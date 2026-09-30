@@ -10,9 +10,9 @@ function M.start(sr,log,globals,panel_provider)
     local source_ids={};local elapsed=0
     local texture_w,texture_h=64,64
     local density=panel_provider and 4 or 1
-    function self.tick(dt)
+    function self.tick(dt,refresh_hz)
         elapsed=elapsed+(dt or 0)
-        if panel_provider and active and world and gui and (not world_ready or elapsed>=0.1) then
+        if panel_provider and active and world and gui and (not world_ready or refresh_hz==0 or elapsed>=1/(refresh_hz or 60)) then
             elapsed=0
             local commands=panel_provider()
             if commands then

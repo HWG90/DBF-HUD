@@ -201,3 +201,8 @@ The user confirmed the supersampled panel is sharp. A second carrier now shares 
 
 
 The user confirmed rear visibility and requested mirrored rear text instead of independently readable text. The rear material now uses uv_scale (-1,1) and uv_offset (1,0), horizontally reversing the shared image. Geometry facing remains unchanged. Offline checks validate the UV settings; live appearance awaits confirmation.
+
+
+## Texture update cadence
+
+The texture update throttle is now configurable from 0 to 120 Hz; zero defaults to every managed update with rendering still submitted through the startup render callback. The source geometry is rebuilt each eligible update. The former 10 Hz cap caused visibly delayed texture animation compared to direct GUI rendering. Users can select a finite cap to reduce cost. Performance at four-times density and every-frame redraw remains to be measured.

@@ -31,7 +31,7 @@ return {
             hud.scene_test_only=scene~=nil and offscreen~=nil and offscreen.texture~=nil and hud.weapon_pose~=nil
             hud.tick(dt)
         end
-        if offscreen and offscreen.tick then offscreen.tick(dt) end
+        if offscreen and offscreen.tick then offscreen.tick(dt,hud and hud.config.texture_refresh_hz) end
         if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect) end
         -- Rebuild only when prerequisites arrive or content bounds change.
         if offscreen then
