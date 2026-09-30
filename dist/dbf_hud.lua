@@ -1063,7 +1063,11 @@ function M.new(sr,log,direct)
             gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate'),'world GUI returned nil')
             log('WORLD_GUI create complete')
             local name='mods/dbf_hud/materials/depth_fill'
-            if not direct and A.can_get and A.can_get('material',name) then depth_fill=name
+            local state_test='mods/dbf_hud/materials/depth_state_test'
+            if not direct and A.can_get and A.can_get('material',state_test) then
+                depth_fill=state_test
+                log('WORLD_GUI isolated depth-enable shader selected; occlusion requires visual verification')
+            elseif not direct and A.can_get and A.can_get('material',name) then depth_fill=name
             elseif not direct and A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
                 depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
             end

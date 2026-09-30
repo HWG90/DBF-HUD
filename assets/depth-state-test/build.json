@@ -1,0 +1,12 @@
+{
+  "source_sha256": "f7622f0fee1d924bbd0281d73903b5ab4413bba191b1125cb7a2ee2d347e7a6e",
+  "shader_resource": "mods/dbf_hud/shaders/gui_depth_state_test",
+  "material_resource": "mods/dbf_hud/materials/depth_state_test",
+  "compiled_variant_id": "0xf521495d",
+  "program_id": "0x528191cc",
+  "depth_enable": 1,
+  "depth_write": 0,
+  "depth_compare": 7,
+  "disk_depth_enable_offset": "0xda0",
+  "live_status": "not loaded or visually verified"
+}
