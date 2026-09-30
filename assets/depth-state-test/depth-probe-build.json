@@ -9,5 +9,5 @@
   "depth_compare": 7,
   "disk_depth_enable_offset": "0xda0",
   "archive_target": "ee6b1ba7e22d71ed",
-  "live_status": "archive-target revision not yet deployed"
+  "live_status": "registered; depth-enable 1 read live; user confirmed WorldGUI occlusion in mission"
 }

@@ -120,3 +120,8 @@ Experimental gui_depth now availability-selects the registered loader-control ma
 
 The user visually confirmed normal drawing with the registered loader-control material selected in experimental WorldGUI, then authorized enabling depth testing. Probe 0.3 uses the same addon identity, native archive target, resource names, identifiers and buffers as control 0.2. Exact zip comparison establishes identical main and stream payloads, and exactly one differing GPU byte: offset DA0 changes 0 to 1. Depth writes remain zero and comparison remains GREATER_EQUAL. The original launch-crashing test remains withdrawn; this is a revision of the verified control. Native launch, actual device depth-state construction and scenery occlusion remain unverified until deployment and visual test.
 
+
+### WorldGUI occlusion visually confirmed
+
+After deploying probe 0.3 and restarting, fresh manager lookup resolved the custom variant and graphics program. The program's relocated serialized state record was enum 10, value 1. The live HUD log resolved the control material instance and submitted WorldGUI through the explicit-material bitmap path. The user then entered a mission, checked occlusion, and reported that it was working and felt superior to the mesh. This establishes a visually confirmed depth-tested direct WorldGUI checkpoint for this session. Broader weapon, camera-mode, transparency and lifecycle coverage remain to be checked. The mesh remains available as fallback.
+
