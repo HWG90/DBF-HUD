@@ -34,8 +34,9 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.fonts={'bigblue','debug','jetbrainsmono','firacode','meslo','hack','cascadiacode','iosevka','0xproto','sourcecodepro','firamono','cascadiamono'}
+M.decorations={'none','outline','brackets','helldivers','double'}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -73,6 +74,7 @@ function M.apply(config,values)
         elseif (k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
+        elseif k=='decoration' then local found=false;for _,name in ipairs(M.decorations) do if v==name then found=true end end;assert(found,'unknown decoration')
         elseif k=='font' then local found=false;for _,name in ipairs(M.fonts) do if v==name then found=true end end;assert(found,'unknown HUD font')
         else v=M.hex(v) end
         clean[k]=v
@@ -1395,6 +1397,36 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     local out={{type='panel',x=left,y=bottom,w=right-left,h=top-bottom,
         c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
     for _,c in ipairs(d) do out[#out+1]=c end
+    -- Decorations stay inside the measured panel perimeter, including at screen edges.
+    -- Shared rectangle commands preserve direct WorldGUI depth and all screen renderers.
+    local style=cfg.decoration or 'none'
+    local w,h=right-left,top-bottom;local line=scale
+    local neutral=HUD.config.rgb(cfg.text_color)
+    local yellow=HUD.config.rgb(cfg.heat_yellow)
+    local function border(dx,dy,bw,bh,color,strength)
+        out[#out+1]={type='rect',decoration=true,x=left+dx,y=bottom+dy,w=bw,h=bh,
+            c=color or neutral,a=opacity*(cfg.text_color_alpha or 255)/255*(strength or .7)}
+    end
+    local function outline(inset,strength)
+        border(inset,inset,w-2*inset,line,nil,strength)
+        border(inset,h-inset-line,w-2*inset,line,nil,strength)
+        border(inset,inset,line,h-2*inset,nil,strength)
+        border(w-inset-line,inset,line,h-2*inset,nil,strength)
+    end
+    local length=math.min(12*scale,w/4,h/4)
+    if style=='outline' then outline(0,.55)
+    elseif style=='brackets' then
+        for _,cx in ipairs({0,w-length}) do for _,cy in ipairs({0,h-line}) do border(cx,cy,length,line) end end
+        for _,cx in ipairs({0,w-line}) do for _,cy in ipairs({0,h-length}) do border(cx,cy,line,length) end end
+    elseif style=='helldivers' then
+        -- Native HUD-inspired open rails, pale angular corners and yellow highlights.
+        border(0,0,line,h,nil,.35);border(w-line,0,line,h,nil,.35)
+        border(0,0,length,line,nil,.9);border(0,h-line,length,line,nil,.9)
+        border(w-length,0,length,line,nil,.9);border(w-length,h-line,length,line,nil,.9)
+        border(0,0,line,length,nil,.9);border(w-line,h-length,line,length,nil,.9)
+        border(0,h-2*line,length,2*line,yellow,.9)
+        border(w-length,0,length,2*line,yellow,.9)
+    elseif style=='double' then outline(0,.65);outline(3*scale,.25) end
     return out
 end
 return M
@@ -2626,6 +2658,7 @@ function M.new(hud)
         follow=true,travel=true,settle=true}
     local function option_id(k)if k=='font' then return 'dbf_hud_v4.font_nerd' end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
+    local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
         {'mount_x','3D right shoulder: left / right',-2,2,0.01},{'mount_y','3D right shoulder: forward / back',-2,2,0.01},{'mount_z','3D right shoulder: up / down',-2,2,0.01},
         {'left_mount_x','3D left shoulder: left / right',-2,2,0.01},{'left_mount_y','3D left shoulder: forward / back',-2,2,0.01},{'left_mount_z','3D left shoulder: up / down',-2,2,0.01},
@@ -2645,6 +2678,7 @@ function M.new(hud)
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('always_show_3d',hud.config.occlusion_mode=='gui')
         set('frosted',hud.config.frosted)
+        set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
         set('font',font_index())
     end
@@ -2683,6 +2717,9 @@ function M.new(hud)
                     hud.configure({[k]=v});hud.save_tuning()
                 end)
             end
+            add('decoration',{type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame'},default=decoration_index()},function(v)
+                hud.configure({decoration=assert(HUD.config.decorations[v])});hud.save_tuning()
+            end)
             add('font',{type='choice',label='HUD font',choices={'BigBlue Terminal (pixel)','Original debug font','JetBrainsMono Nerd Font','FiraCode Nerd Font','Meslo Nerd Font','Hack Nerd Font','CascadiaCode Nerd Font','Iosevka Nerd Font','0xProto Nerd Font','SourceCodePro Nerd Font','FiraMono Nerd Font','CascadiaMono Nerd Font'},default=font_index()},function(v)
                 hud.configure({font=assert(HUD.config.fonts[v])});hud.save_tuning()
             end)
@@ -2713,7 +2750,7 @@ function M.start(sr,backend,options)
     -- Compatibility: retire a previous-brand instance during live upgrade.
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
-    local self={version='0.3.39',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.40',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
@@ -3035,5 +3072,5 @@ return M
 
 end)()
 local ok,result=pcall(function() return HUD.runtime.start(assert(rawget(_G,"stingray"),"stingray missing"),HUD.memory.native()) end)
-if not ok then rawset(_G,"DBFHUD",{status=tostring(result),version="0.3.39"}) end
+if not ok then rawset(_G,"DBFHUD",{status=tostring(result),version="0.3.40"}) end
 return rawget(_G,"DBFHUD")

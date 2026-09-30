@@ -84,6 +84,36 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     local out={{type='panel',x=left,y=bottom,w=right-left,h=top-bottom,
         c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
     for _,c in ipairs(d) do out[#out+1]=c end
+    -- Decorations stay inside the measured panel perimeter, including at screen edges.
+    -- Shared rectangle commands preserve direct WorldGUI depth and all screen renderers.
+    local style=cfg.decoration or 'none'
+    local w,h=right-left,top-bottom;local line=scale
+    local neutral=HUD.config.rgb(cfg.text_color)
+    local yellow=HUD.config.rgb(cfg.heat_yellow)
+    local function border(dx,dy,bw,bh,color,strength)
+        out[#out+1]={type='rect',decoration=true,x=left+dx,y=bottom+dy,w=bw,h=bh,
+            c=color or neutral,a=opacity*(cfg.text_color_alpha or 255)/255*(strength or .7)}
+    end
+    local function outline(inset,strength)
+        border(inset,inset,w-2*inset,line,nil,strength)
+        border(inset,h-inset-line,w-2*inset,line,nil,strength)
+        border(inset,inset,line,h-2*inset,nil,strength)
+        border(w-inset-line,inset,line,h-2*inset,nil,strength)
+    end
+    local length=math.min(12*scale,w/4,h/4)
+    if style=='outline' then outline(0,.55)
+    elseif style=='brackets' then
+        for _,cx in ipairs({0,w-length}) do for _,cy in ipairs({0,h-line}) do border(cx,cy,length,line) end end
+        for _,cx in ipairs({0,w-line}) do for _,cy in ipairs({0,h-length}) do border(cx,cy,line,length) end end
+    elseif style=='helldivers' then
+        -- Native HUD-inspired open rails, pale angular corners and yellow highlights.
+        border(0,0,line,h,nil,.35);border(w-line,0,line,h,nil,.35)
+        border(0,0,length,line,nil,.9);border(0,h-line,length,line,nil,.9)
+        border(w-length,0,length,line,nil,.9);border(w-length,h-line,length,line,nil,.9)
+        border(0,0,line,length,nil,.9);border(w-line,h-length,line,length,nil,.9)
+        border(0,h-2*line,length,2*line,yellow,.9)
+        border(w-length,0,length,2*line,yellow,.9)
+    elseif style=='double' then outline(0,.65);outline(3*scale,.25) end
     return out
 end
 return M

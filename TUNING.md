@@ -11,3 +11,5 @@ Existing flat tuning files remain accepted. Saving through the menu reorganizes 
 Colors remain in Lua tuning. No experimental conversion or saturation is reintroduced. Prepared Nerd Fonts and the archived mesh implementation remain available in the source package.
 
 Font IDs: `bigblue`, `debug`, `jetbrainsmono`, `firacode`, `meslo`, `hack`, `cascadiacode`, `iosevka`, `0xproto`, `sourcecodepro`, `firamono`, `cascadiamono`. New faces use direct monochrome glyph geometry with consistent cap height; patched symbols and ligatures are not enabled in HUD text.
+
+Decorations default to `none`. Other IDs are `outline`, `brackets`, `helldivers` and `double`. Perimeter accents follow the measured panel size in all display modes; their colors use the existing text and heat-yellow palette entries.

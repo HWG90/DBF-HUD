@@ -299,6 +299,23 @@ test('all ten Nerd Fonts draw within measured bounds and fit panel frames',funct
     end
 end)
 
+test('decorations default off, fit dynamic perimeter and preserve content',function()
+    local c=HUD.config.new();assert(c.decoration=='none')
+    local model={kind='heat',fraction=.8,value=80,reserve=3,state='READY'}
+    for _,font in ipairs(HUD.config.fonts) do for _,scale in ipairs({.5,1,2}) do
+        c.font=font;c.decoration='none';local plain=HUD.layout.compose(model,15,20,scale,.8,c,0)
+        for _,style in ipairs(HUD.config.decorations) do
+            HUD.config.apply(c,{decoration=style});local decorated=HUD.layout.compose(model,15,20,scale,.8,c,0)
+            local f=decorated[1];assert(f.x==plain[1].x and f.y==plain[1].y and f.w==plain[1].w and f.h==plain[1].h)
+            assert((style=='none' and #decorated==#plain) or (style~='none' and #decorated>#plain))
+            for i=#plain+1,#decorated do local r=decorated[i]
+                assert(r.decoration and r.w>0 and r.h>0 and r.x>=f.x-1e-6 and r.y>=f.y-1e-6 and r.x+r.w<=f.x+f.w+1e-6 and r.y+r.h<=f.y+f.h+1e-6)
+            end
+        end
+    end end
+    assert(not pcall(HUD.config.apply,c,{decoration='unknown'}))
+end)
+
 test('native menu keeps colors config-only and persists placement',function()
     local options,values,callbacks={},{},{};local writes=0
     ModOptionsMenu={api=1,register_option=function(id,spec) options[id]=spec;values[id]=spec.default;return true end,
@@ -307,14 +324,16 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==30)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==31)
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
     callbacks['dbf_hud_v4.font_nerd'](2);assert(h.config.font=='debug' and writes==2)
     callbacks['dbf_hud_v4.font_nerd'](1);assert(h.config.font=='bigblue' and writes==3)
     callbacks['dbf_hud_v4.debug_logging'](true);assert(h.config.debug_logging and writes==4)
+    callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
+    callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==9 and groups['DBF-HUD Placement']==21)
+    assert(groups['DBF-HUD']==10 and groups['DBF-HUD Placement']==21)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -582,7 +601,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==30)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==31)
         callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end

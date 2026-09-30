@@ -1,6 +1,6 @@
 # DBF-HUD
 
-Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.39**.
+Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.40**.
 
 ## Working features
 

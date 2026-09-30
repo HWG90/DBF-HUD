@@ -2,6 +2,7 @@
 -- The preview exports this format. Native menu edits save here automatically.
 -- Restart to load edits, or call DBFHUD.reload_tuning() from your Lua integration.
 return {
+    decoration = 'none', -- none, outline, brackets, helldivers, double
     debug_logging = false, -- Research traces off; errors are always logged.
     always_show_3d = false,
     font = "bigblue", -- "bigblue" pixel font or "debug" original renderer
