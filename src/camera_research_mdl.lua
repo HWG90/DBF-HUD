@@ -12,7 +12,19 @@ return {
   next_poll=next_poll-(dt or 0);if next_poll>0 then return end;next_poll=1
   local hud=rawget(_G,'DBFHUD');if not hud or not hud.config or not hud.config.debug_logging then return end
   local label=backend.camera_request();if not label then return end
-  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll())
+  if label=='camera_apis' then
+   local sr=rawget(_G,'stingray') or {};local names={}
+   for name,namespace in pairs(sr) do
+    if type(name)=='string' and (name:lower():find('camera',1,true) or name:lower():find('input',1,true) or name:lower():find('player',1,true) or name:lower():find('controller',1,true)) then
+     names[#names+1]=name
+     if type(namespace)=='table' then local entries={};for key,value in pairs(namespace) do if type(value)=='function' then entries[#entries+1]=tostring(key) end end;table.sort(entries)
+      file:write('CAMERA_API '..name..' '..table.concat(entries,' ')..'\n')
+     end
+    end
+   end
+   table.sort(names);file:write('CAMERA_API namespaces '..table.concat(names,' ')..'\nCAMERA_CAPTURE complete label='..label..'\n');file:flush();return
+  end
+  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),label=='trace_code')
   if ok then
    for _,part in ipairs(parts) do
     local hex=part.data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)

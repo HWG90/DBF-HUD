@@ -326,7 +326,7 @@ HUD.camera_state=(function()
 -- Research only: bounded snapshots from already verified camera/player roots.
 -- Never drives placement and never calls engine functions or writes game memory.
 local M={}
-function M.capture(backend,raw)
+function M.capture(backend,raw,trace_code)
     assert(raw and raw.binding,'no identity-checked selected weapon')
     local r=HUD.memory.new(backend);r.reset()
     local base=raw.binding.module_base
@@ -339,6 +339,12 @@ function M.capture(backend,raw)
     end
     part('camera_state',state,512);part('camera',camera,160)
     part('player_view',player+0x380,128)
+    part('player_header',player,0x380)
+    part('camera_state_tail',state+512,512)
+    if trace_code then
+        part('weapon_control_code',base+0x764e00,1024)
+        part('player_control_code',base+0x607100,1024)
+    end
     local selector=r.p(base+HUD.layouts.selector)
     local index=r.map(selector+0x30,raw.binding.avatar_id,1048576)
     if index then
@@ -370,7 +376,19 @@ return {
   next_poll=next_poll-(dt or 0);if next_poll>0 then return end;next_poll=1
   local hud=rawget(_G,'DBFHUD');if not hud or not hud.config or not hud.config.debug_logging then return end
   local label=backend.camera_request();if not label then return end
-  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll())
+  if label=='camera_apis' then
+   local sr=rawget(_G,'stingray') or {};local names={}
+   for name,namespace in pairs(sr) do
+    if type(name)=='string' and (name:lower():find('camera',1,true) or name:lower():find('input',1,true) or name:lower():find('player',1,true) or name:lower():find('controller',1,true)) then
+     names[#names+1]=name
+     if type(namespace)=='table' then local entries={};for key,value in pairs(namespace) do if type(value)=='function' then entries[#entries+1]=tostring(key) end end;table.sort(entries)
+      file:write('CAMERA_API '..name..' '..table.concat(entries,' ')..'\n')
+     end
+    end
+   end
+   table.sort(names);file:write('CAMERA_API namespaces '..table.concat(names,' ')..'\nCAMERA_CAPTURE complete label='..label..'\n');file:flush();return
+  end
+  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),label=='trace_code')
   if ok then
    for _,part in ipairs(parts) do
     local hex=part.data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)

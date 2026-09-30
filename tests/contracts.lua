@@ -89,12 +89,12 @@ test('isolated camera helper compiles without running game APIs',function()
 end)
 
 test('camera research snapshots are bounded and reject stale ownership',function()
-    local cs=alloc(512);local cam=alloc(160);P(base+0x346d560,cs);P(cs,cam)
+    local cs=alloc(1024);local cam=alloc(160);P(base+0x346d560,cs);P(cs,cam)
     local raw={avatar_unit_ref=77,binding={module_base=base,avatar_id=10,avatar_record=avatar}}
-    local total=0;local b={read=function(a,n)assert(n<=512);total=total+n;return read(a,n)end}
-    local parts=HUD.camera_state.capture(b,raw);assert(#parts==4 and total<2048)
+    local total=0;local b={read=function(a,n)assert(n<=1024);total=total+n;return read(a,n)end}
+    local parts=HUD.camera_state.capture(b,raw);assert(#parts==6 and total<4096)
     assert(parts[1].name=='camera_state' and #parts[1].data==512)
-    assert(parts[4].name=='selector' and #parts[4].data==0x1d0)
+    assert(parts[6].name=='selector' and #parts[6].data==0x1d0)
     U(pm+0x3a8,78);assert(not pcall(HUD.camera_state.capture,b,raw));U(pm+0x3a8,77)
     local changed=false
     b.read=function(a,n)
