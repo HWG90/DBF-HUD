@@ -98,4 +98,4 @@ def build():
     print(output)
 
 if __name__ == '__main__':
-    build()
+    raise SystemExit('Disabled: this addon caused a reported launch CTD. Verify native shader-library packaging before rebuilding.')

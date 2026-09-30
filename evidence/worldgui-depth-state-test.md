@@ -1,5 +1,21 @@
 # Isolated WorldGUI depth-state test, 2026-09-30
 
+## Launch failure and rollback
+
+The user reported a launch CTD after deployment. The previous HUD log ends with
+normal cleanup and was not recreated by the failed launch; it does not identify
+the native fault. The deployed patch_79 was identified by both unique resource
+hashes and contained exactly this test's two resources. Its main, stream and GPU
+files were moved intact to work/depth-state-launch-crash outside the game data
+directory. Experimental material selection was removed from the installed Lua,
+and all 46 offline contracts pass on the restored build. Disable the addon in
+Arsenal before redeploying, which would otherwise restore the quarantined files.
+
+This package is withdrawn and its builder entry point is disabled. The verified
+depth-state finding remains useful, but cloning identifiers and constructing an
+archive has not established native shader-library load safety. The next offline
+investigation must verify that format and registration path before another test.
+
 Read-only native inspection connected the selected GUI libraries to their device
 graphics descriptors. Both the plain and named depth variants have DepthEnable=0,
 DepthWriteMask=0, DepthFunc=7. The selected depth program's VS and PS pointers

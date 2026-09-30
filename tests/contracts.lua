@@ -586,20 +586,7 @@ test('world GUI probe uses live worlds, moves and releases without stale handles
     frost_alpha=nil;cfg.frosted=false;assert(probe.draw(p,cfg,panel))
     assert(frost_alpha==nil and tint_alpha==64)
     cfg.frosted=true
-    probe.release()
-    -- Prefer the isolated state-enabled library only in experimental WorldGUI.
-    local state_draws=0
-    sr.Gui.bitmap=function(g,material,pos,size,color)
-        assert(material=='mods/dbf_hud/materials/depth_state_test')
-        state_draws=state_draws+1
-    end
-    probe=HUD.world_probe.new(sr,function()end)
-    assert(probe.draw(p,cfg,commands));assert(state_draws>20);probe.release()
-    local before=state_draws
-    sr.Gui.rect=old_rect
-    probe=HUD.world_probe.new(sr,function()end,true)
-    assert(probe.draw(p,cfg,commands));assert(state_draws==before);probe.release()
-    sr.Gui.rect=old_rect;sr.Gui.bitmap=nil;sr.Application.can_get=nil
+    probe.release();sr.Gui.rect=old_rect;sr.Gui.bitmap=nil;sr.Application.can_get=nil
     -- Rebaseline counters for the remaining lifetime checks.
     created,moved,destroyed,drawn=1,1,0,4
     probe=HUD.world_probe.new(sr,function()end);probe.draw(p,cfg);created=1
