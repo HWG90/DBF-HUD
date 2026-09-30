@@ -3,7 +3,7 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -20,12 +20,25 @@ end
 function M.new() local t={};for k,v in pairs(M.defaults) do t[k]=v end;return t end
 function M.apply(config,values)
     assert(type(values)=='table','configuration must be a table')
-    local clean={}
+    local flattened={}
     for k,v in pairs(values) do
+        if M.archived[k] then
+            assert(type(v)=='table','archived group must be a table')
+            for name,value in pairs(v) do
+                assert(M.archived[k][name],'unknown archived setting: '..tostring(name))
+                assert(values[name]==nil and flattened[name]==nil,'duplicate setting: '..name)
+                flattened[name]=value
+            end
+        else
+            assert(flattened[k]==nil,'duplicate setting: '..tostring(k));flattened[k]=v
+        end
+    end
+    local clean={}
+    for k,v in pairs(flattened) do
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='font' then assert(v=='bigblue' or v=='debug','font must be bigblue or debug')
@@ -39,10 +52,22 @@ function M.apply(config,values)
     if clean.occlusion_mode then clean.hud_occlusion=clean.occlusion_mode~='gui';clean.always_show_3d=clean.occlusion_mode=='gui' end
     for k,v in pairs(clean) do config[k]=v end
 end
+M.archived={archived_mesh={weapon_screen_test=true,saturation=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true},research={pose_marker=true,world_probe=true}}
 function M.serialize(config)
-    local keys={};for k in pairs(M.defaults) do keys[#keys+1]=k end;table.sort(keys)
-    local out={'-- DBF-HUD tuning. Loaded from the game installation root on startup.','return {'}
-    for _,k in ipairs(keys) do local v=config[k];out[#out+1]='    '..k..' = '..(type(v)=='string' and string.format('%q',v) or tostring(v))..',' end
+    local keys={};local archived={}
+    for _,group in pairs(M.archived) do for k in pairs(group) do archived[k]=true end end
+    for k in pairs(M.defaults) do if not archived[k] and k~='occlusion_mode' and k~='hud_occlusion' then keys[#keys+1]=k end end
+    table.sort(keys)
+    local out={'-- DBF-HUD tuning. Active settings below; camera placement is unchanged.','return {','    -- Active display, palette, placement and diagnostics.'}
+    local function value(v)return type(v)=='string' and string.format('%q',v) or tostring(v)end
+    for _,k in ipairs(keys) do out[#out+1]='    '..k..' = '..value(config[k])..',' end
+    for _,name in ipairs({'archived_mesh','research'}) do
+        out[#out+1]='    -- Retained settings; mesh is disabled. Research markers require debug_logging.'
+        out[#out+1]='    '..name..' = {'
+        local members={};for k in pairs(M.archived[name]) do members[#members+1]=k end;table.sort(members)
+        for _,k in ipairs(members) do out[#out+1]='        '..k..' = '..value(config[k])..',' end
+        out[#out+1]='    },'
+    end
     out[#out+1]='}';return table.concat(out,'\n')..'\n'
 end
 return M
@@ -1072,9 +1097,10 @@ function M.new(sr,log,direct)
             elseif not direct and A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
                 depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
             end
-            log('WORLD_GUI depth material '..(depth_fill and 'available' or 'missing; install depth material addon'))
+            log('WORLD_GUI depth material '..(direct and 'not requested' or (depth_fill and 'available' or 'missing; install depth material addon')))
             -- One-time observation only: resolve the same material used by bitmap.
             -- Keep no native material handles across frames or GUI destruction.
+            if c.debug_logging then
             log('WORLD_GUI instance '..identity(gui)..' world '..identity(world))
             if type(G.material)=='function' and A.can_get then
                 for _,material_name in ipairs({'content/ui/shared/material/gui_fill',
@@ -1085,6 +1111,7 @@ function M.new(sr,log,direct)
                     end
                 end
             else log('WORLD_GUI material inspection unavailable') end
+            end
         else
             if first then log('WORLD_GUI move begin') end
             G.move(gui,pose)
@@ -1591,6 +1618,7 @@ function M.new(hud)
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('always_show_3d',hud.config.occlusion_mode=='gui')
         set('frosted',hud.config.frosted)
+        set('debug_logging',hud.config.debug_logging)
         set('font',hud.config.font=='bigblue' and 1 or 2)
     end
     function self.poll()
@@ -1634,6 +1662,10 @@ function M.new(hud)
             add('frosted',{type='toggle',label='Frosted background (2D)',default=hud.config.frosted},function(v)
                 hud.configure({frosted=v});hud.save_tuning()
             end)
+            add('debug_logging',{type='toggle',label='Debug logging',default=hud.config.debug_logging,
+                description='Enable research traces and capability inspection. Errors are always logged.'},function(v)
+                hud.configure({debug_logging=v});hud.save_tuning()
+            end)
             self.sync()
         end)
         self.status=ok and 'Options > Mods > DBF-HUD' or ('menu unavailable: '..tostring(err));if not ok then api=nil end
@@ -1654,7 +1686,7 @@ function M.start(sr,backend,options)
     -- Compatibility: retire a previous-brand instance during live upgrade.
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
-    local self={version='0.3.37',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.38',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
@@ -1675,9 +1707,14 @@ function M.start(sr,backend,options)
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
     local last_binding
     local function log(line) if backend.log then pcall(backend.log,string.format('[%.3f] %s',self.clock,line)) end end
-    local world_probe=HUD.world_probe.new(sr,log)
-    local world_display=HUD.scene_test.new(sr,log)
+    local function research_log(line)
+        if self.config.debug_logging or line:find('failure',1,true) or line:find('missing',1,true) or line:find('stopped',1,true) then log(line) end
+    end
+    local world_probe=HUD.world_probe.new(sr,research_log)
+    local world_display=HUD.scene_test.new(sr,research_log)
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
+    local function research_snapshot()
+    if not self.config.debug_logging then return end
     -- Availability check only: never invokes unverified world GUI functions.
     local capabilities={}
     for _,entry in ipairs({{'World','create_world_gui'},{'World','destroy_gui'},
@@ -1749,6 +1786,7 @@ function M.start(sr,backend,options)
         local ok,available=pcall(function()return sr.Application.can_get(resource[1],resource[2])end)
         log('SCREEN_RESOURCE '..resource[1]..' '..resource[2]..' '..(ok and tostring(available) or 'lookup unavailable'))
     end
+    end
     -- Integration contract: normalized viewport coordinates, origin top-left.
     -- Only a verified adapter should supply the actual game's dynamic reticle.
     function self.push_anchor(x,y,visible)
@@ -1759,7 +1797,9 @@ function M.start(sr,backend,options)
     function self.set_anchor_provider(fn) assert(fn==nil or type(fn)=='function');provider=fn end
     local menu
     function self.configure(values)
+        local was_debug=self.config.debug_logging
         HUD.config.apply(self.config,values)
+        if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
     end
     function self.export_tuning() return HUD.config.serialize(self.config) end
@@ -1783,7 +1823,7 @@ function M.start(sr,backend,options)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
         self.clock=self.clock+dt
-        if self.clock>=next_weapon_screen_lookup then
+        if self.config.debug_logging and self.clock>=next_weapon_screen_lookup then
             next_weapon_screen_lookup=self.clock+5
             local ok,available=pcall(function()
                 return sr.Application.can_get('material','content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen')
@@ -1801,7 +1841,7 @@ function M.start(sr,backend,options)
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
             local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
-            if self.clock>=next_pose_log then
+            if self.config.debug_logging and self.clock>=next_pose_log then
                 if self.weapon_pose then
                     local p=self.weapon_pose;local m=p.matrix
                     log(string.format('POSE weapon=%d handle=0x%X nodes=%d position=%.4f,%.4f,%.4f axis_x=%.4f,%.4f,%.4f',
@@ -1809,12 +1849,12 @@ function M.start(sr,backend,options)
                 elseif self.pose_status~=last_pose_status then log('POSE unavailable: '..self.pose_status) end
                 last_pose_status=self.pose_status;next_pose_log=self.clock+1
             end
-            if raw and raw.binding then
+            if self.config.debug_logging and raw and raw.binding then
                 local b=raw.binding
                 local identity=string.format('weapon=%d native=%d candidate=0x%X record=0x%X resource=%s avatar=%d avatar_native=%d avatar_candidate=0x%X avatar_record=0x%X game_base=0x%X',
                     raw.id,raw.unit_ref,b.candidate,b.record,raw.resource_hex,b.avatar_id,raw.avatar_unit_ref,b.avatar_candidate,b.avatar_record,b.module_base)
                 if identity~=last_binding then log('BINDING '..identity);last_binding=identity end
-            elseif last_binding~=nil then
+            elseif self.config.debug_logging and last_binding~=nil then
                 log('BINDING unavailable: '..self.status);last_binding=nil
             end
             if model and model.id~=last_id then
@@ -1855,7 +1895,7 @@ function M.start(sr,backend,options)
             self.weapon_pose.first_person=self.first_person
             self.weapon_pose.left_shoulder=self.left_shoulder
         end
-        if projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
+        if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f',projection.camera_distance,projection.camera_fov,projection.camera_lateral))
             self.next_camera_sample=self.clock+1
         end
@@ -1878,6 +1918,7 @@ function M.start(sr,backend,options)
         local wanted=visible and 1 or 0
         alpha=wanted+(alpha-wanted)*math.exp(-math.min(dt,0.35)/(visible and 0.06 or 0.10))
         self.opacity=alpha;self.motion_x=x;self.motion_y=y
+        if self.config.debug_logging then
         local diagnostic=self.status..' | '..self.anchor_status..' | '..(view.material_status or 'material not sampled')..' | font: '..self.config.font
         if self.clock>=next_log then
             if diagnostic~=last_log_status or live then
@@ -1886,6 +1927,7 @@ function M.start(sr,backend,options)
                 last_log_status=diagnostic
             end
             next_log=self.clock+2
+        end
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
@@ -1907,7 +1949,7 @@ function M.start(sr,backend,options)
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
         for _,c in ipairs(commands) do c.x=c.x+dx;c.y=c.y+dy end
-        if self.config.pose_marker then
+        if self.config.debug_logging and self.config.pose_marker then
             self.projection_status=projection.status
             if self.clock>=next_projection_log then
                 log(point and string.format('PROJECT x=%.4f y=%.4f depth=%.3f',point.x,point.y,point.depth)
@@ -1921,7 +1963,7 @@ function M.start(sr,backend,options)
             end
         end
         view.draw(commands)
-        world_probe.draw(self.weapon_pose,self.config,nil,dt)
+        if self.config.debug_logging then world_probe.draw(self.weapon_pose,self.config,nil,dt) else world_probe.release() end
     end
     function self.tick(dt)
         if not retired then
@@ -1977,7 +2019,7 @@ local function disable()
     if hud then hud.retire();hud=nil end
 end
 return {
-    name='DBF-HUD (Live)',version='0.3.37',author='DBF-HUD',
+    name='DBF-HUD (Live)',version='0.3.38',author='DBF-HUD',
     description='Reloadable HUD and weapon binding diagnostics. Replaces the running DBF-HUD instance when enabled.',
     on_enable=function(ctx)
         assert(ctx.api==2 and type(ctx.on_cleanup)=='function' and type(ctx.global)=='function','MDL API 2 required')

@@ -195,6 +195,21 @@ test('runtime preserves callback results, expires anchors and releases GUI',func
     U(pm+0x84,0);update(.1);assert(next(active)==nil);U(pm+0x84,1)
     hud.retire();assert(update==previous and destroyed==1 and next(active)==nil)
 end)
+test('research logging is opt-in and errors remain visible',function()
+    local messages={};local lookups=0
+    local b={};for k,v in pairs(backend) do b[k]=v end
+    b.log=function(line)messages[#messages+1]=line end
+    b.read_tuning=function()return {debug_logging=false}end
+    local sr={Application={can_get=function()lookups=lookups+1;return false end},Gui={resolution=function()error('controlled render failure')end}}
+    local h=HUD.runtime.start(sr,b,{managed=true})
+    assert(lookups==0 and not table.concat(messages,'\n'):find('SCREEN_RESOURCE',1,true))
+    h.configure({debug_logging=true});assert(lookups==6)
+    assert(table.concat(messages,'\n'):find('SCREEN_RESOURCE',1,true))
+    h.configure({debug_logging=false});h.tick(6)
+    assert(lookups==6 and table.concat(messages,'\n'):find('ERROR',1,true))
+    h.retire()
+end)
+
 test('movement does not fade the HUD and automatic native input moves it',function()
     local sr={Application={worlds=function()return {1}end,main_world=function()return 1 end,back_buffer_size=function()return 2560,1440 end},
         World={create_screen_gui=function()return 2 end,destroy_gui=function()end},
@@ -258,7 +273,10 @@ test('configuration validates atomically and roundtrips as Lua',function()
     HUD.config.apply(c,{occlusion_mode='mesh'});assert(c.occlusion_mode=='gui_depth' and not c.always_show_3d)
     HUD.config.apply(c,{always_show_3d=true});assert(c.occlusion_mode=='gui' and not c.hud_occlusion)
     local f=assert(loadstring(HUD.config.serialize(c)));setfenv(f,{})
-    local loaded=f();for k,v in pairs(c) do assert(loaded[k]==v) end
+    local loaded=f();assert(loaded.archived_mesh and loaded.research and loaded.saturation==nil)
+    local restored=HUD.config.new();HUD.config.apply(restored,loaded);for k,v in pairs(c) do assert(restored[k]==v) end
+    assert(not pcall(HUD.config.apply,c,{scale=1.5,archived_mesh={unknown=1}}) and c.scale==1)
+    assert(not pcall(HUD.config.apply,c,{saturation=1,archived_mesh={saturation=2}}))
 end)
 test('native menu keeps colors config-only and persists placement',function()
     local options,values,callbacks={},{},{};local writes=0
@@ -268,13 +286,14 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==29)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==30)
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
     callbacks['dbf_hud_v4.font'](2);assert(h.config.font=='debug' and writes==2)
     callbacks['dbf_hud_v4.font'](1);assert(h.config.font=='bigblue' and writes==3)
+    callbacks['dbf_hud_v4.debug_logging'](true);assert(h.config.debug_logging and writes==4)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==8 and groups['DBF-HUD Placement']==21)
+    assert(groups['DBF-HUD']==9 and groups['DBF-HUD Placement']==21)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -542,7 +561,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==29)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==30)
         callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end

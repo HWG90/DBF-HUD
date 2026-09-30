@@ -52,9 +52,10 @@ function M.new(sr,log,direct)
             elseif not direct and A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
                 depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
             end
-            log('WORLD_GUI depth material '..(depth_fill and 'available' or 'missing; install depth material addon'))
+            log('WORLD_GUI depth material '..(direct and 'not requested' or (depth_fill and 'available' or 'missing; install depth material addon')))
             -- One-time observation only: resolve the same material used by bitmap.
             -- Keep no native material handles across frames or GUI destruction.
+            if c.debug_logging then
             log('WORLD_GUI instance '..identity(gui)..' world '..identity(world))
             if type(G.material)=='function' and A.can_get then
                 for _,material_name in ipairs({'content/ui/shared/material/gui_fill',
@@ -65,6 +66,7 @@ function M.new(sr,log,direct)
                     end
                 end
             else log('WORLD_GUI material inspection unavailable') end
+            end
         else
             if first then log('WORLD_GUI move begin') end
             G.move(gui,pose)

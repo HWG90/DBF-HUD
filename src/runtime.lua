@@ -4,7 +4,7 @@ function M.start(sr,backend,options)
     -- Compatibility: retire a previous-brand instance during live upgrade.
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
-    local self={version='0.3.37',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.38',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
@@ -25,9 +25,14 @@ function M.start(sr,backend,options)
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
     local last_binding
     local function log(line) if backend.log then pcall(backend.log,string.format('[%.3f] %s',self.clock,line)) end end
-    local world_probe=HUD.world_probe.new(sr,log)
-    local world_display=HUD.scene_test.new(sr,log)
+    local function research_log(line)
+        if self.config.debug_logging or line:find('failure',1,true) or line:find('missing',1,true) or line:find('stopped',1,true) then log(line) end
+    end
+    local world_probe=HUD.world_probe.new(sr,research_log)
+    local world_display=HUD.scene_test.new(sr,research_log)
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
+    local function research_snapshot()
+    if not self.config.debug_logging then return end
     -- Availability check only: never invokes unverified world GUI functions.
     local capabilities={}
     for _,entry in ipairs({{'World','create_world_gui'},{'World','destroy_gui'},
@@ -99,6 +104,7 @@ function M.start(sr,backend,options)
         local ok,available=pcall(function()return sr.Application.can_get(resource[1],resource[2])end)
         log('SCREEN_RESOURCE '..resource[1]..' '..resource[2]..' '..(ok and tostring(available) or 'lookup unavailable'))
     end
+    end
     -- Integration contract: normalized viewport coordinates, origin top-left.
     -- Only a verified adapter should supply the actual game's dynamic reticle.
     function self.push_anchor(x,y,visible)
@@ -109,7 +115,9 @@ function M.start(sr,backend,options)
     function self.set_anchor_provider(fn) assert(fn==nil or type(fn)=='function');provider=fn end
     local menu
     function self.configure(values)
+        local was_debug=self.config.debug_logging
         HUD.config.apply(self.config,values)
+        if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
     end
     function self.export_tuning() return HUD.config.serialize(self.config) end
@@ -133,7 +141,7 @@ function M.start(sr,backend,options)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
         self.clock=self.clock+dt
-        if self.clock>=next_weapon_screen_lookup then
+        if self.config.debug_logging and self.clock>=next_weapon_screen_lookup then
             next_weapon_screen_lookup=self.clock+5
             local ok,available=pcall(function()
                 return sr.Application.can_get('material','content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen')
@@ -151,7 +159,7 @@ function M.start(sr,backend,options)
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
             local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
-            if self.clock>=next_pose_log then
+            if self.config.debug_logging and self.clock>=next_pose_log then
                 if self.weapon_pose then
                     local p=self.weapon_pose;local m=p.matrix
                     log(string.format('POSE weapon=%d handle=0x%X nodes=%d position=%.4f,%.4f,%.4f axis_x=%.4f,%.4f,%.4f',
@@ -159,12 +167,12 @@ function M.start(sr,backend,options)
                 elseif self.pose_status~=last_pose_status then log('POSE unavailable: '..self.pose_status) end
                 last_pose_status=self.pose_status;next_pose_log=self.clock+1
             end
-            if raw and raw.binding then
+            if self.config.debug_logging and raw and raw.binding then
                 local b=raw.binding
                 local identity=string.format('weapon=%d native=%d candidate=0x%X record=0x%X resource=%s avatar=%d avatar_native=%d avatar_candidate=0x%X avatar_record=0x%X game_base=0x%X',
                     raw.id,raw.unit_ref,b.candidate,b.record,raw.resource_hex,b.avatar_id,raw.avatar_unit_ref,b.avatar_candidate,b.avatar_record,b.module_base)
                 if identity~=last_binding then log('BINDING '..identity);last_binding=identity end
-            elseif last_binding~=nil then
+            elseif self.config.debug_logging and last_binding~=nil then
                 log('BINDING unavailable: '..self.status);last_binding=nil
             end
             if model and model.id~=last_id then
@@ -205,7 +213,7 @@ function M.start(sr,backend,options)
             self.weapon_pose.first_person=self.first_person
             self.weapon_pose.left_shoulder=self.left_shoulder
         end
-        if projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
+        if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f',projection.camera_distance,projection.camera_fov,projection.camera_lateral))
             self.next_camera_sample=self.clock+1
         end
@@ -228,6 +236,7 @@ function M.start(sr,backend,options)
         local wanted=visible and 1 or 0
         alpha=wanted+(alpha-wanted)*math.exp(-math.min(dt,0.35)/(visible and 0.06 or 0.10))
         self.opacity=alpha;self.motion_x=x;self.motion_y=y
+        if self.config.debug_logging then
         local diagnostic=self.status..' | '..self.anchor_status..' | '..(view.material_status or 'material not sampled')..' | font: '..self.config.font
         if self.clock>=next_log then
             if diagnostic~=last_log_status or live then
@@ -236,6 +245,7 @@ function M.start(sr,backend,options)
                 last_log_status=diagnostic
             end
             next_log=self.clock+2
+        end
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
@@ -257,7 +267,7 @@ function M.start(sr,backend,options)
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
         for _,c in ipairs(commands) do c.x=c.x+dx;c.y=c.y+dy end
-        if self.config.pose_marker then
+        if self.config.debug_logging and self.config.pose_marker then
             self.projection_status=projection.status
             if self.clock>=next_projection_log then
                 log(point and string.format('PROJECT x=%.4f y=%.4f depth=%.3f',point.x,point.y,point.depth)
@@ -271,7 +281,7 @@ function M.start(sr,backend,options)
             end
         end
         view.draw(commands)
-        world_probe.draw(self.weapon_pose,self.config,nil,dt)
+        if self.config.debug_logging then world_probe.draw(self.weapon_pose,self.config,nil,dt) else world_probe.release() end
     end
     function self.tick(dt)
         if not retired then

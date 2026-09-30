@@ -2,13 +2,8 @@
 -- The preview exports this format. Native menu edits save here automatically.
 -- Restart to load edits, or call DBFHUD.reload_tuning() from your Lua integration.
 return {
+    debug_logging = false, -- Research traces off; errors are always logged.
     always_show_3d = false,
-    occlusion_mode = "gui_depth",
-    hud_occlusion = true,
-    saturation = 1.3,
-    scanline_strength = 0.18,
-    texture_refresh_hz = 0,
-    emissive_intensity = 3,
     font = "bigblue", -- "bigblue" pixel font or "debug" original renderer
     text_color = "#C4CECA",
     background_color = "#202628",
@@ -25,4 +20,12 @@ return {
     travel = 55,
     settle = 0.22,
     flash_hz = 2, -- complete red/yellow cycles per second
+    -- Inactive mesh settings retained for future research.
+    archived_mesh = {
+        saturation = 1.3,
+        scanline_strength = 0.18,
+        texture_refresh_hz = 0,
+        emissive_intensity = 3,
+    },
+    research = { pose_marker = false, world_probe = false },
 }

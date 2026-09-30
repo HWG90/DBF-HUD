@@ -1,6 +1,6 @@
 # DBF-HUD
 
-Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.37**.
+Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.38**.
 
 ## Working features
 
@@ -56,3 +56,5 @@ Nerd Fonts v3.5.1 has been converted into a future font library: 72 families and
 ## Complete install archive
 
 See [complete installation](INSTALL-COMPLETE.md). `tools/build_complete.py --addon-builder <path-to-build_addon.py>` creates one Arsenal archive with startup and MDL installation choices, the render bridge, verified depth assets, loose MDL Lua, starter tuning, source and font licenses. Disable the previous component addons before deployment.
+
+Debug logging is opt-in; active and archived tuning are separated. See [TUNING.md](TUNING.md).

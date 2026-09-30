@@ -9,7 +9,7 @@ local function disable()
     if hud then hud.retire();hud=nil end
 end
 return {
-    name='DBF-HUD (Live)',version='0.3.37',author='DBF-HUD',
+    name='DBF-HUD (Live)',version='0.3.38',author='DBF-HUD',
     description='Reloadable HUD and weapon binding diagnostics. Replaces the running DBF-HUD instance when enabled.',
     on_enable=function(ctx)
         assert(ctx.api==2 and type(ctx.on_cleanup)=='function' and type(ctx.global)=='function','MDL API 2 required')
