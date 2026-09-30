@@ -86,6 +86,12 @@ The weapon catalog identifies MA5C with `assault_rifle_nacho`, linking this mate
 
 All 62 extracted shader programs disassemble successfully. Image-sampling pixel variants include an RGB power of 2.2, emissive scaling, a view-angle factor, and a buffer-derived brightness factor. The reflected `exposure` and `post_effects_enabled` constants are marked unused in the extracted programs, so their names do not establish an exposure-bypass control. Actual native rifle rendering may choose a different variant or submission path; that remains unverified. Reusing its material alone did not solve the color shift.
 
+### WorldGUI consumer trace after rifle comparison
+
+Read-only inspection verified the current `Gui.bitmap_3d` parser accepts a material, matrix, position, separate layer, size and optional color. Its native implementation calls the same bitmap generator and command allocator as the ordinary bitmap path, then transforms the generated XZ-plane vertices. It does not introduce a separate render-queue type or choose a depth attachment at that point. No new bitmap_3d call was deployed.
+
+Following GUI registration reached an engine renderer object with the native `gui_world` label and a four-entry vtable. Registration initializes shader selectors `9fcfe126` (hash of `gui`) and `d78ab313` (the known depth-enabled variant). The subsequent render-submission function uses an object flag to choose between those default program sets when no custom material is attached; attached materials provide their own program set. It indexes the set using the active rendering-context index before submitting draw packets. This establishes a concrete native GUI consumer path, not proof of a usable scene-depth attachment. The next unresolved distinction is which rendering context and depth state receive those packets.
+
 `content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen` was present as material `09fb77881b4cc43e`, with a 688-byte main payload. Its base material reference is `2661ebb51d18778d`.
 
 That base was located in archive `18235e0c9ec0e636`: 608 bytes of main data and 480,944 bytes of GPU data containing 62 DXBC signatures. Extracted shader symbol strings include:

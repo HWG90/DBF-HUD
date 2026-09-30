@@ -44,7 +44,7 @@ function M.start(sr,backend,options)
     for _,entry in ipairs({{'World','create_world_gui'},{'Gui','move'},{'Unit','set_mesh_visibility'},{'Viewport','set_output_render_target'},
         {'Viewport','register_render_resource'},{'Application','create_viewport'},
         {'Application','render_world'},{'Renderer','update_texture_base64'},
-        {'Mesh','material'},{'Gui','material'},{'Gui','bitmap'},{'Gui','update_bitmap'},{'Material','set_resource'}}) do
+        {'Mesh','material'},{'Gui','material'},{'Gui','bitmap'},{'Gui','bitmap_3d'},{'Gui','update_bitmap'},{'Material','set_resource'}}) do
         local ok,address=pcall(function()
             assert(jit_ok,'jit.util unavailable')
             local ns=sr[entry[1]];local fn=ns and ns[entry[2]]
