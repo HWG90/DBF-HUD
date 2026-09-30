@@ -158,3 +158,7 @@ The user confirmed seeing the new scene-mesh panel and confirmed that an interve
 ### Correction and material switches
 
 The user clarified that the scene plane is occluded but blank: live ammo pixels were confirmed only in the screen preview. The earlier milestone wording overstated scene-texture visibility. The plane also lies flat. Its decoded material settings have use_color_map=0, use_emissive_map=0, emissive_intensity=0, emissive=(0,0,0), base_color=(0.431,0.431,0.431), and uv_scale=(1,1). The test now enables the verified map switches, sets emissive intensity to 1 and white multipliers, and rotates the carrier 90 degrees around local X. Visual results remain pending.
+
+## Facing correction
+
+The user identified the upright plane as facing the wrong direction. The local-X quarter-turn is now reversed to expose the opposite face. During the scene test, the original screen/world-GUI panel is hidden only while a weapon pose and offscreen texture are available; the separate texture preview remains visible. This diagnostic visibility change does not edit saved user tuning. All 42 offline tests pass. Scene-texture legibility still awaits visual confirmation.

@@ -1370,7 +1370,7 @@ function M.new(sr,log)
             local py=p.y+m[2]*x+m[6]*y+m[10]*z
             local pz=p.z+m[3]*x+m[7]*y+m[11]*z
             m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
-            local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),sr.Vector3(-m[9],-m[10],-m[11]),sr.Vector3(m[5],m[6],m[7]),sr.Vector3(m[13],m[14],m[15]))
+            local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),sr.Vector3(m[9],m[10],m[11]),sr.Vector3(-m[5],-m[6],-m[7]),sr.Vector3(m[13],m[14],m[15]))
             U.set_local_pose(unit,1,pose)
             U.set_local_scale(unit,1,sr.Vector3(0.24,0.24,0.12))
         end)
@@ -1700,6 +1700,7 @@ function M.start(sr,backend,options)
             end
             next_log=self.clock+2
         end
+        if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 then world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end;world_config.font='bigblue'
@@ -1805,7 +1806,10 @@ return {
         ctx.log('Enabled DBF-HUD '..hud.version..' with MDL-owned updates')
     end,
     on_update=function(ctx,dt)
-        if hud then hud.tick(dt) end
+        if hud then
+            hud.scene_test_only=scene~=nil and offscreen~=nil and offscreen.texture~=nil and hud.weapon_pose~=nil
+            hud.tick(dt)
+        end
         if offscreen and offscreen.tick then offscreen.tick(dt) end
         if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt) end
         -- Startup addons can load after MDL. Retry only once the bridge exists.

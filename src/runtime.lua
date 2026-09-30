@@ -211,6 +211,7 @@ function M.start(sr,backend,options)
             end
             next_log=self.clock+2
         end
+        if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 then world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end;world_config.font='bigblue'

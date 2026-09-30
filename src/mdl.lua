@@ -27,7 +27,10 @@ return {
         ctx.log('Enabled DBF-HUD '..hud.version..' with MDL-owned updates')
     end,
     on_update=function(ctx,dt)
-        if hud then hud.tick(dt) end
+        if hud then
+            hud.scene_test_only=scene~=nil and offscreen~=nil and offscreen.texture~=nil and hud.weapon_pose~=nil
+            hud.tick(dt)
+        end
         if offscreen and offscreen.tick then offscreen.tick(dt) end
         if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt) end
         -- Startup addons can load after MDL. Retry only once the bridge exists.
