@@ -11,7 +11,10 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     local pixel=cfg.font=='bigblue'
     if pixel and not measure then measure=HUD.font.measure end
     local d={};local heat=m.kind=='heat'
-    local ink=HUD.config.rgb(heat and M.heat_color(m.fraction,clock,cfg) or
+    local vent=heat and m.state=='VENT'
+    if vent then opacity=opacity*(0.25+0.75*(0.5+0.5*math.cos((clock or 0)*math.pi*4))) end
+    local heat_ink=vent and cfg.heat_red or M.heat_color(m.fraction or 0,clock,cfg)
+    local ink=HUD.config.rgb(heat and heat_ink or
         (m.warning and (m.value==0 and cfg.heat_red or cfg.heat_yellow) or cfg.text_color))
     local function rect(dx,dy,w,h,c,a,kind)
         d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity,frosted=cfg.frosted}

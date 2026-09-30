@@ -222,6 +222,16 @@ test('heat fill grows from the bottom and preserves partial cells',function()
     local full,d=fills(1);assert(#full==20 and math.abs(full[20].y-39.5)<1e-8)
     local found=false;for _,v in ipairs(d) do if v.text=='OVERHEAT' then found=true end end;assert(found)
 end)
+test('vent pulses red without disappearing even below the heat threshold',function()
+    local cfg=HUD.config.new()
+    local m={kind='heat',fraction=.5,value=50,state='VENT',reserve=1}
+    local a=HUD.layout.compose(m,0,0,1,1,cfg,0)
+    local b=HUD.layout.compose(m,0,0,1,1,cfg,.25)
+    local red=HUD.config.rgb(cfg.heat_red)
+    for i=1,3 do assert(a[2].c[i]==red[i] and b[2].c[i]==red[i]) end
+    assert(math.abs(b[2].a/a[2].a-.25)<1e-6)
+end)
+
 test('configuration validates atomically and roundtrips as Lua',function()
     local c=HUD.config.new();HUD.config.apply(c,{text_color='a0B1c2',offset_x=-900,frosted=false})
     assert(c.text_color=='#A0B1C2' and c.offset_x==-900 and c.frosted==false)
