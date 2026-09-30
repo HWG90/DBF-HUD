@@ -586,8 +586,8 @@ function M.new(backend)
             end
         end
         local rec,record_address=entity(owner,wid);if not rec then return nil,'no selected weapon' end
-        -- Known crash-prone reference resource: do not probe its components.
-        if rec:sub(1,8)==string.char(0x56,0x89,0xb3,0xab,0x3b,0x7d,0xc2,0x11) then return nil,'excluded resource' end
+        -- The machine gun uses the identity-checked magazine path below. Its
+        -- inherited exclusion was removed after bounded live component checks.
         assert(mounted or flag(rec:byte(21),1),'weapon ownership')
         local driver=global('driver');local di=component(driver,0x28,0x40,wid,rec)
         if not di then return nil,'no weapon driver' end
