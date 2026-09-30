@@ -3,7 +3,7 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={occlusion_mode="mesh",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={weapon_screen_test=false,occlusion_mode="mesh",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -25,7 +25,7 @@ function M.apply(config,values)
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','frosted must be boolean')
+        elseif (k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='font' then assert(v=='bigblue' or v=='debug','font must be bigblue or debug')
@@ -1397,7 +1397,7 @@ function M.new(sr,log,side)
         }
     end
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
-    local unit,world,bound,scene_material,last_emission;local failed=false;local smooth={}
+    local unit,world,bound,scene_material,last_emission,screen_test;local failed=false;local smooth={}
     local self={}
     local function live(w)
         for _,v in pairs(A.worlds() or {}) do if w==v then return true end end
@@ -1414,6 +1414,7 @@ function M.new(sr,log,side)
             local main=A.main_world()
             if not live(main) then return end
             if unit and (world~=main or not live(world)) then self.release() end
+            if unit and screen_test~=(c.weapon_screen_test==true) then self.release() end
             if not unit then
                 local name='content/art_shared/meshes/plane_primitive'
                 assert(A.can_get('unit',name),'plane unit unavailable')
@@ -1434,7 +1435,10 @@ function M.new(sr,log,side)
                 local mesh=U.mesh(unit,1)
                 assert(Mesh.num_materials(mesh)==1,'unexpected material count')
                 local transparent='content/art_shared/materials/placeholder_red_transparent'
+                screen_test=c.weapon_screen_test==true
+                if screen_test then transparent='content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen' end
                 local alpha=type(U.set_material)=='function' and A.can_get('material',transparent)
+                if screen_test then assert(alpha,'weapon screen material unavailable') end
                 if alpha then
                     -- Unit asset declares the named slot 'material' (thin hash eac0b497).
                     log('SCENE transparent material assignment begin')
@@ -1445,6 +1449,17 @@ function M.new(sr,log,side)
                 assert(tonumber(ffi.cast('uintptr_t',material))>=65536,'invalid scene material')
                 assert(tonumber(ffi.cast('uintptr_t',target))>=65536,'invalid panel texture')
                 log('SCENE verified material texture bind begin')
+                if screen_test then
+                    sr.Material.set_resource(material,'input_image',target)
+                    sr.Material.set_scalar(material,'screen_enabled',1)
+                    sr.Material.set_vector4(material,'screen_rect',sr.Vector4(side==-1 and 1 or 0,0,side==-1 and -1 or 1,1))
+                    sr.Material.set_vector2(material,'Atlas_size',sr.Vector2(1,1))
+                    sr.Material.set_vector2(material,'resolution_multiplier',sr.Vector2(1,1))
+                    for _,name in ipairs({'normal_map_amount','normal_map_coloring_amount','dirt_amount','distortion_amount','artifacts_amount','light_bleed_amount','use_dropshadow'}) do
+                        sr.Material.set_scalar(material,name,0)
+                    end
+                    log('SCENE weapon screen image bound side='..side..'; appearance unverified')
+                else
                 sr.Material.set_resource(material,'color_map',target)
                 sr.Material.set_resource(material,'emissive_map',target)
                 sr.Material.set_scalar(material,'use_color_map',1)
@@ -1466,12 +1481,14 @@ function M.new(sr,log,side)
                     sr.Material.set_scalar(material,'use_opacity_map',1)
                     log('SCENE transparent material bound; alpha pixels unverified')
                 end
+                end
+                scene_material=material
                 bound=target
                 log('SCENE plane texture bound')
             end
             assert(bound==target,'render target changed without scene retirement')
             if last_emission~=c.emissive_intensity then
-                sr.Material.set_scalar(scene_material,'emissive_intensity',c.emissive_intensity)
+                sr.Material.set_scalar(scene_material,screen_test and 'emissive_amount' or 'emissive_intensity',c.emissive_intensity)
                 last_emission=c.emissive_intensity
             end
             local m=p.matrix
@@ -1774,10 +1791,21 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     menu=HUD.menu.new(self)
+    local next_weapon_screen_lookup=0;local last_weapon_screen_available
     function self.frame(dt)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
         self.clock=self.clock+dt
+        if self.clock>=next_weapon_screen_lookup then
+            next_weapon_screen_lookup=self.clock+5
+            local ok,available=pcall(function()
+                return sr.Application.can_get('material','content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen')
+            end)
+            local state=ok and tostring(available) or 'lookup unavailable'
+            if state~=last_weapon_screen_available then
+                log('WEAPON_SCREEN_AVAILABILITY '..state);last_weapon_screen_available=state
+            end
+        end
         menu.poll();if self.menu_status~=menu.status then log('MENU '..menu.status) end;self.menu_status=menu.status
         if provider then
             local ok,x,y,visible=pcall(provider)

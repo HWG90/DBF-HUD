@@ -80,6 +80,12 @@ Read-only extraction from the installed game's base bundle archives. No runtime 
 
 ## Weapon screen: strongest candidate
 
+### MA5 rifle live comparison
+
+The weapon catalog identifies MA5C with `assault_rifle_nacho`, linking this material to the rifle's native ammo display. Equipping the rifle made `Application.can_get` report its weapon-screen material available. An isolated `weapon_screen_test` Lua setting assigns it to the existing scene plane and binds the live panel to `input_image`. Screen rectangle and atlas are set to the full image, decorative dirt/distortion/light bleed and drop shadow are disabled, and rear image mapping is mirrored. Both faces bound successfully and the user reported colors still pallid. The test setting was disabled again; the original transparent scene material remains the default fallback. This is not a fullbright fix.
+
+All 62 extracted shader programs disassemble successfully. Image-sampling pixel variants include an RGB power of 2.2, emissive scaling, a view-angle factor, and a buffer-derived brightness factor. The reflected `exposure` and `post_effects_enabled` constants are marked unused in the extracted programs, so their names do not establish an exposure-bypass control. Actual native rifle rendering may choose a different variant or submission path; that remains unverified. Reusing its material alone did not solve the color shift.
+
 `content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen` was present as material `09fb77881b4cc43e`, with a 688-byte main payload. Its base material reference is `2661ebb51d18778d`.
 
 That base was located in archive `18235e0c9ec0e636`: 608 bytes of main data and 480,944 bytes of GPU data containing 62 DXBC signatures. Extracted shader symbol strings include:

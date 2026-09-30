@@ -39,7 +39,7 @@ function M.new(sr,log,side)
         }
     end
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
-    local unit,world,bound,scene_material,last_emission;local failed=false;local smooth={}
+    local unit,world,bound,scene_material,last_emission,screen_test;local failed=false;local smooth={}
     local self={}
     local function live(w)
         for _,v in pairs(A.worlds() or {}) do if w==v then return true end end
@@ -56,6 +56,7 @@ function M.new(sr,log,side)
             local main=A.main_world()
             if not live(main) then return end
             if unit and (world~=main or not live(world)) then self.release() end
+            if unit and screen_test~=(c.weapon_screen_test==true) then self.release() end
             if not unit then
                 local name='content/art_shared/meshes/plane_primitive'
                 assert(A.can_get('unit',name),'plane unit unavailable')
@@ -76,7 +77,10 @@ function M.new(sr,log,side)
                 local mesh=U.mesh(unit,1)
                 assert(Mesh.num_materials(mesh)==1,'unexpected material count')
                 local transparent='content/art_shared/materials/placeholder_red_transparent'
+                screen_test=c.weapon_screen_test==true
+                if screen_test then transparent='content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen' end
                 local alpha=type(U.set_material)=='function' and A.can_get('material',transparent)
+                if screen_test then assert(alpha,'weapon screen material unavailable') end
                 if alpha then
                     -- Unit asset declares the named slot 'material' (thin hash eac0b497).
                     log('SCENE transparent material assignment begin')
@@ -87,6 +91,17 @@ function M.new(sr,log,side)
                 assert(tonumber(ffi.cast('uintptr_t',material))>=65536,'invalid scene material')
                 assert(tonumber(ffi.cast('uintptr_t',target))>=65536,'invalid panel texture')
                 log('SCENE verified material texture bind begin')
+                if screen_test then
+                    sr.Material.set_resource(material,'input_image',target)
+                    sr.Material.set_scalar(material,'screen_enabled',1)
+                    sr.Material.set_vector4(material,'screen_rect',sr.Vector4(side==-1 and 1 or 0,0,side==-1 and -1 or 1,1))
+                    sr.Material.set_vector2(material,'Atlas_size',sr.Vector2(1,1))
+                    sr.Material.set_vector2(material,'resolution_multiplier',sr.Vector2(1,1))
+                    for _,name in ipairs({'normal_map_amount','normal_map_coloring_amount','dirt_amount','distortion_amount','artifacts_amount','light_bleed_amount','use_dropshadow'}) do
+                        sr.Material.set_scalar(material,name,0)
+                    end
+                    log('SCENE weapon screen image bound side='..side..'; appearance unverified')
+                else
                 sr.Material.set_resource(material,'color_map',target)
                 sr.Material.set_resource(material,'emissive_map',target)
                 sr.Material.set_scalar(material,'use_color_map',1)
@@ -108,12 +123,14 @@ function M.new(sr,log,side)
                     sr.Material.set_scalar(material,'use_opacity_map',1)
                     log('SCENE transparent material bound; alpha pixels unverified')
                 end
+                end
+                scene_material=material
                 bound=target
                 log('SCENE plane texture bound')
             end
             assert(bound==target,'render target changed without scene retirement')
             if last_emission~=c.emissive_intensity then
-                sr.Material.set_scalar(scene_material,'emissive_intensity',c.emissive_intensity)
+                sr.Material.set_scalar(scene_material,screen_test and 'emissive_amount' or 'emissive_intensity',c.emissive_intensity)
                 last_emission=c.emissive_intensity
             end
             local m=p.matrix

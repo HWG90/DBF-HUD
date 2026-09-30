@@ -124,10 +124,21 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     menu=HUD.menu.new(self)
+    local next_weapon_screen_lookup=0;local last_weapon_screen_available
     function self.frame(dt)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
         self.clock=self.clock+dt
+        if self.clock>=next_weapon_screen_lookup then
+            next_weapon_screen_lookup=self.clock+5
+            local ok,available=pcall(function()
+                return sr.Application.can_get('material','content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen')
+            end)
+            local state=ok and tostring(available) or 'lookup unavailable'
+            if state~=last_weapon_screen_available then
+                log('WEAPON_SCREEN_AVAILABILITY '..state);last_weapon_screen_available=state
+            end
+        end
         menu.poll();if self.menu_status~=menu.status then log('MENU '..menu.status) end;self.menu_status=menu.status
         if provider then
             local ok,x,y,visible=pcall(provider)
