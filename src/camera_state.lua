@@ -16,8 +16,24 @@ function M.capture(backend,raw,trace_code)
     part('player_view',player+0x380,128)
     part('player_header',player,0x380)
     part('camera_state_tail',state+512,512)
-    if trace_code=='wide_state' then
+    local code_page=type(trace_code)=='string' and trace_code:match('^code_probe_(%d+)$')
+    if code_page then
+        code_page=tonumber(code_page);assert(code_page>=0 and code_page<384,'code probe bounds')
+        for i=0,11 do
+            local address=base+0x500000+code_page*49152+i*4096
+            local data=r.read(address,4096)
+            if data:find(string.char(0xec,2,0,0),1,true) then
+                parts[#parts+1]={name=string.format('code_match_%x',address-base),address=address,data=data}
+            end
+        end
+    elseif trace_code=='wide_state' then
         for i=1,3 do part('player_tail'..i,player+i*1024,1024) end
+    elseif trace_code=='control_links' then
+        for _,off in ipairs({0x18,0x20}) do
+            local address=r.p(player+off)
+            part(string.format('player_link_%x',off),address,1024)
+            assert(r.p(player+off)==address,'player link changed during snapshot')
+        end
     elseif trace_code=='camera_links' then
         for _,off in ipairs({0x180,0x188,0x190,0x1a0}) do
             local address=r.p(state+off)
@@ -26,9 +42,9 @@ function M.capture(backend,raw,trace_code)
         end
     elseif trace_code then
         part('weapon_control_code',base+0x764e00,1024)
-        part('player_control_code',base+0x603000,1024)
+        part('player_control_code',base+0xa40000,1024)
         for i=1,24 do
-            part('player_control_follow'..i,base+0x603000+i*1024,1024)
+            part('player_control_follow'..i,base+0xa40000+i*1024,1024)
         end
     end
     local selector=r.p(base+HUD.layouts.selector)

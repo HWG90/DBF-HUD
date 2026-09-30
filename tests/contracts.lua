@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -103,6 +103,26 @@ test('camera research snapshots are bounded and reject stale ownership',function
         return value
     end
     assert(not pcall(HUD.camera_state.capture,b,raw));P(cs,cam)
+end)
+
+test('native first-person state handles false and rejects stale or unknown bindings',function()
+    local sigs={{0xa42a74,'4c8b0ded398e02'},{0xa42b1f,'4138bc24ec020000'},{0xa42b2a,'41888424ec020000'}}
+    for _,s in ipairs(sigs) do put(base+s[1],s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)) end
+    local raw={avatar_unit_ref=77,binding={module_base=base,avatar_id=10}}
+    bytes[pm+0x2ec]=0;assert(HUD.camera_mode.read(backend,raw)==false)
+    bytes[pm+0x2ec]=1;assert(HUD.camera_mode.read(backend,raw)==true)
+    -- The local-player entity is distinct from the controlled avatar in-game.
+    local local_player=alloc(24);U(local_player+8,11);bytes[local_player+20]=1
+    P(pm+0xe8,local_player);map(pm+0xd0,{[11]=0})
+    assert(HUD.camera_mode.read(backend,raw)==true)
+    P(pm+0xe8,avatar);map(pm+0xd0,{[10]=0})
+    bytes[pm+0x2ec]=2;assert(HUD.camera_mode.read(backend,raw)==nil)
+    bytes[pm+0x2ec]=0;U(pm+0x3a8,78);assert(HUD.camera_mode.read(backend,raw)==nil);U(pm+0x3a8,77)
+    bytes[base+0xa42b2a]=0;assert(HUD.camera_mode.read(backend,raw)==nil);bytes[base+0xa42b2a]=0x41
+    local changed={read=function(a,n)
+        local value=read(a,n);if a==pm+0x2ec then U(pm+0x3a8,78) end;return value
+    end}
+    assert(HUD.camera_mode.read(changed,raw)==nil);U(pm+0x3a8,77)
 end)
 
 test('machine gun uses verified magazine path and rejects stale component identity',function()

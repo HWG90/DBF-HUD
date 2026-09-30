@@ -207,14 +207,17 @@ function M.start(sr,backend,options)
                 z=p.z+m[3]*c.mount_x+m[7]*c.mount_y+m[11]*c.mount_z}
             point=projection.poll(binding_base,mount,w/h)
         end
-        self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov)
+        local native_first,mode_status=HUD.camera_mode.read(backend,latest_raw)
+        if native_first~=nil then self.first_person=native_first
+        else self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
+        self.camera_mode_status=mode_status
         self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,self.first_person)
         if self.weapon_pose then
             self.weapon_pose.first_person=self.first_person
             self.weapon_pose.left_shoulder=self.left_shoulder
         end
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
-            log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f',projection.camera_distance,projection.camera_fov,projection.camera_lateral))
+            log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))
             self.next_camera_sample=self.clock+1
         end
         self.projection_status=projection.status

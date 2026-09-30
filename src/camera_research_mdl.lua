@@ -26,6 +26,8 @@ return {
   end
   local probe=label=='trace_code' or (label:find('wide_state',1,true) and 'wide_state')
   if label:find('camera_links',1,true) then probe='camera_links' end
+  if label:find('control_links',1,true) then probe='control_links' end
+  if label:match('^code_probe_%d+$') then probe=label end
   local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),probe)
   if ok then
    for _,part in ipairs(parts) do
