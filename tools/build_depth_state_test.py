@@ -109,13 +109,13 @@ def build(control=False):
         ordered=sorted(ranges)
         assert all(a[1]<=b[0] for a,b in zip(ordered,ordered[1:]))
     manifest = {'Version': 1, 'Guid': '37e62026-bb34-4ddb-9474-d48076246bfd',
-                'Name': 'DBF-HUD Shader Loader Control 0.1',
+                'Name': 'DBF-HUD Shader Loader Control 0.2',
                 'Description': 'Loader-only control. Adds one unchanged-depth GUI library to the native default group; working HUD is unchanged.',
                 'Options': [{'Name': 'Shader loader control', 'Include': ['DepthState']}]}
-    output = ROOT.parent / 'DBF-HUD-Shader-Loader-Control-0.1.zip'
+    output = ROOT.parent / 'DBF-HUD-Shader-Loader-Control-0.2.zip'
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
         archive.writestr('manifest.json', json.dumps(manifest, indent=2))
-        stem = 'DepthState/9ba626afa44a3aa3.patch_0'
+        stem = 'DepthState/ee6b1ba7e22d71ed.patch_0'
         archive.writestr(stem, body)
         archive.writestr(stem + '.stream', b'')
         archive.writestr(stem + '.gpu_resources', gpu_body)
@@ -125,7 +125,8 @@ def build(control=False):
                 'compiled_variant_id': hex(variant), 'program_id': hex(program),
                 'depth_enable': 0, 'depth_write': 0, 'depth_compare': 7,
                 'disk_depth_enable_offset': '0xda0',
-                'live_status': 'not loaded or visually verified'}
+                'archive_target': 'ee6b1ba7e22d71ed',
+                'live_status': 'archive-target revision not yet deployed'}
     (folder / 'loader-control-build.json').write_text(json.dumps(evidence, indent=2) + '\n')
     print(output)
 
@@ -137,3 +138,4 @@ if __name__ == '__main__':
     if not args.loader_control:
         raise SystemExit('Depth-enabled test remains disabled. Use --loader-control for the separate depth-disabled load check.')
     build(control=True)
+

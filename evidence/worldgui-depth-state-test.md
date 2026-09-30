@@ -98,3 +98,10 @@ renderer selection. Native resource loading and scene-depth attachment are still
 unverified. Enabling hardware depth does not itself prove the pass receives a
 compatible scene depth buffer. If loading fails or rendering regresses, disable
 this isolated addon and use the mesh fallback.
+
+### Live loader control and archive-target isolation
+
+Control 0.1 was deployed and the game reached HUD initialization and the mission. Application.can_get returned true for the control shader, its material, and default_shaders. Fresh native manager lookups still found only the native GUI entries; control variant 75C7DC83 and program 1F57CB83 were absent. Resource discovery therefore does not establish program registration.
+
+The control placed its default-group override under archive 9ba626afa44a3aa3, while the verified native group belongs to ee6b1ba7e22d71ed. Control 0.2 targets that native archive. All three archive payloads are byte-identical to 0.1; only archive targeting and addon metadata change. This is a loading hypothesis, not a proven cause. DepthEnable stays zero. The revised control needs deployment/restart before registration can be verified.
+

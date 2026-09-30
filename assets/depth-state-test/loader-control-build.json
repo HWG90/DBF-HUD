@@ -8,5 +8,6 @@
   "depth_write": 0,
   "depth_compare": 7,
   "disk_depth_enable_offset": "0xda0",
-  "live_status": "not loaded or visually verified"
+  "archive_target": "ee6b1ba7e22d71ed",
+  "live_status": "archive-target revision not yet deployed"
 }

@@ -88,6 +88,9 @@ function M.start(sr,backend,options)
         log('SCREEN_CAPABILITIES '..namespace..' '..table.concat(result,' '))
     end
     for _,resource in ipairs({
+        {'shader_library_group','core/stingray_renderer/shader_libraries/default_shaders'},
+        {'shader_library','mods/dbf_hud/shaders/gui_depth_state_test_loader_control'},
+        {'material','mods/dbf_hud/materials/depth_state_test_loader_control'},
         {'unit','content/env_ship/hologram/units/plane'},
         {'unit','content/env_ship/hologram/units/hologram_cylinder'},
         {'material','content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen'}
@@ -307,3 +310,4 @@ function M.start(sr,backend,options)
     return self
 end
 return M
+
