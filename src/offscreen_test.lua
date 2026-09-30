@@ -182,7 +182,10 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                     -- Independent control: visible geometry does not depend on the render target.
                     G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(panel_provider and texture_w/density+8 or 200,panel_provider and texture_h/density+8 or 200),sr.Color(255,255,0,255))
                     G.rect(preview,sr.Vector3(panel_provider and 916+texture_w/density or 1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
-                    log('OFFSCREEN placement control: magenta frame and white square')
+                    for i,color in ipairs({{255,0,0},{255,255,0},{0,255,0},{0,0,255},{128,128,128},{255,255,255}}) do
+                        G.rect(preview,sr.Vector3(900+(i-1)*32,260,81),sr.Vector2(32,24),sr.Color(255,color[1],color[2],color[3]))
+                    end
+                    log('OFFSCREEN color comparison reference enabled')
                     log('OFFSCREEN preview material lookup begin')
                     for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_diffuse_map','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
                         if A.can_get('material',candidate) then

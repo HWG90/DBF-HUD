@@ -226,3 +226,10 @@ User-labelled left-shoulder aim measured camera-relative mount lateral offset ab
 ## Palette color-space trial
 
 User reported equally pale reds/yellows after reducing emission to 1 and removing diffuse contribution. These observations did not support either adjustment as the cause. The next controlled trial decodes palette sRGB channels to linear values before drawing into the UNORM render target; alpha remains unchanged. Scene texture color-space handling is a hypothesis, not yet verified. Visual comparison is pending.
+
+
+## Fullbright candidate audit
+
+The user reports pure red significantly paler on the scene plane than the native screen reference. Black-metal/roughness isolation did not visibly improve it. A temporary 0.05 emission multiplier only dimmed it and was removed. The swatch comparison remains installed for diagnosis.
+
+Read-only asset inspection: ui_video has three separate video texture channels, not a single panel RGB input. weapon_screen exposes input_image but includes dirt, distortion, normal coloring and light bleed; currently unavailable in the mission. core/appkit/materials/loading_screen is named in the catalog but not found in the scanned base resources and reports unavailable live. store_screen_large is a weathered lit surface and unavailable live. mesh_particle_simple is available and has albedo, normal and mra inputs, with lighting controls; this does not establish an unlit pass. basic_particles and fx_debug_basic declare no bindable texture inputs. space_particle_additive declares base_color but is an additive particle surface with pivot/distance scaling; ordinary mesh compatibility, exposure independence and depth behavior remain unverified. No replacement material has been assigned based on these names alone. A verified fullbright scene material is still unresolved.

@@ -1315,7 +1315,10 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                     -- Independent control: visible geometry does not depend on the render target.
                     G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(panel_provider and texture_w/density+8 or 200,panel_provider and texture_h/density+8 or 200),sr.Color(255,255,0,255))
                     G.rect(preview,sr.Vector3(panel_provider and 916+texture_w/density or 1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
-                    log('OFFSCREEN placement control: magenta frame and white square')
+                    for i,color in ipairs({{255,0,0},{255,255,0},{0,255,0},{0,0,255},{128,128,128},{255,255,255}}) do
+                        G.rect(preview,sr.Vector3(900+(i-1)*32,260,81),sr.Vector2(32,24),sr.Color(255,color[1],color[2],color[3]))
+                    end
+                    log('OFFSCREEN color comparison reference enabled')
                     log('OFFSCREEN preview material lookup begin')
                     for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_diffuse_map','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
                         if A.can_get('material',candidate) then
@@ -1390,6 +1393,9 @@ function M.new(sr,log,side)
                 for _,fn in ipairs({'set_local_pose','set_local_scale','num_meshes','mesh'}) do assert(type(U[fn])=='function','missing Unit.'..fn) end
                 assert(Mesh and type(Mesh.num_materials)=='function' and type(Mesh.material)=='function','mesh material API unavailable')
                 world=main
+                for _,candidate in ipairs({'core/appkit/materials/loading_screen','content/effects/base_shaders/mesh_particle_simple','content/env_ship/hangar/props/materials/store_screen_large','content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen'}) do
+                    log('SCENE fullbright candidate '..candidate..' loaded='..tostring(A.can_get('material',candidate)))
+                end
                 log('SCENE plane spawn begin')
                 unit=assert(W.spawn_unit(world,name))
                 assert(U.num_meshes(unit)==1,'unexpected mesh count')
@@ -1422,6 +1428,11 @@ function M.new(sr,log,side)
                 end
                 scene_material=material
                 sr.Material.set_vector3(material,'base_color',sr.Vector3(0,0,0))
+                -- Diagnostic: black metallic base removes the dielectric reflection term.
+                sr.Material.set_scalar(material,'use_metallic_map',0)
+                sr.Material.set_scalar(material,'metallic',1)
+                sr.Material.set_scalar(material,'use_roughness_map',0)
+                sr.Material.set_scalar(material,'roughness',1)
                 sr.Material.set_vector3(material,'emissive',sr.Vector3(1,1,1))
                 if alpha then
                     sr.Material.set_scalar(material,'opacity',1)
@@ -1598,7 +1609,13 @@ function M.start(sr,backend,options)
         if not model then return nil end
         local cfg={};for k,v in pairs(self.config) do cfg[k]=v end
         cfg.font='bigblue';cfg.frosted=false
-        return HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        local f=commands[1];f.y=f.y-16;f.h=f.h+16
+        local swatches={{255,0,0},{255,255,0},{0,255,0},{0,0,255},{128,128,128},{255,255,255}}
+        for i,color in ipairs(swatches) do
+            commands[#commands+1]={type='rect',x=f.x+(i-1)*f.w/6,y=f.y,w=f.w/6,h=12,c=color,a=1}
+        end
+        return commands
     end
     local retired=false;local cleaned=false;local alpha=0;local last_id;local width,height
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
@@ -1902,7 +1919,7 @@ return {
         ctx.global('DBFHUD',hud)
         -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
         live_log=function(line)if backend.log then pcall(backend.log,line) end end
-        offscreen=HUD.offscreen_test.start(sr,live_log,nil,function()return hud and hud.texture_commands()end,false)
+        offscreen=HUD.offscreen_test.start(sr,live_log,nil,function()return hud and hud.texture_commands()end,true)
         scene=HUD.scene_test.new(sr,live_log)
         ctx.log('Enabled DBF-HUD '..hud.version..' with MDL-owned updates')
     end,
@@ -1921,7 +1938,7 @@ return {
             if bridge_ready and panel_ready and (offscreen.waiting_for_bridge or offscreen.waiting_for_panel or offscreen.resize_required) then
                 if scene then scene.release() end
                 offscreen.release()
-                offscreen=HUD.offscreen_test.start(assert(rawget(_G,'stingray')),live_log,nil,function()return hud and hud.texture_commands()end,false)
+                offscreen=HUD.offscreen_test.start(assert(rawget(_G,'stingray')),live_log,nil,function()return hud and hud.texture_commands()end,true)
             end
         end
     end,

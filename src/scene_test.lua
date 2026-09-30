@@ -32,6 +32,9 @@ function M.new(sr,log,side)
                 for _,fn in ipairs({'set_local_pose','set_local_scale','num_meshes','mesh'}) do assert(type(U[fn])=='function','missing Unit.'..fn) end
                 assert(Mesh and type(Mesh.num_materials)=='function' and type(Mesh.material)=='function','mesh material API unavailable')
                 world=main
+                for _,candidate in ipairs({'core/appkit/materials/loading_screen','content/effects/base_shaders/mesh_particle_simple','content/env_ship/hangar/props/materials/store_screen_large','content/fac_helldivers/equipment/primary_weapons/assault_rifle_nacho/materials/weapon_screen'}) do
+                    log('SCENE fullbright candidate '..candidate..' loaded='..tostring(A.can_get('material',candidate)))
+                end
                 log('SCENE plane spawn begin')
                 unit=assert(W.spawn_unit(world,name))
                 assert(U.num_meshes(unit)==1,'unexpected mesh count')
@@ -64,6 +67,11 @@ function M.new(sr,log,side)
                 end
                 scene_material=material
                 sr.Material.set_vector3(material,'base_color',sr.Vector3(0,0,0))
+                -- Diagnostic: black metallic base removes the dielectric reflection term.
+                sr.Material.set_scalar(material,'use_metallic_map',0)
+                sr.Material.set_scalar(material,'metallic',1)
+                sr.Material.set_scalar(material,'use_roughness_map',0)
+                sr.Material.set_scalar(material,'roughness',1)
                 sr.Material.set_vector3(material,'emissive',sr.Vector3(1,1,1))
                 if alpha then
                     sr.Material.set_scalar(material,'opacity',1)

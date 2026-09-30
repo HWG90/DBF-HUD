@@ -18,7 +18,13 @@ function M.start(sr,backend,options)
         if not model then return nil end
         local cfg={};for k,v in pairs(self.config) do cfg[k]=v end
         cfg.font='bigblue';cfg.frosted=false
-        return HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        local f=commands[1];f.y=f.y-16;f.h=f.h+16
+        local swatches={{255,0,0},{255,255,0},{0,255,0},{0,0,255},{128,128,128},{255,255,255}}
+        for i,color in ipairs(swatches) do
+            commands[#commands+1]={type='rect',x=f.x+(i-1)*f.w/6,y=f.y,w=f.w/6,h=12,c=color,a=1}
+        end
+        return commands
     end
     local retired=false;local cleaned=false;local alpha=0;local last_id;local width,height
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
