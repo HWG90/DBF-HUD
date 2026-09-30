@@ -1058,14 +1058,21 @@ function M.new(sr,log,direct)
         local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),
             sr.Vector3(m[5],m[6],m[7]),sr.Vector3(m[9],m[10],m[11]),sr.Vector3(px,py,pz))
         if not gui then
-            world=main;log('WORLD_GUI create begin')
-            gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate'),'world GUI returned nil')
-            log('WORLD_GUI create complete')
+            world=main
             local name='mods/dbf_hud/materials/depth_fill'
             if not direct and A.can_get and A.can_get('material',name) then depth_fill=name
             elseif not direct and A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
-                depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
+                depth_fill='mods/astra_ammo/materials/depth_fill'
             end
+            log('WORLD_GUI create begin')
+            if depth_fill then
+                -- Current-game Lua parser verified: material consumes the next resource name.
+                gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate','material',depth_fill),'world GUI returned nil')
+                log('WORLD_GUI creation material supplied: '..depth_fill)
+            else
+                gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate'),'world GUI returned nil')
+            end
+            log('WORLD_GUI create complete')
             log('WORLD_GUI depth material '..(depth_fill and 'available' or 'missing; install depth material addon'))
             -- One-time observation only: resolve the same material used by bitmap.
             -- Keep no native material handles across frames or GUI destruction.
@@ -1690,7 +1697,7 @@ function M.start(sr,backend,options)
     log('WORLD_GUI_CAPABILITIES '..table.concat(capabilities,' '))
     -- Inspect C binding entry points without invoking the bindings themselves.
     local jit_ok,jit_util=pcall(require,'jit.util')
-    for _,entry in ipairs({{'Unit','set_mesh_visibility'},{'Viewport','set_output_render_target'},
+    for _,entry in ipairs({{'World','create_world_gui'},{'Gui','move'},{'Unit','set_mesh_visibility'},{'Viewport','set_output_render_target'},
         {'Viewport','register_render_resource'},{'Application','create_viewport'},
         {'Application','render_world'},{'Renderer','update_texture_base64'},
         {'Mesh','material'},{'Gui','material'},{'Gui','bitmap'},{'Gui','update_bitmap'},{'Material','set_resource'}}) do

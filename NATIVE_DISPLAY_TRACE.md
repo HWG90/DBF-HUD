@@ -260,3 +260,8 @@ Occlusion OFF now uses the original direct WorldGUI primitives, rather than a bi
 Replaced the boolean menu with Off (World GUI), On (Mesh), and On (World GUI - experimental). The experimental option uses the existing depth-fill material when available, now including the panel background. This does not establish occlusion; earlier tests failed. Missing depth material falls back to ordinary primitives and is reported in the log. The old boolean remains a compatible tuning alias, with occlusion_mode taking precedence. Old toggle callbacks are retired. All 46 contracts pass.
 
 Offline shader comparison: plain/depth GUI GPU resources differ in only 19 bytes; diffuse/depth-diffuse differ in 20 bytes. Their shader bytecode requires further chunk-level comparison; resource metadata/render-state resolution is the next trace target. No renderer configuration or native process memory was modified.
+
+
+## WorldGUI creation-material experiment
+
+Both plain/depth shader pairs have byte-identical DXBC vertex and pixel programs. Disassembly shows projected Z is preserved; a per-object flag chooses context-camera vs viewport-camera view projection. Current native World.create_world_gui parser accepts immediate, shadow_caster, and material followed by a resource name/hash. The latter is passed as a material array to the native creation routine. Experimental GUI now supplies depth_fill during creation as well as each bitmap draw. Normal direct GUI and mesh modes are unchanged. The API availability alone does not prove scene-depth attachment or successful occlusion. All 46 offline checks pass.
