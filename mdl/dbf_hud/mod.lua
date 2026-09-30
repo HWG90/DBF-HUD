@@ -1393,6 +1393,11 @@ function M.new(sr,log,side)
                 log('SCENE plane spawn begin')
                 unit=assert(W.spawn_unit(world,name))
                 assert(U.num_meshes(unit)==1,'unexpected mesh count')
+                if type(U.set_mesh_visibility)=='function' then
+                    log('SCENE shadow-only visibility begin side='..side)
+                    U.set_mesh_visibility(unit,1,false,'shadow_caster')
+                    log('SCENE shadow-only visibility returned side='..side)
+                end
                 local mesh=U.mesh(unit,1)
                 assert(Mesh.num_materials(mesh)==1,'unexpected material count')
                 local transparent='content/art_shared/materials/placeholder_red_transparent'
@@ -1615,7 +1620,7 @@ function M.start(sr,backend,options)
     log('WORLD_GUI_CAPABILITIES '..table.concat(capabilities,' '))
     -- Inspect C binding entry points without invoking the bindings themselves.
     local jit_ok,jit_util=pcall(require,'jit.util')
-    for _,entry in ipairs({{'Viewport','set_output_render_target'},
+    for _,entry in ipairs({{'Unit','set_mesh_visibility'},{'Viewport','set_output_render_target'},
         {'Viewport','register_render_resource'},{'Application','create_viewport'},
         {'Application','render_world'},{'Renderer','update_texture_base64'},
         {'Mesh','material'},{'Gui','material'},{'Gui','bitmap'},{'Gui','update_bitmap'},{'Material','set_resource'}}) do

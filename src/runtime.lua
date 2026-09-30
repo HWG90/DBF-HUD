@@ -40,7 +40,7 @@ function M.start(sr,backend,options)
     log('WORLD_GUI_CAPABILITIES '..table.concat(capabilities,' '))
     -- Inspect C binding entry points without invoking the bindings themselves.
     local jit_ok,jit_util=pcall(require,'jit.util')
-    for _,entry in ipairs({{'Viewport','set_output_render_target'},
+    for _,entry in ipairs({{'Unit','set_mesh_visibility'},{'Viewport','set_output_render_target'},
         {'Viewport','register_render_resource'},{'Application','create_viewport'},
         {'Application','render_world'},{'Renderer','update_texture_base64'},
         {'Mesh','material'},{'Gui','material'},{'Gui','bitmap'},{'Gui','update_bitmap'},{'Material','set_resource'}}) do
