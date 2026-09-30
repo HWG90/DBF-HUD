@@ -626,11 +626,13 @@ test('offscreen test waits for render, preserves returns and releases in order',
     globals.HUDRenderBridge=nil;HUD.offscreen_test.start(sr,function()end,globals);assert(#events==count)
     globals.HUDRenderBridge=bridge()
     sr.Gui.destroy_rect=event('free rect')
-    sr.Gui.rect=function(gui,pos,size)assert(pos[1]==0 and pos[2]==0 and size[1]==512 and size[2]==256);return 1 end
-    local dynamic=HUD.offscreen_test.start(sr,function()end,globals,function()return {{type='rect',x=0,y=0,w=20,h=10,c={255,255,255},a=1}} end)
+    sr.Gui.rect=function(gui,pos,size)assert(pos[1]==0 and pos[2]==0 and size[1]==20 and size[2]==10);return 1 end
+    local panel_width=20
+    local dynamic=HUD.offscreen_test.start(sr,function()end,globals,function()return {{type='rect',x=0,y=0,w=panel_width,h=10,c={255,255,255},a=1}} end)
     dynamic.tick(0);globals.render(8);assert(rendered==2)
     dynamic.tick(0.01);globals.render(8);assert(rendered==2)
     dynamic.tick(0.1);globals.render(8);assert(rendered==3)
+    panel_width=30;dynamic.tick(0.1);assert(dynamic.resize_required);globals.render(8);assert(rendered==3)
     dynamic.release()
 end)
 
@@ -652,7 +654,7 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
     local material=65536
     local sr={Application={worlds=function()return {1}end,main_world=function()return 1 end,can_get=function()return true end},
         World={spawn_unit=function()return 2 end,destroy_unit=function()destroyed=destroyed+1 end},
-        Unit={num_meshes=function()return 1 end,mesh=function()return 3 end,set_local_pose=function()moves=moves+1 end,set_local_scale=function()end},
+        Unit={set_material=function(_,slot,name)assert(slot=='material' and name=='content/art_shared/materials/placeholder_red_transparent')end,num_meshes=function()return 1 end,mesh=function()return 3 end,set_local_pose=function()moves=moves+1 end,set_local_scale=function()end},
         Mesh={num_materials=function()return 1 end,material=function()return material end},
         Material={set_resource=function()bindings=bindings+1 end,set_scalar=function()end,set_vector3=function()end},
         Matrix4x4={from_axes=function(...)return {...}end},Vector3=function(...)return {...}end}

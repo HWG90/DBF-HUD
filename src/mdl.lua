@@ -33,10 +33,13 @@ return {
         end
         if offscreen and offscreen.tick then offscreen.tick(dt) end
         if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect) end
-        -- Startup addons can load after MDL. Retry only once the bridge exists.
-        if offscreen and offscreen.waiting_for_bridge then
+        -- Rebuild only when prerequisites arrive or content bounds change.
+        if offscreen then
             local bridge=rawget(_G,'HUDRenderBridge')
-            if bridge and bridge.api==1 and type(bridge.subscribe)=='function' then
+            local bridge_ready=bridge and bridge.api==1 and type(bridge.subscribe)=='function'
+            local panel_ready=hud and hud.texture_commands()~=nil
+            if bridge_ready and panel_ready and (offscreen.waiting_for_bridge or offscreen.waiting_for_panel or offscreen.resize_required) then
+                if scene then scene.release() end
                 offscreen.release()
                 offscreen=HUD.offscreen_test.start(assert(rawget(_G,'stingray')),live_log,nil,function()return hud and hud.texture_commands()end)
             end

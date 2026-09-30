@@ -8,18 +8,22 @@ function M.start(sr,log,globals,panel_provider)
     local preview,preview_world
     local world_ready=false
     local source_ids={};local elapsed=0
+    local texture_w,texture_h=64,64
     function self.tick(dt)
         elapsed=elapsed+(dt or 0)
         if panel_provider and active and world and gui and (not world_ready or elapsed>=0.1) then
             elapsed=0
             local commands=panel_provider()
             if commands then
-                for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
-                source_ids={}
                 local f=commands[1]
                 assert(f.w>0 and f.h>0,'invalid panel bounds')
-                self.aspect=f.w/f.h
-                local sx,sy=512/f.w,256/f.h
+                if math.ceil(f.w)~=texture_w or math.ceil(f.h)~=texture_h then
+                    self.resize_required=true;return
+                end
+                self.aspect=texture_w/texture_h
+                local sx,sy=1,1
+                for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
+                source_ids={}
                 local function rect(x,y,w,h,c,a)
                     local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(y-f.y)*sy,1),sr.Vector2(w*sx,h*sy),sr.Color(math.floor(255*(a or 1)),c[1],c[2],c[3]))
                     source_ids[#source_ids+1]=id
@@ -72,6 +76,13 @@ function M.start(sr,log,globals,panel_provider)
         self.waiting_for_bridge=true
         return self
     end
+    if panel_provider then
+        local commands=panel_provider()
+        if not commands then self.waiting_for_panel=true;return self end
+        texture_w,texture_h=math.ceil(commands[1].w),math.ceil(commands[1].h)
+        assert(texture_w>0 and texture_h>0 and texture_w<=2048 and texture_h<=2048,'panel texture bounds invalid')
+        self.aspect=texture_w/texture_h
+    end
     local ok,err=pcall(function()
         for _,pair in ipairs({{A,'new_world'},{A,'release_world'},{A,'create_viewport'},{A,'destroy_viewport'},
             {A,'render_world'},{A,'can_get'},{W,'spawn_unit'},{W,'create_screen_gui'},
@@ -103,34 +114,12 @@ function M.start(sr,log,globals,panel_provider)
         end
         log('OFFSCREEN setup begin')
         world=assert(A.new_world())
-        if type(U.num_meshes)=='function' then
-            for _,candidate in ipairs({'content/art_shared/meshes/plane_2x2m','content/art_shared/meshes/plane_primitive','content/env_ship/hologram/units/plane'}) do
-                local available=A.can_get('unit',candidate)
-                log('SURFACE unit '..candidate..' available='..tostring(available))
-                if available then
-                    local probe=assert(W.spawn_unit(world,candidate))
-                    local count=U.num_meshes(probe)
-                    log('SURFACE unit '..candidate..' meshes='..tostring(count))
-                    if count==1 and type(U.mesh)=='function' and sr.Mesh and type(sr.Mesh.num_materials)=='function' then
-                        local mesh=U.mesh(probe,1)
-                        local slots=sr.Mesh.num_materials(mesh)
-                        log('SURFACE first mesh material slots='..tostring(slots))
-                        if slots==1 and type(sr.Mesh.material)=='function' then
-                            local material=sr.Mesh.material(mesh,1)
-                            local ffi=require('ffi')
-                            log(string.format('SURFACE material pointer=0x%X',tonumber(ffi.cast('uintptr_t',material))))
-                        end
-                    end
-                    -- Private world owns this probe; no scene attachment or material changes.
-                end
-            end
-        end
         local unit=assert(W.spawn_unit(world,name))
         camera=assert(U.camera(unit,1),'camera unavailable')
         environment=assert(default_environment and W.create_default_shading_environment(world)
             or W.create_shading_environment(world,environment_name))
         viewport=assert(A.create_viewport(world,'offscreen_ui_weapon_screen'))
-        target=assert(R.create_resource('render_target','R8G8B8A8',panel_provider and 512 or 64,panel_provider and 256 or 64))
+        target=assert(R.create_resource('render_target','R8G8B8A8',texture_w,texture_h))
         V.set_output_render_target(viewport,target)
         self.texture=target
         gui=assert(W.create_screen_gui(world,'scale',1,1))
@@ -140,7 +129,7 @@ function M.start(sr,log,globals,panel_provider)
                 sr.Color(255,color[1],color[2],color[3]))
         end
         end
-        log('OFFSCREEN camera and source GUI ready')
+        log(string.format('OFFSCREEN source GUI ready at %dx%d',texture_w,texture_h))
     end)
     if not ok then log('OFFSCREEN setup stopped '..tostring(err));self.release();return self end
     unsubscribe=bridge.subscribe('dbf_hud.offscreen',function(...)
@@ -166,8 +155,8 @@ function M.start(sr,log,globals,panel_provider)
                     log('OFFSCREEN preview GUI create begin')
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
                     -- Independent control: visible geometry does not depend on the render target.
-                    G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(panel_provider and 392 or 200,panel_provider and 200 or 200),sr.Color(255,255,0,255))
-                    G.rect(preview,sr.Vector3(panel_provider and 1300 or 1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
+                    G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(panel_provider and texture_w+8 or 200,panel_provider and texture_h+8 or 200),sr.Color(255,255,0,255))
+                    G.rect(preview,sr.Vector3(panel_provider and 916+texture_w or 1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
                     log('OFFSCREEN placement control: magenta frame and white square')
                     log('OFFSCREEN preview material lookup begin')
                     for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_diffuse_map','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
@@ -195,7 +184,7 @@ function M.start(sr,log,globals,panel_provider)
                     log('OFFSCREEN verified texture binding begin')
                     sr.Material.set_resource(material,'diffuse_map',target)
                     log('OFFSCREEN preview bitmap draw begin')
-                    G.bitmap(preview,'content/ui/shared/material/gui_diffuse_map',sr.Vector3(900,300,80),sr.Vector2(panel_provider and 384 or 192,192),sr.Color(255,255,255,255))
+                    G.bitmap(preview,'content/ui/shared/material/gui_diffuse_map',sr.Vector3(900,300,80),sr.Vector2(panel_provider and texture_w or 192,panel_provider and texture_h or 192),sr.Color(255,255,255,255))
                     log('OFFSCREEN four-color preview placed above/right of native bottom-left HUD')
                 end)
                 if not shown then log('OFFSCREEN preview stopped '..tostring(reason)) end

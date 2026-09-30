@@ -166,3 +166,10 @@ The user identified the upright plane as facing the wrong direction. The local-X
 ## Scene image confirmed; content fit corrected
 
 After reversing the upright facing, the user confirmed ammo pixels on the scene plane, but reported the image compressed into one corner and a black panel. The source renderer had placed natural panel bounds into only part of the fixed 512x256 canvas. It now maps the measured frame across the full canvas and carries its aspect ratio into the scene plane scale, preserving the displayed panel proportions. The existing scene material remains opaque: transparent texels do not make the mesh transparent. No frost or alpha-blending success is claimed.
+
+
+## Content-sized target and transparent carrier trial
+
+The user preferred resizing the texture over stretching the counter. The target now uses the measured natural panel bounds, recreating the scene carrier and target when those bounds change. Source glyph geometry is not stretched; the scene aspect ratio follows the target. Offline coverage checks layout-driven resize detection. Supersampling was discussed but is not enabled.
+
+The native placeholder_red_transparent material is loaded in the current session. Asset inspection identifies the standard_transparent base, color_map/emissive_map inputs, opacity, and use_opacity_map. The glass candidates instead use packed normal/roughness/opacity textures and are not suitable substitutes for the panel image. The plane asset slot hashes to the name material. The trial assigns the loaded transparent material through Unit.set_material, obtains and validates its resulting instance, binds both panel texture inputs, and enables opacity-map sampling with opacity 1. This preserves source alpha rather than uniformly fading the text. Actual transparency and retained scene occlusion require visual verification; frosted blur remains unresolved. The previous opaque material remains the fallback when the transparent resource or setter is unavailable.

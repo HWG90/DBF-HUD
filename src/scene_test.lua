@@ -30,6 +30,13 @@ function M.new(sr,log)
                 assert(U.num_meshes(unit)==1,'unexpected mesh count')
                 local mesh=U.mesh(unit,1)
                 assert(Mesh.num_materials(mesh)==1,'unexpected material count')
+                local transparent='content/art_shared/materials/placeholder_red_transparent'
+                local alpha=type(U.set_material)=='function' and A.can_get('material',transparent)
+                if alpha then
+                    -- Unit asset declares the named slot 'material' (thin hash eac0b497).
+                    log('SCENE transparent material assignment begin')
+                    U.set_material(unit,'material',transparent)
+                end
                 local material=Mesh.material(mesh,1)
                 local ffi=require('ffi')
                 assert(tonumber(ffi.cast('uintptr_t',material))>=65536,'invalid scene material')
@@ -42,6 +49,11 @@ function M.new(sr,log)
                 sr.Material.set_scalar(material,'emissive_intensity',1)
                 sr.Material.set_vector3(material,'base_color',sr.Vector3(1,1,1))
                 sr.Material.set_vector3(material,'emissive',sr.Vector3(1,1,1))
+                if alpha then
+                    sr.Material.set_scalar(material,'opacity',1)
+                    sr.Material.set_scalar(material,'use_opacity_map',1)
+                    log('SCENE transparent material bound; alpha pixels unverified')
+                end
                 bound=target
                 log('SCENE plane texture bound')
             end
