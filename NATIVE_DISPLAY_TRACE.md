@@ -136,3 +136,7 @@ The user confirmed magenta and white control squares after the world change, but
 ## Bitmap argument parser mismatch
 
 The screenshot showed the 200-pixel magenta control at its requested position, a 48-pixel white marker, and a separate white shape clipped against the origin. Read-only inspection of Gui.bitmap's argument parser showed that in the normal GUI path the optional material argument accepts a string or a tagged IdString64, not an untagged Material pointer. Passing the pointer leaves the argument index unchanged; subsequent position and size parsing reads the wrong arguments and can retain the default 100-by-100 dimensions. The preview now binds the resource via the checked Material pointer but draws by the material resource name, allowing the GUI's material cache to resolve that instance. The test is moved above/right of the native player HUD to avoid overlap. Visual verification is pending.
+
+## Four-color image visually confirmed
+
+The user confirmed seeing the four-color square after switching Gui.bitmap from the raw Material pointer to the resource name. This verifies the private GUI render, render-target binding, native image material sampling, and HUD-world display together. It does not verify scene-mesh rendering, depth testing, or frosted transparency. This is the working texture-pipeline checkpoint.
