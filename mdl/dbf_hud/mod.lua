@@ -1025,7 +1025,8 @@ function M.new(sr,log,direct)
         -- LuaJIT %p bypasses the engine's generic '[Material]' __tostring.
         -- This identifies Lua userdata storage, not necessarily its native object.
         local ok,address=pcall(string.format,'%p',handle)
-        return tostring(handle)..(ok and (' lua_address='..address) or '')
+        local native_ok,native=pcall(function()return string.format('0x%X',tonumber(require('ffi').cast('uintptr_t',handle)))end)
+        return tostring(handle)..(ok and (' lua_address='..address) or '')..(native_ok and (' native_address='..native) or '')
     end
     local function live(w)
         if not w then return false end
@@ -1072,7 +1073,7 @@ function M.new(sr,log,direct)
             log('WORLD_GUI instance '..identity(gui)..' world '..identity(world))
             if type(G.material)=='function' and A.can_get then
                 for _,material_name in ipairs({'content/ui/shared/material/gui_fill',
-                    'mods/dbf_hud/materials/depth_fill','mods/dbf_hud/materials/depth_blur'}) do
+                    depth_fill or 'mods/dbf_hud/materials/depth_fill','mods/dbf_hud/materials/depth_blur'}) do
                     if A.can_get('material',material_name) then
                         local ok,handle=pcall(G.material,gui,material_name)
                         log('WORLD_GUI material instance '..material_name..' '..(ok and identity(handle) or 'lookup failed'))
