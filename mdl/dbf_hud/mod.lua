@@ -3,10 +3,10 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -268,14 +268,22 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     local vent=heat and m.state=='VENT'
     if vent then opacity=opacity*(0.25+0.75*(0.5+0.5*math.cos((clock or 0)*math.pi*4))) end
     local heat_ink=vent and cfg.heat_red or M.heat_color(m.fraction or 0,clock,cfg)
-    local ink=HUD.config.rgb(heat and heat_ink or
-        (m.warning and (m.value==0 and cfg.heat_red or cfg.heat_yellow) or cfg.text_color))
+    local key='text_color'
+    if heat then
+        if vent then key='heat_red'
+        elseif m.fraction>=.95 then key=math.floor((clock or 0)*cfg.flash_hz*2)%2==0 and 'heat_red' or 'heat_yellow'
+        elseif m.fraction>=.86 then key='heat_red'
+        elseif m.fraction>=.75 then key='heat_yellow'
+        else key='heat_white' end
+    elseif m.warning then key=m.value==0 and 'heat_red' or 'heat_yellow' end
+    local ink=HUD.config.rgb(cfg[key])
+    local ink_alpha=(cfg[key..'_alpha'] or 255)/255
     local function rect(dx,dy,w,h,c,a,kind)
-        d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity,frosted=cfg.frosted}
+        d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity*ink_alpha,frosted=cfg.frosted}
     end
     local function text(t,dx,dy,size,c,a)
         if pixel then size=t=='%' and 24 or (size>=20 and 36 or 12) end
-        d[#d+1]={type='text',text=tostring(t),font=cfg.font,x=x+dx*scale,y=y+dy*scale,size=size*scale,c=c,a=(pixel and 1 or (a or 1))*opacity}
+        d[#d+1]={type='text',text=tostring(t),font=cfg.font,x=x+dx*scale,y=y+dy*scale,size=size*scale,c=c,a=(pixel and 1 or (a or 1))*opacity*ink_alpha}
     end
     local number=type(m.value)=='number' and string.format('%02d',m.value) or m.value
     local number_top,label_top=0,0
@@ -1479,8 +1487,9 @@ function M.new(hud)
         set('pose_marker',hud.config.pose_marker)
         set('world_probe',hud.config.world_probe)
         set('font',hud.config.font=='bigblue' and 1 or 2)
-        local hex=hud.config[HUD.config.colors[target]]:sub(2)
-        for i=1,6 do set('hex'..i,tonumber(hex:sub(i,i),16)+1) end
+        local key=HUD.config.colors[target];local rgb=HUD.config.rgb(hud.config[key])
+        for i=1,3 do set('rgba'..i,rgb[i]) end
+        set('rgba4',key=='background_color' and math.floor(hud.config.panel_opacity*255+0.5) or hud.config[key..'_alpha'])
     end
     function self.poll()
         if attempted or retired then return end
@@ -1530,16 +1539,20 @@ function M.new(hud)
             end)
             add('color_target',{type='choice',label='Color to edit',default=1,
                 choices={'Text / accents','Panel tint','Heat white','Heat yellow','Heat red'},
-                description='Edit #RRGGBB using the six hexadecimal digit rows. Apply the target before editing its digits.'},function(v)
+                description='Choose a color, then edit red, green, blue and alpha from 0 to 255.'},function(v)
                 target=v;self.sync()
             end)
-            local digits={};for i=0,15 do digits[#digits+1]=string.format('%X',i) end
-            for i=1,6 do
+            for i=1,4 do
                 local index=i
-                add('hex'..i,{type='choice',label=({'Hex R high','Hex R low','Hex G high','Hex G low','Hex B high','Hex B low'})[i],
-                    choices=digits,default=tonumber(hud.config.text_color:sub(i+1,i+1),16)+1},function(v)
-                    local key=HUD.config.colors[target];local h=hud.config[key]:sub(2)
-                    hud.configure({[key]='#'..h:sub(1,index-1)..string.format('%X',v-1)..h:sub(index+1)})
+                add('rgba'..i,{type='slider',label=({'Red','Green','Blue','Alpha'})[i],min=0,max=255,step=1,default=255},function(v)
+                    local key=HUD.config.colors[target]
+                    if index==4 then
+                        if key=='background_color' then hud.configure({panel_opacity=v/255})
+                        else hud.configure({[key..'_alpha']=v}) end
+                    else
+                        local rgb=HUD.config.rgb(hud.config[key]);rgb[index]=v
+                        hud.configure({[key]=string.format('#%02X%02X%02X',rgb[1],rgb[2],rgb[3])})
+                    end
                     hud.save_tuning()
                 end)
             end

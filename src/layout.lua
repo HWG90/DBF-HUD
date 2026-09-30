@@ -14,14 +14,22 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     local vent=heat and m.state=='VENT'
     if vent then opacity=opacity*(0.25+0.75*(0.5+0.5*math.cos((clock or 0)*math.pi*4))) end
     local heat_ink=vent and cfg.heat_red or M.heat_color(m.fraction or 0,clock,cfg)
-    local ink=HUD.config.rgb(heat and heat_ink or
-        (m.warning and (m.value==0 and cfg.heat_red or cfg.heat_yellow) or cfg.text_color))
+    local key='text_color'
+    if heat then
+        if vent then key='heat_red'
+        elseif m.fraction>=.95 then key=math.floor((clock or 0)*cfg.flash_hz*2)%2==0 and 'heat_red' or 'heat_yellow'
+        elseif m.fraction>=.86 then key='heat_red'
+        elseif m.fraction>=.75 then key='heat_yellow'
+        else key='heat_white' end
+    elseif m.warning then key=m.value==0 and 'heat_red' or 'heat_yellow' end
+    local ink=HUD.config.rgb(cfg[key])
+    local ink_alpha=(cfg[key..'_alpha'] or 255)/255
     local function rect(dx,dy,w,h,c,a,kind)
-        d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity,frosted=cfg.frosted}
+        d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity*ink_alpha,frosted=cfg.frosted}
     end
     local function text(t,dx,dy,size,c,a)
         if pixel then size=t=='%' and 24 or (size>=20 and 36 or 12) end
-        d[#d+1]={type='text',text=tostring(t),font=cfg.font,x=x+dx*scale,y=y+dy*scale,size=size*scale,c=c,a=(pixel and 1 or (a or 1))*opacity}
+        d[#d+1]={type='text',text=tostring(t),font=cfg.font,x=x+dx*scale,y=y+dy*scale,size=size*scale,c=c,a=(pixel and 1 or (a or 1))*opacity*ink_alpha}
     end
     local number=type(m.value)=='number' and string.format('%02d',m.value) or m.value
     local number_top,label_top=0,0

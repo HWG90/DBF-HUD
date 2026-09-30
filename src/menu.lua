@@ -34,8 +34,9 @@ function M.new(hud)
         set('pose_marker',hud.config.pose_marker)
         set('world_probe',hud.config.world_probe)
         set('font',hud.config.font=='bigblue' and 1 or 2)
-        local hex=hud.config[HUD.config.colors[target]]:sub(2)
-        for i=1,6 do set('hex'..i,tonumber(hex:sub(i,i),16)+1) end
+        local key=HUD.config.colors[target];local rgb=HUD.config.rgb(hud.config[key])
+        for i=1,3 do set('rgba'..i,rgb[i]) end
+        set('rgba4',key=='background_color' and math.floor(hud.config.panel_opacity*255+0.5) or hud.config[key..'_alpha'])
     end
     function self.poll()
         if attempted or retired then return end
@@ -85,16 +86,20 @@ function M.new(hud)
             end)
             add('color_target',{type='choice',label='Color to edit',default=1,
                 choices={'Text / accents','Panel tint','Heat white','Heat yellow','Heat red'},
-                description='Edit #RRGGBB using the six hexadecimal digit rows. Apply the target before editing its digits.'},function(v)
+                description='Choose a color, then edit red, green, blue and alpha from 0 to 255.'},function(v)
                 target=v;self.sync()
             end)
-            local digits={};for i=0,15 do digits[#digits+1]=string.format('%X',i) end
-            for i=1,6 do
+            for i=1,4 do
                 local index=i
-                add('hex'..i,{type='choice',label=({'Hex R high','Hex R low','Hex G high','Hex G low','Hex B high','Hex B low'})[i],
-                    choices=digits,default=tonumber(hud.config.text_color:sub(i+1,i+1),16)+1},function(v)
-                    local key=HUD.config.colors[target];local h=hud.config[key]:sub(2)
-                    hud.configure({[key]='#'..h:sub(1,index-1)..string.format('%X',v-1)..h:sub(index+1)})
+                add('rgba'..i,{type='slider',label=({'Red','Green','Blue','Alpha'})[i],min=0,max=255,step=1,default=255},function(v)
+                    local key=HUD.config.colors[target]
+                    if index==4 then
+                        if key=='background_color' then hud.configure({panel_opacity=v/255})
+                        else hud.configure({[key..'_alpha']=v}) end
+                    else
+                        local rgb=HUD.config.rgb(hud.config[key]);rgb[index]=v
+                        hud.configure({[key]=string.format('#%02X%02X%02X',rgb[1],rgb[2],rgb[3])})
+                    end
                     hud.save_tuning()
                 end)
             end
