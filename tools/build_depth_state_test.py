@@ -28,7 +28,7 @@ def hash64(name):
     value = value * mix & mask
     return value ^ (value >> 47)
 
-def build(control=False):
+def build(control=False, enable_depth=False):
     if not control:
         raise ValueError('Depth-enabled test remains withdrawn; validate loader control first')
     shader = SHADER + '_loader_control'
@@ -51,7 +51,7 @@ def build(control=False):
     # Disk library has an 0x88-byte prefix absent from the relocated live base.
     assert struct.unpack_from('<4I', gpu, 0xd98) == (10, 0, 0, 0)
     # Loader control deliberately preserves the native depth-disable state.
-    struct.pack_into('<I', gpu, 0xda0, 0)
+    struct.pack_into('<I', gpu, 0xda0, int(enable_depth))
     allowed = {0xda0} | set(range(0x88, 0x8c)) | set(range(0xe0, 0xe4)) | set(range(0xa40, 0xa44))
     assert all(i in allowed for i, (a, b) in enumerate(zip(original, gpu)) if a != b)
     material = bytearray((folder / 'source.bin').read_bytes())
@@ -109,33 +109,34 @@ def build(control=False):
         ordered=sorted(ranges)
         assert all(a[1]<=b[0] for a,b in zip(ordered,ordered[1:]))
     manifest = {'Version': 1, 'Guid': '37e62026-bb34-4ddb-9474-d48076246bfd',
-                'Name': 'DBF-HUD Shader Loader Control 0.2',
-                'Description': 'Loader-only control. Adds one unchanged-depth GUI library to the native default group; working HUD is unchanged.',
+                'Name': 'DBF-HUD WorldGUI Depth Probe 0.3' if enable_depth else 'DBF-HUD Shader Loader Control 0.2',
+                'Description': 'Isolated depth-enable probe on the verified loader control.' if enable_depth else 'Loader-only baseline; depth disabled.',
                 'Options': [{'Name': 'Shader loader control', 'Include': ['DepthState']}]}
-    output = ROOT.parent / 'DBF-HUD-Shader-Loader-Control-0.2.zip'
+    output = ROOT.parent / ('DBF-HUD-WorldGUI-Depth-Probe-0.3.zip' if enable_depth else 'DBF-HUD-Shader-Loader-Control-0.2.zip')
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
         archive.writestr('manifest.json', json.dumps(manifest, indent=2))
         stem = 'DepthState/ee6b1ba7e22d71ed.patch_0'
         archive.writestr(stem, body)
         archive.writestr(stem + '.stream', b'')
         archive.writestr(stem + '.gpu_resources', gpu_body)
-        archive.writestr('README.txt', 'Loader control only. Import into Arsenal, enable and deploy, then restart.\nNo HUD change is expected. Depth testing remains off.\nPreserves all 77 native default-group references and appends the control library.\nThe native GUI shader resources are not replaced. Disable this control after the registration check.\nKeep the withdrawn WorldGUI Depth State Test disabled.\n')
+        archive.writestr('README.txt', ('Depth-enable probe: replace loader control, deploy and restart. Use experimental WorldGUI. Occlusion is unverified.\n' if enable_depth else '') + 'Loader control baseline. Import into Arsenal, enable and deploy, then restart.\nDepth testing is enabled only with --depth-probe; otherwise it remains off.\nPreserves all 77 native default-group references and appends the control library.\nThe native GUI shader resources are not replaced. Disable this control after the registration check.\nKeep the withdrawn WorldGUI Depth State Test disabled.\n')
     evidence = {'source_sha256': hashlib.sha256(original).hexdigest(),
                 'shader_resource': shader, 'material_resource': material_name,
                 'compiled_variant_id': hex(variant), 'program_id': hex(program),
-                'depth_enable': 0, 'depth_write': 0, 'depth_compare': 7,
+                'depth_enable': int(enable_depth), 'depth_write': 0, 'depth_compare': 7,
                 'disk_depth_enable_offset': '0xda0',
                 'archive_target': 'ee6b1ba7e22d71ed',
                 'live_status': 'archive-target revision not yet deployed'}
-    (folder / 'loader-control-build.json').write_text(json.dumps(evidence, indent=2) + '\n')
+    (folder / ('depth-probe-build.json' if enable_depth else 'loader-control-build.json')).write_text(json.dumps(evidence, indent=2) + '\n')
     print(output)
 
 if __name__ == '__main__':
     import argparse
     parser=argparse.ArgumentParser()
     parser.add_argument('--loader-control',action='store_true')
+    parser.add_argument('--depth-probe',action='store_true',help='Depth-enable-only revision of verified loader control')
     args=parser.parse_args()
-    if not args.loader_control:
+    if not (args.loader_control or args.depth_probe):
         raise SystemExit('Depth-enabled test remains disabled. Use --loader-control for the separate depth-disabled load check.')
-    build(control=True)
+    build(control=True, enable_depth=args.depth_probe)
 

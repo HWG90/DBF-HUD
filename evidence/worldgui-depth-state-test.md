@@ -115,3 +115,8 @@ After deployment of control 0.2, the game reached HUD initialization. The instal
 
 Experimental gui_depth now availability-selects the registered loader-control material for a depth-disabled baseline draw. Direct gui and mesh modes are unchanged; all 47 contracts pass. A live panel draw still requires an equipped weapon and visual confirmation before creating a depth-enabled revision.
 
+
+### Depth-enable-only probe
+
+The user visually confirmed normal drawing with the registered loader-control material selected in experimental WorldGUI, then authorized enabling depth testing. Probe 0.3 uses the same addon identity, native archive target, resource names, identifiers and buffers as control 0.2. Exact zip comparison establishes identical main and stream payloads, and exactly one differing GPU byte: offset DA0 changes 0 to 1. Depth writes remain zero and comparison remains GREATER_EQUAL. The original launch-crashing test remains withdrawn; this is a revision of the verified control. Native launch, actual device depth-state construction and scenery occlusion remain unverified until deployment and visual test.
+
