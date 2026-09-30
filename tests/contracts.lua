@@ -240,7 +240,7 @@ test('configuration validates atomically and roundtrips as Lua',function()
     local f=assert(loadstring(HUD.config.serialize(c)));setfenv(f,{})
     local loaded=f();for k,v in pairs(c) do assert(loaded[k]==v) end
 end)
-test('optional native menu edits hex colors, position and persists tuning',function()
+test('native menu keeps colors config-only and persists placement',function()
     local options,values,callbacks={},{},{};local writes=0
     ModOptionsMenu={api=1,register_option=function(id,spec) options[id]=spec;values[id]=spec.default;return true end,
         on_change=function(id,fn)callbacks[id]=fn;return true end,set=function(id,v)values[id]=v;return true end}
@@ -248,14 +248,11 @@ test('optional native menu edits hex colors, position and persists tuning',funct
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==39)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==33)
     callbacks['dbf_hud_legacy.offset_x'](-120);assert(h.config.offset_x==-120)
-    callbacks['dbf_hud_v3.color_target'](5)
-    callbacks['dbf_hud_v3.rgba1'](160);assert(h.config.heat_red=='#A06D65')
-    callbacks['dbf_hud_v3.rgba4'](128);assert(h.config.heat_red_alpha==128 and writes==3)
-    assert(values['dbf_hud_v3.rgba1']==160 and values['dbf_hud_v3.rgba4']==128)
-    callbacks['dbf_hud_v3.font'](2);assert(h.config.font=='debug' and writes==4)
-    callbacks['dbf_hud_v3.font'](1);assert(h.config.font=='bigblue' and writes==5)
+    assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
+    callbacks['dbf_hud_v3.font'](2);assert(h.config.font=='debug' and writes==2)
+    callbacks['dbf_hud_v3.font'](1);assert(h.config.font=='bigblue' and writes==3)
     menu.retire();callbacks['dbf_hud_legacy.offset_x'](42);assert(h.config.offset_x==-120)
     ModOptionsMenu=nil;assert(HUD.menu.new(h).status=='Mod Options Menu not installed')
 end)
@@ -512,7 +509,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==39)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==33)
         callbacks['dbf_hud_legacy.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_legacy.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end

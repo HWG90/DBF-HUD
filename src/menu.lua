@@ -1,16 +1,15 @@
 -- Optional ModOptionsMenu API 1 integration. Never bundles or patches its implementation.
 local M={}
 function M.new(hud)
-    local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
+    local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
-    local effects={saturation=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
     local placement={left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true}
     local legacy={weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,
         offset_x=true,offset_y=true,follow=true,travel=true,settle=true,scale=true,opacity=true}
     local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or legacy[k] and 'dbf_hud_legacy.' or effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
-        {'saturation','Panel color saturation',0,2.5,0.05},
         {'left_mount_x','Left shoulder: left / right',-2,2,0.01},{'left_mount_y','Left shoulder: forward / back',-2,2,0.01},{'left_mount_z','Left shoulder: up / down',-2,2,0.01},
         {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
@@ -34,9 +33,7 @@ function M.new(hud)
         set('pose_marker',hud.config.pose_marker)
         set('world_probe',hud.config.world_probe)
         set('font',hud.config.font=='bigblue' and 1 or 2)
-        local key=HUD.config.colors[target];local rgb=HUD.config.rgb(hud.config[key])
-        for i=1,3 do set('rgba'..i,rgb[i]) end
-        set('rgba4',key=='background_color' and math.floor(hud.config.panel_opacity*255+0.5) or hud.config[key..'_alpha'])
+
     end
     function self.poll()
         if attempted or retired then return end
@@ -84,26 +81,12 @@ function M.new(hud)
             add('frosted',{type='toggle',label='Native frosted panel',default=hud.config.frosted},function(v)
                 hud.configure({frosted=v});hud.save_tuning()
             end)
-            add('color_target',{type='choice',label='Color to edit',default=1,
-                choices={'Text / accents','Panel tint','Heat white','Heat yellow','Heat red'},
-                description='Choose a color, then edit red, green, blue and alpha from 0 to 255.'},function(v)
-                target=v;self.sync()
-            end)
-            for i=1,4 do
-                local index=i
-                add('rgba'..i,{type='slider',label=({'Red','Green','Blue','Alpha'})[i],min=0,max=255,step=1,default=255},function(v)
-                    local key=HUD.config.colors[target]
-                    if index==4 then
-                        if key=='background_color' then hud.configure({panel_opacity=v/255})
-                        else hud.configure({[key..'_alpha']=v}) end
-                    else
-                        local rgb=HUD.config.rgb(hud.config[key]);rgb[index]=v
-                        hud.configure({[key]=string.format('#%02X%02X%02X',rgb[1],rgb[2],rgb[3])})
-                    end
-                    hud.save_tuning()
-                end)
+            -- Retired shared controls must never edit the new palette on Apply.
+            for _,k in ipairs({'color_target','rgba1','rgba2','rgba3','rgba4'}) do
+                local route=routes[prefix..k];if route then route.callback=nil end
             end
-            set('color_target',target);self.sync()
+            local old=routes['dbf_hud_effects.saturation'];if old then old.callback=nil end
+            self.sync()
         end)
         self.status=ok and 'Options > Mods > DBF-HUD' or ('menu unavailable: '..tostring(err))
         if not ok then api=nil end

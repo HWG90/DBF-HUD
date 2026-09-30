@@ -8,10 +8,9 @@ end
 function M.new(sr,log,side)
     if not side then
         local front,back=M.new(sr,log,1),M.new(sr,log,-1)
-        local comparison=M.fullbright(sr,log)
         return {
-            draw=function(...) front.draw(...);back.draw(...);comparison.draw(...) end,
-            release=function() comparison.release();front.release();back.release() end
+            draw=function(...) front.draw(...);back.draw(...) end,
+            release=function() front.release();back.release() end
         }
     end
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh

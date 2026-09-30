@@ -10,7 +10,7 @@ function M.start(sr,log,globals,panel_provider,show_preview)
     local source_ids={};local elapsed=0
     local texture_w,texture_h=64,64
     local density=panel_provider and 4 or 1
-    function self.tick(dt,refresh_hz,scanline_strength,saturation)
+    function self.tick(dt,refresh_hz,scanline_strength)
         elapsed=elapsed+(dt or 0)
         if panel_provider and active and world and gui and (not world_ready or refresh_hz==0 or elapsed>=1/(refresh_hz or 60)) then
             elapsed=0
@@ -26,15 +26,8 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                 for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
                 source_ids={}
                 local function rect(x,y,w,h,c,a)
-                    -- Color-space trial: assume scene sampling treats this UNORM target as linear.
-                    -- Decode display-space palette values before storing scene RGB.
-                    local function linear(v)
-                        v=v/255
-                        return 255*(v<=0.04045 and v/12.92 or ((v+0.055)/1.055)^2.4)
-                    end
-                    local gray=0.2126*c[1]+0.7152*c[2]+0.0722*c[3]
-                    local function channel(v)return linear(math.max(0,math.min(255,gray+(v-gray)*(saturation or 1))))end
-                    local rgb={channel(c[1]),channel(c[2]),channel(c[3])}
+                    -- Preserve the selected RGB values; no experimental color transform.
+                    local rgb=c
                     local function strip(bottom,height,factor)
                         local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(bottom-f.y)*sy,1),sr.Vector2(w*sx,height*sy),sr.Color(math.floor(255*(a or 1)),math.floor(rgb[1]*factor+0.5),math.floor(rgb[2]*factor+0.5),math.floor(rgb[3]*factor+0.5)))
                         source_ids[#source_ids+1]=id
