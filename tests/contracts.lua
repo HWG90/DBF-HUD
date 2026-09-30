@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'config','font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','anchor','view','pose_motion','world_probe','offscreen_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'config','font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -644,6 +644,26 @@ test('startup render bridge isolates subscribers and keeps host callback',functi
     bridge.subscribe('broken',function()error('isolated')end);globals.render(9)
     assert(calls==2 and bridge.errors.broken)
     remove();globals.render(9);assert(ran==2 and globals.render==installed)
+end)
+
+test('scene carrier binds once, retires on pose loss and rejects null materials',function()
+    local destroyed,bindings,moves=0,0,0
+    local material=65536
+    local sr={Application={worlds=function()return {1}end,main_world=function()return 1 end,can_get=function()return true end},
+        World={spawn_unit=function()return 2 end,destroy_unit=function()destroyed=destroyed+1 end},
+        Unit={num_meshes=function()return 1 end,mesh=function()return 3 end,set_local_pose=function()moves=moves+1 end,set_local_scale=function()end},
+        Mesh={num_materials=function()return 1 end,material=function()return material end},
+        Material={set_resource=function()bindings=bindings+1 end},
+        Matrix4x4={from_axes=function(...)return {...}end},Vector3=function(...)return {...}end}
+    local p={id=1,candidate=1,x=0,y=0,z=0,matrix={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}}
+    local probe=HUD.scene_test.new(sr,function()end)
+    probe.draw(p,HUD.config.new(),131072,0.016);probe.draw(p,HUD.config.new(),131072,0.016)
+    assert(bindings==2 and moves==2)
+    probe.draw(nil,HUD.config.new(),131072,0.016);assert(destroyed==1)
+    probe.release();assert(destroyed==1)
+    material=0
+    local bad=HUD.scene_test.new(sr,function()end);bad.draw(p,HUD.config.new(),131072,0.016)
+    assert(bindings==2 and destroyed==2)
 end)
 
 test('bundle compiles and excludes crashing diagnostic paths',function()

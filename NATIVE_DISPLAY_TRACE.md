@@ -144,3 +144,9 @@ The user confirmed seeing the four-color square after switching Gui.bitmap from 
 ## Live panel texture preview
 
 The confirmed four-color checkpoint is preserved in Git and evidence/offscreen-four-color-confirmed.png. The next diagnostic feeds the current weapon model through the existing layout and BigBlue rectangle renderer into a 512x256 target. It refreshes at 10 Hz, updates only the private world, and submits rendering only through the startup bridge. The screen-space preview uses the verified named material. Offline coverage checks throttled redraw and render ordering. Live process remains responsive; visual panel content and updates await user confirmation. Scene-mesh attachment and occlusion are still unverified.
+
+The user confirmed that the actual ammo panel appears in the texture preview and updates while firing or switching weapons. The next diagnostic checks existing plane unit availability and mesh counts in the private world only; it does not attach a mesh to the gameplay world or assign scene materials.
+
+## First scene-mesh carrier test
+
+content/art_shared/meshes/plane_primitive is loaded and spawned in the private world with one mesh, one material slot, and a nonzero material pointer. Base asset inspection finds material 29ddde373c760d73 with color_map and emissive_map inputs. The scene carrier uses that existing plane in the main world, binds the live panel texture to those two verified inputs, and follows the damped weapon pose. Live logs reached `SCENE plane texture bound`; the process remains responsive. Visibility, orientation, lighting, and depth occlusion await observation. The screen preview remains a reference. Cleanup destroys the scene unit before the offscreen texture. Offline tests cover binding once, pose-loss retirement and null-material rejection; 42 tests pass.

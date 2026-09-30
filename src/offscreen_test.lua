@@ -100,6 +100,28 @@ function M.start(sr,log,globals,panel_provider)
         end
         log('OFFSCREEN setup begin')
         world=assert(A.new_world())
+        if type(U.num_meshes)=='function' then
+            for _,candidate in ipairs({'content/art_shared/meshes/plane_2x2m','content/art_shared/meshes/plane_primitive','content/env_ship/hologram/units/plane'}) do
+                local available=A.can_get('unit',candidate)
+                log('SURFACE unit '..candidate..' available='..tostring(available))
+                if available then
+                    local probe=assert(W.spawn_unit(world,candidate))
+                    local count=U.num_meshes(probe)
+                    log('SURFACE unit '..candidate..' meshes='..tostring(count))
+                    if count==1 and type(U.mesh)=='function' and sr.Mesh and type(sr.Mesh.num_materials)=='function' then
+                        local mesh=U.mesh(probe,1)
+                        local slots=sr.Mesh.num_materials(mesh)
+                        log('SURFACE first mesh material slots='..tostring(slots))
+                        if slots==1 and type(sr.Mesh.material)=='function' then
+                            local material=sr.Mesh.material(mesh,1)
+                            local ffi=require('ffi')
+                            log(string.format('SURFACE material pointer=0x%X',tonumber(ffi.cast('uintptr_t',material))))
+                        end
+                    end
+                    -- Private world owns this probe; no scene attachment or material changes.
+                end
+            end
+        end
         local unit=assert(W.spawn_unit(world,name))
         camera=assert(U.camera(unit,1),'camera unavailable')
         environment=assert(default_environment and W.create_default_shading_environment(world)
@@ -107,6 +129,7 @@ function M.start(sr,log,globals,panel_provider)
         viewport=assert(A.create_viewport(world,'offscreen_ui_weapon_screen'))
         target=assert(R.create_resource('render_target','R8G8B8A8',panel_provider and 512 or 64,panel_provider and 256 or 64))
         V.set_output_render_target(viewport,target)
+        self.texture=target
         gui=assert(W.create_screen_gui(world,'scale',1,1))
         if not panel_provider then
         for i,color in ipairs({{230,60,60},{60,210,100},{60,110,230},{230,200,60}}) do

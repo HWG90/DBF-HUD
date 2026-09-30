@@ -1210,6 +1210,28 @@ function M.start(sr,log,globals,panel_provider)
         end
         log('OFFSCREEN setup begin')
         world=assert(A.new_world())
+        if type(U.num_meshes)=='function' then
+            for _,candidate in ipairs({'content/art_shared/meshes/plane_2x2m','content/art_shared/meshes/plane_primitive','content/env_ship/hologram/units/plane'}) do
+                local available=A.can_get('unit',candidate)
+                log('SURFACE unit '..candidate..' available='..tostring(available))
+                if available then
+                    local probe=assert(W.spawn_unit(world,candidate))
+                    local count=U.num_meshes(probe)
+                    log('SURFACE unit '..candidate..' meshes='..tostring(count))
+                    if count==1 and type(U.mesh)=='function' and sr.Mesh and type(sr.Mesh.num_materials)=='function' then
+                        local mesh=U.mesh(probe,1)
+                        local slots=sr.Mesh.num_materials(mesh)
+                        log('SURFACE first mesh material slots='..tostring(slots))
+                        if slots==1 and type(sr.Mesh.material)=='function' then
+                            local material=sr.Mesh.material(mesh,1)
+                            local ffi=require('ffi')
+                            log(string.format('SURFACE material pointer=0x%X',tonumber(ffi.cast('uintptr_t',material))))
+                        end
+                    end
+                    -- Private world owns this probe; no scene attachment or material changes.
+                end
+            end
+        end
         local unit=assert(W.spawn_unit(world,name))
         camera=assert(U.camera(unit,1),'camera unavailable')
         environment=assert(default_environment and W.create_default_shading_environment(world)
@@ -1217,6 +1239,7 @@ function M.start(sr,log,globals,panel_provider)
         viewport=assert(A.create_viewport(world,'offscreen_ui_weapon_screen'))
         target=assert(R.create_resource('render_target','R8G8B8A8',panel_provider and 512 or 64,panel_provider and 256 or 64))
         V.set_output_render_target(viewport,target)
+        self.texture=target
         gui=assert(W.create_screen_gui(world,'scale',1,1))
         if not panel_provider then
         for i,color in ipairs({{230,60,60},{60,210,100},{60,110,230},{230,200,60}}) do
@@ -1287,6 +1310,67 @@ function M.start(sr,log,globals,panel_provider)
         end
     end)
     log('OFFSCREEN waiting for render callback')
+    return self
+end
+return M
+
+end)()
+HUD.scene_test=(function()
+-- Experimental scene-mesh carrier; uses only engine-owned handles.
+local M={}
+function M.new(sr,log)
+    local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
+    local unit,world,bound;local failed=false;local smooth={}
+    local self={}
+    local function live(w)
+        for _,v in pairs(A.worlds() or {}) do if w==v then return true end end
+        return false
+    end
+    function self.release()
+        if unit and live(world) then W.destroy_unit(world,unit) end
+        unit,world,bound=nil,nil,nil;smooth={}
+    end
+    function self.draw(p,c,target,dt)
+        if failed then return end
+        if not p or not target then if unit then self.release() end;return end
+        local ok,err=pcall(function()
+            local main=A.main_world()
+            if not live(main) then return end
+            if unit and (world~=main or not live(world)) then self.release() end
+            if not unit then
+                local name='content/art_shared/meshes/plane_primitive'
+                assert(A.can_get('unit',name),'plane unit unavailable')
+                for _,fn in ipairs({'set_local_pose','set_local_scale','num_meshes','mesh'}) do assert(type(U[fn])=='function','missing Unit.'..fn) end
+                assert(Mesh and type(Mesh.num_materials)=='function' and type(Mesh.material)=='function','mesh material API unavailable')
+                world=main
+                log('SCENE plane spawn begin')
+                unit=assert(W.spawn_unit(world,name))
+                assert(U.num_meshes(unit)==1,'unexpected mesh count')
+                local mesh=U.mesh(unit,1)
+                assert(Mesh.num_materials(mesh)==1,'unexpected material count')
+                local material=Mesh.material(mesh,1)
+                local ffi=require('ffi')
+                assert(tonumber(ffi.cast('uintptr_t',material))>=65536,'invalid scene material')
+                assert(tonumber(ffi.cast('uintptr_t',target))>=65536,'invalid panel texture')
+                log('SCENE verified material texture bind begin')
+                sr.Material.set_resource(material,'color_map',target)
+                sr.Material.set_resource(material,'emissive_map',target)
+                bound=target
+                log('SCENE plane texture bound')
+            end
+            assert(bound==target,'render target changed without scene retirement')
+            local m=p.matrix
+            local x,y,z=c.mount_x,c.mount_y,c.mount_z+0.2
+            local px=p.x+m[1]*x+m[5]*y+m[9]*z
+            local py=p.y+m[2]*x+m[6]*y+m[10]*z
+            local pz=p.z+m[3]*x+m[7]*y+m[11]*z
+            m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
+            local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),sr.Vector3(m[5],m[6],m[7]),sr.Vector3(m[9],m[10],m[11]),sr.Vector3(m[13],m[14],m[15]))
+            U.set_local_pose(unit,1,pose)
+            U.set_local_scale(unit,1,sr.Vector3(0.24,0.12,0.24))
+        end)
+        if not ok then failed=true;log('SCENE stopped '..tostring(err));self.release() end
+    end
     return self
 end
 return M
@@ -1690,8 +1774,10 @@ return (function()
 -- MDL API 2 lifecycle; this module never hooks global update or shutdown.
 local hud
 local offscreen
+local scene
 local live_log
 local function disable()
+    if scene then scene.release();scene=nil end
     if offscreen then offscreen.release();offscreen=nil end
     if hud then hud.retire();hud=nil end
 end
@@ -1710,11 +1796,13 @@ return {
         -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
         live_log=function(line)if backend.log then pcall(backend.log,line) end end
         offscreen=HUD.offscreen_test.start(sr,live_log,nil,function()return hud and hud.texture_commands()end)
+        scene=HUD.scene_test.new(sr,live_log)
         ctx.log('Enabled DBF-HUD '..hud.version..' with MDL-owned updates')
     end,
     on_update=function(ctx,dt)
         if hud then hud.tick(dt) end
         if offscreen and offscreen.tick then offscreen.tick(dt) end
+        if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt) end
         -- Startup addons can load after MDL. Retry only once the bridge exists.
         if offscreen and offscreen.waiting_for_bridge then
             local bridge=rawget(_G,'HUDRenderBridge')
