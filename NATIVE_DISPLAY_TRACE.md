@@ -270,3 +270,8 @@ Both plain/depth shader pairs have byte-identical DXBC vertex and pixel programs
 ## Creation-material test reverted after CTD
 
 User reported repeated desktop crashes after the creation-material test. Reverted world_probe.lua to the pre-test implementation in source, packaged outputs, and installed MDL Lua immediately. Final log shows GUI creation returned, then native gui_fill material lookup returned nil; no successful panel submission follows. This is consistent with the explicit material list changing available GUI materials, but does not prove the exact crash instruction. Do not retry this creation override without further offline verification. All 46 offline checks pass after rollback; they do not verify native safety.
+
+
+## Read-only creation-list and lookup trace after rollback
+
+Native GUI manager takes a distinct branch for a nonempty creation material list and initializes its own material table rather than the normal resource-lookup path. Gui.material checks the corresponding GUI flag: explicit-list mode hashes the requested string to a 32-bit local key, checks its table, and returns nil if absent; normal mode uses the full 64-bit resource identifier and calls the resource lookup routine. This explains why a resource path that resolves in the normal GUI can fail under the explicit list. It does not prove the subsequent crash instruction or working depth. The creation override remains reverted. Next investigation: resolve the draw material pass/state and its depth attachment independently of this local-name lookup distinction. Read-only trace artifacts are retained in work; no new native rendering calls were added.
