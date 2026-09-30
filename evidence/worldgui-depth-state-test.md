@@ -31,6 +31,35 @@ compiled-program registration for a renamed library. Those still require native
 loader inspection before any replacement addon is released. Existing crash
 attachments inspected are from earlier sessions, not this launch failure.
 
+### Loader-control milestone
+
+The complete native ee6b1ba7e22d71ed archive has 953 records. An independent
+calculation of separate CPU/GPU buffer offsets, padding each present payload to
+256 bytes in file-index order, matched every record with zero discrepancies.
+The resulting totals exactly matched its declared header buffer sizes. The
+withdrawn test incorrectly assigned both CPU payloads buffer offset zero. This
+is another concrete archive defect; a matching fault address is unavailable.
+
+The native default shader-library group resolves to
+core/stingray_renderer/shader_libraries/default_shaders. Its version is 142,
+count is 77, and its payload contains both plain and depth GUI library hashes.
+The live program manager's variant map resolves D78AB313 to the native depth
+variant, and its program map resolves 63AE484F to the graphics program. This
+establishes the native entries and their loaded layouts, not custom-load safety.
+
+The new Shader Loader Control addon preserves all 77 native group references
+and appends one uniquely named control library. No installed patch already
+overrides this group. The control retains DepthEnable=0, so it separates native
+loading/registration from the depth-enable experiment. Its material is not
+selected by the working Lua renderer. The builder validates distinct buffer
+ranges, declared buffer extents, payload alignment and exact changes to shader
+identifiers. The depth-enabled builder remains blocked.
+
+This is an experimental native asset load test. Launch and custom variant/program
+registration still require verification. No visible HUD change is expected.
+Keep the withdrawn Depth State Test disabled. Import the Shader Loader Control
+in Arsenal, deploy and restart; then inspect its new variant and program entries.
+
 Read-only native inspection connected the selected GUI libraries to their device
 graphics descriptors. Both the plain and named depth variants have DepthEnable=0,
 DepthWriteMask=0, DepthFunc=7. The selected depth program's VS and PS pointers
