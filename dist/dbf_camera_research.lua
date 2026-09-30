@@ -341,9 +341,20 @@ function M.capture(backend,raw,trace_code)
     part('player_view',player+0x380,128)
     part('player_header',player,0x380)
     part('camera_state_tail',state+512,512)
-    if trace_code then
+    if trace_code=='wide_state' then
+        for i=1,3 do part('player_tail'..i,player+i*1024,1024) end
+    elseif trace_code=='camera_links' then
+        for _,off in ipairs({0x180,0x188,0x190,0x1a0}) do
+            local address=r.p(state+off)
+            part(string.format('camera_link_%x',off),address,512)
+            assert(r.p(state+off)==address,'camera link changed during snapshot')
+        end
+    elseif trace_code then
         part('weapon_control_code',base+0x764e00,1024)
-        part('player_control_code',base+0x607100,1024)
+        part('player_control_code',base+0x603000,1024)
+        for i=1,24 do
+            part('player_control_follow'..i,base+0x603000+i*1024,1024)
+        end
     end
     local selector=r.p(base+HUD.layouts.selector)
     local index=r.map(selector+0x30,raw.binding.avatar_id,1048576)
@@ -388,7 +399,9 @@ return {
    end
    table.sort(names);file:write('CAMERA_API namespaces '..table.concat(names,' ')..'\nCAMERA_CAPTURE complete label='..label..'\n');file:flush();return
   end
-  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),label=='trace_code')
+  local probe=label=='trace_code' or (label:find('wide_state',1,true) and 'wide_state')
+  if label:find('camera_links',1,true) then probe='camera_links' end
+  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),probe)
   if ok then
    for _,part in ipairs(parts) do
     local hex=part.data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)

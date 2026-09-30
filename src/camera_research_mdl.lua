@@ -24,7 +24,9 @@ return {
    end
    table.sort(names);file:write('CAMERA_API namespaces '..table.concat(names,' ')..'\nCAMERA_CAPTURE complete label='..label..'\n');file:flush();return
   end
-  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),label=='trace_code')
+  local probe=label=='trace_code' or (label:find('wide_state',1,true) and 'wide_state')
+  if label:find('camera_links',1,true) then probe='camera_links' end
+  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),probe)
   if ok then
    for _,part in ipairs(parts) do
     local hex=part.data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
