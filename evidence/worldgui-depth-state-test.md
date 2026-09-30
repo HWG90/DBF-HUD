@@ -105,3 +105,6 @@ Control 0.1 was deployed and the game reached HUD initialization and the mission
 
 The control placed its default-group override under archive 9ba626afa44a3aa3, while the verified native group belongs to ee6b1ba7e22d71ed. Control 0.2 targets that native archive. All three archive payloads are byte-identical to 0.1; only archive targeting and addon metadata change. This is a loading hypothesis, not a proven cause. DepthEnable stays zero. The revised control needs deployment/restart before registration can be verified.
 
+
+Mission timing correction: the user clarified that the earlier registration check was before entering a mission. After explicit in-mission confirmation, a fresh read still resolved native D78AB313/9FCFE126/63AE484F and did not find control 75C7DC83/1F57CB83. The HUD log simultaneously showed active weapon 745, tracked pose and camera samples. The absence now has a verified mission checkpoint; the earlier mission claim was premature.
+
