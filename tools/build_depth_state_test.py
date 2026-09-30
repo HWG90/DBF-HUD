@@ -60,22 +60,29 @@ def build():
     body = bytearray(offset)
     entries, gpu_body = bytearray(), bytearray()
     for index, (name, kind, main, external) in enumerate(resources):
+        main_alignment = 256 if kind == hash64('shader_library') else 16
+        body += b'\0' * (-len(body) % main_alignment)
+        offset = len(body)
         gpu_at = len(gpu_body)
         entries += struct.pack('<7Q6I', name, kind, offset, 0, gpu_at, 0, 0,
-                               len(main), 0, len(external), 16, 256 if external else 16, index)
+                               len(main), 0, len(external), main_alignment, 256 if external else 16, index)
         body += main
         body += b'\0' * (-len(body) % 16)
         offset = len(body)
         gpu_body += external
         gpu_body += b'\0' * (-len(gpu_body) % 256)
-    header = struct.pack('<III20sQQ24s', 0xf0000011, len(types), len(resources), b'', len(body), 0, b'')
+    header = struct.pack('<III20sQQ24s', 0xf0000011, len(types), len(resources), b'',
+                         (len(body) + 255) & ~255, len(gpu_body), b'')
     table = b''.join(struct.pack('<IIQIIII', 0, 0, kind,
-                                 sum(row[1] == kind for row in resources), 0, 16, 16) for kind in types)
+                                 sum(row[1] == kind for row in resources), 0,
+                                 256 if kind == hash64('shader_library') else 16,
+                                 256 if kind == hash64('shader_library') else 16) for kind in types)
     body[:len(header + table + entries)] = header + table + entries
     # Read back the exact archive rows and their external payload bounds.
     for row in struct.iter_unpack('<7Q6I', body[72 + 32 * len(types):72 + 32 * len(types) + 160]):
         assert body[row[2]:row[2] + row[7]]
         assert row[4] + row[9] <= len(gpu_body)
+        assert row[2] % row[10] == 0 and row[4] % row[11] == 0
     manifest = {'Version': 1, 'Guid': 'acf792bd-7bf5-44e1-bc98-947f39ff29de',
                 'Name': 'DBF-HUD WorldGUI Depth State Test 0.1',
                 'Description': 'Isolated GUI shader with depth enabled; scene occlusion remains experimental.',

@@ -16,6 +16,21 @@ depth-state finding remains useful, but cloning identifiers and constructing an
 archive has not established native shader-library load safety. The next offline
 investigation must verify that format and registration path before another test.
 
+### Offline archive audit after rollback
+
+The native ee6b1ba7e22d71ed archive's shader_library type declares main and GPU
+alignment 0x100. Both the depth and plain library file rows also declare 0x100
+for each alignment. The test declared 0x10 for the shader type and its main file
+alignment. It also wrote ApproxGPUSize=0 while providing 14592 GPU bytes. These
+are concrete packaging discrepancies, not proof of the exception location.
+
+The draft builder now aligns shader main records and both type alignments to
+256 bytes and declares its GPU storage. Its entry point remains disabled. This
+has not established validity of runtime MainBufferOffset/GPUBufferOffset or
+compiled-program registration for a renamed library. Those still require native
+loader inspection before any replacement addon is released. Existing crash
+attachments inspected are from earlier sessions, not this launch failure.
+
 Read-only native inspection connected the selected GUI libraries to their device
 graphics descriptors. Both the plain and named depth variants have DepthEnable=0,
 DepthWriteMask=0, DepthFunc=7. The selected depth program's VS and PS pointers
