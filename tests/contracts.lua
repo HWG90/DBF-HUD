@@ -653,7 +653,7 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
         World={spawn_unit=function()return 2 end,destroy_unit=function()destroyed=destroyed+1 end},
         Unit={num_meshes=function()return 1 end,mesh=function()return 3 end,set_local_pose=function()moves=moves+1 end,set_local_scale=function()end},
         Mesh={num_materials=function()return 1 end,material=function()return material end},
-        Material={set_resource=function()bindings=bindings+1 end},
+        Material={set_resource=function()bindings=bindings+1 end,set_scalar=function()end,set_vector3=function()end},
         Matrix4x4={from_axes=function(...)return {...}end},Vector3=function(...)return {...}end}
     local p={id=1,candidate=1,x=0,y=0,z=0,matrix={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}}
     local probe=HUD.scene_test.new(sr,function()end)

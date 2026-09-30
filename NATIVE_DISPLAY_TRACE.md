@@ -154,3 +154,7 @@ content/art_shared/meshes/plane_primitive is loaded and spawned in the private w
 ## Scene-panel occlusion visually confirmed
 
 The user confirmed seeing the new scene-mesh panel and confirmed that an intervening wall or character hides it. This is the first visually confirmed occlusion result for the project. The exact occluder was not separately identified in the response, so independent wall and character checks are still useful. This establishes a working scene-mesh route for the live panel texture. It does not establish frosted transparency, final orientation/scale, all camera modes, or long-session stability.
+
+### Correction and material switches
+
+The user clarified that the scene plane is occluded but blank: live ammo pixels were confirmed only in the screen preview. The earlier milestone wording overstated scene-texture visibility. The plane also lies flat. Its decoded material settings have use_color_map=0, use_emissive_map=0, emissive_intensity=0, emissive=(0,0,0), base_color=(0.431,0.431,0.431), and uv_scale=(1,1). The test now enables the verified map switches, sets emissive intensity to 1 and white multipliers, and rotates the carrier 90 degrees around local X. Visual results remain pending.
