@@ -651,10 +651,11 @@ end)
 
 test('scene carrier binds once, retires on pose loss and rejects null materials',function()
     local destroyed,bindings,moves=0,0,0
+    local scale
     local material=65536
     local sr={Application={worlds=function()return {1}end,main_world=function()return 1 end,can_get=function()return true end},
         World={spawn_unit=function()return 2 end,destroy_unit=function()destroyed=destroyed+1 end},
-        Unit={set_material=function(_,slot,name)assert(slot=='material' and name=='content/art_shared/materials/placeholder_red_transparent')end,num_meshes=function()return 1 end,mesh=function()return 3 end,set_local_pose=function()moves=moves+1 end,set_local_scale=function()end},
+        Unit={set_material=function(_,slot,name)assert(slot=='material' and name=='content/art_shared/materials/placeholder_red_transparent')end,num_meshes=function()return 1 end,mesh=function()return 3 end,set_local_pose=function()moves=moves+1 end,set_local_scale=function(_,_,v)scale=v end},
         Mesh={num_materials=function()return 1 end,material=function()return material end},
         Material={set_resource=function()bindings=bindings+1 end,set_scalar=function()end,set_vector3=function()end},
         Matrix4x4={from_axes=function(...)return {...}end},Vector3=function(...)return {...}end}
@@ -662,6 +663,9 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
     local probe=HUD.scene_test.new(sr,function()end)
     probe.draw(p,HUD.config.new(),131072,0.016);probe.draw(p,HUD.config.new(),131072,0.016)
     assert(bindings==2 and moves==2)
+    -- Asset mesh XZ is rotated into root XY by its internal joint transform.
+    -- A 2:1 image must therefore have twice the root-X extent as root-Y.
+    assert(math.abs(scale[1]/scale[2]-2)<1e-6 and scale[3]==0.24)
     probe.draw(nil,HUD.config.new(),131072,0.016);assert(destroyed==1)
     probe.release();assert(destroyed==1)
     material=0

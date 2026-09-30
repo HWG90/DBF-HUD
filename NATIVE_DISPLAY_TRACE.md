@@ -178,3 +178,8 @@ The native placeholder_red_transparent material is loaded in the current session
 ## Transparent scene panel visually confirmed
 
 The user confirmed that the scene panel has a see-through background and is still hidden by character or scenery after the transparent-material trial. This establishes live panel imagery, alpha transparency, weapon following, and scene occlusion together for the tested session. Frosted blur remains unimplemented. The carrier uses the measured texture width/height ratio: its local X width stays fixed and its local Z height is width divided by that ratio. A rectangular content texture therefore produces a rectangular plane, not an enforced square.
+
+
+### Aspect-axis correction
+
+The user reported continued squishing. Decoding the primitive unit shows a square XZ mesh, attached to transform index 2 with an internal 90-degree X rotation. Its root-space surface is therefore XY. The earlier root-Z scale correction affected the normal rather than visible height; the preceding aspect claim was incorrect. The carrier now scales root Y by inverse texture aspect and keeps root Z unchanged. An offline regression check enforces the resulting 2:1 root-space extent ratio. Live visual verification remains required.
