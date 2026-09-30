@@ -188,3 +188,8 @@ The user reported continued squishing. Decoding the primitive unit shows a squar
 ## Emission and heat-cell spacing
 
 The user confirmed the corrected aspect ratio. Scene emission now defaults to 3, with a live 0-10 menu slider and Lua tuning setting. Material intensity updates only when changed. The user then reported uneven heat-bar gaps: at source scale 2 the old heat geometry used a fractional 4.7-pixel pitch and 3.5-pixel height. BigBlue now uses a 5-pixel pitch and 4-pixel full-cell height at that scale. Partial heat fill remains continuous. All 42 contracts pass. Visual brightness and spacing confirmation remain pending; perspective minification may still alias.
+
+
+## Four-times texture density
+
+The user confirmed even heat-bar spacing and requested much sharper texture rendering. Live panel render targets now use four times the natural width and height (sixteen times the pixels), with all source geometry uniformly scaled. Scene aspect and physical size are unchanged; the screen reference also retains its former display size. The allocation limit remains 2048 per axis. Tests verify scaled source geometry and resize detection. In-game sharpness, filtering, and bloom remain visual checks.

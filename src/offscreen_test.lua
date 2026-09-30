@@ -9,6 +9,7 @@ function M.start(sr,log,globals,panel_provider)
     local world_ready=false
     local source_ids={};local elapsed=0
     local texture_w,texture_h=64,64
+    local density=panel_provider and 4 or 1
     function self.tick(dt)
         elapsed=elapsed+(dt or 0)
         if panel_provider and active and world and gui and (not world_ready or elapsed>=0.1) then
@@ -17,11 +18,11 @@ function M.start(sr,log,globals,panel_provider)
             if commands then
                 local f=commands[1]
                 assert(f.w>0 and f.h>0,'invalid panel bounds')
-                if math.ceil(f.w)~=texture_w or math.ceil(f.h)~=texture_h then
+                if math.ceil(f.w*density)~=texture_w or math.ceil(f.h*density)~=texture_h then
                     self.resize_required=true;return
                 end
                 self.aspect=texture_w/texture_h
-                local sx,sy=1,1
+                local sx,sy=density,density
                 for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
                 source_ids={}
                 local function rect(x,y,w,h,c,a)
@@ -79,7 +80,7 @@ function M.start(sr,log,globals,panel_provider)
     if panel_provider then
         local commands=panel_provider()
         if not commands then self.waiting_for_panel=true;return self end
-        texture_w,texture_h=math.ceil(commands[1].w),math.ceil(commands[1].h)
+        texture_w,texture_h=math.ceil(commands[1].w*density),math.ceil(commands[1].h*density)
         assert(texture_w>0 and texture_h>0 and texture_w<=2048 and texture_h<=2048,'panel texture bounds invalid')
         self.aspect=texture_w/texture_h
     end
@@ -155,8 +156,8 @@ function M.start(sr,log,globals,panel_provider)
                     log('OFFSCREEN preview GUI create begin')
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
                     -- Independent control: visible geometry does not depend on the render target.
-                    G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(panel_provider and texture_w+8 or 200,panel_provider and texture_h+8 or 200),sr.Color(255,255,0,255))
-                    G.rect(preview,sr.Vector3(panel_provider and 916+texture_w or 1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
+                    G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(panel_provider and texture_w/density+8 or 200,panel_provider and texture_h/density+8 or 200),sr.Color(255,255,0,255))
+                    G.rect(preview,sr.Vector3(panel_provider and 916+texture_w/density or 1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
                     log('OFFSCREEN placement control: magenta frame and white square')
                     log('OFFSCREEN preview material lookup begin')
                     for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_diffuse_map','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
@@ -184,7 +185,7 @@ function M.start(sr,log,globals,panel_provider)
                     log('OFFSCREEN verified texture binding begin')
                     sr.Material.set_resource(material,'diffuse_map',target)
                     log('OFFSCREEN preview bitmap draw begin')
-                    G.bitmap(preview,'content/ui/shared/material/gui_diffuse_map',sr.Vector3(900,300,80),sr.Vector2(panel_provider and texture_w or 192,panel_provider and texture_h or 192),sr.Color(255,255,255,255))
+                    G.bitmap(preview,'content/ui/shared/material/gui_diffuse_map',sr.Vector3(900,300,80),sr.Vector2(panel_provider and texture_w/density or 192,panel_provider and texture_h/density or 192),sr.Color(255,255,255,255))
                     log('OFFSCREEN four-color preview placed above/right of native bottom-left HUD')
                 end)
                 if not shown then log('OFFSCREEN preview stopped '..tostring(reason)) end

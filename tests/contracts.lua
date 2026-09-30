@@ -626,7 +626,7 @@ test('offscreen test waits for render, preserves returns and releases in order',
     globals.HUDRenderBridge=nil;HUD.offscreen_test.start(sr,function()end,globals);assert(#events==count)
     globals.HUDRenderBridge=bridge()
     sr.Gui.destroy_rect=event('free rect')
-    sr.Gui.rect=function(gui,pos,size)assert(pos[1]==0 and pos[2]==0 and size[1]==20 and size[2]==10);return 1 end
+    sr.Gui.rect=function(gui,pos,size)assert(pos[1]==0 and pos[2]==0 and size[1]==80 and size[2]==40);return 1 end
     local panel_width=20
     local dynamic=HUD.offscreen_test.start(sr,function()end,globals,function()return {{type='rect',x=0,y=0,w=panel_width,h=10,c={255,255,255},a=1}} end)
     dynamic.tick(0);globals.render(8);assert(rendered==2)
