@@ -6,9 +6,9 @@ Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current dev
 
 - Dynamic crosshair tracking with damped movement.
 - Weapon-following hybrid mode and an angled world-GUI panel mode.
-- Weapon-pose smoothing, configurable mounting offsets, scale, opacity and hex colors.
+- Weapon-pose smoothing, configurable mounting offsets, scale, opacity and config-file colors.
 - Content-sized frames and BigBlue Terminal pixel typography.
-- Vertical heat gauge: white below 75%, yellow from 75%, red from 86%, alternating red/yellow from 95%.
+- Vertical heat gauge: white below 75%, yellow from 75%, red from 86%; vent mode pulses red.
 - MDL API 2 live Lua reload and menu/Lua tuning.
 
 Runtime global: `DBFHUD`; new MDL folder and resource namespace: `dbf_hud`. Tuning and logs use `DBF-HUD-tuning.lua` and `DBF-HUD.log`. Legacy tuning, runtime retirement and optional material lookup remain supported for upgrades. The addon GUID is unchanged.
@@ -17,9 +17,9 @@ An existing live installation may retain its `astra_ammo` folder to preserve MDL
 
 ## Current limitations
 
-The original 3D world-GUI panel still draws through scenery and characters. The experimental scene-mesh carrier is visible and an intervening object hides it, and its ammo image is now visually confirmed. Content fit is being refined; the carrier remains opaque. Native frost works in hybrid mode; it is disabled in 3D mode because it rendered incorrectly there. Scene-mesh occlusion has a visually confirmed working path; world-space frost remains unresolved.
+Direct WorldGUI occlusion was visually confirmed on September 30 using the registered depth-enable-only shader probe. The scene mesh remains an occluded fallback; its texture material can alter colors through scene processing. Non-occluded direct WorldGUI remains selectable. World-space frosted blur is unresolved, and first-person/shoulder placement currently uses camera heuristics rather than verified camera-state flags.
 
-The experimental native-screen path has successfully created a render target, bound it to the game's offscreen weapon-screen viewport, detached it and cleaned up. The four-color image and live ammo-panel texture have both been visually verified, followed by an occluded scene-plane test. A subsequent reload lost the host render callback and the user reported a crash. The offscreen client now requires a separate startup render bridge to avoid MDL global cleanup. Without that bridge it remains inactive; see bridge/README.md and the investigation notes. This is a development snapshot, not a stable release.
+The complete archive includes the startup bridge needed by the mesh texture renderer. Direct WorldGUI renders text and bars without that intermediate texture. The verified depth assets are included; the combined startup installation still needs its own live verification.
 
 See [native display research](NATIVE_DISPLAY_TRACE.md), [depth investigation](DEPTH_RENDERING.md), and [weapon binding](WEAPON_BINDING.md). These documents include chronological experiments and results; earlier proposed steps are not claims of current functionality.
 
@@ -41,14 +41,18 @@ Configure through the mod menu or game-root `DBF-HUD-tuning.lua`. The file in th
 python tests/run.py --lua-dll "path/to/lua51.dll"
 ```
 
-The runner uses a local Windows LuaJIT DLL. **41 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
+The runner uses a local Windows LuaJIT DLL. **47 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
 
 ## Contents and attribution
 
-Source, generated Lua bundles, preview, tests and development notes are included. Extracted compiled game materials, game binaries, memory captures, private logs and anti-cheat bypass code are not included. The optional experimental depth-material assets referenced in historical notes are not shipped here; code falls back when they are unavailable.
+Source, generated Lua bundles, preview, tests and development notes are included. Game binaries, memory captures, private logs and anti-cheat bypass code are not included. The complete install archive contains the verified compiled GUI depth resources needed by this renderer. The complete install archive includes the verified WorldGUI depth assets. Older experiments remain separate and should be disabled when installing it.
 
 Ammo layout facts originated from Reticle Ammo HUD. This implementation was developed independently of HD2UI; Derive was used for read-only investigation.
 
 BigBlue Terminal printable ASCII glyphs were imported from Nerd Fonts v3.5.1. Font attribution and CC BY-SA 4.0 terms are preserved in [licenses/BigBlueTerminal](licenses/BigBlueTerminal). See `tools/import_bigblue.py` for regeneration. No blanket license is granted for the remaining project code in this snapshot.
 
 Full Nerd Fonts support is deferred in [BACKLOG.md](BACKLOG.md).
+
+## Complete install archive
+
+See [complete installation](INSTALL-COMPLETE.md). `tools/build_complete.py --addon-builder <path-to-build_addon.py>` creates one Arsenal archive with startup and MDL installation choices, the render bridge, verified depth assets, loose MDL Lua, starter tuning, source and font licenses. Disable the previous component addons before deployment.
