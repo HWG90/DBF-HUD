@@ -3,13 +3,14 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
-    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local effects={saturation=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
     local placement={left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true}
     local legacy={weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,
         offset_x=true,offset_y=true,follow=true,travel=true,settle=true,scale=true,opacity=true}
     local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or legacy[k] and 'dbf_hud_legacy.' or effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
+        {'saturation','Panel color saturation',0,2.5,0.05},
         {'left_mount_x','Left shoulder: left / right',-2,2,0.01},{'left_mount_y','Left shoulder: forward / back',-2,2,0.01},{'left_mount_z','Left shoulder: up / down',-2,2,0.01},
         {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},

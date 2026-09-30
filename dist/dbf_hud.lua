@@ -3,10 +3,10 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -1135,7 +1135,7 @@ function M.start(sr,log,globals,panel_provider,show_preview)
     local source_ids={};local elapsed=0
     local texture_w,texture_h=64,64
     local density=panel_provider and 4 or 1
-    function self.tick(dt,refresh_hz,scanline_strength)
+    function self.tick(dt,refresh_hz,scanline_strength,saturation)
         elapsed=elapsed+(dt or 0)
         if panel_provider and active and world and gui and (not world_ready or refresh_hz==0 or elapsed>=1/(refresh_hz or 60)) then
             elapsed=0
@@ -1157,7 +1157,9 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                         v=v/255
                         return 255*(v<=0.04045 and v/12.92 or ((v+0.055)/1.055)^2.4)
                     end
-                    local rgb={linear(c[1]),linear(c[2]),linear(c[3])}
+                    local gray=0.2126*c[1]+0.7152*c[2]+0.0722*c[3]
+                    local function channel(v)return linear(math.max(0,math.min(255,gray+(v-gray)*(saturation or 1))))end
+                    local rgb={channel(c[1]),channel(c[2]),channel(c[3])}
                     local function strip(bottom,height,factor)
                         local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(bottom-f.y)*sy,1),sr.Vector2(w*sx,height*sy),sr.Color(math.floor(255*(a or 1)),math.floor(rgb[1]*factor+0.5),math.floor(rgb[2]*factor+0.5),math.floor(rgb[3]*factor+0.5)))
                         source_ids[#source_ids+1]=id
@@ -1446,13 +1448,14 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
-    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local effects={saturation=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
     local placement={left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true}
     local legacy={weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,
         offset_x=true,offset_y=true,follow=true,travel=true,settle=true,scale=true,opacity=true}
     local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or legacy[k] and 'dbf_hud_legacy.' or effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
+        {'saturation','Panel color saturation',0,2.5,0.05},
         {'left_mount_x','Left shoulder: left / right',-2,2,0.01},{'left_mount_y','Left shoulder: forward / back',-2,2,0.01},{'left_mount_z','Left shoulder: up / down',-2,2,0.01},
         {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
