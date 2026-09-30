@@ -8,9 +8,20 @@ end
 function M.new(sr,log,side)
     if not side then
         local front,back=M.new(sr,log,1),M.new(sr,log,-1)
+        local overlay=M.fullbright(sr,log)
+        local active_mode
         return {
-            draw=function(...) front.draw(...);back.draw(...) end,
-            release=function() front.release();back.release() end
+            draw=function(p,c,target,dt,aspect)
+                local occluded=c.hud_occlusion~=false
+                if active_mode~=occluded then
+                    front.release();back.release();overlay.release()
+                    active_mode=occluded
+                    log('HUD occlusion '..(occluded and 'on: scene mesh' or 'off: fullbright GUI'))
+                end
+                if occluded then front.draw(p,c,target,dt,aspect);back.draw(p,c,target,dt,aspect)
+                else overlay.draw(p,c,target,dt,aspect) end
+            end,
+            release=function() overlay.release();front.release();back.release();active_mode=nil end
         }
     end
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh

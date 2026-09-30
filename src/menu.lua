@@ -28,6 +28,7 @@ function M.new(hud)
     function self.sync()
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
+        set('hud_occlusion',hud.config.hud_occlusion)
         set('frosted',hud.config.frosted)
         set('anchor_mode_v2',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('pose_marker',hud.config.pose_marker)
@@ -67,6 +68,10 @@ function M.new(hud)
             add('anchor_mode_v2',{type='choice',label='Attach HUD to',choices={'Weapon (hybrid)','Crosshair','Weapon (3D plane)'},
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
+            end)
+            add('hud_occlusion',{type='toggle',label='HUD occlusion',default=hud.config.hud_occlusion,
+                description='On: scene mesh hidden by terrain and characters. Off: fullbright GUI draws through geometry; requires the fullbright material addon.'},function(v)
+                hud.configure({hud_occlusion=v});hud.save_tuning()
             end)
             add('world_probe',{type='toggle',label='Experimental 3D rectangle',default=hud.config.world_probe},function(v)
                 hud.configure({world_probe=v});hud.save_tuning()

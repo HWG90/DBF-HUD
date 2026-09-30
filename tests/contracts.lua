@@ -248,7 +248,7 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==33)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==34)
     callbacks['dbf_hud_legacy.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
     callbacks['dbf_hud_v3.font'](2);assert(h.config.font=='debug' and writes==2)
@@ -509,7 +509,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==33)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==34)
         callbacks['dbf_hud_legacy.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_legacy.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
@@ -654,6 +654,23 @@ test('startup render bridge isolates subscribers and keeps host callback',functi
     bridge.subscribe('broken',function()error('isolated')end);globals.render(9)
     assert(calls==2 and bridge.errors.broken)
     remove();globals.render(9);assert(ran==2 and globals.render==installed)
+end)
+
+test('occlusion toggle switches renderers exclusively and releases the previous path',function()
+    local original_new,original_overlay=HUD.scene_test.new,HUD.scene_test.fullbright
+    local draws={front=0,back=0,gui=0};local releases={front=0,back=0,gui=0}
+    local function stub(key)return {draw=function()draws[key]=draws[key]+1 end,release=function()releases[key]=releases[key]+1 end}end
+    HUD.scene_test.new=function(sr,log,side) if side then return stub(side==1 and 'front' or 'back')end return original_new(sr,log,side)end
+    HUD.scene_test.fullbright=function()return stub('gui')end
+    local carrier=HUD.scene_test.new({},function()end)
+    carrier.draw({}, {hud_occlusion=true},1,0.016,2)
+    assert(draws.front==1 and draws.back==1 and draws.gui==0)
+    carrier.draw({}, {hud_occlusion=false},1,0.016,2)
+    assert(draws.front==1 and draws.gui==1 and releases.front==2)
+    carrier.draw({}, {hud_occlusion=true},1,0.016,2)
+    assert(draws.front==2 and draws.back==2 and draws.gui==1 and releases.gui==3)
+    carrier.release()
+    HUD.scene_test.new,HUD.scene_test.fullbright=original_new,original_overlay
 end)
 
 test('scene carrier binds once, retires on pose loss and rejects null materials',function()

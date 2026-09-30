@@ -245,3 +245,8 @@ DBF-HUD-Fullbright-Material-Test-0.1.zip adds only mods/dbf_hud/materials/fullbr
 ## Color experiment rollback
 
 Disabled the unoccluded fullbright GUI comparison while retaining its research code. Removed experimental sRGB conversion and saturation from texture rendering; selected RGB now passes through unchanged (optional scanline dimming remains). Removed diagnostic swatches and screen preview. Color editing is now Lua-config-only because the native menu applies target and channel changes as a batch. Retired RGBA and saturation callbacks are inert until old rows disappear on game restart. Scene processing can still affect the visible colors; visual validation remains necessary. All 45 offline contracts pass.
+
+
+## Selectable occlusion
+
+HUD occlusion in the main DBF-HUD menu defaults on and persists as hud_occlusion in Lua tuning. On selects both scene mesh faces; off selects the fullbright WorldGUI (material addon required). Mode transitions release the previous renderer before drawing the selected one, using the shared mount offsets and centered origins. No simultaneous comparison panel. Offline renderer-switch contract added; 46 checks pass. Visual switching still needs in-game confirmation.
