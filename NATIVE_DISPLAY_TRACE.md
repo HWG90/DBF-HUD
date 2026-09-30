@@ -265,3 +265,8 @@ Offline shader comparison: plain/depth GUI GPU resources differ in only 19 bytes
 ## WorldGUI creation-material experiment
 
 Both plain/depth shader pairs have byte-identical DXBC vertex and pixel programs. Disassembly shows projected Z is preserved; a per-object flag chooses context-camera vs viewport-camera view projection. Current native World.create_world_gui parser accepts immediate, shadow_caster, and material followed by a resource name/hash. The latter is passed as a material array to the native creation routine. Experimental GUI now supplies depth_fill during creation as well as each bitmap draw. Normal direct GUI and mesh modes are unchanged. The API availability alone does not prove scene-depth attachment or successful occlusion. All 46 offline checks pass.
+
+
+## Creation-material test reverted after CTD
+
+User reported repeated desktop crashes after the creation-material test. Reverted world_probe.lua to the pre-test implementation in source, packaged outputs, and installed MDL Lua immediately. Final log shows GUI creation returned, then native gui_fill material lookup returned nil; no successful panel submission follows. This is consistent with the explicit material list changing available GUI materials, but does not prove the exact crash instruction. Do not retry this creation override without further offline verification. All 46 offline checks pass after rollback; they do not verify native safety.
