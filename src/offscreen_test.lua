@@ -1,8 +1,8 @@
 -- Isolated one-frame render test. Never renders from the update callback.
 local M={}
-function M.start(sr,log,globals,panel_provider)
+function M.start(sr,log,globals,panel_provider,show_preview)
     globals=globals or _G
-    local self={};local active=true;local submitted=false
+    local self={};local active=true;local submitted=false;local first_render=true
     local A,W,R,V,U,G=sr.Application,sr.World,sr.Renderer,sr.Viewport,sr.Unit,sr.Gui
     local world,viewport,target,camera,environment,gui
     local preview,preview_world
@@ -136,10 +136,11 @@ function M.start(sr,log,globals,panel_provider)
     unsubscribe=bridge.subscribe('dbf_hud.offscreen',function(...)
         if active and world_ready and not submitted then
             submitted=true
-            if not preview then log('OFFSCREEN render callback entered') end
+            if first_render then log('OFFSCREEN render callback entered') end
             local done,why=pcall(A.render_world,world,camera,viewport,environment)
-            if not preview or not done then log(done and 'OFFSCREEN render submitted; pixels unverified' or ('OFFSCREEN render failed '..tostring(why))) end
-            if done and not preview then
+            if first_render or not done then log(done and 'OFFSCREEN render submitted; pixels unverified' or ('OFFSCREEN render failed '..tostring(why))) end
+            first_render=false
+            if done and show_preview~=false and not preview then
                 local shown,reason=pcall(function()
                     log('OFFSCREEN preview preflight begin')
                     assert(type(G.material)=='function','Gui.material unavailable')
