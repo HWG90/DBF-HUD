@@ -217,9 +217,9 @@ test('heat fill grows from the bottom and preserves partial cells',function()
         return out,d
     end
     assert(#fills(0)==0)
-    local half=fills(.5);assert(#half==10 and half[1].y==-8 and math.abs(half[10].y-13.15)<1e-8)
-    local partial=fills(.525);assert(#partial==11 and math.abs(partial[11].h-.875)<1e-8)
-    local full,d=fills(1);assert(#full==20 and math.abs(full[20].y-36.65)<1e-8)
+    local half=fills(.5);assert(#half==10 and half[1].y==-8 and math.abs(half[10].y-14.5)<1e-8)
+    local partial=fills(.525);assert(#partial==11 and math.abs(partial[11].h-1)<1e-8)
+    local full,d=fills(1);assert(#full==20 and math.abs(full[20].y-39.5)<1e-8)
     local found=false;for _,v in ipairs(d) do if v.text=='OVERHEAT' then found=true end end;assert(found)
 end)
 test('configuration validates atomically and roundtrips as Lua',function()
@@ -238,7 +238,7 @@ test('optional native menu edits hex colors, position and persists tuning',funct
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==31)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==32)
     callbacks['dbf_hud_v3.offset_x'](-120);assert(h.config.offset_x==-120)
     callbacks['dbf_hud_v3.color_target'](5)
     callbacks['dbf_hud_v3.hex1'](11);assert(h.config.heat_red=='#A16D65')
@@ -502,7 +502,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==31)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==32)
         callbacks['dbf_hud_v3.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_v3.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end

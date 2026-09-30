@@ -183,3 +183,8 @@ The user confirmed that the scene panel has a see-through background and is stil
 ### Aspect-axis correction
 
 The user reported continued squishing. Decoding the primitive unit shows a square XZ mesh, attached to transform index 2 with an internal 90-degree X rotation. Its root-space surface is therefore XY. The earlier root-Z scale correction affected the normal rather than visible height; the preceding aspect claim was incorrect. The carrier now scales root Y by inverse texture aspect and keeps root Z unchanged. An offline regression check enforces the resulting 2:1 root-space extent ratio. Live visual verification remains required.
+
+
+## Emission and heat-cell spacing
+
+The user confirmed the corrected aspect ratio. Scene emission now defaults to 3, with a live 0-10 menu slider and Lua tuning setting. Material intensity updates only when changed. The user then reported uneven heat-bar gaps: at source scale 2 the old heat geometry used a fractional 4.7-pixel pitch and 3.5-pixel height. BigBlue now uses a 5-pixel pitch and 4-pixel full-cell height at that scale. Partial heat fill remains continuous. All 42 contracts pass. Visual brightness and spacing confirmation remain pending; perspective minification may still alias.

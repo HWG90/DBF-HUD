@@ -29,10 +29,11 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     end
     if heat then
         -- Twenty cells fill from the base upward, including the partially filled cell.
+        local pitch,cell=pixel and 2.5 or 2.35,pixel and 2 or 1.75
         for i=0,19 do
             local fill=math.max(0,math.min(1,m.fraction*20-i))
-            rect(0,-8+i*2.35,9,1.75,ink,0.12)
-            if fill>0 then rect(0,-8+i*2.35,9,1.75*fill,ink,0.95) end
+            rect(0,-8+i*pitch,9,cell,ink,0.12)
+            if fill>0 then rect(0,-8+i*pitch,9,cell*fill,ink,0.95) end
         end
         text('HEAT',18,pixel and math.max(34,5+number_top+3) or 34,10,ink,0.85)
         local size=pixel and 36 or 30

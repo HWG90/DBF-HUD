@@ -3,10 +3,10 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -283,10 +283,11 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     end
     if heat then
         -- Twenty cells fill from the base upward, including the partially filled cell.
+        local pitch,cell=pixel and 2.5 or 2.35,pixel and 2 or 1.75
         for i=0,19 do
             local fill=math.max(0,math.min(1,m.fraction*20-i))
-            rect(0,-8+i*2.35,9,1.75,ink,0.12)
-            if fill>0 then rect(0,-8+i*2.35,9,1.75*fill,ink,0.95) end
+            rect(0,-8+i*pitch,9,cell,ink,0.12)
+            if fill>0 then rect(0,-8+i*pitch,9,cell*fill,ink,0.95) end
         end
         text('HEAT',18,pixel and math.max(34,5+number_top+3) or 34,10,ink,0.85)
         local size=pixel and 36 or 30
@@ -1312,7 +1313,7 @@ HUD.scene_test=(function()
 local M={}
 function M.new(sr,log)
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
-    local unit,world,bound;local failed=false;local smooth={}
+    local unit,world,bound,scene_material,last_emission;local failed=false;local smooth={}
     local self={}
     local function live(w)
         for _,v in pairs(A.worlds() or {}) do if w==v then return true end end
@@ -1320,7 +1321,7 @@ function M.new(sr,log)
     end
     function self.release()
         if unit and live(world) then W.destroy_unit(world,unit) end
-        unit,world,bound=nil,nil,nil;smooth={}
+        unit,world,bound,scene_material,last_emission=nil,nil,nil,nil,nil;smooth={}
     end
     function self.draw(p,c,target,dt,aspect)
         if failed then return end
@@ -1356,7 +1357,7 @@ function M.new(sr,log)
                 sr.Material.set_resource(material,'emissive_map',target)
                 sr.Material.set_scalar(material,'use_color_map',1)
                 sr.Material.set_scalar(material,'use_emissive_map',1)
-                sr.Material.set_scalar(material,'emissive_intensity',1)
+                scene_material=material
                 sr.Material.set_vector3(material,'base_color',sr.Vector3(1,1,1))
                 sr.Material.set_vector3(material,'emissive',sr.Vector3(1,1,1))
                 if alpha then
@@ -1368,6 +1369,10 @@ function M.new(sr,log)
                 log('SCENE plane texture bound')
             end
             assert(bound==target,'render target changed without scene retirement')
+            if last_emission~=c.emissive_intensity then
+                sr.Material.set_scalar(scene_material,'emissive_intensity',c.emissive_intensity)
+                last_emission=c.emissive_intensity
+            end
             local m=p.matrix
             local x,y,z=c.mount_x,c.mount_y,c.mount_z+0.2
             local px=p.x+m[1]*x+m[5]*y+m[9]*z
@@ -1392,6 +1397,7 @@ function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
     local sliders={
+        {'emissive_intensity','3D panel emission',0,10,0.1},
         {'world_position_smooth','3D position smoothing',0,0.5,0.005},{'world_rotation_smooth','3D rotation smoothing',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
         {'weapon_offset_x','Weapon panel horizontal offset',-1920,1920,1},{'weapon_offset_y','Weapon panel vertical offset',-1080,1080,1},
         {'weapon_settle','Weapon settling time',0.04,1,0.01},{'weapon_lag','Maximum weapon lag',0,160,1},

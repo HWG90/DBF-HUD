@@ -4,6 +4,7 @@ function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
     local sliders={
+        {'emissive_intensity','3D panel emission',0,10,0.1},
         {'world_position_smooth','3D position smoothing',0,0.5,0.005},{'world_rotation_smooth','3D rotation smoothing',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
         {'weapon_offset_x','Weapon panel horizontal offset',-1920,1920,1},{'weapon_offset_y','Weapon panel vertical offset',-1080,1080,1},
         {'weapon_settle','Weapon settling time',0.04,1,0.01},{'weapon_lag','Maximum weapon lag',0,160,1},

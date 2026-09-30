@@ -2,7 +2,7 @@
 local M={}
 function M.new(sr,log)
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
-    local unit,world,bound;local failed=false;local smooth={}
+    local unit,world,bound,scene_material,last_emission;local failed=false;local smooth={}
     local self={}
     local function live(w)
         for _,v in pairs(A.worlds() or {}) do if w==v then return true end end
@@ -10,7 +10,7 @@ function M.new(sr,log)
     end
     function self.release()
         if unit and live(world) then W.destroy_unit(world,unit) end
-        unit,world,bound=nil,nil,nil;smooth={}
+        unit,world,bound,scene_material,last_emission=nil,nil,nil,nil,nil;smooth={}
     end
     function self.draw(p,c,target,dt,aspect)
         if failed then return end
@@ -46,7 +46,7 @@ function M.new(sr,log)
                 sr.Material.set_resource(material,'emissive_map',target)
                 sr.Material.set_scalar(material,'use_color_map',1)
                 sr.Material.set_scalar(material,'use_emissive_map',1)
-                sr.Material.set_scalar(material,'emissive_intensity',1)
+                scene_material=material
                 sr.Material.set_vector3(material,'base_color',sr.Vector3(1,1,1))
                 sr.Material.set_vector3(material,'emissive',sr.Vector3(1,1,1))
                 if alpha then
@@ -58,6 +58,10 @@ function M.new(sr,log)
                 log('SCENE plane texture bound')
             end
             assert(bound==target,'render target changed without scene retirement')
+            if last_emission~=c.emissive_intensity then
+                sr.Material.set_scalar(scene_material,'emissive_intensity',c.emissive_intensity)
+                last_emission=c.emissive_intensity
+            end
             local m=p.matrix
             local x,y,z=c.mount_x,c.mount_y,c.mount_z+0.2
             local px=p.x+m[1]*x+m[5]*y+m[9]*z
