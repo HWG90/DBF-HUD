@@ -117,8 +117,8 @@ function M.start(sr,log,globals)
                     log('OFFSCREEN preview GUI create begin')
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
                     -- Independent control: visible geometry does not depend on the render target.
-                    G.rect(preview,sr.Vector3(36,36,79),sr.Vector2(200,200),sr.Color(255,255,0,255))
-                    G.rect(preview,sr.Vector3(244,40,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
+                    G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(200,200),sr.Color(255,255,0,255))
+                    G.rect(preview,sr.Vector3(1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
                     log('OFFSCREEN placement control: magenta frame and white square')
                     log('OFFSCREEN preview material lookup begin')
                     for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_diffuse_map','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
@@ -146,8 +146,8 @@ function M.start(sr,log,globals)
                     log('OFFSCREEN verified texture binding begin')
                     sr.Material.set_resource(material,'diffuse_map',target)
                     log('OFFSCREEN preview bitmap draw begin')
-                    G.bitmap(preview,material,sr.Vector3(40,40,80),sr.Vector2(192,192),sr.Color(255,255,255,255))
-                    log('OFFSCREEN four-color preview placed at bottom-left')
+                    G.bitmap(preview,'content/ui/shared/material/gui_diffuse_map',sr.Vector3(900,300,80),sr.Vector2(192,192),sr.Color(255,255,255,255))
+                    log('OFFSCREEN four-color preview placed above/right of native bottom-left HUD')
                 end)
                 if not shown then log('OFFSCREEN preview stopped '..tostring(reason)) end
             end
