@@ -329,8 +329,6 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     left,bottom,right,top=left-pad,bottom-pad,right+pad,top+pad
     local out={{type='panel',x=left,y=bottom,w=right-left,h=top-bottom,
         c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
-    out[#out+1]={type='rect',x=left,y=top-scale,w=14*scale,h=scale,c=ink,a=.6*opacity}
-    out[#out+1]={type='rect',x=right-14*scale,y=bottom,w=14*scale,h=scale,c=ink,a=.4*opacity}
     for _,c in ipairs(d) do out[#out+1]=c end
     return out
 end
