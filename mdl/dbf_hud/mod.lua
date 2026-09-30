@@ -1423,6 +1423,8 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
+    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local function option_id(k)return (effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
         {'texture_refresh_hz','Texture update cap (0 = every frame)',0,120,10},
@@ -1436,7 +1438,7 @@ function M.new(hud)
         {'panel_opacity','Panel tint',0,1,0.01},{'follow','Reticle follow',0,1,0.01},
         {'travel','Maximum travel',1,160,1},{'settle','Settling time',0.04,1,0.01},
         {'flash_hz','Overheat flash rate',0.5,3,0.5}}
-    local function set(k,v) assert(api.set(prefix..k,v)) end
+    local function set(k,v) assert(api.set(option_id(k),v)) end
     function self.sync()
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
@@ -1458,8 +1460,8 @@ function M.new(hud)
         api.dbf_hud_routes=api.dbf_hud_routes or {}
         routes=api.dbf_hud_routes
         local function add(k,spec,callback)
-            spec.mod='DBF-HUD'
-            local id=prefix..k
+            spec.mod=effects[k] and 'DBF-HUD Effects' or 'DBF-HUD'
+            local id=option_id(k)
             -- API 1 treats a changed default as a different registration. Reuse
             -- our stable option IDs when taking over from the boot addon too.
             local exists=routes[id] or (type(api.get)=='function' and api.get(id)~=nil)
@@ -1655,7 +1657,7 @@ function M.start(sr,backend,options)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
         self.clock=self.clock+dt
-        menu.poll();self.menu_status=menu.status
+        menu.poll();if self.menu_status~=menu.status then log('MENU '..menu.status) end;self.menu_status=menu.status
         if provider then
             local ok,x,y,visible=pcall(provider)
             if ok and x~=nil then local accepted=pcall(self.push_anchor,x,y,visible);if not accepted then self.anchor_status='invalid provider' end end

@@ -127,7 +127,7 @@ function M.start(sr,backend,options)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
         self.clock=self.clock+dt
-        menu.poll();self.menu_status=menu.status
+        menu.poll();if self.menu_status~=menu.status then log('MENU '..menu.status) end;self.menu_status=menu.status
         if provider then
             local ok,x,y,visible=pcall(provider)
             if ok and x~=nil then local accepted=pcall(self.push_anchor,x,y,visible);if not accepted then self.anchor_status='invalid provider' end end
