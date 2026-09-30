@@ -150,3 +150,7 @@ The user confirmed that the actual ammo panel appears in the texture preview and
 ## First scene-mesh carrier test
 
 content/art_shared/meshes/plane_primitive is loaded and spawned in the private world with one mesh, one material slot, and a nonzero material pointer. Base asset inspection finds material 29ddde373c760d73 with color_map and emissive_map inputs. The scene carrier uses that existing plane in the main world, binds the live panel texture to those two verified inputs, and follows the damped weapon pose. Live logs reached `SCENE plane texture bound`; the process remains responsive. Visibility, orientation, lighting, and depth occlusion await observation. The screen preview remains a reference. Cleanup destroys the scene unit before the offscreen texture. Offline tests cover binding once, pose-loss retirement and null-material rejection; 42 tests pass.
+
+## Scene-panel occlusion visually confirmed
+
+The user confirmed seeing the new scene-mesh panel and confirmed that an intervening wall or character hides it. This is the first visually confirmed occlusion result for the project. The exact occluder was not separately identified in the response, so independent wall and character checks are still useful. This establishes a working scene-mesh route for the live panel texture. It does not establish frosted transparency, final orientation/scale, all camera modes, or long-session stability.

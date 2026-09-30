@@ -17,9 +17,9 @@ An existing live installation may retain its `astra_ammo` folder to preserve MDL
 
 ## Current limitations
 
-The 3D world-GUI panel still draws through scenery and characters. Native frost works in hybrid mode; it is disabled in 3D mode because it rendered incorrectly there. Neither depth occlusion nor world-space frost is solved.
+The original 3D world-GUI panel still draws through scenery and characters. The experimental scene-mesh carrier now displays the live panel texture, and the user has confirmed that an intervening object hides it. Native frost works in hybrid mode; it is disabled in 3D mode because it rendered incorrectly there. Scene-mesh occlusion has a visually confirmed working path; world-space frost remains unresolved.
 
-The experimental native-screen path has successfully created a render target, bound it to the game's offscreen weapon-screen viewport, detached it and cleaned up. A private camera and one offscreen render submission succeeded, but no image pixels have been verified. A subsequent reload lost the host render callback and the user reported a crash. The offscreen client now requires a separate startup render bridge to avoid MDL global cleanup. Without that bridge it remains inactive; see bridge/README.md and the investigation notes. This is a development snapshot, not a stable release.
+The experimental native-screen path has successfully created a render target, bound it to the game's offscreen weapon-screen viewport, detached it and cleaned up. The four-color image and live ammo-panel texture have both been visually verified, followed by an occluded scene-plane test. A subsequent reload lost the host render callback and the user reported a crash. The offscreen client now requires a separate startup render bridge to avoid MDL global cleanup. Without that bridge it remains inactive; see bridge/README.md and the investigation notes. This is a development snapshot, not a stable release.
 
 See [native display research](NATIVE_DISPLAY_TRACE.md), [depth investigation](DEPTH_RENDERING.md), and [weapon binding](WEAPON_BINDING.md). These documents include chronological experiments and results; earlier proposed steps are not claims of current functionality.
 
