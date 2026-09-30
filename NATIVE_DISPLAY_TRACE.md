@@ -122,3 +122,7 @@ Read-only inspection of the current Material.set_resource wrapper confirms argum
 ## Material comparison in the same live GUI
 
 A bounded lookup-only comparison returned a null pointer for core/performance_hud/gui, while content/ui/shared/material/gui_fill and content/ui/shared/material/gui_white_alpha returned distinct nonzero pointers. All three passed Application.can_get. Therefore can_get is not sufficient evidence that this GUI can instantiate the requested material. The GUI can return valid material instances; the failure is specific to the performance-HUD candidate. Neither working candidate has yet been verified to accept the render target or the assumed diffuse_map slot. No texture setter was invoked. Next: verify the texture-sampling shader and slot for an instantiable GUI material before binding the offscreen target.
+
+## Native image material binding succeeds
+
+The catalog identifies content/ui/shared/material/gui_diffuse_map. Read-only extraction found its 160-byte material payload in base archive 007e093ca718ca1a, with diffuse_map slot hash 3aa8b87e and shader identifier ba25de35. A lookup in the same live preview GUI returned a nonzero pointer. After both material and target pointer checks, Material.set_resource(material, 'diffuse_map', target) returned, followed by Gui.bitmap returning and the preview-placement log. The game process remained responsive. Actual four-color image visibility is awaiting user observation; successful API calls alone do not confirm rendered pixels or depth.
