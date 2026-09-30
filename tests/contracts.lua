@@ -660,7 +660,7 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
         Material={set_resource=function()bindings=bindings+1 end,set_scalar=function()end,set_vector3=function()end},
         Matrix4x4={from_axes=function(...)return {...}end},Vector3=function(...)return {...}end}
     local p={id=1,candidate=1,x=0,y=0,z=0,matrix={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}}
-    local probe=HUD.scene_test.new(sr,function()end)
+    local probe=HUD.scene_test.new(sr,function()end,1)
     probe.draw(p,HUD.config.new(),131072,0.016);probe.draw(p,HUD.config.new(),131072,0.016)
     assert(bindings==2 and moves==2)
     -- Asset mesh XZ is rotated into root XY by its internal joint transform.
@@ -669,8 +669,21 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
     probe.draw(nil,HUD.config.new(),131072,0.016);assert(destroyed==1)
     probe.release();assert(destroyed==1)
     material=0
-    local bad=HUD.scene_test.new(sr,function()end);bad.draw(p,HUD.config.new(),131072,0.016)
+    local bad=HUD.scene_test.new(sr,function()end,1);bad.draw(p,HUD.config.new(),131072,0.016)
     assert(bindings==2 and destroyed==2)
+    material=65536
+    local poses={}
+    sr.Unit.set_local_pose=function(_,_,v)poses[#poses+1]=v end
+    local pair=HUD.scene_test.new(sr,function()end)
+    pair.draw(p,HUD.config.new(),131072,0.016,2)
+    assert(bindings==6 and #poses==2)
+    for i=1,3 do
+        assert(poses[1][1][i]==-poses[2][1][i])
+        assert(poses[1][2][i]==poses[2][2][i])
+        assert(poses[1][3][i]==-poses[2][3][i])
+    end
+    pair.release();assert(destroyed==4)
+    pair.release();assert(destroyed==4)
 end)
 
 test('bundle compiles and excludes crashing diagnostic paths',function()

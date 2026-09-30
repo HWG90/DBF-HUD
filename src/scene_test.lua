@@ -1,6 +1,13 @@
 -- Experimental scene-mesh carrier; uses only engine-owned handles.
 local M={}
-function M.new(sr,log)
+function M.new(sr,log,side)
+    if not side then
+        local front,back=M.new(sr,log,1),M.new(sr,log,-1)
+        return {
+            draw=function(...) front.draw(...);back.draw(...) end,
+            release=function() front.release();back.release() end
+        }
+    end
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
     local unit,world,bound,scene_material,last_emission;local failed=false;local smooth={}
     local self={}
@@ -68,7 +75,7 @@ function M.new(sr,log)
             local py=p.y+m[2]*x+m[6]*y+m[10]*z
             local pz=p.z+m[3]*x+m[7]*y+m[11]*z
             m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
-            local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),sr.Vector3(m[9],m[10],m[11]),sr.Vector3(-m[5],-m[6],-m[7]),sr.Vector3(m[13],m[14],m[15]))
+            local pose=sr.Matrix4x4.from_axes(sr.Vector3(side*m[1],side*m[2],side*m[3]),sr.Vector3(m[9],m[10],m[11]),sr.Vector3(-side*m[5],-side*m[6],-side*m[7]),sr.Vector3(m[13],m[14],m[15]))
             U.set_local_pose(unit,1,pose)
             U.set_local_scale(unit,1,sr.Vector3(0.24,0.24/math.max(0.25,math.min(8,aspect or 2)),0.24))
         end)

@@ -193,3 +193,8 @@ The user confirmed the corrected aspect ratio. Scene emission now defaults to 3,
 ## Four-times texture density
 
 The user confirmed even heat-bar spacing and requested much sharper texture rendering. Live panel render targets now use four times the natural width and height (sixteen times the pixels), with all source geometry uniformly scaled. Scene aspect and physical size are unchanged; the screen reference also retains its former display size. The allocation limit remains 2048 per axis. Tests verify scaled source geometry and resize detection. In-game sharpness, filtering, and bloom remain visual checks.
+
+
+## Back-facing carrier
+
+The user confirmed the supersampled panel is sharp. A second carrier now shares the same render target, with root X and Z axes reversed (180 degrees about panel up). This exposes an outward front face on each side with readable rather than mirrored text, preserving proper rotation, alpha material and depth behavior. Both units retire before the render target. Tests verify opposite facing, shared up direction, both bindings and idempotent cleanup. Live rear-face appearance remains to be checked.
