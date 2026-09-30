@@ -198,3 +198,6 @@ The user confirmed even heat-bar spacing and requested much sharper texture rend
 ## Back-facing carrier
 
 The user confirmed the supersampled panel is sharp. A second carrier now shares the same render target, with root X and Z axes reversed (180 degrees about panel up). This exposes an outward front face on each side with readable rather than mirrored text, preserving proper rotation, alpha material and depth behavior. Both units retire before the render target. Tests verify opposite facing, shared up direction, both bindings and idempotent cleanup. Live rear-face appearance remains to be checked.
+
+
+The user confirmed rear visibility and requested mirrored rear text instead of independently readable text. The rear material now uses uv_scale (-1,1) and uv_offset (1,0), horizontally reversing the shared image. Geometry facing remains unchanged. Offline checks validate the UV settings; live appearance awaits confirmation.

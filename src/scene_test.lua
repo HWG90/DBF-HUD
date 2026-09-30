@@ -53,6 +53,10 @@ function M.new(sr,log,side)
                 sr.Material.set_resource(material,'emissive_map',target)
                 sr.Material.set_scalar(material,'use_color_map',1)
                 sr.Material.set_scalar(material,'use_emissive_map',1)
+                if side==-1 then
+                    sr.Material.set_vector2(material,'uv_scale',sr.Vector2(-1,1))
+                    sr.Material.set_vector2(material,'uv_offset',sr.Vector2(1,0))
+                end
                 scene_material=material
                 sr.Material.set_vector3(material,'base_color',sr.Vector3(1,1,1))
                 sr.Material.set_vector3(material,'emissive',sr.Vector3(1,1,1))

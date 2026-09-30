@@ -657,8 +657,8 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
         World={spawn_unit=function()return 2 end,destroy_unit=function()destroyed=destroyed+1 end},
         Unit={set_material=function(_,slot,name)assert(slot=='material' and name=='content/art_shared/materials/placeholder_red_transparent')end,num_meshes=function()return 1 end,mesh=function()return 3 end,set_local_pose=function()moves=moves+1 end,set_local_scale=function(_,_,v)scale=v end},
         Mesh={num_materials=function()return 1 end,material=function()return material end},
-        Material={set_resource=function()bindings=bindings+1 end,set_scalar=function()end,set_vector3=function()end},
-        Matrix4x4={from_axes=function(...)return {...}end},Vector3=function(...)return {...}end}
+        Material={set_resource=function()bindings=bindings+1 end,set_scalar=function()end,set_vector2=function(_,key,v)assert((key=='uv_scale' and v[1]==-1 and v[2]==1) or (key=='uv_offset' and v[1]==1 and v[2]==0))end,set_vector3=function()end},
+        Matrix4x4={from_axes=function(...)return {...}end},Vector2=function(...)return {...}end,Vector3=function(...)return {...}end}
     local p={id=1,candidate=1,x=0,y=0,z=0,matrix={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}}
     local probe=HUD.scene_test.new(sr,function()end,1)
     probe.draw(p,HUD.config.new(),131072,0.016);probe.draw(p,HUD.config.new(),131072,0.016)
