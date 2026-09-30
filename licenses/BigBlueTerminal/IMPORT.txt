@@ -1,0 +1,8 @@
+BigBlue Terminal by VileR, copyright 2015.
+Source: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/BigBlueTerminal.zip
+Font: BigBlueTerm437NerdFontMono-Regular.ttf
+SHA256: 8ecc26541cfb550995baebdf9152eeb298b26b58752f4f5fae05b0f42a751fba
+Astra Ammo conversion: printable ASCII rasterized at native 12px height,
+then losslessly merged into rectangles. No added Nerd Font icons are included.
+Generated glyph data remains CC BY-SA 4.0. Original license and README accompany it.
+https://creativecommons.org/licenses/by-sa/4.0/

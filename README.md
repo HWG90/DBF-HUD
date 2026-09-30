@@ -1,0 +1,52 @@
+# Holographic Utility Display (HUD)
+
+Experimental modular ammo HUD for Helldivers 2, developed as **Astra Ammo**. Current development snapshot: **0.3.31**.
+
+## Working features
+
+- Dynamic crosshair tracking with damped movement.
+- Weapon-following hybrid mode and an angled world-GUI panel mode.
+- Weapon-pose smoothing, configurable mounting offsets, scale, opacity and hex colors.
+- Content-sized frames and BigBlue Terminal pixel typography.
+- Vertical heat gauge: white below 75%, yellow from 75%, red from 86%, alternating red/yellow from 95%.
+- MDL API 2 live Lua reload and menu/Lua tuning.
+
+Runtime names, settings keys and addon identifiers retain `AstraAmmo` / `astra_ammo` for compatibility.
+
+## Current limitations
+
+The 3D world-GUI panel still draws through scenery and characters. Native frost works in hybrid mode; it is disabled in 3D mode because it rendered incorrectly there. Neither depth occlusion nor world-space frost is solved.
+
+The experimental native-screen path has successfully created a render target, bound it to the game's offscreen weapon-screen viewport, detached it and cleaned up. The next render test is blocked on an available camera unit. No offscreen image has been verified. The live build includes guarded diagnostics; it is a development snapshot, not a stable release.
+
+See [native display research](NATIVE_DISPLAY_TRACE.md), [depth investigation](DEPTH_RENDERING.md), and [weapon binding](WEAPON_BINDING.md). These documents include chronological experiments and results; earlier proposed steps are not claims of current functionality.
+
+## Build and install
+
+```sh
+python tools/build.py
+```
+
+This produces `dist/astra_ammo.lua`, `mdl/astra_ammo/mod.lua`, and an MDL ZIP in the parent directory. Optional Arsenal packaging requires an external Bingus addon builder, supplied with `--addon-builder`.
+
+Copy `mdl/astra_ammo` into `%LOCALAPPDATA%/MDL/Helldivers2/Mods`, then enable **Astra Ammo (Live)**. Disable the packaged startup copy to avoid duplicate HUDs. See [MDL setup](MDL.md). With auto-reload enabled, installed Lua file writes take effect immediately; validate locally and copy atomically.
+
+Configure through the mod menu or game-root `AstraAmmo-tuning.lua`. The file in this repository is an example, not a copy of personal live settings. Open `preview/index.html` for the browser design preview; it does not reproduce the native rendering pipeline.
+
+## Validation
+
+```sh
+python tests/run.py --lua-dll "path/to/lua51.dll"
+```
+
+The runner uses a local Windows LuaJIT DLL. **40 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
+
+## Contents and attribution
+
+Source, generated Lua bundles, preview, tests and development notes are included. Extracted compiled game materials, game binaries, memory captures, private logs and anti-cheat bypass code are not included. The optional experimental depth-material assets referenced in historical notes are not shipped here; code falls back when they are unavailable.
+
+Ammo layout facts originated from Reticle Ammo HUD. This implementation was developed independently of HD2UI; Derive was used for read-only investigation.
+
+BigBlue Terminal printable ASCII glyphs were imported from Nerd Fonts v3.5.1. Font attribution and CC BY-SA 4.0 terms are preserved in [licenses/BigBlueTerminal](licenses/BigBlueTerminal). See `tools/import_bigblue.py` for regeneration. No blanket license is granted for the remaining project code in this snapshot.
+
+Full Nerd Fonts support is deferred in [BACKLOG.md](BACKLOG.md).

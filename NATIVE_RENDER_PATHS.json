@@ -1,0 +1,173 @@
+{
+  "viewports": {
+    "offscreen_ui_weapon_screen": {
+      "output_dst": "",
+      "output_rt": "",
+      "layer_config": "ui_only",
+      "resources": []
+    },
+    "ui_3d": {
+      "output_dst": "depth_buffer_temp_fullres",
+      "output_rt": "output_target",
+      "layer_config": "ui_3d",
+      "resources": []
+    },
+    "hud_world_ui_and_composite_layer": {
+      "output_dst": "depth_stencil_buffer",
+      "output_rt": "ui_target",
+      "layer_config": "hud_world_ui_and_composite_layer",
+      "resources": []
+    }
+  },
+  "layer_configs": {
+    "ui_only": [
+      {
+        "clear_flags": [
+          "SURFACE"
+        ],
+        "render_targets": [
+          "output_rt"
+        ],
+        "profiling_scope": "clears"
+      },
+      {
+        "sort": "BACK_FRONT",
+        "name": "transparent",
+        "render_targets": [
+          "output_rt"
+        ],
+        "profiling_scope": "transparent"
+      }
+    ],
+    "ui_3d": [
+      {
+        "clear_flags": [
+          "DEPTH",
+          "STENCIL"
+        ],
+        "depth_stencil_target": "output_dst",
+        "render_targets": [
+          "output_rt"
+        ],
+        "profiling_scope": "ui_3d"
+      },
+      {
+        "clear_flags": [
+          "DEPTH",
+          "STENCIL"
+        ],
+        "depth_stencil_target": "ui_3d_shadows",
+        "profiling_scope": "ui_3d"
+      },
+      {
+        "sort": "BACK_FRONT",
+        "name": "ui_3d_shadows",
+        "profiling_scope": "ui_3d",
+        "depth_stencil_target": "ui_3d_shadows"
+      },
+      {
+        "sort": "BACK_FRONT",
+        "name": "ui_3d_pre",
+        "render_targets": [
+          "output_rt"
+        ],
+        "profiling_scope": "ui_3d",
+        "depth_stencil_target": "output_dst",
+        "input_resources": [
+          "ui_3d_shadows"
+        ]
+      },
+      {
+        "sort": "BACK_FRONT",
+        "name": "ui_3d",
+        "render_targets": [
+          "output_rt"
+        ],
+        "profiling_scope": "ui_3d",
+        "depth_stencil_target": "output_dst",
+        "input_resources": [
+          "ui_3d_shadows"
+        ]
+      }
+    ],
+    "hud_world_ui_and_composite_layer": [
+      {
+        "resource_generator": "blur_behind_ui",
+        "profiling_scope": "blur_behind_ui"
+      },
+      {
+        "clear_flags": [
+          "SURFACE",
+          "DEPTH",
+          "STENCIL"
+        ],
+        "depth_stencil_target": "ui_depth_stencil",
+        "render_targets": [
+          "ui_target"
+        ],
+        "profiling_scope": "clears",
+        "msaa_count": 4
+      },
+      {
+        "sort": "BACK_FRONT",
+        "msaa_count": 4,
+        "name": "transparent_pre",
+        "render_targets": [
+          "ui_target"
+        ],
+        "profiling_scope": "transparent_pre"
+      },
+      {
+        "sort": "BACK_FRONT",
+        "msaa_count": 4,
+        "name": "transparent_shadow",
+        "render_targets": [
+          "ui_target"
+        ],
+        "profiling_scope": "transparent"
+      },
+      {
+        "sort": "BACK_FRONT",
+        "msaa_count": 4,
+        "name": "transparent",
+        "render_targets": [
+          "ui_target"
+        ],
+        "profiling_scope": "transparent"
+      },
+      {
+        "sort": "BACK_FRONT",
+        "msaa_count": 4,
+        "name": "transparent_post",
+        "render_targets": [
+          "ui_target"
+        ],
+        "profiling_scope": "transparent_post"
+      },
+      {
+        "type": "static_branch",
+        "pass": [
+          {
+            "sort": "BACK_FRONT",
+            "name": "ui_overdraw_visualization",
+            "render_targets": [
+              "overdraw_target"
+            ],
+            "profiling_scope": "debug"
+          }
+        ],
+        "render_caps": {
+          "development": true
+        }
+      },
+      {
+        "resource_generator": "noesis",
+        "profiling_scope": "noesis"
+      },
+      {
+        "resource_generator": "copy_and_blend_ui",
+        "profiling_scope": "copy_and_blend_ui"
+      }
+    ]
+  }
+}

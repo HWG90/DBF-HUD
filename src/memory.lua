@@ -1,0 +1,109 @@
+-- Private FFI symbols prevent collisions with other addons' declarations.
+local M={}
+function M.native()
+    local ffi=require('ffi')
+    pcall(ffi.cdef, [[
+    void *aa_module(const char*) __asm__("GetModuleHandleA");
+    void *aa_process(void) __asm__("GetCurrentProcess");
+    int aa_read(void*,const void*,void*,size_t,size_t*) __asm__("ReadProcessMemory");
+    unsigned long aa_filename(void*,char*,unsigned long) __asm__("GetModuleFileNameA");
+    ]])
+    local k=ffi.load('kernel32'); local process=k.aa_process()
+    local buffer=ffi.new('uint8_t[4096]');local got=ffi.new('size_t[1]')
+    local file,log_size;local log_attempted=false
+    local backend={
+        module=function(name) local p=k.aa_module(name); if p~=nil then return tonumber(ffi.cast('uintptr_t',p)) end end,
+        read=function(address,size)
+            if address<65536 or address+size>=2^47 or size<1 or size>4096 then return nil end
+            got[0]=0
+            if k.aa_read(process,ffi.cast('const void*',address),buffer,size,got)==0 or tonumber(got[0])~=size then return nil end
+            return ffi.string(buffer,size)
+        end
+    }
+    function backend.log(line)
+        if not log_attempted then
+            log_attempted=true
+            local buf=ffi.new('char[4096]');local n=tonumber(k.aa_filename(nil,buf,4096))
+            if n and n>0 and n<4096 then
+                local exe=ffi.string(buf,n):gsub('\\','/')
+                local root=exe:match('^(.*)/[Bb][Ii][Nn]/[^/]+$')
+                if root then backend.log_path=root..'/AstraAmmo.log';file=io.open(backend.log_path,'w') end
+            end
+            log_size=0
+        end
+        if file and log_size<512*1024 then
+            file:write(line..'\n');file:flush();log_size=log_size+#line+1
+        end
+    end
+    local function tuning_path()
+        local buf=ffi.new('char[4096]');local n=tonumber(k.aa_filename(nil,buf,4096))
+        assert(n>0 and n<4096,'executable path unavailable')
+        local root=ffi.string(buf,n):gsub('\\','/'):match('^(.*)/[Bb][Ii][Nn]/[^/]+$')
+        assert(root,'game installation root unavailable')
+        return root..'/AstraAmmo-tuning.lua'
+    end
+    function backend.read_tuning()
+        local path=tuning_path();local f=io.open(path,'r')
+        if not f then return nil end
+        local body=f:read(65537);f:close();assert(#body<=65536,'tuning file too large')
+        local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
+        local values=chunk();assert(type(values)=='table','tuning file must return a table')
+        return values
+    end
+    function backend.write_tuning(body)
+        local path=tuning_path();local tmp=path..'.tmp'
+        local f=assert(io.open(tmp,'w'));local ok,err=f:write(body);local closed,cerr=f:close()
+        assert(ok and closed,err or cerr)
+        -- Windows rename cannot replace an existing file; keep a recoverable backup.
+        local previous=io.open(path,'r')
+        if previous then previous:close();os.remove(path..'.bak');assert(os.rename(path,path..'.bak')) end
+        local moved,why=os.rename(tmp,path)
+        if not moved then os.rename(path..'.bak',path);error(why) end
+        return path
+    end
+    function backend.close() if file then file:close();file=nil end end
+    return backend
+end
+function M.new(backend)
+    local r={reads=0,bytes=0}
+    function r.reset() r.reads,r.bytes=0,0 end
+    function r.read(a,n)
+        assert(type(a)=='number' and a==a and a%1==0 and a>=65536 and a+n<2^47,'invalid address')
+        assert(n>0 and n<=4096,'invalid read size')
+        r.reads,r.bytes=r.reads+1,r.bytes+n
+        assert(r.reads<=512 and r.bytes<=65536,'read budget exceeded')
+        local s=backend.read(a,n); assert(s and #s==n,'unreadable memory');return s
+    end
+    function r.u(s,o)
+        local a,b,c,d=s:byte(o+1,o+4);assert(d,'short uint32');return a+b*256+c*65536+d*16777216
+    end
+    function r.i(s,o) local v=r.u(s,o);return v>=2^31 and v-2^32 or v end
+    function r.f(s,o)
+        local v=r.u(s,o);local sign=v>=2^31 and -1 or 1
+        local e=math.floor(v/2^23)%256;local m=v%2^23
+        assert(e~=255,'nonfinite float')
+        return sign*(e==0 and m*2^-149 or (1+m/2^23)*2^(e-127))
+    end
+    function r.p(a)
+        local s=r.read(a,8);local p=r.u(s,0)+r.u(s,4)*2^32
+        assert(p>=65536 and p<2^47,'invalid pointer');return p
+    end
+    function r.map(a,key,limit)
+        local h=r.read(a,20);local n,empty,mult=r.u(h,8),r.u(h,12),r.u(h,16)
+        if n==0 or key==empty or key==0xffffffff then return nil end
+        assert(n<=limit and n>0,'invalid map capacity')
+        local pow=n;while pow>1 and pow%2==0 do pow=pow/2 end
+        assert(pow==1,'invalid map capacity')
+        local p=r.p(a)
+        -- Split multiplication keeps the low 32 bits exact under Lua doubles.
+        local start=((key%65536)*(mult%65536)+((math.floor(key/65536)*(mult%65536)+(key%65536)*math.floor(mult/65536))%65536)*65536)%2^32
+        for probe=0,math.min(n,128)-1 do
+            local row=r.read(p+((start+probe)%n)*8,8);local k=r.u(row,0)
+            if k==empty then return nil end
+            if k==key then local index=r.u(row,4);if index~=0xffffffff then return index end;return nil end
+        end
+        error('map probe limit')
+    end
+    return r
+end
+return M
