@@ -2,7 +2,7 @@ local M={}
 function M.start(sr,backend,options)
     local managed=options and options.managed==true
     local old=rawget(_G,'AstraAmmo');if old and old.retire then old.retire() end
-    local self={version='0.3.31',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.34',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=AA.config.new()
     local attached=AA.motion.new();local attachment_active=false
     local motion=AA.motion.new();local reader=AA.reader.new(backend);local view=AA.view.new(sr)

@@ -1,5 +1,21 @@
 # Native display trace — 2026-09-29
 
+## CTD recovery — 0.3.34
+
+Further catalog inspection found the actual loaded camera resource `core/units/camera` (465f4895f3dc98d1) in the boot archive. 0.3.32 successfully created that private camera, the named shading environment, and the four-color GUI; the live render callback submitted render_world without a Lua error. Pixel content was not verified.
+
+0.3.33 added a preview attempt using core/performance_hud/gui and Material.set_resource(diffuse_map, target). After auto-reload, the log instead reported no global render callback. The user then reported a CTD and the process exited. No preview success was observed.
+
+Root-cause evidence for callback loss: the inspected MDL make_env implementation wraps rawset and records all writes targeting the real global table in mod.globals. Thus the experiment's direct rawset(render) was tracked even without ctx.global. Teardown called the experiment's restoration first, then deleted every tracked global, including the restored render callback. This is a verified lifecycle bug; without a crash dump it is not conclusive proof of the native CTD's entire cause. Offscreen GPU teardown timing remains unverified too.
+
+0.3.34 removes automatic offscreen-test startup entirely and is installed in the live folder. No further render hooks or offscreen allocations are attempted by the live entry. Existing HUD behavior is preserved. 41 offline checks pass, including a disabled-entry regression check. A fresh game process is necessary to restore the host's original callback. Do not re-enable the experiment until MDL ownership and GPU lifetime behavior are addressed.
+
+## Packaged-camera candidate audit
+
+Read-only base-archive scan for the Appkit camera names, editor camera, camera_marker, and configured midday environment found only the latter two resources. The environment exists as resource 9f09b0185b47408f, type fe73c7dcff8a7ca5, 6528 bytes. camera_marker exists as unit 6144b1b6ad477ffb, 1984 main bytes, in archive fc5b6bff0db90aab. Its payload contains mesh metadata, a lambert1 material reference (0a44cebaf396d921), and script keys LevelEditor/is_gizmo_unit. This makes it an editor-marker candidate, not a verified render camera. No camera unit was packaged or spawned based on its name. The generic Appkit names were not found by this scan; this does not prove absence from every patch or unnamed asset.
+
+The packaged-camera route remains unverified. A usable camera component and its dependencies must be established before deploying any unit. Live 0.3.31 remains unchanged.
+
 ## Auto-reload enabled; 0.3.30–0.3.31 live results
 
 User confirmed MDL automatically reloads live Lua. Treat every write to the installed mod as an immediate deployment: build and test in the workspace first, then atomically replace the live file. Do not ask for manual reloads unless auto-reload fails.

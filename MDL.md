@@ -1,10 +1,10 @@
-# Astra Ammo live reload (0.3.31)
+# Astra Ammo live reload (0.3.34)
 
 Requires MDL API 2. The adapter was checked against installed MDL 1.4.2 source and tested offline. Live enable and reload produced valid pose samples. Testing exposed a concurrent startup copy; deploy with the packaged Astra addon disabled.
 
 ## First use
 
-Place the `astra_ammo` directory from `AstraAmmo-MDL-0.3.31.zip` inside `%LOCALAPPDATA%/MDL/Helldivers2/Mods`. This is a loose MDL mod, not an Arsenal archive.
+Place the `astra_ammo` directory from `AstraAmmo-MDL-0.3.34.zip` inside `%LOCALAPPDATA%/MDL/Helldivers2/Mods`. This is a loose MDL mod, not an Arsenal archive.
 
 With MDL 1.4.2 deployed and running, open its in-game panel and enable **Astra Ammo (Live)** under live Lua mods. Mod Options Menu may cause MDL to appear as a floating panel instead of an ESC tab. Refresh/rescan if the new entry has not appeared.
 
@@ -32,7 +32,7 @@ Enable the live mod, close the menu and verify the counter. Use Reload once, the
 
 A small white cross marks the projected weapon root. The counter retains its existing crosshair anchor. The marker is a projection diagnostic, not a calibrated mounting location. Set pose_marker = false in Lua tuning to disable it. The initial projection supports perspective cameras with identity local camera offsets; unsupported modes, clipped points and failed validation hide the marker. PROJECT log entries report coordinates or the rejection reason. Visual alignment during motion still requires the in-game check.
 
-## 0.3.31 weapon attachment
+## 0.3.34 weapon attachment
 
 The user confirmed that the 0.3.10 marker follows the weapon. The screenshot places its unadjusted root near the shoulder rather than the receiver, so mounting offsets still need visual calibration.
 
@@ -65,3 +65,7 @@ Weapon root pose now refreshes every update rather than sharing the 30 Hz ammo d
 ## 0.3.17 depth-material test
 
 Requires the separate material-only AstraAmmo-Depth-Materials-0.1.zip deployed through Arsenal and a game restart. The Lua renderer detects these isolated resources automatically. See DEPTH_RENDERING.md for evidence, installation and limitations. Existing smoothing/tuning is preserved.
+
+## Offscreen experiment disabled
+
+Version 0.3.34 disables offscreen startup after a CTD. MDL tracks writes to the global render callback even through its wrapped rawset and deletes the restored callback on teardown. Do not enable the archived experiment under auto-reload. Normal ammo rendering continues through MDL updates.

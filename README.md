@@ -1,6 +1,6 @@
 # Holographic Utility Display (HUD)
 
-Experimental modular ammo HUD for Helldivers 2, developed as **Astra Ammo**. Current development snapshot: **0.3.31**.
+Experimental modular ammo HUD for Helldivers 2, developed as **Astra Ammo**. Current development snapshot: **0.3.34**.
 
 ## Working features
 
@@ -17,7 +17,7 @@ Runtime names, settings keys and addon identifiers retain `AstraAmmo` / `astra_a
 
 The 3D world-GUI panel still draws through scenery and characters. Native frost works in hybrid mode; it is disabled in 3D mode because it rendered incorrectly there. Neither depth occlusion nor world-space frost is solved.
 
-The experimental native-screen path has successfully created a render target, bound it to the game's offscreen weapon-screen viewport, detached it and cleaned up. The next render test is blocked on an available camera unit. No offscreen image has been verified. The live build includes guarded diagnostics; it is a development snapshot, not a stable release.
+The experimental native-screen path has successfully created a render target, bound it to the game's offscreen weapon-screen viewport, detached it and cleaned up. A private camera and one offscreen render submission succeeded, but no image pixels have been verified. A subsequent reload lost the host render callback and the user reported a crash. Offscreen startup is disabled in 0.3.34; see the investigation notes. This is a development snapshot, not a stable release.
 
 See [native display research](NATIVE_DISPLAY_TRACE.md), [depth investigation](DEPTH_RENDERING.md), and [weapon binding](WEAPON_BINDING.md). These documents include chronological experiments and results; earlier proposed steps are not claims of current functionality.
 
@@ -39,7 +39,7 @@ Configure through the mod menu or game-root `AstraAmmo-tuning.lua`. The file in 
 python tests/run.py --lua-dll "path/to/lua51.dll"
 ```
 
-The runner uses a local Windows LuaJIT DLL. **40 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
+The runner uses a local Windows LuaJIT DLL. **41 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
 
 ## Contents and attribution
 

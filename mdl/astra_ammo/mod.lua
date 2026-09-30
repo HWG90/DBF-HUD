@@ -1110,6 +1110,7 @@ function M.start(sr,log,globals)
     local self={};local active=true;local submitted=false
     local A,W,R,V,U,G=sr.Application,sr.World,sr.Renderer,sr.Viewport,sr.Unit,sr.Gui
     local world,viewport,target,camera,environment,gui
+    local preview,preview_world
     local original=rawget(globals,'render');local wrapper
     function self.release()
         active=false
@@ -1119,6 +1120,12 @@ function M.start(sr,log,globals)
             if not ok then return end
             local done,err=pcall(fn,...);ok=done
             if not done then log('OFFSCREEN cleanup failed '..tostring(err)) end
+        end
+        if preview then
+            local live=false
+            for _,w in pairs(A.worlds() or {}) do if w==preview_world then live=true end end
+            if live then destroy(W.destroy_gui,preview_world,preview) end
+            if ok then preview=nil end
         end
         if gui then destroy(W.destroy_gui,world,gui);if ok then gui=nil end end
         if viewport then destroy(A.destroy_viewport,world,viewport);if ok then viewport=nil end end
@@ -1134,7 +1141,8 @@ function M.start(sr,log,globals)
             {W,'destroy_gui'},{W,'destroy_shading_environment'},
             {U,'camera'},{R,'create_resource'},{R,'destroy_resource'},{V,'set_output_render_target'},
             {G,'rect'}}) do assert(pair[1] and type(pair[1][pair[2]])=='function','missing '..pair[2]) end
-        local name='core/appkit/units/camera/camera'
+        local name='core/units/camera'
+        if not A.can_get('unit',name) then name='core/appkit/units/camera/camera' end
         if not A.can_get('unit',name) then
             for _,ns_name in ipairs({'Camera','World','Application'}) do
                 local names={};local ns=sr[ns_name]
@@ -1179,6 +1187,18 @@ function M.start(sr,log,globals)
             log('OFFSCREEN render callback entered')
             local done,why=pcall(A.render_world,world,camera,viewport,environment)
             log(done and 'OFFSCREEN render submitted; pixels unverified' or ('OFFSCREEN render failed '..tostring(why)))
+            if done and type(G.material)=='function' and sr.Material and type(sr.Material.set_resource)=='function' then
+                local shown,reason=pcall(function()
+                    assert(A.can_get('material','core/performance_hud/gui'),'preview material unavailable')
+                    preview_world=assert(A.main_world())
+                    preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
+                    local material=assert(G.material(preview,'core/performance_hud/gui'))
+                    sr.Material.set_resource(material,'diffuse_map',target)
+                    G.bitmap(preview,material,sr.Vector3(40,40,80),sr.Vector2(192,192),sr.Color(255,255,255,255))
+                    log('OFFSCREEN four-color preview placed at bottom-left')
+                end)
+                if not shown then log('OFFSCREEN preview stopped '..tostring(reason)) end
+            end
         end
         return original(...)
     end
@@ -1299,7 +1319,7 @@ local M={}
 function M.start(sr,backend,options)
     local managed=options and options.managed==true
     local old=rawget(_G,'AstraAmmo');if old and old.retire then old.retire() end
-    local self={version='0.3.31',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.34',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=AA.config.new()
     local attached=AA.motion.new();local attachment_active=false
     local motion=AA.motion.new();local reader=AA.reader.new(backend);local view=AA.view.new(sr)
@@ -1584,7 +1604,7 @@ local function disable()
     if hud then hud.retire();hud=nil end
 end
 return {
-    name='Astra Ammo (Live)',version='0.3.31',author='Astra Ammo',
+    name='Astra Ammo (Live)',version='0.3.34',author='Astra Ammo',
     description='Reloadable HUD and weapon binding diagnostics. Replaces the running Astra instance when enabled.',
     on_enable=function(ctx)
         assert(ctx.api==2 and type(ctx.on_cleanup)=='function' and type(ctx.global)=='function','MDL API 2 required')
@@ -1595,7 +1615,8 @@ return {
         hud=AA.runtime.start(sr,backend,{managed=true})
         started=true
         ctx.global('AstraAmmo',hud)
-        offscreen=AA.offscreen_test.start(sr,function(line)if backend.log then pcall(backend.log,line) end end)
+        -- Offscreen experiment disabled after a live CTD. MDL reload may also
+        -- retire the global render callback; do not install render hooks here.
         ctx.log('Enabled Astra '..hud.version..' with MDL-owned updates')
     end,
     on_update=function(ctx,dt) if hud then hud.tick(dt) end end,

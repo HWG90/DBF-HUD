@@ -619,6 +619,14 @@ test('offscreen test waits for render, preserves returns and releases in order',
     globals.render=nil;AA.offscreen_test.start(sr,function()end,globals);assert(#events==count)
 end)
 
+test('MDL live entry keeps offscreen render-hook experiment disabled',function()
+    local previous=AA.offscreen_test.start
+    AA.offscreen_test.start=function()error('disabled experiment must not start')end
+    local f=assert(io.open('src/mdl.lua','r'));local body=f:read('*a');f:close()
+    assert(not body:find('AA.offscreen_test.start',1,true))
+    AA.offscreen_test.start=previous
+end)
+
 test('bundle compiles and excludes crashing diagnostic paths',function()
     assert(loadfile('dist/astra_ammo.lua'))
     local live=assert(loadfile('mdl/astra_ammo/mod.lua'))()
