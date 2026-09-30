@@ -108,3 +108,10 @@ The control placed its default-group override under archive 9ba626afa44a3aa3, wh
 
 Mission timing correction: the user clarified that the earlier registration check was before entering a mission. After explicit in-mission confirmation, a fresh read still resolved native D78AB313/9FCFE126/63AE484F and did not find control 75C7DC83/1F57CB83. The HUD log simultaneously showed active weapon 745, tracked pose and camera samples. The absence now has a verified mission checkpoint; the earlier mission claim was premature.
 
+
+### Revised control registration confirmed
+
+After deployment of control 0.2, the game reached HUD initialization. The installed unique resource was found only in ee6b1ba7e22d71ed.patch_0. Fresh native manager lookup resolved control variant 75C7DC83 and program 1F57CB83, alongside the existing GUI entries. The registered program pointed to the relocated control GPU payload; a bounded read of its state record confirmed enum 10 still has value zero. The archive-target-only revision therefore established custom program registration in this session; it does not establish depth-tested rendering.
+
+Experimental gui_depth now availability-selects the registered loader-control material for a depth-disabled baseline draw. Direct gui and mesh modes are unchanged; all 47 contracts pass. A live panel draw still requires an equipped weapon and visual confirmation before creating a depth-enabled revision.
+
