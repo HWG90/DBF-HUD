@@ -140,3 +140,7 @@ The screenshot showed the 200-pixel magenta control at its requested position, a
 ## Four-color image visually confirmed
 
 The user confirmed seeing the four-color square after switching Gui.bitmap from the raw Material pointer to the resource name. This verifies the private GUI render, render-target binding, native image material sampling, and HUD-world display together. It does not verify scene-mesh rendering, depth testing, or frosted transparency. This is the working texture-pipeline checkpoint.
+
+## Live panel texture preview
+
+The confirmed four-color checkpoint is preserved in Git and evidence/offscreen-four-color-confirmed.png. The next diagnostic feeds the current weapon model through the existing layout and BigBlue rectangle renderer into a 512x256 target. It refreshes at 10 Hz, updates only the private world, and submits rendering only through the startup bridge. The screen-space preview uses the verified named material. Offline coverage checks throttled redraw and render ordering. Live process remains responsive; visual panel content and updates await user confirmation. Scene-mesh attachment and occlusion are still unverified.

@@ -14,6 +14,12 @@ function M.start(sr,backend,options)
     if not managed and type(original)~='function' then self.status='update callback missing';return self end
     local projection=HUD.projection.new(backend);local binding_base;local next_projection_log=0
     local latest_raw;local next_sample=0;local model;local anchor;local anchor_at=-10;local provider;local failures=0
+    function self.texture_commands()
+        if not model then return nil end
+        local cfg={};for k,v in pairs(self.config) do cfg[k]=v end
+        cfg.font='bigblue';cfg.frosted=false
+        return HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+    end
     local retired=false;local cleaned=false;local alpha=0;local last_id;local width,height
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
     local last_binding

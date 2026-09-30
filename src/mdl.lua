@@ -20,18 +20,18 @@ return {
         ctx.global('DBFHUD',hud)
         -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
         live_log=function(line)if backend.log then pcall(backend.log,line) end end
-        offscreen=HUD.offscreen_test.start(sr,live_log)
+        offscreen=HUD.offscreen_test.start(sr,live_log,nil,function()return hud and hud.texture_commands()end)
         ctx.log('Enabled DBF-HUD '..hud.version..' with MDL-owned updates')
     end,
     on_update=function(ctx,dt)
         if hud then hud.tick(dt) end
-        if offscreen and offscreen.tick then offscreen.tick() end
+        if offscreen and offscreen.tick then offscreen.tick(dt) end
         -- Startup addons can load after MDL. Retry only once the bridge exists.
         if offscreen and offscreen.waiting_for_bridge then
             local bridge=rawget(_G,'HUDRenderBridge')
             if bridge and bridge.api==1 and type(bridge.subscribe)=='function' then
                 offscreen.release()
-                offscreen=HUD.offscreen_test.start(assert(rawget(_G,'stingray')),live_log)
+                offscreen=HUD.offscreen_test.start(assert(rawget(_G,'stingray')),live_log,nil,function()return hud and hud.texture_commands()end)
             end
         end
     end,

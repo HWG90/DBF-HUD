@@ -624,6 +624,13 @@ test('offscreen test waits for render, preserves returns and releases in order',
     assert(table.concat(events,','):find('free gui,free viewport,free environment,free world,free texture',1,true))
     local count=#events;probe.release();assert(#events==count)
     globals.HUDRenderBridge=nil;HUD.offscreen_test.start(sr,function()end,globals);assert(#events==count)
+    globals.HUDRenderBridge=bridge()
+    sr.Gui.destroy_rect=event('free rect')
+    local dynamic=HUD.offscreen_test.start(sr,function()end,globals,function()return {{type='rect',x=0,y=0,w=20,h=10,c={255,255,255},a=1}} end)
+    dynamic.tick(0);globals.render(8);assert(rendered==2)
+    dynamic.tick(0.01);globals.render(8);assert(rendered==2)
+    dynamic.tick(0.1);globals.render(8);assert(rendered==3)
+    dynamic.release()
 end)
 
 test('startup render bridge isolates subscribers and keeps host callback',function()

@@ -1,19 +1,40 @@
 -- Isolated one-frame render test. Never renders from the update callback.
 local M={}
-function M.start(sr,log,globals)
+function M.start(sr,log,globals,panel_provider)
     globals=globals or _G
     local self={};local active=true;local submitted=false
     local A,W,R,V,U,G=sr.Application,sr.World,sr.Renderer,sr.Viewport,sr.Unit,sr.Gui
     local world,viewport,target,camera,environment,gui
     local preview,preview_world
     local world_ready=false
-    function self.tick()
+    local source_ids={};local elapsed=0
+    function self.tick(dt)
+        elapsed=elapsed+(dt or 0)
+        if panel_provider and active and world and gui and (not world_ready or elapsed>=0.1) then
+            elapsed=0
+            local commands=panel_provider()
+            if commands then
+                for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
+                source_ids={}
+                local f=commands[1]
+                local function rect(x,y,w,h,c,a)
+                    local id=G.rect(gui,sr.Vector3(x-f.x+8,y-f.y+8,1),sr.Vector2(w,h),sr.Color(math.floor(255*(a or 1)),c[1],c[2],c[3]))
+                    source_ids[#source_ids+1]=id
+                end
+                for _,c in ipairs(commands) do
+                    if c.type=='text' then
+                        HUD.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)rect(x,y,w,h,c.c,c.a)end)
+                    else rect(c.x,c.y,c.w,c.h,c.c,c.a) end
+                end
+                world_ready=false;submitted=false
+            end
+        end
         if active and world and not world_ready then
             world_ready=true
             if type(W.update)=='function' then
-                log('OFFSCREEN private world update begin')
+                if not panel_provider then log('OFFSCREEN private world update begin') end
                 local ok,err=pcall(W.update,world,0)
-                log(ok and 'OFFSCREEN private world update complete' or ('OFFSCREEN private world update failed '..tostring(err)))
+                if not panel_provider or not ok then log(ok and 'OFFSCREEN private world update complete' or ('OFFSCREEN private world update failed '..tostring(err))) end
                 if not ok then active=false end
             else log('OFFSCREEN private world update unavailable') end
         end
@@ -84,23 +105,25 @@ function M.start(sr,log,globals)
         environment=assert(default_environment and W.create_default_shading_environment(world)
             or W.create_shading_environment(world,environment_name))
         viewport=assert(A.create_viewport(world,'offscreen_ui_weapon_screen'))
-        target=assert(R.create_resource('render_target','R8G8B8A8',64,64))
+        target=assert(R.create_resource('render_target','R8G8B8A8',panel_provider and 512 or 64,panel_provider and 256 or 64))
         V.set_output_render_target(viewport,target)
         gui=assert(W.create_screen_gui(world,'scale',1,1))
+        if not panel_provider then
         for i,color in ipairs({{230,60,60},{60,210,100},{60,110,230},{230,200,60}}) do
             G.rect(gui,sr.Vector3(((i-1)%2)*32,math.floor((i-1)/2)*32,1),sr.Vector2(32,32),
                 sr.Color(255,color[1],color[2],color[3]))
         end
-        log('OFFSCREEN camera and four-color GUI ready')
+        end
+        log('OFFSCREEN camera and source GUI ready')
     end)
     if not ok then log('OFFSCREEN setup stopped '..tostring(err));self.release();return self end
     unsubscribe=bridge.subscribe('dbf_hud.offscreen',function(...)
         if active and world_ready and not submitted then
             submitted=true
-            log('OFFSCREEN render callback entered')
+            if not preview then log('OFFSCREEN render callback entered') end
             local done,why=pcall(A.render_world,world,camera,viewport,environment)
-            log(done and 'OFFSCREEN render submitted; pixels unverified' or ('OFFSCREEN render failed '..tostring(why)))
-            if done then
+            if not preview or not done then log(done and 'OFFSCREEN render submitted; pixels unverified' or ('OFFSCREEN render failed '..tostring(why))) end
+            if done and not preview then
                 local shown,reason=pcall(function()
                     log('OFFSCREEN preview preflight begin')
                     assert(type(G.material)=='function','Gui.material unavailable')
@@ -117,8 +140,8 @@ function M.start(sr,log,globals)
                     log('OFFSCREEN preview GUI create begin')
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
                     -- Independent control: visible geometry does not depend on the render target.
-                    G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(200,200),sr.Color(255,255,0,255))
-                    G.rect(preview,sr.Vector3(1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
+                    G.rect(preview,sr.Vector3(896,296,79),sr.Vector2(panel_provider and 392 or 200,panel_provider and 200 or 200),sr.Color(255,255,0,255))
+                    G.rect(preview,sr.Vector3(panel_provider and 1300 or 1104,300,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
                     log('OFFSCREEN placement control: magenta frame and white square')
                     log('OFFSCREEN preview material lookup begin')
                     for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_diffuse_map','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
@@ -146,7 +169,7 @@ function M.start(sr,log,globals)
                     log('OFFSCREEN verified texture binding begin')
                     sr.Material.set_resource(material,'diffuse_map',target)
                     log('OFFSCREEN preview bitmap draw begin')
-                    G.bitmap(preview,'content/ui/shared/material/gui_diffuse_map',sr.Vector3(900,300,80),sr.Vector2(192,192),sr.Color(255,255,255,255))
+                    G.bitmap(preview,'content/ui/shared/material/gui_diffuse_map',sr.Vector3(900,300,80),sr.Vector2(panel_provider and 384 or 192,192),sr.Color(255,255,255,255))
                     log('OFFSCREEN four-color preview placed above/right of native bottom-left HUD')
                 end)
                 if not shown then log('OFFSCREEN preview stopped '..tostring(reason)) end
