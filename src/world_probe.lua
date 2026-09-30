@@ -1,6 +1,6 @@
 -- Minimal world-space GUI experiment; only engine-returned world/GUI handles.
 local M={}
-function M.new(sr,log)
+function M.new(sr,log,direct)
     local A,W,G=sr.Application,sr.World,sr.Gui
     local smooth={};local depth_fill;local blur;local gui,world;local failed=false;local first=true
     local self={status='not started'}
@@ -31,7 +31,7 @@ function M.new(sr,log)
         if not live(main) then self.status='no live main world';return end
         if gui and main~=world then self.release() end
         local m=p.matrix
-        local x,y,z=c.mount_x,c.mount_y,c.mount_z+.20
+        local x,y,z=HUD.scene_test.mount(p,c)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
@@ -45,8 +45,8 @@ function M.new(sr,log)
             gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate'),'world GUI returned nil')
             log('WORLD_GUI create complete')
             local name='mods/dbf_hud/materials/depth_fill'
-            if A.can_get and A.can_get('material',name) then depth_fill=name
-            elseif A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
+            if not direct and A.can_get and A.can_get('material',name) then depth_fill=name
+            elseif not direct and A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
                 depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
             end
             log('WORLD_GUI depth material '..(depth_fill and 'available' or 'missing; install depth material addon'))

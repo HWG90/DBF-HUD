@@ -250,3 +250,6 @@ Disabled the unoccluded fullbright GUI comparison while retaining its research c
 ## Selectable occlusion
 
 HUD occlusion in the main DBF-HUD menu defaults on and persists as hud_occlusion in Lua tuning. On selects both scene mesh faces; off selects the fullbright WorldGUI (material addon required). Mode transitions release the previous renderer before drawing the selected one, using the shared mount offsets and centered origins. No simultaneous comparison panel. Offline renderer-switch contract added; 46 checks pass. Visual switching still needs in-game confirmation.
+
+
+Occlusion OFF now uses the original direct WorldGUI primitives, rather than a bitmap of the offscreen texture. Text glyphs and bars draw directly each update with unchanged palette values. Commands are centered and scaled to the same panel width; first-person and shoulder mounts share the scene-mesh calculation. This path skips experimental depth materials and does not require the fullbright addon. CRT texture scanlines do not apply to direct primitives. Occlusion ON retains the texture-backed scene mesh. All 46 offline contracts pass; live visual validation pending.

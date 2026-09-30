@@ -70,7 +70,7 @@ function M.new(hud)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
             end)
             add('hud_occlusion',{type='toggle',label='HUD occlusion',default=hud.config.hud_occlusion,
-                description='On: scene mesh hidden by terrain and characters. Off: fullbright GUI draws through geometry; requires the fullbright material addon.'},function(v)
+                description='On: scene mesh hidden by terrain and characters. Off: direct WorldGUI draws crisp text and bars through geometry.'},function(v)
                 hud.configure({hud_occlusion=v});hud.save_tuning()
             end)
             add('world_probe',{type='toggle',label='Experimental 3D rectangle',default=hud.config.world_probe},function(v)

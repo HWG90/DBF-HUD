@@ -1014,7 +1014,7 @@ end)()
 HUD.world_probe=(function()
 -- Minimal world-space GUI experiment; only engine-returned world/GUI handles.
 local M={}
-function M.new(sr,log)
+function M.new(sr,log,direct)
     local A,W,G=sr.Application,sr.World,sr.Gui
     local smooth={};local depth_fill;local blur;local gui,world;local failed=false;local first=true
     local self={status='not started'}
@@ -1045,7 +1045,7 @@ function M.new(sr,log)
         if not live(main) then self.status='no live main world';return end
         if gui and main~=world then self.release() end
         local m=p.matrix
-        local x,y,z=c.mount_x,c.mount_y,c.mount_z+.20
+        local x,y,z=HUD.scene_test.mount(p,c)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
@@ -1059,8 +1059,8 @@ function M.new(sr,log)
             gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate'),'world GUI returned nil')
             log('WORLD_GUI create complete')
             local name='mods/dbf_hud/materials/depth_fill'
-            if A.can_get and A.can_get('material',name) then depth_fill=name
-            elseif A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
+            if not direct and A.can_get and A.can_get('material',name) then depth_fill=name
+            elseif not direct and A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
                 depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
             end
             log('WORLD_GUI depth material '..(depth_fill and 'available' or 'missing; install depth material addon'))
@@ -1362,18 +1362,30 @@ end
 function M.new(sr,log,side)
     if not side then
         local front,back=M.new(sr,log,1),M.new(sr,log,-1)
-        local overlay=M.fullbright(sr,log)
+        local overlay=HUD.world_probe.new(sr,log,true)
         local active_mode
         return {
-            draw=function(p,c,target,dt,aspect)
+            draw=function(p,c,target,dt,aspect,commands)
                 local occluded=c.hud_occlusion~=false
                 if active_mode~=occluded then
                     front.release();back.release();overlay.release()
                     active_mode=occluded
-                    log('HUD occlusion '..(occluded and 'on: scene mesh' or 'off: fullbright GUI'))
+                    log('HUD occlusion '..(occluded and 'on: scene mesh' or 'off: direct WorldGUI'))
                 end
                 if occluded then front.draw(p,c,target,dt,aspect);back.draw(p,c,target,dt,aspect)
-                else overlay.draw(p,c,target,dt,aspect) end
+                else
+                    if not commands then overlay.release();return end
+                    local f=commands[1];local scale=240/f.w;local centered={}
+                    for _,command in ipairs(commands) do
+                        local v={};for k,value in pairs(command) do v[k]=value end
+                        v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
+                        if v.w then v.w=v.w*scale end
+                        if v.h then v.h=v.h*scale end
+                        if v.size then v.size=v.size*scale end
+                        centered[#centered+1]=v
+                    end
+                    overlay.draw(p,c,centered,dt)
+                end
             end,
             release=function() overlay.release();front.release();back.release();active_mode=nil end
         }
@@ -1590,7 +1602,7 @@ function M.new(hud)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
             end)
             add('hud_occlusion',{type='toggle',label='HUD occlusion',default=hud.config.hud_occlusion,
-                description='On: scene mesh hidden by terrain and characters. Off: fullbright GUI draws through geometry; requires the fullbright material addon.'},function(v)
+                description='On: scene mesh hidden by terrain and characters. Off: direct WorldGUI draws crisp text and bars through geometry.'},function(v)
                 hud.configure({hud_occlusion=v});hud.save_tuning()
             end)
             add('world_probe',{type='toggle',label='Experimental 3D rectangle',default=hud.config.world_probe},function(v)
@@ -1963,7 +1975,7 @@ return {
             hud.tick(dt)
         end
         if offscreen and offscreen.tick then offscreen.tick(dt,hud and hud.config.texture_refresh_hz,hud and hud.config.scanline_strength) end
-        if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect) end
+        if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect,hud.texture_commands()) end
         -- Rebuild only when prerequisites arrive or content bounds change.
         if offscreen then
             local bridge=rawget(_G,'HUDRenderBridge')

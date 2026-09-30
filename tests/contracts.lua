@@ -657,20 +657,20 @@ test('startup render bridge isolates subscribers and keeps host callback',functi
 end)
 
 test('occlusion toggle switches renderers exclusively and releases the previous path',function()
-    local original_new,original_overlay=HUD.scene_test.new,HUD.scene_test.fullbright
+    local original_new,original_overlay=HUD.scene_test.new,HUD.world_probe.new
     local draws={front=0,back=0,gui=0};local releases={front=0,back=0,gui=0}
     local function stub(key)return {draw=function()draws[key]=draws[key]+1 end,release=function()releases[key]=releases[key]+1 end}end
     HUD.scene_test.new=function(sr,log,side) if side then return stub(side==1 and 'front' or 'back')end return original_new(sr,log,side)end
-    HUD.scene_test.fullbright=function()return stub('gui')end
+    HUD.world_probe.new=function()return stub('gui')end
     local carrier=HUD.scene_test.new({},function()end)
     carrier.draw({}, {hud_occlusion=true},1,0.016,2)
     assert(draws.front==1 and draws.back==1 and draws.gui==0)
-    carrier.draw({}, {hud_occlusion=false},1,0.016,2)
+    carrier.draw({}, {hud_occlusion=false},1,0.016,2,{{x=0,y=0,w=100,h=50}})
     assert(draws.front==1 and draws.gui==1 and releases.front==2)
     carrier.draw({}, {hud_occlusion=true},1,0.016,2)
     assert(draws.front==2 and draws.back==2 and draws.gui==1 and releases.gui==3)
     carrier.release()
-    HUD.scene_test.new,HUD.scene_test.fullbright=original_new,original_overlay
+    HUD.scene_test.new,HUD.world_probe.new=original_new,original_overlay
 end)
 
 test('scene carrier binds once, retires on pose loss and rejects null materials',function()

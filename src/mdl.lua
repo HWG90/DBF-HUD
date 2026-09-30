@@ -32,7 +32,7 @@ return {
             hud.tick(dt)
         end
         if offscreen and offscreen.tick then offscreen.tick(dt,hud and hud.config.texture_refresh_hz,hud and hud.config.scanline_strength) end
-        if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect) end
+        if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect,hud.texture_commands()) end
         -- Rebuild only when prerequisites arrive or content bounds change.
         if offscreen then
             local bridge=rawget(_G,'HUDRenderBridge')
