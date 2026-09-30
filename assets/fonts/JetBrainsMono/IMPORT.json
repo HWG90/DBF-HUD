@@ -1,0 +1,487 @@
+{
+  "family": "JetBrainsMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/JetBrainsMono.tar.xz",
+  "archive_sha256": "04d5e8f903693f9dd13e16f867e994834e681eb3c72c0d337a770dcda09010cf",
+  "faces": [
+    {
+      "name": "JetBrainsMonoNerdFont-Bold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-Bold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-BoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-BoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-ExtraBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-ExtraLight.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraLight.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-ExtraLightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraLightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-Italic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-Italic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-Light.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-Light.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-Light.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-LightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-LightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-Medium.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-Medium.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-MediumItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-MediumItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-Regular.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-Regular.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-SemiBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-SemiBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-SemiBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-SemiBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-SemiBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-Thin.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-Thin.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-Thin.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFont-ThinItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFont-ThinItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-Bold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-Bold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-BoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-ExtraBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-ExtraBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-ExtraLight.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraLight.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-ExtraLightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraLightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-Italic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-Italic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-Light.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-Light.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-LightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-LightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-Medium.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-Medium.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-MediumItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-MediumItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-Regular.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-Regular.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-SemiBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-SemiBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-SemiBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-Thin.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-Thin.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-Thin.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontMono-ThinItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontMono-ThinItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontMono-ThinItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-Bold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Bold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-ExtraBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-ExtraLight.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraLight.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-Italic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Italic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-Light.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Light.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-LightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-LightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-Medium.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Medium.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-MediumItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-Regular.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Regular.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-SemiBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-SemiBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-Thin.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Thin.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "JetBrainsMonoNerdFontPropo-ThinItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ThinItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNerdFontPropo-ThinItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-Bold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-Bold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-Bold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-BoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-BoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-ExtraBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-ExtraLight.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraLight.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-ExtraLightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraLightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-Italic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-Italic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-Italic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-Light.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-Light.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-Light.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-LightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-LightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-LightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-Medium.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-Medium.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-Medium.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-MediumItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-MediumItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-Regular.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-Regular.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-Regular.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-SemiBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-SemiBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-SemiBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-SemiBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-SemiBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-Thin.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-Thin.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-Thin.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFont-ThinItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFont-ThinItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-Bold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Bold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Bold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-BoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-BoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-ExtraBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-ExtraLight.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraLight.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-ExtraLightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraLightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-Italic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Italic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Italic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-Light.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Light.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Light.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-LightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-LightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-Medium.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Medium.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Medium.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-MediumItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-MediumItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-Regular.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Regular.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Regular.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-SemiBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-SemiBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-SemiBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-Thin.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Thin.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-Thin.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontMono-ThinItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ThinItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontMono-ThinItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-Bold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Bold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-BoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-BoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-ExtraBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-ExtraLight.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraLight.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-Italic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Italic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-Light.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Light.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Light.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-LightItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-LightItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-Medium.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Medium.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-MediumItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-MediumItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-Regular.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Regular.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-SemiBold.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-SemiBold.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-Thin.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Thin.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "JetBrainsMonoNLNerdFontPropo-ThinItalic.ttf",
+      "atlas": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ThinItalic.png",
+      "metrics": "JetBrainsMono/JetBrainsMonoNLNerdFontPropo-ThinItalic.json"
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "family": "UbuntuSans",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/UbuntuSans.tar.xz",
+  "archive_sha256": "abcbf48bb68e2dd09d43dc0ea04f6878cc8ee46334a9f9ce52b51e06f31aa0d0",
+  "faces": [
+    {
+      "name": "UbuntuSansMonoNerdFont-Bold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-Bold.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFont-BoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-BoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFont-Italic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-Italic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFont-Medium.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-Medium.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFont-MediumItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-MediumItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFont-Regular.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-Regular.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFont-SemiBold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-SemiBold.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-SemiBold.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFont-SemiBoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFont-SemiBoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-Bold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-Bold.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-BoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-Italic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-Italic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-Medium.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-Medium.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-MediumItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-MediumItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-Regular.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-Regular.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-SemiBold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-SemiBold.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontMono-SemiBoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-Bold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Bold.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-Italic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Italic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-Medium.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Medium.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-MediumItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-Regular.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Regular.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-SemiBold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-SemiBold.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "UbuntuSansMonoNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansMonoNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansMonoNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-Bold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-Bold.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-Bold.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-BoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-BoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-Italic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-Italic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-Italic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-Medium.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-Medium.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-Medium.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-MediumItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-MediumItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-Regular.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-Regular.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-Regular.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-SemiBold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-SemiBold.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-SemiBold.json"
+    },
+    {
+      "name": "UbuntuSansNerdFont-SemiBoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFont-SemiBoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-Bold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-Bold.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-BoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-BoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-Italic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-Italic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-Medium.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-Medium.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-MediumItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-MediumItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-Regular.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-Regular.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-SemiBold.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-SemiBold.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "UbuntuSansNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "UbuntuSans/UbuntuSansNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "UbuntuSans/UbuntuSansNerdFontPropo-SemiBoldItalic.json"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # DBF-HUD
 
-Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.36**.
+Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.37**.
 
 ## Working features
 
@@ -17,9 +17,9 @@ An existing live installation may retain its `astra_ammo` folder to preserve MDL
 
 ## Current limitations
 
-Direct WorldGUI occlusion was visually confirmed on September 30 using the registered depth-enable-only shader probe. The scene mesh remains an occluded fallback; its texture material can alter colors through scene processing. Non-occluded direct WorldGUI remains selectable. World-space frosted blur is unresolved, and first-person/shoulder placement currently uses camera heuristics rather than verified camera-state flags.
+Direct WorldGUI occlusion was visually confirmed on September 30 using the registered depth-enable-only shader probe. The scene mesh is now archived in code and commented out of public dispatch. The main menu exposes three display modes; Always Show HUD (3D) switches direct WorldGUI between depth-tested and non-occluded drawing. World-space frosted blur is unresolved, and first-person/shoulder placement currently uses camera heuristics rather than verified camera-state flags.
 
-The complete archive includes the startup bridge needed by the mesh texture renderer. Direct WorldGUI renders text and bars without that intermediate texture. The verified depth assets are included; the combined startup installation still needs its own live verification.
+The complete archive retains the startup bridge for compatibility. Direct WorldGUI renders text and bars without an intermediate texture; the active MDL path no longer allocates or updates mesh textures. The verified depth assets are included; the combined startup installation still needs its own live verification.
 
 See [native display research](NATIVE_DISPLAY_TRACE.md), [depth investigation](DEPTH_RENDERING.md), and [weapon binding](WEAPON_BINDING.md). These documents include chronological experiments and results; earlier proposed steps are not claims of current functionality.
 
@@ -51,7 +51,7 @@ Ammo layout facts originated from Reticle Ammo HUD. This implementation was deve
 
 BigBlue Terminal printable ASCII glyphs were imported from Nerd Fonts v3.5.1. Font attribution and CC BY-SA 4.0 terms are preserved in [licenses/BigBlueTerminal](licenses/BigBlueTerminal). See `tools/import_bigblue.py` for regeneration. No blanket license is granted for the remaining project code in this snapshot.
 
-Full Nerd Fonts support is deferred in [BACKLOG.md](BACKLOG.md).
+Nerd Fonts v3.5.1 has been converted into a future font library: 72 families and 2,252 faces, with 48px grayscale atlases, glyph metrics, source checksums and upstream license documents. HUD text uses printable ASCII; SymbolsOnly includes all 10,624 supported symbols per face. Runtime font selection beyond BigBlue/debug is still deferred. See [font assets](assets/fonts/README.md) and [BACKLOG.md](BACKLOG.md).
 
 ## Complete install archive
 

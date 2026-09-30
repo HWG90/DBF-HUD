@@ -1,0 +1,37 @@
+{
+  "family": "Agave",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Agave.tar.xz",
+  "archive_sha256": "0b29420ed47a4cc9bc2743d454ef17ea645ae31e6c348e86154d994b6ccc756e",
+  "faces": [
+    {
+      "name": "AgaveNerdFont-Bold.ttf",
+      "atlas": "Agave/AgaveNerdFont-Bold.png",
+      "metrics": "Agave/AgaveNerdFont-Bold.json"
+    },
+    {
+      "name": "AgaveNerdFont-Regular.ttf",
+      "atlas": "Agave/AgaveNerdFont-Regular.png",
+      "metrics": "Agave/AgaveNerdFont-Regular.json"
+    },
+    {
+      "name": "AgaveNerdFontMono-Bold.ttf",
+      "atlas": "Agave/AgaveNerdFontMono-Bold.png",
+      "metrics": "Agave/AgaveNerdFontMono-Bold.json"
+    },
+    {
+      "name": "AgaveNerdFontMono-Regular.ttf",
+      "atlas": "Agave/AgaveNerdFontMono-Regular.png",
+      "metrics": "Agave/AgaveNerdFontMono-Regular.json"
+    },
+    {
+      "name": "AgaveNerdFontPropo-Bold.ttf",
+      "atlas": "Agave/AgaveNerdFontPropo-Bold.png",
+      "metrics": "Agave/AgaveNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "AgaveNerdFontPropo-Regular.ttf",
+      "atlas": "Agave/AgaveNerdFontPropo-Regular.png",
+      "metrics": "Agave/AgaveNerdFontPropo-Regular.json"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "family": "BitstreamVeraSansMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/BitstreamVeraSansMono.tar.xz",
+  "archive_sha256": "a4827daaa24be2d8f7831b5a65b493fa3ec8e1e92a5076104d8377f94f1b3ada",
+  "faces": [
+    {
+      "name": "BitstromWeraNerdFont-Bold.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFont-Bold.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFont-Bold.json"
+    },
+    {
+      "name": "BitstromWeraNerdFont-BoldOblique.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFont-BoldOblique.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFont-BoldOblique.json"
+    },
+    {
+      "name": "BitstromWeraNerdFont-Oblique.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFont-Oblique.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFont-Oblique.json"
+    },
+    {
+      "name": "BitstromWeraNerdFont-Regular.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFont-Regular.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFont-Regular.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontMono-Bold.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-Bold.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-Bold.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontMono-BoldOblique.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-BoldOblique.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-BoldOblique.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontMono-Oblique.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-Oblique.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-Oblique.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontMono-Regular.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-Regular.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontMono-Regular.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontPropo-Bold.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-Bold.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontPropo-BoldOblique.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-BoldOblique.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-BoldOblique.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontPropo-Oblique.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-Oblique.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-Oblique.json"
+    },
+    {
+      "name": "BitstromWeraNerdFontPropo-Regular.ttf",
+      "atlas": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-Regular.png",
+      "metrics": "BitstreamVeraSansMono/BitstromWeraNerdFontPropo-Regular.json"
+    }
+  ]
+}

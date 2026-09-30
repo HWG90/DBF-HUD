@@ -1,0 +1,67 @@
+{
+  "family": "Monoid",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Monoid.tar.xz",
+  "archive_sha256": "235d997cb92171296eab51871824a9c0d1a673a01f89a88312e1c0540ae3030d",
+  "faces": [
+    {
+      "name": "MonoidNerdFont-Bold.ttf",
+      "atlas": "Monoid/MonoidNerdFont-Bold.png",
+      "metrics": "Monoid/MonoidNerdFont-Bold.json"
+    },
+    {
+      "name": "MonoidNerdFont-Italic.ttf",
+      "atlas": "Monoid/MonoidNerdFont-Italic.png",
+      "metrics": "Monoid/MonoidNerdFont-Italic.json"
+    },
+    {
+      "name": "MonoidNerdFont-Regular.ttf",
+      "atlas": "Monoid/MonoidNerdFont-Regular.png",
+      "metrics": "Monoid/MonoidNerdFont-Regular.json"
+    },
+    {
+      "name": "MonoidNerdFont-Retina.ttf",
+      "atlas": "Monoid/MonoidNerdFont-Retina.png",
+      "metrics": "Monoid/MonoidNerdFont-Retina.json"
+    },
+    {
+      "name": "MonoidNerdFontMono-Bold.ttf",
+      "atlas": "Monoid/MonoidNerdFontMono-Bold.png",
+      "metrics": "Monoid/MonoidNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MonoidNerdFontMono-Italic.ttf",
+      "atlas": "Monoid/MonoidNerdFontMono-Italic.png",
+      "metrics": "Monoid/MonoidNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MonoidNerdFontMono-Regular.ttf",
+      "atlas": "Monoid/MonoidNerdFontMono-Regular.png",
+      "metrics": "Monoid/MonoidNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MonoidNerdFontMono-Retina.ttf",
+      "atlas": "Monoid/MonoidNerdFontMono-Retina.png",
+      "metrics": "Monoid/MonoidNerdFontMono-Retina.json"
+    },
+    {
+      "name": "MonoidNerdFontPropo-Bold.ttf",
+      "atlas": "Monoid/MonoidNerdFontPropo-Bold.png",
+      "metrics": "Monoid/MonoidNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MonoidNerdFontPropo-Italic.ttf",
+      "atlas": "Monoid/MonoidNerdFontPropo-Italic.png",
+      "metrics": "Monoid/MonoidNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MonoidNerdFontPropo-Regular.ttf",
+      "atlas": "Monoid/MonoidNerdFontPropo-Regular.png",
+      "metrics": "Monoid/MonoidNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MonoidNerdFontPropo-Retina.ttf",
+      "atlas": "Monoid/MonoidNerdFontPropo-Retina.png",
+      "metrics": "Monoid/MonoidNerdFontPropo-Retina.json"
+    }
+  ]
+}

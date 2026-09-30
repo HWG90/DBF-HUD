@@ -1,0 +1,277 @@
+{
+  "family": "GeistMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/GeistMono.tar.xz",
+  "archive_sha256": "d3ba4a7418cde16963fda0caa4f7ae866c509e0a864ec21e393455e1906e070c",
+  "faces": [
+    {
+      "name": "GeistMonoNerdFont-Black.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-Black.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-Black.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-BlackItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-BlackItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-BlackItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-Bold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-Bold.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-BoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-BoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-ExtraBold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-ExtraBold.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-ExtraBoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-ExtraBoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-ExtraLight.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-ExtraLight.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-ExtraLightItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-ExtraLightItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-Italic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-Italic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-Light.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-Light.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-Light.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-LightItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-LightItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-Medium.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-Medium.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-MediumItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-MediumItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-Regular.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-Regular.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-SemiBold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-SemiBold.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-SemiBold.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-SemiBoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-SemiBoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-Thin.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-Thin.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-Thin.json"
+    },
+    {
+      "name": "GeistMonoNerdFont-ThinItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFont-ThinItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-Black.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-Black.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-Black.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-BlackItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-BlackItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-BlackItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-Bold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-Bold.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-BoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-BoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-ExtraBold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-ExtraBold.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-ExtraBoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-ExtraBoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-ExtraBoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-ExtraLight.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-ExtraLight.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-ExtraLightItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-ExtraLightItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-Italic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-Italic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-Light.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-Light.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-LightItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-LightItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-Medium.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-Medium.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-MediumItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-MediumItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-Regular.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-Regular.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-SemiBold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-SemiBold.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-SemiBoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-SemiBoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-Thin.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-Thin.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-Thin.json"
+    },
+    {
+      "name": "GeistMonoNerdFontMono-ThinItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontMono-ThinItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontMono-ThinItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-Black.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-Black.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-Black.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-BlackItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-BlackItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-BlackItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-Bold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-Bold.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-BoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-ExtraBold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-ExtraBold.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-ExtraBoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-ExtraLight.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-ExtraLight.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-Italic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-Italic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-Light.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-Light.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-LightItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-LightItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-Medium.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-Medium.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-MediumItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-Regular.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-Regular.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-SemiBold.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-SemiBold.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-SemiBoldItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-Thin.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-Thin.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "GeistMonoNerdFontPropo-ThinItalic.otf",
+      "atlas": "GeistMono/GeistMonoNerdFontPropo-ThinItalic.png",
+      "metrics": "GeistMono/GeistMonoNerdFontPropo-ThinItalic.json"
+    }
+  ]
+}

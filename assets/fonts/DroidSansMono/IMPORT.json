@@ -1,0 +1,22 @@
+{
+  "family": "DroidSansMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/DroidSansMono.tar.xz",
+  "archive_sha256": "8e383ba1fde4e413996dcf47fbfaecbf544a7de940147a03af61fccd9ec9b8c4",
+  "faces": [
+    {
+      "name": "DroidSansMNerdFont-Regular.otf",
+      "atlas": "DroidSansMono/DroidSansMNerdFont-Regular.png",
+      "metrics": "DroidSansMono/DroidSansMNerdFont-Regular.json"
+    },
+    {
+      "name": "DroidSansMNerdFontMono-Regular.otf",
+      "atlas": "DroidSansMono/DroidSansMNerdFontMono-Regular.png",
+      "metrics": "DroidSansMono/DroidSansMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "DroidSansMNerdFontPropo-Regular.otf",
+      "atlas": "DroidSansMono/DroidSansMNerdFontPropo-Regular.png",
+      "metrics": "DroidSansMono/DroidSansMNerdFontPropo-Regular.json"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "family": "D2Coding",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/D2Coding.tar.xz",
+  "archive_sha256": "acdc66f5df6e64a7e1d41f89930b163da5345cf45f7dd08e41a98da255002c95",
+  "faces": [
+    {
+      "name": "D2KodingLigatureNerdFont-Bold.ttf",
+      "atlas": "D2Coding/D2KodingLigatureNerdFont-Bold.png",
+      "metrics": "D2Coding/D2KodingLigatureNerdFont-Bold.json"
+    },
+    {
+      "name": "D2KodingLigatureNerdFont-Regular.ttf",
+      "atlas": "D2Coding/D2KodingLigatureNerdFont-Regular.png",
+      "metrics": "D2Coding/D2KodingLigatureNerdFont-Regular.json"
+    },
+    {
+      "name": "D2KodingLigatureNerdFontMono-Bold.ttf",
+      "atlas": "D2Coding/D2KodingLigatureNerdFontMono-Bold.png",
+      "metrics": "D2Coding/D2KodingLigatureNerdFontMono-Bold.json"
+    },
+    {
+      "name": "D2KodingLigatureNerdFontMono-Regular.ttf",
+      "atlas": "D2Coding/D2KodingLigatureNerdFontMono-Regular.png",
+      "metrics": "D2Coding/D2KodingLigatureNerdFontMono-Regular.json"
+    },
+    {
+      "name": "D2KodingLigatureNerdFontPropo-Bold.ttf",
+      "atlas": "D2Coding/D2KodingLigatureNerdFontPropo-Bold.png",
+      "metrics": "D2Coding/D2KodingLigatureNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "D2KodingLigatureNerdFontPropo-Regular.ttf",
+      "atlas": "D2Coding/D2KodingLigatureNerdFontPropo-Regular.png",
+      "metrics": "D2Coding/D2KodingLigatureNerdFontPropo-Regular.json"
+    }
+  ]
+}

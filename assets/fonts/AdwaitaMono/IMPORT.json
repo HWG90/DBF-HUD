@@ -1,0 +1,67 @@
+{
+  "family": "AdwaitaMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/AdwaitaMono.tar.xz",
+  "archive_sha256": "409118887ec166a2342c184ade6734faf5d236a097742cb7085ff42826a1dd94",
+  "faces": [
+    {
+      "name": "AdwaitaMonoNerdFont-Bold.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFont-Bold.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFont-BoldItalic.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFont-BoldItalic.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFont-Italic.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFont-Italic.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFont-Regular.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFont-Regular.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontMono-Bold.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontMono-BoldItalic.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontMono-Italic.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontMono-Italic.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontMono-Regular.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontMono-Regular.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontPropo-Bold.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontPropo-Bold.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontPropo-Italic.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontPropo-Italic.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "AdwaitaMonoNerdFontPropo-Regular.ttf",
+      "atlas": "AdwaitaMono/AdwaitaMonoNerdFontPropo-Regular.png",
+      "metrics": "AdwaitaMono/AdwaitaMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

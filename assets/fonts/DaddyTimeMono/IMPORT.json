@@ -1,0 +1,22 @@
+{
+  "family": "DaddyTimeMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/DaddyTimeMono.tar.xz",
+  "archive_sha256": "d5c67428e6aefe687e3400e5086ff5ad5c5b0c166388a67ba0e94a57a9cc154e",
+  "faces": [
+    {
+      "name": "DaddyTimeMonoNerdFont-Regular.ttf",
+      "atlas": "DaddyTimeMono/DaddyTimeMonoNerdFont-Regular.png",
+      "metrics": "DaddyTimeMono/DaddyTimeMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "DaddyTimeMonoNerdFontMono-Regular.ttf",
+      "atlas": "DaddyTimeMono/DaddyTimeMonoNerdFontMono-Regular.png",
+      "metrics": "DaddyTimeMono/DaddyTimeMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "DaddyTimeMonoNerdFontPropo-Regular.ttf",
+      "atlas": "DaddyTimeMono/DaddyTimeMonoNerdFontPropo-Regular.png",
+      "metrics": "DaddyTimeMono/DaddyTimeMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

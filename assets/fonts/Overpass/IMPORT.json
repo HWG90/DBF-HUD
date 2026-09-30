@@ -1,0 +1,227 @@
+{
+  "family": "Overpass",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Overpass.tar.xz",
+  "archive_sha256": "ee7b45d4dc481371cac12d0de5c2408826c21f3031b2ef826fb157d077f7353d",
+  "faces": [
+    {
+      "name": "OverpassMNerdFont-Bold.otf",
+      "atlas": "Overpass/OverpassMNerdFont-Bold.png",
+      "metrics": "Overpass/OverpassMNerdFont-Bold.json"
+    },
+    {
+      "name": "OverpassMNerdFont-Light.otf",
+      "atlas": "Overpass/OverpassMNerdFont-Light.png",
+      "metrics": "Overpass/OverpassMNerdFont-Light.json"
+    },
+    {
+      "name": "OverpassMNerdFont-Regular.otf",
+      "atlas": "Overpass/OverpassMNerdFont-Regular.png",
+      "metrics": "Overpass/OverpassMNerdFont-Regular.json"
+    },
+    {
+      "name": "OverpassMNerdFont-SemiBold.otf",
+      "atlas": "Overpass/OverpassMNerdFont-SemiBold.png",
+      "metrics": "Overpass/OverpassMNerdFont-SemiBold.json"
+    },
+    {
+      "name": "OverpassMNerdFontMono-Bold.otf",
+      "atlas": "Overpass/OverpassMNerdFontMono-Bold.png",
+      "metrics": "Overpass/OverpassMNerdFontMono-Bold.json"
+    },
+    {
+      "name": "OverpassMNerdFontMono-Light.otf",
+      "atlas": "Overpass/OverpassMNerdFontMono-Light.png",
+      "metrics": "Overpass/OverpassMNerdFontMono-Light.json"
+    },
+    {
+      "name": "OverpassMNerdFontMono-Regular.otf",
+      "atlas": "Overpass/OverpassMNerdFontMono-Regular.png",
+      "metrics": "Overpass/OverpassMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "OverpassMNerdFontMono-SemiBold.otf",
+      "atlas": "Overpass/OverpassMNerdFontMono-SemiBold.png",
+      "metrics": "Overpass/OverpassMNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "OverpassMNerdFontPropo-Bold.otf",
+      "atlas": "Overpass/OverpassMNerdFontPropo-Bold.png",
+      "metrics": "Overpass/OverpassMNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "OverpassMNerdFontPropo-Light.otf",
+      "atlas": "Overpass/OverpassMNerdFontPropo-Light.png",
+      "metrics": "Overpass/OverpassMNerdFontPropo-Light.json"
+    },
+    {
+      "name": "OverpassMNerdFontPropo-Regular.otf",
+      "atlas": "Overpass/OverpassMNerdFontPropo-Regular.png",
+      "metrics": "Overpass/OverpassMNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "OverpassMNerdFontPropo-SemiBold.otf",
+      "atlas": "Overpass/OverpassMNerdFontPropo-SemiBold.png",
+      "metrics": "Overpass/OverpassMNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "OverpassNerdFont-Bold.otf",
+      "atlas": "Overpass/OverpassNerdFont-Bold.png",
+      "metrics": "Overpass/OverpassNerdFont-Bold.json"
+    },
+    {
+      "name": "OverpassNerdFont-BoldItalic.otf",
+      "atlas": "Overpass/OverpassNerdFont-BoldItalic.png",
+      "metrics": "Overpass/OverpassNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "OverpassNerdFont-ExtraBold.otf",
+      "atlas": "Overpass/OverpassNerdFont-ExtraBold.png",
+      "metrics": "Overpass/OverpassNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "OverpassNerdFont-ExtraBoldItalic.otf",
+      "atlas": "Overpass/OverpassNerdFont-ExtraBoldItalic.png",
+      "metrics": "Overpass/OverpassNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "OverpassNerdFont-ExtraLight.otf",
+      "atlas": "Overpass/OverpassNerdFont-ExtraLight.png",
+      "metrics": "Overpass/OverpassNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "OverpassNerdFont-ExtraLightItalic.otf",
+      "atlas": "Overpass/OverpassNerdFont-ExtraLightItalic.png",
+      "metrics": "Overpass/OverpassNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "OverpassNerdFont-Heavy.otf",
+      "atlas": "Overpass/OverpassNerdFont-Heavy.png",
+      "metrics": "Overpass/OverpassNerdFont-Heavy.json"
+    },
+    {
+      "name": "OverpassNerdFont-HeavyItalic.otf",
+      "atlas": "Overpass/OverpassNerdFont-HeavyItalic.png",
+      "metrics": "Overpass/OverpassNerdFont-HeavyItalic.json"
+    },
+    {
+      "name": "OverpassNerdFont-Italic.otf",
+      "atlas": "Overpass/OverpassNerdFont-Italic.png",
+      "metrics": "Overpass/OverpassNerdFont-Italic.json"
+    },
+    {
+      "name": "OverpassNerdFont-Light.otf",
+      "atlas": "Overpass/OverpassNerdFont-Light.png",
+      "metrics": "Overpass/OverpassNerdFont-Light.json"
+    },
+    {
+      "name": "OverpassNerdFont-LightItalic.otf",
+      "atlas": "Overpass/OverpassNerdFont-LightItalic.png",
+      "metrics": "Overpass/OverpassNerdFont-LightItalic.json"
+    },
+    {
+      "name": "OverpassNerdFont-Regular.otf",
+      "atlas": "Overpass/OverpassNerdFont-Regular.png",
+      "metrics": "Overpass/OverpassNerdFont-Regular.json"
+    },
+    {
+      "name": "OverpassNerdFont-SemiBold.otf",
+      "atlas": "Overpass/OverpassNerdFont-SemiBold.png",
+      "metrics": "Overpass/OverpassNerdFont-SemiBold.json"
+    },
+    {
+      "name": "OverpassNerdFont-SemiBoldItalic.otf",
+      "atlas": "Overpass/OverpassNerdFont-SemiBoldItalic.png",
+      "metrics": "Overpass/OverpassNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "OverpassNerdFont-Thin.otf",
+      "atlas": "Overpass/OverpassNerdFont-Thin.png",
+      "metrics": "Overpass/OverpassNerdFont-Thin.json"
+    },
+    {
+      "name": "OverpassNerdFont-ThinItalic.otf",
+      "atlas": "Overpass/OverpassNerdFont-ThinItalic.png",
+      "metrics": "Overpass/OverpassNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-Bold.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-Bold.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-BoldItalic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-BoldItalic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-ExtraBold.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-ExtraBold.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-ExtraBoldItalic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-ExtraLight.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-ExtraLight.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-Heavy.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-Heavy.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-Heavy.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-HeavyItalic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-HeavyItalic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-HeavyItalic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-Italic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-Italic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-Light.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-Light.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-Light.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-LightItalic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-LightItalic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-Regular.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-Regular.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-SemiBold.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-SemiBold.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-SemiBoldItalic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-Thin.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-Thin.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "OverpassNerdFontPropo-ThinItalic.otf",
+      "atlas": "Overpass/OverpassNerdFontPropo-ThinItalic.png",
+      "metrics": "Overpass/OverpassNerdFontPropo-ThinItalic.json"
+    }
+  ]
+}

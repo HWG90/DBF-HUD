@@ -1,0 +1,67 @@
+{
+  "family": "FantasqueSansMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/FantasqueSansMono.tar.xz",
+  "archive_sha256": "e7e0d7bd558a4e1cc0b448b8dfc6ae0bb7977683aaab6ddab24761e274d0a3dc",
+  "faces": [
+    {
+      "name": "FantasqueSansMNerdFont-Bold.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFont-Bold.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFont-Bold.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFont-BoldItalic.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFont-BoldItalic.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFont-Italic.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFont-Italic.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFont-Italic.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFont-Regular.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFont-Regular.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFont-Regular.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontMono-Bold.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontMono-Bold.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontMono-Bold.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontMono-BoldItalic.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontMono-BoldItalic.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontMono-Italic.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontMono-Italic.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontMono-Italic.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontMono-Regular.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontMono-Regular.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontPropo-Bold.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontPropo-Bold.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontPropo-BoldItalic.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontPropo-BoldItalic.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontPropo-Italic.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontPropo-Italic.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "FantasqueSansMNerdFontPropo-Regular.ttf",
+      "atlas": "FantasqueSansMono/FantasqueSansMNerdFontPropo-Regular.png",
+      "metrics": "FantasqueSansMono/FantasqueSansMNerdFontPropo-Regular.json"
+    }
+  ]
+}

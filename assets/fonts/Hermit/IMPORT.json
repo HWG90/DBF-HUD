@@ -1,0 +1,97 @@
+{
+  "family": "Hermit",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Hermit.tar.xz",
+  "archive_sha256": "61c1a9e87216eb25b69171cd8f39098be86306ebdf65b3b3a273192f3a3bbbb0",
+  "faces": [
+    {
+      "name": "HurmitNerdFont-Bold.otf",
+      "atlas": "Hermit/HurmitNerdFont-Bold.png",
+      "metrics": "Hermit/HurmitNerdFont-Bold.json"
+    },
+    {
+      "name": "HurmitNerdFont-BoldItalic.otf",
+      "atlas": "Hermit/HurmitNerdFont-BoldItalic.png",
+      "metrics": "Hermit/HurmitNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "HurmitNerdFont-Italic.otf",
+      "atlas": "Hermit/HurmitNerdFont-Italic.png",
+      "metrics": "Hermit/HurmitNerdFont-Italic.json"
+    },
+    {
+      "name": "HurmitNerdFont-Light.otf",
+      "atlas": "Hermit/HurmitNerdFont-Light.png",
+      "metrics": "Hermit/HurmitNerdFont-Light.json"
+    },
+    {
+      "name": "HurmitNerdFont-LightItalic.otf",
+      "atlas": "Hermit/HurmitNerdFont-LightItalic.png",
+      "metrics": "Hermit/HurmitNerdFont-LightItalic.json"
+    },
+    {
+      "name": "HurmitNerdFont-Regular.otf",
+      "atlas": "Hermit/HurmitNerdFont-Regular.png",
+      "metrics": "Hermit/HurmitNerdFont-Regular.json"
+    },
+    {
+      "name": "HurmitNerdFontMono-Bold.otf",
+      "atlas": "Hermit/HurmitNerdFontMono-Bold.png",
+      "metrics": "Hermit/HurmitNerdFontMono-Bold.json"
+    },
+    {
+      "name": "HurmitNerdFontMono-BoldItalic.otf",
+      "atlas": "Hermit/HurmitNerdFontMono-BoldItalic.png",
+      "metrics": "Hermit/HurmitNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "HurmitNerdFontMono-Italic.otf",
+      "atlas": "Hermit/HurmitNerdFontMono-Italic.png",
+      "metrics": "Hermit/HurmitNerdFontMono-Italic.json"
+    },
+    {
+      "name": "HurmitNerdFontMono-Light.otf",
+      "atlas": "Hermit/HurmitNerdFontMono-Light.png",
+      "metrics": "Hermit/HurmitNerdFontMono-Light.json"
+    },
+    {
+      "name": "HurmitNerdFontMono-LightItalic.otf",
+      "atlas": "Hermit/HurmitNerdFontMono-LightItalic.png",
+      "metrics": "Hermit/HurmitNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "HurmitNerdFontMono-Regular.otf",
+      "atlas": "Hermit/HurmitNerdFontMono-Regular.png",
+      "metrics": "Hermit/HurmitNerdFontMono-Regular.json"
+    },
+    {
+      "name": "HurmitNerdFontPropo-Bold.otf",
+      "atlas": "Hermit/HurmitNerdFontPropo-Bold.png",
+      "metrics": "Hermit/HurmitNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "HurmitNerdFontPropo-BoldItalic.otf",
+      "atlas": "Hermit/HurmitNerdFontPropo-BoldItalic.png",
+      "metrics": "Hermit/HurmitNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "HurmitNerdFontPropo-Italic.otf",
+      "atlas": "Hermit/HurmitNerdFontPropo-Italic.png",
+      "metrics": "Hermit/HurmitNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "HurmitNerdFontPropo-Light.otf",
+      "atlas": "Hermit/HurmitNerdFontPropo-Light.png",
+      "metrics": "Hermit/HurmitNerdFontPropo-Light.json"
+    },
+    {
+      "name": "HurmitNerdFontPropo-LightItalic.otf",
+      "atlas": "Hermit/HurmitNerdFontPropo-LightItalic.png",
+      "metrics": "Hermit/HurmitNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "HurmitNerdFontPropo-Regular.otf",
+      "atlas": "Hermit/HurmitNerdFontPropo-Regular.png",
+      "metrics": "Hermit/HurmitNerdFontPropo-Regular.json"
+    }
+  ]
+}

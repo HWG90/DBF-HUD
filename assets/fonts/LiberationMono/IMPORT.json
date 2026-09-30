@@ -1,0 +1,147 @@
+{
+  "family": "LiberationMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/LiberationMono.tar.xz",
+  "archive_sha256": "1106e496fb06fdc9bfc472c51191b5336cb56250952593f806486196efb71a66",
+  "faces": [
+    {
+      "name": "LiterationMonoNerdFont-Bold.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFont-Bold.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "LiterationMonoNerdFont-BoldItalic.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFont-BoldItalic.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "LiterationMonoNerdFont-Italic.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFont-Italic.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "LiterationMonoNerdFont-Regular.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFont-Regular.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontMono-Bold.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontMono-Bold.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontMono-BoldItalic.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontMono-Italic.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontMono-Italic.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontMono-Regular.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontMono-Regular.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontPropo-Bold.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontPropo-Bold.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontPropo-Italic.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontPropo-Italic.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "LiterationMonoNerdFontPropo-Regular.ttf",
+      "atlas": "LiberationMono/LiterationMonoNerdFontPropo-Regular.png",
+      "metrics": "LiberationMono/LiterationMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "LiterationSansNerdFont-Bold.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFont-Bold.png",
+      "metrics": "LiberationMono/LiterationSansNerdFont-Bold.json"
+    },
+    {
+      "name": "LiterationSansNerdFont-BoldItalic.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFont-BoldItalic.png",
+      "metrics": "LiberationMono/LiterationSansNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "LiterationSansNerdFont-Italic.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFont-Italic.png",
+      "metrics": "LiberationMono/LiterationSansNerdFont-Italic.json"
+    },
+    {
+      "name": "LiterationSansNerdFont-Regular.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFont-Regular.png",
+      "metrics": "LiberationMono/LiterationSansNerdFont-Regular.json"
+    },
+    {
+      "name": "LiterationSansNerdFontPropo-Bold.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFontPropo-Bold.png",
+      "metrics": "LiberationMono/LiterationSansNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "LiterationSansNerdFontPropo-BoldItalic.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFontPropo-BoldItalic.png",
+      "metrics": "LiberationMono/LiterationSansNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "LiterationSansNerdFontPropo-Italic.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFontPropo-Italic.png",
+      "metrics": "LiberationMono/LiterationSansNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "LiterationSansNerdFontPropo-Regular.ttf",
+      "atlas": "LiberationMono/LiterationSansNerdFontPropo-Regular.png",
+      "metrics": "LiberationMono/LiterationSansNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "LiterationSerifNerdFont-Bold.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFont-Bold.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFont-Bold.json"
+    },
+    {
+      "name": "LiterationSerifNerdFont-BoldItalic.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFont-BoldItalic.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "LiterationSerifNerdFont-Italic.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFont-Italic.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFont-Italic.json"
+    },
+    {
+      "name": "LiterationSerifNerdFont-Regular.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFont-Regular.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFont-Regular.json"
+    },
+    {
+      "name": "LiterationSerifNerdFontPropo-Bold.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFontPropo-Bold.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "LiterationSerifNerdFontPropo-BoldItalic.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFontPropo-BoldItalic.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "LiterationSerifNerdFontPropo-Italic.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFontPropo-Italic.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "LiterationSerifNerdFontPropo-Regular.ttf",
+      "atlas": "LiberationMono/LiterationSerifNerdFontPropo-Regular.png",
+      "metrics": "LiberationMono/LiterationSerifNerdFontPropo-Regular.json"
+    }
+  ]
+}

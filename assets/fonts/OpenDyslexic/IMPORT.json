@@ -1,0 +1,102 @@
+{
+  "family": "OpenDyslexic",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/OpenDyslexic.tar.xz",
+  "archive_sha256": "5f3b8c84ea93982c28fa11d74a6b7e9d90f13f6eb3e228c4603007d9c62aea78",
+  "faces": [
+    {
+      "name": "OpenDyslexicAltNerdFont-Bold.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFont-Bold.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFont-Bold.json"
+    },
+    {
+      "name": "OpenDyslexicAltNerdFont-BoldItalic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFont-BoldItalic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "OpenDyslexicAltNerdFont-Italic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFont-Italic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFont-Italic.json"
+    },
+    {
+      "name": "OpenDyslexicAltNerdFont-Regular.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFont-Regular.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFont-Regular.json"
+    },
+    {
+      "name": "OpenDyslexicAltNerdFontPropo-Bold.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-Bold.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "OpenDyslexicAltNerdFontPropo-BoldItalic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-BoldItalic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "OpenDyslexicAltNerdFontPropo-Italic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-Italic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "OpenDyslexicAltNerdFontPropo-Regular.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-Regular.png",
+      "metrics": "OpenDyslexic/OpenDyslexicAltNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "OpenDyslexicMNerdFont-Regular.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicMNerdFont-Regular.png",
+      "metrics": "OpenDyslexic/OpenDyslexicMNerdFont-Regular.json"
+    },
+    {
+      "name": "OpenDyslexicMNerdFontMono-Regular.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicMNerdFontMono-Regular.png",
+      "metrics": "OpenDyslexic/OpenDyslexicMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "OpenDyslexicMNerdFontPropo-Regular.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicMNerdFontPropo-Regular.png",
+      "metrics": "OpenDyslexic/OpenDyslexicMNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFont-Bold.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFont-Bold.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFont-Bold.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFont-BoldItalic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFont-BoldItalic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFont-Italic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFont-Italic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFont-Italic.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFont-Regular.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFont-Regular.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFont-Regular.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFontPropo-Bold.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFontPropo-Bold.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFontPropo-BoldItalic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFontPropo-BoldItalic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFontPropo-Italic.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFontPropo-Italic.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "OpenDyslexicNerdFontPropo-Regular.otf",
+      "atlas": "OpenDyslexic/OpenDyslexicNerdFontPropo-Regular.png",
+      "metrics": "OpenDyslexic/OpenDyslexicNerdFontPropo-Regular.json"
+    }
+  ]
+}

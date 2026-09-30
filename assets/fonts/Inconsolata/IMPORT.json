@@ -1,0 +1,37 @@
+{
+  "family": "Inconsolata",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Inconsolata.tar.xz",
+  "archive_sha256": "be1903b0016d398e3dc5b25814438b8d0fa44ca9e0ac5d9775130f406345d586",
+  "faces": [
+    {
+      "name": "InconsolataNerdFont-Bold.ttf",
+      "atlas": "Inconsolata/InconsolataNerdFont-Bold.png",
+      "metrics": "Inconsolata/InconsolataNerdFont-Bold.json"
+    },
+    {
+      "name": "InconsolataNerdFont-Regular.ttf",
+      "atlas": "Inconsolata/InconsolataNerdFont-Regular.png",
+      "metrics": "Inconsolata/InconsolataNerdFont-Regular.json"
+    },
+    {
+      "name": "InconsolataNerdFontMono-Bold.ttf",
+      "atlas": "Inconsolata/InconsolataNerdFontMono-Bold.png",
+      "metrics": "Inconsolata/InconsolataNerdFontMono-Bold.json"
+    },
+    {
+      "name": "InconsolataNerdFontMono-Regular.ttf",
+      "atlas": "Inconsolata/InconsolataNerdFontMono-Regular.png",
+      "metrics": "Inconsolata/InconsolataNerdFontMono-Regular.json"
+    },
+    {
+      "name": "InconsolataNerdFontPropo-Bold.ttf",
+      "atlas": "Inconsolata/InconsolataNerdFontPropo-Bold.png",
+      "metrics": "Inconsolata/InconsolataNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "InconsolataNerdFontPropo-Regular.ttf",
+      "atlas": "Inconsolata/InconsolataNerdFontPropo-Regular.png",
+      "metrics": "Inconsolata/InconsolataNerdFontPropo-Regular.json"
+    }
+  ]
+}

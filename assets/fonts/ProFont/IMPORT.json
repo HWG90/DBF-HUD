@@ -1,0 +1,37 @@
+{
+  "family": "ProFont",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/ProFont.tar.xz",
+  "archive_sha256": "186917bff8fe3d7aaf6a0151e7caf76ef2962f2dd825454dc42c3c7285c8f821",
+  "faces": [
+    {
+      "name": "ProFontWindowsNerdFont-Regular.ttf",
+      "atlas": "ProFont/ProFontWindowsNerdFont-Regular.png",
+      "metrics": "ProFont/ProFontWindowsNerdFont-Regular.json"
+    },
+    {
+      "name": "ProFontWindowsNerdFontMono-Regular.ttf",
+      "atlas": "ProFont/ProFontWindowsNerdFontMono-Regular.png",
+      "metrics": "ProFont/ProFontWindowsNerdFontMono-Regular.json"
+    },
+    {
+      "name": "ProFontWindowsNerdFontPropo-Regular.ttf",
+      "atlas": "ProFont/ProFontWindowsNerdFontPropo-Regular.png",
+      "metrics": "ProFont/ProFontWindowsNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "ProFontIIxNerdFont-Regular.ttf",
+      "atlas": "ProFont/ProFontIIxNerdFont-Regular.png",
+      "metrics": "ProFont/ProFontIIxNerdFont-Regular.json"
+    },
+    {
+      "name": "ProFontIIxNerdFontMono-Regular.ttf",
+      "atlas": "ProFont/ProFontIIxNerdFontMono-Regular.png",
+      "metrics": "ProFont/ProFontIIxNerdFontMono-Regular.json"
+    },
+    {
+      "name": "ProFontIIxNerdFontPropo-Regular.ttf",
+      "atlas": "ProFont/ProFontIIxNerdFontPropo-Regular.png",
+      "metrics": "ProFont/ProFontIIxNerdFontPropo-Regular.json"
+    }
+  ]
+}

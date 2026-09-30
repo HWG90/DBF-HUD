@@ -1,0 +1,52 @@
+{
+  "family": "EnvyCodeR",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/EnvyCodeR.tar.xz",
+  "archive_sha256": "911b420bed40268b4eb3c8fc1aedb1ccf498c3496dff645d72a5995f1e65a9a3",
+  "faces": [
+    {
+      "name": "EnvyCodeRNerdFont-Bold.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFont-Bold.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFont-Bold.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFont-Italic.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFont-Italic.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFont-Italic.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFont-Regular.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFont-Regular.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFont-Regular.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFontMono-Bold.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFontMono-Bold.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFontMono-Bold.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFontMono-Italic.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFontMono-Italic.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFontMono-Italic.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFontMono-Regular.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFontMono-Regular.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFontMono-Regular.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFontPropo-Bold.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFontPropo-Bold.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFontPropo-Italic.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFontPropo-Italic.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "EnvyCodeRNerdFontPropo-Regular.ttf",
+      "atlas": "EnvyCodeR/EnvyCodeRNerdFontPropo-Regular.png",
+      "metrics": "EnvyCodeR/EnvyCodeRNerdFontPropo-Regular.json"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "family": "IntelOneMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/IntelOneMono.tar.xz",
+  "archive_sha256": "792614cd446b3044e8043abab487cc604233b307a49ee61460b57bdc97b90f39",
+  "faces": [
+    {
+      "name": "IntoneMonoNerdFont-Bold.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-Bold.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "IntoneMonoNerdFont-BoldItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-BoldItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFont-Italic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-Italic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFont-Light.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-Light.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-Light.json"
+    },
+    {
+      "name": "IntoneMonoNerdFont-LightItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-LightItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFont-Medium.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-Medium.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "IntoneMonoNerdFont-MediumItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-MediumItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFont-Regular.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFont-Regular.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-Bold.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-Bold.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-BoldItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-Italic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-Italic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-Light.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-Light.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-LightItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-LightItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-Medium.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-Medium.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-MediumItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-MediumItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontMono-Regular.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontMono-Regular.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-Bold.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-Bold.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-Italic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-Italic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-Light.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-Light.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-LightItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-LightItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-Medium.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-Medium.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-MediumItalic.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "IntoneMonoNerdFontPropo-Regular.ttf",
+      "atlas": "IntelOneMono/IntoneMonoNerdFontPropo-Regular.png",
+      "metrics": "IntelOneMono/IntoneMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

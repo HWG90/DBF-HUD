@@ -34,8 +34,8 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={weapon_screen_test=false,occlusion_mode="mesh",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
-    panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
+M.defaults={weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+    panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
@@ -56,15 +56,18 @@ function M.apply(config,values)
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='font' then assert(v=='bigblue' or v=='debug','font must be bigblue or debug')
         else v=M.hex(v) end
         clean[k]=v
     end
-    if clean.hud_occlusion~=nil and clean.occlusion_mode==nil then clean.occlusion_mode=clean.hud_occlusion and 'mesh' or 'gui' end
-    if clean.occlusion_mode then clean.hud_occlusion=clean.occlusion_mode~='gui' end
+    if clean.hud_occlusion~=nil and clean.occlusion_mode==nil then clean.occlusion_mode=clean.hud_occlusion and 'gui_depth' or 'gui' end
+    -- Migrate retired mesh selection to the verified direct WorldGUI path.
+    if clean.occlusion_mode=='mesh' then clean.occlusion_mode='gui_depth' end
+    if clean.always_show_3d~=nil then clean.occlusion_mode=clean.always_show_3d and 'gui' or 'gui_depth' end
+    if clean.occlusion_mode then clean.hud_occlusion=clean.occlusion_mode~='gui';clean.always_show_3d=clean.occlusion_mode=='gui' end
     for k,v in pairs(clean) do config[k]=v end
 end
 function M.serialize(config)
@@ -1405,17 +1408,21 @@ function M.new(sr,log,side)
         local active_mode
         return {
             draw=function(p,c,target,dt,aspect,commands)
-                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'mesh' or 'gui')
+                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'gui_depth' or 'gui')
+                if mode=='mesh' then mode='gui_depth' end -- archived selection
                 local occluded=mode=='mesh'
                 if active_mode~=mode then
                     front.release();back.release();overlay.release();depth_overlay.release()
                     active_mode=mode
                     log('HUD occlusion mode '..mode)
                 end
+                --[[ Archived mesh dispatch; retained for future research.
                 if occluded then front.draw(p,c,target,dt,aspect);back.draw(p,c,target,dt,aspect)
                 else
+                ]]
+                do
                     if not commands then overlay.release();depth_overlay.release();return end
-                    local f=commands[1];local scale=240/f.w;local centered={}
+                    local f=commands[1];local scale=240*(c.scale or 1)/f.w;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
@@ -1424,7 +1431,7 @@ function M.new(sr,log,side)
                         if v.size then v.size=v.size*scale end
                         centered[#centered+1]=v
                     end
-                    if mode=='gui_depth' then depth_overlay.draw(p,c,centered,dt) else overlay.draw(p,c,centered,dt) end
+                    if mode=='gui_depth' then return depth_overlay.draw(p,c,centered,dt) else return overlay.draw(p,c,centered,dt) end
                 end
             end,
             release=function() overlay.release();depth_overlay.release();front.release();back.release();active_mode=nil end
@@ -1587,111 +1594,84 @@ return M
 
 end)()
 HUD.menu=(function()
--- Optional ModOptionsMenu API 1 integration. Never bundles or patches its implementation.
+-- ModOptionsMenu API 1; only main settings and placement are exposed.
 local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
-    local prefix='dbf_hud_v3.'
-    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
     local placement={left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
-        mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true}
-    local legacy={weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,
-        offset_x=true,offset_y=true,follow=true,travel=true,settle=true,scale=true,opacity=true}
-    local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or legacy[k] and 'dbf_hud_legacy.' or effects[k] and 'dbf_hud_effects.' or prefix)..k end
+        mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
+        weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
+        follow=true,travel=true,settle=true}
+    local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
     local sliders={
-        {'left_mount_x','Left shoulder: left / right',-2,2,0.01},{'left_mount_y','Left shoulder: forward / back',-2,2,0.01},{'left_mount_z','Left shoulder: up / down',-2,2,0.01},
-        {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
-        {'scanline_strength','CRT scanline strength',0,0.6,0.02},
-        {'texture_refresh_hz','Texture update cap (0 = every frame)',0,120,10},
-        {'emissive_intensity','3D panel emission',0,10,0.1},
-        {'world_position_smooth','3D position smoothing',0,0.5,0.005},{'world_rotation_smooth','3D rotation smoothing',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
-        {'weapon_offset_x','Weapon panel horizontal offset',-1920,1920,1},{'weapon_offset_y','Weapon panel vertical offset',-1080,1080,1},
-        {'weapon_settle','Weapon settling time',0.04,1,0.01},{'weapon_lag','Maximum weapon lag',0,160,1},
-        {'mount_x','Weapon local X',-2,2,0.01},{'mount_y','Weapon local Y',-2,2,0.01},{'mount_z','Weapon local Z',-2,2,0.01},
-        {'offset_x','Horizontal position',-1920,1920,1},{'offset_y','Vertical position (up)',-1080,1080,1},
-        {'scale','HUD scale',0.5,2,0.05},{'opacity','HUD opacity',0.1,1,0.01},
-        {'panel_opacity','Panel tint',0,1,0.01},{'follow','Reticle follow',0,1,0.01},
-        {'travel','Maximum travel',1,160,1},{'settle','Settling time',0.04,1,0.01},
-        {'flash_hz','Overheat flash rate',0.5,3,0.5}}
+        {'mount_x','3D right shoulder: left / right',-2,2,0.01},{'mount_y','3D right shoulder: forward / back',-2,2,0.01},{'mount_z','3D right shoulder: up / down',-2,2,0.01},
+        {'left_mount_x','3D left shoulder: left / right',-2,2,0.01},{'left_mount_y','3D left shoulder: forward / back',-2,2,0.01},{'left_mount_z','3D left shoulder: up / down',-2,2,0.01},
+        {'fp_mount_x','3D first person: left / right',-2,2,0.01},{'fp_mount_y','3D first person: forward / back',-2,2,0.01},{'fp_mount_z','3D first person: up / down',-2,2,0.01},
+        {'world_position_smooth','3D position damping',0,0.5,0.005},{'world_rotation_smooth','3D rotation damping',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
+        {'weapon_offset_x','2D hybrid: horizontal offset',-1920,1920,1},{'weapon_offset_y','2D hybrid: vertical offset',-1080,1080,1},
+        {'weapon_settle','2D hybrid: settling time',0.04,1,0.01},{'weapon_lag','2D hybrid: maximum lag',0,160,1},
+        {'offset_x','2D crosshair: horizontal offset',-1920,1920,1},{'offset_y','2D crosshair: vertical offset',-1080,1080,1},
+        {'follow','2D crosshair: reticle follow',0,1,0.01},{'travel','2D crosshair: maximum travel',1,160,1},{'settle','2D crosshair: settling time',0.04,1,0.01},
+        {'scale','HUD scale',0.5,2,0.05},{'opacity','HUD opacity',0.1,1,0.01},{'panel_opacity','Panel tint',0,1,0.01},{'flash_hz','Heat warning pulse rate',0.5,3,0.5}}
+    -- Mesh-only emission, texture cap and CRT sliders are intentionally archived.
+    -- Their configuration and implementations remain in source for future work.
     local function set(k,v) assert(api.set(option_id(k),v)) end
     function self.sync()
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
-        set('occlusion_mode',hud.config.occlusion_mode=='gui' and 1 or (hud.config.occlusion_mode=='gui_depth' and 3 or 2))
+        set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
+        set('always_show_3d',hud.config.occlusion_mode=='gui')
         set('frosted',hud.config.frosted)
-        set('anchor_mode_v2',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
-        set('pose_marker',hud.config.pose_marker)
-        set('world_probe',hud.config.world_probe)
         set('font',hud.config.font=='bigblue' and 1 or 2)
-
     end
     function self.poll()
         if attempted or retired then return end
         api=rawget(_G,'ModOptionsMenu')
         if not api or api.api~=1 then return end
         for _,k in ipairs({'register_option','on_change','set'}) do if type(api[k])~='function' then return end end
-        attempted=true
-        -- Keep one dispatcher per option across reloads; retiring releases HUD closures.
-        api.dbf_hud_routes=api.dbf_hud_routes or {}
-        routes=api.dbf_hud_routes
+        attempted=true;api.dbf_hud_routes=api.dbf_hud_routes or {};routes=api.dbf_hud_routes
+        -- Old rows may remain visible until restart, but cannot apply stale settings.
+        for id,route in pairs(routes) do
+            if not id:find('dbf_hud_v4.',1,true) and not id:find('dbf_hud_placement.',1,true) then route.callback=nil;route.owner=nil end
+        end
         local function add(k,spec,callback)
-            spec.mod=placement[k] and 'DBF-HUD Placement' or legacy[k] and 'DBF-HUD Legacy Controls' or effects[k] and 'DBF-HUD Effects' or 'DBF-HUD'
+            spec.mod=placement[k] and 'DBF-HUD Placement' or 'DBF-HUD'
             local id=option_id(k)
-            -- API 1 treats a changed default as a different registration. Reuse
-            -- our stable option IDs when taking over from the boot addon too.
             local exists=routes[id] or (type(api.get)=='function' and api.get(id)~=nil)
             if not exists then local ok,err=api.register_option(id,spec);assert(ok,err) end
             if not routes[id] then
                 local route={};routes[id]=route
-                assert(api.on_change(id,function(v) if route.callback then route.callback(v) end end))
+                assert(api.on_change(id,function(v)if route.callback then route.callback(v) end end))
             end
             routes[id].owner=self;routes[id].callback=callback
         end
         local ok,err=pcall(function()
-            for _,s in ipairs(sliders) do
-                local k=s[1]
-                add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)
-                    hud.configure({[k]=v});hud.save_tuning()
-                end)
-            end
-            add('anchor_mode_v2',{type='choice',label='Attach HUD to',choices={'Weapon (hybrid)','Crosshair','Weapon (3D plane)'},
+            add('display_mode',{type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
             end)
-            add('occlusion_mode',{type='choice',label='HUD occlusion',default=2,
-                choices={'Off (World GUI)','On (Mesh)','On (World GUI - experimental)'},
-                description='Mesh occlusion is verified. World GUI depth mode is an experimental material test; it may still draw through geometry.'},function(v)
-                hud.configure({occlusion_mode=v==1 and 'gui' or (v==3 and 'gui_depth' or 'mesh')});hud.save_tuning()
+            add('always_show_3d',{type='toggle',label='Always Show HUD (3D)',default=hud.config.occlusion_mode=='gui',
+                description='On: draw through characters and scenery. Off: scene geometry hides the 3D HUD.'},function(v)
+                hud.configure({always_show_3d=v});hud.save_tuning()
             end)
-            local retired_toggle=routes[prefix..'hud_occlusion'];if retired_toggle then retired_toggle.callback=nil end
-            add('world_probe',{type='toggle',label='Experimental 3D rectangle',default=hud.config.world_probe},function(v)
-                hud.configure({world_probe=v});hud.save_tuning()
-            end)
-            add('pose_marker',{type='toggle',label='Show attachment marker',default=hud.config.pose_marker},function(v)
-                hud.configure({pose_marker=v});hud.save_tuning()
-            end)
-            add('font',{type='choice',label='HUD font',choices={'BigBlue Terminal (pixel)','Original debug font'},
-                default=hud.config.font=='bigblue' and 1 or 2},function(v)
+            for _,s in ipairs(sliders) do
+                local k=s[1];add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)
+                    hud.configure({[k]=v});hud.save_tuning()
+                end)
+            end
+            add('font',{type='choice',label='HUD font',choices={'BigBlue Terminal (pixel)','Original debug font'},default=hud.config.font=='bigblue' and 1 or 2},function(v)
                 hud.configure({font=v==1 and 'bigblue' or 'debug'});hud.save_tuning()
             end)
-            add('frosted',{type='toggle',label='Native frosted panel',default=hud.config.frosted},function(v)
+            add('frosted',{type='toggle',label='Frosted background (2D)',default=hud.config.frosted},function(v)
                 hud.configure({frosted=v});hud.save_tuning()
             end)
-            -- Retired shared controls must never edit the new palette on Apply.
-            for _,k in ipairs({'color_target','rgba1','rgba2','rgba3','rgba4'}) do
-                local route=routes[prefix..k];if route then route.callback=nil end
-            end
-            local old=routes['dbf_hud_effects.saturation'];if old then old.callback=nil end
             self.sync()
         end)
-        self.status=ok and 'Options > Mods > DBF-HUD' or ('menu unavailable: '..tostring(err))
-        if not ok then api=nil end
+        self.status=ok and 'Options > Mods > DBF-HUD' or ('menu unavailable: '..tostring(err));if not ok then api=nil end
     end
     function self.retire()
         retired=true
-        for _,route in pairs(routes or {}) do
-            if route.owner==self then route.callback=nil;route.owner=nil end
-        end
+        for _,route in pairs(routes or {}) do if route.owner==self then route.callback=nil;route.owner=nil end end
     end
     return self
 end
@@ -1705,7 +1685,7 @@ function M.start(sr,backend,options)
     -- Compatibility: retire a previous-brand instance during live upgrade.
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
-    local self={version='0.3.36',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.37',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
@@ -1727,6 +1707,7 @@ function M.start(sr,backend,options)
     local last_binding
     local function log(line) if backend.log then pcall(backend.log,string.format('[%.3f] %s',self.clock,line)) end end
     local world_probe=HUD.world_probe.new(sr,log)
+    local world_display=HUD.scene_test.new(sr,log)
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     -- Availability check only: never invokes unverified world GUI functions.
     local capabilities={}
@@ -1938,16 +1919,17 @@ function M.start(sr,backend,options)
             next_log=self.clock+2
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
-        if not model or alpha<0.01 then world_probe.draw(nil,self.config);view.clear();return end
+        if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
-            local world_config={};for k,v in pairs(self.config)do world_config[k]=v end;world_config.font='bigblue'
+            local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
             local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
-            if world_probe.draw(self.weapon_pose,self.config,world_commands,dt) then
-                view.clear();self.anchor_status='weapon 3D plane';return
+            if world_display.draw(self.weapon_pose,self.config,nil,dt,nil,world_commands) then
+                view.clear();self.anchor_status='weapon 3D WorldGUI';return
             end
         end
+        world_display.release()
         local s=h/1080
         x=w/2+(x+(use_weapon and self.config.weapon_offset_x or self.config.offset_x))*s;y=h/2+(y+(use_weapon and self.config.weapon_offset_y or self.config.offset_y))*s
         local scale=s*self.config.scale
@@ -1998,7 +1980,7 @@ function M.start(sr,backend,options)
     function self.retire()
         if cleaned then return end
         cleaned=true
-        retired=true;menu.retire();pcall(world_probe.release);pcall(view.release)
+        retired=true;menu.retire();pcall(world_display.release);pcall(world_probe.release);pcall(view.release)
         if backend.close then pcall(backend.close) end
         if not managed then
             if rawget(_G,'update')==wrapper then rawset(_G,'update',original) end
@@ -2015,5 +1997,5 @@ return M
 
 end)()
 local ok,result=pcall(function() return HUD.runtime.start(assert(rawget(_G,"stingray"),"stingray missing"),HUD.memory.native()) end)
-if not ok then rawset(_G,"DBFHUD",{status=tostring(result),version="0.3.36"}) end
+if not ok then rawset(_G,"DBFHUD",{status=tostring(result),version="0.3.37"}) end
 return rawget(_G,"DBFHUD")

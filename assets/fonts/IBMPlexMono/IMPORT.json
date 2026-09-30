@@ -1,0 +1,247 @@
+{
+  "family": "IBMPlexMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/IBMPlexMono.tar.xz",
+  "archive_sha256": "3d226683be9fc35f98683837568497f300307bc9b7aefc1617a368f190ef963a",
+  "faces": [
+    {
+      "name": "BlexMonoNerdFont-Bold.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-Bold.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-BoldItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-BoldItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-ExtraLight.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-ExtraLight.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-ExtraLightItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-ExtraLightItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-Italic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-Italic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-Light.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-Light.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-Light.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-LightItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-LightItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-Medium.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-Medium.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-MediumItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-MediumItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-Regular.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-Regular.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-SemiBold.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-SemiBold.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-SemiBold.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-SemiBoldItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-SemiBoldItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-Text.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-Text.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-Text.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-TextItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-TextItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-TextItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-Thin.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-Thin.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-Thin.json"
+    },
+    {
+      "name": "BlexMonoNerdFont-ThinItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFont-ThinItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-Bold.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-Bold.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-BoldItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-ExtraLight.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-ExtraLight.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-ExtraLightItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-ExtraLightItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-Italic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-Italic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-Light.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-Light.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-LightItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-LightItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-Medium.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-Medium.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-MediumItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-MediumItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-Regular.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-Regular.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-SemiBold.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-SemiBold.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-SemiBoldItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-Text.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-Text.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-Text.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-TextItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-TextItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-TextItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-Thin.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-Thin.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-Thin.json"
+    },
+    {
+      "name": "BlexMonoNerdFontMono-ThinItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontMono-ThinItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontMono-ThinItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-Bold.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-Bold.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-ExtraLight.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-ExtraLight.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-Italic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-Italic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-Light.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-Light.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-LightItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-LightItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-Medium.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-Medium.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-MediumItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-Regular.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-Regular.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-SemiBold.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-SemiBold.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-Text.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-Text.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-Text.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-TextItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-TextItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-TextItalic.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-Thin.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-Thin.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "BlexMonoNerdFontPropo-ThinItalic.ttf",
+      "atlas": "IBMPlexMono/BlexMonoNerdFontPropo-ThinItalic.png",
+      "metrics": "IBMPlexMono/BlexMonoNerdFontPropo-ThinItalic.json"
+    }
+  ]
+}

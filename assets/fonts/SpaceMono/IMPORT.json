@@ -1,0 +1,67 @@
+{
+  "family": "SpaceMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/SpaceMono.tar.xz",
+  "archive_sha256": "c7d7ac234030c008dbd7a47bc577e624b8d9ae367860c0b4ba148b33374e74a1",
+  "faces": [
+    {
+      "name": "SpaceMonoNerdFont-Bold.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFont-Bold.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "SpaceMonoNerdFont-BoldItalic.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFont-BoldItalic.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "SpaceMonoNerdFont-Italic.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFont-Italic.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "SpaceMonoNerdFont-Regular.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFont-Regular.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontMono-Bold.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontMono-Bold.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontMono-BoldItalic.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontMono-Italic.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontMono-Italic.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontMono-Regular.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontMono-Regular.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontPropo-Bold.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontPropo-Bold.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontPropo-Italic.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontPropo-Italic.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "SpaceMonoNerdFontPropo-Regular.ttf",
+      "atlas": "SpaceMono/SpaceMonoNerdFontPropo-Regular.png",
+      "metrics": "SpaceMono/SpaceMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

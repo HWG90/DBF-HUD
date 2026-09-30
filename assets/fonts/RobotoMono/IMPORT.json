@@ -1,0 +1,187 @@
+{
+  "family": "RobotoMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/RobotoMono.tar.xz",
+  "archive_sha256": "61f53438b240a00c87c92dc2c372db0bbb264473b36a8144ea62babf787f8383",
+  "faces": [
+    {
+      "name": "RobotoMonoNerdFont-Bold.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-Bold.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-BoldItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-BoldItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-Italic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-Italic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-Light.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-Light.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-Light.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-LightItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-LightItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-Medium.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-Medium.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-MediumItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-MediumItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-Regular.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-Regular.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-SemiBold.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-SemiBold.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-SemiBold.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-SemiBoldItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-SemiBoldItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-Thin.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-Thin.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-Thin.json"
+    },
+    {
+      "name": "RobotoMonoNerdFont-ThinItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFont-ThinItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-Bold.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-Bold.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-BoldItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-Italic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-Italic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-Light.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-Light.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-LightItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-LightItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-Medium.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-Medium.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-MediumItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-MediumItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-Regular.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-Regular.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-SemiBold.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-SemiBold.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-SemiBoldItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-Thin.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-Thin.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-Thin.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontMono-ThinItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontMono-ThinItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontMono-ThinItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-Bold.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-Bold.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-Italic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-Italic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-Light.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-Light.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-LightItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-LightItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-Medium.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-Medium.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-MediumItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-Regular.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-Regular.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-SemiBold.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-SemiBold.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-Thin.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-Thin.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "RobotoMonoNerdFontPropo-ThinItalic.ttf",
+      "atlas": "RobotoMono/RobotoMonoNerdFontPropo-ThinItalic.png",
+      "metrics": "RobotoMono/RobotoMonoNerdFontPropo-ThinItalic.json"
+    }
+  ]
+}

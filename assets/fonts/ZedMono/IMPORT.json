@@ -1,0 +1,457 @@
+{
+  "family": "ZedMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/ZedMono.tar.xz",
+  "archive_sha256": "0411af0883248778335d34bbad8e400466b638d5d896e15c2eb37cd9d4518321",
+  "faces": [
+    {
+      "name": "ZedMonoNerdFont-Extended.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-Extended.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-Extended.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedExtraBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedExtraBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedExtraBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedExtraBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedExtraBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedExtraBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedExtraBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedExtraBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedExtraBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedLight.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedLight.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedLight.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedLightItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedLightItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedLightItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedLightOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedLightOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedLightOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedMedium.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedMedium.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedMedium.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedMediumItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedMediumItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedMediumItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedMediumOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedMediumOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedMediumOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtendedOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtendedOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtendedOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-Extended.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-Extended.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-Extended.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedExtraBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedExtraBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedExtraBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedExtraBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedExtraBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedExtraBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedExtraBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedExtraBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedExtraBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedLight.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedLight.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedLight.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedLightItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedLightItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedLightItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedLightOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedLightOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedLightOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedMedium.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedMedium.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedMedium.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedMediumItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedMediumItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedMediumItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedMediumOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedMediumOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedMediumOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtendedOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtendedOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtendedOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-Extended.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-Extended.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-Extended.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedExtraBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedExtraBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedExtraBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedExtraBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedExtraBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedExtraBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedExtraBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedExtraBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedExtraBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedLight.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedLight.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedLight.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedLightItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedLightItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedLightItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedLightOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedLightOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedLightOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedMedium.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedMedium.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedMedium.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedMediumItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedMediumItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedMediumItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedMediumOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedMediumOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedMediumOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtendedOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtendedOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtendedOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-Bold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-Bold.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-BoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-BoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-BoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-BoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-BoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtraBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtraBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtraBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-ExtraBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-ExtraBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-ExtraBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-Italic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-Italic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-Light.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-Light.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-Light.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-LightItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-LightItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-LightOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-LightOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-LightOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-Medium.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-Medium.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-MediumItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-MediumItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-MediumOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-MediumOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-MediumOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-Oblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-Oblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-Oblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFont-Regular.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFont-Regular.png",
+      "metrics": "ZedMono/ZedMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-Bold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-Bold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-BoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-BoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-BoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-BoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtraBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtraBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtraBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtraBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtraBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-ExtraBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-ExtraBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-ExtraBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-Italic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-Italic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-Light.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-Light.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-LightItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-LightItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-LightOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-LightOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-LightOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-Medium.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-Medium.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-MediumItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-MediumItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-MediumOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-MediumOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-MediumOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-Oblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-Oblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-Oblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontMono-Regular.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontMono-Regular.png",
+      "metrics": "ZedMono/ZedMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-Bold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-Bold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-BoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-BoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-BoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtraBold.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtraBold.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-ExtraBoldOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-ExtraBoldOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-ExtraBoldOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-Italic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-Italic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-Light.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-Light.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-LightItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-LightItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-LightOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-LightOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-LightOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-Medium.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-Medium.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-MediumItalic.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-MediumOblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-MediumOblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-MediumOblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-Oblique.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-Oblique.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-Oblique.json"
+    },
+    {
+      "name": "ZedMonoNerdFontPropo-Regular.ttf",
+      "atlas": "ZedMono/ZedMonoNerdFontPropo-Regular.png",
+      "metrics": "ZedMono/ZedMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

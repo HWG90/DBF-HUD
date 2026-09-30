@@ -1,0 +1,67 @@
+{
+  "family": "Go-Mono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Go-Mono.tar.xz",
+  "archive_sha256": "d993c556cf0e7c4b2455628063a5adb441b3517a297783185c262d77900d70dd",
+  "faces": [
+    {
+      "name": "GoMonoNerdFont-Bold.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFont-Bold.png",
+      "metrics": "Go-Mono/GoMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "GoMonoNerdFont-BoldItalic.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFont-BoldItalic.png",
+      "metrics": "Go-Mono/GoMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "GoMonoNerdFont-Italic.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFont-Italic.png",
+      "metrics": "Go-Mono/GoMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "GoMonoNerdFont-Regular.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFont-Regular.png",
+      "metrics": "Go-Mono/GoMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "GoMonoNerdFontMono-Bold.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontMono-Bold.png",
+      "metrics": "Go-Mono/GoMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "GoMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontMono-BoldItalic.png",
+      "metrics": "Go-Mono/GoMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "GoMonoNerdFontMono-Italic.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontMono-Italic.png",
+      "metrics": "Go-Mono/GoMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "GoMonoNerdFontMono-Regular.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontMono-Regular.png",
+      "metrics": "Go-Mono/GoMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "GoMonoNerdFontPropo-Bold.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontPropo-Bold.png",
+      "metrics": "Go-Mono/GoMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "GoMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "Go-Mono/GoMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "GoMonoNerdFontPropo-Italic.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontPropo-Italic.png",
+      "metrics": "Go-Mono/GoMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "GoMonoNerdFontPropo-Regular.ttf",
+      "atlas": "Go-Mono/GoMonoNerdFontPropo-Regular.png",
+      "metrics": "Go-Mono/GoMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

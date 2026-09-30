@@ -1,0 +1,52 @@
+{
+  "family": "FiraMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/FiraMono.tar.xz",
+  "archive_sha256": "e3112075b65d9a900ef6ca562c30f1b5eb1d1a928e97de7469962ac8c45e93d6",
+  "faces": [
+    {
+      "name": "FiraMonoNerdFont-Bold.otf",
+      "atlas": "FiraMono/FiraMonoNerdFont-Bold.png",
+      "metrics": "FiraMono/FiraMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "FiraMonoNerdFont-Medium.otf",
+      "atlas": "FiraMono/FiraMonoNerdFont-Medium.png",
+      "metrics": "FiraMono/FiraMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "FiraMonoNerdFont-Regular.otf",
+      "atlas": "FiraMono/FiraMonoNerdFont-Regular.png",
+      "metrics": "FiraMono/FiraMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "FiraMonoNerdFontMono-Bold.otf",
+      "atlas": "FiraMono/FiraMonoNerdFontMono-Bold.png",
+      "metrics": "FiraMono/FiraMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "FiraMonoNerdFontMono-Medium.otf",
+      "atlas": "FiraMono/FiraMonoNerdFontMono-Medium.png",
+      "metrics": "FiraMono/FiraMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "FiraMonoNerdFontMono-Regular.otf",
+      "atlas": "FiraMono/FiraMonoNerdFontMono-Regular.png",
+      "metrics": "FiraMono/FiraMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "FiraMonoNerdFontPropo-Bold.otf",
+      "atlas": "FiraMono/FiraMonoNerdFontPropo-Bold.png",
+      "metrics": "FiraMono/FiraMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "FiraMonoNerdFontPropo-Medium.otf",
+      "atlas": "FiraMono/FiraMonoNerdFontPropo-Medium.png",
+      "metrics": "FiraMono/FiraMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "FiraMonoNerdFontPropo-Regular.otf",
+      "atlas": "FiraMono/FiraMonoNerdFontPropo-Regular.png",
+      "metrics": "FiraMono/FiraMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

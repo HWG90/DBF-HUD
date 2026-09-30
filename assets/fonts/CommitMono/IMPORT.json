@@ -1,0 +1,67 @@
+{
+  "family": "CommitMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/CommitMono.tar.xz",
+  "archive_sha256": "7ee1e16909f0fd05cee30db4299753c33a6134c418c828d6d8523d246ee3f836",
+  "faces": [
+    {
+      "name": "CommitMonoNerdFont-Bold.otf",
+      "atlas": "CommitMono/CommitMonoNerdFont-Bold.png",
+      "metrics": "CommitMono/CommitMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "CommitMonoNerdFont-BoldItalic.otf",
+      "atlas": "CommitMono/CommitMonoNerdFont-BoldItalic.png",
+      "metrics": "CommitMono/CommitMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "CommitMonoNerdFont-Italic.otf",
+      "atlas": "CommitMono/CommitMonoNerdFont-Italic.png",
+      "metrics": "CommitMono/CommitMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "CommitMonoNerdFont-Regular.otf",
+      "atlas": "CommitMono/CommitMonoNerdFont-Regular.png",
+      "metrics": "CommitMono/CommitMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "CommitMonoNerdFontMono-Bold.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontMono-Bold.png",
+      "metrics": "CommitMono/CommitMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "CommitMonoNerdFontMono-BoldItalic.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontMono-BoldItalic.png",
+      "metrics": "CommitMono/CommitMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "CommitMonoNerdFontMono-Italic.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontMono-Italic.png",
+      "metrics": "CommitMono/CommitMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "CommitMonoNerdFontMono-Regular.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontMono-Regular.png",
+      "metrics": "CommitMono/CommitMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "CommitMonoNerdFontPropo-Bold.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontPropo-Bold.png",
+      "metrics": "CommitMono/CommitMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "CommitMonoNerdFontPropo-BoldItalic.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "CommitMono/CommitMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "CommitMonoNerdFontPropo-Italic.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontPropo-Italic.png",
+      "metrics": "CommitMono/CommitMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "CommitMonoNerdFontPropo-Regular.otf",
+      "atlas": "CommitMono/CommitMonoNerdFontPropo-Regular.png",
+      "metrics": "CommitMono/CommitMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

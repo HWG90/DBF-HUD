@@ -1,0 +1,67 @@
+{
+  "family": "AnonymousPro",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/AnonymousPro.tar.xz",
+  "archive_sha256": "f84f067b4de991a14afdbd498e106239c429a553a27e76a364048638f2e1de70",
+  "faces": [
+    {
+      "name": "AnonymiceProNerdFont-Bold.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFont-Bold.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFont-Bold.json"
+    },
+    {
+      "name": "AnonymiceProNerdFont-BoldItalic.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFont-BoldItalic.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "AnonymiceProNerdFont-Italic.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFont-Italic.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFont-Italic.json"
+    },
+    {
+      "name": "AnonymiceProNerdFont-Regular.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFont-Regular.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFont-Regular.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontMono-Bold.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontMono-Bold.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontMono-Bold.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontMono-BoldItalic.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontMono-BoldItalic.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontMono-Italic.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontMono-Italic.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontMono-Italic.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontMono-Regular.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontMono-Regular.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontMono-Regular.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontPropo-Bold.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontPropo-Bold.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontPropo-BoldItalic.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontPropo-BoldItalic.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontPropo-Italic.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontPropo-Italic.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "AnonymiceProNerdFontPropo-Regular.ttf",
+      "atlas": "AnonymousPro/AnonymiceProNerdFontPropo-Regular.png",
+      "metrics": "AnonymousPro/AnonymiceProNerdFontPropo-Regular.json"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "family": "CodeNewRoman",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/CodeNewRoman.tar.xz",
+  "archive_sha256": "eb902759ff5bc6c4011821c566f4001139c7c571abeb8990f3a3cdfdf661da4e",
+  "faces": [
+    {
+      "name": "CodeNewRomanNerdFont-Bold.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFont-Bold.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFont-Bold.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFont-Italic.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFont-Italic.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFont-Italic.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFont-Regular.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFont-Regular.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFont-Regular.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFontMono-Bold.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFontMono-Bold.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFontMono-Bold.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFontMono-Italic.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFontMono-Italic.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFontMono-Italic.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFontMono-Regular.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFontMono-Regular.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFontMono-Regular.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFontPropo-Bold.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFontPropo-Bold.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFontPropo-Italic.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFontPropo-Italic.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "CodeNewRomanNerdFontPropo-Regular.otf",
+      "atlas": "CodeNewRoman/CodeNewRomanNerdFontPropo-Regular.png",
+      "metrics": "CodeNewRoman/CodeNewRomanNerdFontPropo-Regular.json"
+    }
+  ]
+}

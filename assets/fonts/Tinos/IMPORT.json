@@ -1,0 +1,47 @@
+{
+  "family": "Tinos",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Tinos.tar.xz",
+  "archive_sha256": "70c5b9b6fac0c3bbb645b1470171023ddccd33ed70105ef41373f7af66f01129",
+  "faces": [
+    {
+      "name": "TinosNerdFont-Bold.ttf",
+      "atlas": "Tinos/TinosNerdFont-Bold.png",
+      "metrics": "Tinos/TinosNerdFont-Bold.json"
+    },
+    {
+      "name": "TinosNerdFont-BoldItalic.ttf",
+      "atlas": "Tinos/TinosNerdFont-BoldItalic.png",
+      "metrics": "Tinos/TinosNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "TinosNerdFont-Italic.ttf",
+      "atlas": "Tinos/TinosNerdFont-Italic.png",
+      "metrics": "Tinos/TinosNerdFont-Italic.json"
+    },
+    {
+      "name": "TinosNerdFont-Regular.ttf",
+      "atlas": "Tinos/TinosNerdFont-Regular.png",
+      "metrics": "Tinos/TinosNerdFont-Regular.json"
+    },
+    {
+      "name": "TinosNerdFontPropo-Bold.ttf",
+      "atlas": "Tinos/TinosNerdFontPropo-Bold.png",
+      "metrics": "Tinos/TinosNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "TinosNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Tinos/TinosNerdFontPropo-BoldItalic.png",
+      "metrics": "Tinos/TinosNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "TinosNerdFontPropo-Italic.ttf",
+      "atlas": "Tinos/TinosNerdFontPropo-Italic.png",
+      "metrics": "Tinos/TinosNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "TinosNerdFontPropo-Regular.ttf",
+      "atlas": "Tinos/TinosNerdFontPropo-Regular.png",
+      "metrics": "Tinos/TinosNerdFontPropo-Regular.json"
+    }
+  ]
+}

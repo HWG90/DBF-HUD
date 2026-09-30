@@ -1,0 +1,2002 @@
+{
+  "family": "Noto",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Noto.tar.xz",
+  "archive_sha256": "818deb4370c71315986b7d7a92c0dc508dd785a8d57f7cdfa871397a3a3834ab",
+  "faces": [
+    {
+      "name": "NotoMonoNerdFont-Regular.ttf",
+      "atlas": "Noto/NotoMonoNerdFont-Regular.png",
+      "metrics": "Noto/NotoMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "NotoMonoNerdFontMono-Regular.ttf",
+      "atlas": "Noto/NotoMonoNerdFontMono-Regular.png",
+      "metrics": "Noto/NotoMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "NotoMonoNerdFontPropo-Regular.ttf",
+      "atlas": "Noto/NotoMonoNerdFontPropo-Regular.png",
+      "metrics": "Noto/NotoMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-Black.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-Black.png",
+      "metrics": "Noto/NotoSansMNerdFont-Black.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-Bold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-Bold.png",
+      "metrics": "Noto/NotoSansMNerdFont-Bold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-CondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-CondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFont-CondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraCondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraCondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraCondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-ExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-ExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-Light.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-Light.png",
+      "metrics": "Noto/NotoSansMNerdFont-Light.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-Medium.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-Medium.png",
+      "metrics": "Noto/NotoSansMNerdFont-Medium.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-Regular.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-Regular.png",
+      "metrics": "Noto/NotoSansMNerdFont-Regular.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-SemiCondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-SemiCondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFont-SemiCondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFont-Thin.ttf",
+      "atlas": "Noto/NotoSansMNerdFont-Thin.png",
+      "metrics": "Noto/NotoSansMNerdFont-Thin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-Black.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-Black.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-Black.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-Bold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-Bold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-Bold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-CondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-CondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-CondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraCondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraCondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraCondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-ExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-ExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-Light.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-Light.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-Light.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-Medium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-Medium.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-Medium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-Regular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-Regular.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-SemiCondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-SemiCondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-SemiCondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontMono-Thin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontMono-Thin.png",
+      "metrics": "Noto/NotoSansMNerdFontMono-Thin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-Black.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-Black.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-Black.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-Bold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-Bold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-CondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-CondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-CondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraCondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraCondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraCondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-ExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-ExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-Light.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-Light.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-Light.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-Medium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-Medium.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-Regular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-Regular.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedBlack.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedLight.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedLight.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedLight.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedMedium.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedRegular.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-SemiCondensedThin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-SemiCondensedThin.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-SemiCondensedThin.json"
+    },
+    {
+      "name": "NotoSansMNerdFontPropo-Thin.ttf",
+      "atlas": "Noto/NotoSansMNerdFontPropo-Thin.png",
+      "metrics": "Noto/NotoSansMNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "NotoSansNerdFont-Black.ttf",
+      "atlas": "Noto/NotoSansNerdFont-Black.png",
+      "metrics": "Noto/NotoSansNerdFont-Black.json"
+    },
+    {
+      "name": "NotoSansNerdFont-BlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-BlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-BlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-Bold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-Bold.png",
+      "metrics": "Noto/NotoSansNerdFont-Bold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-BoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-BoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedBlack.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedBlack.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedBlack.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedBlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedBold.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedLight.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedLight.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedLight.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedMedium.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedMedium.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedMedium.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedMediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedRegular.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedRegular.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedRegular.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedSemiBold.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedThin.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedThin.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedThin.json"
+    },
+    {
+      "name": "NotoSansNerdFont-CondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-CondensedThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-CondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedBlack.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedBold.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedLight.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedLight.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedLight.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedMedium.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedRegular.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedThin.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedThin.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedThin.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraCondensedThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-Italic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-Italic.png",
+      "metrics": "Noto/NotoSansNerdFont-Italic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-Light.ttf",
+      "atlas": "Noto/NotoSansNerdFont-Light.png",
+      "metrics": "Noto/NotoSansNerdFont-Light.json"
+    },
+    {
+      "name": "NotoSansNerdFont-LightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-LightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-LightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-Medium.ttf",
+      "atlas": "Noto/NotoSansNerdFont-Medium.png",
+      "metrics": "Noto/NotoSansNerdFont-Medium.json"
+    },
+    {
+      "name": "NotoSansNerdFont-MediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-MediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-Regular.ttf",
+      "atlas": "Noto/NotoSansNerdFont-Regular.png",
+      "metrics": "Noto/NotoSansNerdFont-Regular.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiBold.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedBlack.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedBold.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedLight.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedLight.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedLight.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedMedium.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedRegular.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedThin.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedThin.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedThin.json"
+    },
+    {
+      "name": "NotoSansNerdFont-SemiCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-SemiCondensedThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-SemiCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFont-Thin.ttf",
+      "atlas": "Noto/NotoSansNerdFont-Thin.png",
+      "metrics": "Noto/NotoSansNerdFont-Thin.json"
+    },
+    {
+      "name": "NotoSansNerdFont-ThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFont-ThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-Black.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-Black.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-Black.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-BlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-BlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-BlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-Bold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-Bold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-BoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedBlack.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedBlack.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedBlack.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedBlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedLight.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedLight.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedLight.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedMedium.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedMedium.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedMedium.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedMediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedRegular.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedRegular.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedRegular.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedSemiBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedThin.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedThin.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedThin.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-CondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-CondensedThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-CondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedBlack.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedLight.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedLight.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedLight.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedMedium.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedRegular.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedThin.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedThin.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedThin.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraCondensedThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-Italic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-Italic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-Light.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-Light.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-Light.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-LightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-LightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-Medium.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-Medium.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-MediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-MediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-Regular.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-Regular.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedBlack.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedBlack.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedBlack.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraLight.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedLight.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedLight.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedLight.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedLightItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedMedium.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedMedium.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedMedium.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedRegular.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedRegular.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedRegular.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedSemiBold.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedThin.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedThin.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedThin.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-SemiCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-SemiCondensedThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-SemiCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-Thin.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-Thin.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "NotoSansNerdFontPropo-ThinItalic.ttf",
+      "atlas": "Noto/NotoSansNerdFontPropo-ThinItalic.png",
+      "metrics": "Noto/NotoSansNerdFontPropo-ThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-Black.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-Black.png",
+      "metrics": "Noto/NotoSerifNerdFont-Black.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-BlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-BlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-BlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-Bold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-Bold.png",
+      "metrics": "Noto/NotoSerifNerdFont-Bold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-BoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-BoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedBlack.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedBlack.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedBlack.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedBlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedLight.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedMedium.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedMedium.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedMedium.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedMediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedRegular.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedRegular.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedRegular.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedSemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedThin.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedThin.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedThin.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-CondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-CondensedThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-CondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedBlack.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedBlack.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedBlack.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedLight.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedMedium.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedMedium.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedMedium.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedRegular.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedRegular.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedRegular.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedSemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedThin.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedThin.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedThin.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraCondensedThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-Italic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-Italic.png",
+      "metrics": "Noto/NotoSerifNerdFont-Italic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-Light.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-Light.png",
+      "metrics": "Noto/NotoSerifNerdFont-Light.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-LightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-LightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-LightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-Medium.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-Medium.png",
+      "metrics": "Noto/NotoSerifNerdFont-Medium.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-MediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-MediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-Regular.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-Regular.png",
+      "metrics": "Noto/NotoSerifNerdFont-Regular.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedBlack.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedBlack.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedBlack.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedLight.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedMedium.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedMedium.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedMedium.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedRegular.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedRegular.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedRegular.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedSemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedThin.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedThin.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedThin.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-SemiCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-SemiCondensedThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-SemiCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-Thin.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-Thin.png",
+      "metrics": "Noto/NotoSerifNerdFont-Thin.json"
+    },
+    {
+      "name": "NotoSerifNerdFont-ThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFont-ThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-Black.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-Black.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-Black.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-BlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-BlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-BlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-Bold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-Bold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-BoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedBlack.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedBlack.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedBlack.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedBlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedLight.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedMedium.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedMedium.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedMedium.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedMediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedRegular.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedRegular.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedRegular.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedSemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedThin.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedThin.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedThin.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-CondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-CondensedThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-CondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedBlack.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBlack.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBlack.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedLight.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedMedium.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedMedium.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedMedium.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedRegular.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedRegular.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedRegular.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedSemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedThin.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedThin.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedThin.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraCondensedThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-Italic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-Italic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-Light.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-Light.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-Light.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-LightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-LightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-Medium.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-Medium.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-MediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-MediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-Regular.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-Regular.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedBlack.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedBlack.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedBlack.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedBlackItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedBlackItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedBlackItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedExtraBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedExtraBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedExtraLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraLight.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedExtraLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedExtraLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedLight.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedLight.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedLight.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedLightItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedLightItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedLightItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedMedium.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedMedium.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedMedium.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedMediumItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedMediumItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedMediumItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedRegular.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedRegular.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedRegular.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedSemiBold.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedSemiBold.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedSemiBold.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedSemiBoldItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedSemiBoldItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedSemiBoldItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedThin.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedThin.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedThin.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-SemiCondensedThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-SemiCondensedThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-SemiCondensedThinItalic.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-Thin.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-Thin.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "NotoSerifNerdFontPropo-ThinItalic.ttf",
+      "atlas": "Noto/NotoSerifNerdFontPropo-ThinItalic.png",
+      "metrics": "Noto/NotoSerifNerdFontPropo-ThinItalic.json"
+    }
+  ]
+}

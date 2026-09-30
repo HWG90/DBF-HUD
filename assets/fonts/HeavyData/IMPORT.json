@@ -1,0 +1,17 @@
+{
+  "family": "HeavyData",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/HeavyData.tar.xz",
+  "archive_sha256": "5137500fe224d8f7876557352136c0c9eef94b371ccea78cdee6aa0160e2e254",
+  "faces": [
+    {
+      "name": "HeavyDataNerdFont-Regular.ttf",
+      "atlas": "HeavyData/HeavyDataNerdFont-Regular.png",
+      "metrics": "HeavyData/HeavyDataNerdFont-Regular.json"
+    },
+    {
+      "name": "HeavyDataNerdFontPropo-Regular.ttf",
+      "atlas": "HeavyData/HeavyDataNerdFontPropo-Regular.png",
+      "metrics": "HeavyData/HeavyDataNerdFontPropo-Regular.json"
+    }
+  ]
+}

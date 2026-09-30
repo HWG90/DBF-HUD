@@ -1,0 +1,217 @@
+{
+  "family": "Hasklig",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Hasklig.tar.xz",
+  "archive_sha256": "25f73bb44cf786939f6fe13914ce220ac0d8a1ffde7fc7ee87090854c0f3d83c",
+  "faces": [
+    {
+      "name": "HasklugNerdFont-Black.otf",
+      "atlas": "Hasklig/HasklugNerdFont-Black.png",
+      "metrics": "Hasklig/HasklugNerdFont-Black.json"
+    },
+    {
+      "name": "HasklugNerdFont-BlackItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFont-BlackItalic.png",
+      "metrics": "Hasklig/HasklugNerdFont-BlackItalic.json"
+    },
+    {
+      "name": "HasklugNerdFont-Bold.otf",
+      "atlas": "Hasklig/HasklugNerdFont-Bold.png",
+      "metrics": "Hasklig/HasklugNerdFont-Bold.json"
+    },
+    {
+      "name": "HasklugNerdFont-BoldItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFont-BoldItalic.png",
+      "metrics": "Hasklig/HasklugNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "HasklugNerdFont-ExtraLight.otf",
+      "atlas": "Hasklig/HasklugNerdFont-ExtraLight.png",
+      "metrics": "Hasklig/HasklugNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "HasklugNerdFont-ExtraLightItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFont-ExtraLightItalic.png",
+      "metrics": "Hasklig/HasklugNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "HasklugNerdFont-Italic.otf",
+      "atlas": "Hasklig/HasklugNerdFont-Italic.png",
+      "metrics": "Hasklig/HasklugNerdFont-Italic.json"
+    },
+    {
+      "name": "HasklugNerdFont-Light.otf",
+      "atlas": "Hasklig/HasklugNerdFont-Light.png",
+      "metrics": "Hasklig/HasklugNerdFont-Light.json"
+    },
+    {
+      "name": "HasklugNerdFont-LightItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFont-LightItalic.png",
+      "metrics": "Hasklig/HasklugNerdFont-LightItalic.json"
+    },
+    {
+      "name": "HasklugNerdFont-Medium.otf",
+      "atlas": "Hasklig/HasklugNerdFont-Medium.png",
+      "metrics": "Hasklig/HasklugNerdFont-Medium.json"
+    },
+    {
+      "name": "HasklugNerdFont-MediumItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFont-MediumItalic.png",
+      "metrics": "Hasklig/HasklugNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "HasklugNerdFont-Regular.otf",
+      "atlas": "Hasklig/HasklugNerdFont-Regular.png",
+      "metrics": "Hasklig/HasklugNerdFont-Regular.json"
+    },
+    {
+      "name": "HasklugNerdFont-SemiBold.otf",
+      "atlas": "Hasklig/HasklugNerdFont-SemiBold.png",
+      "metrics": "Hasklig/HasklugNerdFont-SemiBold.json"
+    },
+    {
+      "name": "HasklugNerdFont-SemiBoldItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFont-SemiBoldItalic.png",
+      "metrics": "Hasklig/HasklugNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-Black.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-Black.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-Black.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-BlackItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-BlackItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-BlackItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-Bold.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-Bold.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-Bold.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-BoldItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-BoldItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-ExtraLight.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-ExtraLight.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-ExtraLightItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-ExtraLightItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-Italic.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-Italic.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-Italic.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-Light.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-Light.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-Light.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-LightItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-LightItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-Medium.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-Medium.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-Medium.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-MediumItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-MediumItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-Regular.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-Regular.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-Regular.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-SemiBold.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-SemiBold.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "HasklugNerdFontMono-SemiBoldItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontMono-SemiBoldItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-Black.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-Black.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-Black.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-BlackItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-BlackItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-BlackItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-Bold.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-Bold.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-BoldItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-BoldItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-ExtraLight.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-ExtraLight.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-Italic.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-Italic.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-Light.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-Light.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-Light.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-LightItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-LightItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-Medium.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-Medium.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-MediumItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-MediumItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-Regular.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-Regular.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-SemiBold.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-SemiBold.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "HasklugNerdFontPropo-SemiBoldItalic.otf",
+      "atlas": "Hasklig/HasklugNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "Hasklig/HasklugNerdFontPropo-SemiBoldItalic.json"
+    }
+  ]
+}

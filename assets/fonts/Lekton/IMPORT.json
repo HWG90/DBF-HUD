@@ -1,0 +1,52 @@
+{
+  "family": "Lekton",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Lekton.tar.xz",
+  "archive_sha256": "f69eb88d4f002ca3ea053551ae91edb522671b460662874c43ece6a7b8aabbe3",
+  "faces": [
+    {
+      "name": "LektonNerdFont-Bold.ttf",
+      "atlas": "Lekton/LektonNerdFont-Bold.png",
+      "metrics": "Lekton/LektonNerdFont-Bold.json"
+    },
+    {
+      "name": "LektonNerdFont-Italic.ttf",
+      "atlas": "Lekton/LektonNerdFont-Italic.png",
+      "metrics": "Lekton/LektonNerdFont-Italic.json"
+    },
+    {
+      "name": "LektonNerdFont-Regular.ttf",
+      "atlas": "Lekton/LektonNerdFont-Regular.png",
+      "metrics": "Lekton/LektonNerdFont-Regular.json"
+    },
+    {
+      "name": "LektonNerdFontMono-Bold.ttf",
+      "atlas": "Lekton/LektonNerdFontMono-Bold.png",
+      "metrics": "Lekton/LektonNerdFontMono-Bold.json"
+    },
+    {
+      "name": "LektonNerdFontMono-Italic.ttf",
+      "atlas": "Lekton/LektonNerdFontMono-Italic.png",
+      "metrics": "Lekton/LektonNerdFontMono-Italic.json"
+    },
+    {
+      "name": "LektonNerdFontMono-Regular.ttf",
+      "atlas": "Lekton/LektonNerdFontMono-Regular.png",
+      "metrics": "Lekton/LektonNerdFontMono-Regular.json"
+    },
+    {
+      "name": "LektonNerdFontPropo-Bold.ttf",
+      "atlas": "Lekton/LektonNerdFontPropo-Bold.png",
+      "metrics": "Lekton/LektonNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "LektonNerdFontPropo-Italic.ttf",
+      "atlas": "Lekton/LektonNerdFontPropo-Italic.png",
+      "metrics": "Lekton/LektonNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "LektonNerdFontPropo-Regular.ttf",
+      "atlas": "Lekton/LektonNerdFontPropo-Regular.png",
+      "metrics": "Lekton/LektonNerdFontPropo-Regular.json"
+    }
+  ]
+}

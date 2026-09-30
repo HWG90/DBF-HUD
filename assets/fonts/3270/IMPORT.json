@@ -1,0 +1,52 @@
+{
+  "family": "3270",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/3270.tar.xz",
+  "archive_sha256": "0be3de53807798fc5bdca90eb972225b0b3880bdd9b505121b3c06750a08b698",
+  "faces": [
+    {
+      "name": "3270NerdFont-Condensed.ttf",
+      "atlas": "3270/3270NerdFont-Condensed.png",
+      "metrics": "3270/3270NerdFont-Condensed.json"
+    },
+    {
+      "name": "3270NerdFont-Regular.ttf",
+      "atlas": "3270/3270NerdFont-Regular.png",
+      "metrics": "3270/3270NerdFont-Regular.json"
+    },
+    {
+      "name": "3270NerdFont-SemiCondensed.ttf",
+      "atlas": "3270/3270NerdFont-SemiCondensed.png",
+      "metrics": "3270/3270NerdFont-SemiCondensed.json"
+    },
+    {
+      "name": "3270NerdFontMono-Condensed.ttf",
+      "atlas": "3270/3270NerdFontMono-Condensed.png",
+      "metrics": "3270/3270NerdFontMono-Condensed.json"
+    },
+    {
+      "name": "3270NerdFontMono-Regular.ttf",
+      "atlas": "3270/3270NerdFontMono-Regular.png",
+      "metrics": "3270/3270NerdFontMono-Regular.json"
+    },
+    {
+      "name": "3270NerdFontMono-SemiCondensed.ttf",
+      "atlas": "3270/3270NerdFontMono-SemiCondensed.png",
+      "metrics": "3270/3270NerdFontMono-SemiCondensed.json"
+    },
+    {
+      "name": "3270NerdFontPropo-Condensed.ttf",
+      "atlas": "3270/3270NerdFontPropo-Condensed.png",
+      "metrics": "3270/3270NerdFontPropo-Condensed.json"
+    },
+    {
+      "name": "3270NerdFontPropo-Regular.ttf",
+      "atlas": "3270/3270NerdFontPropo-Regular.png",
+      "metrics": "3270/3270NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "3270NerdFontPropo-SemiCondensed.ttf",
+      "atlas": "3270/3270NerdFontPropo-SemiCondensed.png",
+      "metrics": "3270/3270NerdFontPropo-SemiCondensed.json"
+    }
+  ]
+}

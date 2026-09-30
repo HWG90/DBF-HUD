@@ -1,0 +1,247 @@
+{
+  "family": "AnnotationMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/AnnotationMono.tar.xz",
+  "archive_sha256": "bae334fde071ee7450cc8bbdc20fc5663a81466dce54d66f93815a48f59a308c",
+  "faces": [
+    {
+      "name": "AnnotationMNerdFont-Bold.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-Bold.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-Bold.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-BoldItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-BoldItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-BoldItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-BoldItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-BoldItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-BoldOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-BoldOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-BoldOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-ExtraBold.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-ExtraBold.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-ExtraBoldItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-ExtraBoldItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-ExtraBoldItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-ExtraBoldItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-ExtraBoldOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-ExtraBoldOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-ExtraBoldOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-Italic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-Italic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-Italic.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-ItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-ItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-ItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-Medium.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-Medium.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-Medium.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-MediumItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-MediumItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-MediumItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-MediumItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-MediumItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-MediumOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-MediumOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-MediumOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-Regular.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-Regular.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-Regular.json"
+    },
+    {
+      "name": "AnnotationMNerdFont-RegularOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFont-RegularOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFont-RegularOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-Bold.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-Bold.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-Bold.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-BoldItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-BoldItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-BoldItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-BoldItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-BoldItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-BoldOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-BoldOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-BoldOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-ExtraBold.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-ExtraBold.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-ExtraBoldItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-ExtraBoldItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-ExtraBoldItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-ExtraBoldItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-ExtraBoldItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-ExtraBoldItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-ExtraBoldOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-ExtraBoldOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-ExtraBoldOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-Italic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-Italic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-Italic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-ItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-ItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-ItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-Medium.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-Medium.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-Medium.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-MediumItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-MediumItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-MediumItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-MediumItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-MediumItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-MediumOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-MediumOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-MediumOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-Regular.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-Regular.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "AnnotationMNerdFontMono-RegularOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontMono-RegularOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontMono-RegularOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-Bold.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-Bold.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-BoldItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-BoldItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-BoldItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-BoldItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-BoldItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-BoldOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-BoldOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-BoldOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-ExtraBold.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBold.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-ExtraBoldItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBoldItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBoldItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-ExtraBoldOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBoldOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-ExtraBoldOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-Italic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-Italic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-ItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-ItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-ItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-Medium.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-Medium.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-MediumItalic.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-MediumItalic.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-MediumItalicUpright.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-MediumItalicUpright.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-MediumItalicUpright.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-MediumOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-MediumOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-MediumOblique.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-Regular.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-Regular.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "AnnotationMNerdFontPropo-RegularOblique.ttf",
+      "atlas": "AnnotationMono/AnnotationMNerdFontPropo-RegularOblique.png",
+      "metrics": "AnnotationMono/AnnotationMNerdFontPropo-RegularOblique.json"
+    }
+  ]
+}

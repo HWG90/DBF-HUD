@@ -1,0 +1,67 @@
+{
+  "family": "InconsolataLGC",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/InconsolataLGC.tar.xz",
+  "archive_sha256": "a44973ed4ae5989d07a61783febfe9ea558b14f19f9484b74f2f9f20f597b4e3",
+  "faces": [
+    {
+      "name": "InconsolataLGCNerdFont-Bold.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFont-Bold.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFont-Bold.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFont-BoldItalic.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFont-BoldItalic.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFont-Italic.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFont-Italic.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFont-Italic.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFont-Regular.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFont-Regular.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFont-Regular.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontMono-Bold.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontMono-Bold.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontMono-Bold.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontMono-BoldItalic.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontMono-BoldItalic.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontMono-Italic.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontMono-Italic.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontMono-Italic.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontMono-Regular.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontMono-Regular.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontMono-Regular.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontPropo-Bold.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontPropo-Bold.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontPropo-BoldItalic.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontPropo-BoldItalic.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontPropo-Italic.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontPropo-Italic.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "InconsolataLGCNerdFontPropo-Regular.ttf",
+      "atlas": "InconsolataLGC/InconsolataLGCNerdFontPropo-Regular.png",
+      "metrics": "InconsolataLGC/InconsolataLGCNerdFontPropo-Regular.json"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "family": "AurulentSansMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/AurulentSansMono.tar.xz",
+  "archive_sha256": "0cb5bb092b1a8b121762c9e8da70bd2b31a4ebcbc90b85cd34d7f883d7825048",
+  "faces": [
+    {
+      "name": "AurulentSansMNerdFont-Regular.otf",
+      "atlas": "AurulentSansMono/AurulentSansMNerdFont-Regular.png",
+      "metrics": "AurulentSansMono/AurulentSansMNerdFont-Regular.json"
+    },
+    {
+      "name": "AurulentSansMNerdFontMono-Regular.otf",
+      "atlas": "AurulentSansMono/AurulentSansMNerdFontMono-Regular.png",
+      "metrics": "AurulentSansMono/AurulentSansMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "AurulentSansMNerdFontPropo-Regular.otf",
+      "atlas": "AurulentSansMono/AurulentSansMNerdFontPropo-Regular.png",
+      "metrics": "AurulentSansMono/AurulentSansMNerdFontPropo-Regular.json"
+    }
+  ]
+}

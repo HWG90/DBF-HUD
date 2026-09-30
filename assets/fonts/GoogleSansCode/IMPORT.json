@@ -1,0 +1,187 @@
+{
+  "family": "GoogleSansCode",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/GoogleSansCode.tar.xz",
+  "archive_sha256": "b5a2a79b6ac0f021049c63b67bb42a1dcf81d5bc4e447fc6205c79d969605f42",
+  "faces": [
+    {
+      "name": "GoogleSansCodeNerdFont-Bold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-Bold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-Bold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-BoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-BoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-ExtraBold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-ExtraBold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-ExtraBoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-Italic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-Italic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-Italic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-Light.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-Light.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-Light.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-LightItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-LightItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-LightItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-Medium.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-Medium.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-Medium.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-MediumItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-MediumItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-Regular.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-Regular.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-Regular.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-SemiBold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-SemiBold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-SemiBold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFont-SemiBoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFont-SemiBoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-Bold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-Bold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-Bold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-BoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-BoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-ExtraBold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-ExtraBold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-ExtraBoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-ExtraBoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-ExtraBoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-Italic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-Italic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-Italic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-Light.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-Light.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-Light.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-LightItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-LightItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-Medium.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-Medium.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-Medium.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-MediumItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-MediumItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-Regular.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-Regular.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-Regular.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-SemiBold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-SemiBold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontMono-SemiBoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-Bold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Bold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-BoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-BoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-ExtraBold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-ExtraBold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-Italic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Italic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-Light.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Light.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Light.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-LightItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-LightItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-Medium.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Medium.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-MediumItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-MediumItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-Regular.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Regular.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-SemiBold.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-SemiBold.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "GoogleSansCodeNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "GoogleSansCode/GoogleSansCodeNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "GoogleSansCode/GoogleSansCodeNerdFontPropo-SemiBoldItalic.json"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "family": "iA-Writer",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/iA-Writer.tar.xz",
+  "archive_sha256": "c6df9758b24f50eed8edbd17df72b93dd68a55b87d4791f7e777b95b52848afa",
+  "faces": [
+    {
+      "name": "iMWritingDuoNerdFont-Bold.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFont-Bold.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFont-Bold.json"
+    },
+    {
+      "name": "iMWritingDuoNerdFont-BoldItalic.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFont-BoldItalic.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "iMWritingDuoNerdFont-Italic.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFont-Italic.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFont-Italic.json"
+    },
+    {
+      "name": "iMWritingDuoNerdFont-Regular.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFont-Regular.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFont-Regular.json"
+    },
+    {
+      "name": "iMWritingDuoNerdFontPropo-Bold.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFontPropo-Bold.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "iMWritingDuoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFontPropo-BoldItalic.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "iMWritingDuoNerdFontPropo-Italic.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFontPropo-Italic.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "iMWritingDuoNerdFontPropo-Regular.ttf",
+      "atlas": "iA-Writer/iMWritingDuoNerdFontPropo-Regular.png",
+      "metrics": "iA-Writer/iMWritingDuoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFont-Bold.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFont-Bold.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFont-BoldItalic.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFont-BoldItalic.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFont-Italic.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFont-Italic.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFont-Regular.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFont-Regular.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontMono-Bold.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontMono-Bold.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontMono-BoldItalic.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontMono-Italic.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontMono-Italic.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontMono-Regular.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontMono-Regular.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontPropo-Bold.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontPropo-Bold.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontPropo-Italic.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontPropo-Italic.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "iMWritingMonoNerdFontPropo-Regular.ttf",
+      "atlas": "iA-Writer/iMWritingMonoNerdFontPropo-Regular.png",
+      "metrics": "iA-Writer/iMWritingMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFont-Bold.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFont-Bold.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFont-Bold.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFont-BoldItalic.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFont-BoldItalic.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFont-Italic.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFont-Italic.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFont-Italic.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFont-Regular.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFont-Regular.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFont-Regular.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFontPropo-Bold.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFontPropo-Bold.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFontPropo-BoldItalic.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFontPropo-BoldItalic.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFontPropo-Italic.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFontPropo-Italic.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "iMWritingQuatNerdFontPropo-Regular.ttf",
+      "atlas": "iA-Writer/iMWritingQuatNerdFontPropo-Regular.png",
+      "metrics": "iA-Writer/iMWritingQuatNerdFontPropo-Regular.json"
+    }
+  ]
+}

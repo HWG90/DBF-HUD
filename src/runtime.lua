@@ -4,7 +4,7 @@ function M.start(sr,backend,options)
     -- Compatibility: retire a previous-brand instance during live upgrade.
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
-    local self={version='0.3.36',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.37',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
@@ -26,6 +26,7 @@ function M.start(sr,backend,options)
     local last_binding
     local function log(line) if backend.log then pcall(backend.log,string.format('[%.3f] %s',self.clock,line)) end end
     local world_probe=HUD.world_probe.new(sr,log)
+    local world_display=HUD.scene_test.new(sr,log)
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     -- Availability check only: never invokes unverified world GUI functions.
     local capabilities={}
@@ -237,16 +238,17 @@ function M.start(sr,backend,options)
             next_log=self.clock+2
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
-        if not model or alpha<0.01 then world_probe.draw(nil,self.config);view.clear();return end
+        if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
-            local world_config={};for k,v in pairs(self.config)do world_config[k]=v end;world_config.font='bigblue'
+            local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
             local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
-            if world_probe.draw(self.weapon_pose,self.config,world_commands,dt) then
-                view.clear();self.anchor_status='weapon 3D plane';return
+            if world_display.draw(self.weapon_pose,self.config,nil,dt,nil,world_commands) then
+                view.clear();self.anchor_status='weapon 3D WorldGUI';return
             end
         end
+        world_display.release()
         local s=h/1080
         x=w/2+(x+(use_weapon and self.config.weapon_offset_x or self.config.offset_x))*s;y=h/2+(y+(use_weapon and self.config.weapon_offset_y or self.config.offset_y))*s
         local scale=s*self.config.scale
@@ -297,7 +299,7 @@ function M.start(sr,backend,options)
     function self.retire()
         if cleaned then return end
         cleaned=true
-        retired=true;menu.retire();pcall(world_probe.release);pcall(view.release)
+        retired=true;menu.retire();pcall(world_display.release);pcall(world_probe.release);pcall(view.release)
         if backend.close then pcall(backend.close) end
         if not managed then
             if rawget(_G,'update')==wrapper then rawset(_G,'update',original) end

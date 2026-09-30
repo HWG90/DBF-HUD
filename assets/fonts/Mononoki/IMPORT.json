@@ -1,0 +1,67 @@
+{
+  "family": "Mononoki",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Mononoki.tar.xz",
+  "archive_sha256": "84cf96bf81645f97eb11a410e6febad864784a0a254bba4a348d6ff9665a0114",
+  "faces": [
+    {
+      "name": "MononokiNerdFont-Bold.ttf",
+      "atlas": "Mononoki/MononokiNerdFont-Bold.png",
+      "metrics": "Mononoki/MononokiNerdFont-Bold.json"
+    },
+    {
+      "name": "MononokiNerdFont-BoldItalic.ttf",
+      "atlas": "Mononoki/MononokiNerdFont-BoldItalic.png",
+      "metrics": "Mononoki/MononokiNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MononokiNerdFont-Italic.ttf",
+      "atlas": "Mononoki/MononokiNerdFont-Italic.png",
+      "metrics": "Mononoki/MononokiNerdFont-Italic.json"
+    },
+    {
+      "name": "MononokiNerdFont-Regular.ttf",
+      "atlas": "Mononoki/MononokiNerdFont-Regular.png",
+      "metrics": "Mononoki/MononokiNerdFont-Regular.json"
+    },
+    {
+      "name": "MononokiNerdFontMono-Bold.ttf",
+      "atlas": "Mononoki/MononokiNerdFontMono-Bold.png",
+      "metrics": "Mononoki/MononokiNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MononokiNerdFontMono-BoldItalic.ttf",
+      "atlas": "Mononoki/MononokiNerdFontMono-BoldItalic.png",
+      "metrics": "Mononoki/MononokiNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MononokiNerdFontMono-Italic.ttf",
+      "atlas": "Mononoki/MononokiNerdFontMono-Italic.png",
+      "metrics": "Mononoki/MononokiNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MononokiNerdFontMono-Regular.ttf",
+      "atlas": "Mononoki/MononokiNerdFontMono-Regular.png",
+      "metrics": "Mononoki/MononokiNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MononokiNerdFontPropo-Bold.ttf",
+      "atlas": "Mononoki/MononokiNerdFontPropo-Bold.png",
+      "metrics": "Mononoki/MononokiNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MononokiNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Mononoki/MononokiNerdFontPropo-BoldItalic.png",
+      "metrics": "Mononoki/MononokiNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MononokiNerdFontPropo-Italic.ttf",
+      "atlas": "Mononoki/MononokiNerdFontPropo-Italic.png",
+      "metrics": "Mononoki/MononokiNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MononokiNerdFontPropo-Regular.ttf",
+      "atlas": "Mononoki/MononokiNerdFontPropo-Regular.png",
+      "metrics": "Mononoki/MononokiNerdFontPropo-Regular.json"
+    }
+  ]
+}

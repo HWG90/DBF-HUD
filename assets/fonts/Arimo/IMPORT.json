@@ -1,0 +1,47 @@
+{
+  "family": "Arimo",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Arimo.tar.xz",
+  "archive_sha256": "997706a5e98185d9b0b74ef9593c65c6c3bf775721ade614f0bd156aeca6bace",
+  "faces": [
+    {
+      "name": "ArimoNerdFont-Bold.ttf",
+      "atlas": "Arimo/ArimoNerdFont-Bold.png",
+      "metrics": "Arimo/ArimoNerdFont-Bold.json"
+    },
+    {
+      "name": "ArimoNerdFont-BoldItalic.ttf",
+      "atlas": "Arimo/ArimoNerdFont-BoldItalic.png",
+      "metrics": "Arimo/ArimoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "ArimoNerdFont-Italic.ttf",
+      "atlas": "Arimo/ArimoNerdFont-Italic.png",
+      "metrics": "Arimo/ArimoNerdFont-Italic.json"
+    },
+    {
+      "name": "ArimoNerdFont-Regular.ttf",
+      "atlas": "Arimo/ArimoNerdFont-Regular.png",
+      "metrics": "Arimo/ArimoNerdFont-Regular.json"
+    },
+    {
+      "name": "ArimoNerdFontPropo-Bold.ttf",
+      "atlas": "Arimo/ArimoNerdFontPropo-Bold.png",
+      "metrics": "Arimo/ArimoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "ArimoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Arimo/ArimoNerdFontPropo-BoldItalic.png",
+      "metrics": "Arimo/ArimoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "ArimoNerdFontPropo-Italic.ttf",
+      "atlas": "Arimo/ArimoNerdFontPropo-Italic.png",
+      "metrics": "Arimo/ArimoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "ArimoNerdFontPropo-Regular.ttf",
+      "atlas": "Arimo/ArimoNerdFontPropo-Regular.png",
+      "metrics": "Arimo/ArimoNerdFontPropo-Regular.json"
+    }
+  ]
+}

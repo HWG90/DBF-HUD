@@ -1,0 +1,232 @@
+{
+  "family": "IosevkaTermSlab",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/IosevkaTermSlab.tar.xz",
+  "archive_sha256": "a31b73c260b5466a534c0a5e53e97b871353a93d19f37a5a522d11218313f95f",
+  "faces": [
+    {
+      "name": "IosevkaTermSlabNerdFont-Bold.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Bold.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Bold.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-BoldItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-BoldItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-BoldOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-BoldOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-BoldOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-ExtraBold.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-ExtraBold.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-ExtraBold.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-ExtraBoldItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-ExtraBoldItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-ExtraBoldItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-ExtraBoldOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-ExtraBoldOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-ExtraBoldOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-Italic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Italic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Italic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-Light.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Light.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Light.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-LightItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-LightItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-LightItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-LightOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-LightOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-LightOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-Medium.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Medium.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Medium.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-MediumItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-MediumItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-MediumOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-MediumOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-MediumOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-Oblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Oblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Oblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFont-Regular.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Regular.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFont-Regular.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-Bold.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Bold.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Bold.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-BoldItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-BoldItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-BoldOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-BoldOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-BoldOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-ExtraBold.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-ExtraBold.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-ExtraBold.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-ExtraBoldItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-ExtraBoldItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-ExtraBoldItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-ExtraBoldOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-ExtraBoldOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-ExtraBoldOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-Italic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Italic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Italic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-Light.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Light.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Light.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-LightItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-LightItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-LightOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-LightOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-LightOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-Medium.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Medium.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Medium.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-MediumItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-MediumItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-MediumOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-MediumOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-MediumOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-Oblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Oblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Oblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontMono-Regular.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Regular.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontMono-Regular.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-Bold.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Bold.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-BoldItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-BoldItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-BoldOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-BoldOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-BoldOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-ExtraBold.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-ExtraBold.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-ExtraBoldItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-ExtraBoldItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-ExtraBoldItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-ExtraBoldOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-ExtraBoldOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-ExtraBoldOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-Italic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Italic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-Light.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Light.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Light.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-LightItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-LightItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-LightOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-LightOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-LightOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-Medium.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Medium.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-MediumItalic.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-MediumItalic.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-MediumOblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-MediumOblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-MediumOblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-Oblique.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Oblique.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Oblique.json"
+    },
+    {
+      "name": "IosevkaTermSlabNerdFontPropo-Regular.ttf",
+      "atlas": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Regular.png",
+      "metrics": "IosevkaTermSlab/IosevkaTermSlabNerdFontPropo-Regular.json"
+    }
+  ]
+}

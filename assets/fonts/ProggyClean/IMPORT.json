@@ -1,0 +1,52 @@
+{
+  "family": "ProggyClean",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/ProggyClean.tar.xz",
+  "archive_sha256": "b7c0b6d558f92764fa26481d557ef867e6608e932d951a2aa8705b9fc6a50fd6",
+  "faces": [
+    {
+      "name": "ProggyCleanCENerdFont-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanCENerdFont-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanCENerdFont-Regular.json"
+    },
+    {
+      "name": "ProggyCleanCENerdFontMono-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanCENerdFontMono-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanCENerdFontMono-Regular.json"
+    },
+    {
+      "name": "ProggyCleanCENerdFontPropo-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanCENerdFontPropo-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanCENerdFontPropo-Regular.json"
+    },
+    {
+      "name": "ProggyCleanNerdFont-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanNerdFont-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanNerdFont-Regular.json"
+    },
+    {
+      "name": "ProggyCleanNerdFontMono-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanNerdFontMono-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanNerdFontMono-Regular.json"
+    },
+    {
+      "name": "ProggyCleanNerdFontPropo-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanNerdFontPropo-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "ProggyCleanSZNerdFont-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanSZNerdFont-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanSZNerdFont-Regular.json"
+    },
+    {
+      "name": "ProggyCleanSZNerdFontMono-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanSZNerdFontMono-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanSZNerdFontMono-Regular.json"
+    },
+    {
+      "name": "ProggyCleanSZNerdFontPropo-Regular.ttf",
+      "atlas": "ProggyClean/ProggyCleanSZNerdFontPropo-Regular.png",
+      "metrics": "ProggyClean/ProggyCleanSZNerdFontPropo-Regular.json"
+    }
+  ]
+}

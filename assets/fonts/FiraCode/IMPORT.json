@@ -1,0 +1,97 @@
+{
+  "family": "FiraCode",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/FiraCode.tar.xz",
+  "archive_sha256": "68e3bd6164864b8b514605bc34e3a87ac401c8c48682fcce6478c70263340207",
+  "faces": [
+    {
+      "name": "FiraCodeNerdFont-Bold.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFont-Bold.png",
+      "metrics": "FiraCode/FiraCodeNerdFont-Bold.json"
+    },
+    {
+      "name": "FiraCodeNerdFont-Light.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFont-Light.png",
+      "metrics": "FiraCode/FiraCodeNerdFont-Light.json"
+    },
+    {
+      "name": "FiraCodeNerdFont-Medium.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFont-Medium.png",
+      "metrics": "FiraCode/FiraCodeNerdFont-Medium.json"
+    },
+    {
+      "name": "FiraCodeNerdFont-Regular.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFont-Regular.png",
+      "metrics": "FiraCode/FiraCodeNerdFont-Regular.json"
+    },
+    {
+      "name": "FiraCodeNerdFont-Retina.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFont-Retina.png",
+      "metrics": "FiraCode/FiraCodeNerdFont-Retina.json"
+    },
+    {
+      "name": "FiraCodeNerdFont-SemiBold.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFont-SemiBold.png",
+      "metrics": "FiraCode/FiraCodeNerdFont-SemiBold.json"
+    },
+    {
+      "name": "FiraCodeNerdFontMono-Bold.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontMono-Bold.png",
+      "metrics": "FiraCode/FiraCodeNerdFontMono-Bold.json"
+    },
+    {
+      "name": "FiraCodeNerdFontMono-Light.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontMono-Light.png",
+      "metrics": "FiraCode/FiraCodeNerdFontMono-Light.json"
+    },
+    {
+      "name": "FiraCodeNerdFontMono-Medium.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontMono-Medium.png",
+      "metrics": "FiraCode/FiraCodeNerdFontMono-Medium.json"
+    },
+    {
+      "name": "FiraCodeNerdFontMono-Regular.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontMono-Regular.png",
+      "metrics": "FiraCode/FiraCodeNerdFontMono-Regular.json"
+    },
+    {
+      "name": "FiraCodeNerdFontMono-Retina.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontMono-Retina.png",
+      "metrics": "FiraCode/FiraCodeNerdFontMono-Retina.json"
+    },
+    {
+      "name": "FiraCodeNerdFontMono-SemiBold.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontMono-SemiBold.png",
+      "metrics": "FiraCode/FiraCodeNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "FiraCodeNerdFontPropo-Bold.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontPropo-Bold.png",
+      "metrics": "FiraCode/FiraCodeNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "FiraCodeNerdFontPropo-Light.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontPropo-Light.png",
+      "metrics": "FiraCode/FiraCodeNerdFontPropo-Light.json"
+    },
+    {
+      "name": "FiraCodeNerdFontPropo-Medium.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontPropo-Medium.png",
+      "metrics": "FiraCode/FiraCodeNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "FiraCodeNerdFontPropo-Regular.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontPropo-Regular.png",
+      "metrics": "FiraCode/FiraCodeNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "FiraCodeNerdFontPropo-Retina.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontPropo-Retina.png",
+      "metrics": "FiraCode/FiraCodeNerdFontPropo-Retina.json"
+    },
+    {
+      "name": "FiraCodeNerdFontPropo-SemiBold.ttf",
+      "atlas": "FiraCode/FiraCodeNerdFontPropo-SemiBold.png",
+      "metrics": "FiraCode/FiraCodeNerdFontPropo-SemiBold.json"
+    }
+  ]
+}

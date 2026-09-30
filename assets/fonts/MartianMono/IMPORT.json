@@ -1,0 +1,97 @@
+{
+  "family": "MartianMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/MartianMono.tar.xz",
+  "archive_sha256": "804a5a458856725d45a03d96a778349e8c3c9a4a45f5df023f294e196fbe88f2",
+  "faces": [
+    {
+      "name": "MartianMonoNerdFont-CondensedBold.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFont-CondensedBold.png",
+      "metrics": "MartianMono/MartianMonoNerdFont-CondensedBold.json"
+    },
+    {
+      "name": "MartianMonoNerdFont-CondensedMedium.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFont-CondensedMedium.png",
+      "metrics": "MartianMono/MartianMonoNerdFont-CondensedMedium.json"
+    },
+    {
+      "name": "MartianMonoNerdFont-CondensedRegular.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFont-CondensedRegular.png",
+      "metrics": "MartianMono/MartianMonoNerdFont-CondensedRegular.json"
+    },
+    {
+      "name": "MartianMonoNerdFontMono-CondensedBold.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontMono-CondensedBold.png",
+      "metrics": "MartianMono/MartianMonoNerdFontMono-CondensedBold.json"
+    },
+    {
+      "name": "MartianMonoNerdFontMono-CondensedMedium.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontMono-CondensedMedium.png",
+      "metrics": "MartianMono/MartianMonoNerdFontMono-CondensedMedium.json"
+    },
+    {
+      "name": "MartianMonoNerdFontMono-CondensedRegular.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontMono-CondensedRegular.png",
+      "metrics": "MartianMono/MartianMonoNerdFontMono-CondensedRegular.json"
+    },
+    {
+      "name": "MartianMonoNerdFontPropo-CondensedBold.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontPropo-CondensedBold.png",
+      "metrics": "MartianMono/MartianMonoNerdFontPropo-CondensedBold.json"
+    },
+    {
+      "name": "MartianMonoNerdFontPropo-CondensedMedium.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontPropo-CondensedMedium.png",
+      "metrics": "MartianMono/MartianMonoNerdFontPropo-CondensedMedium.json"
+    },
+    {
+      "name": "MartianMonoNerdFontPropo-CondensedRegular.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontPropo-CondensedRegular.png",
+      "metrics": "MartianMono/MartianMonoNerdFontPropo-CondensedRegular.json"
+    },
+    {
+      "name": "MartianMonoNerdFont-Bold.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFont-Bold.png",
+      "metrics": "MartianMono/MartianMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "MartianMonoNerdFont-Medium.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFont-Medium.png",
+      "metrics": "MartianMono/MartianMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "MartianMonoNerdFont-Regular.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFont-Regular.png",
+      "metrics": "MartianMono/MartianMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "MartianMonoNerdFontMono-Bold.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontMono-Bold.png",
+      "metrics": "MartianMono/MartianMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MartianMonoNerdFontMono-Medium.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontMono-Medium.png",
+      "metrics": "MartianMono/MartianMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "MartianMonoNerdFontMono-Regular.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontMono-Regular.png",
+      "metrics": "MartianMono/MartianMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MartianMonoNerdFontPropo-Bold.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontPropo-Bold.png",
+      "metrics": "MartianMono/MartianMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MartianMonoNerdFontPropo-Medium.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontPropo-Medium.png",
+      "metrics": "MartianMono/MartianMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "MartianMonoNerdFontPropo-Regular.ttf",
+      "atlas": "MartianMono/MartianMonoNerdFontPropo-Regular.png",
+      "metrics": "MartianMono/MartianMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

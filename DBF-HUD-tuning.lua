@@ -2,7 +2,8 @@
 -- The preview exports this format. Native menu edits save here automatically.
 -- Restart to load edits, or call DBFHUD.reload_tuning() from your Lua integration.
 return {
-    occlusion_mode = "mesh",
+    always_show_3d = false,
+    occlusion_mode = "gui_depth",
     hud_occlusion = true,
     saturation = 1.3,
     scanline_strength = 0.18,

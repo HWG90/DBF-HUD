@@ -1,0 +1,67 @@
+{
+  "family": "Terminus",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Terminus.tar.xz",
+  "archive_sha256": "80c6431f5789a72dc7464ecce3ee820cdc0f0123585befada87b13876d2fda90",
+  "faces": [
+    {
+      "name": "TerminessNerdFont-Bold.ttf",
+      "atlas": "Terminus/TerminessNerdFont-Bold.png",
+      "metrics": "Terminus/TerminessNerdFont-Bold.json"
+    },
+    {
+      "name": "TerminessNerdFont-BoldItalic.ttf",
+      "atlas": "Terminus/TerminessNerdFont-BoldItalic.png",
+      "metrics": "Terminus/TerminessNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "TerminessNerdFont-Italic.ttf",
+      "atlas": "Terminus/TerminessNerdFont-Italic.png",
+      "metrics": "Terminus/TerminessNerdFont-Italic.json"
+    },
+    {
+      "name": "TerminessNerdFont-Regular.ttf",
+      "atlas": "Terminus/TerminessNerdFont-Regular.png",
+      "metrics": "Terminus/TerminessNerdFont-Regular.json"
+    },
+    {
+      "name": "TerminessNerdFontMono-Bold.ttf",
+      "atlas": "Terminus/TerminessNerdFontMono-Bold.png",
+      "metrics": "Terminus/TerminessNerdFontMono-Bold.json"
+    },
+    {
+      "name": "TerminessNerdFontMono-BoldItalic.ttf",
+      "atlas": "Terminus/TerminessNerdFontMono-BoldItalic.png",
+      "metrics": "Terminus/TerminessNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "TerminessNerdFontMono-Italic.ttf",
+      "atlas": "Terminus/TerminessNerdFontMono-Italic.png",
+      "metrics": "Terminus/TerminessNerdFontMono-Italic.json"
+    },
+    {
+      "name": "TerminessNerdFontMono-Regular.ttf",
+      "atlas": "Terminus/TerminessNerdFontMono-Regular.png",
+      "metrics": "Terminus/TerminessNerdFontMono-Regular.json"
+    },
+    {
+      "name": "TerminessNerdFontPropo-Bold.ttf",
+      "atlas": "Terminus/TerminessNerdFontPropo-Bold.png",
+      "metrics": "Terminus/TerminessNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "TerminessNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Terminus/TerminessNerdFontPropo-BoldItalic.png",
+      "metrics": "Terminus/TerminessNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "TerminessNerdFontPropo-Italic.ttf",
+      "atlas": "Terminus/TerminessNerdFontPropo-Italic.png",
+      "metrics": "Terminus/TerminessNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "TerminessNerdFontPropo-Regular.ttf",
+      "atlas": "Terminus/TerminessNerdFontPropo-Regular.png",
+      "metrics": "Terminus/TerminessNerdFontPropo-Regular.json"
+    }
+  ]
+}

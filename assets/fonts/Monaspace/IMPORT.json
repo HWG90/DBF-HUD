@@ -1,0 +1,757 @@
+{
+  "family": "Monaspace",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Monaspace.tar.xz",
+  "archive_sha256": "7cdb44b7cd3855a231641b3cc4cf38f434d615d12e1c475eb86232868c667dc0",
+  "faces": [
+    {
+      "name": "MonaspiceArNerdFont-Bold.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-Bold.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-Bold.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-Italic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-Italic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-Italic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-Light.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-Light.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-Light.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-Medium.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-Medium.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-Medium.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFont-Regular.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFont-Regular.png",
+      "metrics": "Monaspace/MonaspiceArNerdFont-Regular.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-Bold.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-Bold.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-Italic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-Italic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-Light.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-Light.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-Light.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-Medium.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-Medium.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-Medium.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontMono-Regular.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontMono-Regular.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-Bold.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-Bold.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-Italic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-Italic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-Light.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-Light.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-Light.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-Medium.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-Medium.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceArNerdFontPropo-Regular.otf",
+      "atlas": "Monaspace/MonaspiceArNerdFontPropo-Regular.png",
+      "metrics": "Monaspace/MonaspiceArNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-Bold.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-Bold.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-Bold.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-Italic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-Italic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-Italic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-Light.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-Light.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-Light.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-Medium.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-Medium.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-Medium.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFont-Regular.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFont-Regular.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFont-Regular.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-Bold.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-Bold.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-Italic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-Italic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-Light.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-Light.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-Light.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-Medium.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-Medium.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-Medium.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontMono-Regular.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontMono-Regular.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-Bold.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-Bold.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-Italic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-Italic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-Light.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-Light.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-Light.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-Medium.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-Medium.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceKrNerdFontPropo-Regular.otf",
+      "atlas": "Monaspace/MonaspiceKrNerdFontPropo-Regular.png",
+      "metrics": "Monaspace/MonaspiceKrNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-Bold.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-Bold.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-Bold.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-Italic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-Italic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-Italic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-Light.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-Light.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-Light.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-Medium.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-Medium.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-Medium.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFont-Regular.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFont-Regular.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFont-Regular.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-Bold.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-Bold.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-Italic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-Italic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-Light.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-Light.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-Light.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-Medium.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-Medium.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-Medium.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontMono-Regular.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontMono-Regular.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-Bold.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-Bold.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-Italic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-Italic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-Light.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-Light.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-Light.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-Medium.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-Medium.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceNeNerdFontPropo-Regular.otf",
+      "atlas": "Monaspace/MonaspiceNeNerdFontPropo-Regular.png",
+      "metrics": "Monaspace/MonaspiceNeNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-Bold.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-Bold.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-Bold.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-Italic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-Italic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-Italic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-Light.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-Light.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-Light.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-Medium.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-Medium.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-Medium.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFont-Regular.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFont-Regular.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFont-Regular.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-Bold.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-Bold.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-Italic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-Italic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-Light.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-Light.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-Light.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-Medium.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-Medium.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-Medium.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontMono-Regular.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontMono-Regular.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-Bold.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-Bold.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-Italic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-Italic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-Light.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-Light.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-Light.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-Medium.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-Medium.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceRnNerdFontPropo-Regular.otf",
+      "atlas": "Monaspace/MonaspiceRnNerdFontPropo-Regular.png",
+      "metrics": "Monaspace/MonaspiceRnNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-Bold.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-Bold.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-Bold.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-Italic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-Italic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-Italic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-Light.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-Light.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-Light.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-Medium.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-Medium.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-Medium.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFont-Regular.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFont-Regular.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFont-Regular.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-Bold.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-Bold.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-Italic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-Italic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-Light.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-Light.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-Light.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-Medium.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-Medium.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-Medium.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontMono-Regular.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontMono-Regular.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-Bold.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-Bold.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-BoldItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-BoldItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-ExtraLight.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-ExtraLight.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-ExtraLightItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-Italic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-Italic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-Light.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-Light.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-Light.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-LightItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-LightItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-Medium.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-Medium.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-MediumItalic.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-MediumItalic.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "MonaspiceXeNerdFontPropo-Regular.otf",
+      "atlas": "Monaspace/MonaspiceXeNerdFontPropo-Regular.png",
+      "metrics": "Monaspace/MonaspiceXeNerdFontPropo-Regular.json"
+    }
+  ]
+}

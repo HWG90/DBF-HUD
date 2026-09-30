@@ -1,0 +1,127 @@
+{
+  "family": "AtkinsonHyperlegibleMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/AtkinsonHyperlegibleMono.tar.xz",
+  "archive_sha256": "a0fd13eb48ff2c7522f652369d2add4d285903f600525c6bb72be5cf2448ef55",
+  "faces": [
+    {
+      "name": "AtkynsonMonoNerdFont-Bold.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Bold.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFont-BoldItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-BoldItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFont-Italic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Italic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFont-Light.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Light.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Light.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFont-LightItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-LightItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFont-Medium.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Medium.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFont-MediumItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-MediumItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFont-Regular.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Regular.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-Bold.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Bold.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-BoldItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-BoldItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-Italic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Italic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-Light.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Light.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-LightItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-LightItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-Medium.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Medium.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-MediumItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-MediumItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontMono-Regular.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Regular.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-Bold.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Bold.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-BoldItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-Italic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Italic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-Light.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Light.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-LightItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-LightItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-Medium.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Medium.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-MediumItalic.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "AtkynsonMonoNerdFontPropo-Regular.otf",
+      "atlas": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Regular.png",
+      "metrics": "AtkinsonHyperlegibleMono/AtkynsonMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

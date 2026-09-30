@@ -1,0 +1,67 @@
+{
+  "family": "UbuntuMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/UbuntuMono.tar.xz",
+  "archive_sha256": "9c4d18e23e1ff809849fa0afec79ade67c58e22150c95ea373d22598c1ddea18",
+  "faces": [
+    {
+      "name": "UbuntuMonoNerdFont-Bold.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFont-Bold.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFont-BoldItalic.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFont-BoldItalic.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFont-Italic.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFont-Italic.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFont-Regular.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFont-Regular.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontMono-Bold.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontMono-Bold.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontMono-BoldItalic.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontMono-Italic.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontMono-Italic.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontMono-Regular.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontMono-Regular.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontPropo-Bold.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontPropo-Bold.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontPropo-Italic.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontPropo-Italic.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "UbuntuMonoNerdFontPropo-Regular.ttf",
+      "atlas": "UbuntuMono/UbuntuMonoNerdFontPropo-Regular.png",
+      "metrics": "UbuntuMono/UbuntuMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

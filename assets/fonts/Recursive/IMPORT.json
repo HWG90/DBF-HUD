@@ -1,0 +1,247 @@
+{
+  "family": "Recursive",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Recursive.tar.xz",
+  "archive_sha256": "fb1e116c950b021c42235345a23380b4516b8bb318c57ab0085bdb33068feb56",
+  "faces": [
+    {
+      "name": "RecMonoCasualNerdFont-Bold.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFont-Bold.png",
+      "metrics": "Recursive/RecMonoCasualNerdFont-Bold.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFont-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFont-BoldItalic.png",
+      "metrics": "Recursive/RecMonoCasualNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFont-Italic.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFont-Italic.png",
+      "metrics": "Recursive/RecMonoCasualNerdFont-Italic.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFont-Regular.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFont-Regular.png",
+      "metrics": "Recursive/RecMonoCasualNerdFont-Regular.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontMono-Bold.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontMono-Bold.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontMono-Bold.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontMono-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontMono-BoldItalic.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontMono-Italic.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontMono-Italic.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontMono-Italic.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontMono-Regular.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontMono-Regular.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontMono-Regular.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontPropo-Bold.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontPropo-Bold.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontPropo-BoldItalic.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontPropo-Italic.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontPropo-Italic.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "RecMonoCasualNerdFontPropo-Regular.ttf",
+      "atlas": "Recursive/RecMonoCasualNerdFontPropo-Regular.png",
+      "metrics": "Recursive/RecMonoCasualNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFont-Bold.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFont-Bold.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFont-Bold.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFont-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFont-BoldItalic.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFont-Italic.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFont-Italic.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFont-Italic.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFont-Regular.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFont-Regular.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFont-Regular.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontMono-Bold.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontMono-Bold.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontMono-Bold.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontMono-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontMono-BoldItalic.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontMono-Italic.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontMono-Italic.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontMono-Italic.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontMono-Regular.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontMono-Regular.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontMono-Regular.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontPropo-Bold.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontPropo-Bold.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontPropo-BoldItalic.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontPropo-Italic.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontPropo-Italic.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "RecMonoDuotoneNerdFontPropo-Regular.ttf",
+      "atlas": "Recursive/RecMonoDuotoneNerdFontPropo-Regular.png",
+      "metrics": "Recursive/RecMonoDuotoneNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFont-Bold.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFont-Bold.png",
+      "metrics": "Recursive/RecMonoLinearNerdFont-Bold.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFont-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFont-BoldItalic.png",
+      "metrics": "Recursive/RecMonoLinearNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFont-Italic.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFont-Italic.png",
+      "metrics": "Recursive/RecMonoLinearNerdFont-Italic.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFont-Regular.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFont-Regular.png",
+      "metrics": "Recursive/RecMonoLinearNerdFont-Regular.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontMono-Bold.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontMono-Bold.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontMono-Bold.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontMono-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontMono-BoldItalic.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontMono-Italic.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontMono-Italic.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontMono-Italic.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontMono-Regular.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontMono-Regular.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontMono-Regular.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontPropo-Bold.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontPropo-Bold.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontPropo-BoldItalic.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontPropo-Italic.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontPropo-Italic.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "RecMonoLinearNerdFontPropo-Regular.ttf",
+      "atlas": "Recursive/RecMonoLinearNerdFontPropo-Regular.png",
+      "metrics": "Recursive/RecMonoLinearNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFont-Bold.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFont-Bold.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFont-Bold.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFont-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFont-BoldItalic.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFont-Italic.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFont-Italic.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFont-Italic.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFont-Regular.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFont-Regular.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFont-Regular.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontMono-Bold.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontMono-Bold.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontMono-Bold.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontMono-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontMono-BoldItalic.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontMono-Italic.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontMono-Italic.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontMono-Italic.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontMono-Regular.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontMono-Regular.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontMono-Regular.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontPropo-Bold.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontPropo-Bold.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontPropo-BoldItalic.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontPropo-Italic.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontPropo-Italic.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "RecMonoSmCasualNerdFontPropo-Regular.ttf",
+      "atlas": "Recursive/RecMonoSmCasualNerdFontPropo-Regular.png",
+      "metrics": "Recursive/RecMonoSmCasualNerdFontPropo-Regular.json"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "family": "NerdFontsSymbolsOnly",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/NerdFontsSymbolsOnly.tar.xz",
+  "archive_sha256": "01172f37db8543edb102e5cb5c64101c9f4686630804d49b419aa07b23a69996",
+  "faces": [
+    {
+      "name": "SymbolsNerdFont-Regular.ttf",
+      "atlas": "NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.png",
+      "metrics": "NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.json"
+    },
+    {
+      "name": "SymbolsNerdFontMono-Regular.ttf",
+      "atlas": "NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.png",
+      "metrics": "NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.json"
+    }
+  ]
+}

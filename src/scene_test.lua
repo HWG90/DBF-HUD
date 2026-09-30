@@ -13,17 +13,21 @@ function M.new(sr,log,side)
         local active_mode
         return {
             draw=function(p,c,target,dt,aspect,commands)
-                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'mesh' or 'gui')
+                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'gui_depth' or 'gui')
+                if mode=='mesh' then mode='gui_depth' end -- archived selection
                 local occluded=mode=='mesh'
                 if active_mode~=mode then
                     front.release();back.release();overlay.release();depth_overlay.release()
                     active_mode=mode
                     log('HUD occlusion mode '..mode)
                 end
+                --[[ Archived mesh dispatch; retained for future research.
                 if occluded then front.draw(p,c,target,dt,aspect);back.draw(p,c,target,dt,aspect)
                 else
+                ]]
+                do
                     if not commands then overlay.release();depth_overlay.release();return end
-                    local f=commands[1];local scale=240/f.w;local centered={}
+                    local f=commands[1];local scale=240*(c.scale or 1)/f.w;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
@@ -32,7 +36,7 @@ function M.new(sr,log,side)
                         if v.size then v.size=v.size*scale end
                         centered[#centered+1]=v
                     end
-                    if mode=='gui_depth' then depth_overlay.draw(p,c,centered,dt) else overlay.draw(p,c,centered,dt) end
+                    if mode=='gui_depth' then return depth_overlay.draw(p,c,centered,dt) else return overlay.draw(p,c,centered,dt) end
                 end
             end,
             release=function() overlay.release();depth_overlay.release();front.release();back.release();active_mode=nil end

@@ -1,0 +1,322 @@
+{
+  "family": "VictorMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/VictorMono.tar.xz",
+  "archive_sha256": "c6c52657921835862314b7edbbccf5695146c1e6c5d3507c3deab88e555215ed",
+  "faces": [
+    {
+      "name": "VictorMonoNerdFont-Bold.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-Bold.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-BoldItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-BoldItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-BoldOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-BoldOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-BoldOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-ExtraLight.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-ExtraLight.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-ExtraLightItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-ExtraLightItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-ExtraLightOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-ExtraLightOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-ExtraLightOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-Italic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-Italic.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-Light.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-Light.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-Light.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-LightItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-LightItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-LightOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-LightOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-LightOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-Medium.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-Medium.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-Medium.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-MediumItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-MediumItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-MediumOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-MediumOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-MediumOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-Oblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-Oblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-Oblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-Regular.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-Regular.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-SemiBold.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-SemiBold.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-SemiBold.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-SemiBoldItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-SemiBoldItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-SemiBoldOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-SemiBoldOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-SemiBoldOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-Thin.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-Thin.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-Thin.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-ThinItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-ThinItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFont-ThinOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFont-ThinOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFont-ThinOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-Bold.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-Bold.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-BoldItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-BoldOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-BoldOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-BoldOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-ExtraLight.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-ExtraLight.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-ExtraLightItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-ExtraLightItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-ExtraLightOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-ExtraLightOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-ExtraLightOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-Italic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-Italic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-Light.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-Light.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-LightItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-LightItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-LightOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-LightOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-LightOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-Medium.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-Medium.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-Medium.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-MediumItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-MediumItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-MediumOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-MediumOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-MediumOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-Oblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-Oblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-Oblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-Regular.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-Regular.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-SemiBold.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-SemiBold.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-SemiBoldItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-SemiBoldOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-SemiBoldOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-SemiBoldOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-Thin.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-Thin.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-Thin.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-ThinItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-ThinItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-ThinItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontMono-ThinOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontMono-ThinOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontMono-ThinOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-Bold.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-Bold.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-BoldOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-BoldOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-BoldOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-ExtraLight.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-ExtraLight.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-ExtraLightOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-ExtraLightOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-ExtraLightOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-Italic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-Italic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-Light.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-Light.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-LightItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-LightItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-LightOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-LightOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-LightOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-Medium.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-Medium.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-MediumItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-MediumItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-MediumOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-MediumOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-MediumOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-Oblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-Oblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-Oblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-Regular.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-Regular.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-SemiBold.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-SemiBold.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-SemiBoldOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-SemiBoldOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-SemiBoldOblique.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-Thin.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-Thin.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-ThinItalic.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-ThinItalic.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-ThinItalic.json"
+    },
+    {
+      "name": "VictorMonoNerdFontPropo-ThinOblique.ttf",
+      "atlas": "VictorMono/VictorMonoNerdFontPropo-ThinOblique.png",
+      "metrics": "VictorMono/VictorMonoNerdFontPropo-ThinOblique.json"
+    }
+  ]
+}

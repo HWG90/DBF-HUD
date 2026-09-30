@@ -1,0 +1,217 @@
+{
+  "family": "SourceCodePro",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/SourceCodePro.tar.xz",
+  "archive_sha256": "50ead7bb7addce27cf4b55f4fffb669b5f1899fece675fad623a2a75a478c8c7",
+  "faces": [
+    {
+      "name": "SauceCodeProNerdFont-Black.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-Black.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-Black.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-BlackItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-BlackItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-BlackItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-Bold.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-Bold.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-Bold.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-BoldItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-BoldItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-ExtraLight.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-ExtraLight.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-ExtraLightItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-ExtraLightItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-Italic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-Italic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-Italic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-Light.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-Light.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-Light.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-LightItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-LightItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-LightItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-Medium.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-Medium.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-Medium.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-MediumItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-MediumItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-Regular.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-Regular.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-Regular.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-SemiBold.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-SemiBold.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-SemiBold.json"
+    },
+    {
+      "name": "SauceCodeProNerdFont-SemiBoldItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFont-SemiBoldItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-Black.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-Black.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-Black.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-BlackItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-BlackItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-BlackItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-Bold.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-Bold.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-Bold.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-BoldItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-BoldItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-ExtraLight.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-ExtraLight.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-ExtraLightItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-ExtraLightItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-Italic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-Italic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-Italic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-Light.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-Light.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-Light.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-LightItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-LightItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-Medium.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-Medium.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-Medium.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-MediumItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-MediumItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-Regular.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-Regular.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-Regular.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-SemiBold.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-SemiBold.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontMono-SemiBoldItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-Black.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-Black.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-Black.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-BlackItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-BlackItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-BlackItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-Bold.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-Bold.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-BoldItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-BoldItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-ExtraLight.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-ExtraLight.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-Italic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-Italic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-Light.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-Light.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-Light.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-LightItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-LightItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-Medium.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-Medium.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-MediumItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-MediumItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-Regular.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-Regular.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-SemiBold.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-SemiBold.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "SauceCodeProNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "SourceCodePro/SauceCodeProNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "SourceCodePro/SauceCodeProNerdFontPropo-SemiBoldItalic.json"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "family": "ComicShannsMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/ComicShannsMono.tar.xz",
+  "archive_sha256": "0ca2a0aac547d52a395551a19c2bed0d6ee9541feb06c90cbd48f314ec995045",
+  "faces": [
+    {
+      "name": "ComicShannsMonoNerdFont-Bold.otf",
+      "atlas": "ComicShannsMono/ComicShannsMonoNerdFont-Bold.png",
+      "metrics": "ComicShannsMono/ComicShannsMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "ComicShannsMonoNerdFont-Regular.otf",
+      "atlas": "ComicShannsMono/ComicShannsMonoNerdFont-Regular.png",
+      "metrics": "ComicShannsMono/ComicShannsMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "ComicShannsMonoNerdFontMono-Bold.otf",
+      "atlas": "ComicShannsMono/ComicShannsMonoNerdFontMono-Bold.png",
+      "metrics": "ComicShannsMono/ComicShannsMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "ComicShannsMonoNerdFontMono-Regular.otf",
+      "atlas": "ComicShannsMono/ComicShannsMonoNerdFontMono-Regular.png",
+      "metrics": "ComicShannsMono/ComicShannsMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "ComicShannsMonoNerdFontPropo-Bold.otf",
+      "atlas": "ComicShannsMono/ComicShannsMonoNerdFontPropo-Bold.png",
+      "metrics": "ComicShannsMono/ComicShannsMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "ComicShannsMonoNerdFontPropo-Regular.otf",
+      "atlas": "ComicShannsMono/ComicShannsMonoNerdFontPropo-Regular.png",
+      "metrics": "ComicShannsMono/ComicShannsMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "family": "Gohu",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Gohu.tar.xz",
+  "archive_sha256": "b56a359a7562beebcc443d2a1c3f57a29e1ac7ffb47da17eca1fa028a0017b5a",
+  "faces": [
+    {
+      "name": "GohuFont11NerdFont-Regular.ttf",
+      "atlas": "Gohu/GohuFont11NerdFont-Regular.png",
+      "metrics": "Gohu/GohuFont11NerdFont-Regular.json"
+    },
+    {
+      "name": "GohuFont11NerdFontMono-Regular.ttf",
+      "atlas": "Gohu/GohuFont11NerdFontMono-Regular.png",
+      "metrics": "Gohu/GohuFont11NerdFontMono-Regular.json"
+    },
+    {
+      "name": "GohuFont11NerdFontPropo-Regular.ttf",
+      "atlas": "Gohu/GohuFont11NerdFontPropo-Regular.png",
+      "metrics": "Gohu/GohuFont11NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "GohuFont14NerdFont-Regular.ttf",
+      "atlas": "Gohu/GohuFont14NerdFont-Regular.png",
+      "metrics": "Gohu/GohuFont14NerdFont-Regular.json"
+    },
+    {
+      "name": "GohuFont14NerdFontMono-Regular.ttf",
+      "atlas": "Gohu/GohuFont14NerdFontMono-Regular.png",
+      "metrics": "Gohu/GohuFont14NerdFontMono-Regular.json"
+    },
+    {
+      "name": "GohuFont14NerdFontPropo-Regular.ttf",
+      "atlas": "Gohu/GohuFont14NerdFontPropo-Regular.png",
+      "metrics": "Gohu/GohuFont14NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "GohuFontuni11NerdFont-Regular.ttf",
+      "atlas": "Gohu/GohuFontuni11NerdFont-Regular.png",
+      "metrics": "Gohu/GohuFontuni11NerdFont-Regular.json"
+    },
+    {
+      "name": "GohuFontuni11NerdFontMono-Regular.ttf",
+      "atlas": "Gohu/GohuFontuni11NerdFontMono-Regular.png",
+      "metrics": "Gohu/GohuFontuni11NerdFontMono-Regular.json"
+    },
+    {
+      "name": "GohuFontuni11NerdFontPropo-Regular.ttf",
+      "atlas": "Gohu/GohuFontuni11NerdFontPropo-Regular.png",
+      "metrics": "Gohu/GohuFontuni11NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "GohuFontuni14NerdFont-Regular.ttf",
+      "atlas": "Gohu/GohuFontuni14NerdFont-Regular.png",
+      "metrics": "Gohu/GohuFontuni14NerdFont-Regular.json"
+    },
+    {
+      "name": "GohuFontuni14NerdFontMono-Regular.ttf",
+      "atlas": "Gohu/GohuFontuni14NerdFontMono-Regular.png",
+      "metrics": "Gohu/GohuFontuni14NerdFontMono-Regular.json"
+    },
+    {
+      "name": "GohuFontuni14NerdFontPropo-Regular.ttf",
+      "atlas": "Gohu/GohuFontuni14NerdFontPropo-Regular.png",
+      "metrics": "Gohu/GohuFontuni14NerdFontPropo-Regular.json"
+    }
+  ]
+}

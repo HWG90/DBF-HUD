@@ -1,0 +1,22 @@
+{
+  "family": "ShareTechMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/ShareTechMono.tar.xz",
+  "archive_sha256": "002de1c65aa0b1d61e71ff91ec3afc45a88cfeed26433796f00c8d264be66ffa",
+  "faces": [
+    {
+      "name": "ShureTechMonoNerdFont-Regular.ttf",
+      "atlas": "ShareTechMono/ShureTechMonoNerdFont-Regular.png",
+      "metrics": "ShareTechMono/ShureTechMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "ShureTechMonoNerdFontMono-Regular.ttf",
+      "atlas": "ShareTechMono/ShureTechMonoNerdFontMono-Regular.png",
+      "metrics": "ShareTechMono/ShureTechMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "ShureTechMonoNerdFontPropo-Regular.ttf",
+      "atlas": "ShareTechMono/ShureTechMonoNerdFontPropo-Regular.png",
+      "metrics": "ShareTechMono/ShureTechMonoNerdFontPropo-Regular.json"
+    }
+  ]
+}

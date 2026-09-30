@@ -1,0 +1,37 @@
+{
+  "family": "BigBlueTerminal",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/BigBlueTerminal.tar.xz",
+  "archive_sha256": "5c2589a37394459fe2207a6e46ccb5c37a978c51c6a5a2f92985a1356be27846",
+  "faces": [
+    {
+      "name": "BigBlueTerm437NerdFont-Regular.ttf",
+      "atlas": "BigBlueTerminal/BigBlueTerm437NerdFont-Regular.png",
+      "metrics": "BigBlueTerminal/BigBlueTerm437NerdFont-Regular.json"
+    },
+    {
+      "name": "BigBlueTerm437NerdFontMono-Regular.ttf",
+      "atlas": "BigBlueTerminal/BigBlueTerm437NerdFontMono-Regular.png",
+      "metrics": "BigBlueTerminal/BigBlueTerm437NerdFontMono-Regular.json"
+    },
+    {
+      "name": "BigBlueTerm437NerdFontPropo-Regular.ttf",
+      "atlas": "BigBlueTerminal/BigBlueTerm437NerdFontPropo-Regular.png",
+      "metrics": "BigBlueTerminal/BigBlueTerm437NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "BigBlueTermPlusNerdFont-Regular.ttf",
+      "atlas": "BigBlueTerminal/BigBlueTermPlusNerdFont-Regular.png",
+      "metrics": "BigBlueTerminal/BigBlueTermPlusNerdFont-Regular.json"
+    },
+    {
+      "name": "BigBlueTermPlusNerdFontMono-Regular.ttf",
+      "atlas": "BigBlueTerminal/BigBlueTermPlusNerdFontMono-Regular.png",
+      "metrics": "BigBlueTerminal/BigBlueTermPlusNerdFontMono-Regular.json"
+    },
+    {
+      "name": "BigBlueTermPlusNerdFontPropo-Regular.ttf",
+      "atlas": "BigBlueTerminal/BigBlueTermPlusNerdFontPropo-Regular.png",
+      "metrics": "BigBlueTerminal/BigBlueTermPlusNerdFontPropo-Regular.json"
+    }
+  ]
+}

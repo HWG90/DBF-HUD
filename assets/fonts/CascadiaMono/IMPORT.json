@@ -1,0 +1,187 @@
+{
+  "family": "CascadiaMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/CascadiaMono.tar.xz",
+  "archive_sha256": "e4fe0248bbe2558e907d26b55ed287403972f946239a4ea3f7a8afd3365ad6ba",
+  "faces": [
+    {
+      "name": "CaskaydiaMonoNerdFont-Bold.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-Bold.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-Bold.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-BoldItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-BoldItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-ExtraLight.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-ExtraLight.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-ExtraLightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-ExtraLightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-Italic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-Italic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-Italic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-Light.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-Light.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-Light.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-LightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-LightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-LightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-Regular.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-Regular.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-Regular.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-SemiBold.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-SemiBold.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-SemiBold.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-SemiBoldItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-SemiBoldItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-SemiBoldItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-SemiLight.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-SemiLight.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-SemiLight.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFont-SemiLightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFont-SemiLightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFont-SemiLightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-Bold.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-Bold.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-Bold.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-BoldItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-BoldItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-ExtraLight.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-ExtraLight.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-ExtraLightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-ExtraLightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-Italic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-Italic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-Italic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-Light.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-Light.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-Light.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-LightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-LightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-LightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-Regular.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-Regular.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-Regular.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-SemiBold.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiBold.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-SemiBoldItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiBoldItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiBoldItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-SemiLight.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiLight.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiLight.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontMono-SemiLightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiLightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontMono-SemiLightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-Bold.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Bold.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-BoldItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-BoldItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-ExtraLight.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-ExtraLight.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-Italic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Italic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-Light.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Light.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Light.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-LightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-LightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-Regular.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Regular.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-SemiBold.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiBold.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-SemiBoldItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiBoldItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiBoldItalic.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-SemiLight.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiLight.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiLight.json"
+    },
+    {
+      "name": "CaskaydiaMonoNerdFontPropo-SemiLightItalic.ttf",
+      "atlas": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiLightItalic.png",
+      "metrics": "CascadiaMono/CaskaydiaMonoNerdFontPropo-SemiLightItalic.json"
+    }
+  ]
+}

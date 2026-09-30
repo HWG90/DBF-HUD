@@ -1,0 +1,52 @@
+{
+  "family": "Monofur",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Monofur.tar.xz",
+  "archive_sha256": "2df31b59b5144b335de6895e6f841cedfd5c2e336b3b08b004033515e4003be9",
+  "faces": [
+    {
+      "name": "MonofurNerdFont-Bold.ttf",
+      "atlas": "Monofur/MonofurNerdFont-Bold.png",
+      "metrics": "Monofur/MonofurNerdFont-Bold.json"
+    },
+    {
+      "name": "MonofurNerdFont-Italic.ttf",
+      "atlas": "Monofur/MonofurNerdFont-Italic.png",
+      "metrics": "Monofur/MonofurNerdFont-Italic.json"
+    },
+    {
+      "name": "MonofurNerdFont-Regular.ttf",
+      "atlas": "Monofur/MonofurNerdFont-Regular.png",
+      "metrics": "Monofur/MonofurNerdFont-Regular.json"
+    },
+    {
+      "name": "MonofurNerdFontMono-Bold.ttf",
+      "atlas": "Monofur/MonofurNerdFontMono-Bold.png",
+      "metrics": "Monofur/MonofurNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MonofurNerdFontMono-Italic.ttf",
+      "atlas": "Monofur/MonofurNerdFontMono-Italic.png",
+      "metrics": "Monofur/MonofurNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MonofurNerdFontMono-Regular.ttf",
+      "atlas": "Monofur/MonofurNerdFontMono-Regular.png",
+      "metrics": "Monofur/MonofurNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MonofurNerdFontPropo-Bold.ttf",
+      "atlas": "Monofur/MonofurNerdFontPropo-Bold.png",
+      "metrics": "Monofur/MonofurNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MonofurNerdFontPropo-Italic.ttf",
+      "atlas": "Monofur/MonofurNerdFontPropo-Italic.png",
+      "metrics": "Monofur/MonofurNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MonofurNerdFontPropo-Regular.ttf",
+      "atlas": "Monofur/MonofurNerdFontPropo-Regular.png",
+      "metrics": "Monofur/MonofurNerdFontPropo-Regular.json"
+    }
+  ]
+}

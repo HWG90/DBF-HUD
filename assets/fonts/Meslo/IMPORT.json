@@ -1,0 +1,367 @@
+{
+  "family": "Meslo",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Meslo.tar.xz",
+  "archive_sha256": "6b6624632dc6873dfb7681c3f818e7c01ab601ab707690b6440933bbe57e2b11",
+  "faces": [
+    {
+      "name": "MesloLGLDZNerdFont-Bold.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFont-Bold.png",
+      "metrics": "Meslo/MesloLGLDZNerdFont-Bold.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFont-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFont-BoldItalic.png",
+      "metrics": "Meslo/MesloLGLDZNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFont-Italic.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFont-Italic.png",
+      "metrics": "Meslo/MesloLGLDZNerdFont-Italic.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFont-Regular.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFont-Regular.png",
+      "metrics": "Meslo/MesloLGLDZNerdFont-Regular.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontMono-Bold.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontMono-Bold.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontMono-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontMono-BoldItalic.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontMono-Italic.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontMono-Italic.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontMono-Regular.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontMono-Regular.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontPropo-Bold.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontPropo-Bold.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontPropo-BoldItalic.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontPropo-Italic.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontPropo-Italic.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MesloLGLDZNerdFontPropo-Regular.ttf",
+      "atlas": "Meslo/MesloLGLDZNerdFontPropo-Regular.png",
+      "metrics": "Meslo/MesloLGLDZNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MesloLGLNerdFont-Bold.ttf",
+      "atlas": "Meslo/MesloLGLNerdFont-Bold.png",
+      "metrics": "Meslo/MesloLGLNerdFont-Bold.json"
+    },
+    {
+      "name": "MesloLGLNerdFont-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGLNerdFont-BoldItalic.png",
+      "metrics": "Meslo/MesloLGLNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGLNerdFont-Italic.ttf",
+      "atlas": "Meslo/MesloLGLNerdFont-Italic.png",
+      "metrics": "Meslo/MesloLGLNerdFont-Italic.json"
+    },
+    {
+      "name": "MesloLGLNerdFont-Regular.ttf",
+      "atlas": "Meslo/MesloLGLNerdFont-Regular.png",
+      "metrics": "Meslo/MesloLGLNerdFont-Regular.json"
+    },
+    {
+      "name": "MesloLGLNerdFontMono-Bold.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontMono-Bold.png",
+      "metrics": "Meslo/MesloLGLNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MesloLGLNerdFontMono-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontMono-BoldItalic.png",
+      "metrics": "Meslo/MesloLGLNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGLNerdFontMono-Italic.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontMono-Italic.png",
+      "metrics": "Meslo/MesloLGLNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MesloLGLNerdFontMono-Regular.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontMono-Regular.png",
+      "metrics": "Meslo/MesloLGLNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MesloLGLNerdFontPropo-Bold.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontPropo-Bold.png",
+      "metrics": "Meslo/MesloLGLNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MesloLGLNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontPropo-BoldItalic.png",
+      "metrics": "Meslo/MesloLGLNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGLNerdFontPropo-Italic.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontPropo-Italic.png",
+      "metrics": "Meslo/MesloLGLNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MesloLGLNerdFontPropo-Regular.ttf",
+      "atlas": "Meslo/MesloLGLNerdFontPropo-Regular.png",
+      "metrics": "Meslo/MesloLGLNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFont-Bold.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFont-Bold.png",
+      "metrics": "Meslo/MesloLGMDZNerdFont-Bold.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFont-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFont-BoldItalic.png",
+      "metrics": "Meslo/MesloLGMDZNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFont-Italic.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFont-Italic.png",
+      "metrics": "Meslo/MesloLGMDZNerdFont-Italic.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFont-Regular.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFont-Regular.png",
+      "metrics": "Meslo/MesloLGMDZNerdFont-Regular.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontMono-Bold.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontMono-Bold.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontMono-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontMono-BoldItalic.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontMono-Italic.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontMono-Italic.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontMono-Regular.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontMono-Regular.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontPropo-Bold.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontPropo-Bold.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontPropo-BoldItalic.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontPropo-Italic.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontPropo-Italic.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MesloLGMDZNerdFontPropo-Regular.ttf",
+      "atlas": "Meslo/MesloLGMDZNerdFontPropo-Regular.png",
+      "metrics": "Meslo/MesloLGMDZNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MesloLGMNerdFont-Bold.ttf",
+      "atlas": "Meslo/MesloLGMNerdFont-Bold.png",
+      "metrics": "Meslo/MesloLGMNerdFont-Bold.json"
+    },
+    {
+      "name": "MesloLGMNerdFont-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGMNerdFont-BoldItalic.png",
+      "metrics": "Meslo/MesloLGMNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGMNerdFont-Italic.ttf",
+      "atlas": "Meslo/MesloLGMNerdFont-Italic.png",
+      "metrics": "Meslo/MesloLGMNerdFont-Italic.json"
+    },
+    {
+      "name": "MesloLGMNerdFont-Regular.ttf",
+      "atlas": "Meslo/MesloLGMNerdFont-Regular.png",
+      "metrics": "Meslo/MesloLGMNerdFont-Regular.json"
+    },
+    {
+      "name": "MesloLGMNerdFontMono-Bold.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontMono-Bold.png",
+      "metrics": "Meslo/MesloLGMNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MesloLGMNerdFontMono-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontMono-BoldItalic.png",
+      "metrics": "Meslo/MesloLGMNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGMNerdFontMono-Italic.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontMono-Italic.png",
+      "metrics": "Meslo/MesloLGMNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MesloLGMNerdFontMono-Regular.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontMono-Regular.png",
+      "metrics": "Meslo/MesloLGMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MesloLGMNerdFontPropo-Bold.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontPropo-Bold.png",
+      "metrics": "Meslo/MesloLGMNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MesloLGMNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontPropo-BoldItalic.png",
+      "metrics": "Meslo/MesloLGMNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGMNerdFontPropo-Italic.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontPropo-Italic.png",
+      "metrics": "Meslo/MesloLGMNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MesloLGMNerdFontPropo-Regular.ttf",
+      "atlas": "Meslo/MesloLGMNerdFontPropo-Regular.png",
+      "metrics": "Meslo/MesloLGMNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFont-Bold.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFont-Bold.png",
+      "metrics": "Meslo/MesloLGSDZNerdFont-Bold.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFont-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFont-BoldItalic.png",
+      "metrics": "Meslo/MesloLGSDZNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFont-Italic.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFont-Italic.png",
+      "metrics": "Meslo/MesloLGSDZNerdFont-Italic.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFont-Regular.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFont-Regular.png",
+      "metrics": "Meslo/MesloLGSDZNerdFont-Regular.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontMono-Bold.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontMono-Bold.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontMono-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontMono-BoldItalic.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontMono-Italic.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontMono-Italic.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontMono-Regular.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontMono-Regular.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontPropo-Bold.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontPropo-Bold.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontPropo-BoldItalic.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontPropo-Italic.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontPropo-Italic.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MesloLGSDZNerdFontPropo-Regular.ttf",
+      "atlas": "Meslo/MesloLGSDZNerdFontPropo-Regular.png",
+      "metrics": "Meslo/MesloLGSDZNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "MesloLGSNerdFont-Bold.ttf",
+      "atlas": "Meslo/MesloLGSNerdFont-Bold.png",
+      "metrics": "Meslo/MesloLGSNerdFont-Bold.json"
+    },
+    {
+      "name": "MesloLGSNerdFont-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGSNerdFont-BoldItalic.png",
+      "metrics": "Meslo/MesloLGSNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGSNerdFont-Italic.ttf",
+      "atlas": "Meslo/MesloLGSNerdFont-Italic.png",
+      "metrics": "Meslo/MesloLGSNerdFont-Italic.json"
+    },
+    {
+      "name": "MesloLGSNerdFont-Regular.ttf",
+      "atlas": "Meslo/MesloLGSNerdFont-Regular.png",
+      "metrics": "Meslo/MesloLGSNerdFont-Regular.json"
+    },
+    {
+      "name": "MesloLGSNerdFontMono-Bold.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontMono-Bold.png",
+      "metrics": "Meslo/MesloLGSNerdFontMono-Bold.json"
+    },
+    {
+      "name": "MesloLGSNerdFontMono-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontMono-BoldItalic.png",
+      "metrics": "Meslo/MesloLGSNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGSNerdFontMono-Italic.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontMono-Italic.png",
+      "metrics": "Meslo/MesloLGSNerdFontMono-Italic.json"
+    },
+    {
+      "name": "MesloLGSNerdFontMono-Regular.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontMono-Regular.png",
+      "metrics": "Meslo/MesloLGSNerdFontMono-Regular.json"
+    },
+    {
+      "name": "MesloLGSNerdFontPropo-Bold.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontPropo-Bold.png",
+      "metrics": "Meslo/MesloLGSNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "MesloLGSNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontPropo-BoldItalic.png",
+      "metrics": "Meslo/MesloLGSNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "MesloLGSNerdFontPropo-Italic.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontPropo-Italic.png",
+      "metrics": "Meslo/MesloLGSNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "MesloLGSNerdFontPropo-Regular.ttf",
+      "atlas": "Meslo/MesloLGSNerdFontPropo-Regular.png",
+      "metrics": "Meslo/MesloLGSNerdFontPropo-Regular.json"
+    }
+  ]
+}

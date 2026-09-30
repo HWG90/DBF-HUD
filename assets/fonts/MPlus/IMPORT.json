@@ -1,0 +1,502 @@
+{
+  "family": "MPlus",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/MPlus.tar.xz",
+  "archive_sha256": "e159e842616b340d88e402524a1f78795bb36e445a2c54967900fc462fa602dd",
+  "faces": [
+    {
+      "name": "M+1CodeNerdFont-Bold.ttf",
+      "atlas": "MPlus/M+1CodeNerdFont-Bold.png",
+      "metrics": "MPlus/M+1CodeNerdFont-Bold.json"
+    },
+    {
+      "name": "M+1CodeNerdFont-ExtraLight.ttf",
+      "atlas": "MPlus/M+1CodeNerdFont-ExtraLight.png",
+      "metrics": "MPlus/M+1CodeNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "M+1CodeNerdFont-Light.ttf",
+      "atlas": "MPlus/M+1CodeNerdFont-Light.png",
+      "metrics": "MPlus/M+1CodeNerdFont-Light.json"
+    },
+    {
+      "name": "M+1CodeNerdFont-Medium.ttf",
+      "atlas": "MPlus/M+1CodeNerdFont-Medium.png",
+      "metrics": "MPlus/M+1CodeNerdFont-Medium.json"
+    },
+    {
+      "name": "M+1CodeNerdFont-Regular.ttf",
+      "atlas": "MPlus/M+1CodeNerdFont-Regular.png",
+      "metrics": "MPlus/M+1CodeNerdFont-Regular.json"
+    },
+    {
+      "name": "M+1CodeNerdFont-SemiBold.ttf",
+      "atlas": "MPlus/M+1CodeNerdFont-SemiBold.png",
+      "metrics": "MPlus/M+1CodeNerdFont-SemiBold.json"
+    },
+    {
+      "name": "M+1CodeNerdFont-Thin.ttf",
+      "atlas": "MPlus/M+1CodeNerdFont-Thin.png",
+      "metrics": "MPlus/M+1CodeNerdFont-Thin.json"
+    },
+    {
+      "name": "M+1CodeNerdFontMono-Bold.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontMono-Bold.png",
+      "metrics": "MPlus/M+1CodeNerdFontMono-Bold.json"
+    },
+    {
+      "name": "M+1CodeNerdFontMono-ExtraLight.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontMono-ExtraLight.png",
+      "metrics": "MPlus/M+1CodeNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "M+1CodeNerdFontMono-Light.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontMono-Light.png",
+      "metrics": "MPlus/M+1CodeNerdFontMono-Light.json"
+    },
+    {
+      "name": "M+1CodeNerdFontMono-Medium.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontMono-Medium.png",
+      "metrics": "MPlus/M+1CodeNerdFontMono-Medium.json"
+    },
+    {
+      "name": "M+1CodeNerdFontMono-Regular.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontMono-Regular.png",
+      "metrics": "MPlus/M+1CodeNerdFontMono-Regular.json"
+    },
+    {
+      "name": "M+1CodeNerdFontMono-SemiBold.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontMono-SemiBold.png",
+      "metrics": "MPlus/M+1CodeNerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "M+1CodeNerdFontMono-Thin.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontMono-Thin.png",
+      "metrics": "MPlus/M+1CodeNerdFontMono-Thin.json"
+    },
+    {
+      "name": "M+1CodeNerdFontPropo-Bold.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontPropo-Bold.png",
+      "metrics": "MPlus/M+1CodeNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "M+1CodeNerdFontPropo-ExtraLight.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontPropo-ExtraLight.png",
+      "metrics": "MPlus/M+1CodeNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "M+1CodeNerdFontPropo-Light.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontPropo-Light.png",
+      "metrics": "MPlus/M+1CodeNerdFontPropo-Light.json"
+    },
+    {
+      "name": "M+1CodeNerdFontPropo-Medium.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontPropo-Medium.png",
+      "metrics": "MPlus/M+1CodeNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "M+1CodeNerdFontPropo-Regular.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontPropo-Regular.png",
+      "metrics": "MPlus/M+1CodeNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "M+1CodeNerdFontPropo-SemiBold.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontPropo-SemiBold.png",
+      "metrics": "MPlus/M+1CodeNerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "M+1CodeNerdFontPropo-Thin.ttf",
+      "atlas": "MPlus/M+1CodeNerdFontPropo-Thin.png",
+      "metrics": "MPlus/M+1CodeNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "M+1NerdFont-Black.ttf",
+      "atlas": "MPlus/M+1NerdFont-Black.png",
+      "metrics": "MPlus/M+1NerdFont-Black.json"
+    },
+    {
+      "name": "M+1NerdFont-Bold.ttf",
+      "atlas": "MPlus/M+1NerdFont-Bold.png",
+      "metrics": "MPlus/M+1NerdFont-Bold.json"
+    },
+    {
+      "name": "M+1NerdFont-ExtraBold.ttf",
+      "atlas": "MPlus/M+1NerdFont-ExtraBold.png",
+      "metrics": "MPlus/M+1NerdFont-ExtraBold.json"
+    },
+    {
+      "name": "M+1NerdFont-ExtraLight.ttf",
+      "atlas": "MPlus/M+1NerdFont-ExtraLight.png",
+      "metrics": "MPlus/M+1NerdFont-ExtraLight.json"
+    },
+    {
+      "name": "M+1NerdFont-Light.ttf",
+      "atlas": "MPlus/M+1NerdFont-Light.png",
+      "metrics": "MPlus/M+1NerdFont-Light.json"
+    },
+    {
+      "name": "M+1NerdFont-Medium.ttf",
+      "atlas": "MPlus/M+1NerdFont-Medium.png",
+      "metrics": "MPlus/M+1NerdFont-Medium.json"
+    },
+    {
+      "name": "M+1NerdFont-Regular.ttf",
+      "atlas": "MPlus/M+1NerdFont-Regular.png",
+      "metrics": "MPlus/M+1NerdFont-Regular.json"
+    },
+    {
+      "name": "M+1NerdFont-SemiBold.ttf",
+      "atlas": "MPlus/M+1NerdFont-SemiBold.png",
+      "metrics": "MPlus/M+1NerdFont-SemiBold.json"
+    },
+    {
+      "name": "M+1NerdFont-Thin.ttf",
+      "atlas": "MPlus/M+1NerdFont-Thin.png",
+      "metrics": "MPlus/M+1NerdFont-Thin.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-Black.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-Black.png",
+      "metrics": "MPlus/M+1NerdFontPropo-Black.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-Bold.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-Bold.png",
+      "metrics": "MPlus/M+1NerdFontPropo-Bold.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-ExtraBold.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-ExtraBold.png",
+      "metrics": "MPlus/M+1NerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-ExtraLight.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-ExtraLight.png",
+      "metrics": "MPlus/M+1NerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-Light.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-Light.png",
+      "metrics": "MPlus/M+1NerdFontPropo-Light.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-Medium.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-Medium.png",
+      "metrics": "MPlus/M+1NerdFontPropo-Medium.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-Regular.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-Regular.png",
+      "metrics": "MPlus/M+1NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-SemiBold.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-SemiBold.png",
+      "metrics": "MPlus/M+1NerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "M+1NerdFontPropo-Thin.ttf",
+      "atlas": "MPlus/M+1NerdFontPropo-Thin.png",
+      "metrics": "MPlus/M+1NerdFontPropo-Thin.json"
+    },
+    {
+      "name": "M+2NerdFont-Black.ttf",
+      "atlas": "MPlus/M+2NerdFont-Black.png",
+      "metrics": "MPlus/M+2NerdFont-Black.json"
+    },
+    {
+      "name": "M+2NerdFont-Bold.ttf",
+      "atlas": "MPlus/M+2NerdFont-Bold.png",
+      "metrics": "MPlus/M+2NerdFont-Bold.json"
+    },
+    {
+      "name": "M+2NerdFont-ExtraBold.ttf",
+      "atlas": "MPlus/M+2NerdFont-ExtraBold.png",
+      "metrics": "MPlus/M+2NerdFont-ExtraBold.json"
+    },
+    {
+      "name": "M+2NerdFont-ExtraLight.ttf",
+      "atlas": "MPlus/M+2NerdFont-ExtraLight.png",
+      "metrics": "MPlus/M+2NerdFont-ExtraLight.json"
+    },
+    {
+      "name": "M+2NerdFont-Light.ttf",
+      "atlas": "MPlus/M+2NerdFont-Light.png",
+      "metrics": "MPlus/M+2NerdFont-Light.json"
+    },
+    {
+      "name": "M+2NerdFont-Medium.ttf",
+      "atlas": "MPlus/M+2NerdFont-Medium.png",
+      "metrics": "MPlus/M+2NerdFont-Medium.json"
+    },
+    {
+      "name": "M+2NerdFont-Regular.ttf",
+      "atlas": "MPlus/M+2NerdFont-Regular.png",
+      "metrics": "MPlus/M+2NerdFont-Regular.json"
+    },
+    {
+      "name": "M+2NerdFont-SemiBold.ttf",
+      "atlas": "MPlus/M+2NerdFont-SemiBold.png",
+      "metrics": "MPlus/M+2NerdFont-SemiBold.json"
+    },
+    {
+      "name": "M+2NerdFont-Thin.ttf",
+      "atlas": "MPlus/M+2NerdFont-Thin.png",
+      "metrics": "MPlus/M+2NerdFont-Thin.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-Black.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-Black.png",
+      "metrics": "MPlus/M+2NerdFontPropo-Black.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-Bold.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-Bold.png",
+      "metrics": "MPlus/M+2NerdFontPropo-Bold.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-ExtraBold.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-ExtraBold.png",
+      "metrics": "MPlus/M+2NerdFontPropo-ExtraBold.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-ExtraLight.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-ExtraLight.png",
+      "metrics": "MPlus/M+2NerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-Light.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-Light.png",
+      "metrics": "MPlus/M+2NerdFontPropo-Light.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-Medium.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-Medium.png",
+      "metrics": "MPlus/M+2NerdFontPropo-Medium.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-Regular.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-Regular.png",
+      "metrics": "MPlus/M+2NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-SemiBold.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-SemiBold.png",
+      "metrics": "MPlus/M+2NerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "M+2NerdFontPropo-Thin.ttf",
+      "atlas": "MPlus/M+2NerdFontPropo-Thin.png",
+      "metrics": "MPlus/M+2NerdFontPropo-Thin.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFont-Bold.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFont-Bold.png",
+      "metrics": "MPlus/M+CodeLat50NerdFont-Bold.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFont-ExtraLight.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFont-ExtraLight.png",
+      "metrics": "MPlus/M+CodeLat50NerdFont-ExtraLight.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFont-Light.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFont-Light.png",
+      "metrics": "MPlus/M+CodeLat50NerdFont-Light.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFont-Medium.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFont-Medium.png",
+      "metrics": "MPlus/M+CodeLat50NerdFont-Medium.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFont-Regular.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFont-Regular.png",
+      "metrics": "MPlus/M+CodeLat50NerdFont-Regular.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFont-SemiBold.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFont-SemiBold.png",
+      "metrics": "MPlus/M+CodeLat50NerdFont-SemiBold.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFont-Thin.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFont-Thin.png",
+      "metrics": "MPlus/M+CodeLat50NerdFont-Thin.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontMono-Bold.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontMono-Bold.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontMono-Bold.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontMono-ExtraLight.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontMono-ExtraLight.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontMono-Light.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontMono-Light.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontMono-Light.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontMono-Medium.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontMono-Medium.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontMono-Medium.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontMono-Regular.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontMono-Regular.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontMono-Regular.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontMono-SemiBold.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontMono-SemiBold.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontMono-Thin.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontMono-Thin.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontMono-Thin.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontPropo-Bold.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontPropo-Bold.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontPropo-Bold.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontPropo-ExtraLight.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontPropo-ExtraLight.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontPropo-Light.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontPropo-Light.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontPropo-Light.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontPropo-Medium.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontPropo-Medium.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontPropo-Medium.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontPropo-Regular.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontPropo-Regular.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontPropo-SemiBold.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontPropo-SemiBold.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "M+CodeLat50NerdFontPropo-Thin.ttf",
+      "atlas": "MPlus/M+CodeLat50NerdFontPropo-Thin.png",
+      "metrics": "MPlus/M+CodeLat50NerdFontPropo-Thin.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFont-Bold.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFont-Bold.png",
+      "metrics": "MPlus/M+CodeLat60NerdFont-Bold.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFont-ExtraLight.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFont-ExtraLight.png",
+      "metrics": "MPlus/M+CodeLat60NerdFont-ExtraLight.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFont-Light.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFont-Light.png",
+      "metrics": "MPlus/M+CodeLat60NerdFont-Light.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFont-Medium.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFont-Medium.png",
+      "metrics": "MPlus/M+CodeLat60NerdFont-Medium.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFont-Regular.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFont-Regular.png",
+      "metrics": "MPlus/M+CodeLat60NerdFont-Regular.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFont-SemiBold.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFont-SemiBold.png",
+      "metrics": "MPlus/M+CodeLat60NerdFont-SemiBold.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFont-Thin.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFont-Thin.png",
+      "metrics": "MPlus/M+CodeLat60NerdFont-Thin.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontMono-Bold.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontMono-Bold.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontMono-Bold.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontMono-ExtraLight.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontMono-ExtraLight.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontMono-Light.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontMono-Light.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontMono-Light.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontMono-Medium.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontMono-Medium.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontMono-Medium.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontMono-Regular.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontMono-Regular.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontMono-Regular.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontMono-SemiBold.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontMono-SemiBold.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontMono-SemiBold.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontMono-Thin.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontMono-Thin.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontMono-Thin.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontPropo-Bold.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontPropo-Bold.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontPropo-Bold.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontPropo-ExtraLight.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontPropo-ExtraLight.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontPropo-Light.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontPropo-Light.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontPropo-Light.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontPropo-Medium.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontPropo-Medium.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontPropo-Medium.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontPropo-Regular.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontPropo-Regular.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontPropo-Regular.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontPropo-SemiBold.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontPropo-SemiBold.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontPropo-SemiBold.json"
+    },
+    {
+      "name": "M+CodeLat60NerdFontPropo-Thin.ttf",
+      "atlas": "MPlus/M+CodeLat60NerdFontPropo-Thin.png",
+      "metrics": "MPlus/M+CodeLat60NerdFontPropo-Thin.json"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "family": "DejaVuSansMono",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/DejaVuSansMono.tar.xz",
+  "archive_sha256": "9d3f2d60faa790b101903c2984b89c11397fc63b9ce43f2dcd25ffed4fb44e5f",
+  "faces": [
+    {
+      "name": "DejaVuSansMNerdFont-Bold.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFont-Bold.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFont-Bold.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFont-BoldOblique.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFont-BoldOblique.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFont-BoldOblique.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFont-Oblique.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFont-Oblique.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFont-Oblique.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFont-Regular.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFont-Regular.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFont-Regular.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontMono-Bold.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontMono-Bold.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontMono-Bold.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontMono-BoldOblique.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontMono-BoldOblique.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontMono-BoldOblique.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontMono-Oblique.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontMono-Oblique.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontMono-Oblique.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontMono-Regular.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontMono-Regular.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontMono-Regular.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontPropo-Bold.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontPropo-Bold.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontPropo-BoldOblique.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontPropo-BoldOblique.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontPropo-BoldOblique.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontPropo-Oblique.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontPropo-Oblique.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontPropo-Oblique.json"
+    },
+    {
+      "name": "DejaVuSansMNerdFontPropo-Regular.ttf",
+      "atlas": "DejaVuSansMono/DejaVuSansMNerdFontPropo-Regular.png",
+      "metrics": "DejaVuSansMono/DejaVuSansMNerdFontPropo-Regular.json"
+    }
+  ]
+}

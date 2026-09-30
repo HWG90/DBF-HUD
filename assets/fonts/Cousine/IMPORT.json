@@ -1,0 +1,67 @@
+{
+  "family": "Cousine",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Cousine.tar.xz",
+  "archive_sha256": "4fdef49cf4f77b5ba96be58f6304239573b8f679bc64af4a4ea423d5d09c5c33",
+  "faces": [
+    {
+      "name": "CousineNerdFont-Bold.ttf",
+      "atlas": "Cousine/CousineNerdFont-Bold.png",
+      "metrics": "Cousine/CousineNerdFont-Bold.json"
+    },
+    {
+      "name": "CousineNerdFont-BoldItalic.ttf",
+      "atlas": "Cousine/CousineNerdFont-BoldItalic.png",
+      "metrics": "Cousine/CousineNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "CousineNerdFont-Italic.ttf",
+      "atlas": "Cousine/CousineNerdFont-Italic.png",
+      "metrics": "Cousine/CousineNerdFont-Italic.json"
+    },
+    {
+      "name": "CousineNerdFont-Regular.ttf",
+      "atlas": "Cousine/CousineNerdFont-Regular.png",
+      "metrics": "Cousine/CousineNerdFont-Regular.json"
+    },
+    {
+      "name": "CousineNerdFontMono-Bold.ttf",
+      "atlas": "Cousine/CousineNerdFontMono-Bold.png",
+      "metrics": "Cousine/CousineNerdFontMono-Bold.json"
+    },
+    {
+      "name": "CousineNerdFontMono-BoldItalic.ttf",
+      "atlas": "Cousine/CousineNerdFontMono-BoldItalic.png",
+      "metrics": "Cousine/CousineNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "CousineNerdFontMono-Italic.ttf",
+      "atlas": "Cousine/CousineNerdFontMono-Italic.png",
+      "metrics": "Cousine/CousineNerdFontMono-Italic.json"
+    },
+    {
+      "name": "CousineNerdFontMono-Regular.ttf",
+      "atlas": "Cousine/CousineNerdFontMono-Regular.png",
+      "metrics": "Cousine/CousineNerdFontMono-Regular.json"
+    },
+    {
+      "name": "CousineNerdFontPropo-Bold.ttf",
+      "atlas": "Cousine/CousineNerdFontPropo-Bold.png",
+      "metrics": "Cousine/CousineNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "CousineNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Cousine/CousineNerdFontPropo-BoldItalic.png",
+      "metrics": "Cousine/CousineNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "CousineNerdFontPropo-Italic.ttf",
+      "atlas": "Cousine/CousineNerdFontPropo-Italic.png",
+      "metrics": "Cousine/CousineNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "CousineNerdFontPropo-Regular.ttf",
+      "atlas": "Cousine/CousineNerdFontPropo-Regular.png",
+      "metrics": "Cousine/CousineNerdFontPropo-Regular.json"
+    }
+  ]
+}

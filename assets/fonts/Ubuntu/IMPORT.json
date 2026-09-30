@@ -1,0 +1,97 @@
+{
+  "family": "Ubuntu",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Ubuntu.tar.xz",
+  "archive_sha256": "e84b2dbb9e6303e6ce45f0c80e6a083b31fda329fd0de0dd21fb8f851be141bd",
+  "faces": [
+    {
+      "name": "UbuntuNerdFont-Bold.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-Bold.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-Bold.json"
+    },
+    {
+      "name": "UbuntuNerdFont-BoldItalic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-BoldItalic.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuNerdFont-Condensed.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-Condensed.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-Condensed.json"
+    },
+    {
+      "name": "UbuntuNerdFont-Italic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-Italic.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-Italic.json"
+    },
+    {
+      "name": "UbuntuNerdFont-Light.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-Light.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-Light.json"
+    },
+    {
+      "name": "UbuntuNerdFont-LightItalic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-LightItalic.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-LightItalic.json"
+    },
+    {
+      "name": "UbuntuNerdFont-Medium.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-Medium.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-Medium.json"
+    },
+    {
+      "name": "UbuntuNerdFont-MediumItalic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-MediumItalic.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "UbuntuNerdFont-Regular.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFont-Regular.png",
+      "metrics": "Ubuntu/UbuntuNerdFont-Regular.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-Bold.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-Bold.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-BoldItalic.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-Condensed.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-Condensed.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-Condensed.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-Italic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-Italic.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-Light.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-Light.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-Light.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-LightItalic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-LightItalic.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-LightItalic.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-Medium.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-Medium.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-MediumItalic.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-MediumItalic.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "UbuntuNerdFontPropo-Regular.ttf",
+      "atlas": "Ubuntu/UbuntuNerdFontPropo-Regular.png",
+      "metrics": "Ubuntu/UbuntuNerdFontPropo-Regular.json"
+    }
+  ]
+}

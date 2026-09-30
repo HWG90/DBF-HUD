@@ -1,0 +1,157 @@
+{
+  "family": "Lilex",
+  "source_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/Lilex.tar.xz",
+  "archive_sha256": "34ba9564bcb32c03d2d8e1404e72c5c4320fa99231ba99f4c566a24224f350a3",
+  "faces": [
+    {
+      "name": "LilexNerdFont-Bold.ttf",
+      "atlas": "Lilex/LilexNerdFont-Bold.png",
+      "metrics": "Lilex/LilexNerdFont-Bold.json"
+    },
+    {
+      "name": "LilexNerdFont-BoldItalic.ttf",
+      "atlas": "Lilex/LilexNerdFont-BoldItalic.png",
+      "metrics": "Lilex/LilexNerdFont-BoldItalic.json"
+    },
+    {
+      "name": "LilexNerdFont-ExtraLight.ttf",
+      "atlas": "Lilex/LilexNerdFont-ExtraLight.png",
+      "metrics": "Lilex/LilexNerdFont-ExtraLight.json"
+    },
+    {
+      "name": "LilexNerdFont-ExtraLightItalic.ttf",
+      "atlas": "Lilex/LilexNerdFont-ExtraLightItalic.png",
+      "metrics": "Lilex/LilexNerdFont-ExtraLightItalic.json"
+    },
+    {
+      "name": "LilexNerdFont-Italic.ttf",
+      "atlas": "Lilex/LilexNerdFont-Italic.png",
+      "metrics": "Lilex/LilexNerdFont-Italic.json"
+    },
+    {
+      "name": "LilexNerdFont-Medium.ttf",
+      "atlas": "Lilex/LilexNerdFont-Medium.png",
+      "metrics": "Lilex/LilexNerdFont-Medium.json"
+    },
+    {
+      "name": "LilexNerdFont-MediumItalic.ttf",
+      "atlas": "Lilex/LilexNerdFont-MediumItalic.png",
+      "metrics": "Lilex/LilexNerdFont-MediumItalic.json"
+    },
+    {
+      "name": "LilexNerdFont-Regular.ttf",
+      "atlas": "Lilex/LilexNerdFont-Regular.png",
+      "metrics": "Lilex/LilexNerdFont-Regular.json"
+    },
+    {
+      "name": "LilexNerdFont-Thin.ttf",
+      "atlas": "Lilex/LilexNerdFont-Thin.png",
+      "metrics": "Lilex/LilexNerdFont-Thin.json"
+    },
+    {
+      "name": "LilexNerdFont-ThinItalic.ttf",
+      "atlas": "Lilex/LilexNerdFont-ThinItalic.png",
+      "metrics": "Lilex/LilexNerdFont-ThinItalic.json"
+    },
+    {
+      "name": "LilexNerdFontMono-Bold.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-Bold.png",
+      "metrics": "Lilex/LilexNerdFontMono-Bold.json"
+    },
+    {
+      "name": "LilexNerdFontMono-BoldItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-BoldItalic.png",
+      "metrics": "Lilex/LilexNerdFontMono-BoldItalic.json"
+    },
+    {
+      "name": "LilexNerdFontMono-ExtraLight.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-ExtraLight.png",
+      "metrics": "Lilex/LilexNerdFontMono-ExtraLight.json"
+    },
+    {
+      "name": "LilexNerdFontMono-ExtraLightItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-ExtraLightItalic.png",
+      "metrics": "Lilex/LilexNerdFontMono-ExtraLightItalic.json"
+    },
+    {
+      "name": "LilexNerdFontMono-Italic.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-Italic.png",
+      "metrics": "Lilex/LilexNerdFontMono-Italic.json"
+    },
+    {
+      "name": "LilexNerdFontMono-Medium.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-Medium.png",
+      "metrics": "Lilex/LilexNerdFontMono-Medium.json"
+    },
+    {
+      "name": "LilexNerdFontMono-MediumItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-MediumItalic.png",
+      "metrics": "Lilex/LilexNerdFontMono-MediumItalic.json"
+    },
+    {
+      "name": "LilexNerdFontMono-Regular.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-Regular.png",
+      "metrics": "Lilex/LilexNerdFontMono-Regular.json"
+    },
+    {
+      "name": "LilexNerdFontMono-Thin.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-Thin.png",
+      "metrics": "Lilex/LilexNerdFontMono-Thin.json"
+    },
+    {
+      "name": "LilexNerdFontMono-ThinItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontMono-ThinItalic.png",
+      "metrics": "Lilex/LilexNerdFontMono-ThinItalic.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-Bold.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-Bold.png",
+      "metrics": "Lilex/LilexNerdFontPropo-Bold.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-BoldItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-BoldItalic.png",
+      "metrics": "Lilex/LilexNerdFontPropo-BoldItalic.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-ExtraLight.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-ExtraLight.png",
+      "metrics": "Lilex/LilexNerdFontPropo-ExtraLight.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-ExtraLightItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-ExtraLightItalic.png",
+      "metrics": "Lilex/LilexNerdFontPropo-ExtraLightItalic.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-Italic.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-Italic.png",
+      "metrics": "Lilex/LilexNerdFontPropo-Italic.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-Medium.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-Medium.png",
+      "metrics": "Lilex/LilexNerdFontPropo-Medium.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-MediumItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-MediumItalic.png",
+      "metrics": "Lilex/LilexNerdFontPropo-MediumItalic.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-Regular.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-Regular.png",
+      "metrics": "Lilex/LilexNerdFontPropo-Regular.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-Thin.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-Thin.png",
+      "metrics": "Lilex/LilexNerdFontPropo-Thin.json"
+    },
+    {
+      "name": "LilexNerdFontPropo-ThinItalic.ttf",
+      "atlas": "Lilex/LilexNerdFontPropo-ThinItalic.png",
+      "metrics": "Lilex/LilexNerdFontPropo-ThinItalic.json"
+    }
+  ]
+}

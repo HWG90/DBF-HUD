@@ -255,6 +255,8 @@ test('configuration validates atomically and roundtrips as Lua',function()
     assert(c.text_color=='#A0B1C2' and c.offset_x==-900 and c.frosted==false)
     assert(not pcall(HUD.config.apply,c,{scale=1.5,heat_red='#GGGGGG'}) and c.scale==1)
     assert(not pcall(HUD.config.apply,c,{offset_y=0/0}))
+    HUD.config.apply(c,{occlusion_mode='mesh'});assert(c.occlusion_mode=='gui_depth' and not c.always_show_3d)
+    HUD.config.apply(c,{always_show_3d=true});assert(c.occlusion_mode=='gui' and not c.hud_occlusion)
     local f=assert(loadstring(HUD.config.serialize(c)));setfenv(f,{})
     local loaded=f();for k,v in pairs(c) do assert(loaded[k]==v) end
 end)
@@ -266,12 +268,20 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==34)
-    callbacks['dbf_hud_legacy.offset_x'](-120);assert(h.config.offset_x==-120)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==29)
+    callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
-    callbacks['dbf_hud_v3.font'](2);assert(h.config.font=='debug' and writes==2)
-    callbacks['dbf_hud_v3.font'](1);assert(h.config.font=='bigblue' and writes==3)
-    menu.retire();callbacks['dbf_hud_legacy.offset_x'](42);assert(h.config.offset_x==-120)
+    callbacks['dbf_hud_v4.font'](2);assert(h.config.font=='debug' and writes==2)
+    callbacks['dbf_hud_v4.font'](1);assert(h.config.font=='bigblue' and writes==3)
+    local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
+    assert(groups['DBF-HUD']==8 and groups['DBF-HUD Placement']==21)
+    assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
+    callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
+    callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
+    callbacks['dbf_hud_v4.display_mode'](3);assert(h.config.anchor_mode=='world')
+    callbacks['dbf_hud_v4.always_show_3d'](true);assert(h.config.occlusion_mode=='gui' and h.config.always_show_3d)
+    callbacks['dbf_hud_v4.always_show_3d'](false);assert(h.config.occlusion_mode=='gui_depth' and not h.config.always_show_3d)
+    menu.retire();callbacks['dbf_hud_placement.offset_x'](42);assert(h.config.offset_x==-120)
     ModOptionsMenu=nil;assert(HUD.menu.new(h).status=='Mod Options Menu not installed')
 end)
 test('native frost is availability gated and bitmap lifecycle is released',function()
@@ -432,12 +442,14 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
         World={create_screen_gui=function()return 2 end,destroy_gui=function()end},
         Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
         Gui={resolution=function()return 1920,1080 end,rect=function()return 1 end,text=function()return 2 end,destroy_rect=function()end,destroy_text=function()end}}
-    local saved_pose,saved_projection=HUD.pose.new,HUD.projection.new
+    local saved_pose,saved_projection,saved_scene=HUD.pose.new,HUD.projection.new,HUD.scene_test.new
+    local world_draws=0;local selected_mode
+    HUD.scene_test.new=function()return {draw=function(p,c,target,dt,aspect,commands)assert(target==nil and commands and #commands>0);world_draws=world_draws+1;selected_mode=c.occlusion_mode;return true end,release=function()end}end
     local valid=true;local received;local pose_reads=0
     HUD.pose.new=function()return {poll=function()pose_reads=pose_reads+1;return {id=20,candidate=1,node_count=1,x=1,y=2,z=3,matrix={0,1,0,0,-1,0,0,0,0,0,1,0,1,2,3,1}}end,status='test'}end
     HUD.projection.new=function()return {status='test',poll=function(base,p,aspect)received=p;if valid then return {x=.8,y=.2,depth=2} end end}end
     update=function()end
-    local h=HUD.runtime.start(sr,backend);h.configure({mount_x=.5})
+    local h=HUD.runtime.start(sr,backend);h.configure({mount_x=.5,anchor_mode='weapon'})
     update(1/60);assert(h.anchor_status=='weapon attachment')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
     assert(received.x==1 and received.y==2.5 and received.z==3)
@@ -446,7 +458,10 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     assert(h.anchor_status~='weapon attachment' and h.opacity>=alpha)
     valid=true;update(1/60);assert(math.abs(h.motion_x-576)<1e-6)
     h.configure({anchor_mode='crosshair'});update(1/60);assert(h.anchor_status~='weapon attachment')
-    h.retire();HUD.pose.new,HUD.projection.new=saved_pose,saved_projection
+    h.configure({anchor_mode='world',always_show_3d=false});update(1/60);assert(world_draws==1 and selected_mode=='gui_depth')
+    h.configure({always_show_3d=true});update(1/60);assert(world_draws==2 and selected_mode=='gui')
+    h.configure({anchor_mode='weapon'});update(1/60);assert(world_draws==2)
+    h.retire();HUD.pose.new,HUD.projection.new,HUD.scene_test.new=saved_pose,saved_projection,saved_scene
 end)
 
 test('projection handles perspective, aspect, camera rotation and clipping',function()
@@ -527,9 +542,9 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==34)
-        callbacks['dbf_hud_legacy.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
-        menu.retire();callbacks['dbf_hud_legacy.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==29)
+        callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
+        menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
     ModOptionsMenu=nil
 end)
@@ -542,7 +557,7 @@ test('live menu reuses boot registrations with changed saved defaults',function(
         on_change=function(id,fn)callbacks[id]=fn;return true end,set=function()return true end}
     h.configure=function(v)HUD.config.apply(h.config,v)end
     local menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    callbacks['dbf_hud_legacy.offset_x'](188);assert(h.config.offset_x==188)
+    callbacks['dbf_hud_placement.offset_x'](188);assert(h.config.offset_x==188)
     menu.retire();ModOptionsMenu=nil
 end)
 
@@ -677,18 +692,17 @@ end)
 test('occlusion toggle switches renderers exclusively and releases the previous path',function()
     local original_new,original_overlay=HUD.scene_test.new,HUD.world_probe.new
     local draws={front=0,back=0,gui=0,depth=0};local releases={front=0,back=0,gui=0,depth=0}
-    local function stub(key)return {draw=function()draws[key]=draws[key]+1 end,release=function()releases[key]=releases[key]+1 end}end
+    local function stub(key)return {draw=function()draws[key]=draws[key]+1;return true end,release=function()releases[key]=releases[key]+1 end}end
     HUD.scene_test.new=function(sr,log,side) if side then return stub(side==1 and 'front' or 'back')end return original_new(sr,log,side)end
     HUD.world_probe.new=function(sr,log,direct)return stub(direct and 'gui' or 'depth')end
     local carrier=HUD.scene_test.new({},function()end)
-    carrier.draw({}, {hud_occlusion=true},1,0.016,2)
-    assert(draws.front==1 and draws.back==1 and draws.gui==0)
-    carrier.draw({}, {hud_occlusion=false},1,0.016,2,{{x=0,y=0,w=100,h=50}})
-    assert(draws.front==1 and draws.gui==1 and releases.front==2)
-    carrier.draw({}, {hud_occlusion=true},1,0.016,2)
-    assert(draws.front==2 and draws.back==2 and draws.gui==1 and releases.gui==3)
-    carrier.draw({}, {occlusion_mode='gui_depth'},1,0.016,2,{{x=0,y=0,w=100,h=50}})
-    assert(draws.depth==1 and draws.gui==1 and draws.front==2)
+    local commands={{x=0,y=0,w=100,h=50}}
+    carrier.draw({}, {occlusion_mode='gui_depth'},nil,0.016,nil,commands)
+    assert(draws.depth==1 and draws.front==0 and draws.back==0)
+    carrier.draw({}, {occlusion_mode='gui'},nil,0.016,nil,commands)
+    assert(draws.gui==1 and draws.depth==1 and releases.depth==2)
+    carrier.draw({}, {occlusion_mode='mesh'},nil,0.016,nil,commands)
+    assert(draws.depth==2 and draws.front==0 and draws.back==0)
     carrier.release()
     HUD.scene_test.new,HUD.world_probe.new=original_new,original_overlay
 end)
@@ -718,7 +732,9 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
     material=65536
     local poses={}
     sr.Unit.set_local_pose=function(_,_,v)poses[#poses+1]=v end
-    local pair=HUD.scene_test.new(sr,function()end)
+    -- Archived mesh implementation is checked directly, never exposed by dispatch.
+    local front=HUD.scene_test.new(sr,function()end,1);local back=HUD.scene_test.new(sr,function()end,-1)
+    local pair={draw=function(...)front.draw(...);back.draw(...)end,release=function()front.release();back.release()end}
     pair.draw(p,HUD.config.new(),131072,0.016,2)
     assert(bindings==6 and #poses==2)
     for i=1,3 do
