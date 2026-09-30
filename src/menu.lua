@@ -3,8 +3,11 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
-    local effects={fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
-    local function option_id(k)return (effects[k] and 'dbf_hud_effects.' or prefix)..k end
+    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local placement={fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,mount_x=true,mount_y=true,mount_z=true,
+        world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,weapon_offset_x=true,weapon_offset_y=true,
+        weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,follow=true,travel=true,settle=true}
+    local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
         {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
@@ -41,7 +44,7 @@ function M.new(hud)
         api.dbf_hud_routes=api.dbf_hud_routes or {}
         routes=api.dbf_hud_routes
         local function add(k,spec,callback)
-            spec.mod=effects[k] and 'DBF-HUD Effects' or 'DBF-HUD'
+            spec.mod=placement[k] and 'DBF-HUD Placement' or effects[k] and 'DBF-HUD Effects' or 'DBF-HUD'
             local id=option_id(k)
             -- API 1 treats a changed default as a different registration. Reuse
             -- our stable option IDs when taking over from the boot addon too.

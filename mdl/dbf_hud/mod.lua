@@ -3,7 +3,7 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=0.02,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -1432,8 +1432,11 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
-    local effects={fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
-    local function option_id(k)return (effects[k] and 'dbf_hud_effects.' or prefix)..k end
+    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local placement={fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,mount_x=true,mount_y=true,mount_z=true,
+        world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,weapon_offset_x=true,weapon_offset_y=true,
+        weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,follow=true,travel=true,settle=true}
+    local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
         {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
@@ -1470,7 +1473,7 @@ function M.new(hud)
         api.dbf_hud_routes=api.dbf_hud_routes or {}
         routes=api.dbf_hud_routes
         local function add(k,spec,callback)
-            spec.mod=effects[k] and 'DBF-HUD Effects' or 'DBF-HUD'
+            spec.mod=placement[k] and 'DBF-HUD Placement' or effects[k] and 'DBF-HUD Effects' or 'DBF-HUD'
             local id=option_id(k)
             -- API 1 treats a changed default as a different registration. Reuse
             -- our stable option IDs when taking over from the boot addon too.
