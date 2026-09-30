@@ -96,9 +96,18 @@ function M.start(sr,log,globals)
                     assert(type(G.bitmap)=='function','Gui.bitmap unavailable')
                     assert(type(A.main_world)=='function','Application.main_world unavailable')
                     assert(A.can_get('material','content/ui/shared/material/gui_diffuse_map'),'preview material unavailable')
-                    preview_world=assert(A.main_world())
+                    local main=assert(A.main_world())
+                    preview_world=main
+                    for _,candidate in pairs(A.worlds() or {}) do
+                        if candidate~=main and candidate~=world then preview_world=candidate;break end
+                    end
+                    log('OFFSCREEN preview world '..(preview_world==main and 'main fallback' or 'HUD world'))
                     log('OFFSCREEN preview GUI create begin')
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
+                    -- Independent control: visible geometry does not depend on the render target.
+                    G.rect(preview,sr.Vector3(36,36,79),sr.Vector2(200,200),sr.Color(255,255,0,255))
+                    G.rect(preview,sr.Vector3(244,40,80),sr.Vector2(48,48),sr.Color(255,255,255,255))
+                    log('OFFSCREEN placement control: magenta frame and white square')
                     log('OFFSCREEN preview material lookup begin')
                     for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_diffuse_map','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
                         if A.can_get('material',candidate) then

@@ -126,3 +126,7 @@ A bounded lookup-only comparison returned a null pointer for core/performance_hu
 ## Native image material binding succeeds
 
 The catalog identifies content/ui/shared/material/gui_diffuse_map. Read-only extraction found its 160-byte material payload in base archive 007e093ca718ca1a, with diffuse_map slot hash 3aa8b87e and shader identifier ba25de35. A lookup in the same live preview GUI returned a nonzero pointer. After both material and target pointer checks, Material.set_resource(material, 'diffuse_map', target) returned, followed by Gui.bitmap returning and the preview-placement log. The game process remained responsive. Actual four-color image visibility is awaiting user observation; successful API calls alone do not confirm rendered pixels or depth.
+
+## Preview world placement
+
+The user saw neither the bound image nor independent magenta/white rectangle controls. Inspection found that the working screen HUD selects a non-main world, whereas the preview used Application.main_world. The preview now uses the HUD selection pattern while explicitly excluding its private offscreen world. The live log confirms HUD-world selection and completed drawing. Visual confirmation is pending. This distinguishes compositor placement from offscreen image content.
