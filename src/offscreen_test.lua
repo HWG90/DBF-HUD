@@ -78,7 +78,7 @@ function M.start(sr,log,globals)
         log('OFFSCREEN camera and four-color GUI ready')
     end)
     if not ok then log('OFFSCREEN setup stopped '..tostring(err));self.release();return self end
-    unsubscribe=bridge.subscribe('astra_ammo.offscreen',function(...)
+    unsubscribe=bridge.subscribe('dbf_hud.offscreen',function(...)
         if active and not submitted then
             submitted=true
             log('OFFSCREEN render callback entered')

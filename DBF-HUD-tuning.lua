@@ -1,6 +1,6 @@
 -- Optional starter tuning. Copy into the Helldivers 2 installation root, beside bin.
 -- The preview exports this format. Native menu edits save here automatically.
--- Restart to load edits, or call AstraAmmo.reload_tuning() from your Lua integration.
+-- Restart to load edits, or call DBFHUD.reload_tuning() from your Lua integration.
 return {
     font = "bigblue", -- "bigblue" pixel font or "debug" original renderer
     text_color = "#C4CECA",

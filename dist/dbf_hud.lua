@@ -1,6 +1,6 @@
--- Astra Ammo / MDL API 2 loose mod.
-local AA={}
-AA.config=(function()
+-- HD2-Addon: mods/dbf_hud/hud
+local HUD={}
+HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
 M.defaults={world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
@@ -35,14 +35,14 @@ function M.apply(config,values)
 end
 function M.serialize(config)
     local keys={};for k in pairs(M.defaults) do keys[#keys+1]=k end;table.sort(keys)
-    local out={'-- Astra Ammo tuning. Loaded from the game installation root on startup.','return {'}
+    local out={'-- DBF-HUD tuning. Loaded from the game installation root on startup.','return {'}
     for _,k in ipairs(keys) do local v=config[k];out[#out+1]='    '..k..' = '..(type(v)=='string' and string.format('%q',v) or tostring(v))..',' end
     out[#out+1]='}';return table.concat(out,'\n')..'\n'
 end
 return M
 
 end)()
-AA.font_data=(function()
+HUD.font_data=(function()
 -- Generated from BigBlue Terminal (c) 2015 VileR / Nerd Fonts 3.5.1.
 -- Glyph data: CC BY-SA 4.0; see licenses/BigBlueTerminal.
 
@@ -145,14 +145,14 @@ return {
 }
 
 end)()
-AA.font=(function()
+HUD.font=(function()
 -- Pixel glyph geometry: no native font calls, handle conversions or asset loading.
 local M={}
 function M.pixel(size) return math.max(1,math.floor(size/12+0.5)) end
 function M.measure(text,size)
     local p=M.pixel(size);local left,bottom,right,top=0,0,0,0
     for i=1,#text do
-        local g=AA.font_data[text:byte(i)] or AA.font_data[63]
+        local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
         local b=g.bounds;local offset=(i-1)*8
         left=math.min(left,offset+b[1]);bottom=math.min(bottom,b[2])
         right=math.max(right,offset+b[3]);top=math.max(top,b[4])
@@ -163,7 +163,7 @@ function M.draw(text,size,x,y,emit)
     local p=M.pixel(size)
     x=math.floor(x+0.5);y=math.floor(y+0.5)
     for i=1,#text do
-        local g=AA.font_data[text:byte(i)] or AA.font_data[63]
+        local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
         local offset=(i-1)*8*p
         for _,r in ipairs(g.runs) do emit(x+offset+r[1]*p,y+r[2]*p,r[3]*p,r[4]*p) end
     end
@@ -171,7 +171,7 @@ end
 return M
 
 end)()
-AA.motion=(function()
+HUD.motion=(function()
 -- Exact critically damped spring; all coordinates are 1080p reference pixels.
 local M = {}
 local function finite(x) return type(x)=='number' and x==x and math.abs(x)<1e8 end
@@ -220,7 +220,7 @@ end
 return M
 
 end)()
-AA.model=(function()
+HUD.model=(function()
 -- Normalize providers into one presentation contract; unknown is never zero.
 local M={}
 local function count(x)
@@ -251,7 +251,7 @@ end
 return M
 
 end)()
-AA.layout=(function()
+HUD.layout=(function()
 -- Renderer-independent HUD; geometry uses bottom-left coordinates.
 local M={}
 function M.heat_color(fraction,clock,cfg)
@@ -261,11 +261,11 @@ function M.heat_color(fraction,clock,cfg)
     return cfg.heat_white
 end
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
-    cfg=cfg or AA.config.defaults
+    cfg=cfg or HUD.config.defaults
     local pixel=cfg.font=='bigblue'
-    if pixel and not measure then measure=AA.font.measure end
+    if pixel and not measure then measure=HUD.font.measure end
     local d={};local heat=m.kind=='heat'
-    local ink=AA.config.rgb(heat and M.heat_color(m.fraction,clock,cfg) or
+    local ink=HUD.config.rgb(heat and M.heat_color(m.fraction,clock,cfg) or
         (m.warning and (m.value==0 and cfg.heat_red or cfg.heat_yellow) or cfg.text_color))
     local function rect(dx,dy,w,h,c,a,kind)
         d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity,frosted=cfg.frosted}
@@ -324,7 +324,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     local pad=8*scale
     left,bottom,right,top=left-pad,bottom-pad,right+pad,top+pad
     local out={{type='panel',x=left,y=bottom,w=right-left,h=top-bottom,
-        c=AA.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
+        c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
     out[#out+1]={type='rect',x=left,y=top-scale,w=14*scale,h=scale,c=ink,a=.6*opacity}
     out[#out+1]={type='rect',x=right-14*scale,y=bottom,w=14*scale,h=scale,c=ink,a=.4*opacity}
     for _,c in ipairs(d) do out[#out+1]=c end
@@ -333,37 +333,37 @@ end
 return M
 
 end)()
-AA.memory=(function()
+HUD.memory=(function()
 -- Private FFI symbols prevent collisions with other addons' declarations.
 local M={}
 function M.native()
     local ffi=require('ffi')
     pcall(ffi.cdef, [[
-    void *aa_module(const char*) __asm__("GetModuleHandleA");
-    void *aa_process(void) __asm__("GetCurrentProcess");
-    int aa_read(void*,const void*,void*,size_t,size_t*) __asm__("ReadProcessMemory");
-    unsigned long aa_filename(void*,char*,unsigned long) __asm__("GetModuleFileNameA");
+    void *dbf_hud_module(const char*) __asm__("GetModuleHandleA");
+    void *dbf_hud_process(void) __asm__("GetCurrentProcess");
+    int dbf_hud_read(void*,const void*,void*,size_t,size_t*) __asm__("ReadProcessMemory");
+    unsigned long dbf_hud_filename(void*,char*,unsigned long) __asm__("GetModuleFileNameA");
     ]])
-    local k=ffi.load('kernel32'); local process=k.aa_process()
+    local k=ffi.load('kernel32'); local process=k.dbf_hud_process()
     local buffer=ffi.new('uint8_t[4096]');local got=ffi.new('size_t[1]')
     local file,log_size;local log_attempted=false
     local backend={
-        module=function(name) local p=k.aa_module(name); if p~=nil then return tonumber(ffi.cast('uintptr_t',p)) end end,
+        module=function(name) local p=k.dbf_hud_module(name); if p~=nil then return tonumber(ffi.cast('uintptr_t',p)) end end,
         read=function(address,size)
             if address<65536 or address+size>=2^47 or size<1 or size>4096 then return nil end
             got[0]=0
-            if k.aa_read(process,ffi.cast('const void*',address),buffer,size,got)==0 or tonumber(got[0])~=size then return nil end
+            if k.dbf_hud_read(process,ffi.cast('const void*',address),buffer,size,got)==0 or tonumber(got[0])~=size then return nil end
             return ffi.string(buffer,size)
         end
     }
     function backend.log(line)
         if not log_attempted then
             log_attempted=true
-            local buf=ffi.new('char[4096]');local n=tonumber(k.aa_filename(nil,buf,4096))
+            local buf=ffi.new('char[4096]');local n=tonumber(k.dbf_hud_filename(nil,buf,4096))
             if n and n>0 and n<4096 then
                 local exe=ffi.string(buf,n):gsub('\\','/')
                 local root=exe:match('^(.*)/[Bb][Ii][Nn]/[^/]+$')
-                if root then backend.log_path=root..'/AstraAmmo.log';file=io.open(backend.log_path,'w') end
+                if root then backend.log_path=root..'/DBF-HUD.log';file=io.open(backend.log_path,'w') end
             end
             log_size=0
         end
@@ -372,14 +372,16 @@ function M.native()
         end
     end
     local function tuning_path()
-        local buf=ffi.new('char[4096]');local n=tonumber(k.aa_filename(nil,buf,4096))
+        local buf=ffi.new('char[4096]');local n=tonumber(k.dbf_hud_filename(nil,buf,4096))
         assert(n>0 and n<4096,'executable path unavailable')
         local root=ffi.string(buf,n):gsub('\\','/'):match('^(.*)/[Bb][Ii][Nn]/[^/]+$')
         assert(root,'game installation root unavailable')
-        return root..'/AstraAmmo-tuning.lua'
+        return root..'/DBF-HUD-tuning.lua'
     end
     function backend.read_tuning()
         local path=tuning_path();local f=io.open(path,'r')
+        -- Compatibility: old settings are readable; writes use the new filename.
+        if not f then path=path:gsub('DBF%-HUD%-tuning.lua$','AstraAmmo-tuning.lua');f=io.open(path,'r') end
         if not f then return nil end
         local body=f:read(65537);f:close();assert(#body<=65536,'tuning file too large')
         local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
@@ -445,7 +447,7 @@ end
 return M
 
 end)()
-AA.layouts=(function()
+HUD.layouts=(function()
 -- Reference facts: Reticle Ammo HUD 1.1.0, Steam 25327279 and September 24 PE.
 -- No layout is guessed on unknown builds. Offsets relative to game.dll.
 return {
@@ -471,8 +473,8 @@ return {
 }
 
 end)()
-AA.reader=(function()
-local Memory,Layout=AA.memory,AA.layouts
+HUD.reader=(function()
+local Memory,Layout=HUD.memory,HUD.layouts
 local M={}
 local function flag(v,b) return math.floor(v/b)%2==1 end
 local function valid(v,limit) return v>=0 and v<=limit end
@@ -646,7 +648,7 @@ end
 return M
 
 end)()
-AA.pose=(function()
+HUD.pose=(function()
 -- Read-only selected-weapon root pose. Native code is inspected, never invoked.
 -- See WEAPON_BINDING.md. Unknown implementations or recycled handles fail closed.
 local M={}
@@ -656,7 +658,7 @@ local pose_suffix=unhex('488bc84c8b0041ff90e8000000488bcb48c1e10648034828488bc14
 local resolver_prefix=unhex('48895c24084889742410574883ec20488b35')
 local resolver_body=unhex('8bc325ffff3f003b8698000000720433dbeb1c8bc8488b86a0000000c1eb16381c0175eb488b8688000000488b1cc8')
 function M.new(backend)
-    local r=AA.memory.new(backend)
+    local r=HUD.memory.new(backend)
     local self={status='not sampled',samples=0}
     function self.snapshot(raw)
         assert(raw and raw.binding,'no weapon binding')
@@ -709,7 +711,7 @@ end
 return M
 
 end)()
-AA.projection=(function()
+HUD.projection=(function()
 -- Diagnostic world-to-screen projection. Reads data only; no engine calls.
 -- Initial scope: perspective camera with identity local camera offset.
 local M={}
@@ -735,7 +737,7 @@ function M.project(m,x,y,z,fov,aspect,near)
     return {x=nx,y=ny,depth=depth},'projected weapon root'
 end
 function M.new(backend)
-    local r=AA.memory.new(backend);local self={status='not sampled'}
+    local r=HUD.memory.new(backend);local self={status='not sampled'}
     function self.snapshot(base,pose,aspect)
         r.reset()
         local api=r.p(base+0x3326308);local camera_api=r.p(api+0x20)
@@ -773,7 +775,7 @@ end
 return M
 
 end)()
-AA.anchor=(function()
+HUD.anchor=(function()
 -- Read the native crosshair controller AFTER the game's update.
 -- Layout independently traced from hud_crosshair -> native update -> screen XY.
 -- Never invokes game functions or writes game memory.
@@ -792,14 +794,14 @@ local SPEC={
 }
 M.spec=SPEC
 function M.new(backend)
-    local r=AA.memory.new(backend)
+    local r=HUD.memory.new(backend)
     local base,validated,failed;local self={status='not sampled',samples=0}
     local function validate()
         r.reset();base=assert(backend.module('game.dll'),'game.dll not loaded')
         local d=r.read(base,64);assert(d:sub(1,2)=='MZ','DOS signature')
         local offset=r.u(d,0x3c);assert(offset<0x100000,'PE offset')
         local h=r.read(base+offset,0x80)
-        assert(h:sub(1,4)=='PE\0\0' and AA.layouts.stamps[r.u(h,8)]==r.u(h,0x50),'unsupported anchor build')
+        assert(h:sub(1,4)=='PE\0\0' and HUD.layouts.stamps[r.u(h,8)]==r.u(h,0x50),'unsupported anchor build')
         for _,s in ipairs(SPEC.signatures) do
             local expected=s[2]:gsub('..',function(hex)return string.char(tonumber(hex,16))end)
             assert(r.read(base+s[1],#expected)==expected,string.format('anchor signature %X',s[1]))
@@ -864,7 +866,7 @@ end
 return M
 
 end)()
-AA.view=(function()
+HUD.view=(function()
 local M={}
 function M.new(sr)
     local gui,world;local ids={};local G,W,A=sr.Gui,sr.World,sr.Application
@@ -924,7 +926,7 @@ function M.new(sr)
             elseif c.type=='rect' then
                 id=G.rect(gui,sr.Vector3(c.x,c.y,50),sr.Vector2(c.w,c.h),color)
             elseif c.font=='bigblue' then
-                AA.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)
+                HUD.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)
                     local rid=G.rect(gui,sr.Vector3(x,y,51),sr.Vector2(w,h),color)
                     if rid then ids[#ids+1]={type='rect',id=rid} end
                 end)
@@ -939,7 +941,7 @@ end
 return M
 
 end)()
-AA.pose_motion=(function()
+HUD.pose_motion=(function()
 -- Frame-rate independent rigid-pose smoothing; no engine userdata retained.
 local M={}
 local function quaternion(m)
@@ -986,7 +988,7 @@ end
 return M
 
 end)()
-AA.world_probe=(function()
+HUD.world_probe=(function()
 -- Minimal world-space GUI experiment; only engine-returned world/GUI handles.
 local M={}
 function M.new(sr,log)
@@ -1024,7 +1026,7 @@ function M.new(sr,log)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
-        m=AA.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
+        m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]
         if first then log('WORLD_GUI matrix begin') end
         local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),
@@ -1033,15 +1035,18 @@ function M.new(sr,log)
             world=main;log('WORLD_GUI create begin')
             gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate'),'world GUI returned nil')
             log('WORLD_GUI create complete')
-            local name='mods/astra_ammo/materials/depth_fill'
-            if A.can_get and A.can_get('material',name) then depth_fill=name end
+            local name='mods/dbf_hud/materials/depth_fill'
+            if A.can_get and A.can_get('material',name) then depth_fill=name
+            elseif A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
+                depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
+            end
             log('WORLD_GUI depth material '..(depth_fill and 'available' or 'missing; install depth material addon'))
             -- One-time observation only: resolve the same material used by bitmap.
             -- Keep no native material handles across frames or GUI destruction.
             log('WORLD_GUI instance '..identity(gui)..' world '..identity(world))
             if type(G.material)=='function' and A.can_get then
                 for _,material_name in ipairs({'content/ui/shared/material/gui_fill',
-                    'mods/astra_ammo/materials/depth_fill','mods/astra_ammo/materials/depth_blur'}) do
+                    'mods/dbf_hud/materials/depth_fill','mods/dbf_hud/materials/depth_blur'}) do
                     if A.can_get('material',material_name) then
                         local ok,handle=pcall(G.material,gui,material_name)
                         log('WORLD_GUI material instance '..material_name..' '..(ok and identity(handle) or 'lookup failed'))
@@ -1071,7 +1076,7 @@ function M.new(sr,log)
                 elseif v.type=='rect' then
                     solid(v.x,v.y,v.w,v.h,2,color)
                 elseif v.font=='bigblue' then
-                    AA.font.draw(v.text,v.size,v.x,v.y,function(x,y,w,h)
+                    HUD.font.draw(v.text,v.size,v.x,v.y,function(x,y,w,h)
                         solid(x,y,w,h,3,color)
                     end)
                 else
@@ -1102,7 +1107,7 @@ end
 return M
 
 end)()
-AA.offscreen_test=(function()
+HUD.offscreen_test=(function()
 -- Isolated one-frame render test. Never renders from the update callback.
 local M={}
 function M.start(sr,log,globals)
@@ -1183,7 +1188,7 @@ function M.start(sr,log,globals)
         log('OFFSCREEN camera and four-color GUI ready')
     end)
     if not ok then log('OFFSCREEN setup stopped '..tostring(err));self.release();return self end
-    unsubscribe=bridge.subscribe('astra_ammo.offscreen',function(...)
+    unsubscribe=bridge.subscribe('dbf_hud.offscreen',function(...)
         if active and not submitted then
             submitted=true
             log('OFFSCREEN render callback entered')
@@ -1209,12 +1214,12 @@ end
 return M
 
 end)()
-AA.menu=(function()
+HUD.menu=(function()
 -- Optional ModOptionsMenu API 1 integration. Never bundles or patches its implementation.
 local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
-    local prefix='astra_ammo_v3.'
+    local prefix='dbf_hud_v3.'
     local sliders={
         {'world_position_smooth','3D position smoothing',0,0.5,0.005},{'world_rotation_smooth','3D rotation smoothing',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
         {'weapon_offset_x','Weapon panel horizontal offset',-1920,1920,1},{'weapon_offset_y','Weapon panel vertical offset',-1080,1080,1},
@@ -1234,7 +1239,7 @@ function M.new(hud)
         set('pose_marker',hud.config.pose_marker)
         set('world_probe',hud.config.world_probe)
         set('font',hud.config.font=='bigblue' and 1 or 2)
-        local hex=hud.config[AA.config.colors[target]]:sub(2)
+        local hex=hud.config[HUD.config.colors[target]]:sub(2)
         for i=1,6 do set('hex'..i,tonumber(hex:sub(i,i),16)+1) end
     end
     function self.poll()
@@ -1244,10 +1249,10 @@ function M.new(hud)
         for _,k in ipairs({'register_option','on_change','set'}) do if type(api[k])~='function' then return end end
         attempted=true
         -- Keep one dispatcher per option across reloads; retiring releases HUD closures.
-        api.astra_ammo_routes=api.astra_ammo_routes or {}
-        routes=api.astra_ammo_routes
+        api.dbf_hud_routes=api.dbf_hud_routes or {}
+        routes=api.dbf_hud_routes
         local function add(k,spec,callback)
-            spec.mod='Astra Ammo'
+            spec.mod='DBF-HUD'
             local id=prefix..k
             -- API 1 treats a changed default as a different registration. Reuse
             -- our stable option IDs when taking over from the boot addon too.
@@ -1293,14 +1298,14 @@ function M.new(hud)
                 local index=i
                 add('hex'..i,{type='choice',label=({'Hex R high','Hex R low','Hex G high','Hex G low','Hex B high','Hex B low'})[i],
                     choices=digits,default=tonumber(hud.config.text_color:sub(i+1,i+1),16)+1},function(v)
-                    local key=AA.config.colors[target];local h=hud.config[key]:sub(2)
+                    local key=HUD.config.colors[target];local h=hud.config[key]:sub(2)
                     hud.configure({[key]='#'..h:sub(1,index-1)..string.format('%X',v-1)..h:sub(index+1)})
                     hud.save_tuning()
                 end)
             end
             set('color_target',target);self.sync()
         end)
-        self.status=ok and 'Options > Mods > Astra Ammo' or ('menu unavailable: '..tostring(err))
+        self.status=ok and 'Options > Mods > DBF-HUD' or ('menu unavailable: '..tostring(err))
         if not ok then api=nil end
     end
     function self.retire()
@@ -1314,27 +1319,29 @@ end
 return M
 
 end)()
-AA.runtime=(function()
+HUD.runtime=(function()
 local M={}
 function M.start(sr,backend,options)
     local managed=options and options.managed==true
-    local old=rawget(_G,'AstraAmmo');if old and old.retire then old.retire() end
-    local self={version='0.3.35',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
-    self.config=AA.config.new()
-    local attached=AA.motion.new();local attachment_active=false
-    local motion=AA.motion.new();local reader=AA.reader.new(backend);local view=AA.view.new(sr)
-    local native=AA.anchor.new(backend);self.native_anchor=native
-    local pose=AA.pose.new(backend);local next_pose_log=0;local last_pose_status
+    -- Compatibility: retire a previous-brand instance during live upgrade.
+    local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
+    local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
+    local self={version='0.3.36',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    self.config=HUD.config.new()
+    local attached=HUD.motion.new();local attachment_active=false
+    local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
+    local native=HUD.anchor.new(backend);self.native_anchor=native
+    local pose=HUD.pose.new(backend);local next_pose_log=0;local last_pose_status
     local original=rawget(_G,'update');local shutdown=rawget(_G,'shutdown')
     if not managed and type(original)~='function' then self.status='update callback missing';return self end
-    local projection=AA.projection.new(backend);local binding_base;local next_projection_log=0
+    local projection=HUD.projection.new(backend);local binding_base;local next_projection_log=0
     local latest_raw;local next_sample=0;local model;local anchor;local anchor_at=-10;local provider;local failures=0
     local retired=false;local cleaned=false;local alpha=0;local last_id;local width,height
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
     local last_binding
     local function log(line) if backend.log then pcall(backend.log,string.format('[%.3f] %s',self.clock,line)) end end
-    local world_probe=AA.world_probe.new(sr,log)
-    log('START AstraAmmo '..self.version..' native crosshair enabled; movement visibility filter removed')
+    local world_probe=HUD.world_probe.new(sr,log)
+    log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     -- Availability check only: never invokes unverified world GUI functions.
     local capabilities={}
     for _,entry in ipairs({{'World','create_world_gui'},{'World','destroy_gui'},
@@ -1413,10 +1420,10 @@ function M.start(sr,backend,options)
     function self.set_anchor_provider(fn) assert(fn==nil or type(fn)=='function');provider=fn end
     local menu
     function self.configure(values)
-        AA.config.apply(self.config,values)
+        HUD.config.apply(self.config,values)
         if menu then menu.sync() end
     end
-    function self.export_tuning() return AA.config.serialize(self.config) end
+    function self.export_tuning() return HUD.config.serialize(self.config) end
     function self.save_tuning()
         if not backend.write_tuning then self.tuning_status='file writer unavailable';return false end
         local ok,result=pcall(backend.write_tuning,self.export_tuning())
@@ -1431,7 +1438,7 @@ function M.start(sr,backend,options)
         log('TUNING '..self.tuning_status);return ok and result
     end
     self.reload_tuning()
-    menu=AA.menu.new(self)
+    menu=HUD.menu.new(self)
     function self.frame(dt)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
@@ -1443,7 +1450,7 @@ function M.start(sr,backend,options)
         end
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
-            local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=AA.model.normalize(raw);self.status=reader.status
+            local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
             if self.clock>=next_pose_log then
                 if self.weapon_pose then
                     local p=self.weapon_pose;local m=p.matrix
@@ -1497,10 +1504,10 @@ function M.start(sr,backend,options)
         if use_weapon~=attachment_active then motion.ready=false;attached.ready=false;attachment_active=use_weapon end
         local x,y
         if use_weapon then
-            x,y=AA.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config)
+            x,y=HUD.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config)
             self.anchor_status='weapon attachment'
         else
-            x,y=AA.motion.step(motion,target,dt,self.config)
+            x,y=HUD.motion.step(motion,target,dt,self.config)
             self.attachment_status='reticle fallback: '..projection.status
         end
         -- Movement must not control alpha. Native reticle hiding only changes the anchor.
@@ -1523,7 +1530,7 @@ function M.start(sr,backend,options)
         if not model or alpha<0.01 then world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end;world_config.font='bigblue'
-            local world_commands=AA.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
+            local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
             if world_probe.draw(self.weapon_pose,self.config,world_commands,dt) then
@@ -1533,7 +1540,7 @@ function M.start(sr,backend,options)
         local s=h/1080
         x=w/2+(x+(use_weapon and self.config.weapon_offset_x or self.config.offset_x))*s;y=h/2+(y+(use_weapon and self.config.weapon_offset_y or self.config.offset_y))*s
         local scale=s*self.config.scale
-        local commands=AA.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
+        local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
         local frame=commands[1];local margin=4*scale
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
@@ -1588,39 +1595,13 @@ function M.start(sr,backend,options)
         end
     end
     if not managed then
-        rawset(_G,'update',wrapper);rawset(_G,'shutdown',shutdown_wrapper);rawset(_G,'AstraAmmo',self)
+        rawset(_G,'update',wrapper);rawset(_G,'shutdown',shutdown_wrapper);rawset(_G,'DBFHUD',self)
     end
     return self
 end
 return M
 
 end)()
-return (function()
--- MDL API 2 lifecycle; this module never hooks global update or shutdown.
-local hud
-local offscreen
-local function disable()
-    if offscreen then offscreen.release();offscreen=nil end
-    if hud then hud.retire();hud=nil end
-end
-return {
-    name='Astra Ammo (Live)',version='0.3.35',author='Astra Ammo',
-    description='Reloadable HUD and weapon binding diagnostics. Replaces the running Astra instance when enabled.',
-    on_enable=function(ctx)
-        assert(ctx.api==2 and type(ctx.on_cleanup)=='function' and type(ctx.global)=='function','MDL API 2 required')
-        local sr=assert(rawget(_G,'stingray'),'stingray missing')
-        local backend=AA.memory.native()
-        local started=false
-        ctx.on_cleanup(function() disable();if not started and backend.close then backend.close() end end)
-        hud=AA.runtime.start(sr,backend,{managed=true})
-        started=true
-        ctx.global('AstraAmmo',hud)
-        -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
-        offscreen=AA.offscreen_test.start(sr,function(line)if backend.log then pcall(backend.log,line) end end)
-        ctx.log('Enabled Astra '..hud.version..' with MDL-owned updates')
-    end,
-    on_update=function(ctx,dt) if hud then hud.tick(dt) end end,
-    on_disable=disable,
-}
-
-end)()
+local ok,result=pcall(function() return HUD.runtime.start(assert(rawget(_G,"stingray"),"stingray missing"),HUD.memory.native()) end)
+if not ok then rawset(_G,"DBFHUD",{status=tostring(result),version="0.3.36"}) end
+return rawget(_G,"DBFHUD")

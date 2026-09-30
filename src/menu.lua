@@ -2,7 +2,7 @@
 local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
-    local prefix='astra_ammo_v3.'
+    local prefix='dbf_hud_v3.'
     local sliders={
         {'world_position_smooth','3D position smoothing',0,0.5,0.005},{'world_rotation_smooth','3D rotation smoothing',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
         {'weapon_offset_x','Weapon panel horizontal offset',-1920,1920,1},{'weapon_offset_y','Weapon panel vertical offset',-1080,1080,1},
@@ -22,7 +22,7 @@ function M.new(hud)
         set('pose_marker',hud.config.pose_marker)
         set('world_probe',hud.config.world_probe)
         set('font',hud.config.font=='bigblue' and 1 or 2)
-        local hex=hud.config[AA.config.colors[target]]:sub(2)
+        local hex=hud.config[HUD.config.colors[target]]:sub(2)
         for i=1,6 do set('hex'..i,tonumber(hex:sub(i,i),16)+1) end
     end
     function self.poll()
@@ -32,10 +32,10 @@ function M.new(hud)
         for _,k in ipairs({'register_option','on_change','set'}) do if type(api[k])~='function' then return end end
         attempted=true
         -- Keep one dispatcher per option across reloads; retiring releases HUD closures.
-        api.astra_ammo_routes=api.astra_ammo_routes or {}
-        routes=api.astra_ammo_routes
+        api.dbf_hud_routes=api.dbf_hud_routes or {}
+        routes=api.dbf_hud_routes
         local function add(k,spec,callback)
-            spec.mod='Astra Ammo'
+            spec.mod='DBF-HUD'
             local id=prefix..k
             -- API 1 treats a changed default as a different registration. Reuse
             -- our stable option IDs when taking over from the boot addon too.
@@ -81,14 +81,14 @@ function M.new(hud)
                 local index=i
                 add('hex'..i,{type='choice',label=({'Hex R high','Hex R low','Hex G high','Hex G low','Hex B high','Hex B low'})[i],
                     choices=digits,default=tonumber(hud.config.text_color:sub(i+1,i+1),16)+1},function(v)
-                    local key=AA.config.colors[target];local h=hud.config[key]:sub(2)
+                    local key=HUD.config.colors[target];local h=hud.config[key]:sub(2)
                     hud.configure({[key]='#'..h:sub(1,index-1)..string.format('%X',v-1)..h:sub(index+1)})
                     hud.save_tuning()
                 end)
             end
             set('color_target',target);self.sync()
         end)
-        self.status=ok and 'Options > Mods > Astra Ammo' or ('menu unavailable: '..tostring(err))
+        self.status=ok and 'Options > Mods > DBF-HUD' or ('menu unavailable: '..tostring(err))
         if not ok then api=nil end
     end
     function self.retire()

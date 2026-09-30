@@ -32,7 +32,7 @@ function M.apply(config,values)
 end
 function M.serialize(config)
     local keys={};for k in pairs(M.defaults) do keys[#keys+1]=k end;table.sort(keys)
-    local out={'-- Astra Ammo tuning. Loaded from the game installation root on startup.','return {'}
+    local out={'-- DBF-HUD tuning. Loaded from the game installation root on startup.','return {'}
     for _,k in ipairs(keys) do local v=config[k];out[#out+1]='    '..k..' = '..(type(v)=='string' and string.format('%q',v) or tostring(v))..',' end
     out[#out+1]='}';return table.concat(out,'\n')..'\n'
 end

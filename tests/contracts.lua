@@ -1,35 +1,35 @@
-AA={}
-for _,name in ipairs({'config','font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','anchor','view','pose_motion','world_probe','offscreen_test','menu','runtime'}) do AA[name]=assert(loadfile('src/'..name..'.lua'))() end
+HUD={}
+for _,name in ipairs({'config','font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','anchor','view','pose_motion','world_probe','offscreen_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
 test('spring is frame-rate invariant',function()
     local values={}
     for _,fps in ipairs({30,60,144}) do
-        local s=AA.motion.new();AA.motion.step(s,nil,0,cfg)
-        for i=1,fps do AA.motion.step(s,{x=40,y=-20},1/fps,cfg) end
+        local s=HUD.motion.new();HUD.motion.step(s,nil,0,cfg)
+        for i=1,fps do HUD.motion.step(s,{x=40,y=-20},1/fps,cfg) end
         values[#values+1]=s.x
     end
     assert(math.abs(values[1]-values[3])<1e-8)
 end)
 test('travel envelope survives impulses and direction reversals',function()
-    local s=AA.motion.new()
+    local s=HUD.motion.new()
     for i=1,2000 do
-        AA.motion.step(s,{x=math.sin(i*0.06)*5000,y=math.cos(i*0.09)*5000},1/144,cfg)
+        HUD.motion.step(s,{x=math.sin(i*0.06)*5000,y=math.cos(i*0.09)*5000},1/144,cfg)
         assert(s.x*s.x+s.y*s.y<=55*55+1e-6)
     end
 end)
 test('stale anchor returns to center and long stalls reset velocity',function()
-    local s=AA.motion.new();AA.motion.step(s,{x=30,y=20},0,cfg)
-    for i=1,60 do AA.motion.step(s,nil,1/60,cfg) end
+    local s=HUD.motion.new();HUD.motion.step(s,{x=30,y=20},0,cfg)
+    for i=1,60 do HUD.motion.step(s,nil,1/60,cfg) end
     assert(math.abs(s.x)<0.001)
-    AA.motion.step(s,{x=-40,y=0},1,cfg);assert(s.x==-40 and s.vx==0)
+    HUD.motion.step(s,{x=-40,y=0},1,cfg);assert(s.x==-40 and s.vx==0)
 end)
 test('unknown ammo is not zero; heat and empty semantics',function()
-    assert(AA.model.normalize({kind='magazine'})==nil)
-    local m=AA.model.normalize({kind='magazine',rounds=0,reserve=0});assert(m.state=='EMPTY' and m.reserve==0)
-    assert(AA.model.normalize({kind='heat',heat=0/0})==nil)
-    assert(AA.model.normalize({kind='heat',heat=0.92,locked=true}).state=='VENT')
+    assert(HUD.model.normalize({kind='magazine'})==nil)
+    local m=HUD.model.normalize({kind='magazine',rounds=0,reserve=0});assert(m.state=='EMPTY' and m.reserve==0)
+    assert(HUD.model.normalize({kind='heat',heat=0/0})==nil)
+    assert(HUD.model.normalize({kind='heat',heat=0.92,locked=true}).state=='VENT')
 end)
 local ffi=require('ffi')
 local bytes={};local nextaddr=0x10000000;local regions={}
@@ -51,7 +51,7 @@ local function read(a,n)
     end
     return table.concat(b)
 end
-local base=0x100000;local L=AA.layouts
+local base=0x100000;local L=HUD.layouts
 put(base,'MZ'..string.rep('\0',62));U(base+0x3c,0x100)
 put(base+0x100,'PE\0\0'..string.rep('\0',124));U(base+0x108,0x6AB3B43F);U(base+0x150,0x4744000)
 for _,s in ipairs(L.signatures) do put(base+s[1],s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)) end
@@ -81,7 +81,7 @@ local spec=L.static.magazine;local tablebase=alloc(spec[2]*16+spec[3]);P(owner+s
 put(tablebase+(123%spec[2])*16,u(123)..u(0)..u(0)..u(0))
 local config=tablebase+spec[2]*16;U(config+0x88,45);U(config+0x94,7);bytes[config+0x9c]=1
 local backend={module=function()return base end,read=read}
-local reader=AA.reader.new(backend)
+local reader=HUD.reader.new(backend)
 test('known build signatures accepted',function() reader.validate() end)
 test('magazine adds chamber once and preserves tactical reload',function()
     U(flags,0xc0);U(state,44);U(state+8,1);U(runtime,6)
@@ -107,12 +107,12 @@ test('ownership mismatch and missing player clear data',function()
     U(pm+0x84,0);assert(reader.poll()==nil);U(pm+0x84,1)
 end)
 test('unknown builds and changed signatures fail closed',function()
-    U(base+0x108,123);assert(AA.reader.new(backend).poll()==nil);U(base+0x108,0x6AB3B43F)
+    U(base+0x108,123);assert(HUD.reader.new(backend).poll()==nil);U(base+0x108,0x6AB3B43F)
     local at=base+L.signatures[1][1];local old=bytes[at];bytes[at]=0
-    assert(AA.reader.new(backend).poll()==nil);bytes[at]=old
+    assert(HUD.reader.new(backend).poll()==nil);bytes[at]=old
 end)
 test('read budget prevents unbounded probing',function()
-    local r=AA.memory.new(backend);local ok=pcall(function() for i=1,513 do r.read(base,1) end end);assert(not ok)
+    local r=HUD.memory.new(backend);local ok=pcall(function() for i=1,513 do r.read(base,1) end end);assert(not ok)
 end)
 test('resource ammo resolves an identity-checked deposit',function()
     local dep=owner+L.records+48;U(dep+8,21);bytes[dep+20]=1
@@ -129,16 +129,16 @@ test('selected seat weapon works without an inventory slot',function()
     U(inventory+28,1)
 end)
 -- Native crosshair fixture: independent screen/UI dimensions and a parent chain.
-for _,s in ipairs(AA.anchor.spec.signatures) do put(base+s[1],s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)) end
-local ui=alloc(0x46e000);P(base+AA.anchor.spec.manager,ui)
+for _,s in ipairs(HUD.anchor.spec.signatures) do put(base+s[1],s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)) end
+local ui=alloc(0x46e000);P(base+HUD.anchor.spec.manager,ui)
 local hudroot=ui+0x24e340;bytes[hudroot+0x58]=1;bytes[hudroot+0x21f5b0]=1
 local reticle=hudroot+0x19aaf8;local parent=alloc(256);local root=alloc(256)
 P(reticle+0xf0,parent);P(parent+0xf0,root);F(root+0xc,1920);F(root+0x10,1080)
-local camera=alloc(256);P(base+AA.anchor.spec.camera,camera);F(camera+0xdc,0);F(camera+0xe0,0)
+local camera=alloc(256);P(base+HUD.anchor.spec.camera,camera);F(camera+0xdc,0);F(camera+0xe0,0)
 U(reticle+0x2080,3);F(reticle+0x2088,1020);F(reticle+0x208c,515)
 F(reticle+0x2090,60);F(reticle+0x2094,-25)
 test('native anchor follows stored reticle displacement without injected provider',function()
-    local anchor=AA.anchor.new(backend);local p=assert(anchor.poll(),anchor.status)
+    local anchor=HUD.anchor.new(backend);local p=assert(anchor.poll(),anchor.status)
     assert(math.abs(p.x-(.5+60/1920))<1e-8 and math.abs(p.y-(.5+25/1080))<1e-8)
     F(reticle+0x2090,-90);F(reticle+0x2094,40)
     p=assert(anchor.poll());assert(p.x<.5 and p.y<.5)
@@ -147,14 +147,14 @@ end)
 test('anchor normalization accounts for UI size and camera screen offset',function()
     F(root+0xc,1280);F(root+0x10,720);F(camera+0xdc,.2);F(camera+0xe0,-.1)
     F(reticle+0x2090,64);F(reticle+0x2094,36)
-    local a=AA.anchor.new(backend);local p=assert(a.poll(),a.status)
+    local a=HUD.anchor.new(backend);local p=assert(a.poll(),a.status)
     assert(math.abs(p.x-.65)<1e-6 and math.abs(p.y-.5)<1e-6)
     F(root+0xc,1920);F(root+0x10,1080);F(camera+0xdc,0);F(camera+0xe0,0)
 end)
 test('native anchor rejects bad signatures, hidden state and cyclic parents',function()
-    local at=base+AA.anchor.spec.signatures[1][1];local save=bytes[at];bytes[at]=0
-    assert(AA.anchor.new(backend).poll()==nil);bytes[at]=save
-    local a=AA.anchor.new(backend);U(reticle+0x2080,1);assert(a.poll()==nil and a.status=='native reticle hidden')
+    local at=base+HUD.anchor.spec.signatures[1][1];local save=bytes[at];bytes[at]=0
+    assert(HUD.anchor.new(backend).poll()==nil);bytes[at]=save
+    local a=HUD.anchor.new(backend);U(reticle+0x2080,1);assert(a.poll()==nil and a.status=='native reticle hidden')
     U(reticle+0x2080,3);P(root+0xf0,reticle);assert(a.poll()==nil and a.status:find('cycle'))
     P(root+0xf0,0);assert(a.poll())
 end)
@@ -168,7 +168,7 @@ test('runtime preserves callback results, expires anchors and releases GUI',func
     local function remove(g,id)assert(active[id]);active[id]=nil end
     sr.Gui.rect=add;sr.Gui.text=add;sr.Gui.destroy_rect=remove;sr.Gui.destroy_text=remove
     local previous=function()calls=calls+1;return 7,nil,9 end;update=previous
-    local hud=AA.runtime.start(sr,backend)
+    local hud=HUD.runtime.start(sr,backend)
     local a,b,c=update(1/60);assert(a==7 and b==nil and c==9 and calls==1)
     hud.set_anchor_provider(function()return nil end)
     hud.push_anchor(.6,.4);update(1/60);assert(hud.anchor_status=='external provider')
@@ -183,10 +183,10 @@ test('movement does not fade the HUD and automatic native input moves it',functi
         Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
         Gui={resolution=function()return 1280,720 end,rect=function()return 1 end,text=function()return 2 end,destroy_rect=function()end,destroy_text=function()end}}
     update=function()end
-    local normalize=AA.model.normalize
-    AA.model.normalize=function(raw)local m=normalize(raw);if m then m.lowered=true end;return m end
+    local normalize=HUD.model.normalize
+    HUD.model.normalize=function(raw)local m=normalize(raw);if m then m.lowered=true end;return m end
     F(reticle+0x2090,0);F(reticle+0x2094,0)
-    local h=AA.runtime.start(sr,backend)
+    local h=HUD.runtime.start(sr,backend)
     for _=1,60 do update(1/60) end
     assert(h.opacity>.99 and math.abs(h.motion_x)<1e-6)
     F(selection+0x1ac,6);F(selection+0x1b0,12)
@@ -196,23 +196,23 @@ test('movement does not fade the HUD and automatic native input moves it',functi
     U(reticle+0x2080,1)
     for _=1,60 do update(1/60) end
     assert(h.opacity>.99 and math.abs(h.motion_x)<.01)
-    U(reticle+0x2080,3);h.retire();AA.model.normalize=normalize
+    U(reticle+0x2080,3);h.retire();HUD.model.normalize=normalize
 end)
 test('heat thresholds and alternating overheat colors',function()
-    local c=AA.config.new()
-    for _,f in ipairs({0,.74,.74999}) do assert(AA.layout.heat_color(f,0,c)==c.heat_white) end
-    for _,f in ipairs({.75,.85,.85999}) do assert(AA.layout.heat_color(f,0,c)==c.heat_yellow) end
-    for _,f in ipairs({.86,.94,.94999}) do assert(AA.layout.heat_color(f,0,c)==c.heat_red) end
+    local c=HUD.config.new()
+    for _,f in ipairs({0,.74,.74999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_white) end
+    for _,f in ipairs({.75,.85,.85999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_yellow) end
+    for _,f in ipairs({.86,.94,.94999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_red) end
     for _,f in ipairs({.95,1}) do
-        assert(AA.layout.heat_color(f,0,c)==c.heat_red)
-        assert(AA.layout.heat_color(f,.25,c)==c.heat_yellow)
-        assert(AA.layout.heat_color(f,.5,c)==c.heat_red)
+        assert(HUD.layout.heat_color(f,0,c)==c.heat_red)
+        assert(HUD.layout.heat_color(f,.25,c)==c.heat_yellow)
+        assert(HUD.layout.heat_color(f,.5,c)==c.heat_red)
     end
 end)
 test('heat fill grows from the bottom and preserves partial cells',function()
     local function fills(f)
-        local m=AA.model.normalize({id=1,kind='heat',heat=f,reserve=2})
-        local d=AA.layout.compose(m,0,0,1,1,AA.config.new(),0);local out={}
+        local m=HUD.model.normalize({id=1,kind='heat',heat=f,reserve=2})
+        local d=HUD.layout.compose(m,0,0,1,1,HUD.config.new(),0);local out={}
         for _,v in ipairs(d) do if v.type=='rect' and v.w==9 and v.a==.95 then out[#out+1]=v end end
         return out,d
     end
@@ -223,31 +223,31 @@ test('heat fill grows from the bottom and preserves partial cells',function()
     local found=false;for _,v in ipairs(d) do if v.text=='OVERHEAT' then found=true end end;assert(found)
 end)
 test('configuration validates atomically and roundtrips as Lua',function()
-    local c=AA.config.new();AA.config.apply(c,{text_color='a0B1c2',offset_x=-900,frosted=false})
+    local c=HUD.config.new();HUD.config.apply(c,{text_color='a0B1c2',offset_x=-900,frosted=false})
     assert(c.text_color=='#A0B1C2' and c.offset_x==-900 and c.frosted==false)
-    assert(not pcall(AA.config.apply,c,{scale=1.5,heat_red='#GGGGGG'}) and c.scale==1)
-    assert(not pcall(AA.config.apply,c,{offset_y=0/0}))
-    local f=assert(loadstring(AA.config.serialize(c)));setfenv(f,{})
+    assert(not pcall(HUD.config.apply,c,{scale=1.5,heat_red='#GGGGGG'}) and c.scale==1)
+    assert(not pcall(HUD.config.apply,c,{offset_y=0/0}))
+    local f=assert(loadstring(HUD.config.serialize(c)));setfenv(f,{})
     local loaded=f();for k,v in pairs(c) do assert(loaded[k]==v) end
 end)
 test('optional native menu edits hex colors, position and persists tuning',function()
     local options,values,callbacks={},{},{};local writes=0
     ModOptionsMenu={api=1,register_option=function(id,spec) options[id]=spec;values[id]=spec.default;return true end,
         on_change=function(id,fn)callbacks[id]=fn;return true end,set=function(id,v)values[id]=v;return true end}
-    local h={config=AA.config.new()};local menu
-    h.configure=function(v)AA.config.apply(h.config,v);menu.sync()end
+    local h={config=HUD.config.new()};local menu
+    h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
-    menu=AA.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > Astra Ammo')
+    menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
     local n=0;for _ in pairs(options) do n=n+1 end;assert(n==31)
-    callbacks['astra_ammo_v3.offset_x'](-120);assert(h.config.offset_x==-120)
-    callbacks['astra_ammo_v3.color_target'](5)
-    callbacks['astra_ammo_v3.hex1'](11);assert(h.config.heat_red=='#A16D65')
-    callbacks['astra_ammo_v3.hex6'](16);assert(h.config.heat_red=='#A16D6F' and writes==3)
-    assert(values['astra_ammo_v3.hex1']==11)
-    callbacks['astra_ammo_v3.font'](2);assert(h.config.font=='debug' and writes==4)
-    callbacks['astra_ammo_v3.font'](1);assert(h.config.font=='bigblue' and writes==5)
-    menu.retire();callbacks['astra_ammo_v3.offset_x'](42);assert(h.config.offset_x==-120)
-    ModOptionsMenu=nil;assert(AA.menu.new(h).status=='Mod Options Menu not installed')
+    callbacks['dbf_hud_v3.offset_x'](-120);assert(h.config.offset_x==-120)
+    callbacks['dbf_hud_v3.color_target'](5)
+    callbacks['dbf_hud_v3.hex1'](11);assert(h.config.heat_red=='#A16D65')
+    callbacks['dbf_hud_v3.hex6'](16);assert(h.config.heat_red=='#A16D6F' and writes==3)
+    assert(values['dbf_hud_v3.hex1']==11)
+    callbacks['dbf_hud_v3.font'](2);assert(h.config.font=='debug' and writes==4)
+    callbacks['dbf_hud_v3.font'](1);assert(h.config.font=='bigblue' and writes==5)
+    menu.retire();callbacks['dbf_hud_v3.offset_x'](42);assert(h.config.offset_x==-120)
+    ModOptionsMenu=nil;assert(HUD.menu.new(h).status=='Mod Options Menu not installed')
 end)
 test('native frost is availability gated and bitmap lifecycle is released',function()
     local active={};local nextid=0;local bitmaps=0;local panelalpha;local available=false
@@ -259,7 +259,7 @@ test('native frost is availability gated and bitmap lifecycle is released',funct
         Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
         Gui={rect=function(g,p,s,c)panelalpha=c[1];return add()end,text=add,
             bitmap=function()bitmaps=bitmaps+1;return add()end,destroy_rect=remove,destroy_text=remove,destroy_bitmap=remove}}
-    local v=AA.view.new(sr);local command={{type='panel',x=0,y=0,w=103,h=83,c={32,38,40},a=.55,frosted=true}}
+    local v=HUD.view.new(sr);local command={{type='panel',x=0,y=0,w=103,h=83,c={32,38,40},a=.55,frosted=true}}
     v.draw(command);assert(bitmaps==0 and panelalpha==255)
     v.release();assert(next(active)==nil);available=true
     v.draw(command);assert(bitmaps==1 and panelalpha==140 and v.material_status:find('native frost',1,true))
@@ -268,10 +268,10 @@ end)
 
 test('heat proportions scale together and percent remains adjacent',function()
     for _,heat in ipairs({0,.62,1}) do
-        local m=AA.model.normalize({id=1,kind='heat',heat=heat,reserve=3})
-        local config=AA.config.new();config.font='debug'
-        local one=AA.layout.compose(m,0,0,1,1,config,0)
-        local two=AA.layout.compose(m,0,0,2,1,config,0)
+        local m=HUD.model.normalize({id=1,kind='heat',heat=heat,reserve=3})
+        local config=HUD.config.new();config.font='debug'
+        local one=HUD.layout.compose(m,0,0,1,1,config,0)
+        local two=HUD.layout.compose(m,0,0,2,1,config,0)
         assert(one[1].w>0 and one[1].h>0)
         local number,percent
         for i,c in ipairs(one) do
@@ -286,7 +286,7 @@ end)
 test('frame fits measured text including bearings and grows for content',function()
     local function measure(t,size) return -2,-size*.25,#t*size*.7,size*.9 end
     local function card(value,reserve)
-        return AA.layout.compose({kind='magazine',value=value,label='AMMO',state='READY',reserve=reserve,reserve_kind='MAGAZINES',fraction=.5},0,0,1,1,AA.config.new(),0,measure)
+        return HUD.layout.compose({kind='magazine',value=value,label='AMMO',state='READY',reserve=reserve,reserve_kind='MAGAZINES',fraction=.5},0,0,1,1,HUD.config.new(),0,measure)
     end
     local small=card(7,1);local large=card(12345,99999)
     assert(large[1].w>small[1].w)
@@ -299,16 +299,16 @@ test('frame fits measured text including bearings and grows for content',functio
             assert(c.y+b>=p.y+8-1e-8 and c.y+f<=p.y+p.h-8+1e-8)
         end
     end
-    local a=AA.layout.compose(AA.model.normalize({kind='heat',heat=.99,reserve=1}),0,0,1,1,AA.config.new(),0,measure)
-    local b=AA.layout.compose(AA.model.normalize({kind='heat',heat=1,reserve=1}),0,0,1,1,AA.config.new(),0,measure)
+    local a=HUD.layout.compose(HUD.model.normalize({kind='heat',heat=.99,reserve=1}),0,0,1,1,HUD.config.new(),0,measure)
+    local b=HUD.layout.compose(HUD.model.normalize({kind='heat',heat=1,reserve=1}),0,0,1,1,HUD.config.new(),0,measure)
     assert(b[1].w>a[1].w)
 end)
 
 test('BigBlue glyph drawing snaps to pixels and fits its measured bounds',function()
     for code=32,126 do
         for _,size in ipairs({6,12,18,24,36,72,144}) do
-            local text=string.char(code);local a,b,c,d=AA.font.measure(text,size);local n=0
-            AA.font.draw(text,size,.3,-.3,function(x,y,w,h)
+            local text=string.char(code);local a,b,c,d=HUD.font.measure(text,size);local n=0
+            HUD.font.draw(text,size,.3,-.3,function(x,y,w,h)
                 n=n+1;assert(x==math.floor(x) and y==math.floor(y))
                 assert(w>0 and h>0 and w==math.floor(w) and h==math.floor(h))
                 assert(x>=a and y>=b and x+w<=c and y+h<=d)
@@ -321,15 +321,15 @@ end)
 test('BigBlue frame contains glyphs and stacked labels across scales',function()
     for _,scale in ipairs({.25,.5,.67,1,1.25,1.5,2,3,4}) do
         for _,heat in ipairs({.62,1}) do
-            local m=AA.model.normalize({kind='heat',heat=heat,reserve=3})
-            local commands=AA.layout.compose(m,100.3,120.7,scale,1,AA.config.new(),0)
+            local m=HUD.model.normalize({kind='heat',heat=heat,reserve=3})
+            local commands=HUD.layout.compose(m,100.3,120.7,scale,1,HUD.config.new(),0)
             local panel=commands[1];local header,number,footer
             for _,c in ipairs(commands) do
                 if c.type=='text' then
                     assert(c.a==1 and c.font=='bigblue')
-                    local a,b,e,f=AA.font.measure(c.text,c.size)
+                    local a,b,e,f=HUD.font.measure(c.text,c.size)
                     if c.text=='HEAT' then header=c elseif c.text==string.format('%02d',m.value) then number={c.y+b,c.y+f} elseif c.text:find('SINKS') or c.text=='OVERHEAT' then footer={c.y+b,c.y+f} end
-                    AA.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)
+                    HUD.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)
                         assert(x>=panel.x and x+w<=panel.x+panel.w)
                         assert(y>=panel.y and y+h<=panel.y+panel.h)
                     end)
@@ -349,12 +349,12 @@ test('BigBlue renderer uses rectangles and releases all of them',function()
         Gui={rect=add,text=function()texts=texts+1;return add()end,
             destroy_rect=function(g,id)assert(active[id]);active[id]=nil end,
             destroy_text=function(g,id)assert(active[id]);active[id]=nil end}}
-    local v=AA.view.new(sr)
+    local v=HUD.view.new(sr)
     local cmd={type='text',text='0123456789 HEAT SINKS',font='bigblue',size=24,x=.4,y=.7,a=1,c={255,255,255}}
     v.draw({cmd});assert(texts==0 and index>0 and index<=12*#cmd.text)
     v.clear();assert(next(active)==nil)
     cmd.font='debug';v.draw({cmd});assert(texts==1);v.release();assert(next(active)==nil)
-    local cfg=AA.config.new();assert(not pcall(AA.config.apply,cfg,{font='unverified/path'}))
+    local cfg=HUD.config.new();assert(not pcall(HUD.config.apply,cfg,{font='unverified/path'}))
 end)
 
 test('pose reader checks code, generations, matrices and ownership after read',function()
@@ -375,7 +375,7 @@ test('pose reader checks code, generations, matrices and ownership after read',f
     for i,v in ipairs({1,0,0,0,0,1,0,0,0,0,1,0,12,23,34,1})do F(matrix+(i-1)*4,v)end
     U(record+8,123);U(record+12,candidate);U(record+16,77)
     local raw={id=123,unit_ref=77,resource_hex='test',binding={module_base=testbase,record=record,candidate=candidate}}
-    local p=AA.pose.new(backend);local value=assert(p.poll(raw),p.status)
+    local p=HUD.pose.new(backend);local value=assert(p.poll(raw),p.status)
     assert(value.x==12 and value.y==23 and value.z==34 and value.node_count==63)
     bytes[generations+2]=4;assert(p.poll(raw)==nil and p.status:find('recycled'));bytes[generations+2]=3
     local first=bytes[getter];bytes[getter]=0;assert(p.poll(raw)==nil and p.status:find('getter'));bytes[getter]=first
@@ -383,23 +383,23 @@ test('pose reader checks code, generations, matrices and ownership after read',f
     F(matrix+4,.5);assert(p.poll(raw)==nil);F(matrix+4,0)
     U(record+8,124);assert(p.poll(raw)==nil and p.status:find('weapon changed'));U(record+8,123)
     local tearing={read=function(a,n)local s=read(a,n);if a==matrix then bytes[generations+2]=4 end;return s end}
-    assert(AA.pose.new(tearing).poll(raw)==nil);bytes[generations+2]=3
+    assert(HUD.pose.new(tearing).poll(raw)==nil);bytes[generations+2]=3
     assert(p.poll(raw))
 end)
 
 
 test('weapon attachment follows distant targets with bounded lag and resets',function()
-    local c=AA.config.new();local a=AA.motion.new()
-    local x,y=AA.motion.attach(a,{x=600,y=-300},1/60,c)
+    local c=HUD.config.new();local a=HUD.motion.new()
+    local x,y=HUD.motion.attach(a,{x=600,y=-300},1/60,c)
     assert(x==600 and y==-300)
     for i=1,100 do
         local t={x=600+i*10,y=-300+i*5}
-        x,y=AA.motion.attach(a,t,1/60,c)
+        x,y=HUD.motion.attach(a,t,1/60,c)
         assert((x-t.x)^2+(y-t.y)^2<=c.weapon_lag^2+1e-7)
     end
-    c.weapon_lag=0;x,y=AA.motion.attach(a,{x=-800,y=400},1/60,c)
+    c.weapon_lag=0;x,y=HUD.motion.attach(a,{x=-800,y=400},1/60,c)
     assert(x==-800 and y==400)
-    x,y=AA.motion.attach(a,{x=100,y=200},1,c);assert(x==100 and y==200)
+    x,y=HUD.motion.attach(a,{x=100,y=200},1,c);assert(x==100 and y==200)
 end)
 
 test('runtime attaches without reticle travel clamp and falls back when projection fails',function()
@@ -407,12 +407,12 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
         World={create_screen_gui=function()return 2 end,destroy_gui=function()end},
         Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
         Gui={resolution=function()return 1920,1080 end,rect=function()return 1 end,text=function()return 2 end,destroy_rect=function()end,destroy_text=function()end}}
-    local saved_pose,saved_projection=AA.pose.new,AA.projection.new
+    local saved_pose,saved_projection=HUD.pose.new,HUD.projection.new
     local valid=true;local received;local pose_reads=0
-    AA.pose.new=function()return {poll=function()pose_reads=pose_reads+1;return {id=20,candidate=1,node_count=1,x=1,y=2,z=3,matrix={0,1,0,0,-1,0,0,0,0,0,1,0,1,2,3,1}}end,status='test'}end
-    AA.projection.new=function()return {status='test',poll=function(base,p,aspect)received=p;if valid then return {x=.8,y=.2,depth=2} end end}end
+    HUD.pose.new=function()return {poll=function()pose_reads=pose_reads+1;return {id=20,candidate=1,node_count=1,x=1,y=2,z=3,matrix={0,1,0,0,-1,0,0,0,0,0,1,0,1,2,3,1}}end,status='test'}end
+    HUD.projection.new=function()return {status='test',poll=function(base,p,aspect)received=p;if valid then return {x=.8,y=.2,depth=2} end end}end
     update=function()end
-    local h=AA.runtime.start(sr,backend);h.configure({mount_x=.5})
+    local h=HUD.runtime.start(sr,backend);h.configure({mount_x=.5})
     update(1/60);assert(h.anchor_status=='weapon attachment')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
     assert(received.x==1 and received.y==2.5 and received.z==3)
@@ -421,21 +421,21 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     assert(h.anchor_status~='weapon attachment' and h.opacity>=alpha)
     valid=true;update(1/60);assert(math.abs(h.motion_x-576)<1e-6)
     h.configure({anchor_mode='crosshair'});update(1/60);assert(h.anchor_status~='weapon attachment')
-    h.retire();AA.pose.new,AA.projection.new=saved_pose,saved_projection
+    h.retire();HUD.pose.new,HUD.projection.new=saved_pose,saved_projection
 end)
 
 test('projection handles perspective, aspect, camera rotation and clipping',function()
     local m={1,0,0,0,0,1,0,0,0,0,1,0,10,20,30,1}
-    local p=assert(AA.projection.project(m,10,30,30,math.pi/2,2,.05))
+    local p=assert(HUD.projection.project(m,10,30,30,math.pi/2,2,.05))
     assert(math.abs(p.x-.5)<1e-9 and math.abs(p.y-.5)<1e-9)
-    p=assert(AA.projection.project(m,20,30,35,math.pi/2,2,.05))
+    p=assert(HUD.projection.project(m,20,30,35,math.pi/2,2,.05))
     assert(math.abs(p.x-.75)<1e-9 and math.abs(p.y-.75)<1e-9)
-    assert(AA.projection.project(m,10,19,30,math.pi/2,2,.05)==nil)
-    assert(AA.projection.project(m,1000,30,30,math.pi/2,2,.05)==nil)
+    assert(HUD.projection.project(m,10,19,30,math.pi/2,2,.05)==nil)
+    assert(HUD.projection.project(m,1000,30,30,math.pi/2,2,.05)==nil)
     m={0,1,0,0,-1,0,0,0,0,0,1,0,0,0,0,1}
-    p=assert(AA.projection.project(m,-10,5,0,math.pi/2,1,.05))
+    p=assert(HUD.projection.project(m,-10,5,0,math.pi/2,1,.05))
     assert(math.abs(p.x-.75)<1e-9)
-    m[1]=1;assert(not pcall(AA.projection.project,m,-10,5,0,math.pi/2,1,.05))
+    m[1]=1;assert(not pcall(HUD.projection.project,m,-10,5,0,math.pi/2,1,.05))
 end)
 
 test('camera reader rejects changed code, camera modes and torn ownership',function()
@@ -449,13 +449,13 @@ test('camera reader rejects changed code, camera modes and torn ownership',funct
     P(base+0x346d560,state);P(state,cam);put(cam,string.rep(string.char(0),160))
     P(cam+0x18,scene);U(cam+0x20,0);U(cam+0x30,1);F(cam+0x28,.05);F(cam+0x34,math.pi/2);F(cam+0x8c,1);P(scene+0x28,mat)
     for i,v in ipairs({1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1})do F(mat+(i-1)*4,v)end
-    local reader=AA.projection.new(backend);local pose={x=0,y=10,z=0}
+    local reader=HUD.projection.new(backend);local pose={x=0,y=10,z=0}
     assert(reader.poll(base,pose,2),reader.status)
     U(cam+0x50,2);assert(not reader.poll(base,pose,2));U(cam+0x50,0)
     F(cam+0x90,1);assert(not reader.poll(base,pose,2));F(cam+0x90,0)
     bytes[getter]=0;assert(not reader.poll(base,pose,2));bytes[getter]=0x48
     local tearing={read=function(a,n)local b=read(a,n);if a==mat then U(cam+0x20,1)end;return b end}
-    assert(not AA.projection.new(tearing).poll(base,pose,2));U(cam+0x20,0)
+    assert(not HUD.projection.new(tearing).poll(base,pose,2));U(cam+0x20,0)
     assert(reader.poll(base,pose,2))
 end)
 
@@ -463,25 +463,25 @@ test('MDL cycles preserve host callbacks, retire old HUD and clean every resourc
     local active={};local sequence=0;local destroyed=0;local closed=0;local host_calls=0
     local function add()sequence=sequence+1;active[sequence]=true;return sequence end
     local function remove(g,id)assert(active[id]);active[id]=nil end
-    local saved_sr=stingray;local saved_native=AA.memory.native
+    local saved_sr=stingray;local saved_native=HUD.memory.native
     stingray={Application={worlds=function()return {1}end,main_world=function()return 1 end},
         World={create_screen_gui=function()return 2 end,destroy_gui=function()destroyed=destroyed+1 end},
         Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
         Gui={resolution=function()return 1920,1080 end,rect=add,text=add,destroy_rect=remove,destroy_text=remove}}
-    AA.memory.native=function()return {module=backend.module,read=backend.read,close=function()closed=closed+1 end}end
+    HUD.memory.native=function()return {module=backend.module,read=backend.read,close=function()closed=closed+1 end}end
     update=function()host_calls=host_calls+1;return 7,nil,9 end
     shutdown=function()return 'host shutdown' end
-    local old=AA.runtime.start(stingray,backend);update(1/60)
+    local old=HUD.runtime.start(stingray,backend);update(1/60)
     -- Simulate a later addon wrapping the original boot HUD.
     local chained=update;local host=function(...)return chained(...)end;update=host
     for cycle=1,4 do
         local cleanup;local def=assert(loadfile('src/mdl.lua'))()
         local ctx={api=2,on_cleanup=function(fn)cleanup=fn end,
-            global=function(name,value)assert(name=='AstraAmmo');rawset(_G,name,value)end,log=function()end}
+            global=function(name,value)assert(name=='DBFHUD');rawset(_G,name,value)end,log=function()end}
         def.on_enable(ctx)
         local host_shutdown=shutdown
         assert(update==host)
-        local current=AstraAmmo;local before=host_calls
+        local current=DBFHUD;local before=host_calls
         local a,b,c=update(1/60);assert(a==7 and b==nil and c==9 and host_calls==before+1)
         assert(current.clock==0) -- host chain cannot tick the managed instance
         def.on_update(ctx,1/60);assert(current.clock==1/60 and next(active))
@@ -490,9 +490,9 @@ test('MDL cycles preserve host callbacks, retire old HUD and clean every resourc
         assert(next(active)==nil and closed==cycle and destroyed==cycle+1)
         def.on_update(ctx,1);current.frame(1);current.tick(1);assert(current.clock==1/60)
         assert(update==host and shutdown==host_shutdown)
-        AstraAmmo=nil
+        DBFHUD=nil
     end
-    AA.memory.native=saved_native;stingray=saved_sr
+    HUD.memory.native=saved_native;stingray=saved_sr
 end)
 
 test('menu reload reuses dispatchers and releases retired callbacks',function()
@@ -500,47 +500,47 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     ModOptionsMenu={api=1,register_option=function()return true end,
         on_change=function(id,fn)registered=registered+1;callbacks[id]=fn;return true end,set=function()return true end}
     for cycle=1,5 do
-        local h={config=AA.config.new(),save_tuning=function()writes=writes+1 end}
-        h.configure=function(v)AA.config.apply(h.config,v)end
-        local menu=AA.menu.new(h);menu.poll();assert(registered==31)
-        callbacks['astra_ammo_v3.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
-        menu.retire();callbacks['astra_ammo_v3.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
+        local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
+        h.configure=function(v)HUD.config.apply(h.config,v)end
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==31)
+        callbacks['dbf_hud_v3.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
+        menu.retire();callbacks['dbf_hud_v3.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
     ModOptionsMenu=nil
 end)
 
 test('live menu reuses boot registrations with changed saved defaults',function()
-    local callbacks={};local h={config=AA.config.new(),save_tuning=function()end}
+    local callbacks={};local h={config=HUD.config.new(),save_tuning=function()end}
     h.config.offset_x=177;h.config.font='debug'
     ModOptionsMenu={api=1,get=function()return 1 end,
         register_option=function()error('existing boot schema must not be registered with new defaults')end,
         on_change=function(id,fn)callbacks[id]=fn;return true end,set=function()return true end}
-    h.configure=function(v)AA.config.apply(h.config,v)end
-    local menu=AA.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > Astra Ammo')
-    callbacks['astra_ammo_v3.offset_x'](188);assert(h.config.offset_x==188)
+    h.configure=function(v)HUD.config.apply(h.config,v)end
+    local menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
+    callbacks['dbf_hud_v3.offset_x'](188);assert(h.config.offset_x==188)
     menu.retire();ModOptionsMenu=nil
 end)
 
 test('3D smoothing preserves rigid axes, bounds lag and resets on weapon changes',function()
     local identity={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
     local turn={-1,0,0,0,0,-1,0,0,0,0,1,0,0,0,0,1}
-    local c=AA.config.new();c.world_rotation_smooth=.3;c.world_max_lag=.5
+    local c=HUD.config.new();c.world_rotation_smooth=.3;c.world_max_lag=.5
     local results={}
     for _,fps in ipairs({30,60,144})do
-        local state={};AA.pose_motion.step(state,identity,0,0,0,1,0,c)
+        local state={};HUD.pose_motion.step(state,identity,0,0,0,1,0,c)
         local out
-        for i=1,fps do out=AA.pose_motion.step(state,turn,.5,0,0,1,1/fps,c)end
+        for i=1,fps do out=HUD.pose_motion.step(state,turn,.5,0,0,1,1/fps,c)end
         for _,k in ipairs({1,5,9})do assert(math.abs(out[k]^2+out[k+1]^2+out[k+2]^2-1)<1e-8)end
         assert(math.abs(out[1]*out[5]+out[2]*out[6]+out[3]*out[7])<1e-8)
         results[#results+1]=out
     end
     for i=1,16 do assert(math.abs(results[1][i]-results[3][i])<1e-7)end
-    local state={};AA.pose_motion.step(state,identity,0,0,0,1,0,c);c.world_max_lag=.12
-    local out=AA.pose_motion.step(state,turn,1,0,0,1,1/144,c);assert(1-out[13]<=.12000001)
-    out=AA.pose_motion.step(state,identity,-1,0,0,2,1/144,c);assert(out[13]==-1 and out[1]==1)
-    out=AA.pose_motion.step(state,turn,20,0,0,2,1/144,c);assert(out[13]==20 and out[1]==-1)
+    local state={};HUD.pose_motion.step(state,identity,0,0,0,1,0,c);c.world_max_lag=.12
+    local out=HUD.pose_motion.step(state,turn,1,0,0,1,1/144,c);assert(1-out[13]<=.12000001)
+    out=HUD.pose_motion.step(state,identity,-1,0,0,2,1/144,c);assert(out[13]==-1 and out[1]==1)
+    out=HUD.pose_motion.step(state,turn,20,0,0,2,1/144,c);assert(out[13]==20 and out[1]==-1)
     c.world_position_smooth=0;c.world_rotation_smooth=0
-    out=AA.pose_motion.step(state,identity,20.1,0,0,2,1/144,c);assert(out[13]==20.1 and out[1]==1)
+    out=HUD.pose_motion.step(state,identity,20.1,0,0,2,1/144,c);assert(out[13]==20.1 and out[1]==1)
 end)
 
 test('world GUI probe uses live worlds, moves and releases without stale handles',function()
@@ -551,22 +551,22 @@ test('world GUI probe uses live worlds, moves and releases without stale handles
         World={create_world_gui=function(w,p,x,y,mode)assert(w==worlds[1] and x==1000 and mode=='immediate');created=created+1;return created end,
             destroy_gui=function(w,g)assert(w==worlds[1]);destroyed=destroyed+1 end},
         Gui={move=function()moved=moved+1 end,rect=function()drawn=drawn+1 end}}
-    local probe=AA.world_probe.new(sr,function()end);local cfg=AA.config.new();cfg.world_probe=true
+    local probe=HUD.world_probe.new(sr,function()end);local cfg=HUD.config.new();cfg.world_probe=true
     local p={x=0,y=0,z=0,matrix={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}}
     probe.draw(p,cfg);probe.draw(p,cfg);assert(created==1 and moved==1 and drawn==4)
-    local commands=AA.layout.compose({kind='heat',value=83,fraction=.83,reserve=3,state='READY'},0,0,2,1,cfg,0)
+    local commands=HUD.layout.compose({kind='heat',value=83,fraction=.83,reserve=3,state='READY'},0,0,2,1,cfg,0)
     local material_draws=0
-    sr.Application.can_get=function(kind,name)return name=='mods/astra_ammo/materials/depth_fill'end
-    probe.release();probe=AA.world_probe.new(sr,function()end)
+    sr.Application.can_get=function(kind,name)return name=='mods/dbf_hud/materials/depth_fill'end
+    probe.release();probe=HUD.world_probe.new(sr,function()end)
     local old_rect=sr.Gui.rect
-    sr.Gui.bitmap=function(g,material,pos,size,color)assert(material=='mods/astra_ammo/materials/depth_fill');material_draws=material_draws+1;return old_rect()end
+    sr.Gui.bitmap=function(g,material,pos,size,color)assert(material=='mods/dbf_hud/materials/depth_fill');material_draws=material_draws+1;return old_rect()end
     sr.Gui.rect=function(g,pos)assert(pos[3]==1,'foreground must use explicit material');return old_rect()end
     assert(probe.draw(p,cfg,commands));assert(material_draws>20)
     -- World GUI must omit the broken frost draw and preserve tint transparency.
     local frost_alpha,tint_alpha
     sr.Application.can_get=function()return true end
     sr.Gui.bitmap=function(g,material,pos,size,color)
-        assert(material~='mods/astra_ammo/materials/depth_blur')
+        assert(material~='mods/dbf_hud/materials/depth_blur')
         if material=='content/ui/shared/material/gui_blur' then frost_alpha=color[1]
         end
     end
@@ -582,7 +582,7 @@ test('world GUI probe uses live worlds, moves and releases without stale handles
     probe.release();sr.Gui.rect=old_rect;sr.Gui.bitmap=nil;sr.Application.can_get=nil
     -- Rebaseline counters for the remaining lifetime checks.
     created,moved,destroyed,drawn=1,1,0,4
-    probe=AA.world_probe.new(sr,function()end);probe.draw(p,cfg);created=1
+    probe=HUD.world_probe.new(sr,function()end);probe.draw(p,cfg);created=1
     local previous=drawn;cfg.world_probe=false
     assert(probe.draw(p,cfg,commands));assert(drawn>previous+20)
     cfg.world_probe=true
@@ -612,14 +612,14 @@ test('offscreen test waits for render, preserves returns and releases in order',
         Renderer={create_resource=event('texture',7),destroy_resource=event('free texture')},
         Viewport={set_output_render_target=function(v,t)assert(v==2 and t==7)end},
         Gui={rect=event('rect')},Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end}
-    local probe=AA.offscreen_test.start(sr,function()end,globals)
+    local probe=HUD.offscreen_test.start(sr,function()end,globals)
     assert(rendered==0 and globals.render==host_render)
     local a,b,c=globals.render(8);assert(a==8 and b==nil and c==9 and rendered==1)
     globals.render(8);assert(rendered==1)
     probe.release();assert(globals.render==host_render)
     assert(table.concat(events,','):find('free gui,free viewport,free environment,free world,free texture',1,true))
     local count=#events;probe.release();assert(#events==count)
-    globals.HUDRenderBridge=nil;AA.offscreen_test.start(sr,function()end,globals);assert(#events==count)
+    globals.HUDRenderBridge=nil;HUD.offscreen_test.start(sr,function()end,globals);assert(#events==count)
 end)
 
 test('startup render bridge isolates subscribers and keeps host callback',function()
@@ -636,11 +636,11 @@ test('startup render bridge isolates subscribers and keeps host callback',functi
 end)
 
 test('bundle compiles and excludes crashing diagnostic paths',function()
-    assert(loadfile('dist/astra_ammo.lua'))
-    local live=assert(loadfile('mdl/astra_ammo/mod.lua'))()
+    assert(loadfile('dist/dbf_hud.lua'))
+    local live=assert(loadfile('mdl/dbf_hud/mod.lua'))()
     assert(type(live.on_enable)=='function' and type(live.on_update)=='function' and type(live.on_disable)=='function')
-    local f=assert(io.open('dist/astra_ammo.lua','r'));local source=f:read('*a');f:close()
-    assert(not source:find('BINDING2',1,true) and not source:find('AA.probe',1,true))
+    local f=assert(io.open('dist/dbf_hud.lua','r'));local source=f:read('*a');f:close()
+    assert(not source:find('BINDING2',1,true) and not source:find('HUD.probe',1,true))
     assert(not source:find('G.text_extents',1,true) and not source:find('World.units',1,true))
 end)
 print(string.format('%d contract tests passed',tests))

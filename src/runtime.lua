@@ -1,23 +1,25 @@
 local M={}
 function M.start(sr,backend,options)
     local managed=options and options.managed==true
-    local old=rawget(_G,'AstraAmmo');if old and old.retire then old.retire() end
-    local self={version='0.3.35',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
-    self.config=AA.config.new()
-    local attached=AA.motion.new();local attachment_active=false
-    local motion=AA.motion.new();local reader=AA.reader.new(backend);local view=AA.view.new(sr)
-    local native=AA.anchor.new(backend);self.native_anchor=native
-    local pose=AA.pose.new(backend);local next_pose_log=0;local last_pose_status
+    -- Compatibility: retire a previous-brand instance during live upgrade.
+    local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
+    local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
+    local self={version='0.3.36',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    self.config=HUD.config.new()
+    local attached=HUD.motion.new();local attachment_active=false
+    local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
+    local native=HUD.anchor.new(backend);self.native_anchor=native
+    local pose=HUD.pose.new(backend);local next_pose_log=0;local last_pose_status
     local original=rawget(_G,'update');local shutdown=rawget(_G,'shutdown')
     if not managed and type(original)~='function' then self.status='update callback missing';return self end
-    local projection=AA.projection.new(backend);local binding_base;local next_projection_log=0
+    local projection=HUD.projection.new(backend);local binding_base;local next_projection_log=0
     local latest_raw;local next_sample=0;local model;local anchor;local anchor_at=-10;local provider;local failures=0
     local retired=false;local cleaned=false;local alpha=0;local last_id;local width,height
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
     local last_binding
     local function log(line) if backend.log then pcall(backend.log,string.format('[%.3f] %s',self.clock,line)) end end
-    local world_probe=AA.world_probe.new(sr,log)
-    log('START AstraAmmo '..self.version..' native crosshair enabled; movement visibility filter removed')
+    local world_probe=HUD.world_probe.new(sr,log)
+    log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     -- Availability check only: never invokes unverified world GUI functions.
     local capabilities={}
     for _,entry in ipairs({{'World','create_world_gui'},{'World','destroy_gui'},
@@ -96,10 +98,10 @@ function M.start(sr,backend,options)
     function self.set_anchor_provider(fn) assert(fn==nil or type(fn)=='function');provider=fn end
     local menu
     function self.configure(values)
-        AA.config.apply(self.config,values)
+        HUD.config.apply(self.config,values)
         if menu then menu.sync() end
     end
-    function self.export_tuning() return AA.config.serialize(self.config) end
+    function self.export_tuning() return HUD.config.serialize(self.config) end
     function self.save_tuning()
         if not backend.write_tuning then self.tuning_status='file writer unavailable';return false end
         local ok,result=pcall(backend.write_tuning,self.export_tuning())
@@ -114,7 +116,7 @@ function M.start(sr,backend,options)
         log('TUNING '..self.tuning_status);return ok and result
     end
     self.reload_tuning()
-    menu=AA.menu.new(self)
+    menu=HUD.menu.new(self)
     function self.frame(dt)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
@@ -126,7 +128,7 @@ function M.start(sr,backend,options)
         end
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
-            local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=AA.model.normalize(raw);self.status=reader.status
+            local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
             if self.clock>=next_pose_log then
                 if self.weapon_pose then
                     local p=self.weapon_pose;local m=p.matrix
@@ -180,10 +182,10 @@ function M.start(sr,backend,options)
         if use_weapon~=attachment_active then motion.ready=false;attached.ready=false;attachment_active=use_weapon end
         local x,y
         if use_weapon then
-            x,y=AA.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config)
+            x,y=HUD.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config)
             self.anchor_status='weapon attachment'
         else
-            x,y=AA.motion.step(motion,target,dt,self.config)
+            x,y=HUD.motion.step(motion,target,dt,self.config)
             self.attachment_status='reticle fallback: '..projection.status
         end
         -- Movement must not control alpha. Native reticle hiding only changes the anchor.
@@ -206,7 +208,7 @@ function M.start(sr,backend,options)
         if not model or alpha<0.01 then world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end;world_config.font='bigblue'
-            local world_commands=AA.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
+            local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
             if world_probe.draw(self.weapon_pose,self.config,world_commands,dt) then
@@ -216,7 +218,7 @@ function M.start(sr,backend,options)
         local s=h/1080
         x=w/2+(x+(use_weapon and self.config.weapon_offset_x or self.config.offset_x))*s;y=h/2+(y+(use_weapon and self.config.weapon_offset_y or self.config.offset_y))*s
         local scale=s*self.config.scale
-        local commands=AA.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
+        local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
         local frame=commands[1];local margin=4*scale
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
@@ -271,7 +273,7 @@ function M.start(sr,backend,options)
         end
     end
     if not managed then
-        rawset(_G,'update',wrapper);rawset(_G,'shutdown',shutdown_wrapper);rawset(_G,'AstraAmmo',self)
+        rawset(_G,'update',wrapper);rawset(_G,'shutdown',shutdown_wrapper);rawset(_G,'DBFHUD',self)
     end
     return self
 end

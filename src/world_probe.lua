@@ -35,7 +35,7 @@ function M.new(sr,log)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
-        m=AA.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
+        m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]
         if first then log('WORLD_GUI matrix begin') end
         local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),
@@ -44,15 +44,18 @@ function M.new(sr,log)
             world=main;log('WORLD_GUI create begin')
             gui=assert(W.create_world_gui(world,pose,1000,1000,'immediate'),'world GUI returned nil')
             log('WORLD_GUI create complete')
-            local name='mods/astra_ammo/materials/depth_fill'
-            if A.can_get and A.can_get('material',name) then depth_fill=name end
+            local name='mods/dbf_hud/materials/depth_fill'
+            if A.can_get and A.can_get('material',name) then depth_fill=name
+            elseif A.can_get and A.can_get('material','mods/astra_ammo/materials/depth_fill') then
+                depth_fill='mods/astra_ammo/materials/depth_fill' -- Previously deployed optional material.
+            end
             log('WORLD_GUI depth material '..(depth_fill and 'available' or 'missing; install depth material addon'))
             -- One-time observation only: resolve the same material used by bitmap.
             -- Keep no native material handles across frames or GUI destruction.
             log('WORLD_GUI instance '..identity(gui)..' world '..identity(world))
             if type(G.material)=='function' and A.can_get then
                 for _,material_name in ipairs({'content/ui/shared/material/gui_fill',
-                    'mods/astra_ammo/materials/depth_fill','mods/astra_ammo/materials/depth_blur'}) do
+                    'mods/dbf_hud/materials/depth_fill','mods/dbf_hud/materials/depth_blur'}) do
                     if A.can_get('material',material_name) then
                         local ok,handle=pcall(G.material,gui,material_name)
                         log('WORLD_GUI material instance '..material_name..' '..(ok and identity(handle) or 'lookup failed'))
@@ -82,7 +85,7 @@ function M.new(sr,log)
                 elseif v.type=='rect' then
                     solid(v.x,v.y,v.w,v.h,2,color)
                 elseif v.font=='bigblue' then
-                    AA.font.draw(v.text,v.size,v.x,v.y,function(x,y,w,h)
+                    HUD.font.draw(v.text,v.size,v.x,v.y,function(x,y,w,h)
                         solid(x,y,w,h,3,color)
                     end)
                 else

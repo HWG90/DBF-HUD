@@ -39,7 +39,7 @@ The user confirmed that the world-space rectangle renders over the character. Wo
 
 ## Next technical requirement
 
-Locate a GUI-compatible depth-tested shader program in the current build before constructing an isolated Astra material. Do not change the shared native gui_fill material: other HUDs use it. Do not infer that changing a shader-name hash alone produces a valid compiled material. If a new material asset is necessary, it will require normal asset deployment; MDL reload alone only replaces Lua.
+Locate a GUI-compatible depth-tested shader program in the current build before constructing an isolated DBF-HUD material. Do not change the shared native gui_fill material: other HUDs use it. Do not infer that changing a shader-name hash alone produces a valid compiled material. If a new material asset is necessary, it will require normal asset deployment; MDL reload alone only replaces Lua.
 
 ## References
 
@@ -50,15 +50,15 @@ Locate a GUI-compatible depth-tested shader program in the current build before 
 
 Further archive inspection found shader_library resources for gui:depth_test_enabled and gui:depth_test_enabled:blur_background in archive ee6b1ba7e22d71ed. Their GPU payloads are 14576 and 15792 bytes respectively, each containing two DXBC blocks. The corresponding plain variants have matching payload sizes. The solid depth library identifies the uppercase compiled variant 0xD78AB313; the blur depth library identifies 0x63009884. Resource lookup names use lowercase flags, while these compiled identifiers use uppercase flags; they must not be interchanged.
 
-AstraAmmo-Depth-Materials-0.1.zip adds only two materials with unique Astra paths. The 144-byte native gui_fill and gui_blur payloads were cloned, changing only the shader identifier at byte 128 to the verified compiled identifiers. This is an experimental material reference change, not new shader compilation. It does not modify a shared game resource. Material compatibility, shader loading and visual depth behavior remain to be confirmed in game.
+DBF-HUD-Depth-Materials-0.1.zip adds only two materials with unique DBF-HUD paths. The 144-byte native gui_fill and gui_blur payloads were cloned, changing only the shader identifier at byte 128 to the verified compiled identifiers. This is an experimental material reference change, not new shader compilation. It does not modify a shared game resource. Material compatibility, shader loading and visual depth behavior remain to be confirmed in game.
 
-Live 0.3.17 checks availability before selecting the Astra material. It supplies the solid depth material to panel tint, bars, accents and pixel-font rectangles, and selects the depth blur material when available. The world panel uses BigBlue glyph rectangles so text cannot retain a separate overlay-only font material. If the depth blur is unavailable, the panel becomes opaque; if both assets are missing, the previous material path remains active and the log reports the missing addon.
+Live 0.3.17 checks availability before selecting the DBF-HUD material. It supplies the solid depth material to panel tint, bars, accents and pixel-font rectangles, and selects the depth blur material when available. The world panel uses BigBlue glyph rectangles so text cannot retain a separate overlay-only font material. If the depth blur is unavailable, the panel becomes opaque; if both assets are missing, the previous material path remains active and the log reports the missing addon.
 
 ### Installation for the live test
 
-1. Import AstraAmmo-Depth-Materials-0.1.zip into Arsenal, enable it, and deploy.
-2. Keep the packaged Astra Ammo HUD disabled. The new package contains materials only and does not start a second HUD.
-3. Restart the game and enable Astra Ammo (Live) in MDL. Its updated Lua is already installed.
+1. Import DBF-HUD-Depth-Materials-0.1.zip into Arsenal, enable it, and deploy.
+2. Keep the packaged DBF-HUD HUD disabled. The new package contains materials only and does not start a second HUD.
+3. Restart the game and enable DBF-HUD (Live) in MDL. Its updated Lua is already installed.
 4. In 3D plane mode, turn so the panel crosses the shoulder. Verify that the background, digits and heat bar all disappear behind it. Also check the panel against scenery.
 
 All 39 offline contracts pass, including propagation of the material to glyph primitives. No claim of successful live occlusion has been made yet.

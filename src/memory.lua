@@ -3,31 +3,31 @@ local M={}
 function M.native()
     local ffi=require('ffi')
     pcall(ffi.cdef, [[
-    void *aa_module(const char*) __asm__("GetModuleHandleA");
-    void *aa_process(void) __asm__("GetCurrentProcess");
-    int aa_read(void*,const void*,void*,size_t,size_t*) __asm__("ReadProcessMemory");
-    unsigned long aa_filename(void*,char*,unsigned long) __asm__("GetModuleFileNameA");
+    void *dbf_hud_module(const char*) __asm__("GetModuleHandleA");
+    void *dbf_hud_process(void) __asm__("GetCurrentProcess");
+    int dbf_hud_read(void*,const void*,void*,size_t,size_t*) __asm__("ReadProcessMemory");
+    unsigned long dbf_hud_filename(void*,char*,unsigned long) __asm__("GetModuleFileNameA");
     ]])
-    local k=ffi.load('kernel32'); local process=k.aa_process()
+    local k=ffi.load('kernel32'); local process=k.dbf_hud_process()
     local buffer=ffi.new('uint8_t[4096]');local got=ffi.new('size_t[1]')
     local file,log_size;local log_attempted=false
     local backend={
-        module=function(name) local p=k.aa_module(name); if p~=nil then return tonumber(ffi.cast('uintptr_t',p)) end end,
+        module=function(name) local p=k.dbf_hud_module(name); if p~=nil then return tonumber(ffi.cast('uintptr_t',p)) end end,
         read=function(address,size)
             if address<65536 or address+size>=2^47 or size<1 or size>4096 then return nil end
             got[0]=0
-            if k.aa_read(process,ffi.cast('const void*',address),buffer,size,got)==0 or tonumber(got[0])~=size then return nil end
+            if k.dbf_hud_read(process,ffi.cast('const void*',address),buffer,size,got)==0 or tonumber(got[0])~=size then return nil end
             return ffi.string(buffer,size)
         end
     }
     function backend.log(line)
         if not log_attempted then
             log_attempted=true
-            local buf=ffi.new('char[4096]');local n=tonumber(k.aa_filename(nil,buf,4096))
+            local buf=ffi.new('char[4096]');local n=tonumber(k.dbf_hud_filename(nil,buf,4096))
             if n and n>0 and n<4096 then
                 local exe=ffi.string(buf,n):gsub('\\','/')
                 local root=exe:match('^(.*)/[Bb][Ii][Nn]/[^/]+$')
-                if root then backend.log_path=root..'/AstraAmmo.log';file=io.open(backend.log_path,'w') end
+                if root then backend.log_path=root..'/DBF-HUD.log';file=io.open(backend.log_path,'w') end
             end
             log_size=0
         end
@@ -36,14 +36,16 @@ function M.native()
         end
     end
     local function tuning_path()
-        local buf=ffi.new('char[4096]');local n=tonumber(k.aa_filename(nil,buf,4096))
+        local buf=ffi.new('char[4096]');local n=tonumber(k.dbf_hud_filename(nil,buf,4096))
         assert(n>0 and n<4096,'executable path unavailable')
         local root=ffi.string(buf,n):gsub('\\','/'):match('^(.*)/[Bb][Ii][Nn]/[^/]+$')
         assert(root,'game installation root unavailable')
-        return root..'/AstraAmmo-tuning.lua'
+        return root..'/DBF-HUD-tuning.lua'
     end
     function backend.read_tuning()
         local path=tuning_path();local f=io.open(path,'r')
+        -- Compatibility: old settings are readable; writes use the new filename.
+        if not f then path=path:gsub('DBF%-HUD%-tuning.lua$','AstraAmmo-tuning.lua');f=io.open(path,'r') end
         if not f then return nil end
         local body=f:read(65537);f:close();assert(#body<=65536,'tuning file too large')
         local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})

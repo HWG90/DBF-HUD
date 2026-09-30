@@ -16,14 +16,14 @@ local SPEC={
 }
 M.spec=SPEC
 function M.new(backend)
-    local r=AA.memory.new(backend)
+    local r=HUD.memory.new(backend)
     local base,validated,failed;local self={status='not sampled',samples=0}
     local function validate()
         r.reset();base=assert(backend.module('game.dll'),'game.dll not loaded')
         local d=r.read(base,64);assert(d:sub(1,2)=='MZ','DOS signature')
         local offset=r.u(d,0x3c);assert(offset<0x100000,'PE offset')
         local h=r.read(base+offset,0x80)
-        assert(h:sub(1,4)=='PE\0\0' and AA.layouts.stamps[r.u(h,8)]==r.u(h,0x50),'unsupported anchor build')
+        assert(h:sub(1,4)=='PE\0\0' and HUD.layouts.stamps[r.u(h,8)]==r.u(h,0x50),'unsupported anchor build')
         for _,s in ipairs(SPEC.signatures) do
             local expected=s[2]:gsub('..',function(hex)return string.char(tonumber(hex,16))end)
             assert(r.read(base+s[1],#expected)==expected,string.format('anchor signature %X',s[1]))

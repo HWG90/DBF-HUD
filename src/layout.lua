@@ -7,11 +7,11 @@ function M.heat_color(fraction,clock,cfg)
     return cfg.heat_white
 end
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
-    cfg=cfg or AA.config.defaults
+    cfg=cfg or HUD.config.defaults
     local pixel=cfg.font=='bigblue'
-    if pixel and not measure then measure=AA.font.measure end
+    if pixel and not measure then measure=HUD.font.measure end
     local d={};local heat=m.kind=='heat'
-    local ink=AA.config.rgb(heat and M.heat_color(m.fraction,clock,cfg) or
+    local ink=HUD.config.rgb(heat and M.heat_color(m.fraction,clock,cfg) or
         (m.warning and (m.value==0 and cfg.heat_red or cfg.heat_yellow) or cfg.text_color))
     local function rect(dx,dy,w,h,c,a,kind)
         d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity,frosted=cfg.frosted}
@@ -70,7 +70,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     local pad=8*scale
     left,bottom,right,top=left-pad,bottom-pad,right+pad,top+pad
     local out={{type='panel',x=left,y=bottom,w=right-left,h=top-bottom,
-        c=AA.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
+        c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
     out[#out+1]={type='rect',x=left,y=top-scale,w=14*scale,h=scale,c=ink,a=.6*opacity}
     out[#out+1]={type='rect',x=right-14*scale,y=bottom,w=14*scale,h=scale,c=ink,a=.4*opacity}
     for _,c in ipairs(d) do out[#out+1]=c end

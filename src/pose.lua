@@ -7,7 +7,7 @@ local pose_suffix=unhex('488bc84c8b0041ff90e8000000488bcb48c1e10648034828488bc14
 local resolver_prefix=unhex('48895c24084889742410574883ec20488b35')
 local resolver_body=unhex('8bc325ffff3f003b8698000000720433dbeb1c8bc8488b86a0000000c1eb16381c0175eb488b8688000000488b1cc8')
 function M.new(backend)
-    local r=AA.memory.new(backend)
+    local r=HUD.memory.new(backend)
     local self={status='not sampled',samples=0}
     function self.snapshot(raw)
         assert(raw and raw.binding,'no weapon binding')

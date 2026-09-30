@@ -22,7 +22,7 @@ The observed path is:
 
 `src/pose.lua` follows this path using bounded ReadProcessMemory only, inspecting the getter/resolver/accessor instruction bytes first. It rechecks ownership and generation after reading, checks matrix validity and does not retain unit/matrix pointers between polls. Unknown implementations fail closed. Getter and resolver addresses are decoded from current-session pointers and relative instructions, never reused from this document.
 
-Version 0.3.9 exposes the result as `AstraAmmo.weapon_pose` and logs `POSE` samples once per second. It does not yet move the HUD onto the gun. Camera projection, root-axis calibration, a visible attachment marker, and the camera-facing blend remain to be verified.
+Version 0.3.9 exposes the result as `DBFHUD.weapon_pose` and logs `POSE` samples once per second. It does not yet move the HUD onto the gun. Camera projection, root-axis calibration, a visible attachment marker, and the camera-facing blend remain to be verified.
 
 The public [Stingray C API headers](https://github.com/AutodeskGames/stingray-plugin-api-samples/blob/master/stingray_sdk/engine_plugin_api/c_api/c_api_unit.h) helped identify the API family, but their function offsets differ from this game and are not used as authority for the live offsets.
 
@@ -62,7 +62,7 @@ Entity lookup at RVA `0xFD9D40` resolves the entity map under the owner manager 
 
 ## Next validation boundary
 
-The user confirmed 0.3.4 works through gameplay and explicitly authorized using the Derive mod as a diagnostic aid. Installed DBF-derive R11 provides a file-command interface in `%APPDATA%/Arrowhead/Helldivers2`: `derive_in.txt` and `derive_out.log`. Its inspected commands include targeted `read`, `hex` (maximum 4096 bytes), and `watch`/`unwatch`. This is a memory inspection tool, not a ready-made weapon transform provider. The installed copy is packaged under HD2UI; no implementation is copied into Astra Ammo.
+The user confirmed 0.3.4 works through gameplay and explicitly authorized using the Derive mod as a diagnostic aid. Installed DBF-derive R11 provides a file-command interface in `%APPDATA%/Arrowhead/Helldivers2`: `derive_in.txt` and `derive_out.log`. Its inspected commands include targeted `read`, `hex` (maximum 4096 bytes), and `watch`/`unwatch`. This is a memory inspection tool, not a ready-made weapon transform provider. The installed copy is packaged under HD2UI; no implementation is copied into DBF-HUD.
 
 Prefer targeted Derive reads once a current module base and record address are established. Do not overwrite a pending command or interrupt another scan. A log saying INSTALLED establishes initialization at that time, not current responsiveness. External module enumeration returned no usable game.dll base during the initial check; do not reuse addresses from another game session.
 

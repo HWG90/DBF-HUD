@@ -1,6 +1,6 @@
-# Holographic Utility Display (HUD)
+# DBF-HUD
 
-Experimental modular ammo HUD for Helldivers 2, developed as **Astra Ammo**. Current development snapshot: **0.3.35**.
+Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.36**.
 
 ## Working features
 
@@ -11,7 +11,9 @@ Experimental modular ammo HUD for Helldivers 2, developed as **Astra Ammo**. Cur
 - Vertical heat gauge: white below 75%, yellow from 75%, red from 86%, alternating red/yellow from 95%.
 - MDL API 2 live Lua reload and menu/Lua tuning.
 
-Runtime names, settings keys and addon identifiers retain `AstraAmmo` / `astra_ammo` for compatibility.
+Runtime global: `DBFHUD`; new MDL folder and resource namespace: `dbf_hud`. Tuning and logs use `DBF-HUD-tuning.lua` and `DBF-HUD.log`. Legacy tuning, runtime retirement and optional material lookup remain supported for upgrades. The addon GUID is unchanged.
+
+An existing live installation may retain its `astra_ammo` folder to preserve MDL enablement. For a fresh installation, disable/remove that entry before enabling `dbf_hud`; never enable both. Historical archives keep their original names.
 
 ## Current limitations
 
@@ -27,11 +29,11 @@ See [native display research](NATIVE_DISPLAY_TRACE.md), [depth investigation](DE
 python tools/build.py
 ```
 
-This produces `dist/astra_ammo.lua`, `mdl/astra_ammo/mod.lua`, and an MDL ZIP in the parent directory. Optional Arsenal packaging requires an external Bingus addon builder, supplied with `--addon-builder`.
+This produces `dist/dbf_hud.lua`, `mdl/dbf_hud/mod.lua`, and an MDL ZIP in the parent directory. Optional Arsenal packaging requires an external Bingus addon builder, supplied with `--addon-builder`.
 
-Copy `mdl/astra_ammo` into `%LOCALAPPDATA%/MDL/Helldivers2/Mods`, then enable **Astra Ammo (Live)**. Disable the packaged startup copy to avoid duplicate HUDs. See [MDL setup](MDL.md). With auto-reload enabled, installed Lua file writes take effect immediately; validate locally and copy atomically.
+Copy `mdl/dbf_hud` into `%LOCALAPPDATA%/MDL/Helldivers2/Mods`, then enable **DBF-HUD (Live)**. Disable the packaged startup copy to avoid duplicate HUDs. See [MDL setup](MDL.md). With auto-reload enabled, installed Lua file writes take effect immediately; validate locally and copy atomically.
 
-Configure through the mod menu or game-root `AstraAmmo-tuning.lua`. The file in this repository is an example, not a copy of personal live settings. Open `preview/index.html` for the browser design preview; it does not reproduce the native rendering pipeline.
+Configure through the mod menu or game-root `DBF-HUD-tuning.lua`. The file in this repository is an example, not a copy of personal live settings. Open `preview/index.html` for the browser design preview; it does not reproduce the native rendering pipeline.
 
 ## Validation
 

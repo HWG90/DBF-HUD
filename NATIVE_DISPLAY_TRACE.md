@@ -1,10 +1,10 @@
 # Native display trace — 2026-09-29
 
-## 0.3.35 startup dispatcher separation
+## 0.3.36 startup dispatcher separation
 
 Recovery 0.3.34 was observed running after restart. Added authored startup-only HUDRenderBridge addon; MDL client no longer writes/restores the global render callback. It subscribes through API 1 and unsubscribes before GUI/viewport/world/texture cleanup. The bridge preserves host arguments/returns, isolates listener Lua failures and prevents an old unsubscribe from deleting a replacement listener. Existing global ownership is not registered with MDL. Offline tests cover these behaviors (41 pass).
 
-HUD-Render-Bridge-0.1.zip contains only this dispatcher, packaged with the existing Bingus addon builder. It requires normal Arsenal deployment and restart; do not load it through MDL. Live client 0.3.35 is installed and remains inert with respect to offscreen rendering until the bridge exists. The four-color texture preview remains the next live experiment; callback ownership fix does not establish GPU cleanup safety or visual correctness.
+HUD-Render-Bridge-0.1.zip contains only this dispatcher, packaged with the existing Bingus addon builder. It requires normal Arsenal deployment and restart; do not load it through MDL. Live client 0.3.36 is installed and remains inert with respect to offscreen rendering until the bridge exists. The four-color texture preview remains the next live experiment; callback ownership fix does not establish GPU cleanup safety or visual correctness.
 
 ## CTD recovery — 0.3.34
 
@@ -66,7 +66,7 @@ Live enumeration found Viewport.set_output_render_target and register_render_res
 
 Extracted `rendering/renderer` (resource ee6b1ba7e22d71ed, type 27862fe24795319c) from the same-named base archive, and decoded its typed binary configuration. Selected records are saved in NATIVE_RENDER_PATHS.json. The offscreen_ui_weapon_screen viewport has empty output_rt/output_dst, no private resources, and layer_config ui_only. That layer clears its color output then submits the transparent pass without a depth attachment. This establishes a native offscreen template but not the runtime method for assigning its destination.
 
-The ui_3d configuration explicitly clears its own depth/stencil target. The HUD composite configuration also creates/clears UI depth and runs blur_behind_ui. These records explain why a UI pass cannot be assumed to retain scene depth; they do not identify the exact viewport submitting Astra's current world GUI.
+The ui_3d configuration explicitly clears its own depth/stencil target. The HUD composite configuration also creates/clears UI depth and runs blur_behind_ui. These records explain why a UI pass cannot be assumed to retain scene depth; they do not identify the exact viewport submitting DBF-HUD's current world GUI.
 
 0.3.25 enumerates actual Viewport/Renderer/Material function names and material/mesh-related Unit names without invoking them. Installed for one reload; all 39 contracts pass. Current HUD appearance and settings remain unchanged. Image destination assignment and native mesh material access remain the next missing bindings.
 

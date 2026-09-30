@@ -23,7 +23,7 @@ function M.project(m,x,y,z,fov,aspect,near)
     return {x=nx,y=ny,depth=depth},'projected weapon root'
 end
 function M.new(backend)
-    local r=AA.memory.new(backend);local self={status='not sampled'}
+    local r=HUD.memory.new(backend);local self={status='not sampled'}
     function self.snapshot(base,pose,aspect)
         r.reset()
         local api=r.p(base+0x3326308);local camera_api=r.p(api+0x20)

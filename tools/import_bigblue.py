@@ -77,7 +77,7 @@ def main(path):
         'BigBlue Terminal by VileR, copyright 2015.\n'
         'Source: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.5.1/BigBlueTerminal.zip\n'
         f'Font: {NAME}\nSHA256: {hashlib.sha256(font_bytes).hexdigest()}\n'
-        'Astra Ammo conversion: printable ASCII rasterized at native 12px height,\n'
+        'DBF-HUD conversion: printable ASCII rasterized at native 12px height,\n'
         'then losslessly merged into rectangles. No added Nerd Font icons are included.\n'
         'Generated glyph data remains CC BY-SA 4.0. Original license and README accompany it.\n'
         'https://creativecommons.org/licenses/by-sa/4.0/\n', encoding='utf-8')
