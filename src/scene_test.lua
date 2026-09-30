@@ -9,18 +9,20 @@ function M.new(sr,log,side)
     if not side then
         local front,back=M.new(sr,log,1),M.new(sr,log,-1)
         local overlay=HUD.world_probe.new(sr,log,true)
+        local depth_overlay=HUD.world_probe.new(sr,log,false)
         local active_mode
         return {
             draw=function(p,c,target,dt,aspect,commands)
-                local occluded=c.hud_occlusion~=false
-                if active_mode~=occluded then
-                    front.release();back.release();overlay.release()
-                    active_mode=occluded
-                    log('HUD occlusion '..(occluded and 'on: scene mesh' or 'off: direct WorldGUI'))
+                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'mesh' or 'gui')
+                local occluded=mode=='mesh'
+                if active_mode~=mode then
+                    front.release();back.release();overlay.release();depth_overlay.release()
+                    active_mode=mode
+                    log('HUD occlusion mode '..mode)
                 end
                 if occluded then front.draw(p,c,target,dt,aspect);back.draw(p,c,target,dt,aspect)
                 else
-                    if not commands then overlay.release();return end
+                    if not commands then overlay.release();depth_overlay.release();return end
                     local f=commands[1];local scale=240/f.w;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
@@ -30,10 +32,10 @@ function M.new(sr,log,side)
                         if v.size then v.size=v.size*scale end
                         centered[#centered+1]=v
                     end
-                    overlay.draw(p,c,centered,dt)
+                    if mode=='gui_depth' then depth_overlay.draw(p,c,centered,dt) else overlay.draw(p,c,centered,dt) end
                 end
             end,
-            release=function() overlay.release();front.release();back.release();active_mode=nil end
+            release=function() overlay.release();depth_overlay.release();front.release();back.release();active_mode=nil end
         }
     end
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh

@@ -253,3 +253,10 @@ HUD occlusion in the main DBF-HUD menu defaults on and persists as hud_occlusion
 
 
 Occlusion OFF now uses the original direct WorldGUI primitives, rather than a bitmap of the offscreen texture. Text glyphs and bars draw directly each update with unchanged palette values. Commands are centered and scaled to the same panel width; first-person and shoulder mounts share the scene-mesh calculation. This path skips experimental depth materials and does not require the fullbright addon. CRT texture scanlines do not apply to direct primitives. Occlusion ON retains the texture-backed scene mesh. All 46 offline contracts pass; live visual validation pending.
+
+
+## Three-way occlusion comparison
+
+Replaced the boolean menu with Off (World GUI), On (Mesh), and On (World GUI - experimental). The experimental option uses the existing depth-fill material when available, now including the panel background. This does not establish occlusion; earlier tests failed. Missing depth material falls back to ordinary primitives and is reported in the log. The old boolean remains a compatible tuning alias, with occlusion_mode taking precedence. Old toggle callbacks are retired. All 46 contracts pass.
+
+Offline shader comparison: plain/depth GUI GPU resources differ in only 19 bytes; diffuse/depth-diffuse differ in 20 bytes. Their shader bytecode requires further chunk-level comparison; resource metadata/render-state resolution is the next trace target. No renderer configuration or native process memory was modified.

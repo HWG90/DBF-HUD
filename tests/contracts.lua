@@ -575,7 +575,7 @@ test('world GUI probe uses live worlds, moves and releases without stale handles
     sr.Gui.bitmap=function(g,material,pos,size,color)
         assert(material~='mods/dbf_hud/materials/depth_blur')
         if material=='content/ui/shared/material/gui_blur' then frost_alpha=color[1]
-        end
+        elseif material=='mods/dbf_hud/materials/depth_fill' and pos[3]==1 then tint_alpha=color[1] end
     end
     sr.Gui.rect=function(g,pos,size,color)assert(pos[3]==1);tint_alpha=color[1]end
     local panel={{type='panel',x=0,y=0,w=100,h=80,c={0,0,0},a=.25,frost_a=.8}}
@@ -658,10 +658,10 @@ end)
 
 test('occlusion toggle switches renderers exclusively and releases the previous path',function()
     local original_new,original_overlay=HUD.scene_test.new,HUD.world_probe.new
-    local draws={front=0,back=0,gui=0};local releases={front=0,back=0,gui=0}
+    local draws={front=0,back=0,gui=0,depth=0};local releases={front=0,back=0,gui=0,depth=0}
     local function stub(key)return {draw=function()draws[key]=draws[key]+1 end,release=function()releases[key]=releases[key]+1 end}end
     HUD.scene_test.new=function(sr,log,side) if side then return stub(side==1 and 'front' or 'back')end return original_new(sr,log,side)end
-    HUD.world_probe.new=function()return stub('gui')end
+    HUD.world_probe.new=function(sr,log,direct)return stub(direct and 'gui' or 'depth')end
     local carrier=HUD.scene_test.new({},function()end)
     carrier.draw({}, {hud_occlusion=true},1,0.016,2)
     assert(draws.front==1 and draws.back==1 and draws.gui==0)
@@ -669,6 +669,8 @@ test('occlusion toggle switches renderers exclusively and releases the previous 
     assert(draws.front==1 and draws.gui==1 and releases.front==2)
     carrier.draw({}, {hud_occlusion=true},1,0.016,2)
     assert(draws.front==2 and draws.back==2 and draws.gui==1 and releases.gui==3)
+    carrier.draw({}, {occlusion_mode='gui_depth'},1,0.016,2,{{x=0,y=0,w=100,h=50}})
+    assert(draws.depth==1 and draws.gui==1 and draws.front==2)
     carrier.release()
     HUD.scene_test.new,HUD.world_probe.new=original_new,original_overlay
 end)

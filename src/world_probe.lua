@@ -81,7 +81,7 @@ function M.new(sr,log,direct)
                 if v.type=='panel' then
                     -- Match the known-working hybrid background; leave experimental
                     -- depth fill on foreground primitives only during this comparison.
-                    G.rect(gui,sr.Vector3(v.x,v.y,1),sr.Vector2(v.w,v.h),color)
+                    solid(v.x,v.y,v.w,v.h,1,color)
                 elseif v.type=='rect' then
                     solid(v.x,v.y,v.w,v.h,2,color)
                 elseif v.font=='bigblue' then

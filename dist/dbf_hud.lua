@@ -3,7 +3,7 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={occlusion_mode="mesh",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -26,11 +26,14 @@ function M.apply(config,values)
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
         elseif (k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','frosted must be boolean')
+        elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='font' then assert(v=='bigblue' or v=='debug','font must be bigblue or debug')
         else v=M.hex(v) end
         clean[k]=v
     end
+    if clean.hud_occlusion~=nil and clean.occlusion_mode==nil then clean.occlusion_mode=clean.hud_occlusion and 'mesh' or 'gui' end
+    if clean.occlusion_mode then clean.hud_occlusion=clean.occlusion_mode~='gui' end
     for k,v in pairs(clean) do config[k]=v end
 end
 function M.serialize(config)
@@ -1095,7 +1098,7 @@ function M.new(sr,log,direct)
                 if v.type=='panel' then
                     -- Match the known-working hybrid background; leave experimental
                     -- depth fill on foreground primitives only during this comparison.
-                    G.rect(gui,sr.Vector3(v.x,v.y,1),sr.Vector2(v.w,v.h),color)
+                    solid(v.x,v.y,v.w,v.h,1,color)
                 elseif v.type=='rect' then
                     solid(v.x,v.y,v.w,v.h,2,color)
                 elseif v.font=='bigblue' then
@@ -1363,18 +1366,20 @@ function M.new(sr,log,side)
     if not side then
         local front,back=M.new(sr,log,1),M.new(sr,log,-1)
         local overlay=HUD.world_probe.new(sr,log,true)
+        local depth_overlay=HUD.world_probe.new(sr,log,false)
         local active_mode
         return {
             draw=function(p,c,target,dt,aspect,commands)
-                local occluded=c.hud_occlusion~=false
-                if active_mode~=occluded then
-                    front.release();back.release();overlay.release()
-                    active_mode=occluded
-                    log('HUD occlusion '..(occluded and 'on: scene mesh' or 'off: direct WorldGUI'))
+                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'mesh' or 'gui')
+                local occluded=mode=='mesh'
+                if active_mode~=mode then
+                    front.release();back.release();overlay.release();depth_overlay.release()
+                    active_mode=mode
+                    log('HUD occlusion mode '..mode)
                 end
                 if occluded then front.draw(p,c,target,dt,aspect);back.draw(p,c,target,dt,aspect)
                 else
-                    if not commands then overlay.release();return end
+                    if not commands then overlay.release();depth_overlay.release();return end
                     local f=commands[1];local scale=240/f.w;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
@@ -1384,10 +1389,10 @@ function M.new(sr,log,side)
                         if v.size then v.size=v.size*scale end
                         centered[#centered+1]=v
                     end
-                    overlay.draw(p,c,centered,dt)
+                    if mode=='gui_depth' then depth_overlay.draw(p,c,centered,dt) else overlay.draw(p,c,centered,dt) end
                 end
             end,
-            release=function() overlay.release();front.release();back.release();active_mode=nil end
+            release=function() overlay.release();depth_overlay.release();front.release();back.release();active_mode=nil end
         }
     end
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
@@ -1560,7 +1565,7 @@ function M.new(hud)
     function self.sync()
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
-        set('hud_occlusion',hud.config.hud_occlusion)
+        set('occlusion_mode',hud.config.occlusion_mode=='gui' and 1 or (hud.config.occlusion_mode=='gui_depth' and 3 or 2))
         set('frosted',hud.config.frosted)
         set('anchor_mode_v2',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('pose_marker',hud.config.pose_marker)
@@ -1601,10 +1606,12 @@ function M.new(hud)
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
             end)
-            add('hud_occlusion',{type='toggle',label='HUD occlusion',default=hud.config.hud_occlusion,
-                description='On: scene mesh hidden by terrain and characters. Off: direct WorldGUI draws crisp text and bars through geometry.'},function(v)
-                hud.configure({hud_occlusion=v});hud.save_tuning()
+            add('occlusion_mode',{type='choice',label='HUD occlusion',default=2,
+                choices={'Off (World GUI)','On (Mesh)','On (World GUI - experimental)'},
+                description='Mesh occlusion is verified. World GUI depth mode is an experimental material test; it may still draw through geometry.'},function(v)
+                hud.configure({occlusion_mode=v==1 and 'gui' or (v==3 and 'gui_depth' or 'mesh')});hud.save_tuning()
             end)
+            local retired_toggle=routes[prefix..'hud_occlusion'];if retired_toggle then retired_toggle.callback=nil end
             add('world_probe',{type='toggle',label='Experimental 3D rectangle',default=hud.config.world_probe},function(v)
                 hud.configure({world_probe=v});hud.save_tuning()
             end)

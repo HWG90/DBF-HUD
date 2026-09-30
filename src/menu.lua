@@ -28,7 +28,7 @@ function M.new(hud)
     function self.sync()
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
-        set('hud_occlusion',hud.config.hud_occlusion)
+        set('occlusion_mode',hud.config.occlusion_mode=='gui' and 1 or (hud.config.occlusion_mode=='gui_depth' and 3 or 2))
         set('frosted',hud.config.frosted)
         set('anchor_mode_v2',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('pose_marker',hud.config.pose_marker)
@@ -69,10 +69,12 @@ function M.new(hud)
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
             end)
-            add('hud_occlusion',{type='toggle',label='HUD occlusion',default=hud.config.hud_occlusion,
-                description='On: scene mesh hidden by terrain and characters. Off: direct WorldGUI draws crisp text and bars through geometry.'},function(v)
-                hud.configure({hud_occlusion=v});hud.save_tuning()
+            add('occlusion_mode',{type='choice',label='HUD occlusion',default=2,
+                choices={'Off (World GUI)','On (Mesh)','On (World GUI - experimental)'},
+                description='Mesh occlusion is verified. World GUI depth mode is an experimental material test; it may still draw through geometry.'},function(v)
+                hud.configure({occlusion_mode=v==1 and 'gui' or (v==3 and 'gui_depth' or 'mesh')});hud.save_tuning()
             end)
+            local retired_toggle=routes[prefix..'hud_occlusion'];if retired_toggle then retired_toggle.callback=nil end
             add('world_probe',{type='toggle',label='Experimental 3D rectangle',default=hud.config.world_probe},function(v)
                 hud.configure({world_probe=v});hud.save_tuning()
             end)
