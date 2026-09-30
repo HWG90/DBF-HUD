@@ -1398,7 +1398,7 @@ function M.new(sr,log,side)
                     sr.Material.set_vector2(material,'uv_offset',sr.Vector2(1,0))
                 end
                 scene_material=material
-                sr.Material.set_vector3(material,'base_color',sr.Vector3(1,1,1))
+                sr.Material.set_vector3(material,'base_color',sr.Vector3(0,0,0))
                 sr.Material.set_vector3(material,'emissive',sr.Vector3(1,1,1))
                 if alpha then
                     sr.Material.set_scalar(material,'opacity',1)
