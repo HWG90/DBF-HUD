@@ -17,8 +17,11 @@ function M.start(sr,log,globals,panel_provider)
                 for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
                 source_ids={}
                 local f=commands[1]
+                assert(f.w>0 and f.h>0,'invalid panel bounds')
+                self.aspect=f.w/f.h
+                local sx,sy=512/f.w,256/f.h
                 local function rect(x,y,w,h,c,a)
-                    local id=G.rect(gui,sr.Vector3(x-f.x+8,y-f.y+8,1),sr.Vector2(w,h),sr.Color(math.floor(255*(a or 1)),c[1],c[2],c[3]))
+                    local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(y-f.y)*sy,1),sr.Vector2(w*sx,h*sy),sr.Color(math.floor(255*(a or 1)),c[1],c[2],c[3]))
                     source_ids[#source_ids+1]=id
                 end
                 for _,c in ipairs(commands) do

@@ -162,3 +162,7 @@ The user clarified that the scene plane is occluded but blank: live ammo pixels 
 ## Facing correction
 
 The user identified the upright plane as facing the wrong direction. The local-X quarter-turn is now reversed to expose the opposite face. During the scene test, the original screen/world-GUI panel is hidden only while a weapon pose and offscreen texture are available; the separate texture preview remains visible. This diagnostic visibility change does not edit saved user tuning. All 42 offline tests pass. Scene-texture legibility still awaits visual confirmation.
+
+## Scene image confirmed; content fit corrected
+
+After reversing the upright facing, the user confirmed ammo pixels on the scene plane, but reported the image compressed into one corner and a black panel. The source renderer had placed natural panel bounds into only part of the fixed 512x256 canvas. It now maps the measured frame across the full canvas and carries its aspect ratio into the scene plane scale, preserving the displayed panel proportions. The existing scene material remains opaque: transparent texels do not make the mesh transparent. No frost or alpha-blending success is claimed.

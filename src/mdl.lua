@@ -32,7 +32,7 @@ return {
             hud.tick(dt)
         end
         if offscreen and offscreen.tick then offscreen.tick(dt) end
-        if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt) end
+        if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect) end
         -- Startup addons can load after MDL. Retry only once the bridge exists.
         if offscreen and offscreen.waiting_for_bridge then
             local bridge=rawget(_G,'HUDRenderBridge')

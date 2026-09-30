@@ -12,7 +12,7 @@ function M.new(sr,log)
         if unit and live(world) then W.destroy_unit(world,unit) end
         unit,world,bound=nil,nil,nil;smooth={}
     end
-    function self.draw(p,c,target,dt)
+    function self.draw(p,c,target,dt,aspect)
         if failed then return end
         if not p or not target then if unit then self.release() end;return end
         local ok,err=pcall(function()
@@ -54,7 +54,7 @@ function M.new(sr,log)
             m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
             local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),sr.Vector3(m[9],m[10],m[11]),sr.Vector3(-m[5],-m[6],-m[7]),sr.Vector3(m[13],m[14],m[15]))
             U.set_local_pose(unit,1,pose)
-            U.set_local_scale(unit,1,sr.Vector3(0.24,0.24,0.12))
+            U.set_local_scale(unit,1,sr.Vector3(0.24,0.24,0.24/math.max(0.25,math.min(8,aspect or 2))))
         end)
         if not ok then failed=true;log('SCENE stopped '..tostring(err));self.release() end
     end

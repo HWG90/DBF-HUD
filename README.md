@@ -17,7 +17,7 @@ An existing live installation may retain its `astra_ammo` folder to preserve MDL
 
 ## Current limitations
 
-The original 3D world-GUI panel still draws through scenery and characters. The experimental scene-mesh carrier is visible and an intervening object hides it, but its ammo image is not yet visually confirmed. The live panel texture is confirmed in the screen preview. Native frost works in hybrid mode; it is disabled in 3D mode because it rendered incorrectly there. Scene-mesh occlusion has a visually confirmed working path; world-space frost remains unresolved.
+The original 3D world-GUI panel still draws through scenery and characters. The experimental scene-mesh carrier is visible and an intervening object hides it, and its ammo image is now visually confirmed. Content fit is being refined; the carrier remains opaque. Native frost works in hybrid mode; it is disabled in 3D mode because it rendered incorrectly there. Scene-mesh occlusion has a visually confirmed working path; world-space frost remains unresolved.
 
 The experimental native-screen path has successfully created a render target, bound it to the game's offscreen weapon-screen viewport, detached it and cleaned up. The four-color image and live ammo-panel texture have both been visually verified, followed by an occluded scene-plane test. A subsequent reload lost the host render callback and the user reported a crash. The offscreen client now requires a separate startup render bridge to avoid MDL global cleanup. Without that bridge it remains inactive; see bridge/README.md and the investigation notes. This is a development snapshot, not a stable release.
 
