@@ -1722,7 +1722,7 @@ function M.start(sr,backend,options)
         log('SCREEN_BINDING '..entry[1]..'.'..entry[2]..' '..(ok and address or 'unavailable'))
     end
     -- Enumerate exposed names rather than guessing the game's custom bindings.
-    for _,namespace in ipairs({'Viewport','Renderer','Material','Unit'}) do
+    for _,namespace in ipairs({'Viewport','Renderer','Material','Unit','Gui','World'}) do
         local ok,names=pcall(function()
             local ns=sr[namespace];local found={}
             if type(ns)~='table' then return {'namespace='..type(ns)} end
