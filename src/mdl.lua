@@ -1,6 +1,7 @@
 -- MDL API 2 lifecycle; this module never hooks global update or shutdown.
 local hud
 local offscreen
+local live_log
 local function disable()
     if offscreen then offscreen.release();offscreen=nil end
     if hud then hud.retire();hud=nil end
@@ -18,9 +19,20 @@ return {
         started=true
         ctx.global('DBFHUD',hud)
         -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
-        offscreen=HUD.offscreen_test.start(sr,function(line)if backend.log then pcall(backend.log,line) end end)
+        live_log=function(line)if backend.log then pcall(backend.log,line) end end
+        offscreen=HUD.offscreen_test.start(sr,live_log)
         ctx.log('Enabled DBF-HUD '..hud.version..' with MDL-owned updates')
     end,
-    on_update=function(ctx,dt) if hud then hud.tick(dt) end end,
+    on_update=function(ctx,dt)
+        if hud then hud.tick(dt) end
+        -- Startup addons can load after MDL. Retry only once the bridge exists.
+        if offscreen and offscreen.waiting_for_bridge then
+            local bridge=rawget(_G,'HUDRenderBridge')
+            if bridge and bridge.api==1 and type(bridge.subscribe)=='function' then
+                offscreen.release()
+                offscreen=HUD.offscreen_test.start(assert(rawget(_G,'stingray')),live_log)
+            end
+        end
+    end,
     on_disable=disable,
 }

@@ -612,9 +612,11 @@ test('offscreen test waits for render, preserves returns and releases in order',
         Renderer={create_resource=event('texture',7),destroy_resource=event('free texture')},
         Viewport={set_output_render_target=function(v,t)assert(v==2 and t==7)end},
         Gui={rect=event('rect')},Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end}
-    local probe=HUD.offscreen_test.start(sr,function()end,globals)
+    local messages={}
+    local probe=HUD.offscreen_test.start(sr,function(line)messages[#messages+1]=line end,globals)
     assert(rendered==0 and globals.render==host_render)
     local a,b,c=globals.render(8);assert(a==8 and b==nil and c==9 and rendered==1)
+    assert(table.concat(messages,'\n'):find('Gui.material unavailable',1,true))
     globals.render(8);assert(rendered==1)
     probe.release();assert(globals.render==host_render)
     assert(table.concat(events,','):find('free gui,free viewport,free environment,free world,free texture',1,true))

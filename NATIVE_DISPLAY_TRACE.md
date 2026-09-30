@@ -108,3 +108,9 @@ The named hologram plane unit was also located; its material-list offset is zero
 Trace the native screen's `input_image` resource assignment and `screen_rect` setup. Verify whether an exposed API can render the existing GUI into that image, and whether an independently created surface can use it. Verify scene depth on an actual native reference before claiming successful occlusion. Do not assign these mesh materials to Gui.bitmap merely because they exist: their vertex inputs and resource bindings differ from the GUI path.
 
 The 3D panel currently retains its transparent fallback. This investigation found a concrete native image-backed screen reference, not a completed depth or frost fix.
+
+## DBF-HUD research resume
+
+The current session reports `OFFSCREEN blocked: startup HUD render bridge required`. Earlier submissions do not establish bridge availability after a restart. No offscreen pixels or scene occlusion are verified. The preview now reports unavailable APIs explicitly, and logs GUI creation, material lookup, resource binding and bitmap drawing separately. Offline coverage verifies that a missing preview API is reported without a second render submission. This diagnostic does not change render timing, shaders or resource ownership.
+
+The subsequent live reload found the bridge, created the private scene, and returned from render_world. Preview GUI creation and material lookup returned; the final log was `OFFSCREEN preview texture binding begin`. No completion or bitmap draw was logged. This localizes the interruption to Material.set_resource but does not yet establish its cause. That call is disabled pending game-specific signature/handle verification. A bridge that becomes available after MDL startup is now detected without requiring a manual reload.

@@ -1140,7 +1140,11 @@ function M.start(sr,log,globals)
         if ok then log('OFFSCREEN cleanup complete') end
     end
     if not bridge or bridge.api~=1 or type(bridge.subscribe)~='function' then
-        log('OFFSCREEN blocked: startup HUD render bridge required');return self
+        local loader=rawget(globals,'CowboyBingusModLoader')
+        local state=loader and loader.modules and loader.modules['mods/holographic_utility_display/render_bridge']
+        log('OFFSCREEN blocked: startup HUD render bridge required; loader='..tostring(state)..'; render='..type(rawget(globals,'render')))
+        self.waiting_for_bridge=true
+        return self
     end
     local ok,err=pcall(function()
         for _,pair in ipairs({{A,'new_world'},{A,'release_world'},{A,'create_viewport'},{A,'destroy_viewport'},
@@ -1194,13 +1198,23 @@ function M.start(sr,log,globals)
             log('OFFSCREEN render callback entered')
             local done,why=pcall(A.render_world,world,camera,viewport,environment)
             log(done and 'OFFSCREEN render submitted; pixels unverified' or ('OFFSCREEN render failed '..tostring(why)))
-            if done and type(G.material)=='function' and sr.Material and type(sr.Material.set_resource)=='function' then
+            if done then
                 local shown,reason=pcall(function()
+                    log('OFFSCREEN preview preflight begin')
+                    assert(type(G.material)=='function','Gui.material unavailable')
+                    assert(sr.Material and type(sr.Material.set_resource)=='function','Material.set_resource unavailable')
+                    assert(type(G.bitmap)=='function','Gui.bitmap unavailable')
+                    assert(type(A.main_world)=='function','Application.main_world unavailable')
                     assert(A.can_get('material','core/performance_hud/gui'),'preview material unavailable')
                     preview_world=assert(A.main_world())
+                    log('OFFSCREEN preview GUI create begin')
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
+                    log('OFFSCREEN preview material lookup begin')
                     local material=assert(G.material(preview,'core/performance_hud/gui'))
+                    -- Live execution stopped inside set_resource; do not repeat until its ABI is verified.
+                    error('texture binding paused: native Material.set_resource requires verification')
                     sr.Material.set_resource(material,'diffuse_map',target)
+                    log('OFFSCREEN preview bitmap draw begin')
                     G.bitmap(preview,material,sr.Vector3(40,40,80),sr.Vector2(192,192),sr.Color(255,255,255,255))
                     log('OFFSCREEN four-color preview placed at bottom-left')
                 end)
@@ -1606,6 +1620,7 @@ return (function()
 -- MDL API 2 lifecycle; this module never hooks global update or shutdown.
 local hud
 local offscreen
+local live_log
 local function disable()
     if offscreen then offscreen.release();offscreen=nil end
     if hud then hud.retire();hud=nil end
@@ -1623,10 +1638,21 @@ return {
         started=true
         ctx.global('DBFHUD',hud)
         -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
-        offscreen=HUD.offscreen_test.start(sr,function(line)if backend.log then pcall(backend.log,line) end end)
+        live_log=function(line)if backend.log then pcall(backend.log,line) end end
+        offscreen=HUD.offscreen_test.start(sr,live_log)
         ctx.log('Enabled DBF-HUD '..hud.version..' with MDL-owned updates')
     end,
-    on_update=function(ctx,dt) if hud then hud.tick(dt) end end,
+    on_update=function(ctx,dt)
+        if hud then hud.tick(dt) end
+        -- Startup addons can load after MDL. Retry only once the bridge exists.
+        if offscreen and offscreen.waiting_for_bridge then
+            local bridge=rawget(_G,'HUDRenderBridge')
+            if bridge and bridge.api==1 and type(bridge.subscribe)=='function' then
+                offscreen.release()
+                offscreen=HUD.offscreen_test.start(assert(rawget(_G,'stingray')),live_log)
+            end
+        end
+    end,
     on_disable=disable,
 }
 
