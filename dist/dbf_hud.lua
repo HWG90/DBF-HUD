@@ -1211,6 +1211,17 @@ function M.start(sr,log,globals)
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
                     log('OFFSCREEN preview material lookup begin')
                     local material=assert(G.material(preview,'core/performance_hud/gui'))
+                    log('OFFSCREEN material Lua type='..type(material)..'; target Lua type='..type(target))
+                    local pointer_ok,pointers=pcall(function()
+                        local ffi=require('ffi')
+                        local mp=tonumber(ffi.cast('uintptr_t',material))
+                        local tp=tonumber(ffi.cast('uintptr_t',target))
+                        assert(mp and mp>=65536,'Gui.material returned a null or invalid native pointer')
+                        assert(tp and tp>=65536,'render target returned a null or invalid native pointer')
+                        return string.format('material=0x%X target=0x%X',mp,tp)
+                    end)
+                    assert(pointer_ok,pointers)
+                    log('OFFSCREEN native pointer check '..pointers)
                     -- Live execution stopped inside set_resource; do not repeat until its ABI is verified.
                     error('texture binding paused: native Material.set_resource requires verification')
                     sr.Material.set_resource(material,'diffuse_map',target)
@@ -1373,7 +1384,7 @@ function M.start(sr,backend,options)
     for _,entry in ipairs({{'Viewport','set_output_render_target'},
         {'Viewport','register_render_resource'},{'Application','create_viewport'},
         {'Application','render_world'},{'Renderer','update_texture_base64'},
-        {'Mesh','material'}}) do
+        {'Mesh','material'},{'Gui','material'},{'Material','set_resource'}}) do
         local ok,address=pcall(function()
             assert(jit_ok,'jit.util unavailable')
             local ns=sr[entry[1]];local fn=ns and ns[entry[2]]
