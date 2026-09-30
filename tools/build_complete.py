@@ -22,8 +22,8 @@ def main():
  builder.build_addon('mods/holographic_utility_display/render_bridge',(ROOT/'bridge/render_bridge.lua').read_bytes(),'2d860b40-510b-4a22-bbad-0911f9537d64',live)
  depth=ROOT.parent/'DBF-HUD-WorldGUI-Depth-Probe-0.3.zip'
  assert depth.exists(),'Build the verified depth probe first'
- manifest={'Version':1,'Guid':'eb9de2f7-5733-46a0-96d8-8750becccd53','Name':'DBF-HUD Complete 0.3.38','Description':'HUD, startup render bridge and verified WorldGUI depth assets. Requires Bingus Shared Loader. Choose one installation mode.','Options':[{'Name':'Complete HUD - startup','Include':['Startup','DepthState']},{'Name':'MDL live reload - bridge and depth assets','Include':['LiveBridge','DepthState']}]}
- output=ROOT.parent/'DBF-HUD-Complete-0.3.38.zip'
+ manifest={'Version':1,'Guid':'eb9de2f7-5733-46a0-96d8-8750becccd53','Name':'DBF-HUD Complete 0.3.39','Description':'HUD, startup render bridge and verified WorldGUI depth assets. Requires Bingus Shared Loader. Choose one installation mode.','Options':[{'Name':'Complete HUD - startup','Include':['Startup','DepthState']},{'Name':'MDL live reload - bridge and depth assets','Include':['LiveBridge','DepthState']}]}
+ output=ROOT.parent/'DBF-HUD-Complete-0.3.39.zip'
  with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as out:
   out.writestr('manifest.json',json.dumps(manifest,indent=2)+'\n')
   for component,prefix in [(temp,'Startup'),(live,'LiveBridge')]:

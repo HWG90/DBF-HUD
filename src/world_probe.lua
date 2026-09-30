@@ -89,10 +89,10 @@ function M.new(sr,log,direct)
                     solid(v.x,v.y,v.w,v.h,1,color)
                 elseif v.type=='rect' then
                     solid(v.x,v.y,v.w,v.h,2,color)
-                elseif v.font=='bigblue' then
+                elseif HUD.font.supported(v.font) then
                     HUD.font.draw(v.text,v.size,v.x,v.y,function(x,y,w,h)
                         solid(x,y,w,h,3,color)
-                    end)
+                    end,v.font)
                 else
                     local font='core/performance_hud/debug'
                     G.text(gui,v.text,font,v.size,font,sr.Vector3(v.x,v.y,3),color)

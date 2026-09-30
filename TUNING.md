@@ -9,3 +9,5 @@ The tuning file keeps active settings at the top level. `archived_mesh` contains
 Existing flat tuning files remain accepted. Saving through the menu reorganizes their values into these groups without discarding archived values. Unknown or duplicate entries reject the entire update. `always_show_3d` is the authoritative saved occlusion setting; old `hud_occlusion` and `occlusion_mode` aliases remain accepted for migration.
 
 Colors remain in Lua tuning. No experimental conversion or saturation is reintroduced. Prepared Nerd Fonts and the archived mesh implementation remain available in the source package.
+
+Font IDs: `bigblue`, `debug`, `jetbrainsmono`, `firacode`, `meslo`, `hack`, `cascadiacode`, `iosevka`, `0xproto`, `sourcecodepro`, `firamono`, `cascadiamono`. New faces use direct monochrome glyph geometry with consistent cap height; patched symbols and ligatures are not enabled in HUD text.

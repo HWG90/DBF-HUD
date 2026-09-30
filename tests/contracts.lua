@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'config','font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -278,6 +278,27 @@ test('configuration validates atomically and roundtrips as Lua',function()
     assert(not pcall(HUD.config.apply,c,{scale=1.5,archived_mesh={unknown=1}}) and c.scale==1)
     assert(not pcall(HUD.config.apply,c,{saturation=1,archived_mesh={saturation=2}}))
 end)
+test('all ten Nerd Fonts draw within measured bounds and fit panel frames',function()
+    assert(#HUD.config.fonts==12)
+    for i=3,#HUD.config.fonts do
+        local name=HUD.config.fonts[i];local cfg=HUD.config.new();HUD.config.apply(cfg,{font=name})
+        for _,size in ipairs({12,24,36,53.5}) do
+            local text='0123456789 % HEAT SINKS /?';local l,b,r,t=HUD.font.measure(text,size,name);local count=0
+            HUD.font.draw(text,size,0,0,function(x,y,w,h)
+                assert(w>0 and h>0 and x>=l-1e-6 and y>=b-1e-6 and x+w<=r+1e-6 and y+h<=t+1e-6);count=count+1
+            end,name)
+            assert(count>0)
+        end
+        local commands=HUD.layout.compose({kind='heat',fraction=.8,value=80,reserve=3,state='READY'},0,0,1,1,cfg,0)
+        local frame=commands[1]
+        for _,c in ipairs(commands) do if c.type=='text' then
+            local l,b,r,t=HUD.font.measure(c.text,c.size,name)
+            assert(c.x+l>=frame.x-1e-6 and c.y+b>=frame.y-1e-6 and c.x+r<=frame.x+frame.w+1e-6 and c.y+t<=frame.y+frame.h+1e-6)
+        end end
+        local restored=HUD.config.new();HUD.config.apply(restored,assert(loadstring(HUD.config.serialize(cfg)))());assert(restored.font==name)
+    end
+end)
+
 test('native menu keeps colors config-only and persists placement',function()
     local options,values,callbacks={},{},{};local writes=0
     ModOptionsMenu={api=1,register_option=function(id,spec) options[id]=spec;values[id]=spec.default;return true end,
@@ -289,8 +310,8 @@ test('native menu keeps colors config-only and persists placement',function()
     local n=0;for _ in pairs(options) do n=n+1 end;assert(n==30)
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
-    callbacks['dbf_hud_v4.font'](2);assert(h.config.font=='debug' and writes==2)
-    callbacks['dbf_hud_v4.font'](1);assert(h.config.font=='bigblue' and writes==3)
+    callbacks['dbf_hud_v4.font_nerd'](2);assert(h.config.font=='debug' and writes==2)
+    callbacks['dbf_hud_v4.font_nerd'](1);assert(h.config.font=='bigblue' and writes==3)
     callbacks['dbf_hud_v4.debug_logging'](true);assert(h.config.debug_logging and writes==4)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
     assert(groups['DBF-HUD']==9 and groups['DBF-HUD Placement']==21)

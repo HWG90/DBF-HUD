@@ -8,8 +8,8 @@ function M.heat_color(fraction,clock,cfg)
 end
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     cfg=cfg or HUD.config.defaults
-    local pixel=cfg.font=='bigblue'
-    if pixel and not measure then measure=HUD.font.measure end
+    local pixel=HUD.font.supported(cfg.font)
+    if pixel and not measure then measure=function(text,size)return HUD.font.measure(text,size,cfg.font)end end
     local d={};local heat=m.kind=='heat'
     local vent=heat and m.state=='VENT'
     if vent then opacity=opacity*(0.25+0.75*(0.5+0.5*math.cos((clock or 0)*math.pi*4))) end

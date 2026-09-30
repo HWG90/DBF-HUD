@@ -1,0 +1,47 @@
+{
+  "basis": "GitHub v3.5.1 release download counts, zip plus tar.xz, excluding symbol-only fonts",
+  "source": "https://github.com/ryanoasis/nerd-fonts/releases/tag/v3.5.1",
+  "selected_at": "2026-09-30",
+  "families": [
+    [
+      "JetBrainsMono",
+      261841
+    ],
+    [
+      "FiraCode",
+      119686
+    ],
+    [
+      "Meslo",
+      104107
+    ],
+    [
+      "Hack",
+      102778
+    ],
+    [
+      "CascadiaCode",
+      40820
+    ],
+    [
+      "Iosevka",
+      32255
+    ],
+    [
+      "0xProto",
+      31994
+    ],
+    [
+      "SourceCodePro",
+      26151
+    ],
+    [
+      "FiraMono",
+      22759
+    ],
+    [
+      "CascadiaMono",
+      20088
+    ]
+  ]
+}

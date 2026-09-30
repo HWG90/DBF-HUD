@@ -1,0 +1,72 @@
+[
+  {
+    "id": "jetbrainsmono",
+    "label": "JetBrainsMono Nerd Font",
+    "face": "JetBrainsMonoNerdFontMono-Regular.ttf",
+    "rectangles": 1184,
+    "downloads": 261841
+  },
+  {
+    "id": "firacode",
+    "label": "FiraCode Nerd Font",
+    "face": "FiraCodeNerdFontMono-Regular.ttf",
+    "rectangles": 1079,
+    "downloads": 119686
+  },
+  {
+    "id": "meslo",
+    "label": "Meslo Nerd Font",
+    "face": "MesloLGMNerdFontMono-Regular.ttf",
+    "rectangles": 1123,
+    "downloads": 104107
+  },
+  {
+    "id": "hack",
+    "label": "Hack Nerd Font",
+    "face": "HackNerdFontMono-Regular.ttf",
+    "rectangles": 1103,
+    "downloads": 102778
+  },
+  {
+    "id": "cascadiacode",
+    "label": "CascadiaCode Nerd Font",
+    "face": "CaskaydiaCoveNerdFontMono-Regular.ttf",
+    "rectangles": 1045,
+    "downloads": 40820
+  },
+  {
+    "id": "iosevka",
+    "label": "Iosevka Nerd Font",
+    "face": "IosevkaNerdFontMono-Regular.ttf",
+    "rectangles": 930,
+    "downloads": 32255
+  },
+  {
+    "id": "0xproto",
+    "label": "0xProto Nerd Font",
+    "face": "0xProtoNerdFontMono-Regular.ttf",
+    "rectangles": 1218,
+    "downloads": 31994
+  },
+  {
+    "id": "sourcecodepro",
+    "label": "SourceCodePro Nerd Font",
+    "face": "SauceCodeProNerdFontMono-Regular.ttf",
+    "rectangles": 1093,
+    "downloads": 26151
+  },
+  {
+    "id": "firamono",
+    "label": "FiraMono Nerd Font",
+    "face": "FiraMonoNerdFontMono-Regular.otf",
+    "rectangles": 1084,
+    "downloads": 22759
+  },
+  {
+    "id": "cascadiamono",
+    "label": "CascadiaMono Nerd Font",
+    "face": "CaskaydiaMonoNerdFontMono-Regular.ttf",
+    "rectangles": 1045,
+    "downloads": 20088
+  }
+]

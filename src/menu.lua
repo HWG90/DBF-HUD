@@ -6,7 +6,8 @@ function M.new(hud)
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
-    local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
+    local function option_id(k)if k=='font' then return 'dbf_hud_v4.font_nerd' end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
+    local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local sliders={
         {'mount_x','3D right shoulder: left / right',-2,2,0.01},{'mount_y','3D right shoulder: forward / back',-2,2,0.01},{'mount_z','3D right shoulder: up / down',-2,2,0.01},
         {'left_mount_x','3D left shoulder: left / right',-2,2,0.01},{'left_mount_y','3D left shoulder: forward / back',-2,2,0.01},{'left_mount_z','3D left shoulder: up / down',-2,2,0.01},
@@ -27,7 +28,7 @@ function M.new(hud)
         set('always_show_3d',hud.config.occlusion_mode=='gui')
         set('frosted',hud.config.frosted)
         set('debug_logging',hud.config.debug_logging)
-        set('font',hud.config.font=='bigblue' and 1 or 2)
+        set('font',font_index())
     end
     function self.poll()
         if attempted or retired then return end
@@ -64,8 +65,8 @@ function M.new(hud)
                     hud.configure({[k]=v});hud.save_tuning()
                 end)
             end
-            add('font',{type='choice',label='HUD font',choices={'BigBlue Terminal (pixel)','Original debug font'},default=hud.config.font=='bigblue' and 1 or 2},function(v)
-                hud.configure({font=v==1 and 'bigblue' or 'debug'});hud.save_tuning()
+            add('font',{type='choice',label='HUD font',choices={'BigBlue Terminal (pixel)','Original debug font','JetBrainsMono Nerd Font','FiraCode Nerd Font','Meslo Nerd Font','Hack Nerd Font','CascadiaCode Nerd Font','Iosevka Nerd Font','0xProto Nerd Font','SourceCodePro Nerd Font','FiraMono Nerd Font','CascadiaMono Nerd Font'},default=font_index()},function(v)
+                hud.configure({font=assert(HUD.config.fonts[v])});hud.save_tuning()
             end)
             add('frosted',{type='toggle',label='Frosted background (2D)',default=hud.config.frosted},function(v)
                 hud.configure({frosted=v});hud.save_tuning()

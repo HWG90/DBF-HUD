@@ -1,4 +1,5 @@
 local M={}
+M.fonts={'bigblue','debug','jetbrainsmono','firacode','meslo','hack','cascadiacode','iosevka','0xproto','sourcecodepro','firamono','cascadiamono'}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
 M.defaults={debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
@@ -38,7 +39,7 @@ function M.apply(config,values)
         elseif (k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
-        elseif k=='font' then assert(v=='bigblue' or v=='debug','font must be bigblue or debug')
+        elseif k=='font' then local found=false;for _,name in ipairs(M.fonts) do if v==name then found=true end end;assert(found,'unknown HUD font')
         else v=M.hex(v) end
         clean[k]=v
     end
