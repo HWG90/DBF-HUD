@@ -6,6 +6,18 @@ function M.start(sr,log,globals)
     local A,W,R,V,U,G=sr.Application,sr.World,sr.Renderer,sr.Viewport,sr.Unit,sr.Gui
     local world,viewport,target,camera,environment,gui
     local preview,preview_world
+    local world_ready=false
+    function self.tick()
+        if active and world and not world_ready then
+            world_ready=true
+            if type(W.update)=='function' then
+                log('OFFSCREEN private world update begin')
+                local ok,err=pcall(W.update,world,0)
+                log(ok and 'OFFSCREEN private world update complete' or ('OFFSCREEN private world update failed '..tostring(err)))
+                if not ok then active=false end
+            else log('OFFSCREEN private world update unavailable') end
+        end
+    end
     local bridge=rawget(globals,'HUDRenderBridge');local unsubscribe
     function self.release()
         active=false
@@ -83,7 +95,7 @@ function M.start(sr,log,globals)
     end)
     if not ok then log('OFFSCREEN setup stopped '..tostring(err));self.release();return self end
     unsubscribe=bridge.subscribe('dbf_hud.offscreen',function(...)
-        if active and not submitted then
+        if active and world_ready and not submitted then
             submitted=true
             log('OFFSCREEN render callback entered')
             local done,why=pcall(A.render_world,world,camera,viewport,environment)

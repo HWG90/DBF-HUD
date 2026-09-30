@@ -25,6 +25,7 @@ return {
     end,
     on_update=function(ctx,dt)
         if hud then hud.tick(dt) end
+        if offscreen and offscreen.tick then offscreen.tick() end
         -- Startup addons can load after MDL. Retry only once the bridge exists.
         if offscreen and offscreen.waiting_for_bridge then
             local bridge=rawget(_G,'HUDRenderBridge')

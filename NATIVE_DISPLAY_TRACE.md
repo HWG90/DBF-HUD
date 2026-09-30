@@ -130,3 +130,5 @@ The catalog identifies content/ui/shared/material/gui_diffuse_map. Read-only ext
 ## Preview world placement
 
 The user saw neither the bound image nor independent magenta/white rectangle controls. Inspection found that the working screen HUD selects a non-main world, whereas the preview used Application.main_world. The preview now uses the HUD selection pattern while explicitly excluding its private offscreen world. The live log confirms HUD-world selection and completed drawing. Visual confirmation is pending. This distinguishes compositor placement from offscreen image content.
+
+The user confirmed magenta and white control squares after the world change, but no four-color image; the larger sampled bitmap appears white. Placement is therefore verified while texture contents remain unverified. A single World.update(private_world, 0) now runs from the managed update callback before the first render submission. The live log confirms the update and render returned; this is not proof that it corrected the image. The offline contract enforces update-before-render ordering.

@@ -606,7 +606,7 @@ test('offscreen test waits for render, preserves returns and releases in order',
     local sr={Application={can_get=function()return true end,new_world=event('world',1),
         release_world=event('free world'),create_viewport=event('viewport',2),destroy_viewport=event('free viewport'),
         render_world=function(w,c,v,e)assert(w==1 and c==4 and v==2 and e==5);rendered=rendered+1 end},
-        World={spawn_unit=event('unit',3),create_default_shading_environment=event('environment',5),
+        World={update=function(w,dt)assert(w==1 and dt==0);events[#events+1]='world update' end,spawn_unit=event('unit',3),create_default_shading_environment=event('environment',5),
         destroy_shading_environment=event('free environment'),create_screen_gui=event('gui',6),destroy_gui=event('free gui')},
         Unit={camera=function(u,n)assert(u==3 and n==1);return 4 end},
         Renderer={create_resource=event('texture',7),destroy_resource=event('free texture')},
@@ -615,6 +615,8 @@ test('offscreen test waits for render, preserves returns and releases in order',
     local messages={}
     local probe=HUD.offscreen_test.start(sr,function(line)messages[#messages+1]=line end,globals)
     assert(rendered==0 and globals.render==host_render)
+    globals.render(8);assert(rendered==0)
+    probe.tick();assert(events[#events]=='world update')
     local a,b,c=globals.render(8);assert(a==8 and b==nil and c==9 and rendered==1)
     assert(table.concat(messages,'\n'):find('Gui.material unavailable',1,true))
     globals.render(8);assert(rendered==1)
