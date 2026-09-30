@@ -239,14 +239,14 @@ test('optional native menu edits hex colors, position and persists tuning',funct
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
     local n=0;for _ in pairs(options) do n=n+1 end;assert(n==40)
-    callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
+    callbacks['dbf_hud_legacy.offset_x'](-120);assert(h.config.offset_x==-120)
     callbacks['dbf_hud_v3.color_target'](5)
     callbacks['dbf_hud_v3.hex1'](11);assert(h.config.heat_red=='#A16D65')
     callbacks['dbf_hud_v3.hex6'](16);assert(h.config.heat_red=='#A16D6F' and writes==3)
     assert(values['dbf_hud_v3.hex1']==11)
     callbacks['dbf_hud_v3.font'](2);assert(h.config.font=='debug' and writes==4)
     callbacks['dbf_hud_v3.font'](1);assert(h.config.font=='bigblue' and writes==5)
-    menu.retire();callbacks['dbf_hud_placement.offset_x'](42);assert(h.config.offset_x==-120)
+    menu.retire();callbacks['dbf_hud_legacy.offset_x'](42);assert(h.config.offset_x==-120)
     ModOptionsMenu=nil;assert(HUD.menu.new(h).status=='Mod Options Menu not installed')
 end)
 test('native frost is availability gated and bitmap lifecycle is released',function()
@@ -503,8 +503,8 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
         local menu=HUD.menu.new(h);menu.poll();assert(registered==40)
-        callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
-        menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
+        callbacks['dbf_hud_legacy.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
+        menu.retire();callbacks['dbf_hud_legacy.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
     ModOptionsMenu=nil
 end)
@@ -517,7 +517,7 @@ test('live menu reuses boot registrations with changed saved defaults',function(
         on_change=function(id,fn)callbacks[id]=fn;return true end,set=function()return true end}
     h.configure=function(v)HUD.config.apply(h.config,v)end
     local menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    callbacks['dbf_hud_placement.offset_x'](188);assert(h.config.offset_x==188)
+    callbacks['dbf_hud_legacy.offset_x'](188);assert(h.config.offset_x==188)
     menu.retire();ModOptionsMenu=nil
 end)
 
