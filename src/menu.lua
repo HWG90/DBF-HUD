@@ -4,6 +4,7 @@ function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
     local sliders={
+        {'scanline_strength','CRT scanline strength',0,0.6,0.02},
         {'texture_refresh_hz','Texture update cap (0 = every frame)',0,120,10},
         {'emissive_intensity','3D panel emission',0,10,0.1},
         {'world_position_smooth','3D position smoothing',0,0.5,0.005},{'world_rotation_smooth','3D rotation smoothing',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},

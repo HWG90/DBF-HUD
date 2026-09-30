@@ -3,10 +3,10 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -1121,7 +1121,7 @@ function M.start(sr,log,globals,panel_provider,show_preview)
     local source_ids={};local elapsed=0
     local texture_w,texture_h=64,64
     local density=panel_provider and 4 or 1
-    function self.tick(dt,refresh_hz)
+    function self.tick(dt,refresh_hz,scanline_strength)
         elapsed=elapsed+(dt or 0)
         if panel_provider and active and world and gui and (not world_ready or refresh_hz==0 or elapsed>=1/(refresh_hz or 60)) then
             elapsed=0
@@ -1137,8 +1137,22 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                 for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
                 source_ids={}
                 local function rect(x,y,w,h,c,a)
-                    local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(y-f.y)*sy,1),sr.Vector2(w*sx,h*sy),sr.Color(math.floor(255*(a or 1)),c[1],c[2],c[3]))
-                    source_ids[#source_ids+1]=id
+                    local function strip(bottom,height,factor)
+                        local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(bottom-f.y)*sy,1),sr.Vector2(w*sx,height*sy),sr.Color(math.floor(255*(a or 1)),math.floor(c[1]*factor),math.floor(c[2]*factor),math.floor(c[3]*factor)))
+                        source_ids[#source_ids+1]=id
+                    end
+                    local strength=scanline_strength or 0
+                    if strength<=0 then strip(y,h,1);return end
+                    -- One dim row per four source pixels, aligned across all primitives.
+                    -- Modulate RGB only: never paint opaque bands into clear texels.
+                    local bottom=y
+                    while bottom<y+h do
+                        local row=math.floor(bottom-f.y+0.000001)
+                        local top=math.min(y+h,f.y+row+1)
+                        if top<=bottom then break end
+                        strip(bottom,top-bottom,row%4==0 and (1-strength) or 1)
+                        bottom=top
+                    end
                 end
                 for _,c in ipairs(commands) do
                     if c.type=='text' then
@@ -1410,6 +1424,7 @@ function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
     local sliders={
+        {'scanline_strength','CRT scanline strength',0,0.6,0.02},
         {'texture_refresh_hz','Texture update cap (0 = every frame)',0,120,10},
         {'emissive_intensity','3D panel emission',0,10,0.1},
         {'world_position_smooth','3D position smoothing',0,0.5,0.005},{'world_rotation_smooth','3D rotation smoothing',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
@@ -1834,7 +1849,7 @@ return {
             hud.scene_test_only=scene~=nil and offscreen~=nil and offscreen.texture~=nil and hud.weapon_pose~=nil
             hud.tick(dt)
         end
-        if offscreen and offscreen.tick then offscreen.tick(dt,hud and hud.config.texture_refresh_hz) end
+        if offscreen and offscreen.tick then offscreen.tick(dt,hud and hud.config.texture_refresh_hz,hud and hud.config.scanline_strength) end
         if scene and hud then scene.draw(hud.weapon_pose,hud.config,offscreen and offscreen.texture,dt,offscreen and offscreen.aspect) end
         -- Rebuild only when prerequisites arrive or content bounds change.
         if offscreen then

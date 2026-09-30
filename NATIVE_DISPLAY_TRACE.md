@@ -206,3 +206,8 @@ The user confirmed rear visibility and requested mirrored rear text instead of i
 ## Texture update cadence
 
 The texture update throttle is now configurable from 0 to 120 Hz; zero defaults to every managed update with rendering still submitted through the startup render callback. The source geometry is rebuilt each eligible update. The former 10 Hz cap caused visibly delayed texture animation compared to direct GUI rendering. Users can select a finite cap to reduce cost. Performance at four-times density and every-frame redraw remains to be measured.
+
+
+## Optional CRT scanlines
+
+Added a source-texture scanline effect: one dim row per four natural source pixels, uniformly aligned across primitives. RGB is modulated while alpha is preserved, avoiding opaque stripes in transparent areas. Default strength is 0.18; the menu and Lua accept 0 through 0.6, with zero disabling the effect. This adds source geometry and its performance at uncapped refresh needs observation. No blur or animated flicker is introduced.

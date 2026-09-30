@@ -10,7 +10,7 @@ function M.start(sr,log,globals,panel_provider,show_preview)
     local source_ids={};local elapsed=0
     local texture_w,texture_h=64,64
     local density=panel_provider and 4 or 1
-    function self.tick(dt,refresh_hz)
+    function self.tick(dt,refresh_hz,scanline_strength)
         elapsed=elapsed+(dt or 0)
         if panel_provider and active and world and gui and (not world_ready or refresh_hz==0 or elapsed>=1/(refresh_hz or 60)) then
             elapsed=0
@@ -26,8 +26,22 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                 for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
                 source_ids={}
                 local function rect(x,y,w,h,c,a)
-                    local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(y-f.y)*sy,1),sr.Vector2(w*sx,h*sy),sr.Color(math.floor(255*(a or 1)),c[1],c[2],c[3]))
-                    source_ids[#source_ids+1]=id
+                    local function strip(bottom,height,factor)
+                        local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(bottom-f.y)*sy,1),sr.Vector2(w*sx,height*sy),sr.Color(math.floor(255*(a or 1)),math.floor(c[1]*factor),math.floor(c[2]*factor),math.floor(c[3]*factor)))
+                        source_ids[#source_ids+1]=id
+                    end
+                    local strength=scanline_strength or 0
+                    if strength<=0 then strip(y,h,1);return end
+                    -- One dim row per four source pixels, aligned across all primitives.
+                    -- Modulate RGB only: never paint opaque bands into clear texels.
+                    local bottom=y
+                    while bottom<y+h do
+                        local row=math.floor(bottom-f.y+0.000001)
+                        local top=math.min(y+h,f.y+row+1)
+                        if top<=bottom then break end
+                        strip(bottom,top-bottom,row%4==0 and (1-strength) or 1)
+                        bottom=top
+                    end
                 end
                 for _,c in ipairs(commands) do
                     if c.type=='text' then

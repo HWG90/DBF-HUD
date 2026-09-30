@@ -2,6 +2,7 @@
 -- The preview exports this format. Native menu edits save here automatically.
 -- Restart to load edits, or call DBFHUD.reload_tuning() from your Lua integration.
 return {
+    scanline_strength = 0.18,
     texture_refresh_hz = 0,
     emissive_intensity = 3,
     font = "bigblue", -- "bigblue" pixel font or "debug" original renderer
