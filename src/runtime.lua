@@ -176,12 +176,18 @@ function M.start(sr,backend,options)
         self.anchor_status=live and anchor_source or ('center fallback: '..native.status)
         local target=live and {x=(anchor.x-0.5)*w*1080/h,y=(0.5-anchor.y)*1080} or nil
         local point
-        if self.weapon_pose and (self.config.anchor_mode=='weapon' or self.config.pose_marker) then
+        if self.weapon_pose then
             local p=self.weapon_pose;local m=p.matrix;local c=self.config
             local mount={x=p.x+m[1]*c.mount_x+m[5]*c.mount_y+m[9]*c.mount_z,
                 y=p.y+m[2]*c.mount_x+m[6]*c.mount_y+m[10]*c.mount_z,
                 z=p.z+m[3]*c.mount_x+m[7]*c.mount_y+m[11]*c.mount_z}
             point=projection.poll(binding_base,mount,w/h)
+        end
+        self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov)
+        if self.weapon_pose then self.weapon_pose.first_person=self.first_person end
+        if projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
+            log(string.format('CAMERA placement distance=%.3f fov=%.3f',projection.camera_distance,projection.camera_fov))
+            self.next_camera_sample=self.clock+1
         end
         self.projection_status=projection.status
         local use_weapon=self.config.anchor_mode=='weapon' and point~=nil and not provider and self.clock>=manual_until

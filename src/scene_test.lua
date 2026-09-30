@@ -75,6 +75,7 @@ function M.new(sr,log,side)
             end
             local m=p.matrix
             local x,y,z=c.mount_x,c.mount_y,c.mount_z+0.2
+            if p.first_person then x,y,z=c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+0.2 end
             local px=p.x+m[1]*x+m[5]*y+m[9]*z
             local py=p.y+m[2]*x+m[6]*y+m[10]*z
             local pz=p.z+m[3]*x+m[7]*y+m[11]*z

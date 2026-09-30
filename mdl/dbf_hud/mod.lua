@@ -3,10 +3,10 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=0.02,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -737,6 +737,11 @@ function M.project(m,x,y,z,fov,aspect,near)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
 end
+function M.first_person(previous,distance,fov)
+    if not distance or not fov then return false end
+    if previous then return distance<0.95 and fov<1.45 end
+    return distance<0.75 and fov<1.3
+end
 function M.new(backend)
     local r=HUD.memory.new(backend);local self={status='not sampled'}
     function self.snapshot(base,pose,aspect)
@@ -763,10 +768,13 @@ function M.new(backend)
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
+        self.camera_fov=fov
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
+        self.camera_distance=nil;self.camera_fov=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
         self.status=ok and status or tostring(result)
         return ok and result or nil
@@ -1402,6 +1410,7 @@ function M.new(sr,log,side)
             end
             local m=p.matrix
             local x,y,z=c.mount_x,c.mount_y,c.mount_z+0.2
+            if p.first_person then x,y,z=c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+0.2 end
             local px=p.x+m[1]*x+m[5]*y+m[9]*z
             local py=p.y+m[2]*x+m[6]*y+m[10]*z
             local pz=p.z+m[3]*x+m[7]*y+m[11]*z
@@ -1423,9 +1432,10 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
-    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local effects={fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
     local function option_id(k)return (effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
+        {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
         {'texture_refresh_hz','Texture update cap (0 = every frame)',0,120,10},
         {'emissive_intensity','3D panel emission',0,10,0.1},
@@ -1706,12 +1716,18 @@ function M.start(sr,backend,options)
         self.anchor_status=live and anchor_source or ('center fallback: '..native.status)
         local target=live and {x=(anchor.x-0.5)*w*1080/h,y=(0.5-anchor.y)*1080} or nil
         local point
-        if self.weapon_pose and (self.config.anchor_mode=='weapon' or self.config.pose_marker) then
+        if self.weapon_pose then
             local p=self.weapon_pose;local m=p.matrix;local c=self.config
             local mount={x=p.x+m[1]*c.mount_x+m[5]*c.mount_y+m[9]*c.mount_z,
                 y=p.y+m[2]*c.mount_x+m[6]*c.mount_y+m[10]*c.mount_z,
                 z=p.z+m[3]*c.mount_x+m[7]*c.mount_y+m[11]*c.mount_z}
             point=projection.poll(binding_base,mount,w/h)
+        end
+        self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov)
+        if self.weapon_pose then self.weapon_pose.first_person=self.first_person end
+        if projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
+            log(string.format('CAMERA placement distance=%.3f fov=%.3f',projection.camera_distance,projection.camera_fov))
+            self.next_camera_sample=self.clock+1
         end
         self.projection_status=projection.status
         local use_weapon=self.config.anchor_mode=='weapon' and point~=nil and not provider and self.clock>=manual_until

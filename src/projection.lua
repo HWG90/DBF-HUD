@@ -22,6 +22,11 @@ function M.project(m,x,y,z,fov,aspect,near)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
 end
+function M.first_person(previous,distance,fov)
+    if not distance or not fov then return false end
+    if previous then return distance<0.95 and fov<1.45 end
+    return distance<0.75 and fov<1.3
+end
 function M.new(backend)
     local r=HUD.memory.new(backend);local self={status='not sampled'}
     function self.snapshot(base,pose,aspect)
@@ -48,10 +53,13 @@ function M.new(backend)
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
+        self.camera_fov=fov
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
+        self.camera_distance=nil;self.camera_fov=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
         self.status=ok and status or tostring(result)
         return ok and result or nil

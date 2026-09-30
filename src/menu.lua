@@ -3,9 +3,10 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
-    local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
+    local effects={fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
     local function option_id(k)return (effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
+        {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
         {'texture_refresh_hz','Texture update cap (0 = every frame)',0,120,10},
         {'emissive_intensity','3D panel emission',0,10,0.1},

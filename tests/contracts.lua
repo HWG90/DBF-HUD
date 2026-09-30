@@ -238,7 +238,7 @@ test('optional native menu edits hex colors, position and persists tuning',funct
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==34)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==37)
     callbacks['dbf_hud_v3.offset_x'](-120);assert(h.config.offset_x==-120)
     callbacks['dbf_hud_v3.color_target'](5)
     callbacks['dbf_hud_v3.hex1'](11);assert(h.config.heat_red=='#A16D65')
@@ -502,7 +502,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==34)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==37)
         callbacks['dbf_hud_v3.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_v3.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
@@ -684,6 +684,14 @@ test('scene carrier binds once, retires on pose loss and rejects null materials'
     end
     pair.release();assert(destroyed==4)
     pair.release();assert(destroyed==4)
+end)
+
+test('camera placement heuristic has hysteresis and fails back on missing data',function()
+    assert(HUD.projection.first_person(false,.508,1.047))
+    assert(not HUD.projection.first_person(false,1.25,1.571))
+    assert(HUD.projection.first_person(true,.8,1.35))
+    assert(not HUD.projection.first_person(false,.8,1.35))
+    assert(not HUD.projection.first_person(true,nil,nil))
 end)
 
 test('bundle compiles and excludes crashing diagnostic paths',function()
