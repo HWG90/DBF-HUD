@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -83,6 +83,27 @@ local config=tablebase+spec[2]*16;U(config+0x88,45);U(config+0x94,7);bytes[confi
 local backend={module=function()return base end,read=read}
 local reader=HUD.reader.new(backend)
 test('known build signatures accepted',function() reader.validate() end)
+
+test('isolated camera helper compiles without running game APIs',function()
+    assert(loadfile('dist/dbf_camera_research.lua'))
+end)
+
+test('camera research snapshots are bounded and reject stale ownership',function()
+    local cs=alloc(512);local cam=alloc(160);P(base+0x346d560,cs);P(cs,cam)
+    local raw={avatar_unit_ref=77,binding={module_base=base,avatar_id=10,avatar_record=avatar}}
+    local total=0;local b={read=function(a,n)assert(n<=512);total=total+n;return read(a,n)end}
+    local parts=HUD.camera_state.capture(b,raw);assert(#parts==4 and total<2048)
+    assert(parts[1].name=='camera_state' and #parts[1].data==512)
+    assert(parts[4].name=='selector' and #parts[4].data==0x1d0)
+    U(pm+0x3a8,78);assert(not pcall(HUD.camera_state.capture,b,raw));U(pm+0x3a8,77)
+    local changed=false
+    b.read=function(a,n)
+        local value=read(a,n)
+        if a==cam and not changed then changed=true;P(cs,cam+16)end
+        return value
+    end
+    assert(not pcall(HUD.camera_state.capture,b,raw));P(cs,cam)
+end)
 
 test('machine gun uses verified magazine path and rejects stale component identity',function()
     local original=read(weapon,8)

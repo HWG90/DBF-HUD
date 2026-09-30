@@ -1446,6 +1446,14 @@ function M.native()
         assert(root,'game installation root unavailable')
         return root..'/DBF-HUD-tuning.lua'
     end
+    function backend.camera_log_path() return tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-camera.log') end
+    function backend.camera_request()
+        local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-camera-request.txt')
+        local file=io.open(path,'r');if not file then return nil end
+        local label=file:read(65);file:close();assert(os.remove(path),'camera request acknowledgement failed')
+        assert(#label<=64 and label:match('^[%w_%-]+%s*$'),'invalid camera snapshot label')
+        return label:match('^[%w_%-]+')
+    end
     function backend.read_tuning()
         local path=tuning_path();local f=io.open(path,'r')
         -- Compatibility: old settings are readable; writes use the new filename.
