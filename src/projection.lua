@@ -22,6 +22,10 @@ function M.project(m,x,y,z,fov,aspect,near)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
 end
+function M.left_shoulder(previous,lateral,first_person)
+    if first_person or not lateral then return false end
+    return lateral>(previous and 0.4 or 0.7)
+end
 function M.first_person(previous,distance,fov)
     if not distance or not fov then return false end
     if previous then return distance<0.95 and fov<1.45 end
@@ -55,11 +59,12 @@ function M.new(backend)
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
         self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
         self.camera_fov=fov
+        self.camera_lateral=(pose.x-matrix[13])*matrix[1]+(pose.y-matrix[14])*matrix[2]+(pose.z-matrix[15])*matrix[3]
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
-        self.camera_distance=nil;self.camera_fov=nil
+        self.camera_distance=nil;self.camera_fov=nil;self.camera_lateral=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
         self.status=ok and status or tostring(result)
         return ok and result or nil

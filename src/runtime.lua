@@ -184,9 +184,13 @@ function M.start(sr,backend,options)
             point=projection.poll(binding_base,mount,w/h)
         end
         self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov)
-        if self.weapon_pose then self.weapon_pose.first_person=self.first_person end
+        self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,self.first_person)
+        if self.weapon_pose then
+            self.weapon_pose.first_person=self.first_person
+            self.weapon_pose.left_shoulder=self.left_shoulder
+        end
         if projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
-            log(string.format('CAMERA placement distance=%.3f fov=%.3f',projection.camera_distance,projection.camera_fov))
+            log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f',projection.camera_distance,projection.camera_fov,projection.camera_lateral))
             self.next_camera_sample=self.clock+1
         end
         self.projection_status=projection.status

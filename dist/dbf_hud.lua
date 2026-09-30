@@ -3,10 +3,10 @@ local HUD={}
 HUD.config=(function()
 local M={}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={left_mount_x=-0.22,left_mount_y=0.03,left_mount_z=-0.12,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='weapon',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -737,6 +737,10 @@ function M.project(m,x,y,z,fov,aspect,near)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
 end
+function M.left_shoulder(previous,lateral,first_person)
+    if first_person or not lateral then return false end
+    return lateral>(previous and 0.4 or 0.7)
+end
 function M.first_person(previous,distance,fov)
     if not distance or not fov then return false end
     if previous then return distance<0.95 and fov<1.45 end
@@ -770,11 +774,12 @@ function M.new(backend)
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
         self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
         self.camera_fov=fov
+        self.camera_lateral=(pose.x-matrix[13])*matrix[1]+(pose.y-matrix[14])*matrix[2]+(pose.z-matrix[15])*matrix[3]
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
-        self.camera_distance=nil;self.camera_fov=nil
+        self.camera_distance=nil;self.camera_fov=nil;self.camera_lateral=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
         self.status=ok and status or tostring(result)
         return ok and result or nil
@@ -1410,7 +1415,8 @@ function M.new(sr,log,side)
             end
             local m=p.matrix
             local x,y,z=c.mount_x,c.mount_y,c.mount_z+0.2
-            if p.first_person then x,y,z=c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+0.2 end
+            if p.first_person then x,y,z=c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+0.2
+            elseif p.left_shoulder then x,y,z=c.left_mount_x,c.left_mount_y,c.left_mount_z+0.2 end
             local px=p.x+m[1]*x+m[5]*y+m[9]*z
             local py=p.y+m[2]*x+m[6]*y+m[10]*z
             local pz=p.z+m[3]*x+m[7]*y+m[11]*z
@@ -1433,11 +1439,12 @@ function M.new(hud)
     local api,attempted,retired,routes;local target=1;local self={status='Mod Options Menu not installed'}
     local prefix='dbf_hud_v3.'
     local effects={scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true}
-    local placement={fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,mount_x=true,mount_y=true,mount_z=true,
+    local placement={left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,mount_x=true,mount_y=true,mount_z=true,
         world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,weapon_offset_x=true,weapon_offset_y=true,
         weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,follow=true,travel=true,settle=true}
     local function option_id(k)return (placement[k] and 'dbf_hud_placement.' or effects[k] and 'dbf_hud_effects.' or prefix)..k end
     local sliders={
+        {'left_mount_x','Left shoulder: left / right',-2,2,0.01},{'left_mount_y','Left shoulder: forward / back',-2,2,0.01},{'left_mount_z','Left shoulder: up / down',-2,2,0.01},
         {'fp_mount_x','First-person left / right',-2,2,0.01},{'fp_mount_y','First-person forward / back',-2,2,0.01},{'fp_mount_z','First-person up / down',-2,2,0.01},
         {'scanline_strength','CRT scanline strength',0,0.6,0.02},
         {'texture_refresh_hz','Texture update cap (0 = every frame)',0,120,10},
@@ -1727,9 +1734,13 @@ function M.start(sr,backend,options)
             point=projection.poll(binding_base,mount,w/h)
         end
         self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov)
-        if self.weapon_pose then self.weapon_pose.first_person=self.first_person end
+        self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,self.first_person)
+        if self.weapon_pose then
+            self.weapon_pose.first_person=self.first_person
+            self.weapon_pose.left_shoulder=self.left_shoulder
+        end
         if projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
-            log(string.format('CAMERA placement distance=%.3f fov=%.3f',projection.camera_distance,projection.camera_fov))
+            log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f',projection.camera_distance,projection.camera_fov,projection.camera_lateral))
             self.next_camera_sample=self.clock+1
         end
         self.projection_status=projection.status

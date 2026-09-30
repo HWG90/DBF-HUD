@@ -216,3 +216,8 @@ Added a source-texture scanline effect: one dim row per four natural source pixe
 ## First-person placement trial
 
 User-labelled first-person samples measured approximately 0.508 camera-to-mount distance and 1.047 radian FOV; third-person aim measured 1.24-1.32 and 1.571 respectively. A provisional hysteretic classifier enters below 0.75 and 1.3, stays below 0.95 and 1.45, and falls back on missing samples. This is not an authoritative camera-mode flag and needs validation across weapons, zooms, and close scenery. The scene panel selects separate first-person local offsets (-0.18, 0.20, 0.02 plus the existing vertical lift), preserving current third-person tuning. Existing pose damping handles transitions. The three first-person sliders live in DBF-HUD Effects. All 43 contracts pass; visual placement remains to be confirmed.
+
+
+## Shoulder placement trial
+
+User-labelled left-shoulder aim measured camera-relative mount lateral offset about 0.95; right-shoulder aim returned to about 0.16. The provisional classifier enters left above 0.7 and exits below 0.4; first-person placement takes priority and missing data falls back right. Separate left-shoulder local offsets and placement sliders were added. The observed separation is weapon/session-specific, not an authoritative shoulder flag; alternate weapons and camera collision need validation. All 44 contracts pass.
