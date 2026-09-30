@@ -6,10 +6,10 @@ function M.start(sr,log,globals)
     local A,W,R,V,U,G=sr.Application,sr.World,sr.Renderer,sr.Viewport,sr.Unit,sr.Gui
     local world,viewport,target,camera,environment,gui
     local preview,preview_world
-    local original=rawget(globals,'render');local wrapper
+    local bridge=rawget(globals,'HUDRenderBridge');local unsubscribe
     function self.release()
         active=false
-        if wrapper and rawget(globals,'render')==wrapper then rawset(globals,'render',original) end
+        if unsubscribe then unsubscribe();unsubscribe=nil end
         local ok=true
         local function destroy(fn,...)
             if not ok then return end
@@ -29,7 +29,9 @@ function M.start(sr,log,globals)
         if target then destroy(R.destroy_resource,target);if ok then target=nil end end
         if ok then log('OFFSCREEN cleanup complete') end
     end
-    if type(original)~='function' then log('OFFSCREEN blocked: no global render callback');return self end
+    if not bridge or bridge.api~=1 or type(bridge.subscribe)~='function' then
+        log('OFFSCREEN blocked: startup HUD render bridge required');return self
+    end
     local ok,err=pcall(function()
         for _,pair in ipairs({{A,'new_world'},{A,'release_world'},{A,'create_viewport'},{A,'destroy_viewport'},
             {A,'render_world'},{A,'can_get'},{W,'spawn_unit'},{W,'create_screen_gui'},
@@ -76,7 +78,7 @@ function M.start(sr,log,globals)
         log('OFFSCREEN camera and four-color GUI ready')
     end)
     if not ok then log('OFFSCREEN setup stopped '..tostring(err));self.release();return self end
-    wrapper=function(...)
+    unsubscribe=bridge.subscribe('astra_ammo.offscreen',function(...)
         if active and not submitted then
             submitted=true
             log('OFFSCREEN render callback entered')
@@ -95,9 +97,7 @@ function M.start(sr,log,globals)
                 if not shown then log('OFFSCREEN preview stopped '..tostring(reason)) end
             end
         end
-        return original(...)
-    end
-    rawset(globals,'render',wrapper)
+    end)
     log('OFFSCREEN waiting for render callback')
     return self
 end

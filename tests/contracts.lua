@@ -600,6 +600,9 @@ test('offscreen test waits for render, preserves returns and releases in order',
     local function event(name,ret)return function(...)events[#events+1]=name;return ret end end
     local original=function(a)return a,nil,9 end
     local globals={render=original}
+    local env=setmetatable({_G=globals},{__index=_G})
+    local bridge=assert(loadfile('bridge/render_bridge.lua'));setfenv(bridge,env);bridge()
+    local host_render=globals.render
     local sr={Application={can_get=function()return true end,new_world=event('world',1),
         release_world=event('free world'),create_viewport=event('viewport',2),destroy_viewport=event('free viewport'),
         render_world=function(w,c,v,e)assert(w==1 and c==4 and v==2 and e==5);rendered=rendered+1 end},
@@ -610,21 +613,26 @@ test('offscreen test waits for render, preserves returns and releases in order',
         Viewport={set_output_render_target=function(v,t)assert(v==2 and t==7)end},
         Gui={rect=event('rect')},Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end}
     local probe=AA.offscreen_test.start(sr,function()end,globals)
-    assert(rendered==0 and globals.render~=original)
+    assert(rendered==0 and globals.render==host_render)
     local a,b,c=globals.render(8);assert(a==8 and b==nil and c==9 and rendered==1)
     globals.render(8);assert(rendered==1)
-    probe.release();assert(globals.render==original)
+    probe.release();assert(globals.render==host_render)
     assert(table.concat(events,','):find('free gui,free viewport,free environment,free world,free texture',1,true))
     local count=#events;probe.release();assert(#events==count)
-    globals.render=nil;AA.offscreen_test.start(sr,function()end,globals);assert(#events==count)
+    globals.HUDRenderBridge=nil;AA.offscreen_test.start(sr,function()end,globals);assert(#events==count)
 end)
 
-test('MDL live entry keeps offscreen render-hook experiment disabled',function()
-    local previous=AA.offscreen_test.start
-    AA.offscreen_test.start=function()error('disabled experiment must not start')end
-    local f=assert(io.open('src/mdl.lua','r'));local body=f:read('*a');f:close()
-    assert(not body:find('AA.offscreen_test.start',1,true))
-    AA.offscreen_test.start=previous
+test('startup render bridge isolates subscribers and keeps host callback',function()
+    local calls=0;local globals={render=function(v)calls=calls+1;return v,nil,17 end}
+    local env=setmetatable({_G=globals},{__index=_G})
+    local chunk=assert(loadfile('bridge/render_bridge.lua'));setfenv(chunk,env);local bridge=chunk()
+    local installed=globals.render;assert(chunk()==bridge and globals.render==installed)
+    local old=bridge.subscribe('test',function()error('old callback')end)
+    local ran=0;local remove=bridge.subscribe('test',function()ran=ran+1 end);old()
+    local a,b,c=globals.render(9);assert(a==9 and b==nil and c==17 and ran==1)
+    bridge.subscribe('broken',function()error('isolated')end);globals.render(9)
+    assert(calls==2 and bridge.errors.broken)
+    remove();globals.render(9);assert(ran==2 and globals.render==installed)
 end)
 
 test('bundle compiles and excludes crashing diagnostic paths',function()

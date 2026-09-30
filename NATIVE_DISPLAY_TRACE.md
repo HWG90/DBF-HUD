@@ -1,5 +1,11 @@
 # Native display trace — 2026-09-29
 
+## 0.3.35 startup dispatcher separation
+
+Recovery 0.3.34 was observed running after restart. Added authored startup-only HUDRenderBridge addon; MDL client no longer writes/restores the global render callback. It subscribes through API 1 and unsubscribes before GUI/viewport/world/texture cleanup. The bridge preserves host arguments/returns, isolates listener Lua failures and prevents an old unsubscribe from deleting a replacement listener. Existing global ownership is not registered with MDL. Offline tests cover these behaviors (41 pass).
+
+HUD-Render-Bridge-0.1.zip contains only this dispatcher, packaged with the existing Bingus addon builder. It requires normal Arsenal deployment and restart; do not load it through MDL. Live client 0.3.35 is installed and remains inert with respect to offscreen rendering until the bridge exists. The four-color texture preview remains the next live experiment; callback ownership fix does not establish GPU cleanup safety or visual correctness.
+
 ## CTD recovery — 0.3.34
 
 Further catalog inspection found the actual loaded camera resource `core/units/camera` (465f4895f3dc98d1) in the boot archive. 0.3.32 successfully created that private camera, the named shading environment, and the four-color GUI; the live render callback submitted render_world without a Lua error. Pixel content was not verified.

@@ -1111,10 +1111,10 @@ function M.start(sr,log,globals)
     local A,W,R,V,U,G=sr.Application,sr.World,sr.Renderer,sr.Viewport,sr.Unit,sr.Gui
     local world,viewport,target,camera,environment,gui
     local preview,preview_world
-    local original=rawget(globals,'render');local wrapper
+    local bridge=rawget(globals,'HUDRenderBridge');local unsubscribe
     function self.release()
         active=false
-        if wrapper and rawget(globals,'render')==wrapper then rawset(globals,'render',original) end
+        if unsubscribe then unsubscribe();unsubscribe=nil end
         local ok=true
         local function destroy(fn,...)
             if not ok then return end
@@ -1134,7 +1134,9 @@ function M.start(sr,log,globals)
         if target then destroy(R.destroy_resource,target);if ok then target=nil end end
         if ok then log('OFFSCREEN cleanup complete') end
     end
-    if type(original)~='function' then log('OFFSCREEN blocked: no global render callback');return self end
+    if not bridge or bridge.api~=1 or type(bridge.subscribe)~='function' then
+        log('OFFSCREEN blocked: startup HUD render bridge required');return self
+    end
     local ok,err=pcall(function()
         for _,pair in ipairs({{A,'new_world'},{A,'release_world'},{A,'create_viewport'},{A,'destroy_viewport'},
             {A,'render_world'},{A,'can_get'},{W,'spawn_unit'},{W,'create_screen_gui'},
@@ -1181,7 +1183,7 @@ function M.start(sr,log,globals)
         log('OFFSCREEN camera and four-color GUI ready')
     end)
     if not ok then log('OFFSCREEN setup stopped '..tostring(err));self.release();return self end
-    wrapper=function(...)
+    unsubscribe=bridge.subscribe('astra_ammo.offscreen',function(...)
         if active and not submitted then
             submitted=true
             log('OFFSCREEN render callback entered')
@@ -1200,9 +1202,7 @@ function M.start(sr,log,globals)
                 if not shown then log('OFFSCREEN preview stopped '..tostring(reason)) end
             end
         end
-        return original(...)
-    end
-    rawset(globals,'render',wrapper)
+    end)
     log('OFFSCREEN waiting for render callback')
     return self
 end
@@ -1319,7 +1319,7 @@ local M={}
 function M.start(sr,backend,options)
     local managed=options and options.managed==true
     local old=rawget(_G,'AstraAmmo');if old and old.retire then old.retire() end
-    local self={version='0.3.34',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.35',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     self.config=AA.config.new()
     local attached=AA.motion.new();local attachment_active=false
     local motion=AA.motion.new();local reader=AA.reader.new(backend);local view=AA.view.new(sr)
@@ -1604,7 +1604,7 @@ local function disable()
     if hud then hud.retire();hud=nil end
 end
 return {
-    name='Astra Ammo (Live)',version='0.3.34',author='Astra Ammo',
+    name='Astra Ammo (Live)',version='0.3.35',author='Astra Ammo',
     description='Reloadable HUD and weapon binding diagnostics. Replaces the running Astra instance when enabled.',
     on_enable=function(ctx)
         assert(ctx.api==2 and type(ctx.on_cleanup)=='function' and type(ctx.global)=='function','MDL API 2 required')
@@ -1615,8 +1615,8 @@ return {
         hud=AA.runtime.start(sr,backend,{managed=true})
         started=true
         ctx.global('AstraAmmo',hud)
-        -- Offscreen experiment disabled after a live CTD. MDL reload may also
-        -- retire the global render callback; do not install render hooks here.
+        -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
+        offscreen=AA.offscreen_test.start(sr,function(line)if backend.log then pcall(backend.log,line) end end)
         ctx.log('Enabled Astra '..hud.version..' with MDL-owned updates')
     end,
     on_update=function(ctx,dt) if hud then hud.tick(dt) end end,

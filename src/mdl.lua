@@ -6,7 +6,7 @@ local function disable()
     if hud then hud.retire();hud=nil end
 end
 return {
-    name='Astra Ammo (Live)',version='0.3.34',author='Astra Ammo',
+    name='Astra Ammo (Live)',version='0.3.35',author='Astra Ammo',
     description='Reloadable HUD and weapon binding diagnostics. Replaces the running Astra instance when enabled.',
     on_enable=function(ctx)
         assert(ctx.api==2 and type(ctx.on_cleanup)=='function' and type(ctx.global)=='function','MDL API 2 required')
@@ -17,8 +17,8 @@ return {
         hud=AA.runtime.start(sr,backend,{managed=true})
         started=true
         ctx.global('AstraAmmo',hud)
-        -- Offscreen experiment disabled after a live CTD. MDL reload may also
-        -- retire the global render callback; do not install render hooks here.
+        -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.
+        offscreen=AA.offscreen_test.start(sr,function(line)if backend.log then pcall(backend.log,line) end end)
         ctx.log('Enabled Astra '..hud.version..' with MDL-owned updates')
     end,
     on_update=function(ctx,dt) if hud then hud.tick(dt) end end,
