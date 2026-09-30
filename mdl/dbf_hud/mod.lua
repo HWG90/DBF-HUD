@@ -1210,6 +1210,15 @@ function M.start(sr,log,globals)
                     log('OFFSCREEN preview GUI create begin')
                     preview=assert(W.create_screen_gui(preview_world,'scale',1,1))
                     log('OFFSCREEN preview material lookup begin')
+                    for _,candidate in ipairs({'core/performance_hud/gui','content/ui/shared/material/gui_fill','content/ui/shared/material/gui_white_alpha'}) do
+                        if A.can_get('material',candidate) then
+                            local valid,result=pcall(function()
+                                local ffi=require('ffi')
+                                return string.format('0x%X',tonumber(ffi.cast('uintptr_t',G.material(preview,candidate))))
+                            end)
+                            log('OFFSCREEN material candidate '..candidate..' '..(valid and result or 'lookup failed'))
+                        else log('OFFSCREEN material candidate '..candidate..' unavailable') end
+                    end
                     local material=assert(G.material(preview,'core/performance_hud/gui'))
                     log('OFFSCREEN material Lua type='..type(material)..'; target Lua type='..type(target))
                     local pointer_ok,pointers=pcall(function()

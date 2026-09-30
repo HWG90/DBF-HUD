@@ -118,3 +118,7 @@ The subsequent live reload found the bridge, created the private scene, and retu
 ## Null material identified
 
 Read-only inspection of the current Material.set_resource wrapper confirms argument order (material, slot, resource). Its native implementation immediately reads material + 0x18 without a null guard. Gui.material can return a null light userdata when lookup fails; Lua treats that value as truthy. The guarded live diagnostic reported material=0x0 and a nonzero render-target pointer. Thus assert(Gui.material(...)) was insufficient and the previous setter call had a null first argument. An explicit native-pointer guard now rejects it before any setter call. The setter remains disabled even for nonnull values pending successful lookup and further validation. No image or depth result is claimed.
+
+## Material comparison in the same live GUI
+
+A bounded lookup-only comparison returned a null pointer for core/performance_hud/gui, while content/ui/shared/material/gui_fill and content/ui/shared/material/gui_white_alpha returned distinct nonzero pointers. All three passed Application.can_get. Therefore can_get is not sufficient evidence that this GUI can instantiate the requested material. The GUI can return valid material instances; the failure is specific to the performance-HUD candidate. Neither working candidate has yet been verified to accept the render target or the assumed diffuse_map slot. No texture setter was invoked. Next: verify the texture-sampling shader and slot for an instantiable GUI material before binding the offscreen target.
