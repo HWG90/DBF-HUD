@@ -1393,6 +1393,10 @@ function M.new(sr,log,side)
                 log('SCENE plane spawn begin')
                 unit=assert(W.spawn_unit(world,name))
                 assert(U.num_meshes(unit)==1,'unexpected mesh count')
+                if type(U.set_mesh_visibility)=='function' then
+                    local shadow_ok,shadow_err=pcall(U.set_mesh_visibility,unit,1,false,'shadow_caster')
+                    log(shadow_ok and 'SCENE shadow casting disabled' or ('SCENE shadow disable failed '..tostring(shadow_err)))
+                else log('SCENE shadow visibility API unavailable') end
                 local mesh=U.mesh(unit,1)
                 assert(Mesh.num_materials(mesh)==1,'unexpected material count')
                 local transparent='content/art_shared/materials/placeholder_red_transparent'
