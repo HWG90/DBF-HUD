@@ -221,3 +221,8 @@ User-labelled first-person samples measured approximately 0.508 camera-to-mount 
 ## Shoulder placement trial
 
 User-labelled left-shoulder aim measured camera-relative mount lateral offset about 0.95; right-shoulder aim returned to about 0.16. The provisional classifier enters left above 0.7 and exits below 0.4; first-person placement takes priority and missing data falls back right. Separate left-shoulder local offsets and placement sliders were added. The observed separation is weapon/session-specific, not an authoritative shoulder flag; alternate weapons and camera collision need validation. All 44 contracts pass.
+
+
+## Palette color-space trial
+
+User reported equally pale reds/yellows after reducing emission to 1 and removing diffuse contribution. These observations did not support either adjustment as the cause. The next controlled trial decodes palette sRGB channels to linear values before drawing into the UNORM render target; alpha remains unchanged. Scene texture color-space handling is a hypothesis, not yet verified. Visual comparison is pending.

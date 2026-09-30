@@ -26,8 +26,15 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                 for _,id in ipairs(source_ids) do G.destroy_rect(gui,id) end
                 source_ids={}
                 local function rect(x,y,w,h,c,a)
+                    -- Color-space trial: assume scene sampling treats this UNORM target as linear.
+                    -- Decode display-space palette values before storing scene RGB.
+                    local function linear(v)
+                        v=v/255
+                        return 255*(v<=0.04045 and v/12.92 or ((v+0.055)/1.055)^2.4)
+                    end
+                    local rgb={linear(c[1]),linear(c[2]),linear(c[3])}
                     local function strip(bottom,height,factor)
-                        local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(bottom-f.y)*sy,1),sr.Vector2(w*sx,height*sy),sr.Color(math.floor(255*(a or 1)),math.floor(c[1]*factor),math.floor(c[2]*factor),math.floor(c[3]*factor)))
+                        local id=G.rect(gui,sr.Vector3((x-f.x)*sx,(bottom-f.y)*sy,1),sr.Vector2(w*sx,height*sy),sr.Color(math.floor(255*(a or 1)),math.floor(rgb[1]*factor+0.5),math.floor(rgb[2]*factor+0.5),math.floor(rgb[3]*factor+0.5)))
                         source_ids[#source_ids+1]=id
                     end
                     local strength=scanline_strength or 0
