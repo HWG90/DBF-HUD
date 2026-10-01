@@ -9316,7 +9316,7 @@ function M.new(hud)
         follow=true,travel=true,settle=true}
     local function option_id(k)if k=='font' then return 'dbf_hud_v4.font_nerd' end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
     local font_choices={}
-    for i,name in ipairs(HUD.config.fonts) do font_choices[i]=name=='debug' and 'Original debug font' or HUD.native_font_data.faces[name].label end
+    for i,name in ipairs(HUD.config.fonts) do font_choices[i]=name=='debug' and 'Debug' or name:sub(1,16) end
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
