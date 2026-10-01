@@ -8,16 +8,28 @@ Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current dev
 - Weapon-following hybrid mode and an angled world-GUI panel mode.
 - Weapon-pose smoothing, configurable mounting offsets, scale, opacity and config-file colors.
 - Content-sized frames and BigBlue Terminal pixel typography.
-- Vertical heat gauge: white below 75%, yellow from 75%, red from 86%; vent mode pulses red.
+- Centered horizontal heat gauge: white below 75%, yellow from 75%, red from 86%; vent mode pulses red.
 - MDL API 2 live Lua reload and menu/Lua tuning.
 
 Runtime global: `DBFHUD`; new MDL folder and resource namespace: `dbf_hud`. Tuning and logs use `DBF-HUD-tuning.lua` and `DBF-HUD.log`. Legacy tuning, runtime retirement and optional material lookup remain supported for upgrades. The addon GUID is unchanged.
 
 An existing live installation may retain its `astra_ammo` folder to preserve MDL enablement. For a fresh installation, disable/remove that entry before enabling `dbf_hud`; never enable both. Historical archives keep their original names.
 
+## October 1 checkpoint
+
+- Sparse external weapon profiles retain weapon-specific first-person side and position corrections.
+- Magazine insertion includes the pending chamber round immediately. Eligible tactical reloads show a small +1 beside the heading; round-by-round weapons are excluded.
+- Autocannon APHET/FLAK selection survives Semi/Auto changes, with the mode heading and symbol separate from backpack reserves. Five rounds pulse as a reload reminder; three or fewer warn yellow and empty warns red.
+- Recognized fire-selection modes have a matching-width child panel with a two-reference-pixel gap. Fixed-mode weapons hide this panel.
+- Game-derived Auto/Semi/Burst/underbarrel masks share depth-aware rectangle rendering. Laser catalog entries use a beam/starburst symbol. Text, count/icon groups, bars and reserves are centered; heat is shown with a horizontal bar.
+- The verified rifle alternate source displays its grenade count, grenade reserves and 40MM HE heading. Other auxiliary modes still require live validation; unknown modes are not presented as verified.
+- Native-font depth assets and their builder are preserved as an isolated experiment and are not wired into the HUD. MDL panel resizing and the layout editor remain deferred.
+
+The installable checkpoint is in `releases/DBF-HUD-MDL-0.3.40.zip`.
+
 ## Current limitations
 
-Direct WorldGUI occlusion was visually confirmed on September 30 using the registered depth-enable-only shader probe. The scene mesh is now archived in code and commented out of public dispatch. The main menu exposes three display modes; Always Show HUD (3D) switches direct WorldGUI between depth-tested and non-occluded drawing. World-space frosted blur is unresolved, and first-person/shoulder placement currently uses camera heuristics rather than verified camera-state flags.
+Direct WorldGUI occlusion was visually confirmed on September 30 using the registered depth-enable-only shader probe. The scene mesh is now archived in code and commented out of public dispatch. The main menu exposes three display modes. The 3D HUD is unoccluded while aiming and depth-tested otherwise; both third-person shoulders share the sight mount. First-person and aiming state use validated native flags. World-space frosted blur remains unresolved.
 
 The complete archive retains the startup bridge for compatibility. Direct WorldGUI renders text and bars without an intermediate texture; the active MDL path no longer allocates or updates mesh textures. The verified depth assets are included; the combined startup installation still needs its own live verification.
 
@@ -41,7 +53,7 @@ Configure through the mod menu or game-root `DBF-HUD-tuning.lua`. The file in th
 python tests/run.py --lua-dll "path/to/lua51.dll"
 ```
 
-The runner uses a local Windows LuaJIT DLL. **47 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
+The runner uses a local Windows LuaJIT DLL. **69 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
 
 ## Contents and attribution
 

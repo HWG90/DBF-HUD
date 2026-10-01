@@ -24,8 +24,8 @@ function M.new(backend)
     local function config(kind,m,id,rec,owner)
         local spec=Layout.static[kind]
         if kind~='magazine' then
-            local i=r.map(m+0x68,id,65536)
-            if i then assert(i<4096,'override index');return r.read(r.p(m+0xa8)+i*spec[3],spec[3]) end
+            local i=r.map(m+(spec[4] or 0x68),id,65536)
+            if i then assert(i<4096,'override index');return r.read(r.p(m+(spec[5] or 0xa8))+i*spec[3],spec[3]) end
         end
         local p=r.p(owner+spec[1]);local n=spec[2];local key=rec:sub(1,8)
         local home=((r.u(rec,4)%n)*(2^32%n)+r.u(rec,0)%n)%n
@@ -100,14 +100,48 @@ function M.new(backend)
         -- The machine gun uses the identity-checked magazine path below. Its
         -- inherited exclusion was removed after bounded live component checks.
         assert(mounted or flag(rec:byte(21),1),'weapon ownership')
+        local main_rec,main_wid,main_address=rec,wid,record_address
+        local control_address,active_mode
+        local control_ok,address,mode=pcall(function()
+            assert(r.read(base+0x75673a,7)==string.char(0x4c,0x8b,0x15,0x9f,0x05,0xbd,0x02),'weapon control getter binding')
+            local control_manager=r.p(base+0x3326ce0)
+            local control_index=component(control_manager,0x30,0x48,wid,rec)
+            if not control_index then return nil end
+            local count=r.u(r.read(control_manager+0x20,4),0)
+            assert(count<=4096 and control_index<count,'weapon control bounds')
+            local at=r.p(control_manager+0x60)+control_index*12
+            return at,r.u(r.read(at,4),0)
+        end)
+        if control_ok then control_address,active_mode=address,mode end
+        if active_mode==8 then
+            local auxiliary=r.p(base+0x3326a38)
+            local index=r.map(auxiliary+0x278,wid,4096)
+            if not index or index>=4096 or not si then return nil,'alternate ammunition unavailable' end
+            local state=r.read(r.p(auxiliary+0x2a0)+index*128,128)
+            local ammo_id=r.u(state,0x64)
+            local selector=r.read(r.p(sm+0x60)+si*0x1d0,5*0x50)
+            local attached=false
+            for slot=0,4 do
+                if r.u(selector,slot*0x50)==wid and r.u(selector,slot*0x50+4)==ammo_id then attached=true end
+            end
+            if not attached then return nil,'alternate weapon attachment mismatch' end
+            local ammo_rec,ammo_address=entity(owner,ammo_id)
+            if not ammo_rec then return nil,'alternate weapon missing' end
+            local owner_manager=r.p(base+0x3326730)
+            local oi=component(owner_manager,0x18,0x30,ammo_id,ammo_rec)
+            if not oi or r.u(r.read(r.p(owner_manager+0x38)+oi*4,4),0)~=aid then return nil,'alternate weapon owner mismatch' end
+            wid,rec,record_address=ammo_id,ammo_rec,ammo_address
+        end
         local driver=global('driver');local di=component(driver,0x28,0x40,wid,rec)
         if not di then return nil,'no weapon driver' end
-        local flags=r.u(r.read(r.p(driver+0x50)+di*40,40),0)
-        local result={id=wid,unit_ref=r.u(rec,16),avatar_unit_ref=unit,resource_hex=string.format('%08x%08x',r.u(rec,4),r.u(rec,0)),lowered=lowered,alternate=mounted,reloadable=flag(flags,0x40)}
+        local driver_state=r.read(r.p(driver+0x50)+di*40,40)
+        local flags=r.u(driver_state,0)
+        local result={id=main_wid,unit_ref=r.u(main_rec,16),avatar_unit_ref=unit,resource_hex=string.format('%08x%08x',r.u(main_rec,4),r.u(main_rec,0)),lowered=lowered,alternate=mounted,reloadable=flag(flags,0x40)}
+        if wid~=main_wid then result.ammo_resource_hex=string.format('%08x%08x',r.u(rec,4),r.u(rec,0));result.alternate_fire=true end
         -- Diagnostic values only. +0x0C is not yet a verified engine/Lua handle.
         -- All bytes below were already read for ownership and ammo selection.
-        result.binding={module_base=base,record=record_address,candidate=r.u(rec,12),
-            avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12)}
+        result.binding={module_base=base,record=main_address,candidate=r.u(main_rec,12),
+            avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12),driver_state=driver_state}
         local kind=flag(flags,0x80) and 'magazine' or flag(flags,0x100) and 'rounds' or flag(flags,0x200) and 'heat'
         if kind then
             local m=global(kind);local mag=kind=='magazine'
@@ -125,25 +159,52 @@ function M.new(backend)
             else
                 local st=r.read(r.p(m+(mag and 0x48 or 0x50))+i*(mag and 16 or 24),mag and 16 or 24)
                 local rt=r.read(r.p(m+(mag and 0x50 or 0x58))+i*(mag and 12 or 20),mag and 12 or 20)
+                result.binding.ammo_state=st
+                result.binding.ammo_runtime=rt
+                result.binding.driver_flags=flags
                 local sel=mag and 0 or r.u(rt,4);assert(sel<=1,'magazine selection')
+                result.ammo_slot=sel
+                if not mag and cfg then
+                    result.projectile_type=r.u(cfg,0x40+sel*4)
+                    result.binding.ammo_types=cfg:sub(0x40+1,0x48)
+                end
                 local chambered=cfg and cfg:byte((mag and 0x9c or 0x68)+1)==1
                 local chamber=chambered and r.u(st,mag and 8 or 16)>0 and 1 or 0
                 result.rounds=r.i(st,mag and 0 or 4+sel*4)+chamber
+                result.chamber_rounds=chamber
+                result.chamber_supported=chambered==true
                 assert(valid(result.rounds,5001),'ammo range')
                 if cfg then
                     local capacity=mag and r.u(cfg,0x88) or r.f(cfg,0x48+sel*4)
-                    if valid(capacity,5000) and capacity>=1 then result.capacity=math.max(capacity,result.rounds) end
+                    if valid(capacity,5000) and capacity>=1 then result.capacity=capacity end
+                    -- A full replacement magazine reserves its chamber round before
+                    -- the bolt animation completes. Observed runtime +8 clears on chambering.
+                    if mag and chambered and chamber==0 and result.capacity and
+                        result.rounds==result.capacity-1 and rt:byte(9)==1 then
+                        result.pending_chamber_round=1
+                        result.rounds=result.rounds+1
+                    end
                 end
                 local reserve=r.i(rt,0)
                 local reserve_max=cfg and r.u(cfg,mag and 0x94 or 0x50)
                 if valid(reserve,100000) and (not reserve_max or reserve_max>0) then
                     result.reserve=reserve;result.reserve_kind=mag and 'MAGS' or 'ROUNDS'
                 end
-                -- Only a known spawned pair is used; arbitrary backpacks never become reserve.
-                if cfg and reserve_max==0 and not mounted then
+                -- Inventory ownership plus the matching pack resource survives respawns;
+                -- adjacent entity IDs alone do not identify an autocannon backpack.
+                local autocannon=result.resource_hex=='a8cffb316f0b5c5f'
+                if autocannon or (cfg and reserve_max==0 and not mounted) then
                     for off=12,24,4 do
                         local bid=r.u(inventory,off)
-                        if bid==wid+1 then result.reserve=deposit(owner,bid);result.reserve_kind='PACK' end
+                        local matches=not autocannon and bid==wid+1
+                        if autocannon and bid~=wid then
+                            local pack=entity(owner,bid)
+                            matches=pack and string.format('%08x%08x',r.u(pack,4),r.u(pack,0))=='e60ae045e0090f4c'
+                        end
+                        if matches then
+                            local count=deposit(owner,bid)
+                            if count~=nil then result.reserve=count;result.reserve_kind='PACK';break end
+                        end
                     end
                 end
             end
@@ -160,7 +221,27 @@ function M.new(backend)
             end
             if not result.rounds then return nil,'resource provider unavailable' end
         else return nil,'unsupported ammo component' end
-        self.status='ok';return result
+        do
+            -- Optional mode metadata must not suppress otherwise valid ammunition.
+            local ok,mode,fire_mode=pcall(function()
+                assert(r.read(base+0x75673a,7)==string.char(0x4c,0x8b,0x15,0x9f,0x05,0xbd,0x02),'ammo control getter binding')
+                local manager=r.p(base+0x3326ce0)
+                local index=component(manager,0x30,0x48,main_wid,main_rec)
+                if not index then return nil end
+                local count=r.u(r.read(manager+0x20,4),0)
+                assert(count<=4096 and index<count,'ammo control bounds')
+                local controls=r.read(r.p(manager+0x60)+index*12,12)
+                assert(r.read(main_address,24)==main_rec,'ammo control weapon changed')
+                local mode=result.resource_hex=='a8cffb316f0b5c5f' and HUD.ammo_types.autocannon_mode(r.u(controls,4)) or nil
+                local settings=config('weapon_data',manager,main_wid,main_rec,owner)
+                local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
+                local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
+                return mode,fire_mode
+            end)
+            if ok then result.ammo_mode=mode;result.fire_mode=fire_mode end
+        end
+        if control_address then assert(r.u(r.read(control_address,4),0)==active_mode,'fire mode changed during snapshot') end
+        self.status='ok';return HUD.ammo_types.apply(result)
     end
     function self.poll()
         local ok,value,reason=pcall(self.snapshot)

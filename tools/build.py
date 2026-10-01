@@ -6,7 +6,7 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ORDER = ['config','font_data','nerd_font_data','font','motion', 'model', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe', 'offscreen_test', 'world_style','archived_mesh','scene_test','placement','weapon_offsets', 'menu', 'runtime']
+ORDER = ['config','font_data','nerd_font_data','font','motion', 'ammo_types','model', 'fire_icons', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe', 'offscreen_test', 'world_style','archived_mesh','scene_test','placement','weapon_offsets', 'menu', 'runtime']
 
 def bundle():
     parts = ['-- HD2-Addon: mods/dbf_hud/hud\nlocal HUD={}\n']

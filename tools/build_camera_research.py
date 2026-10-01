@@ -4,7 +4,7 @@ import argparse,os
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--install',action='store_true');args=p.parse_args()
 parts=['local HUD={}']
-for name in ['memory','layouts','reader','pose','camera_state']:
+for name in ['ammo_types','memory','layouts','reader','pose','camera_state']:
  parts.append('HUD.'+name+'=(function()\n'+(ROOT/'src'/f'{name}.lua').read_text()+'\nend)()')
 parts.append((ROOT/'src/camera_research_mdl.lua').read_text())
 output=ROOT/'dist/dbf_camera_research.lua';output.write_text('\n'.join(parts))

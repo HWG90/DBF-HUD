@@ -1,10 +1,10 @@
-# DBF-HUD live reload (0.3.34)
+# DBF-HUD live reload (0.3.40)
 
 Requires MDL API 2. The adapter was checked against installed MDL 1.4.2 source and tested offline. Live enable and reload produced valid pose samples. Testing exposed a concurrent startup copy; deploy with the packaged DBF-HUD addon disabled.
 
 ## First use
 
-Place the `dbf_hud` directory from `DBF-HUD-MDL-0.3.34.zip` inside `%LOCALAPPDATA%/MDL/Helldivers2/Mods`. This is a loose MDL mod, not an Arsenal archive.
+Place the `dbf_hud` directory from `DBF-HUD-MDL-0.3.40.zip` inside `%LOCALAPPDATA%/MDL/Helldivers2/Mods`. This is a loose MDL mod, not an Arsenal archive.
 
 With MDL 1.4.2 deployed and running, open its in-game panel and enable **DBF-HUD (Live)** under live Lua mods. Mod Options Menu may cause MDL to appear as a floating panel instead of an ESC tab. Refresh/rescan if the new entry has not appeared.
 

@@ -1262,6 +1262,199 @@ end
 return M
 
 end)()
+HUD.ammo_types=(function()
+-- Catalog-derived ammo presentation; live selector remains the source of counts.
+local M={}
+local projectiles={
+    [1]='FLECHETTES',
+    [14]='BUCKSHOT',
+    [36]='HE',
+    [37]='FLECHETTES',
+    [47]='BUCKSHOT',
+    [62]='BUCKSHOT',
+    [73]='BUCKSHOT',
+    [96]='FRAG',
+    [115]='APHET',
+    [153]='HEAT',
+    [183]='FLECHETTES',
+    [191]='STUN',
+    [198]='BUCKSHOT',
+    [199]='BUCKSHOT',
+    [217]='BUCKSHOT',
+    [224]='FLAK',
+    [231]='HEAT',
+    [232]='BUCKSHOT',
+    [240]='SLUG',
+    [260]='BUCKSHOT',
+    [262]='BUCKSHOT',
+    [284]='FLAK',
+    [290]='BUCKSHOT',
+    [292]='BUCKSHOT',
+    [312]='FLAK',
+    [317]='BUCKSHOT',
+    [322]='FRAG',
+    [332]='FLECHETTES',
+    [350]='HE',
+}
+local weapons={
+    ['02cd7321cd8445f5']='GRENADES', -- Verified auxiliary grenade entity on the equipped rifle.
+    ['006e44327bb953fe']='GRENADES', -- pump_grenade_launcher
+    ['02eecd0b1fa49630']='GRENADES', -- grenade_launcher
+    ['03e67a19b07c6523']='ROUNDS', -- marksman_rifle_vigilance
+    ['05d8d8c073b9d502']='SHELLS', -- pump_shotgun_plasma
+    ['07419ebc09a1a7c5']='ROUNDS', -- railgun
+    ['076dd5d4f4360204']='SHELLS', -- arc_shotgun
+    ['0807aea5217e4767']='ROUNDS', -- personal_defense_weapon
+    ['0c197bbd8d2c725b']='ROUNDS', -- assault_rifle_penetrator
+    ['0f83639ab8c86165']='ROUNDS', -- battle_rifle_ceremonial
+    ['11c27d3babb38956']='ROUNDS', -- machinegun
+    ['11ec8e2296a3d662']='SHELLS', -- pump_shotgun_02
+    ['16051937941bb709']='ROUNDS', -- smg_rhino
+    ['186ea95de7306b1a']='ROUNDS', -- smg_solvent
+    ['1abbff60d26ba391']='ROUNDS', -- marksman_rifle_shark
+    ['2152d5147b0ac418']='ROUNDS', -- heavy_mg
+    ['2383b0439f0bc465']='ROUNDS', -- assault_rifle_rico
+    ['25aa2fd4643cf4ee']='ROUNDS', -- faf_missile_launcher
+    ['26df5aa208ce216e']='ROUNDS', -- railgun
+    ['26e40437ea275296']='ROCKETS', -- air_burst_rocket_launcher
+    ['27ee1ed8f6fb6356']='ROUNDS', -- laser_rifle
+    ['295beb26dc4f8ff1']='ROUNDS', -- laser_rifle_long_hotshot
+    ['2b28e17ffed05f7c']='SHELLS', -- triple_barrel_breakshotgun
+    ['2df1cfb9ed77e06c']='ROUNDS', -- marksman_rifle
+    ['2e9d0bdc48b09e60']='ROUNDS', -- railgun
+    ['30061f91af477f5e']='ROUNDS', -- sniper_rifle_helghast
+    ['35a61296619cc47e']='ROUNDS', -- laser_pulse_cannon
+    ['3828e2051aa9e897']='ROUNDS', -- harpoon_gun
+    ['39ab99895147a3bf']='FUEL', -- flamethrower
+    ['3c86e871923f3970']='SHELLS', -- laser_shotgun
+    ['41eac4a03987faa0']='SHELLS', -- pump_shotgun
+    ['43a58cb89cfa197c']='ROUNDS', -- minigun
+    ['43b2d7766120203b']='ROUNDS', -- chemgun
+    ['43cb1033961a2276']='ROUNDS', -- assault_rifle
+    ['46183b50961d1328']='SHELLS', -- assault_shotgun
+    ['46427f2630a80d88']='ROUNDS', -- faf_missile_launcher_helghast
+    ['4ba41b6f9f405cc2']='ROUNDS', -- smg_helghast
+    ['4c786785c79d44e7']='ROUNDS', -- marksman_rifle_vigilance
+    ['4dbd74f49c8ffc13']='ROUNDS', -- assault_rifle_nacho
+    ['4e310b1fe4c52b52']='SHELLS', -- pump_shotgun_02
+    ['4e4a613eb9bf5c24']='ROUNDS', -- personal_defense_weapon
+    ['4f749e2ee26f532d']='SHELLS', -- pump_shotgun
+    ['4fb0f8c02f55c82b']='FUEL', -- flamethrower_ripley
+    ['53eebe75cd6e26df']='SHELLS', -- pump_shotgun_slug
+    ['5990123d142b16cb']='ROUNDS', -- laser_guided_missile_launcher
+    ['5ebaea70c0d060b9']='SHELLS', -- assault_shotgun
+    ['5fecab819f96a3e8']='ROUNDS', -- battle_rifle
+    ['6228d0242bde56b6']='SHELLS', -- assault_shotgun_sprayandpray
+    ['644d748f359de03e']='ROUNDS', -- railgun
+    ['692eb345969d368e']='ROUNDS', -- lat_oneshot
+    ['6cfcc7f8801a0266']='ROUNDS', -- energy_weapon_shark
+    ['6dfa768b4e2401a7']='ROUNDS', -- railgun
+    ['6e68194b95d60145']='ROUNDS', -- marksman_rifle_vigilance_counter_sniper
+    ['708ea298c82093d0']='ROUNDS', -- assault_rifle_whisper
+    ['719f42b7d137789c']='ROUNDS', -- jet_rifle_phoenix
+    ['72170a55a1f37ff1']='SHELLS', -- shotgun_double_freedom
+    ['7617642765ac38c7']='ROCKETS', -- expendable_massive_rocket_launcher
+    ['78a8185f63a70795']='FUEL', -- heavy_flamethrower
+    ['7b75e5132ffd4ca6']='ROUNDS', -- bolt_action_rifle
+    ['7c47244d3b030884']='ROUNDS', -- railgun
+    ['7e3145a5baa4b948']='ROUNDS', -- laser_rifle_charge
+    ['8039834a4b7489b9']='ROUNDS', -- assault_rifle_penetrator
+    ['80932fa0ed6901d3']='ROUNDS', -- lat_oneshot
+    ['80f1a156d9fa1e36']='ROUNDS', -- jet_rifle
+    ['84354339522c932d']='ROUNDS', -- assault_rifle_large_calibre_01
+    ['8645f167b3c813a2']='ROUNDS', -- laser_rifle_long
+    ['8666e5f49f440d44']='ROUNDS', -- faf_missile_launcher
+    ['88c2d09ad85a7c9f']='GRENADES', -- belt_fed_grenade_launcher
+    ['89c5493e08ca4207']='ROUNDS', -- sniper_rifle
+    ['8a307bd1811a5fe9']='FUEL', -- smg_flamer
+    ['8a35c1dc19f41870']='ROUNDS', -- bolt_action_rifle
+    ['8dc91f277c6096ee']='ROUNDS', -- jet_rifle_phoenix
+    ['90ddc374f4e3d756']='SHELLS', -- shotgun_nacho
+    ['945f7e132049b514']='ROUNDS', -- railgun
+    ['94bd931b5fb4ee95']='ROUNDS', -- smg_rhino
+    ['9571ca51f0daf35b']='ROUNDS', -- smg_defender
+    ['968211c0033dce64']='ROUNDS', -- assault_rifle
+    ['96de9cd50f7306e6']='ROUNDS', -- arc_thrower
+    ['9b0a7b78126c2fec']='ROUNDS', -- missile_launcher
+    ['9f80d67a12a7e40f']='ROCKETS', -- recoilless_rifle
+    ['a6a735accb4a327f']='ROUNDS', -- lmg_stalwart
+    ['a7ee1ebf58fcdf1f']='ROUNDS', -- assault_rifle_patriot
+    ['a8a91eb54892b6b2']='ROUNDS', -- assault_rifle_risk
+    ['a8cffb316f0b5c5f']='ROUNDS', -- automatic_cannon
+    ['a955c4ea6f6d4203']='ROUNDS', -- assault_rifle_grenadier
+    ['a9e574cd953d3b3a']='ROUNDS', -- faf_missile_helghast
+    ['ab2a2b390c539f18']='ROUNDS', -- assault_rifle_explosive
+    ['b16c9d490aa59b77']='ROUNDS', -- expendable_machinegun
+    ['b2b5e0d185605f9e']='ROUNDS', -- expendable_napalm_launcher
+    ['b6aff2195568767f']='ROUNDS', -- jet_rifle
+    ['bc29613666df696b']='ROUNDS', -- assault_rifle_karbin
+    ['bcc2177439d231be']='SHELLS', -- pump_shotgun
+    ['be70ee0d8d44028e']='ROUNDS', -- smg_nacho
+    ['bf9504e95c0103a1']='ROUNDS', -- battle_rifle_ceremonial
+    ['bfe35746f5084222']='ROUNDS', -- assault_rifle_karbin
+    ['c0a9ee8ce12f682a']='ROUNDS', -- railgun
+    ['c12a34f375bd5a87']='SHELLS', -- assault_shotgun_incendiary
+    ['c4232a0e62166d91']='ROUNDS', -- personal_defense_weapon_pepper
+    ['c85f576d5e086147']='ROUNDS', -- laser_smg_blaster
+    ['cc786f6491fe7e65']='ROUNDS', -- faf_missile_launcher_helghast
+    ['cdf28be026bb7d84']='ROUNDS', -- assault_rifle_helghast
+    ['cdf733b0106a23c3']='SHELLS', -- assault_shotgun_incendiary
+    ['ce063aa33d95a812']='ROUNDS', -- assault_rifle_rico
+    ['cf5f176e0e322be1']='ROUNDS', -- assault_rifle
+    ['d323de60855898ac']='SHELLS', -- pump_shotgun_dragon
+    ['d54b9505c0f72873']='ROUNDS', -- laser_cannon
+    ['dcd1c835407ef7ba']='SHELLS', -- pump_shotgun_trench
+    ['df8decb6b6538265']='ROUNDS', -- railgun
+    ['e5796355a8fd67e0']='ROUNDS', -- marksman_rifle_drake
+    ['e6d932be83729076']='ROUNDS', -- lever_action_rifle_01
+    ['e8d5f49ad7780e54']='ROUNDS', -- plasma_blaster
+    ['e8ffad77b73c221c']='ROUNDS', -- railgun
+    ['eea5e3cef1e12c14']='ROUNDS', -- plasma_rifle
+    ['efdcef306cea63fe']='ROUNDS', -- plasma_rifle_charge
+    ['f0338468dcdb6a6c']='ROUNDS', -- marksman_rifle_justice
+    ['f49227a0630a3f7f']='ROUNDS', -- crossbow_greyfax
+    ['f992ce97577c8a7f']='ROUNDS', -- volley_gun
+    ['fb3a19078694708a']='ROUNDS', -- plasma_rifle
+    ['fe3b29b2cfa63f9b']='GRENADES', -- grenade_launcher_tactical
+    ['ffc18b2ce10ca381']='ROUNDS', -- battle_rifle
+}
+-- APHET/Flak values verified by a matched return sequence. Full auto adds
+-- 0x1000 to this packed word independently of the programmable-ammo bit.
+-- Ignore only that observed flag; unverified combinations remain unknown.
+function M.autocannon_mode(control)
+    if type(control)~='number' or control~=math.floor(control) or control<0 or control>0xffffffff then return nil end
+    if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
+    return ({[0x50]='APHET',[0x54]='FLAK'})[control]
+end
+function M.fire_mode(control)
+    -- Standard catalog modes plus native mode 8, whose setter enables the
+    -- auxiliary weapon entity. Safety/charge enums remain unverified.
+    return ({[1]='AUTO',[2]='SEMI',[3]='BURST',[8]='ALT'})[control]
+end
+function M.selectable_fire_mode(control,choices)
+    if not choices then return nil end
+    local seen,count={},0
+    for _,value in ipairs(choices) do
+        if value>0 and value<=8 and not seen[value] then seen[value]=true;count=count+1 end
+    end
+    if count>1 and seen[control] then return M.fire_mode(control) end
+end
+local lasers={['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
+function M.apply(raw)
+    if raw then raw.energy_icon=lasers[raw.ammo_resource_hex or raw.resource_hex] and 'LASER' or nil end
+    if not raw or raw.kind=='heat' or raw.kind=='infinite' then return raw end
+    local category=weapons[raw.ammo_resource_hex or raw.resource_hex] or 'ROUNDS'
+    local special=raw.projectile_type and projectiles[raw.projectile_type]
+    raw.label=special or category
+    if raw.resource_hex=='a8cffb316f0b5c5f' then raw.label='AMMO' end
+    if raw.alternate_fire and category=='GRENADES' then raw.label='GRENADES';raw.reserve_kind='GRENADES' end
+    if raw.alternate_fire and raw.ammo_resource_hex=='02cd7321cd8445f5' then raw.label='40MM HE' end
+    if raw.reserve_kind=='ROUNDS' then raw.reserve_kind=category end
+    return raw
+end
+return M
+
+end)()
 HUD.model=(function()
 -- Normalize providers into one presentation contract; unknown is never zero.
 local M={}
@@ -1271,7 +1464,7 @@ end
 function M.normalize(raw)
     if not raw then return nil end
     local m={id=raw.id,unit_ref=raw.unit_ref,avatar_unit_ref=raw.avatar_unit_ref,resource_hex=raw.resource_hex,kind=raw.kind,reserve=count(raw.reserve),reserve_kind=raw.reserve_kind,
-        alternate=raw.alternate, lowered=raw.lowered, label=raw.label or 'AMMO'}
+        alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, energy_icon=raw.energy_icon, lowered=raw.lowered, label=raw.label or 'AMMO'}
     if raw.kind=='heat' then
         if type(raw.heat)~='number' or raw.heat~=raw.heat or raw.heat<0 or raw.heat>1 then return nil end
         m.value=math.floor(raw.heat*100+0.5); m.fraction=raw.heat
@@ -1284,13 +1477,32 @@ function M.normalize(raw)
         m.value=count(raw.rounds)
         if not m.value then return nil end
         m.capacity=count(raw.capacity)
+        if raw.kind=='magazine' and raw.chamber_supported and raw.chamber_rounds==1 and m.capacity and m.value>m.capacity then
+            m.chamber_bonus=1
+            m.value=m.value-1
+        end
         if m.capacity and m.capacity>0 then m.fraction=math.min(1,m.value/m.capacity) end
         m.state=m.value==0 and (raw.reloadable==false and 'SPENT' or 'EMPTY') or 'READY'
         m.warning=m.value==0 or (m.fraction and m.fraction<=0.2) or false
+        if m.resource_hex=='a8cffb316f0b5c5f' then
+            m.warning=m.value<=3
+            m.reload_reminder=m.value==5
+        end
     end
     return m
 end
 return M
+
+end)()
+HUD.fire_icons=(function()
+-- Masks sampled from the game fire-mode textures; rectangle rendering preserves HUD depth.
+return {
+    LASER={w=17,h=24,runs={{8,0,1,15},{7,15,3,3},{8,20,1,4},{8,11,1,3},{0,16,5,1},{12,16,5,1},{3,21,2,2},{12,21,2,2},{3,11,2,2},{12,11,2,2}}},
+    AUTO={w=24,h=24,runs={{0,23,18,1},{0,22,21,1},{0,21,23,1},{0,20,24,1},{0,19,23,1},{0,18,21,1},{0,17,18,1},{0,14,20,1},{0,13,22,1},{0,12,24,1},{0,11,24,1},{0,10,23,1},{0,9,20,1},{2,8,12,1},{0,6,18,1},{0,5,21,1},{0,4,23,1},{0,3,24,1},{0,2,23,1},{0,1,21,1},{0,0,18,1}}},
+    SEMI={w=24,h=7,runs={{0,6,18,1},{0,5,21,1},{0,4,23,1},{0,3,24,1},{0,2,23,1},{0,1,22,1},{0,0,19,1}}},
+    BURST={w=24,h=11,runs={{2,10,1,1},{0,9,1,1},{2,9,1,1},{5,9,2,1},{8,9,7,1},{0,8,1,1},{2,8,1,1},{5,8,2,1},{8,8,12,1},{0,7,1,1},{2,7,1,1},{5,7,2,1},{8,7,14,1},{0,6,1,1},{2,6,1,1},{5,6,2,1},{8,6,15,1},{0,5,1,1},{2,5,1,1},{5,5,2,1},{8,5,16,1},{0,4,1,1},{2,4,1,1},{5,4,2,1},{8,4,15,1},{0,3,1,1},{2,3,1,1},{5,3,2,1},{8,3,14,1},{0,2,1,1},{2,2,1,1},{5,2,2,1},{8,2,12,1},{0,1,1,1},{2,1,1,1},{5,1,2,1},{8,1,7,1},{2,0,1,1}}},
+    ALT={w=24,h=13,runs={{0,12,2,1},{0,11,2,1},{3,11,14,1},{19,11,1,1},{0,10,2,1},{3,10,14,1},{19,10,3,1},{0,9,2,1},{3,9,14,1},{19,9,4,1},{0,8,2,1},{3,8,14,1},{19,8,5,1},{0,7,2,1},{3,7,14,1},{19,7,5,1},{0,6,2,1},{3,6,14,1},{19,6,5,1},{0,5,2,1},{3,5,14,1},{19,5,5,1},{0,4,2,1},{3,4,14,1},{19,4,5,1},{0,3,2,1},{3,3,14,1},{19,3,4,1},{0,2,2,1},{3,2,14,1},{19,2,3,1},{0,1,2,1},{3,1,14,1},{19,1,2,1},{0,0,2,1}}},
+}
 
 end)()
 HUD.layout=(function()
@@ -1302,84 +1514,9 @@ function M.heat_color(fraction,clock,cfg)
     if fraction>=0.75 then return cfg.heat_yellow end
     return cfg.heat_white
 end
-function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
-    cfg=cfg or HUD.config.defaults
-    local pixel=HUD.font.supported(cfg.font)
-    if pixel and not measure then measure=function(text,size)return HUD.font.measure(text,size,cfg.font)end end
-    local d={};local heat=m.kind=='heat'
-    local vent=heat and m.state=='VENT'
-    if vent then opacity=opacity*(0.25+0.75*(0.5+0.5*math.cos((clock or 0)*math.pi*4))) end
-    local heat_ink=vent and cfg.heat_red or M.heat_color(m.fraction or 0,clock,cfg)
-    local key='text_color'
-    if heat then
-        if vent then key='heat_red'
-        elseif m.fraction>=.95 then key=math.floor((clock or 0)*cfg.flash_hz*2)%2==0 and 'heat_red' or 'heat_yellow'
-        elseif m.fraction>=.86 then key='heat_red'
-        elseif m.fraction>=.75 then key='heat_yellow'
-        else key='heat_white' end
-    elseif m.warning then key=m.value==0 and 'heat_red' or 'heat_yellow' end
-    local ink=HUD.config.rgb(cfg[key])
-    local ink_alpha=(cfg[key..'_alpha'] or 255)/255
-    local function rect(dx,dy,w,h,c,a,kind)
-        d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity*ink_alpha,frosted=cfg.frosted}
-    end
-    local function text(t,dx,dy,size,c,a)
-        if pixel then size=t=='%' and 24 or (size>=20 and 36 or 12) end
-        d[#d+1]={type='text',text=tostring(t),font=cfg.font,x=x+dx*scale,y=y+dy*scale,size=size*scale,c=c,a=(pixel and 1 or (a or 1))*opacity*ink_alpha}
-    end
-    local number=type(m.value)=='number' and string.format('%02d',m.value) or m.value
-    local number_top,label_top=0,0
-    if pixel then
-        local a,b,c,nt=measure(number,36*scale)
-        local e,f,g,lt=measure('HEAT SINKS',12*scale)
-        number_top=nt/scale;label_top=lt/scale
-    end
-    if heat then
-        -- Twenty cells fill from the base upward, including the partially filled cell.
-        local pitch,cell=pixel and 2.5 or 2.35,pixel and 2 or 1.75
-        for i=0,19 do
-            local fill=math.max(0,math.min(1,m.fraction*20-i))
-            rect(0,-8+i*pitch,9,cell,ink,0.12)
-            if fill>0 then rect(0,-8+i*pitch,9,cell*fill,ink,0.95) end
-        end
-        text('HEAT',18,pixel and math.max(34,5+number_top+3) or 34,10,ink,0.85)
-        local size=pixel and 36 or 30
-        local edge=#number*size*0.6
-        if measure then local a,b,c,e=measure(number,size*scale);if c then edge=c/scale end end
-        text(number,18,5,size,ink);text('%',18+edge+4,5,pixel and 24 or 20,ink,0.85)
-        local footer=m.fraction>=0.95 and 'OVERHEAT' or (m.state=='VENT' and 'VENT' or
-            (m.reserve and string.format('%02d SINKS',m.reserve) or '-- SINKS'))
-        text(footer,18,pixel and math.min(-9,1-label_top) or -9,9,ink,0.9)
-    else
-        text(m.label,0,pixel and math.max(42,5+number_top+3) or 42,8,ink,0.72)
-        text(number,0,5,32,ink)
-        if m.suffix then
-            local edge=60
-            if pixel then local a,b,c=measure(number,36*scale);edge=c/scale end
-            text(m.suffix,edge+4,11,12,ink,0.7)
-        end
-        for i=0,11 do rect(i*6.5,-3,4.5,3,ink,m.fraction and i/12<m.fraction and 0.92 or 0.14) end
-        local reserve=m.reserve and (string.format('%02d',m.reserve)..' '..(m.reserve_kind or 'RES')) or '-- RES'
-        local footer=m.state~='READY' and m.state or reserve
-        text(footer,0,pixel and math.min(-19,-7-label_top) or -19,9,ink,0.8)
-    end
-    -- Measure content first. Frame, frost and accents share these same bounds.
-    local left,bottom,right,top=math.huge,math.huge,-math.huge,-math.huge
-    for _,c in ipairs(d) do
-        local x0,y0,x1,y1=c.x,c.y,c.x+(c.w or 0),c.y+(c.h or 0)
-        if c.type=='text' then
-            local a,b,e,f
-            if measure then a,b,e,f=measure(c.text,c.size) end
-            if not e then a,b,e,f=0,-c.size*.2,#c.text*c.size*.6,c.size*.8 end
-            x0,y0,x1,y1=c.x+a,c.y+b,c.x+e,c.y+f
-        end
-        left,bottom,right,top=math.min(left,x0),math.min(bottom,y0),math.max(right,x1),math.max(top,y1)
-    end
-    local pad=8*scale
-    left,bottom,right,top=left-pad,bottom-pad,right+pad,top+pad
-    local out={{type='panel',x=left,y=bottom,w=right-left,h=top-bottom,
-        c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
-    for _,c in ipairs(d) do out[#out+1]=c end
+function M.decorate(out,frame,scale,cfg,opacity)
+    local left,bottom=frame.x,frame.y
+    local right,top=left+frame.w,bottom+frame.h
     -- Decorations stay inside the measured panel perimeter, including at screen edges.
     -- Shared rectangle commands preserve direct WorldGUI depth and all screen renderers.
     local style=cfg.decoration or 'none'
@@ -1410,6 +1547,196 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         border(0,h-2*line,length,2*line,yellow,.9)
         border(w-length,0,length,2*line,yellow,.9)
     elseif style=='double' then outline(0,.65);outline(3*scale,.25) end
+end
+function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
+    cfg=cfg or HUD.config.defaults
+    local pixel=HUD.font.supported(cfg.font)
+    if pixel and not measure then measure=function(text,size)return HUD.font.measure(text,size,cfg.font)end end
+    local d={};local heat=m.kind=='heat'
+    local vent=heat and m.state=='VENT'
+    if vent then opacity=opacity*(0.25+0.75*(0.5+0.5*math.cos((clock or 0)*math.pi*4))) end
+    local heat_ink=vent and cfg.heat_red or M.heat_color(m.fraction or 0,clock,cfg)
+    local key='text_color'
+    if heat then
+        if vent then key='heat_red'
+        elseif m.fraction>=.95 then key=math.floor((clock or 0)*cfg.flash_hz*2)%2==0 and 'heat_red' or 'heat_yellow'
+        elseif m.fraction>=.86 then key='heat_red'
+        elseif m.fraction>=.75 then key='heat_yellow'
+        else key='heat_white' end
+    elseif m.warning then key=m.value==0 and 'heat_red' or 'heat_yellow' end
+    local ink=HUD.config.rgb(cfg[key])
+    local ink_alpha=(cfg[key..'_alpha'] or 255)/255
+    local function rect(dx,dy,w,h,c,a,kind)
+        d[#d+1]={type=kind or 'rect',x=x+dx*scale,y=y+dy*scale,w=w*scale,h=h*scale,c=c,a=(a or 1)*opacity*ink_alpha,frosted=cfg.frosted}
+    end
+    local function text(t,dx,dy,size,c,a)
+        if pixel then size=t=='%' and 24 or (size>=20 and 36 or 12) end
+        local reminder=m.reload_reminder and size>=20 and (0.35+0.65*(0.5+0.5*math.cos((clock or 0)*math.pi*2*cfg.flash_hz))) or 1
+        d[#d+1]={type='text',text=tostring(t),font=cfg.font,x=x+dx*scale,y=y+dy*scale,size=size*scale,c=c,a=(pixel and 1 or (a or 1))*opacity*ink_alpha*reminder}
+    end
+    local number=type(m.value)=='number' and string.format('%02d',m.value) or m.value
+    local number_top,label_top=0,0
+    if pixel then
+        local a,b,c,nt=measure(number,36*scale)
+        local e,f,g,lt=measure('HEAT SINKS',12*scale)
+        number_top=nt/scale;label_top=lt/scale
+    end
+    if heat then
+        text('HEAT',0,pixel and math.max(42,5+number_top+3) or 42,10,ink,.85)
+        text(number..'%',0,5,32,ink)
+        for i=0,19 do
+            local fill=math.max(0,math.min(1,m.fraction*20-i))
+            rect(i*5,-3,3.5,3,ink,.12)
+            if fill>0 then rect(i*5,-3,3.5*fill,3,ink,.95) end
+        end
+        local footer=m.fraction>=.95 and 'OVERHEAT' or (m.state=='VENT' and 'VENT' or
+            (m.reserve and string.format('%02d SINKS',m.reserve) or '-- SINKS'))
+        text(footer,0,pixel and math.min(-19,-7-label_top) or -19,9,ink,.9)
+    else
+        local heading=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.ammo_mode or m.label
+        local heading_y=pixel and math.max(42,5+number_top+3) or 42
+        text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
+        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].size=(pixel and 18 or 12)*scale end
+        text(number,0,5,32,ink)
+        local fire_icon=HUD.fire_icons[m.energy_icon or m.fire_mode]
+        if fire_icon and not m.ammo_mode then
+            d[#d].mode_count=true
+            local edge=#number*(pixel and 36 or 32)*.6
+            if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
+            -- Fit both dimensions: wide single/burst icons must not be
+            -- enlarged merely to match the square auto icon's height.
+            local factor=24/math.max(fire_icon.w,fire_icon.h)
+            local bottom,top=0,32
+            if measure then local a,b,c,e=measure(number,(pixel and 36 or 32)*scale);if e then bottom,top=b/scale,e/scale end end
+            if m.fire_mode=='AUTO' then
+                factor=(top-bottom)/fire_icon.h
+            end
+            local icon_y=5+(bottom+top-fire_icon.h*factor)/2
+            for _,run in ipairs(fire_icon.runs) do
+                rect(edge+8+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,ink,.9)
+                d[#d].mode_icon=true
+            end
+        end
+        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].mode_count=true end
+        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then
+            local edge=#number*(pixel and 36 or 32)*.6
+            if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
+            local ix,iy=edge+8,5
+            -- Large pictogram shares the main count row.
+            local function mode_rect(dx,dy,w,h)
+                rect(ix+dx*1.8,iy+dy*1.8,w*1.8,h*1.8,ink,.9)
+                d[#d].mode_icon=true
+            end
+            -- Compact cartridge / airburst pictograms use the same depth-aware
+            -- primitives as the HUD; native icon materials are not depth-validated.
+            if m.ammo_mode=='APHET' then
+                mode_rect(5,0,6,12);mode_rect(6,12,4,3);mode_rect(7,15,2,2)
+                mode_rect(4,0,8,2)
+            else
+                mode_rect(6,6,4,4)
+                for _,p in ipairs({{7,13},{7,0},{0,7},{13,7},{2,2},{12,12},{2,12},{12,2}}) do
+                    mode_rect(p[1],p[2],2,2)
+                end
+            end
+        end
+        if m.suffix then
+            local edge=60
+            if pixel then local a,b,c=measure(number,36*scale);edge=c/scale end
+            text(m.suffix,edge+4,11,12,ink,0.7)
+        end
+        for i=0,11 do rect(i*6.5,-3,4.5,3,ink,m.fraction and i/12<m.fraction and 0.92 or 0.14) end
+        local reserve=m.reserve and (string.format('%02d',m.reserve)..' '..(m.reserve_kind or 'RES')) or '-- RES'
+        local footer=m.state~='READY' and m.state or reserve
+        text(footer,0,pixel and math.min(-19,-7-label_top) or -19,9,ink,0.8)
+    end
+    if heat then
+        local icon=HUD.fire_icons[m.energy_icon or m.fire_mode]
+        if icon then
+            local command
+            for _,v in ipairs(d) do if v.type=='text' and v.text==number..'%' then command=v end end
+            command.mode_count=true
+            local a,b,e,f=0,0,#command.text*command.size*.6,command.size
+            if measure then a,b,e,f=measure(command.text,command.size) end
+            local factor=24/math.max(icon.w,icon.h)
+            local iy=5+(b/scale+f/scale-icon.h*factor)/2
+            for _,run in ipairs(icon.runs) do
+                rect(e/scale+8+run[1]*factor,iy+run[2]*factor,run[3]*factor,run[4]*factor,ink,.9)
+                d[#d].mode_icon=true
+            end
+        end
+    end
+    -- Measure content first. Frame, frost and accents share these same bounds.
+    local left,bottom,right,top=math.huge,math.huge,-math.huge,-math.huge
+    for _,c in ipairs(d) do
+        local x0,y0,x1,y1=c.x,c.y,c.x+(c.w or 0),c.y+(c.h or 0)
+        if c.type=='text' then
+            local a,b,e,f
+            if measure then a,b,e,f=measure(c.text,c.size) end
+            if not e then a,b,e,f=0,-c.size*.2,#c.text*c.size*.6,c.size*.8 end
+            x0,y0,x1,y1=c.x+a,c.y+b,c.x+e,c.y+f
+        end
+        left,bottom,right,top=math.min(left,x0),math.min(bottom,y0),math.max(right,x1),math.max(top,y1)
+    end
+    local pad=8*scale
+    left,bottom,right,top=left-pad,bottom-pad,right+pad,top+pad
+    do
+        local center=(left+right)/2
+        local bar_left,bar_right=math.huge,-math.huge
+        for _,v in ipairs(d) do if v.type=='rect' and not v.mode_icon then bar_left=math.min(bar_left,v.x);bar_right=math.max(bar_right,v.x+v.w) end end
+        for _,c in ipairs(d) do
+            if c.type=='text' then
+                c.center_in_frame=true
+                local a,b,e,f
+                if measure then a,b,e,f=measure(c.text,c.size) end
+                if not e then a,e=0,#c.text*c.size*.6 end
+                c.x=center-(a+e)/2
+            elseif c.type=='rect' and not c.mode_icon then
+                c.center_bar=true
+                -- Ammo bar retains its own cell spacing, centered as a group.
+                c.x=c.x+center-(bar_left+bar_right)/2
+            end
+        end
+    end
+    local icon_right,icon_top=-math.huge,-math.huge
+    for _,c in ipairs(d) do
+        if c.mode_icon then icon_right=math.max(icon_right,c.x+c.w);icon_top=math.max(icon_top,c.y+c.h) end
+    end
+    if icon_right>-math.huge then
+        local dx,dy=right-pad-icon_right,0
+        for _,c in ipairs(d) do if c.mode_icon then c.x=c.x+dx;c.y=c.y+dy end end
+    end
+    local heading_command;local icon_left,icon_edge=math.huge,-math.huge
+    for _,c in ipairs(d) do
+        if c.mode_count then heading_command=c end
+        if c.mode_icon then icon_left=math.min(icon_left,c.x);icon_edge=math.max(icon_edge,c.x+c.w) end
+    end
+    if heading_command and icon_left<math.huge then
+        local h=heading_command;local a,b,e,f
+        if measure then a,b,e,f=measure(h.text,h.size) end
+        if not e then a,e=0,#h.text*h.size*.6 end
+        local gap=8*scale;local width=e-a+gap+icon_edge-icon_left
+        local start=(left+right-width)/2
+        h.x=start-a
+        local shift=start+e-a+gap-icon_left
+        for _,c in ipairs(d) do if c.mode_icon then c.x=c.x+shift end end
+    end
+    local out={{type='panel',x=left,y=bottom,w=right-left,h=top-bottom,
+        c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}}
+    for _,c in ipairs(d) do out[#out+1]=c end
+    M.decorate(out,out[1],scale,cfg,opacity)
+    if m.fire_mode=='AUTO' or m.fire_mode=='SEMI' or m.fire_mode=='BURST' or m.fire_mode=='ALT' then
+        local size=(pixel and 12 or 8)*scale
+        local a,b,e,f
+        if measure then a,b,e,f=measure(m.fire_mode,size) end
+        if not e then a,b,e,f=0,-size*.2,#m.fire_mode*size*.6,size*.8 end
+        local cw,ch=right-left,f-b+8*scale
+        local child={type='panel',child=true,x=(left+right-cw)/2,y=bottom-2*scale-ch,w=cw,h=ch,
+            c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}
+        local group={child,{type='text',child=true,text=m.fire_mode,font=cfg.font,
+            x=child.x+cw/2-(a+e)/2,y=child.y+4*scale-b,size=size,c=ink,a=opacity*ink_alpha}}
+        M.decorate(group,child,scale,cfg,opacity)
+        for _,command in ipairs(group) do command.child=true;out[#out+1]=command end
+    end
     return out
 end
 return M
@@ -1553,7 +1880,7 @@ return {
     selector=0x3326420,magazine=0x3326648,rounds=0x3326CF0,heat=0x3326D48,
     entity_map=0xF1AEB0,unit_map=0xF22EC8,records=0xF32F18,
     deposit={0x33265F0,0x33265E8},resource={0x3326AA0,0x3326AA8,0x3326A98,0x3326AB0},
-    static={magazine={0xF124A0,540,160},rounds={0xF12820,50,0x88},heat={0xF12CC8,58,0x250}},
+    static={magazine={0xF124A0,540,160},rounds={0xF12820,50,0x88},heat={0xF12CC8,58,0x250},weapon_data={0xF12BD8,730,0x4d0,0x70,0xb0}},
     signatures={
         {0x607200,'488b0561f2d10283b88400000000'},
         {0x6066ed,'8b9410a8030000'},
@@ -1597,8 +1924,8 @@ function M.new(backend)
     local function config(kind,m,id,rec,owner)
         local spec=Layout.static[kind]
         if kind~='magazine' then
-            local i=r.map(m+0x68,id,65536)
-            if i then assert(i<4096,'override index');return r.read(r.p(m+0xa8)+i*spec[3],spec[3]) end
+            local i=r.map(m+(spec[4] or 0x68),id,65536)
+            if i then assert(i<4096,'override index');return r.read(r.p(m+(spec[5] or 0xa8))+i*spec[3],spec[3]) end
         end
         local p=r.p(owner+spec[1]);local n=spec[2];local key=rec:sub(1,8)
         local home=((r.u(rec,4)%n)*(2^32%n)+r.u(rec,0)%n)%n
@@ -1673,14 +2000,48 @@ function M.new(backend)
         -- The machine gun uses the identity-checked magazine path below. Its
         -- inherited exclusion was removed after bounded live component checks.
         assert(mounted or flag(rec:byte(21),1),'weapon ownership')
+        local main_rec,main_wid,main_address=rec,wid,record_address
+        local control_address,active_mode
+        local control_ok,address,mode=pcall(function()
+            assert(r.read(base+0x75673a,7)==string.char(0x4c,0x8b,0x15,0x9f,0x05,0xbd,0x02),'weapon control getter binding')
+            local control_manager=r.p(base+0x3326ce0)
+            local control_index=component(control_manager,0x30,0x48,wid,rec)
+            if not control_index then return nil end
+            local count=r.u(r.read(control_manager+0x20,4),0)
+            assert(count<=4096 and control_index<count,'weapon control bounds')
+            local at=r.p(control_manager+0x60)+control_index*12
+            return at,r.u(r.read(at,4),0)
+        end)
+        if control_ok then control_address,active_mode=address,mode end
+        if active_mode==8 then
+            local auxiliary=r.p(base+0x3326a38)
+            local index=r.map(auxiliary+0x278,wid,4096)
+            if not index or index>=4096 or not si then return nil,'alternate ammunition unavailable' end
+            local state=r.read(r.p(auxiliary+0x2a0)+index*128,128)
+            local ammo_id=r.u(state,0x64)
+            local selector=r.read(r.p(sm+0x60)+si*0x1d0,5*0x50)
+            local attached=false
+            for slot=0,4 do
+                if r.u(selector,slot*0x50)==wid and r.u(selector,slot*0x50+4)==ammo_id then attached=true end
+            end
+            if not attached then return nil,'alternate weapon attachment mismatch' end
+            local ammo_rec,ammo_address=entity(owner,ammo_id)
+            if not ammo_rec then return nil,'alternate weapon missing' end
+            local owner_manager=r.p(base+0x3326730)
+            local oi=component(owner_manager,0x18,0x30,ammo_id,ammo_rec)
+            if not oi or r.u(r.read(r.p(owner_manager+0x38)+oi*4,4),0)~=aid then return nil,'alternate weapon owner mismatch' end
+            wid,rec,record_address=ammo_id,ammo_rec,ammo_address
+        end
         local driver=global('driver');local di=component(driver,0x28,0x40,wid,rec)
         if not di then return nil,'no weapon driver' end
-        local flags=r.u(r.read(r.p(driver+0x50)+di*40,40),0)
-        local result={id=wid,unit_ref=r.u(rec,16),avatar_unit_ref=unit,resource_hex=string.format('%08x%08x',r.u(rec,4),r.u(rec,0)),lowered=lowered,alternate=mounted,reloadable=flag(flags,0x40)}
+        local driver_state=r.read(r.p(driver+0x50)+di*40,40)
+        local flags=r.u(driver_state,0)
+        local result={id=main_wid,unit_ref=r.u(main_rec,16),avatar_unit_ref=unit,resource_hex=string.format('%08x%08x',r.u(main_rec,4),r.u(main_rec,0)),lowered=lowered,alternate=mounted,reloadable=flag(flags,0x40)}
+        if wid~=main_wid then result.ammo_resource_hex=string.format('%08x%08x',r.u(rec,4),r.u(rec,0));result.alternate_fire=true end
         -- Diagnostic values only. +0x0C is not yet a verified engine/Lua handle.
         -- All bytes below were already read for ownership and ammo selection.
-        result.binding={module_base=base,record=record_address,candidate=r.u(rec,12),
-            avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12)}
+        result.binding={module_base=base,record=main_address,candidate=r.u(main_rec,12),
+            avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12),driver_state=driver_state}
         local kind=flag(flags,0x80) and 'magazine' or flag(flags,0x100) and 'rounds' or flag(flags,0x200) and 'heat'
         if kind then
             local m=global(kind);local mag=kind=='magazine'
@@ -1698,25 +2059,52 @@ function M.new(backend)
             else
                 local st=r.read(r.p(m+(mag and 0x48 or 0x50))+i*(mag and 16 or 24),mag and 16 or 24)
                 local rt=r.read(r.p(m+(mag and 0x50 or 0x58))+i*(mag and 12 or 20),mag and 12 or 20)
+                result.binding.ammo_state=st
+                result.binding.ammo_runtime=rt
+                result.binding.driver_flags=flags
                 local sel=mag and 0 or r.u(rt,4);assert(sel<=1,'magazine selection')
+                result.ammo_slot=sel
+                if not mag and cfg then
+                    result.projectile_type=r.u(cfg,0x40+sel*4)
+                    result.binding.ammo_types=cfg:sub(0x40+1,0x48)
+                end
                 local chambered=cfg and cfg:byte((mag and 0x9c or 0x68)+1)==1
                 local chamber=chambered and r.u(st,mag and 8 or 16)>0 and 1 or 0
                 result.rounds=r.i(st,mag and 0 or 4+sel*4)+chamber
+                result.chamber_rounds=chamber
+                result.chamber_supported=chambered==true
                 assert(valid(result.rounds,5001),'ammo range')
                 if cfg then
                     local capacity=mag and r.u(cfg,0x88) or r.f(cfg,0x48+sel*4)
-                    if valid(capacity,5000) and capacity>=1 then result.capacity=math.max(capacity,result.rounds) end
+                    if valid(capacity,5000) and capacity>=1 then result.capacity=capacity end
+                    -- A full replacement magazine reserves its chamber round before
+                    -- the bolt animation completes. Observed runtime +8 clears on chambering.
+                    if mag and chambered and chamber==0 and result.capacity and
+                        result.rounds==result.capacity-1 and rt:byte(9)==1 then
+                        result.pending_chamber_round=1
+                        result.rounds=result.rounds+1
+                    end
                 end
                 local reserve=r.i(rt,0)
                 local reserve_max=cfg and r.u(cfg,mag and 0x94 or 0x50)
                 if valid(reserve,100000) and (not reserve_max or reserve_max>0) then
                     result.reserve=reserve;result.reserve_kind=mag and 'MAGS' or 'ROUNDS'
                 end
-                -- Only a known spawned pair is used; arbitrary backpacks never become reserve.
-                if cfg and reserve_max==0 and not mounted then
+                -- Inventory ownership plus the matching pack resource survives respawns;
+                -- adjacent entity IDs alone do not identify an autocannon backpack.
+                local autocannon=result.resource_hex=='a8cffb316f0b5c5f'
+                if autocannon or (cfg and reserve_max==0 and not mounted) then
                     for off=12,24,4 do
                         local bid=r.u(inventory,off)
-                        if bid==wid+1 then result.reserve=deposit(owner,bid);result.reserve_kind='PACK' end
+                        local matches=not autocannon and bid==wid+1
+                        if autocannon and bid~=wid then
+                            local pack=entity(owner,bid)
+                            matches=pack and string.format('%08x%08x',r.u(pack,4),r.u(pack,0))=='e60ae045e0090f4c'
+                        end
+                        if matches then
+                            local count=deposit(owner,bid)
+                            if count~=nil then result.reserve=count;result.reserve_kind='PACK';break end
+                        end
                     end
                 end
             end
@@ -1733,7 +2121,27 @@ function M.new(backend)
             end
             if not result.rounds then return nil,'resource provider unavailable' end
         else return nil,'unsupported ammo component' end
-        self.status='ok';return result
+        do
+            -- Optional mode metadata must not suppress otherwise valid ammunition.
+            local ok,mode,fire_mode=pcall(function()
+                assert(r.read(base+0x75673a,7)==string.char(0x4c,0x8b,0x15,0x9f,0x05,0xbd,0x02),'ammo control getter binding')
+                local manager=r.p(base+0x3326ce0)
+                local index=component(manager,0x30,0x48,main_wid,main_rec)
+                if not index then return nil end
+                local count=r.u(r.read(manager+0x20,4),0)
+                assert(count<=4096 and index<count,'ammo control bounds')
+                local controls=r.read(r.p(manager+0x60)+index*12,12)
+                assert(r.read(main_address,24)==main_rec,'ammo control weapon changed')
+                local mode=result.resource_hex=='a8cffb316f0b5c5f' and HUD.ammo_types.autocannon_mode(r.u(controls,4)) or nil
+                local settings=config('weapon_data',manager,main_wid,main_rec,owner)
+                local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
+                local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
+                return mode,fire_mode
+            end)
+            if ok then result.ammo_mode=mode;result.fire_mode=fire_mode end
+        end
+        if control_address then assert(r.u(r.read(control_address,4),0)==active_mode,'fire mode changed during snapshot') end
+        self.status='ok';return HUD.ammo_types.apply(result)
     end
     function self.poll()
         local ok,value,reason=pcall(self.snapshot)
@@ -2345,8 +2753,8 @@ function M.new(sr,log,direct)
                         if c.style_3d=='hologram' then
                             local at=y
                             while at<y+h do
-                                local edge=math.min(y+h,(math.floor(at/4)+1)*4)
-                                local dim=math.floor(at/4)%2==0 and .78 or 1
+                                local edge=math.min(y+h,(math.floor(at/2)+1)*2)
+                                local dim=math.floor(at/2)%2==0 and .78 or 1
                                 solid(x,at,w,edge-at,3,sr.Color(math.floor(v.a*255*dim+.5),v.c[1],v.c[2],v.c[3]))
                                 at=edge
                             end
@@ -2622,14 +3030,14 @@ function M.prepare(commands,p,c)
                         local left,bottom,right,top=panel.x,panel.y,panel.x+panel.w,panel.y+panel.h
                         local padding=math.max(1,8*2*(c.scale or 1)*scale)
                         for _,v in ipairs(centered) do
-                            if v.type=='text' then
+                            if v.type=='text' and not v.child then
                                 local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
                                 left=math.min(left,v.x+a-padding);bottom=math.min(bottom,v.y+b-padding)
                                 right=math.max(right,v.x+e+padding);top=math.max(top,v.y+f+padding)
                             end
                         end
                         for _,v in ipairs(centered) do
-                            if v.decoration then
+                            if v.decoration and not v.child then
                                 v.x=left+(v.x-panel.x)*(right-left)/panel.w
                                 v.y=bottom+(v.y-panel.y)*(top-bottom)/panel.h
                                 v.w=v.w*(right-left)/panel.w
@@ -2638,18 +3046,76 @@ function M.prepare(commands,p,c)
                         end
                         panel.x,panel.y,panel.w,panel.h=left,bottom,right-left,top-bottom
                     end
+                    -- World glyph scaling and frame fitting may change the final
+                    -- bounds after screen-layout centering. Align actual glyphs here.
+                    local panel=centered[1];local middle=panel.x+panel.w/2
+                    local bar_left,bar_right=math.huge,-math.huge
+                    for _,v in ipairs(centered) do
+                        if v.center_in_frame then
+                            local a,b,e,f
+                            if HUD.font.supported(v.font) then a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true) end
+                            if not e then a,e=0,#v.text*v.size*.6 end
+                            v.x=middle-(a+e)/2
+                        elseif v.center_bar then
+                            bar_left=math.min(bar_left,v.x);bar_right=math.max(bar_right,v.x+v.w)
+                        end
+                    end
+                    if bar_left<math.huge then
+                        local shift=middle-(bar_left+bar_right)/2
+                        for _,v in ipairs(centered) do if v.center_bar then v.x=v.x+shift end end
+                    end
+                    local heading;local icon_left,icon_right=math.huge,-math.huge
+                    for _,v in ipairs(centered) do
+                        if v.mode_count then heading=v end
+                        if v.mode_icon then icon_left=math.min(icon_left,v.x);icon_right=math.max(icon_right,v.x+v.w) end
+                    end
+                    if heading and icon_left<math.huge then
+                        local a,b,e,f
+                        if HUD.font.supported(heading.font) then a,b,e,f=HUD.font.measure(heading.text,heading.size,heading.font,true) end
+                        if not e then a,e=0,#heading.text*heading.size*.6 end
+                        local gap=8*scale;local width=e-a+gap+icon_right-icon_left
+                        local start=middle-width/2;heading.x=start-a
+                        local shift=start+e-a+gap-icon_left
+                        for _,v in ipairs(centered) do if v.mode_icon then v.x=v.x+shift end end
+                    end
+                    local child_panel,child_text
+                    for _,v in ipairs(centered) do
+                        if v.child and v.type=='panel' then child_panel=v end
+                        if v.child and v.type=='text' then child_text=v end
+                    end
+                    if child_panel and child_text then
+                        local old={x=child_panel.x,y=child_panel.y,w=child_panel.w,h=child_panel.h}
+                        local a,b,e,f
+                        if HUD.font.supported(child_text.font) then a,b,e,f=HUD.font.measure(child_text.text,child_text.size,child_text.font,true) end
+                        if not e then a,b,e,f=0,-child_text.size*.2,#child_text.text*child_text.size*.6,child_text.size*.8 end
+                        local pad=4*2*(c.scale or 1)*scale
+                        local width,height=panel.w,f-b+2*pad
+                        child_panel.x=middle-width/2;child_panel.y=panel.y-2*2*(c.scale or 1)*scale-height
+                        child_panel.w,child_panel.h=width,height
+                        child_text.x=middle-(a+e)/2;child_text.y=child_panel.y+pad-b
+                        for _,v in ipairs(centered) do
+                            if v.child and v.decoration then
+                                v.x=child_panel.x+(v.x-old.x)*width/old.w
+                                v.y=child_panel.y+(v.y-old.y)*height/old.h
+                                v.w=v.w*width/old.w;v.h=v.h*height/old.h
+                            end
+                        end
+                    end
                     if c.style_3d=='hologram' then
                         local panel=centered[1];local clock=c.style_clock or 0
                         local flicker=.96+.025*math.sin(clock*17)+.015*math.sin(clock*31)
                         for _,v in ipairs(centered) do v.a=v.a*flicker end
                         panel.a=panel.a*.18
+                        if child_panel then child_panel.a=child_panel.a*.18 end
                         local ink=HUD.config.rgb(c.text_color)
                         local strength=commands[2] and commands[2].a or 1
-                        local thickness=math.max(.3,panel.w/500)
-                        for _,edge in ipairs({{panel.x,panel.y,panel.w,thickness},{panel.x,panel.y+panel.h-thickness,panel.w,thickness}}) do
-                            centered[#centered+1]={type='rect',x=edge[1],y=edge[2],w=edge[3],h=edge[4],c=ink,a=.18*strength}
+                        for _,frame in ipairs(child_panel and {panel,child_panel} or {panel}) do
+                            local thickness=math.max(.3,frame.w/500)
+                            for _,edge in ipairs({{frame.x,frame.y,frame.w,thickness},{frame.x,frame.y+frame.h-thickness,frame.w,thickness}}) do
+                                centered[#centered+1]={type='rect',x=edge[1],y=edge[2],w=edge[3],h=edge[4],c=ink,a=.18*strength}
+                            end
+                            centered[#centered+1]={type='rect',x=frame.x,y=frame.y+(clock*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.10*strength}
                         end
-                        centered[#centered+1]={type='rect',x=panel.x,y=panel.y+(clock*.35%1)*(panel.h-thickness),w=panel.w,h=thickness,c=ink,a=.10*strength}
                     end
     return centered
 end
@@ -3209,6 +3675,12 @@ function M.start(sr,backend,options)
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
             local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
+            if self.config.debug_logging and self.clock<90 and raw and raw.binding and raw.binding.ammo_state then
+                local b=raw.binding
+                local function hex(s)return s:gsub('.',function(ch)return string.format('%02X',ch:byte())end)end
+                local entry=string.format('AMMO_RELOAD weapon=%s count=%d capacity=%s chamber=%s flags=%X state=%s runtime=%s driver=%s types=%s projectile=%s',raw.resource_hex,raw.rounds or -1,tostring(raw.capacity),tostring(raw.chamber_rounds),b.driver_flags,hex(b.ammo_state),hex(b.ammo_runtime),hex(b.driver_state),b.ammo_types and hex(b.ammo_types) or '-',tostring(raw.projectile_type))
+                if entry~=self.last_ammo_trace then log(entry);self.last_ammo_trace=entry end
+            end
             if self.config.debug_logging and self.clock>=next_pose_log then
                 if self.weapon_pose then
                     local p=self.weapon_pose;local m=p.matrix
@@ -3341,9 +3813,12 @@ function M.start(sr,backend,options)
         local scale=s*self.config.scale
         local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
         local frame=commands[1]
+        local frame_bottom=frame.y
+        for _,command in ipairs(commands) do if command.type=='panel' then frame_bottom=math.min(frame_bottom,command.y) end end
         local margin=4*scale
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
+        dy=math.max(dy,margin-frame_bottom)
         for _,c in ipairs(commands) do c.x=c.x+dx;c.y=c.y+dy end
         if self.config.debug_logging and self.config.pose_marker then
             self.projection_status=projection.status

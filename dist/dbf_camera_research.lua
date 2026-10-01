@@ -1,4 +1,197 @@
 local HUD={}
+HUD.ammo_types=(function()
+-- Catalog-derived ammo presentation; live selector remains the source of counts.
+local M={}
+local projectiles={
+    [1]='FLECHETTES',
+    [14]='BUCKSHOT',
+    [36]='HE',
+    [37]='FLECHETTES',
+    [47]='BUCKSHOT',
+    [62]='BUCKSHOT',
+    [73]='BUCKSHOT',
+    [96]='FRAG',
+    [115]='APHET',
+    [153]='HEAT',
+    [183]='FLECHETTES',
+    [191]='STUN',
+    [198]='BUCKSHOT',
+    [199]='BUCKSHOT',
+    [217]='BUCKSHOT',
+    [224]='FLAK',
+    [231]='HEAT',
+    [232]='BUCKSHOT',
+    [240]='SLUG',
+    [260]='BUCKSHOT',
+    [262]='BUCKSHOT',
+    [284]='FLAK',
+    [290]='BUCKSHOT',
+    [292]='BUCKSHOT',
+    [312]='FLAK',
+    [317]='BUCKSHOT',
+    [322]='FRAG',
+    [332]='FLECHETTES',
+    [350]='HE',
+}
+local weapons={
+    ['02cd7321cd8445f5']='GRENADES', -- Verified auxiliary grenade entity on the equipped rifle.
+    ['006e44327bb953fe']='GRENADES', -- pump_grenade_launcher
+    ['02eecd0b1fa49630']='GRENADES', -- grenade_launcher
+    ['03e67a19b07c6523']='ROUNDS', -- marksman_rifle_vigilance
+    ['05d8d8c073b9d502']='SHELLS', -- pump_shotgun_plasma
+    ['07419ebc09a1a7c5']='ROUNDS', -- railgun
+    ['076dd5d4f4360204']='SHELLS', -- arc_shotgun
+    ['0807aea5217e4767']='ROUNDS', -- personal_defense_weapon
+    ['0c197bbd8d2c725b']='ROUNDS', -- assault_rifle_penetrator
+    ['0f83639ab8c86165']='ROUNDS', -- battle_rifle_ceremonial
+    ['11c27d3babb38956']='ROUNDS', -- machinegun
+    ['11ec8e2296a3d662']='SHELLS', -- pump_shotgun_02
+    ['16051937941bb709']='ROUNDS', -- smg_rhino
+    ['186ea95de7306b1a']='ROUNDS', -- smg_solvent
+    ['1abbff60d26ba391']='ROUNDS', -- marksman_rifle_shark
+    ['2152d5147b0ac418']='ROUNDS', -- heavy_mg
+    ['2383b0439f0bc465']='ROUNDS', -- assault_rifle_rico
+    ['25aa2fd4643cf4ee']='ROUNDS', -- faf_missile_launcher
+    ['26df5aa208ce216e']='ROUNDS', -- railgun
+    ['26e40437ea275296']='ROCKETS', -- air_burst_rocket_launcher
+    ['27ee1ed8f6fb6356']='ROUNDS', -- laser_rifle
+    ['295beb26dc4f8ff1']='ROUNDS', -- laser_rifle_long_hotshot
+    ['2b28e17ffed05f7c']='SHELLS', -- triple_barrel_breakshotgun
+    ['2df1cfb9ed77e06c']='ROUNDS', -- marksman_rifle
+    ['2e9d0bdc48b09e60']='ROUNDS', -- railgun
+    ['30061f91af477f5e']='ROUNDS', -- sniper_rifle_helghast
+    ['35a61296619cc47e']='ROUNDS', -- laser_pulse_cannon
+    ['3828e2051aa9e897']='ROUNDS', -- harpoon_gun
+    ['39ab99895147a3bf']='FUEL', -- flamethrower
+    ['3c86e871923f3970']='SHELLS', -- laser_shotgun
+    ['41eac4a03987faa0']='SHELLS', -- pump_shotgun
+    ['43a58cb89cfa197c']='ROUNDS', -- minigun
+    ['43b2d7766120203b']='ROUNDS', -- chemgun
+    ['43cb1033961a2276']='ROUNDS', -- assault_rifle
+    ['46183b50961d1328']='SHELLS', -- assault_shotgun
+    ['46427f2630a80d88']='ROUNDS', -- faf_missile_launcher_helghast
+    ['4ba41b6f9f405cc2']='ROUNDS', -- smg_helghast
+    ['4c786785c79d44e7']='ROUNDS', -- marksman_rifle_vigilance
+    ['4dbd74f49c8ffc13']='ROUNDS', -- assault_rifle_nacho
+    ['4e310b1fe4c52b52']='SHELLS', -- pump_shotgun_02
+    ['4e4a613eb9bf5c24']='ROUNDS', -- personal_defense_weapon
+    ['4f749e2ee26f532d']='SHELLS', -- pump_shotgun
+    ['4fb0f8c02f55c82b']='FUEL', -- flamethrower_ripley
+    ['53eebe75cd6e26df']='SHELLS', -- pump_shotgun_slug
+    ['5990123d142b16cb']='ROUNDS', -- laser_guided_missile_launcher
+    ['5ebaea70c0d060b9']='SHELLS', -- assault_shotgun
+    ['5fecab819f96a3e8']='ROUNDS', -- battle_rifle
+    ['6228d0242bde56b6']='SHELLS', -- assault_shotgun_sprayandpray
+    ['644d748f359de03e']='ROUNDS', -- railgun
+    ['692eb345969d368e']='ROUNDS', -- lat_oneshot
+    ['6cfcc7f8801a0266']='ROUNDS', -- energy_weapon_shark
+    ['6dfa768b4e2401a7']='ROUNDS', -- railgun
+    ['6e68194b95d60145']='ROUNDS', -- marksman_rifle_vigilance_counter_sniper
+    ['708ea298c82093d0']='ROUNDS', -- assault_rifle_whisper
+    ['719f42b7d137789c']='ROUNDS', -- jet_rifle_phoenix
+    ['72170a55a1f37ff1']='SHELLS', -- shotgun_double_freedom
+    ['7617642765ac38c7']='ROCKETS', -- expendable_massive_rocket_launcher
+    ['78a8185f63a70795']='FUEL', -- heavy_flamethrower
+    ['7b75e5132ffd4ca6']='ROUNDS', -- bolt_action_rifle
+    ['7c47244d3b030884']='ROUNDS', -- railgun
+    ['7e3145a5baa4b948']='ROUNDS', -- laser_rifle_charge
+    ['8039834a4b7489b9']='ROUNDS', -- assault_rifle_penetrator
+    ['80932fa0ed6901d3']='ROUNDS', -- lat_oneshot
+    ['80f1a156d9fa1e36']='ROUNDS', -- jet_rifle
+    ['84354339522c932d']='ROUNDS', -- assault_rifle_large_calibre_01
+    ['8645f167b3c813a2']='ROUNDS', -- laser_rifle_long
+    ['8666e5f49f440d44']='ROUNDS', -- faf_missile_launcher
+    ['88c2d09ad85a7c9f']='GRENADES', -- belt_fed_grenade_launcher
+    ['89c5493e08ca4207']='ROUNDS', -- sniper_rifle
+    ['8a307bd1811a5fe9']='FUEL', -- smg_flamer
+    ['8a35c1dc19f41870']='ROUNDS', -- bolt_action_rifle
+    ['8dc91f277c6096ee']='ROUNDS', -- jet_rifle_phoenix
+    ['90ddc374f4e3d756']='SHELLS', -- shotgun_nacho
+    ['945f7e132049b514']='ROUNDS', -- railgun
+    ['94bd931b5fb4ee95']='ROUNDS', -- smg_rhino
+    ['9571ca51f0daf35b']='ROUNDS', -- smg_defender
+    ['968211c0033dce64']='ROUNDS', -- assault_rifle
+    ['96de9cd50f7306e6']='ROUNDS', -- arc_thrower
+    ['9b0a7b78126c2fec']='ROUNDS', -- missile_launcher
+    ['9f80d67a12a7e40f']='ROCKETS', -- recoilless_rifle
+    ['a6a735accb4a327f']='ROUNDS', -- lmg_stalwart
+    ['a7ee1ebf58fcdf1f']='ROUNDS', -- assault_rifle_patriot
+    ['a8a91eb54892b6b2']='ROUNDS', -- assault_rifle_risk
+    ['a8cffb316f0b5c5f']='ROUNDS', -- automatic_cannon
+    ['a955c4ea6f6d4203']='ROUNDS', -- assault_rifle_grenadier
+    ['a9e574cd953d3b3a']='ROUNDS', -- faf_missile_helghast
+    ['ab2a2b390c539f18']='ROUNDS', -- assault_rifle_explosive
+    ['b16c9d490aa59b77']='ROUNDS', -- expendable_machinegun
+    ['b2b5e0d185605f9e']='ROUNDS', -- expendable_napalm_launcher
+    ['b6aff2195568767f']='ROUNDS', -- jet_rifle
+    ['bc29613666df696b']='ROUNDS', -- assault_rifle_karbin
+    ['bcc2177439d231be']='SHELLS', -- pump_shotgun
+    ['be70ee0d8d44028e']='ROUNDS', -- smg_nacho
+    ['bf9504e95c0103a1']='ROUNDS', -- battle_rifle_ceremonial
+    ['bfe35746f5084222']='ROUNDS', -- assault_rifle_karbin
+    ['c0a9ee8ce12f682a']='ROUNDS', -- railgun
+    ['c12a34f375bd5a87']='SHELLS', -- assault_shotgun_incendiary
+    ['c4232a0e62166d91']='ROUNDS', -- personal_defense_weapon_pepper
+    ['c85f576d5e086147']='ROUNDS', -- laser_smg_blaster
+    ['cc786f6491fe7e65']='ROUNDS', -- faf_missile_launcher_helghast
+    ['cdf28be026bb7d84']='ROUNDS', -- assault_rifle_helghast
+    ['cdf733b0106a23c3']='SHELLS', -- assault_shotgun_incendiary
+    ['ce063aa33d95a812']='ROUNDS', -- assault_rifle_rico
+    ['cf5f176e0e322be1']='ROUNDS', -- assault_rifle
+    ['d323de60855898ac']='SHELLS', -- pump_shotgun_dragon
+    ['d54b9505c0f72873']='ROUNDS', -- laser_cannon
+    ['dcd1c835407ef7ba']='SHELLS', -- pump_shotgun_trench
+    ['df8decb6b6538265']='ROUNDS', -- railgun
+    ['e5796355a8fd67e0']='ROUNDS', -- marksman_rifle_drake
+    ['e6d932be83729076']='ROUNDS', -- lever_action_rifle_01
+    ['e8d5f49ad7780e54']='ROUNDS', -- plasma_blaster
+    ['e8ffad77b73c221c']='ROUNDS', -- railgun
+    ['eea5e3cef1e12c14']='ROUNDS', -- plasma_rifle
+    ['efdcef306cea63fe']='ROUNDS', -- plasma_rifle_charge
+    ['f0338468dcdb6a6c']='ROUNDS', -- marksman_rifle_justice
+    ['f49227a0630a3f7f']='ROUNDS', -- crossbow_greyfax
+    ['f992ce97577c8a7f']='ROUNDS', -- volley_gun
+    ['fb3a19078694708a']='ROUNDS', -- plasma_rifle
+    ['fe3b29b2cfa63f9b']='GRENADES', -- grenade_launcher_tactical
+    ['ffc18b2ce10ca381']='ROUNDS', -- battle_rifle
+}
+-- APHET/Flak values verified by a matched return sequence. Full auto adds
+-- 0x1000 to this packed word independently of the programmable-ammo bit.
+-- Ignore only that observed flag; unverified combinations remain unknown.
+function M.autocannon_mode(control)
+    if type(control)~='number' or control~=math.floor(control) or control<0 or control>0xffffffff then return nil end
+    if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
+    return ({[0x50]='APHET',[0x54]='FLAK'})[control]
+end
+function M.fire_mode(control)
+    -- Standard catalog modes plus native mode 8, whose setter enables the
+    -- auxiliary weapon entity. Safety/charge enums remain unverified.
+    return ({[1]='AUTO',[2]='SEMI',[3]='BURST',[8]='ALT'})[control]
+end
+function M.selectable_fire_mode(control,choices)
+    if not choices then return nil end
+    local seen,count={},0
+    for _,value in ipairs(choices) do
+        if value>0 and value<=8 and not seen[value] then seen[value]=true;count=count+1 end
+    end
+    if count>1 and seen[control] then return M.fire_mode(control) end
+end
+local lasers={['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
+function M.apply(raw)
+    if raw then raw.energy_icon=lasers[raw.ammo_resource_hex or raw.resource_hex] and 'LASER' or nil end
+    if not raw or raw.kind=='heat' or raw.kind=='infinite' then return raw end
+    local category=weapons[raw.ammo_resource_hex or raw.resource_hex] or 'ROUNDS'
+    local special=raw.projectile_type and projectiles[raw.projectile_type]
+    raw.label=special or category
+    if raw.resource_hex=='a8cffb316f0b5c5f' then raw.label='AMMO' end
+    if raw.alternate_fire and category=='GRENADES' then raw.label='GRENADES';raw.reserve_kind='GRENADES' end
+    if raw.alternate_fire and raw.ammo_resource_hex=='02cd7321cd8445f5' then raw.label='40MM HE' end
+    if raw.reserve_kind=='ROUNDS' then raw.reserve_kind=category end
+    return raw
+end
+return M
+
+end)()
 HUD.memory=(function()
 -- Private FFI symbols prevent collisions with other addons' declarations.
 local M={}
@@ -61,6 +254,13 @@ function M.native()
         local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
         local values=chunk();assert(type(values)=='table','tuning file must return a table')
         return values
+    end
+    function backend.read_weapon_offsets()
+        local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-weapon-offsets.lua')
+        local f=io.open(path,'r');if not f then return nil end
+        local body=f:read(65537);f:close();assert(#body<=65536,'weapon offsets file too large')
+        local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
+        return chunk()
     end
     function backend.write_tuning(body)
         local path=tuning_path();local tmp=path..'.tmp'
@@ -130,7 +330,7 @@ return {
     selector=0x3326420,magazine=0x3326648,rounds=0x3326CF0,heat=0x3326D48,
     entity_map=0xF1AEB0,unit_map=0xF22EC8,records=0xF32F18,
     deposit={0x33265F0,0x33265E8},resource={0x3326AA0,0x3326AA8,0x3326A98,0x3326AB0},
-    static={magazine={0xF124A0,540,160},rounds={0xF12820,50,0x88},heat={0xF12CC8,58,0x250}},
+    static={magazine={0xF124A0,540,160},rounds={0xF12820,50,0x88},heat={0xF12CC8,58,0x250},weapon_data={0xF12BD8,730,0x4d0,0x70,0xb0}},
     signatures={
         {0x607200,'488b0561f2d10283b88400000000'},
         {0x6066ed,'8b9410a8030000'},
@@ -174,8 +374,8 @@ function M.new(backend)
     local function config(kind,m,id,rec,owner)
         local spec=Layout.static[kind]
         if kind~='magazine' then
-            local i=r.map(m+0x68,id,65536)
-            if i then assert(i<4096,'override index');return r.read(r.p(m+0xa8)+i*spec[3],spec[3]) end
+            local i=r.map(m+(spec[4] or 0x68),id,65536)
+            if i then assert(i<4096,'override index');return r.read(r.p(m+(spec[5] or 0xa8))+i*spec[3],spec[3]) end
         end
         local p=r.p(owner+spec[1]);local n=spec[2];local key=rec:sub(1,8)
         local home=((r.u(rec,4)%n)*(2^32%n)+r.u(rec,0)%n)%n
@@ -250,14 +450,48 @@ function M.new(backend)
         -- The machine gun uses the identity-checked magazine path below. Its
         -- inherited exclusion was removed after bounded live component checks.
         assert(mounted or flag(rec:byte(21),1),'weapon ownership')
+        local main_rec,main_wid,main_address=rec,wid,record_address
+        local control_address,active_mode
+        local control_ok,address,mode=pcall(function()
+            assert(r.read(base+0x75673a,7)==string.char(0x4c,0x8b,0x15,0x9f,0x05,0xbd,0x02),'weapon control getter binding')
+            local control_manager=r.p(base+0x3326ce0)
+            local control_index=component(control_manager,0x30,0x48,wid,rec)
+            if not control_index then return nil end
+            local count=r.u(r.read(control_manager+0x20,4),0)
+            assert(count<=4096 and control_index<count,'weapon control bounds')
+            local at=r.p(control_manager+0x60)+control_index*12
+            return at,r.u(r.read(at,4),0)
+        end)
+        if control_ok then control_address,active_mode=address,mode end
+        if active_mode==8 then
+            local auxiliary=r.p(base+0x3326a38)
+            local index=r.map(auxiliary+0x278,wid,4096)
+            if not index or index>=4096 or not si then return nil,'alternate ammunition unavailable' end
+            local state=r.read(r.p(auxiliary+0x2a0)+index*128,128)
+            local ammo_id=r.u(state,0x64)
+            local selector=r.read(r.p(sm+0x60)+si*0x1d0,5*0x50)
+            local attached=false
+            for slot=0,4 do
+                if r.u(selector,slot*0x50)==wid and r.u(selector,slot*0x50+4)==ammo_id then attached=true end
+            end
+            if not attached then return nil,'alternate weapon attachment mismatch' end
+            local ammo_rec,ammo_address=entity(owner,ammo_id)
+            if not ammo_rec then return nil,'alternate weapon missing' end
+            local owner_manager=r.p(base+0x3326730)
+            local oi=component(owner_manager,0x18,0x30,ammo_id,ammo_rec)
+            if not oi or r.u(r.read(r.p(owner_manager+0x38)+oi*4,4),0)~=aid then return nil,'alternate weapon owner mismatch' end
+            wid,rec,record_address=ammo_id,ammo_rec,ammo_address
+        end
         local driver=global('driver');local di=component(driver,0x28,0x40,wid,rec)
         if not di then return nil,'no weapon driver' end
-        local flags=r.u(r.read(r.p(driver+0x50)+di*40,40),0)
-        local result={id=wid,unit_ref=r.u(rec,16),avatar_unit_ref=unit,resource_hex=string.format('%08x%08x',r.u(rec,4),r.u(rec,0)),lowered=lowered,alternate=mounted,reloadable=flag(flags,0x40)}
+        local driver_state=r.read(r.p(driver+0x50)+di*40,40)
+        local flags=r.u(driver_state,0)
+        local result={id=main_wid,unit_ref=r.u(main_rec,16),avatar_unit_ref=unit,resource_hex=string.format('%08x%08x',r.u(main_rec,4),r.u(main_rec,0)),lowered=lowered,alternate=mounted,reloadable=flag(flags,0x40)}
+        if wid~=main_wid then result.ammo_resource_hex=string.format('%08x%08x',r.u(rec,4),r.u(rec,0));result.alternate_fire=true end
         -- Diagnostic values only. +0x0C is not yet a verified engine/Lua handle.
         -- All bytes below were already read for ownership and ammo selection.
-        result.binding={module_base=base,record=record_address,candidate=r.u(rec,12),
-            avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12)}
+        result.binding={module_base=base,record=main_address,candidate=r.u(main_rec,12),
+            avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12),driver_state=driver_state}
         local kind=flag(flags,0x80) and 'magazine' or flag(flags,0x100) and 'rounds' or flag(flags,0x200) and 'heat'
         if kind then
             local m=global(kind);local mag=kind=='magazine'
@@ -275,25 +509,52 @@ function M.new(backend)
             else
                 local st=r.read(r.p(m+(mag and 0x48 or 0x50))+i*(mag and 16 or 24),mag and 16 or 24)
                 local rt=r.read(r.p(m+(mag and 0x50 or 0x58))+i*(mag and 12 or 20),mag and 12 or 20)
+                result.binding.ammo_state=st
+                result.binding.ammo_runtime=rt
+                result.binding.driver_flags=flags
                 local sel=mag and 0 or r.u(rt,4);assert(sel<=1,'magazine selection')
+                result.ammo_slot=sel
+                if not mag and cfg then
+                    result.projectile_type=r.u(cfg,0x40+sel*4)
+                    result.binding.ammo_types=cfg:sub(0x40+1,0x48)
+                end
                 local chambered=cfg and cfg:byte((mag and 0x9c or 0x68)+1)==1
                 local chamber=chambered and r.u(st,mag and 8 or 16)>0 and 1 or 0
                 result.rounds=r.i(st,mag and 0 or 4+sel*4)+chamber
+                result.chamber_rounds=chamber
+                result.chamber_supported=chambered==true
                 assert(valid(result.rounds,5001),'ammo range')
                 if cfg then
                     local capacity=mag and r.u(cfg,0x88) or r.f(cfg,0x48+sel*4)
-                    if valid(capacity,5000) and capacity>=1 then result.capacity=math.max(capacity,result.rounds) end
+                    if valid(capacity,5000) and capacity>=1 then result.capacity=capacity end
+                    -- A full replacement magazine reserves its chamber round before
+                    -- the bolt animation completes. Observed runtime +8 clears on chambering.
+                    if mag and chambered and chamber==0 and result.capacity and
+                        result.rounds==result.capacity-1 and rt:byte(9)==1 then
+                        result.pending_chamber_round=1
+                        result.rounds=result.rounds+1
+                    end
                 end
                 local reserve=r.i(rt,0)
                 local reserve_max=cfg and r.u(cfg,mag and 0x94 or 0x50)
                 if valid(reserve,100000) and (not reserve_max or reserve_max>0) then
                     result.reserve=reserve;result.reserve_kind=mag and 'MAGS' or 'ROUNDS'
                 end
-                -- Only a known spawned pair is used; arbitrary backpacks never become reserve.
-                if cfg and reserve_max==0 and not mounted then
+                -- Inventory ownership plus the matching pack resource survives respawns;
+                -- adjacent entity IDs alone do not identify an autocannon backpack.
+                local autocannon=result.resource_hex=='a8cffb316f0b5c5f'
+                if autocannon or (cfg and reserve_max==0 and not mounted) then
                     for off=12,24,4 do
                         local bid=r.u(inventory,off)
-                        if bid==wid+1 then result.reserve=deposit(owner,bid);result.reserve_kind='PACK' end
+                        local matches=not autocannon and bid==wid+1
+                        if autocannon and bid~=wid then
+                            local pack=entity(owner,bid)
+                            matches=pack and string.format('%08x%08x',r.u(pack,4),r.u(pack,0))=='e60ae045e0090f4c'
+                        end
+                        if matches then
+                            local count=deposit(owner,bid)
+                            if count~=nil then result.reserve=count;result.reserve_kind='PACK';break end
+                        end
                     end
                 end
             end
@@ -310,7 +571,27 @@ function M.new(backend)
             end
             if not result.rounds then return nil,'resource provider unavailable' end
         else return nil,'unsupported ammo component' end
-        self.status='ok';return result
+        do
+            -- Optional mode metadata must not suppress otherwise valid ammunition.
+            local ok,mode,fire_mode=pcall(function()
+                assert(r.read(base+0x75673a,7)==string.char(0x4c,0x8b,0x15,0x9f,0x05,0xbd,0x02),'ammo control getter binding')
+                local manager=r.p(base+0x3326ce0)
+                local index=component(manager,0x30,0x48,main_wid,main_rec)
+                if not index then return nil end
+                local count=r.u(r.read(manager+0x20,4),0)
+                assert(count<=4096 and index<count,'ammo control bounds')
+                local controls=r.read(r.p(manager+0x60)+index*12,12)
+                assert(r.read(main_address,24)==main_rec,'ammo control weapon changed')
+                local mode=result.resource_hex=='a8cffb316f0b5c5f' and HUD.ammo_types.autocannon_mode(r.u(controls,4)) or nil
+                local settings=config('weapon_data',manager,main_wid,main_rec,owner)
+                local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
+                local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
+                return mode,fire_mode
+            end)
+            if ok then result.ammo_mode=mode;result.fire_mode=fire_mode end
+        end
+        if control_address then assert(r.u(r.read(control_address,4),0)==active_mode,'fire mode changed during snapshot') end
+        self.status='ok';return HUD.ammo_types.apply(result)
     end
     function self.poll()
         local ok,value,reason=pcall(self.snapshot)
@@ -334,7 +615,7 @@ local resolver_body=unhex('8bc325ffff3f003b8698000000720433dbeb1c8bc8488b86a0000
 function M.new(backend)
     local r=HUD.memory.new(backend)
     local self={status='not sampled',samples=0}
-    function self.snapshot(raw,research)
+    function self.snapshot(raw,research,anchor_hash)
         assert(raw and raw.binding,'no weapon binding')
         local b=raw.binding;r.reset()
         -- The reader must validate the game build before returning this binding.
@@ -373,7 +654,7 @@ function M.new(backend)
             assert(nodes<=128,'sight node limit')
             local hashes=r.p(object+0xa0);local data=r.read(hashes,nodes*4)
             for n=0,nodes-1 do
-                if r.u(data,n*4)==0x527c9c73 then
+                if r.u(data,n*4)==(anchor_hash or 0x527c9c73) then
                     local pose=r.read(address+n*64,64);local delta={}
                     for j=1,3 do delta[j]=r.f(pose,(11+j)*4)-matrix[12+j];assert(math.abs(delta[j])<5,'sight bounds') end
                     assert(r.p(object+0xa0)==hashes and r.read(hashes,nodes*4)==data,'sight table changed')
@@ -439,6 +720,7 @@ function M.new(backend)
         if not ok then self.status=tostring(value);return nil end
         self.status='verified root pose';self.samples=self.samples+1;return value
     end
+
     return self
 end
 return M
@@ -545,6 +827,7 @@ return M
 
 end)()
 local backend,reader,file,next_poll= nil,nil,nil,0
+local ammo_watch,last_ammo
 local function cleanup() if file then file:close();file=nil end;backend=nil;reader=nil end
 return {
  name='DBF-HUD Camera Research',version='0.1',author='DBF-HUD',
@@ -555,13 +838,148 @@ return {
   file:write('CAMERA_RESEARCH enabled\n');file:flush()
  end,
  on_update=function(ctx,dt)
+  if ammo_watch then
+   ammo_watch=ammo_watch-(dt or 0)
+   local raw=reader.poll()
+   if raw and raw.binding and raw.binding.ammo_state then
+    local b=raw.binding
+    local function hex(s)return s:gsub('.',function(ch)return string.format('%02X',ch:byte())end)end
+    local state=string.format('AMMO_WATCH weapon=%s id=%d kind=%s count=%d capacity=%s chamber=%s flags=%X state=%s runtime=%s',
+     raw.resource_hex,raw.id,raw.kind,raw.rounds or -1,tostring(raw.capacity),tostring(raw.chamber_rounds),b.driver_flags,hex(b.ammo_state),hex(b.ammo_runtime))
+    if state~=last_ammo then file:write(string.format('%.3f %s\n',os.clock(),state));file:flush();last_ammo=state end
+   end
+   if ammo_watch<=0 then ammo_watch=nil;file:write('AMMO_WATCH complete\n');file:flush() end
+  end
   next_poll=next_poll-(dt or 0);if next_poll>0 then return end;next_poll=1
   local hud=rawget(_G,'DBFHUD');if not hud or not hud.config or not hud.config.debug_logging then return end
   local label=backend.camera_request();if not label then return end
-  if label=='camera_apis' or label=='weapon_node_apis' then
+  if label:match('^ammo_driver_') then
+   local ok,err=pcall(function()
+    local raw=assert(reader.poll(),reader.status);local r=HUD.memory.new(backend)
+    local record=r.read(raw.binding.record,24)
+    -- Native getter at RVA 0x754980 resolves this manager's map at +0x30.
+    local manager=r.p(raw.binding.module_base+0x3326ce0)
+    local index=assert(r.map(manager+0x30,raw.id,4096));assert(index<4096)
+    local count=r.u(r.read(manager+0x20,4),0)
+    assert(count<=4096 and index<count,'control runtime bounds')
+    assert(r.read(r.p(r.p(manager+0x48)+index*8),24)==record,'control runtime owner mismatch')
+    local data=r.read(r.p(manager+0x58)+index*0x3f0,0x3f0)
+    -- Getter at RVA 0x756730 reads the selected controls from a separate array.
+    local controls=r.read(r.p(manager+0x60)+index*12,12)
+    assert(r.read(raw.binding.record,24)==record,'weapon identity changed')
+    local hex=data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+    file:write(string.format('AMMO_DRIVER weapon=%s id=%d state=%s\n',raw.resource_hex,raw.id,hex))
+    file:write('AMMO_CONTROLS '..controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)..'\n')
+    file:write('AMMO_FIRE_MODE '..tostring(raw.fire_mode)..'\n')
+    file:write(string.format('AMMO_PRESENTATION kind=%s count=%s capacity=%s reserve=%s reserve_kind=%s label=%s resource=%s alternate=%s\n',tostring(raw.kind),tostring(raw.rounds),tostring(raw.capacity),tostring(raw.reserve),tostring(raw.reserve_kind),tostring(raw.label),tostring(raw.ammo_resource_hex),tostring(raw.alternate_fire)))
+    local auxiliary=r.p(raw.binding.module_base+0x3326a38)
+    local auxiliary_index=r.map(auxiliary+0x278,raw.id,4096)
+    if auxiliary_index and auxiliary_index<4096 then
+        local state=r.read(r.p(auxiliary+0x2a0)+auxiliary_index*128,128)
+        file:write('AMMO_AUXILIARY '..state:gsub('.',function(ch)return string.format('%02X',ch:byte())end)..'\n')
+    end
+   end)
+   file:write('CAMERA_CAPTURE '..(ok and 'complete' or 'failure')..' label='..label..(ok and '' or ' '..tostring(err))..'\n');file:flush();return
+  end
+  local ammo_page=label:match('^ammo_code_page_(%d+)$') or label:match('^ammo_alias_page_(%d+)$')
+  if ammo_page then
+   local ok,err=pcall(function()
+    reader.validate();local r=HUD.memory.new(backend);local base=assert(backend.module('game.dll'))
+    local page=tonumber(ammo_page);assert(page>=0 and page<96)
+    for chunk=0,47 do
+     local offset=0x700000+page*49152+chunk*1024
+     local data=r.read(base+offset,1024);local match=false
+     for at=0,1020 do
+      local displacement=r.u(data,at)
+      if displacement>=0x80000000 then displacement=displacement-0x100000000 end
+      local target=offset+at+4+displacement
+      if target==0x3326B28 or target==0x3326B98 or
+       (label:match('^ammo_alias_page_') and (target==0x3326640 or target==0x3326698 or target==0x3326730 or
+        target==0x3326940 or target==0x3326A68 or target==0x3326AC0 or target==0x3326BE8)) then match=true;break end
+     end
+     if match then
+      local hex=data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+      file:write(string.format('AMMO_CODE_MATCH rva=%X hex=%s\n',offset,hex))
+     end
+    end
+   end)
+   file:write('CAMERA_CAPTURE '..(ok and 'complete' or 'failure')..' label='..label..(ok and '' or ' '..tostring(err))..'\n');file:flush();return
+  end
+  if label:match('^ammo_component_') or label:match('^ammo_projectile_') then
+   local ok,err=pcall(function()
+    local raw=assert(reader.poll(),reader.status);local r=HUD.memory.new(backend)
+    local record=r.read(raw.binding.record,24)
+    local projectile=label:match('^ammo_projectile_')~=nil
+    local manager=r.p(raw.binding.module_base+(projectile and 0x3326B28 or 0x3326DC0))
+    local index=assert(r.map(manager+(projectile and 0x28 or 0x20),raw.id,4096))
+    assert(index<4096)
+    assert(r.read(r.p(r.p(manager+(projectile and 0x40 or 0x38))+index*8),24)==record,'component owner mismatch')
+    local stride=projectile and 32 or 48
+    local data=r.read(r.p(manager+(projectile and 0x50 or 0x40))+index*stride,stride)
+    assert(r.read(raw.binding.record,24)==record,'weapon identity changed')
+    local hex=data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+    file:write(string.format('AMMO_COMPONENT weapon=%s id=%d state=%s\n',raw.resource_hex,raw.id,hex))
+   end)
+   file:write('CAMERA_CAPTURE '..(ok and 'complete' or 'failure')..' label='..label..(ok and '' or ' '..tostring(err))..'\n');file:flush();return
+  end
+  local manager_page=label:match('^weapon_function_managers_(%d+)$')
+  if manager_page then
+   local ok,err=pcall(function()
+    local raw=assert(reader.poll(),reader.status);local r=HUD.memory.new(backend)
+    local record=r.read(raw.binding.record,24);local base=raw.binding.module_base
+    local page=tonumber(manager_page);assert(page>=0 and page<=9)
+    for slot=0x3326400+page*256,0x3326400+page*256+248,8 do
+     for _,shape in ipairs({{0x18,0x30},{0x20,0x38},{0x28,0x40}}) do
+      local found,manager,index,header=pcall(function()
+       local manager=r.p(base+slot)
+       local capacity=r.u(r.read(manager+shape[1]+8,4),0);assert(capacity>0 and capacity<=4096)
+       local index=r.map(manager+shape[1],raw.id,4096)
+       assert(index and index<4096)
+       assert(r.read(r.p(r.p(manager+shape[2])+index*8),24)==record)
+       return manager,index,r.read(manager,128)
+      end)
+      if found then
+       local hex=header:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+       file:write(string.format('WEAPON_MANAGER slot=%X index=%d shape=%X address=%X header=%s\n',slot,index,shape[1],manager,hex))
+      end
+     end
+    end
+    assert(r.read(raw.binding.record,24)==record,'weapon identity changed')
+   end)
+   file:write('CAMERA_CAPTURE '..(ok and 'complete' or 'failure')..' label='..label..(ok and '' or ' '..tostring(err))..'\n');file:flush();return
+  end
+  if label=='ammo_control_code' then
+   local ok,err=pcall(function()
+    reader.validate()
+    local r=HUD.memory.new(backend);local base=assert(backend.module('game.dll'))
+    for _,start in ipairs({0x788000,0x752000}) do
+     for i=0,23 do
+      local address=base+start+i*1024;local data=r.read(address,1024)
+      local hex=data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+      file:write(string.format('CAMERA_CAPTURE label=%s part=ammo_code_%x address=0x%X hex=%s\n',label,start+i*1024,address,hex))
+     end
+    end
+   end)
+   file:write('CAMERA_CAPTURE '..(ok and 'complete' or 'failure')..' label='..label..(ok and '' or ' '..tostring(err))..'\n');file:flush();return
+  end
+  if label=='ammo_reload_watch' then
+   ammo_watch=20;last_ammo=nil
+   file:write('CAMERA_CAPTURE complete label='..label..'\n');file:flush();return
+  end
+  if label=='native_fonts' then
+   local sr=assert(rawget(_G,'stingray'))
+   for _,name in ipairs({'core/performance_hud/debug','content/fonts/core_sans','content/fonts/cyborg_style','content/fonts/runtime_font','content/fonts/samples','content/fonts/runtime_font_terminal_layer'}) do
+    for _,kind in ipairs({'font','material'}) do
+     local ok,available=pcall(sr.Application.can_get,kind,name)
+     file:write('NATIVE_FONT '..name..' '..kind..' '..tostring(ok and available)..'\n')
+    end
+   end
+   file:write('CAMERA_CAPTURE complete label='..label..'\n');file:flush();return
+  end
+  if label=='camera_apis' or label=='weapon_node_apis' or label=='ammo_apis' then
    local sr=rawget(_G,'stingray') or {};local names={}
    for name,namespace in pairs(sr) do
-    if type(name)=='string' and (name:lower():find('camera',1,true) or name:lower():find('input',1,true) or name:lower():find('player',1,true) or name:lower():find('controller',1,true) or (label=='weapon_node_apis' and name=='Unit')) then
+    if type(name)=='string' and (name:lower():find('camera',1,true) or name:lower():find('input',1,true) or name:lower():find('player',1,true) or name:lower():find('controller',1,true) or ((label=='weapon_node_apis' or label=='ammo_apis') and name=='Unit') or (label=='ammo_apis' and (name:lower():find('weapon',1,true) or name:lower():find('ammo',1,true)))) then
      names[#names+1]=name
      if type(namespace)=='table' then local entries={};for key,value in pairs(namespace) do if type(value)=='function' then entries[#entries+1]=tostring(key) end end;table.sort(entries)
       file:write('CAMERA_API '..name..' '..table.concat(entries,' ')..'\n')

@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','world_style','archived_mesh','scene_test','placement','weapon_offsets','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','ammo_types','model','fire_icons','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','world_style','archived_mesh','scene_test','placement','weapon_offsets','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -174,14 +174,23 @@ end)
 test('magazine adds chamber once and preserves tactical reload',function()
     U(flags,0xc0);U(state,44);U(state+8,1);U(runtime,6)
     local m=assert(reader.poll(),reader.status);assert(m.rounds==45 and m.capacity==45 and m.reserve==6)
-    U(state,45);m=assert(reader.poll());assert(m.rounds==46 and m.capacity==46)
+    U(state,45);m=assert(reader.poll());assert(m.rounds==46 and m.capacity==45 and m.chamber_rounds==1)
+    local shown=HUD.model.normalize(m);assert(shown.value==45 and shown.chamber_bonus==1)
+    U(state,44);U(state+8,0);bytes[runtime+8]=1
+    m=assert(reader.poll());assert(m.rounds==45 and m.chamber_rounds==0 and m.pending_chamber_round==1)
+    assert(not HUD.model.normalize(m).chamber_bonus)
+    bytes[runtime+8]=0;m=assert(reader.poll());assert(m.rounds==44 and not m.pending_chamber_round)
+    U(state+8,1)
 end)
 test('rounds selects correct tube and includes chamber',function()
     local rm=manager('rounds');bind(rm,0x28,0x40,20,weapon);P(rm+0x50,state);P(rm+0x58,runtime)
     map(rm+0x68,{[20]=0});local cfgaddr=alloc(0x88);P(rm+0xa8,cfgaddr)
-    F(cfgaddr+0x4c,4);U(cfgaddr+0x50,20);bytes[cfgaddr+0x68]=1
+    F(cfgaddr+0x48,8);F(cfgaddr+0x4c,4);U(cfgaddr+0x50,20);bytes[cfgaddr+0x68]=1
+    U(cfgaddr+0x40,14);U(cfgaddr+0x44,240)
     U(flags,0x140);U(state+8,3);U(state+16,1);U(runtime+4,1);U(runtime,12)
     local m=assert(reader.poll(),reader.status);assert(m.rounds==4 and m.capacity==4 and m.reserve==12)
+    assert(m.ammo_slot==1 and m.label=='SLUG')
+    U(state+4,6);U(runtime+4,0);m=assert(reader.poll());assert(m.rounds==7 and m.capacity==8 and m.label=='BUCKSHOT' and m.ammo_slot==0)
     U(runtime+4,2);assert(reader.poll()==nil);U(runtime+4,1)
 end)
 test('heat uses configured limit and lock state',function()
@@ -312,17 +321,17 @@ test('heat thresholds and alternating overheat colors',function()
         assert(HUD.layout.heat_color(f,.5,c)==c.heat_red)
     end
 end)
-test('heat fill grows from the bottom and preserves partial cells',function()
+test('centered heat bar preserves partial cells',function()
     local function fills(f)
         local m=HUD.model.normalize({id=1,kind='heat',heat=f,reserve=2})
         local d=HUD.layout.compose(m,0,0,1,1,HUD.config.new(),0);local out={}
-        for _,v in ipairs(d) do if v.type=='rect' and v.w==9 and v.a==.95 then out[#out+1]=v end end
+        for _,v in ipairs(d) do if v.type=='rect' and v.h==3 and v.a==.95 then out[#out+1]=v end end
         return out,d
     end
     assert(#fills(0)==0)
-    local half=fills(.5);assert(#half==10 and half[1].y==-8 and math.abs(half[10].y-14.5)<1e-8)
-    local partial=fills(.525);assert(#partial==11 and math.abs(partial[11].h-1)<1e-8)
-    local full,d=fills(1);assert(#full==20 and math.abs(full[20].y-39.5)<1e-8)
+    local half=fills(.5);assert(#half==10 and math.abs(half[10].x-half[1].x-45)<1e-8)
+    local partial=fills(.525);assert(#partial==11 and math.abs(partial[11].w-1.75)<1e-8)
+    local full,d=fills(1);assert(#full==20 and math.abs(full[20].x-full[1].x-95)<1e-8)
     local found=false;for _,v in ipairs(d) do if v.text=='OVERHEAT' then found=true end end;assert(found)
 end)
 test('vent pulses red without disappearing even below the heat threshold',function()
@@ -468,10 +477,10 @@ test('heat proportions scale together and percent remains adjacent',function()
         for i,c in ipairs(one) do
             assert(two[i].x==2*c.x and two[i].y==2*c.y)
             if c.size then assert(two[i].size==2*c.size) end
-            if c.text==string.format('%02d',m.value) then number=c end
+            if c.text==string.format('%02d',m.value)..'%' then number=c end
             if c.text=='%' then percent=c end
         end
-        assert(number and percent and percent.x-(number.x+#number.text*number.size*.6)==4)
+        assert(number and number.text:sub(-1)=='%')
     end
 end)
 test('frame fits measured text including bearings and grows for content',function()
@@ -519,7 +528,7 @@ test('BigBlue frame contains glyphs and stacked labels across scales',function()
                 if c.type=='text' then
                     assert(c.a==1 and c.font=='bigblue')
                     local a,b,e,f=HUD.font.measure(c.text,c.size)
-                    if c.text=='HEAT' then header=c elseif c.text==string.format('%02d',m.value) then number={c.y+b,c.y+f} elseif c.text:find('SINKS') or c.text=='OVERHEAT' then footer={c.y+b,c.y+f} end
+                    if c.text=='HEAT' then header=c elseif c.text==string.format('%02d',m.value)..'%' then number={c.y+b,c.y+f} elseif c.text:find('SINKS') or c.text=='OVERHEAT' then footer={c.y+b,c.y+f} end
                     HUD.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)
                         assert(x>=panel.x and x+w<=panel.x+panel.w)
                         assert(y>=panel.y and y+h<=panel.y+panel.h)
@@ -979,6 +988,146 @@ test('external profiles reject malformed data and empty table clears built-in pr
     assert(next(HUD.weapon_offsets.load({read_weapon_offsets=function()return {} end},log))==nil)
     local bad={['0123456789abcdef']={right={x=0/0}}}
     assert(HUD.weapon_offsets.load({read_weapon_offsets=function()return bad end},log)==HUD.config.weapon_clearance and errors==1)
+end)
+test('autocannon reload reminder is exactly five and low warning starts at three',function()
+    local function model(n,key) return HUD.model.normalize({kind='magazine',rounds=n,capacity=10,resource_hex=key or 'a8cffb316f0b5c5f'}) end
+    assert(model(5).reload_reminder and not model(5).warning)
+    assert(not model(4).reload_reminder and not model(4).warning)
+    assert(model(3).warning and not model(3).reload_reminder)
+    assert(model(0).warning and model(0).state=='EMPTY')
+    assert(not model(5,'other').reload_reminder)
+    local function number_alpha(clock)
+        for _,v in ipairs(HUD.layout.compose(model(5),0,0,1,1,HUD.config.defaults,clock)) do
+            if v.type=='text' and v.text=='05' then return v.a end
+        end
+        error('ammo number missing')
+    end
+    assert(number_alpha(0)>number_alpha(.25))
+end)
+test('ammo labels preserve heat and magazine reserves and tolerate unknown projectiles',function()
+    local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='unknown',reserve_kind='MAGS',projectile_type=99999})
+    assert(raw.label=='ROUNDS' and raw.reserve_kind=='MAGS')
+    raw=HUD.ammo_types.apply({kind='heat',reserve_kind='SINKS'})
+    assert(raw.label==nil and raw.reserve_kind=='SINKS')
+end)
+test('chamber bonus is magazine-only and appears beside the ammo label',function()
+    local raw={kind='magazine',rounds=31,capacity=30,chamber_supported=true,chamber_rounds=1,label='ROUNDS'}
+    local m=HUD.model.normalize(raw);assert(m.value==30 and m.chamber_bonus==1)
+    local found=false
+    for _,v in ipairs(HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)) do
+        if v.type=='text' and v.text=='ROUNDS +1' then found=true end
+    end
+    assert(found)
+    raw.rounds=30;m=HUD.model.normalize(raw);assert(m.value==30 and not m.chamber_bonus)
+    raw.kind='rounds';raw.rounds=9;raw.capacity=8;m=HUD.model.normalize(raw)
+    assert(m.value==9 and not m.chamber_bonus)
+end)
+test('autocannon mode is explicit and its indicator fits beside the count',function()
+    assert(HUD.ammo_types.autocannon_mode(0x50)=='APHET')
+    assert(HUD.ammo_types.autocannon_mode(0x54)=='FLAK')
+    assert(HUD.ammo_types.autocannon_mode(0x1050)=='APHET')
+    assert(HUD.ammo_types.autocannon_mode(0x1054)=='FLAK')
+    assert(HUD.ammo_types.autocannon_mode(0x51)==nil)
+    assert(HUD.ammo_types.autocannon_mode(nil)==nil)
+    assert(HUD.ammo_types.fire_mode(1)=='AUTO')
+    assert(HUD.ammo_types.fire_mode(2)=='SEMI')
+    assert(HUD.ammo_types.fire_mode(3)=='BURST')
+    assert(HUD.ammo_types.fire_mode(8)=='ALT')
+    assert(HUD.ammo_types.fire_mode(4)==nil)
+    assert(HUD.ammo_types.selectable_fire_mode(1,{1,2,0})=='AUTO')
+    assert(HUD.ammo_types.selectable_fire_mode(2,{1,2,0})=='SEMI')
+    assert(HUD.ammo_types.selectable_fire_mode(8,{2,8,0})=='ALT')
+    assert(HUD.ammo_types.selectable_fire_mode(1,{1,0,0})==nil)
+    assert(HUD.ammo_types.selectable_fire_mode(1,{1,1,0})==nil)
+    assert(HUD.ammo_types.selectable_fire_mode(8,{1,2,0})==nil)
+    for _,mode in ipairs({'APHET','FLAK'}) do
+        local m=HUD.model.normalize({kind='rounds',rounds=10,capacity=10,ammo_mode=mode,label='AMMO'})
+        assert(not m.chamber_bonus)
+        local commands=HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)
+        local panel=commands[1];local number,indicator
+        for _,v in ipairs(commands) do
+            if v.type=='text' and v.text=='10' then number=v end
+            if v.type=='text' and v.text==mode then indicator=v end
+            if v.type=='rect' and not v.decoration then
+                assert(v.x>=panel.x and v.y>=panel.y and v.x+v.w<=panel.x+panel.w and v.y+v.h<=panel.y+panel.h)
+            end
+        end
+        assert(number and indicator and indicator.y>number.y)
+        local a,b,e=HUD.font.measure(indicator.text,indicator.size,HUD.config.defaults.font)
+        assert(math.abs(indicator.x+(a+e)/2-(panel.x+panel.w/2))<1e-6)
+    end
+end)
+test('fire-mode child frame inherits decorations and remains separate after world scaling',function()
+    local m=HUD.model.normalize({kind='rounds',rounds=10,capacity=10,ammo_mode='FLAK',fire_mode='AUTO',label='AMMO'})
+    for _,style in ipairs({'outline','brackets','helldivers','double'}) do
+        local cfg=HUD.config.new();cfg.decoration=style
+        local commands=HUD.layout.compose(m,0,0,1,1,cfg,0)
+        local child,decorations
+        for _,v in ipairs(commands) do
+            if v.child and v.type=='panel' then child=v end
+            if v.child and v.decoration then decorations=true end
+        end
+        assert(child and decorations)
+        assert(child.w==commands[1].w)
+        assert(math.abs(commands[1].y-(child.y+child.h)-2)<1e-6)
+        assert(math.abs(child.x+child.w/2-(commands[1].x+commands[1].w/2))<1e-6)
+        local world=HUD.world_style.prepare(commands,{first_person=true},cfg)
+        local frame=world[1];local text
+        for _,v in ipairs(world) do
+            if v.child and v.type=='panel' then child=v end
+            if v.child and v.type=='text' then text=v end
+        end
+        assert(child.y+child.h<frame.y)
+        assert(child.w==frame.w)
+        local a,b,e,f=HUD.font.measure(text.text,text.size,cfg.font,true)
+        assert(text.x+a>=child.x and text.x+e<=child.x+child.w)
+        assert(text.y+b>=child.y and text.y+f<=child.y+child.h)
+    end
+end)
+test('game fire-mode masks fit the count row and alternate labels stay isolated',function()
+    for _,mode in ipairs({'AUTO','SEMI','BURST','ALT'}) do
+        local icon=assert(HUD.fire_icons[mode]);assert(#icon.runs>0)
+        local commands=HUD.layout.compose({kind='rounds',value=1,label='40MM HE',reserve=5,reserve_kind='GRENADES',state='READY',fire_mode=mode},0,0,1,1,HUD.config.defaults,0)
+        local frame=commands[1];local count=0
+        for _,v in ipairs(commands) do if v.mode_icon then
+            count=count+1;assert(v.x>=frame.x and v.x+v.w<=frame.x+frame.w)
+            assert(v.y>=frame.y and v.y+v.h<=frame.y+frame.h)
+        end end
+        assert(count==#icon.runs)
+    end
+    local raw=HUD.ammo_types.apply({kind='rounds',resource_hex='a955c4ea6f6d4203',ammo_resource_hex='02cd7321cd8445f5',alternate_fire=true,reserve_kind='ROUNDS'})
+    assert(raw.label=='40MM HE' and raw.reserve_kind=='GRENADES')
+end)
+test('ordinary ammo rows center against the final frame',function()
+    local cfg={};for k,v in pairs(HUD.config.defaults) do cfg[k]=v end
+    local commands=HUD.layout.compose({kind='magazine',value=40,label='ROUNDS',chamber_bonus=1,reserve=2,reserve_kind='MAGS',state='READY',fire_mode='BURST'},0,0,2,1,cfg,0,function(t,size)return HUD.font.measure(t,size,cfg.font) end)
+    commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
+    local panel=commands[1];local center=panel.x+panel.w/2
+    for _,v in ipairs(commands) do
+        if v.center_in_frame and not v.mode_count then
+            local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
+            assert(math.abs(v.x+(a+e)/2-center)<.001)
+        end
+    end
+end)
+test('laser catalog symbols and heat rows share centered presentation',function()
+    local cfg=HUD.config.new()
+    local raw=HUD.ammo_types.apply({kind='heat',resource_hex='d54b9505c0f72873',heat=.62,reserve=3})
+    assert(raw.energy_icon=='LASER')
+    local m=HUD.model.normalize(raw);assert(m.energy_icon=='LASER')
+    local commands=HUD.layout.compose(m,0,0,2,1,cfg,0)
+    commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
+    local panel=commands[1];local center=panel.x+panel.w/2;local symbols=0
+    for _,v in ipairs(commands) do
+        if v.mode_icon then symbols=symbols+1 end
+        if v.center_in_frame and not v.mode_count then
+            local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
+            assert(math.abs(v.x+(a+e)/2-center)<.001)
+        end
+    end
+    assert(symbols==#HUD.fire_icons.LASER.runs)
+    raw=HUD.ammo_types.apply({kind='rounds',resource_hex='5990123d142b16cb'})
+    assert(not raw.energy_icon,'laser-guided missiles are not beam weapons')
 end)
 print(string.format('%d contract tests passed',tests))
 

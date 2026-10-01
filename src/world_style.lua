@@ -17,14 +17,14 @@ function M.prepare(commands,p,c)
                         local left,bottom,right,top=panel.x,panel.y,panel.x+panel.w,panel.y+panel.h
                         local padding=math.max(1,8*2*(c.scale or 1)*scale)
                         for _,v in ipairs(centered) do
-                            if v.type=='text' then
+                            if v.type=='text' and not v.child then
                                 local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
                                 left=math.min(left,v.x+a-padding);bottom=math.min(bottom,v.y+b-padding)
                                 right=math.max(right,v.x+e+padding);top=math.max(top,v.y+f+padding)
                             end
                         end
                         for _,v in ipairs(centered) do
-                            if v.decoration then
+                            if v.decoration and not v.child then
                                 v.x=left+(v.x-panel.x)*(right-left)/panel.w
                                 v.y=bottom+(v.y-panel.y)*(top-bottom)/panel.h
                                 v.w=v.w*(right-left)/panel.w
@@ -33,18 +33,76 @@ function M.prepare(commands,p,c)
                         end
                         panel.x,panel.y,panel.w,panel.h=left,bottom,right-left,top-bottom
                     end
+                    -- World glyph scaling and frame fitting may change the final
+                    -- bounds after screen-layout centering. Align actual glyphs here.
+                    local panel=centered[1];local middle=panel.x+panel.w/2
+                    local bar_left,bar_right=math.huge,-math.huge
+                    for _,v in ipairs(centered) do
+                        if v.center_in_frame then
+                            local a,b,e,f
+                            if HUD.font.supported(v.font) then a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true) end
+                            if not e then a,e=0,#v.text*v.size*.6 end
+                            v.x=middle-(a+e)/2
+                        elseif v.center_bar then
+                            bar_left=math.min(bar_left,v.x);bar_right=math.max(bar_right,v.x+v.w)
+                        end
+                    end
+                    if bar_left<math.huge then
+                        local shift=middle-(bar_left+bar_right)/2
+                        for _,v in ipairs(centered) do if v.center_bar then v.x=v.x+shift end end
+                    end
+                    local heading;local icon_left,icon_right=math.huge,-math.huge
+                    for _,v in ipairs(centered) do
+                        if v.mode_count then heading=v end
+                        if v.mode_icon then icon_left=math.min(icon_left,v.x);icon_right=math.max(icon_right,v.x+v.w) end
+                    end
+                    if heading and icon_left<math.huge then
+                        local a,b,e,f
+                        if HUD.font.supported(heading.font) then a,b,e,f=HUD.font.measure(heading.text,heading.size,heading.font,true) end
+                        if not e then a,e=0,#heading.text*heading.size*.6 end
+                        local gap=8*scale;local width=e-a+gap+icon_right-icon_left
+                        local start=middle-width/2;heading.x=start-a
+                        local shift=start+e-a+gap-icon_left
+                        for _,v in ipairs(centered) do if v.mode_icon then v.x=v.x+shift end end
+                    end
+                    local child_panel,child_text
+                    for _,v in ipairs(centered) do
+                        if v.child and v.type=='panel' then child_panel=v end
+                        if v.child and v.type=='text' then child_text=v end
+                    end
+                    if child_panel and child_text then
+                        local old={x=child_panel.x,y=child_panel.y,w=child_panel.w,h=child_panel.h}
+                        local a,b,e,f
+                        if HUD.font.supported(child_text.font) then a,b,e,f=HUD.font.measure(child_text.text,child_text.size,child_text.font,true) end
+                        if not e then a,b,e,f=0,-child_text.size*.2,#child_text.text*child_text.size*.6,child_text.size*.8 end
+                        local pad=4*2*(c.scale or 1)*scale
+                        local width,height=panel.w,f-b+2*pad
+                        child_panel.x=middle-width/2;child_panel.y=panel.y-2*2*(c.scale or 1)*scale-height
+                        child_panel.w,child_panel.h=width,height
+                        child_text.x=middle-(a+e)/2;child_text.y=child_panel.y+pad-b
+                        for _,v in ipairs(centered) do
+                            if v.child and v.decoration then
+                                v.x=child_panel.x+(v.x-old.x)*width/old.w
+                                v.y=child_panel.y+(v.y-old.y)*height/old.h
+                                v.w=v.w*width/old.w;v.h=v.h*height/old.h
+                            end
+                        end
+                    end
                     if c.style_3d=='hologram' then
                         local panel=centered[1];local clock=c.style_clock or 0
                         local flicker=.96+.025*math.sin(clock*17)+.015*math.sin(clock*31)
                         for _,v in ipairs(centered) do v.a=v.a*flicker end
                         panel.a=panel.a*.18
+                        if child_panel then child_panel.a=child_panel.a*.18 end
                         local ink=HUD.config.rgb(c.text_color)
                         local strength=commands[2] and commands[2].a or 1
-                        local thickness=math.max(.3,panel.w/500)
-                        for _,edge in ipairs({{panel.x,panel.y,panel.w,thickness},{panel.x,panel.y+panel.h-thickness,panel.w,thickness}}) do
-                            centered[#centered+1]={type='rect',x=edge[1],y=edge[2],w=edge[3],h=edge[4],c=ink,a=.18*strength}
+                        for _,frame in ipairs(child_panel and {panel,child_panel} or {panel}) do
+                            local thickness=math.max(.3,frame.w/500)
+                            for _,edge in ipairs({{frame.x,frame.y,frame.w,thickness},{frame.x,frame.y+frame.h-thickness,frame.w,thickness}}) do
+                                centered[#centered+1]={type='rect',x=edge[1],y=edge[2],w=edge[3],h=edge[4],c=ink,a=.18*strength}
+                            end
+                            centered[#centered+1]={type='rect',x=frame.x,y=frame.y+(clock*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.10*strength}
                         end
-                        centered[#centered+1]={type='rect',x=panel.x,y=panel.y+(clock*.35%1)*(panel.h-thickness),w=panel.w,h=thickness,c=ink,a=.10*strength}
                     end
     return centered
 end

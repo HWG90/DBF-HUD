@@ -96,8 +96,8 @@ function M.new(sr,log,direct)
                         if c.style_3d=='hologram' then
                             local at=y
                             while at<y+h do
-                                local edge=math.min(y+h,(math.floor(at/4)+1)*4)
-                                local dim=math.floor(at/4)%2==0 and .78 or 1
+                                local edge=math.min(y+h,(math.floor(at/2)+1)*2)
+                                local dim=math.floor(at/2)%2==0 and .78 or 1
                                 solid(x,at,w,edge-at,3,sr.Color(math.floor(v.a*255*dim+.5),v.c[1],v.c[2],v.c[3]))
                                 at=edge
                             end

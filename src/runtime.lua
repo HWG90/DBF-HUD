@@ -160,6 +160,12 @@ function M.start(sr,backend,options)
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
             local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
+            if self.config.debug_logging and self.clock<90 and raw and raw.binding and raw.binding.ammo_state then
+                local b=raw.binding
+                local function hex(s)return s:gsub('.',function(ch)return string.format('%02X',ch:byte())end)end
+                local entry=string.format('AMMO_RELOAD weapon=%s count=%d capacity=%s chamber=%s flags=%X state=%s runtime=%s driver=%s types=%s projectile=%s',raw.resource_hex,raw.rounds or -1,tostring(raw.capacity),tostring(raw.chamber_rounds),b.driver_flags,hex(b.ammo_state),hex(b.ammo_runtime),hex(b.driver_state),b.ammo_types and hex(b.ammo_types) or '-',tostring(raw.projectile_type))
+                if entry~=self.last_ammo_trace then log(entry);self.last_ammo_trace=entry end
+            end
             if self.config.debug_logging and self.clock>=next_pose_log then
                 if self.weapon_pose then
                     local p=self.weapon_pose;local m=p.matrix
@@ -292,9 +298,12 @@ function M.start(sr,backend,options)
         local scale=s*self.config.scale
         local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
         local frame=commands[1]
+        local frame_bottom=frame.y
+        for _,command in ipairs(commands) do if command.type=='panel' then frame_bottom=math.min(frame_bottom,command.y) end end
         local margin=4*scale
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
+        dy=math.max(dy,margin-frame_bottom)
         for _,c in ipairs(commands) do c.x=c.x+dx;c.y=c.y+dy end
         if self.config.debug_logging and self.config.pose_marker then
             self.projection_status=projection.status
