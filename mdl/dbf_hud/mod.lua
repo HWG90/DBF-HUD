@@ -9217,7 +9217,7 @@ function M.mount(p,c)
     elseif p.first_person then x,y,z=c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+.2
     elseif p.left_shoulder then x,y,z=c.left_mount_x,c.left_mount_y,c.left_mount_z+.2
     else x,y,z=c.mount_x,c.mount_y,c.mount_z+.2 end
-    return x,y+.0762,z -- Shared three-inch forward shift; Purifier diagnostic forward correction is external.
+    return x,y+.0762,z -- Shared three-inch forward shift; Purifier forward and right corrections are external.
 end
 function M.new(sr,log,side)
     if not side then
