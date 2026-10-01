@@ -1097,7 +1097,7 @@ test('screen font commands make one native draw and no glyph rectangles',functio
 end)
 test('Stoker labels follow its active ammo source and fuel has no grenade icon or chamber bonus',function()
     local primary=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9',rounds=41,capacity=40,chamber_supported=true,chamber_rounds=1,fire_mode='AUTO'})
-    assert(primary.label=='ROUNDS' and HUD.model.normalize(primary).chamber_bonus==1)
+    assert(primary.label=='ROUNDS' and HUD.model.normalize(primary).chamber_bonus==1 and primary.energy_icon=='SEMI')
     local alt=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9',ammo_resource_hex='unknown',alternate_fire=true,rounds=41,capacity=40,chamber_supported=true,chamber_rounds=1,fire_mode='ALT'})
     local model=HUD.model.normalize(alt)
     assert(alt.label=='FUEL' and model.reserve_kind=='TANKS' and model.energy_icon=='NONE' and not model.chamber_bonus)
