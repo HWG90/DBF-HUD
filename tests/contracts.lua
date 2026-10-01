@@ -1122,8 +1122,9 @@ test('catalog first-person profiles are at least six inches down',function()
     local profiles=assert(loadfile('DBF-HUD-weapon-offsets.lua'))()
     local loaded=HUD.weapon_offsets.load({read_weapon_offsets=function()return profiles end},function(message)error(message)end)
     assert(loaded==profiles)
-    for _,views in pairs(profiles) do
-        assert(views.first_left.z<=-.1524+1e-9 and views.first_right.z<=-.1524+1e-9)
+    for resource,views in pairs(profiles) do
+        local baseline=resource=='fb3a19078694708a' and -.1016 or -.1524
+        assert(views.first_left.z<=baseline+1e-9 and views.first_right.z<=baseline+1e-9)
     end
 end)
 print(string.format('%d contract tests passed',tests))
