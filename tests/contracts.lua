@@ -1100,7 +1100,7 @@ test('Stoker labels follow its active ammo source and fuel has no grenade icon o
     assert(primary.label=='ROUNDS' and HUD.model.normalize(primary).chamber_bonus==1)
     local alt=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9',ammo_resource_hex='unknown',alternate_fire=true,rounds=41,capacity=40,chamber_supported=true,chamber_rounds=1,fire_mode='ALT'})
     local model=HUD.model.normalize(alt)
-    assert(alt.label=='FUEL' and model.energy_icon=='NONE' and not model.chamber_bonus)
+    assert(alt.label=='FUEL' and model.reserve_kind=='TANKS' and model.energy_icon=='NONE' and not model.chamber_bonus)
     assert(not HUD.fire_icons[model.energy_icon or model.fire_mode])
 end)
 print(string.format('%d contract tests passed',tests))

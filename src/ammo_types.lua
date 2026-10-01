@@ -188,7 +188,7 @@ function M.apply(raw)
     -- Stoker primary ammunition is bullets; its auxiliary entity supplies fuel.
     if raw.resource_hex=='8a307bd1811a5fe9' then
         raw.label=raw.alternate_fire and 'FUEL' or 'ROUNDS'
-        if raw.alternate_fire then raw.energy_icon='NONE';raw.chamber_supported=false end
+        if raw.alternate_fire then raw.energy_icon='NONE';raw.chamber_supported=false;raw.reserve_kind='TANKS' end
     end
     return raw
 end
