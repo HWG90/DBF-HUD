@@ -1,5 +1,5 @@
 local M={}
-M.fonts=HUD.native_font_data.order
+M.fonts={'bigblue','hack','jetbrainsmono','firacode','iosevka'}
 M.decorations={'none','outline','brackets','helldivers','double'}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
 -- Auto clearance in weapon-local metres; independent entries for each view.
@@ -52,7 +52,7 @@ function M.apply(config,values)
         elseif k=='placement_mode' then assert(v=='manual' or v=='auto','invalid placement mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='decoration' then local found=false;for _,name in ipairs(M.decorations) do if v==name then found=true end end;assert(found,'unknown decoration')
-        elseif k=='font' then local found=false;for _,name in ipairs(M.fonts) do if v==name then found=true end end;assert(found,'unknown HUD font')
+        elseif k=='font' then assert(v=='debug' or HUD.native_font_data.faces[v],'unknown HUD font')
         else v=M.hex(v) end
         clean[k]=v
     end

@@ -410,19 +410,19 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==30)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==26)
     local depth=h.config.occlusion_mode
     callbacks['dbf_hud_v4.always_visible'](true);assert(h.config.always_visible and h.config.occlusion_mode==depth);writes=writes-1
     callbacks['dbf_hud_placement.fp_auto_side'](1);assert(h.config.fp_auto_side=='left');writes=writes-1
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
-    callbacks['dbf_hud_v4.font_nerd'](2);assert(h.config.font=='debug' and writes==2)
-    callbacks['dbf_hud_v4.font_nerd'](1);assert(h.config.font=='bigblue' and writes==3)
+    callbacks['dbf_hud_v5.font_native'](2);assert(h.config.font=='hack' and writes==2)
+    callbacks['dbf_hud_v5.font_native'](1);assert(h.config.font=='bigblue' and writes==3)
     callbacks['dbf_hud_v4.debug_logging'](true);assert(h.config.debug_logging and writes==4)
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==16 and groups['DBF-HUD Placement']==14)
+    assert(groups['DBF-HUD']==12 and groups['DBF-HUD Placement']==14)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -654,7 +654,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==30)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==26)
         callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
@@ -1072,7 +1072,7 @@ test('all 72 native families have finite bounds and selectable labels',function(
             assert(a==a and b==b and e>a and f>b)
         end
     end
-    assert(count==72 and #HUD.config.fonts==73)
+    assert(count==72 and #HUD.config.fonts==5)
 end)
 test('native resource resolver selects separate clear and depth materials',function()
     local sr={Application={can_get=function()return true end}}

@@ -7018,7 +7018,7 @@ return M
 end)()
 HUD.config=(function()
 local M={}
-M.fonts=HUD.native_font_data.order
+M.fonts={'bigblue','hack','jetbrainsmono','firacode','iosevka'}
 M.decorations={'none','outline','brackets','helldivers','double'}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
 -- Auto clearance in weapon-local metres; independent entries for each view.
@@ -7071,7 +7071,7 @@ function M.apply(config,values)
         elseif k=='placement_mode' then assert(v=='manual' or v=='auto','invalid placement mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='decoration' then local found=false;for _,name in ipairs(M.decorations) do if v==name then found=true end end;assert(found,'unknown decoration')
-        elseif k=='font' then local found=false;for _,name in ipairs(M.fonts) do if v==name then found=true end end;assert(found,'unknown HUD font')
+        elseif k=='font' then assert(v=='debug' or HUD.native_font_data.faces[v],'unknown HUD font')
         else v=M.hex(v) end
         clean[k]=v
     end
@@ -9314,9 +9314,9 @@ function M.new(hud)
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
-    local function option_id(k)if k=='font' then return 'dbf_hud_v4.font_nerd' end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
+    local function option_id(k)if k=='font' then return 'dbf_hud_v5.font_native' end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
     local font_choices={}
-    for i,name in ipairs(HUD.config.fonts) do font_choices[i]=name=='debug' and 'Debug' or name:sub(1,16) end
+    for i,name in ipairs(HUD.config.fonts) do font_choices[i]=({bigblue='BigBlue Terminal',hack='Hack',jetbrainsmono='JetBrains Mono',firacode='Fira Code',iosevka='Iosevka'})[name] end
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
@@ -9357,6 +9357,7 @@ function M.new(hud)
         for id,route in pairs(routes) do
             if not id:find('dbf_hud_v4.',1,true) and not id:find('dbf_hud_placement.',1,true) then route.callback=nil;route.owner=nil end
         end
+        for id,route in pairs(routes) do if id=='dbf_hud_v4.font_nerd' or id:find('dbf_hud_v4.font_page_',1,true) then route.callback=nil end end
         if routes['dbf_hud_v4.show_3d'] then routes['dbf_hud_v4.show_3d'].callback=nil end
         if routes['dbf_hud_v4.always_show_3d'] then routes['dbf_hud_v4.always_show_3d'].callback=nil end
         local function add(k,spec,callback)
@@ -9396,7 +9397,7 @@ function M.new(hud)
                 for i=first,math.min(first+15,#font_choices) do choices[#choices+1]=font_choices[i] end
                 local key=page==1 and 'font' or ('font_page_'..page)
                 local selected=font_index()
-                add(key,{type='choice',label='HUD font group '..page,choices=choices,
+                add(key,{type='choice',label='HUD font',choices=choices,
                     default=selected>=first and selected<first+16 and selected-first+1 or 1,
                     description='Choose a font from any group. Only the most recently chosen font is active.'},function(v)
                     hud.configure({font=assert(HUD.config.fonts[first+v-1])});hud.save_tuning()
