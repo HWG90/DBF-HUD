@@ -62,8 +62,7 @@ def build(control=False, enable_depth=False):
     assert len(source_group)==640 and struct.unpack_from('<I',source_group,16)[0]==77
     assert source_group[:16]==struct.pack('<I12x',142)
     group=bytearray(source_group)
-    struct.pack_into('<I',group,16,79)
-    group+=struct.pack('<Q',hash64('mods/dbf_hud/shaders/gui_depth_state_test_loader_control'))
+    struct.pack_into('<I',group,16,78)
     group+=struct.pack('<Q',hash64(shader))
     assert bytes(group[24:640])==source_group[24:]
     resources = [(hash64(shader), hash64('shader_library'), struct.pack('<I', 4), bytes(gpu)),
@@ -110,17 +109,17 @@ def build(control=False, enable_depth=False):
         ordered=sorted(ranges)
         assert all(a[1]<=b[0] for a,b in zip(ordered,ordered[1:]))
     manifest = {'Version': 1, 'Guid': 'c4d8a752-e5f6-4e56-9c03-a5b41635fbed',
-                'Name': 'DBF-HUD Native Font Depth Test 0.1' if enable_depth else 'DBF-HUD Shader Loader Control 0.2',
+                'Name': 'DBF-HUD Native Font Depth Test 0.2' if enable_depth else 'DBF-HUD Shader Loader Control 0.3',
                 'Description': 'Isolated depth-enable probe on the verified loader control.' if enable_depth else 'Loader-only baseline; depth disabled.',
                 'Options': [{'Name': 'Shader loader control', 'Include': ['DepthState']}]}
-    output = ROOT.parent / ('DBF-HUD-Native-Font-Depth-Test-0.1.zip' if enable_depth else 'DBF-HUD-Shader-Loader-Control-0.2.zip')
+    output = ROOT.parent / ('DBF-HUD-Native-Font-Depth-Test-0.2.zip' if enable_depth else 'DBF-HUD-Shader-Loader-Control-0.3.zip')
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
         archive.writestr('manifest.json', json.dumps(manifest, indent=2))
         stem = 'DepthState/ee6b1ba7e22d71ed.patch_0'
         archive.writestr(stem, body)
         archive.writestr(stem + '.stream', b'')
         archive.writestr(stem + '.gpu_resources', gpu_body)
-        archive.writestr('README.txt', ('Depth-enable probe: replace loader control, deploy and restart. Use experimental WorldGUI. Occlusion is unverified.\n' if enable_depth else '') + 'Loader control baseline. Import into Arsenal, enable and deploy, then restart.\nDepth testing is enabled only with --depth-probe; otherwise it remains off.\nPreserves all 77 native default-group references and appends the control library.\nThe native GUI shader resources are not replaced. Disable this control after the registration check.\nKeep the withdrawn WorldGUI Depth State Test disabled.\n')
+        archive.writestr('README.txt', 'Import into Arsenal, enable, deploy and restart. Enable only one native-font test package at a time.\nPreserves all 77 native default-group references and appends only the included font shader.\nNo HUD rendering changes are included. Check registration with the separate MDL native-font probe before drawing.\nDepth is enabled in the depth-test package and disabled in the loader-control package. Native text occlusion remains unverified.\nDisable older font tests and the withdrawn WorldGUI Depth State Test.\n')
     evidence = {'source_sha256': hashlib.sha256(original).hexdigest(),
                 'shader_resource': shader, 'material_resource': material_name,
                 'compiled_variant_id': hex(variant), 'program_id': hex(program),

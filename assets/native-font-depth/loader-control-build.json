@@ -1,0 +1,13 @@
+{
+  "source_sha256": "2912f44f2fcc0ce1ec74b0e7f32a56fab2b0720ecd097d5b1feb7dd5a027d97b",
+  "shader_resource": "mods/dbf_hud/shaders/native_font_depth_loader_control",
+  "material_resource": "mods/dbf_hud/materials/native_font_depth_loader_control",
+  "compiled_variant_id": "0xf0bbfd88",
+  "program_id": "0x147c930e",
+  "depth_enable": 0,
+  "depth_write": 0,
+  "depth_compare": 7,
+  "disk_depth_enable_offset": "0xdb0",
+  "archive_target": "ee6b1ba7e22d71ed",
+  "live_status": "archive-target revision not yet deployed"
+}
