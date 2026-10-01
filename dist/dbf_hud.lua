@@ -7352,7 +7352,7 @@ function M.selectable_fire_mode(control,choices)
     end
     if count>1 and seen[control] then return M.fire_mode(control) end
 end
-local lasers={['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
+local lasers={['416d053372c4e433']=true,['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
 function M.apply(raw)
     if raw then raw.energy_icon=lasers[raw.ammo_resource_hex or raw.resource_hex] and 'LASER' or nil end
     if not raw or raw.kind=='heat' or raw.kind=='infinite' then return raw end
@@ -7977,6 +7977,12 @@ function M.new(backend)
         result.binding={module_base=base,record=main_address,candidate=r.u(main_rec,12),
             avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12),driver_state=driver_state}
         local kind=flag(flags,0x80) and 'magazine' or flag(flags,0x100) and 'rounds' or flag(flags,0x200) and 'heat'
+        -- Talon exposes round bookkeeping alongside its heat component.
+        -- Prefer heat only when that component belongs to the selected entity.
+        if result.resource_hex=='416d053372c4e433' then
+            local hm=global('heat')
+            if component(hm,0x28,0x40,wid,rec) then kind='heat' end
+        end
         if kind then
             local m=global(kind);local mag=kind=='magazine'
             local i=component(m,mag and 0x20 or 0x28,mag and 0x38 or 0x40,wid,rec)

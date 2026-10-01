@@ -143,6 +143,12 @@ function M.new(backend)
         result.binding={module_base=base,record=main_address,candidate=r.u(main_rec,12),
             avatar_id=aid,avatar_record=owner+Layout.records+ai*24,avatar_candidate=r.u(avatar,12),driver_state=driver_state}
         local kind=flag(flags,0x80) and 'magazine' or flag(flags,0x100) and 'rounds' or flag(flags,0x200) and 'heat'
+        -- Talon exposes round bookkeeping alongside its heat component.
+        -- Prefer heat only when that component belongs to the selected entity.
+        if result.resource_hex=='416d053372c4e433' then
+            local hm=global('heat')
+            if component(hm,0x28,0x40,wid,rec) then kind='heat' end
+        end
         if kind then
             local m=global(kind);local mag=kind=='magazine'
             local i=component(m,mag and 0x20 or 0x28,mag and 0x38 or 0x40,wid,rec)

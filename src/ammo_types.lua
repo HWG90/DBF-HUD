@@ -174,7 +174,7 @@ function M.selectable_fire_mode(control,choices)
     end
     if count>1 and seen[control] then return M.fire_mode(control) end
 end
-local lasers={['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
+local lasers={['416d053372c4e433']=true,['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
 function M.apply(raw)
     if raw then raw.energy_icon=lasers[raw.ammo_resource_hex or raw.resource_hex] and 'LASER' or nil end
     if not raw or raw.kind=='heat' or raw.kind=='infinite' then return raw end

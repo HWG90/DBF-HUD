@@ -199,6 +199,13 @@ test('heat uses configured limit and lock state',function()
     U(flags,0x240);U(runtime,2);F(runtime+4,92);bytes[runtime+8]=1
     local m=assert(reader.poll(),reader.status);assert(math.abs(m.heat-.92)<1e-6 and m.locked and m.reserve==2)
 end)
+test('Talon reads its owned heat component instead of round bookkeeping',function()
+    local old=read(weapon,8)
+    U(weapon,0x72c4e433);U(weapon+4,0x416d0533);U(flags,0x140)
+    local m=assert(reader.poll(),reader.status)
+    assert(m.kind=='heat' and math.abs(m.heat-.92)<1e-6 and m.energy_icon=='LASER')
+    put(weapon,old);U(flags,0x240)
+end)
 test('ownership mismatch and missing player clear data',function()
     bytes[avatar+20]=0;assert(reader.poll()==nil);bytes[avatar+20]=1
     U(pm+0x84,0);assert(reader.poll()==nil);U(pm+0x84,1)
