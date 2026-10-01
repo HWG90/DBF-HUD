@@ -22,6 +22,20 @@ function M.project(m,x,y,z,fov,aspect,near)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
 end
+-- Screen-relative seed only; this does not establish model clearance.
+function M.auto_mount(camera,p,fov,aspect,near)
+    local dx,dy,dz=p.x-camera[13],p.y-camera[14],p.z-camera[15]
+    local depth=dx*camera[5]+dy*camera[6]+dz*camera[7]
+    depth=math.max(near+.15,math.max(.55,depth))
+    local nx=(p.first_person or p.left_shoulder) and .42 or .58
+    local right=(nx-.5)*2*depth*math.tan(fov*.5)*aspect
+    local up=-.04*depth*math.tan(fov*.5)
+    local x=camera[13]+camera[5]*depth+camera[1]*right+camera[9]*up-p.x
+    local y=camera[14]+camera[6]*depth+camera[2]*right+camera[10]*up-p.y
+    local z=camera[15]+camera[7]*depth+camera[3]*right+camera[11]*up-p.z
+    local m=p.matrix
+    return {x=x*m[1]+y*m[2]+z*m[3],y=x*m[5]+y*m[6]+z*m[7],z=x*m[9]+y*m[10]+z*m[11]}
+end
 function M.left_shoulder(previous,lateral,first_person)
     if first_person or not lateral then return false end
     return lateral>(previous and 0.4 or 0.7)
@@ -57,6 +71,7 @@ function M.new(backend)
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        self.camera_matrix=matrix;self.camera_near=near;self.camera_aspect=aspect
         self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
         self.camera_fov=fov
         self.camera_lateral=(pose.x-matrix[13])*matrix[1]+(pose.y-matrix[14])*matrix[2]+(pose.z-matrix[15])*matrix[3]
@@ -64,6 +79,7 @@ function M.new(backend)
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
+        self.camera_matrix=nil;self.camera_near=nil;self.camera_aspect=nil
         self.camera_distance=nil;self.camera_fov=nil;self.camera_lateral=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
         self.status=ok and status or tostring(result)

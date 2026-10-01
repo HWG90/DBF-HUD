@@ -105,6 +105,20 @@ test('camera research snapshots are bounded and reject stale ownership',function
     assert(not pcall(HUD.camera_state.capture,b,raw));P(cs,cam)
 end)
 
+test('expanded avatar control pages stay bounded and reject ownership changes',function()
+    local manager=alloc(0xa7aec);P(base+0x3326d20,manager)
+    map(manager+0xf8,{[10]=0});P(manager+0x110,avatar)
+    local raw={avatar_unit_ref=77,binding={module_base=base,avatar_id=10,avatar_record=avatar}}
+    local total=0;local b={read=function(a,n)assert(n<=4096);total=total+n;return read(a,n)end}
+    local parts=HUD.camera_state.capture(b,raw,'avatar_page_0_test')
+    assert(#parts==18 and total<65536)
+    parts=HUD.camera_state.capture({read=read},raw,'avatar_page_13_test')
+    local last=parts[#parts-1];assert(last.address+#last.data<=manager+0xa7aec)
+    assert(not pcall(HUD.camera_state.capture,{read=read},raw,'avatar_page_14_test'))
+    b.read=function(a,n)local value=read(a,n);if a==manager and n==4096 then P(manager+0x110,weapon) end;return value end
+    assert(not pcall(HUD.camera_state.capture,b,raw,'avatar_page_0_test'));P(manager+0x110,avatar)
+end)
+
 test('native first-person state handles false and rejects stale or unknown bindings',function()
     local sigs={{0xa42a74,'4c8b0ded398e02'},{0xa42b1f,'4138bc24ec020000'},{0xa42b2a,'41888424ec020000'}}
     for _,s in ipairs(sigs) do put(base+s[1],s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)) end
@@ -123,6 +137,21 @@ test('native first-person state handles false and rejects stale or unknown bindi
         local value=read(a,n);if a==pm+0x2ec then U(pm+0x3a8,78) end;return value
     end}
     assert(HUD.camera_mode.read(changed,raw)==nil);U(pm+0x3a8,77)
+end)
+
+test('native shoulder state rejects stale ownership and unknown code',function()
+    for _,s in ipairs({{0xa4604c,'4c8b15cd0c8e02'},{0xa460da,'4869c138120000'},{0xa460e1,'4a8b841088e8530048c1e82a2401'}}) do
+        put(base+s[1],s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end))
+    end
+    local manager=alloc(0x540000);P(base+0x3326d20,manager)
+    map(manager+0xf8,{[10]=0});P(manager+0x110,avatar)
+    local raw={avatar_unit_ref=77,binding={module_base=base,avatar_id=10,avatar_record=avatar}}
+    bytes[manager+0x53e88d]=32;assert(HUD.camera_mode.read_shoulder(backend,raw)==false)
+    bytes[manager+0x53e88d]=36;assert(HUD.camera_mode.read_shoulder(backend,raw)==true)
+    P(manager+0x110,weapon);assert(HUD.camera_mode.read_shoulder(backend,raw)==nil);P(manager+0x110,avatar)
+    local changed={read=function(a,n)local v=read(a,n);if a==manager+0x53e88d then P(manager+0x110,weapon)end;return v end}
+    assert(HUD.camera_mode.read_shoulder(changed,raw)==nil);P(manager+0x110,avatar)
+    bytes[base+0xa4604c]=0;assert(HUD.camera_mode.read_shoulder(backend,raw)==nil)
 end)
 
 test('machine gun uses verified magazine path and rejects stale component identity',function()
@@ -357,6 +386,32 @@ test('decorations default off, fit dynamic perimeter and preserve content',funct
     assert(not pcall(HUD.config.apply,c,{decoration='unknown'}))
 end)
 
+test('upright mount removes roll while preserving forward direction',function()
+    local q=math.sqrt(.5)
+    local m={q,0,-q,0,0,1,0,0,q,0,q,0,2,3,4,1}
+    local u=HUD.pose_motion.upright(m)
+    assert(u[1]==1 and u[3]==0 and u[5]==m[5] and u[6]==m[6] and u[7]==m[7])
+    assert(u[9]==0 and u[10]==0 and u[11]==1 and u[13]==2)
+    local vertical={1,0,0,0,0,0,1,0,0,-1,0,0,0,0,0,1}
+    assert(HUD.pose_motion.upright(vertical)==vertical)
+end)
+
+test('auto placement projects to its target and preserves manual offsets',function()
+    local m={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    local p={x=.2,y=1,z=.1,matrix=m}
+    local c=HUD.config.new();c.mount_x=.3;c.mount_y=.4;c.mount_z=.5
+    for _,left in ipairs({false,true}) do
+        p.left_shoulder=left
+        local a=HUD.projection.auto_mount(m,p,1,16/9,.1)
+        local screen=assert(HUD.projection.project(m,p.x+a.x,p.y+a.y,p.z+a.z,1,16/9,.1))
+        assert(math.abs(screen.x-(left and .42 or .58))<1e-6 and math.abs(screen.y-.48)<1e-6)
+        p.auto_mount=a;c.placement_mode='auto';local x,y,z=HUD.scene_test.mount(p,c);assert(x==a.x and y==a.y and z==a.z)
+    end
+    c.placement_mode='manual';p.left_shoulder=false
+    local x,y,z=HUD.scene_test.mount(p,c);assert(x==.3 and y==.4 and z==.7)
+    assert(c.mount_x==.3 and c.mount_y==.4 and c.mount_z==.5)
+end)
+
 test('native menu keeps colors config-only and persists placement',function()
     local options,values,callbacks={},{},{};local writes=0
     ModOptionsMenu={api=1,register_option=function(id,spec) options[id]=spec;values[id]=spec.default;return true end,
@@ -365,7 +420,7 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==31)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==32)
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
     callbacks['dbf_hud_v4.font_nerd'](2);assert(h.config.font=='debug' and writes==2)
@@ -374,7 +429,7 @@ test('native menu keeps colors config-only and persists placement',function()
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==10 and groups['DBF-HUD Placement']==21)
+    assert(groups['DBF-HUD']==10 and groups['DBF-HUD Placement']==22)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -538,10 +593,11 @@ test('weapon attachment follows distant targets with bounded lag and resets',fun
 end)
 
 test('runtime attaches without reticle travel clamp and falls back when projection fails',function()
-    local sr={Application={worlds=function()return {1}end,main_world=function()return 1 end},
+    local draw_x=0
+    local sr={Application={back_buffer_size=function()return 3840,2160 end,worlds=function()return {1}end,main_world=function()return 1 end},
         World={create_screen_gui=function()return 2 end,destroy_gui=function()end},
         Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
-        Gui={resolution=function()return 1920,1080 end,rect=function()return 1 end,text=function()return 2 end,destroy_rect=function()end,destroy_text=function()end}}
+        Gui={resolution=function()return 1920,1080 end,rect=function(gui,pos)draw_x=math.max(draw_x,pos[1]);return 1 end,text=function()return 2 end,destroy_rect=function()end,destroy_text=function()end}}
     local saved_pose,saved_projection,saved_scene=HUD.pose.new,HUD.projection.new,HUD.scene_test.new
     local world_draws=0;local selected_mode
     HUD.scene_test.new=function()return {draw=function(p,c,target,dt,aspect,commands)assert(target==nil and commands and #commands>0);world_draws=world_draws+1;selected_mode=c.occlusion_mode;return true end,release=function()end}end
@@ -551,6 +607,7 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     update=function()end
     local h=HUD.runtime.start(sr,backend);h.configure({mount_x=.5,anchor_mode='weapon'})
     update(1/60);assert(h.anchor_status=='weapon attachment')
+    assert(draw_x>0 and draw_x<1920,'screen geometry must stay in GUI coordinates despite a larger back buffer')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
     assert(received.x==1 and received.y==2.5 and received.z==3)
     local before=pose_reads;for i=1,10 do update(1/144)end;assert(pose_reads==before+10)
@@ -642,7 +699,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==31)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==32)
         callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
@@ -872,3 +929,4 @@ test('bundle compiles and excludes crashing diagnostic paths',function()
     assert(not source:find('G.text_extents',1,true) and not source:find('World.units',1,true))
 end)
 print(string.format('%d contract tests passed',tests))
+

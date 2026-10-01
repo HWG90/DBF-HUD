@@ -5,7 +5,7 @@ local M={}
 M.fonts={'bigblue','debug','jetbrainsmono','firacode','meslo','hack','cascadiacode','iosevka','0xproto','sourcecodepro','firamono','cascadiamono'}
 M.decorations={'none','outline','brackets','helldivers','double'}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={placement_mode='manual',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -42,6 +42,7 @@ function M.apply(config,values)
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
         elseif (k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
+        elseif k=='placement_mode' then assert(v=='manual' or v=='auto','invalid placement mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='decoration' then local found=false;for _,name in ipairs(M.decorations) do if v==name then found=true end end;assert(found,'unknown decoration')
         elseif k=='font' then local found=false;for _,name in ipairs(M.fonts) do if v==name then found=true end end;assert(found,'unknown HUD font')
@@ -1814,6 +1815,31 @@ function M.read(backend,raw)
     if ok then return value,'game first-person state' end
     return nil,tostring(value)
 end
+-- Observed active shoulder state, read through the native character flag owner.
+function M.read_shoulder(backend,raw)
+    local ok,value=pcall(function()
+        assert(raw and raw.binding,'no current weapon identity')
+        local r=HUD.memory.new(backend);r.reset()
+        local base=raw.binding.module_base
+        for _,s in ipairs({{0xa4604c,'4c8b15cd0c8e02'},{0xa460da,'4869c138120000'},{0xa460e1,'4a8b841088e8530048c1e82a2401'}}) do
+            local expected=s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)
+            assert(r.read(base+s[1],#expected)==expected,'unknown shoulder control binding')
+        end
+        local player=r.p(base+HUD.layouts.player)
+        assert(r.u(r.read(player+0x3a8,4),0)==raw.avatar_unit_ref,'avatar changed')
+        local manager=r.p(base+0x3326d20)
+        local index=r.map(manager+0xf8,raw.binding.avatar_id,65536)
+        assert(index and index<16,'no bounded shoulder slot')
+        local identity=r.p(manager+0x110+index*8)
+        assert(identity==raw.binding.avatar_record,'shoulder avatar identity mismatch')
+        local flag=r.read(manager+0x53e88d+index*0x1238,1):byte()
+        assert(r.p(base+0x3326d20)==manager and r.p(manager+0x110+index*8)==identity and
+            r.p(base+HUD.layouts.player)==player and r.u(r.read(player+0x3a8,4),0)==raw.avatar_unit_ref,'shoulder owner changed')
+        return math.floor(flag/4)%2==1
+    end)
+    if ok then return value,'game shoulder state' end
+    return nil,tostring(value)
+end
 return M
 
 end)()
@@ -1841,6 +1867,20 @@ function M.project(m,x,y,z,fov,aspect,near)
     local nx,ny=.5+.5*right/(depth*t*aspect),.5+.5*up/(depth*t)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
+end
+-- Screen-relative seed only; this does not establish model clearance.
+function M.auto_mount(camera,p,fov,aspect,near)
+    local dx,dy,dz=p.x-camera[13],p.y-camera[14],p.z-camera[15]
+    local depth=dx*camera[5]+dy*camera[6]+dz*camera[7]
+    depth=math.max(near+.15,math.max(.55,depth))
+    local nx=(p.first_person or p.left_shoulder) and .42 or .58
+    local right=(nx-.5)*2*depth*math.tan(fov*.5)*aspect
+    local up=-.04*depth*math.tan(fov*.5)
+    local x=camera[13]+camera[5]*depth+camera[1]*right+camera[9]*up-p.x
+    local y=camera[14]+camera[6]*depth+camera[2]*right+camera[10]*up-p.y
+    local z=camera[15]+camera[7]*depth+camera[3]*right+camera[11]*up-p.z
+    local m=p.matrix
+    return {x=x*m[1]+y*m[2]+z*m[3],y=x*m[5]+y*m[6]+z*m[7],z=x*m[9]+y*m[10]+z*m[11]}
 end
 function M.left_shoulder(previous,lateral,first_person)
     if first_person or not lateral then return false end
@@ -1877,6 +1917,7 @@ function M.new(backend)
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        self.camera_matrix=matrix;self.camera_near=near;self.camera_aspect=aspect
         self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
         self.camera_fov=fov
         self.camera_lateral=(pose.x-matrix[13])*matrix[1]+(pose.y-matrix[14])*matrix[2]+(pose.z-matrix[15])*matrix[3]
@@ -1884,6 +1925,7 @@ function M.new(backend)
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
+        self.camera_matrix=nil;self.camera_near=nil;self.camera_aspect=nil
         self.camera_distance=nil;self.camera_fov=nil;self.camera_lateral=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
         self.status=ok and status or tostring(result)
@@ -2084,6 +2126,14 @@ local function blend(a,b,t)
     local q={};local n=0;for i=1,4 do q[i]=a[i]*u+b[i]*sign*v;n=n+q[i]^2 end
     n=math.sqrt(n);for i=1,4 do q[i]=q[i]/n end;return q
 end
+-- Preserve forward direction while aligning the panel's up axis with world up.
+function M.upright(m)
+    local fx,fy,fz=m[5],m[6],m[7]
+    local n=math.sqrt(fx*fx+fy*fy)
+    if n<.05 then return m end -- Near vertical aim has no stable horizontal right.
+    local rx,ry=fy/n,-fx/n
+    return {rx,ry,0,0,fx,fy,fz,0,ry*fz,-rx*fz,rx*fy-ry*fx,0,m[13],m[14],m[15],1}
+end
 function M.step(s,m,x,y,z,key,dt,c)
     dt=type(dt)=='number' and dt==dt and dt>=0 and dt or 1/60
     local q=quaternion(m)
@@ -2146,7 +2196,8 @@ function M.new(sr,log,direct)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
-        m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(p.id)..':'..tostring(p.candidate),dt,c)
+        if c.placement_mode=='auto' and (p.left_shoulder or p.first_person) then m=HUD.pose_motion.upright(m) end
+        m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(c.placement_mode)..':'..tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]
         if first then log('WORLD_GUI matrix begin') end
         local pose=sr.Matrix4x4.from_axes(sr.Vector3(m[1],m[2],m[3]),
@@ -2457,6 +2508,7 @@ HUD.scene_test=(function()
 -- Experimental scene-mesh carrier; uses only engine-owned handles.
 local M={}
 function M.mount(p,c)
+    if c.placement_mode=='auto' and p.auto_mount then return p.auto_mount.x,p.auto_mount.y,p.auto_mount.z end
     if p.first_person then return c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+.2 end
     if p.left_shoulder then return c.left_mount_x,c.left_mount_y,c.left_mount_z+.2 end
     return c.mount_x,c.mount_y,c.mount_z+.2
@@ -2483,7 +2535,8 @@ function M.new(sr,log,side)
                 ]]
                 do
                     if not commands then overlay.release();depth_overlay.release();return end
-                    local f=commands[1];local scale=240*(c.scale or 1)/f.w;local centered={}
+                    local f=commands[1];local scale=240*(c.scale or 1)/f.w
+                    if c.placement_mode=='auto' and p.first_person then scale=scale*.5 end;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
@@ -2659,7 +2712,7 @@ HUD.menu=(function()
 local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
-    local placement={left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
+    local placement={placement_mode=true,left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
@@ -2684,6 +2737,7 @@ function M.new(hud)
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('always_show_3d',hud.config.occlusion_mode=='gui')
+        set('placement_mode',hud.config.placement_mode=='auto' and 2 or 1)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
@@ -2714,6 +2768,10 @@ function M.new(hud)
             add('display_mode',{type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
+            end)
+            add('placement_mode',{type='choice',label='3D placement mode',choices={'Manual','Auto (experimental)'},default=hud.config.placement_mode=='auto' and 2 or 1,
+                description='Auto targets a central screen position. Model-clearance detection is not yet available.'},function(v)
+                hud.configure({placement_mode=v==2 and 'auto' or 'manual'});hud.save_tuning()
             end)
             add('always_show_3d',{type='toggle',label='Always Show HUD (3D)',default=hud.config.occlusion_mode=='gui',
                 description='On: draw through characters and scenery. Off: scene geometry hides the 3D HUD.'},function(v)
@@ -2938,11 +2996,8 @@ function M.start(sr,backend,options)
         self.weapon_pose=latest_raw and pose.poll(latest_raw) or nil
         self.pose_status=latest_raw and pose.status or 'no weapon'
         local w,h=sr.Gui.resolution()
-        -- Screen GUIs may render at output size while Gui.resolution reports render scale.
-        if sr.Application and type(sr.Application.back_buffer_size)=='function' then
-            local ok,bw,bh=pcall(sr.Application.back_buffer_size)
-            if ok and type(bw)=='number' and type(bh)=='number' and bw>=320 and bh>=240 and bw<=32768 and bh<=32768 then w,h=bw,bh end
-        end
+        -- Screen GUI coordinates use Gui.resolution(), not the output back buffer.
+        -- Upscaling can make the latter larger and displace the whole hybrid panel.
         if type(w)~='number' or type(h)~='number' or w<=0 or h<=0 then view.clear();return end
         if w~=width or h~=height then motion.ready=false;attached.ready=false;width,height=w,h end
         if model and not provider and self.clock>=manual_until then
@@ -2964,10 +3019,41 @@ function M.start(sr,backend,options)
         if native_first~=nil then self.first_person=native_first
         else self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
         self.camera_mode_status=mode_status
-        self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,self.first_person)
+        local native_left,shoulder_status=HUD.camera_mode.read_shoulder(backend,latest_raw)
+        if self.first_person then self.left_shoulder=false
+        elseif native_left~=nil then self.left_shoulder=native_left
+        else self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,false) end
+        self.shoulder_mode_status=shoulder_status
         if self.weapon_pose then
             self.weapon_pose.first_person=self.first_person
             self.weapon_pose.left_shoulder=self.left_shoulder
+            self.weapon_pose.auto_mount=nil
+            if self.config.placement_mode=='auto' then
+                local equip=tostring(self.weapon_pose.id)..':'..tostring(self.weapon_pose.candidate)..':'..tostring(latest_raw.avatar_unit_ref)
+                if self.auto_equip~=equip then self.auto_equip=equip;self.auto_mounts={};self.auto_view=nil end
+                local view=self.first_person and 'first' or (self.left_shoulder and 'left' or 'right')
+                if self.auto_view~=view then self.auto_view=view;self.auto_sample_after=self.clock+.4 end
+                local mount=self.auto_mounts[view]
+                if not mount and projection.camera_matrix and self.clock>=self.auto_sample_after then
+                    mount=HUD.projection.auto_mount(projection.camera_matrix,self.weapon_pose,
+                        projection.camera_fov,projection.camera_aspect,projection.camera_near)
+                    -- Keep the seed close to the gun; no model-clearance claim yet.
+                    mount.x=math.max(-.8,math.min(.8,mount.x))
+                    mount.y=math.max(-.15,math.min(.4,mount.y))
+                    mount.z=math.max(-.2,math.min(.4,mount.z))
+                    local side=(self.first_person or self.left_shoulder) and -1 or 1
+                    mount.x=side*math.max(.13,math.min(.18,math.abs(mount.x)+.05))
+                    if self.left_shoulder and not self.first_person then mount.x=mount.x-.40 end
+                    mount.y=math.max(-.05,math.min(.10,mount.y*.4))
+                    mount.z=math.max(.03,math.min(.10,mount.z*.4))
+                    if self.left_shoulder and not self.first_person then mount.y=mount.y-.15;mount.z=mount.z+.08 end
+                    if self.first_person then mount.x=-.12;mount.y=.35;mount.z=.22 end
+                    self.auto_mounts[view]=mount
+                end
+                self.weapon_pose.auto_mount=mount
+            else
+                self.auto_equip=nil;self.auto_mounts=nil
+            end
         end
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))

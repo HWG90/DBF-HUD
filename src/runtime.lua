@@ -185,11 +185,8 @@ function M.start(sr,backend,options)
         self.weapon_pose=latest_raw and pose.poll(latest_raw) or nil
         self.pose_status=latest_raw and pose.status or 'no weapon'
         local w,h=sr.Gui.resolution()
-        -- Screen GUIs may render at output size while Gui.resolution reports render scale.
-        if sr.Application and type(sr.Application.back_buffer_size)=='function' then
-            local ok,bw,bh=pcall(sr.Application.back_buffer_size)
-            if ok and type(bw)=='number' and type(bh)=='number' and bw>=320 and bh>=240 and bw<=32768 and bh<=32768 then w,h=bw,bh end
-        end
+        -- Screen GUI coordinates use Gui.resolution(), not the output back buffer.
+        -- Upscaling can make the latter larger and displace the whole hybrid panel.
         if type(w)~='number' or type(h)~='number' or w<=0 or h<=0 then view.clear();return end
         if w~=width or h~=height then motion.ready=false;attached.ready=false;width,height=w,h end
         if model and not provider and self.clock>=manual_until then
@@ -211,10 +208,41 @@ function M.start(sr,backend,options)
         if native_first~=nil then self.first_person=native_first
         else self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
         self.camera_mode_status=mode_status
-        self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,self.first_person)
+        local native_left,shoulder_status=HUD.camera_mode.read_shoulder(backend,latest_raw)
+        if self.first_person then self.left_shoulder=false
+        elseif native_left~=nil then self.left_shoulder=native_left
+        else self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,false) end
+        self.shoulder_mode_status=shoulder_status
         if self.weapon_pose then
             self.weapon_pose.first_person=self.first_person
             self.weapon_pose.left_shoulder=self.left_shoulder
+            self.weapon_pose.auto_mount=nil
+            if self.config.placement_mode=='auto' then
+                local equip=tostring(self.weapon_pose.id)..':'..tostring(self.weapon_pose.candidate)..':'..tostring(latest_raw.avatar_unit_ref)
+                if self.auto_equip~=equip then self.auto_equip=equip;self.auto_mounts={};self.auto_view=nil end
+                local view=self.first_person and 'first' or (self.left_shoulder and 'left' or 'right')
+                if self.auto_view~=view then self.auto_view=view;self.auto_sample_after=self.clock+.4 end
+                local mount=self.auto_mounts[view]
+                if not mount and projection.camera_matrix and self.clock>=self.auto_sample_after then
+                    mount=HUD.projection.auto_mount(projection.camera_matrix,self.weapon_pose,
+                        projection.camera_fov,projection.camera_aspect,projection.camera_near)
+                    -- Keep the seed close to the gun; no model-clearance claim yet.
+                    mount.x=math.max(-.8,math.min(.8,mount.x))
+                    mount.y=math.max(-.15,math.min(.4,mount.y))
+                    mount.z=math.max(-.2,math.min(.4,mount.z))
+                    local side=(self.first_person or self.left_shoulder) and -1 or 1
+                    mount.x=side*math.max(.13,math.min(.18,math.abs(mount.x)+.05))
+                    if self.left_shoulder and not self.first_person then mount.x=mount.x-.40 end
+                    mount.y=math.max(-.05,math.min(.10,mount.y*.4))
+                    mount.z=math.max(.03,math.min(.10,mount.z*.4))
+                    if self.left_shoulder and not self.first_person then mount.y=mount.y-.15;mount.z=mount.z+.08 end
+                    if self.first_person then mount.x=-.12;mount.y=.35;mount.z=.22 end
+                    self.auto_mounts[view]=mount
+                end
+                self.weapon_pose.auto_mount=mount
+            else
+                self.auto_equip=nil;self.auto_mounts=nil
+            end
         end
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))

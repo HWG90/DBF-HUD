@@ -2,7 +2,7 @@
 local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
-    local placement={left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
+    local placement={placement_mode=true,left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
@@ -27,6 +27,7 @@ function M.new(hud)
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('always_show_3d',hud.config.occlusion_mode=='gui')
+        set('placement_mode',hud.config.placement_mode=='auto' and 2 or 1)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
@@ -57,6 +58,10 @@ function M.new(hud)
             add('display_mode',{type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
+            end)
+            add('placement_mode',{type='choice',label='3D placement mode',choices={'Manual','Auto (experimental)'},default=hud.config.placement_mode=='auto' and 2 or 1,
+                description='Auto targets a central screen position. Model-clearance detection is not yet available.'},function(v)
+                hud.configure({placement_mode=v==2 and 'auto' or 'manual'});hud.save_tuning()
             end)
             add('always_show_3d',{type='toggle',label='Always Show HUD (3D)',default=hud.config.occlusion_mode=='gui',
                 description='On: draw through characters and scenery. Off: scene geometry hides the 3D HUD.'},function(v)

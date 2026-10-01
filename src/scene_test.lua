@@ -1,6 +1,7 @@
 -- Experimental scene-mesh carrier; uses only engine-owned handles.
 local M={}
 function M.mount(p,c)
+    if c.placement_mode=='auto' and p.auto_mount then return p.auto_mount.x,p.auto_mount.y,p.auto_mount.z end
     if p.first_person then return c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+.2 end
     if p.left_shoulder then return c.left_mount_x,c.left_mount_y,c.left_mount_z+.2 end
     return c.mount_x,c.mount_y,c.mount_z+.2
@@ -27,7 +28,8 @@ function M.new(sr,log,side)
                 ]]
                 do
                     if not commands then overlay.release();depth_overlay.release();return end
-                    local f=commands[1];local scale=240*(c.scale or 1)/f.w;local centered={}
+                    local f=commands[1];local scale=240*(c.scale or 1)/f.w
+                    if c.placement_mode=='auto' and p.first_person then scale=scale*.5 end;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale

@@ -21,6 +21,14 @@ local function blend(a,b,t)
     local q={};local n=0;for i=1,4 do q[i]=a[i]*u+b[i]*sign*v;n=n+q[i]^2 end
     n=math.sqrt(n);for i=1,4 do q[i]=q[i]/n end;return q
 end
+-- Preserve forward direction while aligning the panel's up axis with world up.
+function M.upright(m)
+    local fx,fy,fz=m[5],m[6],m[7]
+    local n=math.sqrt(fx*fx+fy*fy)
+    if n<.05 then return m end -- Near vertical aim has no stable horizontal right.
+    local rx,ry=fy/n,-fx/n
+    return {rx,ry,0,0,fx,fy,fz,0,ry*fz,-rx*fz,rx*fy-ry*fx,0,m[13],m[14],m[15],1}
+end
 function M.step(s,m,x,y,z,key,dt,c)
     dt=type(dt)=='number' and dt==dt and dt>=0 and dt or 1/60
     local q=quaternion(m)
