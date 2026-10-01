@@ -9341,7 +9341,11 @@ function M.new(hud)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
-        set('font',font_index())
+        local selected=font_index()
+        for page=1,math.ceil(#font_choices/16) do
+            local first=(page-1)*16+1
+            set(page==1 and 'font' or ('font_page_'..page),selected>=first and selected<first+16 and selected-first+1 or 1)
+        end
     end
     function self.poll()
         if attempted or retired then return end
@@ -9385,9 +9389,19 @@ function M.new(hud)
             add('decoration',{type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame'},default=decoration_index()},function(v)
                 hud.configure({decoration=assert(HUD.config.decorations[v])});hud.save_tuning()
             end)
-            add('font',{type='choice',label='HUD font',choices=font_choices,default=font_index()},function(v)
-                hud.configure({font=assert(HUD.config.fonts[v])});hud.save_tuning()
-            end)
+            -- ModOptionsMenu accepts at most sixteen names per choice.
+            for page=1,math.ceil(#font_choices/16) do
+                local first=(page-1)*16+1
+                local choices={}
+                for i=first,math.min(first+15,#font_choices) do choices[#choices+1]=font_choices[i] end
+                local key=page==1 and 'font' or ('font_page_'..page)
+                local selected=font_index()
+                add(key,{type='choice',label='HUD font group '..page,choices=choices,
+                    default=selected>=first and selected<first+16 and selected-first+1 or 1,
+                    description='Choose a font from any group. Only the most recently chosen font is active.'},function(v)
+                    hud.configure({font=assert(HUD.config.fonts[first+v-1])});hud.save_tuning()
+                end)
+            end
             add('always_visible',{type='toggle',label='Always show HUD',default=hud.config.always_visible,description='Keep the HUD visible when the reticle is hidden or aim is released. Aiming still controls occlusion.'},function(v)
                 hud.configure({always_visible=v});hud.save_tuning()
             end)
