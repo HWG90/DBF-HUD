@@ -87,3 +87,17 @@ User confirmed the diagnostic marker follows the weapon. The HUD now supports a 
 Adds a startup-only check of the exposed World, Gui and Matrix4x4 function types. It does not invoke world GUI creation, movement or matrix constructors. Existing hybrid rendering remains active. Engine documentation supports world-space GUI primitives and transform-based movement, but game binding availability and depth behavior remain unverified.
 
 Reference: https://help.autodesk.com/cloudhelp/ENU/Stingray-Help/lua_ref/obj_stingray_Gui.html
+
+## Current optic-anchor research
+Read-only research captures (weapon_nodes_rifle1/2, pistol1/2, support1/2) retain per-pair entity identity. Rifle: 43 nodes; handgun: 33; regular machine gun: 46. Root-local node 11 translations are respectively (0, .2449, .0352), (0, .1209, .0246), and (-.0112, .2986, .056) metres. The machine gun repeats the same location at nodes 12/13; this does not identify node 11 as an optic, muzzle, or common semantic anchor. No non-root anchor is used in production.
+The +0x3B0 Unit API candidate searches a resource hash table, but the observed table at accessor +0x178 -> +0x28 contains zero entries. Therefore this slot is NOT accepted as the scene-node-name lookup; its API identity remains unresolved. Named-node Lua functions are exposed, but their handle/argument path has not been invoked. Research snapshots capture bounded matrices and headers after normal root validation, then recheck ownership. Root offsets are recorded separately in AUTO-PLACEMENT.md.
+
+### Named sight anchor comparison
+The read-only native Unit lookup at API slot +0x6D8 searches uint32 hashes at scene+0x40 (unit object+0xA0), bounded by scene+0x10. The scene accessor returns object+0x60. Parent records are at scene+0x38. No native function was invoked.
+
+The upper 32 bits of the existing Stingray hash64 helper for `sight` equal 0x527C9C73. This hash occurs in all three labeled captures:
+- Rifle: index 18, root-local position approximately (0, -0.1000, 0.2101) metres.
+- Pistol: index 15, root-local position approximately (0, -0.1000, 0.1049) metres.
+- Regular machine gun: index 21, root-local position approximately (0, -0.0558, 0.1871) metres.
+
+This establishes a shared named-node candidate, not a visually verified optic mount. Its differing height is consistent with why the shared rifle root offset places the handgun HUD too high. Production placement remains unchanged pending integration and visual validation. Capture evidence is in the outer work folder as camera-state-weapon_nodes_hash_{rifle,pistol,support}.txt.

@@ -60,6 +60,13 @@ function M.native()
         local values=chunk();assert(type(values)=='table','tuning file must return a table')
         return values
     end
+    function backend.read_weapon_offsets()
+        local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-weapon-offsets.lua')
+        local f=io.open(path,'r');if not f then return nil end
+        local body=f:read(65537);f:close();assert(#body<=65536,'weapon offsets file too large')
+        local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
+        return chunk()
+    end
     function backend.write_tuning(body)
         local path=tuning_path();local tmp=path..'.tmp'
         local f=assert(io.open(tmp,'w'));local ok,err=f:write(body);local closed,cerr=f:close()

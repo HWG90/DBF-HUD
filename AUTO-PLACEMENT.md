@@ -1,10 +1,33 @@
-# Experimental root placement checkpoint
+# Automatic 3D placement
 
-Manual remains default and retains saved offsets. Auto caches a weapon-local mount per equipped entity/candidate/avatar and view, after a 0.4 second settling interval. It retains weapon direction; left shoulder and first person remove roll. Model clearance and general backpack detection are not implemented.
+Auto is the active 3D placement path. The public menu no longer exposes Manual or its nine position sliders. First-person side, upright orientation and smoothing remain selectable.
 
-Current fallback (metres relative to weapon root):
-- Right shoulder: lateral +0.13 to +0.18; forward -0.05 to +0.10; up +0.03 to +0.10.
-- Left shoulder: lateral -0.53 to -0.58; forward -0.20 to -0.05; up +0.11 to +0.18.
-- First person: lateral -0.12; forward +0.35; up +0.22; panel size multiplier 0.5.
+## Responsibilities
 
-The first two ranges come from the projected seed with bounded clearance. First person currently overrides the seed with shared rifle-tuned constants, which float too high on handguns. User visually confirmed right and left positions and upright left rotation; rifle first-person position improved and was confirmed readable. Keep these as a fallback while researching optic/sight scene nodes. No optic or barrel node has been identified yet.
+- `pose.lua`: bounded, identity-checked weapon and character transform reads; named sight and right-shoulder anchors.
+- `camera_mode.lua`: first-person, shoulder and observed aiming state reads.
+- `placement.lua`: weapon/view mount calculation and per-weapon corrections.
+- `weapon_offsets.lua`: external profile validation and fallback.
+- `world_probe.lua`: orientation, smoothing and direct WorldGUI drawing.
+- `runtime.lua`: coordinates those modules and chooses visibility.
+
+Sight mounts update from the current node each frame. They have no settling delay or screen-seed cache. Only weapons without a usable sight retain the earlier root-based fallback, including its 0.4 second settling interval and per-equip/view cache.
+
+## Current mounts
+
+Offsets in metres relative to the named sight:
+- Right shoulder: (+0.16, +0.10, +0.04).
+- First person: (+/-0.12, +0.45, +0.01), with half-size rendering. Left is the default side.
+- Left shoulder fallback: (+0.16, -0.25, +0.12); the sampled pistol adds (+0.05, -0.08, 0).
+
+For shoulder-specific placement, left-shoulder aim uses the character's named right shoulder. Its root-relative position is sampled once per avatar to avoid bone animation. Clearance is camera-relative (+0.06 right, -0.20 forward, +0.12 up), and orientation faces the camera.
+
+The default visibility mode is When aiming. It draws through geometry during observed aiming and restores scene depth on release. In this mode both third-person shoulders use the standard sight mount, without shoulder relocation. First person remains separate. Validation failure keeps occlusion enabled.
+
+## Editable profiles
+
+`DBF-HUD-weapon-offsets.lua` lives beside the game's `DBF-HUD-tuning.lua`. It is loaded when DBF-HUD starts; reload the HUD in MDL or restart after editing. Merely rewriting an identical bundled mod does not reliably trigger MDL auto-reload.
+
+Profiles use stable weapon resource identities, with separate `right`, `left`, `first_left`, and `first_right` entries. Each axis is an additional weapon-local correction in metres; absent axes and views add zero. Menu saves never overwrite this file. An empty return table disables built-in corrections. Invalid files log a rejection and use built-in defaults.
+
+The Scythe and autocannon currently have right-shoulder profiles. Automatic model-clearance queries and backpack detection remain unimplemented. The layout editor is deferred until this cleanup is verified in-game.

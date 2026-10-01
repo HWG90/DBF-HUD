@@ -33,7 +33,18 @@ return {
   if label:find('shoulder_code',1,true) then probe='shoulder_code' end
   if label:find('command_flags',1,true) then probe='command_flags' end
   if label:find('camera_preferences',1,true) then probe='camera_preferences' end
-  local ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),probe)
+  local ok,parts
+  if label:find('avatar_nodes',1,true) then
+   ok,parts=pcall(function()
+    local raw=assert(reader.poll());local b=raw.binding
+    local r=HUD.memory.new(backend);local rec=r.read(b.avatar_record,24)
+    assert(r.u(rec,8)==b.avatar_id and r.u(rec,12)==b.avatar_candidate and r.u(rec,16)==raw.avatar_unit_ref,'avatar identity changed')
+    return HUD.pose.new(backend).snapshot({id=b.avatar_id,unit_ref=raw.avatar_unit_ref,
+     binding={module_base=b.module_base,record=b.avatar_record,candidate=b.avatar_candidate}},'avatar').node_parts
+   end)
+  elseif label:find('weapon_nodes',1,true) then
+   ok,parts=pcall(function()return HUD.pose.new(backend).snapshot(reader.poll(),label:find('unit_api',1,true) and 'api' or true).node_parts end)
+  else ok,parts=pcall(HUD.camera_state.capture,backend,reader.poll(),probe) end
   if ok then
    for _,part in ipairs(parts) do
     local hex=part.data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)

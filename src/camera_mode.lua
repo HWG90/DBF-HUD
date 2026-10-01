@@ -25,7 +25,7 @@ function M.read(backend,raw)
     return nil,tostring(value)
 end
 -- Observed active shoulder state, read through the native character flag owner.
-function M.read_shoulder(backend,raw)
+function M.read_shoulder(backend,raw,aiming)
     local ok,value=pcall(function()
         assert(raw and raw.binding,'no current weapon identity')
         local r=HUD.memory.new(backend);r.reset()
@@ -42,11 +42,20 @@ function M.read_shoulder(backend,raw)
         local identity=r.p(manager+0x110+index*8)
         assert(identity==raw.binding.avatar_record,'shoulder avatar identity mismatch')
         local flag=r.read(manager+0x53e88d+index*0x1238,1):byte()
+        local aim
+        if aiming then
+            local flags=r.read(manager+0x53e880+index*0x1238,16)
+            aim=math.floor(flags:byte(11)/4)%2==1
+            assert(aim==(math.floor(flags:byte(16)/32)%2==1),'aiming flags disagree')
+            assert(r.read(manager+0x53e880+index*0x1238,16)==flags,'aiming flags changed')
+        end
         assert(r.p(base+0x3326d20)==manager and r.p(manager+0x110+index*8)==identity and
             r.p(base+HUD.layouts.player)==player and r.u(r.read(player+0x3a8,4),0)==raw.avatar_unit_ref,'shoulder owner changed')
+        if aiming then return aim end
         return math.floor(flag/4)%2==1
     end)
     if ok then return value,'game shoulder state' end
     return nil,tostring(value)
 end
+function M.read_aiming(backend,raw) return M.read_shoulder(backend,raw,true) end
 return M

@@ -5,7 +5,14 @@ local M={}
 M.fonts={'bigblue','debug','jetbrainsmono','firacode','meslo','hack','cascadiacode','iosevka','0xproto','sourcecodepro','firamono','cascadiamono'}
 M.decorations={'none','outline','brackets','helldivers','double'}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
-M.defaults={placement_mode='manual',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=-0.80,left_mount_y=0.10,left_mount_z=0.10,fp_mount_x=-0.18,fp_mount_y=0.20,fp_mount_z=-0.01,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+-- Auto clearance in weapon-local metres; independent entries for each view.
+-- Resource identity is stable across equip/respawn; never key by entity handle.
+M.weapon_clearance={
+    ['a8cffb316f0b5c5f']={ -- Autocannon: initial right-shoulder obstruction correction.
+        right={x=.12,y=-.08,z=.10},
+    },
+}
+M.defaults={show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -40,8 +47,10 @@ function M.apply(config,values)
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
+        elseif k=='fp_auto_side' then assert(v=='left' or v=='right','invalid first-person side')
         elseif k=='placement_mode' then assert(v=='manual' or v=='auto','invalid placement mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
         elseif k=='decoration' then local found=false;for _,name in ipairs(M.decorations) do if v==name then found=true end end;assert(found,'unknown decoration')
@@ -52,6 +61,8 @@ function M.apply(config,values)
     if clean.hud_occlusion~=nil and clean.occlusion_mode==nil then clean.occlusion_mode=clean.hud_occlusion and 'gui_depth' or 'gui' end
     -- Migrate retired mesh selection to the verified direct WorldGUI path.
     if clean.occlusion_mode=='mesh' then clean.occlusion_mode='gui_depth' end
+    if clean.show_3d==nil and clean.always_show_3d~=nil then clean.show_3d=clean.always_show_3d and 'always' or 'occluded' end
+    if clean.show_3d then clean.always_show_3d=clean.show_3d=='always' end
     if clean.always_show_3d~=nil then clean.occlusion_mode=clean.always_show_3d and 'gui' or 'gui_depth' end
     if clean.occlusion_mode then clean.hud_occlusion=clean.occlusion_mode~='gui';clean.always_show_3d=clean.occlusion_mode=='gui' end
     for k,v in pairs(clean) do config[k]=v end
@@ -1465,6 +1476,13 @@ function M.native()
         local values=chunk();assert(type(values)=='table','tuning file must return a table')
         return values
     end
+    function backend.read_weapon_offsets()
+        local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-weapon-offsets.lua')
+        local f=io.open(path,'r');if not f then return nil end
+        local body=f:read(65537);f:close();assert(#body<=65536,'weapon offsets file too large')
+        local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
+        return chunk()
+    end
     function backend.write_tuning(body)
         local path=tuning_path();local tmp=path..'.tmp'
         local f=assert(io.open(tmp,'w'));local ok,err=f:write(body);local closed,cerr=f:close()
@@ -1737,7 +1755,7 @@ local resolver_body=unhex('8bc325ffff3f003b8698000000720433dbeb1c8bc8488b86a0000
 function M.new(backend)
     local r=HUD.memory.new(backend)
     local self={status='not sampled',samples=0}
-    function self.snapshot(raw)
+    function self.snapshot(raw,research,anchor_hash)
         assert(raw and raw.binding,'no weapon binding')
         local b=raw.binding;r.reset()
         -- The reader must validate the game build before returning this binding.
@@ -1770,18 +1788,86 @@ function M.new(backend)
             assert(math.abs(dot)<.05,'matrix axes')
         end
         for i=13,15 do assert(math.abs(matrix[i])<1e7,'matrix position') end
+        local sight
+        -- Optional named anchor; any unavailable or changing table keeps root fallback.
+        local sight_ok,sight_value=pcall(function()
+            assert(nodes<=128,'sight node limit')
+            local hashes=r.p(object+0xa0);local data=r.read(hashes,nodes*4)
+            for n=0,nodes-1 do
+                if r.u(data,n*4)==(anchor_hash or 0x527c9c73) then
+                    local pose=r.read(address+n*64,64);local delta={}
+                    for j=1,3 do delta[j]=r.f(pose,(11+j)*4)-matrix[12+j];assert(math.abs(delta[j])<5,'sight bounds') end
+                    assert(r.p(object+0xa0)==hashes and r.read(hashes,nodes*4)==data,'sight table changed')
+                    local result={index=n}
+                    for axis,k in ipairs({1,5,9}) do
+                        local v=0;for j=1,3 do v=v+delta[j]*matrix[k+j-1] end
+                        result[({'x','y','z'})[axis]]=v
+                    end
+                    return result
+                end
+            end
+        end)
+        if sight_ok then sight=sight_value end
+        local node_parts
+        if research then
+            assert(nodes<=128,'research node limit')
+            node_parts={{name='weapon_identity',address=b.record,data=r.read(b.record,24)},{name='weapon_scene_header',address=object+0x60,data=r.read(object+0x60,128)}}
+            -- Native node lookup (+0x6d8) uses scene+0x40; parent lookup
+            -- (+0x500) uses scene+0x38. Scene accessor returns object+0x60.
+            local node_hashes=r.p(object+0xa0);local parents=r.p(object+0x98)
+            node_parts[#node_parts+1]={name='weapon_scene_node_hashes',address=node_hashes,data=r.read(node_hashes,nodes*4)}
+            node_parts[#node_parts+1]={name='weapon_scene_parents',address=parents,data=r.read(parents,nodes*4)}
+            assert(r.p(object+0xa0)==node_hashes and r.p(object+0x98)==parents and r.u(r.read(object+0x70,4),0)==nodes,'scene tables changed')
+            local scene_resource=r.p(object+0x68)
+            node_parts[#node_parts+1]={name='weapon_scene_resource',address=scene_resource,data=r.read(scene_resource,512)}
+            for first=0,nodes-1,64 do
+                local at=address+first*64
+                node_parts[#node_parts+1]={name='weapon_nodes_'..first,address=at,data=r.read(at,math.min(64,nodes-first)*64)}
+            end
+            if research~='avatar' then
+            local resource_getter=r.p(r.p(object)+0x1b0)
+            local resource_code=r.read(resource_getter,64)
+            node_parts[#node_parts+1]={name='weapon_resource_accessor',address=resource_getter,data=resource_code}
+            assert(resource_code:sub(1,8)==unhex('488b8178010000c3'),'unknown weapon resource accessor')
+            local resource=r.p(object+0x178);local names=r.p(resource+0x28)
+            local header=r.read(names,32);local count=r.u(header,0x14);local offset=r.u(header,0x18)
+            node_parts[#node_parts+1]={name='weapon_resource_header',address=resource,data=r.read(resource,256)}
+            node_parts[#node_parts+1]={name='weapon_lookup_table_header',address=names,data=header}
+            assert(count<=128 and offset<0x100000,'lookup table bounds')
+            if count>0 then node_parts[#node_parts+1]={name='weapon_lookup_hashes',address=names+offset,data=r.read(names+offset,count*4)} end
+            assert(r.p(object+0x178)==resource and r.p(resource+0x28)==names,'weapon resource changed')
+            node_parts[#node_parts+1]={name='weapon_object_header',address=object,data=r.read(object,96)}
+            if research=='api' then
+                for off=0x4f8,0x700,8 do
+                    local ok,entry=pcall(function()local fn=r.p(unit_api+off);return {name=string.format('weapon_api_%x',off),address=fn,data=r.read(fn,128)} end)
+                    if ok then node_parts[#node_parts+1]=entry end
+                end
+            end
+            local lookup=r.p(unit_api+0x3b0)
+            node_parts[#node_parts+1]={name='weapon_node_lookup_code',address=lookup,data=r.read(lookup,512)}
+            end
+        end
         -- Revalidate both ends after the read; no persistent entity/matrix pointer cache.
         local record=r.read(b.record,24)
         assert(r.u(record,8)==raw.id and r.u(record,12)==b.candidate and r.u(record,16)==raw.unit_ref,'weapon changed')
         assert(r.read(generations+index,1):byte()==generation and r.p(array+index*8)==object,'unit recycled during read')
         assert(r.u(r.read(object+8,4),0)==b.candidate and r.p(object+0x88)==address,'pose owner changed')
         return {id=raw.id,resource_hex=raw.resource_hex,candidate=b.candidate,node_count=nodes,
-            matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
+            node_parts=node_parts,sight=sight,matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
     end
     function self.poll(raw)
         local ok,value=pcall(self.snapshot,raw)
         if not ok then self.status=tostring(value);return nil end
         self.status='verified root pose';self.samples=self.samples+1;return value
+    end
+    function self.shoulder(raw)
+        local ok,value=pcall(function()
+            local b=assert(raw.binding)
+            return self.snapshot({id=b.avatar_id,unit_ref=raw.avatar_unit_ref,
+                binding={module_base=b.module_base,record=b.avatar_record,candidate=b.avatar_candidate}},nil,0x1620b2ce)
+        end)
+        self.shoulder_status=ok and (value.sight and 'right shoulder resolved' or 'right shoulder name absent') or tostring(value)
+        if ok and value.sight then return value end
     end
     return self
 end
@@ -1816,7 +1902,7 @@ function M.read(backend,raw)
     return nil,tostring(value)
 end
 -- Observed active shoulder state, read through the native character flag owner.
-function M.read_shoulder(backend,raw)
+function M.read_shoulder(backend,raw,aiming)
     local ok,value=pcall(function()
         assert(raw and raw.binding,'no current weapon identity')
         local r=HUD.memory.new(backend);r.reset()
@@ -1833,13 +1919,22 @@ function M.read_shoulder(backend,raw)
         local identity=r.p(manager+0x110+index*8)
         assert(identity==raw.binding.avatar_record,'shoulder avatar identity mismatch')
         local flag=r.read(manager+0x53e88d+index*0x1238,1):byte()
+        local aim
+        if aiming then
+            local flags=r.read(manager+0x53e880+index*0x1238,16)
+            aim=math.floor(flags:byte(11)/4)%2==1
+            assert(aim==(math.floor(flags:byte(16)/32)%2==1),'aiming flags disagree')
+            assert(r.read(manager+0x53e880+index*0x1238,16)==flags,'aiming flags changed')
+        end
         assert(r.p(base+0x3326d20)==manager and r.p(manager+0x110+index*8)==identity and
             r.p(base+HUD.layouts.player)==player and r.u(r.read(player+0x3a8,4),0)==raw.avatar_unit_ref,'shoulder owner changed')
+        if aiming then return aim end
         return math.floor(flag/4)%2==1
     end)
     if ok then return value,'game shoulder state' end
     return nil,tostring(value)
 end
+function M.read_aiming(backend,raw) return M.read_shoulder(backend,raw,true) end
 return M
 
 end)()
@@ -2197,6 +2292,12 @@ function M.new(sr,log,direct)
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
         if c.placement_mode=='auto' and (p.left_shoulder or p.first_person) then m=HUD.pose_motion.upright(m) end
+        if c.placement_mode=='auto' and p.left_shoulder and p.camera_facing then
+            local camera=p.camera_facing
+            -- WorldGUI's visible plane uses right/up (X/Z), with forward Y.
+            m=camera
+        end
+        if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
         m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(c.placement_mode)..':'..tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]
         if first then log('WORLD_GUI matrix begin') end
@@ -2707,12 +2808,128 @@ end
 return M
 
 end)()
+HUD.placement=(function()
+-- Weapon/view placement. Native readers remain in pose and camera_mode.
+-- Sight anchors update live; only the legacy root fallback caches a screen seed.
+local M={}
+function M.update(self,pose,projection,latest_raw,log)
+    if self.weapon_pose then
+        self.weapon_pose.first_person=self.first_person
+        self.weapon_pose.left_shoulder=self.left_shoulder
+        self.weapon_pose.auto_mount=nil
+        self.weapon_pose.camera_facing=nil
+        if self.config.placement_mode=='auto' then
+            local equip=tostring(self.weapon_pose.id)..':'..tostring(self.weapon_pose.candidate)..':'..tostring(latest_raw.avatar_unit_ref)
+            if self.auto_equip~=equip then self.auto_equip=equip;self.auto_mounts={};self.auto_view=nil end
+            local view=self.first_person and 'first' or (self.left_shoulder and 'left' or 'right')
+            if self.auto_view~=view then self.auto_view=view;self.auto_sample_after=self.clock+.4 end
+            local mount=self.auto_mounts[view]
+            local sight=self.weapon_pose.sight
+            if sight then
+                -- Named anchors need neither camera settling nor cached screen seeds.
+                if self.first_person then
+                    mount={x=sight.x+(self.config.fp_auto_side=='right' and .12 or -.12),y=sight.y+.45,z=sight.z+.01}
+                elseif self.left_shoulder then
+                    mount={x=sight.x+.16,y=sight.y-.25,z=sight.z+.12}
+                    if self.weapon_pose.resource_hex=='05e4e5c2db6e44a2' then
+                        mount.x=mount.x+.05;mount.y=mount.y-.08
+                    end
+                    local player=pose.shoulder(latest_raw)
+                    if self.config.debug_logging and self.clock>=(self.next_shoulder_log or 0) then
+                        log('SHOULDER_ANCHOR '..tostring(pose.shoulder_status));self.next_shoulder_log=self.clock+1
+                    end
+                    if player then
+                        local shoulder_owner=tostring(player.id)..':'..tostring(player.candidate)
+                        if self.shoulder_owner~=shoulder_owner then
+                            self.shoulder_owner=shoulder_owner;self.shoulder_rest=player.sight
+                        end
+                        -- Character-relative anchor is sampled once per avatar;
+                        -- bone animation no longer drives the mounted position.
+                        local a=self.shoulder_rest;local pm=player.matrix;local wm=self.weapon_pose.matrix
+                        local delta={}
+                        for j=1,3 do
+                            delta[j]=pm[12+j]+pm[j]*a.x+pm[4+j]*a.y+pm[8+j]*a.z-wm[12+j]
+                            local basis=projection.camera_matrix or pm
+                            delta[j]=delta[j]+basis[j]*.06-basis[4+j]*.20+basis[8+j]*.12
+                        end
+                        for axis,k in ipairs({1,5,9}) do
+                            local v=0;for j=1,3 do v=v+delta[j]*wm[k+j-1] end
+                            mount[({'x','y','z'})[axis]]=v
+                        end
+                        self.weapon_pose.camera_facing=projection.camera_matrix
+                    end
+                else
+                    mount={x=sight.x+.16,y=sight.y+.10,z=sight.z+.04}
+                end
+            elseif not mount and projection.camera_matrix and self.clock>=self.auto_sample_after then
+                mount=HUD.projection.auto_mount(projection.camera_matrix,self.weapon_pose,
+                    projection.camera_fov,projection.camera_aspect,projection.camera_near)
+                -- Keep the seed close to the gun; no model-clearance claim yet.
+                mount.x=math.max(-.8,math.min(.8,mount.x))
+                mount.y=math.max(-.15,math.min(.4,mount.y))
+                mount.z=math.max(-.2,math.min(.4,mount.z))
+                local side=(self.first_person or self.left_shoulder) and -1 or 1
+                mount.x=side*math.max(.13,math.min(.18,math.abs(mount.x)+.05))
+                if self.left_shoulder and not self.first_person then mount.x=mount.x-.40 end
+                mount.y=math.max(-.05,math.min(.10,mount.y*.4))
+                mount.z=math.max(.03,math.min(.10,mount.z*.4))
+                if self.left_shoulder and not self.first_person then mount.y=mount.y-.15;mount.z=mount.z+.08 end
+                if self.first_person then mount.x=-.12;mount.y=.35;mount.z=.22 end
+                self.auto_mounts[view]=mount
+            end
+            local profile=self.weapon_clearance[self.weapon_pose.resource_hex]
+            local profile_view=self.first_person and ('first_'..self.config.fp_auto_side) or view
+            local correction=profile and profile[profile_view]
+            if mount and correction then
+                mount={x=mount.x+(correction.x or 0),y=mount.y+(correction.y or 0),z=mount.z+(correction.z or 0)}
+            end
+            self.weapon_pose.auto_mount=mount
+        else
+            self.auto_equip=nil;self.auto_mounts=nil
+        end
+    end
+end
+return M
+
+end)()
+HUD.weapon_offsets=(function()
+-- External weapon profile loading and validation, independent of rendering.
+local M={}
+function M.load(backend,log)
+    local profiles_loaded
+    profiles_loaded=HUD.config.weapon_clearance
+    if backend.read_weapon_offsets then
+        local ok,profiles=pcall(function()
+            local values=backend.read_weapon_offsets();if not values then return nil end
+            assert(type(values)=='table','weapon offsets must return a table')
+            for resource,views in pairs(values) do
+                assert(type(resource)=='string' and #resource==16 and resource:match('^%x+$'),'invalid weapon resource')
+                assert(type(views)=='table','weapon views must be a table')
+                for view,offset in pairs(views) do
+                    assert(view=='right' or view=='left' or view=='first_left' or view=='first_right','invalid weapon view')
+                    assert(type(offset)=='table','weapon offset must be a table')
+                    for axis,value in pairs(offset) do
+                        assert(axis=='x' or axis=='y' or axis=='z','invalid offset axis')
+                        assert(type(value)=='number' and value==value and math.abs(value)<=2,'offset must be within two metres')
+                    end
+                end
+            end
+            return values
+        end)
+        if ok and profiles then profiles_loaded=profiles end
+        if not ok then log('WEAPON_OFFSETS rejected: '..tostring(profiles)) end
+    end
+    return profiles_loaded
+end
+return M
+
+end)()
 HUD.menu=(function()
 -- ModOptionsMenu API 1; only main settings and placement are exposed.
 local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
-    local placement={placement_mode=true,left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
+    local placement={keep_hud_upright=true,fp_auto_side=true,placement_mode=true,left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
@@ -2720,9 +2937,6 @@ function M.new(hud)
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
-        {'mount_x','3D right shoulder: left / right',-2,2,0.01},{'mount_y','3D right shoulder: forward / back',-2,2,0.01},{'mount_z','3D right shoulder: up / down',-2,2,0.01},
-        {'left_mount_x','3D left shoulder: left / right',-2,2,0.01},{'left_mount_y','3D left shoulder: forward / back',-2,2,0.01},{'left_mount_z','3D left shoulder: up / down',-2,2,0.01},
-        {'fp_mount_x','3D first person: left / right',-2,2,0.01},{'fp_mount_y','3D first person: forward / back',-2,2,0.01},{'fp_mount_z','3D first person: up / down',-2,2,0.01},
         {'world_position_smooth','3D position damping',0,0.5,0.005},{'world_rotation_smooth','3D rotation damping',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
         {'weapon_offset_x','2D hybrid: horizontal offset',-1920,1920,1},{'weapon_offset_y','2D hybrid: vertical offset',-1080,1080,1},
         {'weapon_settle','2D hybrid: settling time',0.04,1,0.01},{'weapon_lag','2D hybrid: maximum lag',0,160,1},
@@ -2736,8 +2950,9 @@ function M.new(hud)
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
-        set('always_show_3d',hud.config.occlusion_mode=='gui')
-        set('placement_mode',hud.config.placement_mode=='auto' and 2 or 1)
+        set('show_3d',hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1))
+        set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
+        set('keep_hud_upright',hud.config.keep_hud_upright)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
@@ -2753,6 +2968,7 @@ function M.new(hud)
         for id,route in pairs(routes) do
             if not id:find('dbf_hud_v4.',1,true) and not id:find('dbf_hud_placement.',1,true) then route.callback=nil;route.owner=nil end
         end
+        if routes['dbf_hud_v4.always_show_3d'] then routes['dbf_hud_v4.always_show_3d'].callback=nil end
         local function add(k,spec,callback)
             spec.mod=placement[k] and 'DBF-HUD Placement' or 'DBF-HUD'
             local id=option_id(k)
@@ -2769,13 +2985,15 @@ function M.new(hud)
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
             end)
-            add('placement_mode',{type='choice',label='3D placement mode',choices={'Manual','Auto (experimental)'},default=hud.config.placement_mode=='auto' and 2 or 1,
-                description='Auto targets a central screen position. Model-clearance detection is not yet available.'},function(v)
-                hud.configure({placement_mode=v==2 and 'auto' or 'manual'});hud.save_tuning()
+            add('keep_hud_upright',{type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,description='Remove sideways roll in every 3D view while preserving facing direction.'},function(v)
+                hud.configure({keep_hud_upright=v});hud.save_tuning()
             end)
-            add('always_show_3d',{type='toggle',label='Always Show HUD (3D)',default=hud.config.occlusion_mode=='gui',
+            add('fp_auto_side',{type='choice',label='Auto first-person HUD side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1},function(v)
+                hud.configure({fp_auto_side=v==2 and 'right' or 'left'});hud.save_tuning()
+            end)
+            add('show_3d',{type='choice',label='Always Show HUD (3D)',choices={'Off (occluded)','Always','When aiming'},default=hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1),
                 description='On: draw through characters and scenery. Off: scene geometry hides the 3D HUD.'},function(v)
-                hud.configure({always_show_3d=v});hud.save_tuning()
+                hud.configure({show_3d=v==2 and 'always' or (v==3 and 'aiming' or 'occluded')});hud.save_tuning()
             end)
             for _,s in ipairs(sliders) do
                 local k=s[1];add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)
@@ -2927,7 +3145,7 @@ function M.start(sr,backend,options)
     local menu
     function self.configure(values)
         local was_debug=self.config.debug_logging
-        HUD.config.apply(self.config,values)
+        HUD.config.apply(self.config,values);self.config.placement_mode='auto'
         if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
     end
@@ -2946,6 +3164,7 @@ function M.start(sr,backend,options)
         log('TUNING '..self.tuning_status);return ok and result
     end
     self.reload_tuning()
+    self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
     menu=HUD.menu.new(self)
     local next_weapon_screen_lookup=0;local last_weapon_screen_available
     function self.frame(dt)
@@ -3024,37 +3243,10 @@ function M.start(sr,backend,options)
         elseif native_left~=nil then self.left_shoulder=native_left
         else self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,false) end
         self.shoulder_mode_status=shoulder_status
-        if self.weapon_pose then
-            self.weapon_pose.first_person=self.first_person
-            self.weapon_pose.left_shoulder=self.left_shoulder
-            self.weapon_pose.auto_mount=nil
-            if self.config.placement_mode=='auto' then
-                local equip=tostring(self.weapon_pose.id)..':'..tostring(self.weapon_pose.candidate)..':'..tostring(latest_raw.avatar_unit_ref)
-                if self.auto_equip~=equip then self.auto_equip=equip;self.auto_mounts={};self.auto_view=nil end
-                local view=self.first_person and 'first' or (self.left_shoulder and 'left' or 'right')
-                if self.auto_view~=view then self.auto_view=view;self.auto_sample_after=self.clock+.4 end
-                local mount=self.auto_mounts[view]
-                if not mount and projection.camera_matrix and self.clock>=self.auto_sample_after then
-                    mount=HUD.projection.auto_mount(projection.camera_matrix,self.weapon_pose,
-                        projection.camera_fov,projection.camera_aspect,projection.camera_near)
-                    -- Keep the seed close to the gun; no model-clearance claim yet.
-                    mount.x=math.max(-.8,math.min(.8,mount.x))
-                    mount.y=math.max(-.15,math.min(.4,mount.y))
-                    mount.z=math.max(-.2,math.min(.4,mount.z))
-                    local side=(self.first_person or self.left_shoulder) and -1 or 1
-                    mount.x=side*math.max(.13,math.min(.18,math.abs(mount.x)+.05))
-                    if self.left_shoulder and not self.first_person then mount.x=mount.x-.40 end
-                    mount.y=math.max(-.05,math.min(.10,mount.y*.4))
-                    mount.z=math.max(.03,math.min(.10,mount.z*.4))
-                    if self.left_shoulder and not self.first_person then mount.y=mount.y-.15;mount.z=mount.z+.08 end
-                    if self.first_person then mount.x=-.12;mount.y=.35;mount.z=.22 end
-                    self.auto_mounts[view]=mount
-                end
-                self.weapon_pose.auto_mount=mount
-            else
-                self.auto_equip=nil;self.auto_mounts=nil
-            end
-        end
+        -- Aim-only unoccluded rendering makes shoulder-clearance relocation
+        -- unnecessary. Keep the standard sight mount for either shoulder.
+        if self.config.show_3d=='aiming' then self.left_shoulder=false end
+        HUD.placement.update(self,pose,projection,latest_raw,log)
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))
             self.next_camera_sample=self.clock+1
@@ -3093,10 +3285,14 @@ function M.start(sr,backend,options)
         if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
+            if self.config.show_3d=='aiming' then
+                local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
+                world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
+            end
             local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
-            if world_display.draw(self.weapon_pose,self.config,nil,dt,nil,world_commands) then
+            if world_display.draw(self.weapon_pose,world_config,nil,dt,nil,world_commands) then
                 view.clear();self.anchor_status='weapon 3D WorldGUI';return
             end
         end

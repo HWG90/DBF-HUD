@@ -2,7 +2,7 @@
 local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
-    local placement={placement_mode=true,left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
+    local placement={keep_hud_upright=true,fp_auto_side=true,placement_mode=true,left_mount_x=true,left_mount_y=true,left_mount_z=true,fp_mount_x=true,fp_mount_y=true,fp_mount_z=true,
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
@@ -10,9 +10,6 @@ function M.new(hud)
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
-        {'mount_x','3D right shoulder: left / right',-2,2,0.01},{'mount_y','3D right shoulder: forward / back',-2,2,0.01},{'mount_z','3D right shoulder: up / down',-2,2,0.01},
-        {'left_mount_x','3D left shoulder: left / right',-2,2,0.01},{'left_mount_y','3D left shoulder: forward / back',-2,2,0.01},{'left_mount_z','3D left shoulder: up / down',-2,2,0.01},
-        {'fp_mount_x','3D first person: left / right',-2,2,0.01},{'fp_mount_y','3D first person: forward / back',-2,2,0.01},{'fp_mount_z','3D first person: up / down',-2,2,0.01},
         {'world_position_smooth','3D position damping',0,0.5,0.005},{'world_rotation_smooth','3D rotation damping',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
         {'weapon_offset_x','2D hybrid: horizontal offset',-1920,1920,1},{'weapon_offset_y','2D hybrid: vertical offset',-1080,1080,1},
         {'weapon_settle','2D hybrid: settling time',0.04,1,0.01},{'weapon_lag','2D hybrid: maximum lag',0,160,1},
@@ -26,8 +23,9 @@ function M.new(hud)
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
-        set('always_show_3d',hud.config.occlusion_mode=='gui')
-        set('placement_mode',hud.config.placement_mode=='auto' and 2 or 1)
+        set('show_3d',hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1))
+        set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
+        set('keep_hud_upright',hud.config.keep_hud_upright)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
@@ -43,6 +41,7 @@ function M.new(hud)
         for id,route in pairs(routes) do
             if not id:find('dbf_hud_v4.',1,true) and not id:find('dbf_hud_placement.',1,true) then route.callback=nil;route.owner=nil end
         end
+        if routes['dbf_hud_v4.always_show_3d'] then routes['dbf_hud_v4.always_show_3d'].callback=nil end
         local function add(k,spec,callback)
             spec.mod=placement[k] and 'DBF-HUD Placement' or 'DBF-HUD'
             local id=option_id(k)
@@ -59,13 +58,15 @@ function M.new(hud)
                 default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2)},function(v)
                 hud.configure({anchor_mode=v==1 and 'weapon' or (v==3 and 'world' or 'crosshair')});hud.save_tuning()
             end)
-            add('placement_mode',{type='choice',label='3D placement mode',choices={'Manual','Auto (experimental)'},default=hud.config.placement_mode=='auto' and 2 or 1,
-                description='Auto targets a central screen position. Model-clearance detection is not yet available.'},function(v)
-                hud.configure({placement_mode=v==2 and 'auto' or 'manual'});hud.save_tuning()
+            add('keep_hud_upright',{type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,description='Remove sideways roll in every 3D view while preserving facing direction.'},function(v)
+                hud.configure({keep_hud_upright=v});hud.save_tuning()
             end)
-            add('always_show_3d',{type='toggle',label='Always Show HUD (3D)',default=hud.config.occlusion_mode=='gui',
+            add('fp_auto_side',{type='choice',label='Auto first-person HUD side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1},function(v)
+                hud.configure({fp_auto_side=v==2 and 'right' or 'left'});hud.save_tuning()
+            end)
+            add('show_3d',{type='choice',label='Always Show HUD (3D)',choices={'Off (occluded)','Always','When aiming'},default=hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1),
                 description='On: draw through characters and scenery. Off: scene geometry hides the 3D HUD.'},function(v)
-                hud.configure({always_show_3d=v});hud.save_tuning()
+                hud.configure({show_3d=v==2 and 'always' or (v==3 and 'aiming' or 'occluded')});hud.save_tuning()
             end)
             for _,s in ipairs(sliders) do
                 local k=s[1];add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)

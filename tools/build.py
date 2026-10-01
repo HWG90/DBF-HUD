@@ -6,7 +6,7 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ORDER = ['config','font_data','nerd_font_data','font','motion', 'model', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe', 'offscreen_test', 'scene_test', 'menu', 'runtime']
+ORDER = ['config','font_data','nerd_font_data','font','motion', 'model', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe', 'offscreen_test', 'scene_test','placement','weapon_offsets', 'menu', 'runtime']
 
 def bundle():
     parts = ['-- HD2-Addon: mods/dbf_hud/hud\nlocal HUD={}\n']
@@ -27,6 +27,7 @@ def bundle():
     with zipfile.ZipFile(ROOT.parent / 'DBF-HUD-MDL-0.3.40.zip','w',zipfile.ZIP_DEFLATED) as archive:
         archive.write(live,'dbf_hud/mod.lua')
         if (ROOT / 'MDL.md').exists(): archive.write(ROOT / 'MDL.md','dbf_hud/README.md')
+        archive.write(ROOT / 'DBF-HUD-weapon-offsets.lua','DBF-HUD-weapon-offsets.lua')
         for path in sorted((ROOT / 'licenses').rglob('*')):
             if path.is_file(): archive.write(path,'dbf_hud/'+path.relative_to(ROOT).as_posix())
     return target
@@ -40,7 +41,7 @@ if __name__ == '__main__':
             '--output',str(ROOT.parent / 'DBF-HUD-0.3.40.zip')],check=True)
 
         with zipfile.ZipFile(ROOT.parent / 'DBF-HUD-0.3.40.zip','a',zipfile.ZIP_DEFLATED) as archive:
-            for name in ['README.md','NATIVE_ANCHOR.md','DBF-HUD-tuning.lua']:
+            for name in ['README.md','NATIVE_ANCHOR.md','DBF-HUD-tuning.lua','DBF-HUD-weapon-offsets.lua']:
                 archive.write(ROOT / name,name)
             for path in sorted((ROOT / 'licenses').rglob('*')):
                 if path.is_file(): archive.write(path,path.relative_to(ROOT).as_posix())
