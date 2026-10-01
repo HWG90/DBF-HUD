@@ -7028,7 +7028,7 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={always_visible=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -7063,7 +7063,7 @@ function M.apply(config,values)
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='always_visible' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
@@ -9336,6 +9336,7 @@ function M.new(hud)
         set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('fade_3d_unless_aiming',hud.config.fade_3d_unless_aiming)
+        set('always_visible',hud.config.always_visible)
         set('style_3d',hud.config.style_3d=='hologram' and 2 or 1)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
@@ -9386,6 +9387,9 @@ function M.new(hud)
             end)
             add('font',{type='choice',label='HUD font',choices=font_choices,default=font_index()},function(v)
                 hud.configure({font=assert(HUD.config.fonts[v])});hud.save_tuning()
+            end)
+            add('always_visible',{type='toggle',label='Always show HUD',default=hud.config.always_visible,description='Keep the HUD visible when the reticle is hidden or aim is released. Aiming still controls occlusion.'},function(v)
+                hud.configure({always_visible=v});hud.save_tuning()
             end)
             add('fade_3d_unless_aiming',{type='toggle',label='Fade 3D HUD when not aiming',default=hud.config.fade_3d_unless_aiming},function(v)
                 hud.configure({fade_3d_unless_aiming=v});hud.save_tuning()
@@ -9662,7 +9666,7 @@ function M.start(sr,backend,options)
             self.attachment_status='reticle fallback: '..projection.status
         end
         -- Movement must not control alpha. Native reticle hiding only changes the anchor.
-        local visible=model and not self.hidden and not (live and not anchor.visible)
+        local visible=model and not self.hidden and not (live and not anchor.visible and not self.config.always_visible)
         if sr.Window and sr.Window.show_cursor then
             local ok,cursor=pcall(sr.Window.show_cursor);if ok and cursor then visible=false end
         end
@@ -9689,7 +9693,7 @@ function M.start(sr,backend,options)
             world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             local aim_opacity=1
-            if self.config.fade_3d_unless_aiming then
+            if self.config.fade_3d_unless_aiming and not self.config.always_visible then
                 local wanted=aiming==true and 1 or 0
                 local previous=self.aim_opacity or wanted
                 aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
