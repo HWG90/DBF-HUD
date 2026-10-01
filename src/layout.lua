@@ -90,7 +90,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
         if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].size=(pixel and 18 or 12)*scale end
         text(number,0,5,32,ink)
-        local fire_icon=HUD.fire_icons[m.energy_icon or m.fire_mode]
+        local fire_icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
         if fire_icon and not m.ammo_mode then
             d[#d].mode_count=true
             local edge=#number*(pixel and 36 or 32)*.6
@@ -100,7 +100,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             local factor=24/math.max(fire_icon.w,fire_icon.h)
             local bottom,top=0,32
             if measure then local a,b,c,e=measure(number,(pixel and 36 or 32)*scale);if e then bottom,top=b/scale,e/scale end end
-            if m.fire_mode=='AUTO' then
+            if m.fire_mode=='AUTO' and not m.ammo_icon and not m.energy_icon then
                 factor=(top-bottom)/fire_icon.h
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
@@ -142,7 +142,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         text(footer,0,pixel and math.min(-19,-7-label_top) or -19,9,ink,0.8)
     end
     if heat then
-        local icon=HUD.fire_icons[m.energy_icon or m.fire_mode]
+        local icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
         if icon then
             local command
             for _,v in ipairs(d) do if v.type=='text' and v.text==number..'%' then command=v end end

@@ -6,7 +6,7 @@ end
 function M.normalize(raw)
     if not raw then return nil end
     local m={id=raw.id,unit_ref=raw.unit_ref,avatar_unit_ref=raw.avatar_unit_ref,resource_hex=raw.resource_hex,kind=raw.kind,reserve=count(raw.reserve),reserve_kind=raw.reserve_kind,
-        alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, energy_icon=raw.energy_icon, lowered=raw.lowered, label=raw.label or 'AMMO'}
+        alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, energy_icon=raw.energy_icon, ammo_icon=raw.ammo_icon, lowered=raw.lowered, label=raw.label or 'AMMO'}
     if raw.kind=='heat' then
         if type(raw.heat)~='number' or raw.heat~=raw.heat or raw.heat<0 or raw.heat>1 then return nil end
         m.value=math.floor(raw.heat*100+0.5); m.fraction=raw.heat

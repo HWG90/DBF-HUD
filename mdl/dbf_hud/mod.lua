@@ -7366,8 +7366,11 @@ function M.apply(raw)
     -- Stoker primary ammunition is bullets; its auxiliary entity supplies fuel.
     if raw.resource_hex=='8a307bd1811a5fe9' then
         raw.label=raw.alternate_fire and 'FUEL' or 'ROUNDS'
-        if not raw.alternate_fire then raw.energy_icon='SEMI' end
-        if raw.alternate_fire then raw.energy_icon='NONE';raw.chamber_supported=false;raw.reserve_kind='TANKS' end
+        if raw.alternate_fire then raw.energy_icon=nil;raw.chamber_supported=false;raw.reserve_kind='TANKS' end
+    end
+    if not raw.energy_icon and not raw.ammo_mode then
+        local ammo=raw.label=='FUEL' and 'FUEL' or ({ROUNDS='BULLET',SHELLS='SHELL',GRENADES='GRENADE',ROCKETS='ROCKET'})[category]
+        if not raw.fire_mode or raw.alternate_fire then raw.ammo_icon=ammo end
     end
     return raw
 end
@@ -7383,7 +7386,7 @@ end
 function M.normalize(raw)
     if not raw then return nil end
     local m={id=raw.id,unit_ref=raw.unit_ref,avatar_unit_ref=raw.avatar_unit_ref,resource_hex=raw.resource_hex,kind=raw.kind,reserve=count(raw.reserve),reserve_kind=raw.reserve_kind,
-        alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, energy_icon=raw.energy_icon, lowered=raw.lowered, label=raw.label or 'AMMO'}
+        alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, energy_icon=raw.energy_icon, ammo_icon=raw.ammo_icon, lowered=raw.lowered, label=raw.label or 'AMMO'}
     if raw.kind=='heat' then
         if type(raw.heat)~='number' or raw.heat~=raw.heat or raw.heat<0 or raw.heat>1 then return nil end
         m.value=math.floor(raw.heat*100+0.5); m.fraction=raw.heat
@@ -7415,13 +7418,26 @@ return M
 end)()
 HUD.fire_icons=(function()
 -- Masks sampled from the game fire-mode textures; rectangle rendering preserves HUD depth.
-return {
+local M={
     LASER={w=17,h=24,runs={{8,0,1,15},{7,15,3,3},{8,20,1,4},{8,11,1,3},{0,16,5,1},{12,16,5,1},{3,21,2,2},{12,21,2,2},{3,11,2,2},{12,11,2,2}}},
     AUTO={w=24,h=24,runs={{0,23,18,1},{0,22,21,1},{0,21,23,1},{0,20,24,1},{0,19,23,1},{0,18,21,1},{0,17,18,1},{0,14,20,1},{0,13,22,1},{0,12,24,1},{0,11,24,1},{0,10,23,1},{0,9,20,1},{2,8,12,1},{0,6,18,1},{0,5,21,1},{0,4,23,1},{0,3,24,1},{0,2,23,1},{0,1,21,1},{0,0,18,1}}},
     SEMI={w=24,h=7,runs={{0,6,18,1},{0,5,21,1},{0,4,23,1},{0,3,24,1},{0,2,23,1},{0,1,22,1},{0,0,19,1}}},
     BURST={w=24,h=11,runs={{2,10,1,1},{0,9,1,1},{2,9,1,1},{5,9,2,1},{8,9,7,1},{0,8,1,1},{2,8,1,1},{5,8,2,1},{8,8,12,1},{0,7,1,1},{2,7,1,1},{5,7,2,1},{8,7,14,1},{0,6,1,1},{2,6,1,1},{5,6,2,1},{8,6,15,1},{0,5,1,1},{2,5,1,1},{5,5,2,1},{8,5,16,1},{0,4,1,1},{2,4,1,1},{5,4,2,1},{8,4,15,1},{0,3,1,1},{2,3,1,1},{5,3,2,1},{8,3,14,1},{0,2,1,1},{2,2,1,1},{5,2,2,1},{8,2,12,1},{0,1,1,1},{2,1,1,1},{5,1,2,1},{8,1,7,1},{2,0,1,1}}},
     ALT={w=24,h=13,runs={{0,12,2,1},{0,11,2,1},{3,11,14,1},{19,11,1,1},{0,10,2,1},{3,10,14,1},{19,10,3,1},{0,9,2,1},{3,9,14,1},{19,9,4,1},{0,8,2,1},{3,8,14,1},{19,8,5,1},{0,7,2,1},{3,7,14,1},{19,7,5,1},{0,6,2,1},{3,6,14,1},{19,6,5,1},{0,5,2,1},{3,5,14,1},{19,5,5,1},{0,4,2,1},{3,4,14,1},{19,4,5,1},{0,3,2,1},{3,3,14,1},{19,3,4,1},{0,2,2,1},{3,2,14,1},{19,2,3,1},{0,1,2,1},{3,1,14,1},{19,1,2,1},{0,0,2,1}}},
 }
+-- Upright ammunition symbols for weapons without fire selection.
+M.BULLET={w=7,h=24,runs={{1,0,5,3},{2,3,3,16},{1,19,5,2},{2,21,3,2},{3,23,1,1}}}
+M.SHELL={w=9,h=24,runs={{0,0,9,3},{1,3,7,19},{2,22,5,2}}}
+M.GRENADE={w=13,h=20,runs={{3,0,7,2},{1,2,11,3},{0,5,13,9},{2,14,9,2},{5,16,3,4},{8,18,4,2}}}
+M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
+M.FUEL={w=14,h=22,runs={{3,0,8,2},{1,2,12,3},{0,5,14,5},{2,10,10,4},{4,14,7,3},{6,17,4,3},{7,20,2,2}}}
+-- Rotate the game bullet masks from right-facing to tip-up.
+for _,key in ipairs({'AUTO','SEMI','BURST'}) do
+    local icon=M[key];local old_h=icon.h
+    for _,r in ipairs(icon.runs) do r[1],r[2],r[3],r[4]=old_h-r[2]-r[4],r[1],r[4],r[3] end
+    icon.w,icon.h=icon.h,icon.w
+end
+return M
 
 end)()
 HUD.layout=(function()
@@ -7517,7 +7533,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
         if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].size=(pixel and 18 or 12)*scale end
         text(number,0,5,32,ink)
-        local fire_icon=HUD.fire_icons[m.energy_icon or m.fire_mode]
+        local fire_icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
         if fire_icon and not m.ammo_mode then
             d[#d].mode_count=true
             local edge=#number*(pixel and 36 or 32)*.6
@@ -7527,7 +7543,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             local factor=24/math.max(fire_icon.w,fire_icon.h)
             local bottom,top=0,32
             if measure then local a,b,c,e=measure(number,(pixel and 36 or 32)*scale);if e then bottom,top=b/scale,e/scale end end
-            if m.fire_mode=='AUTO' then
+            if m.fire_mode=='AUTO' and not m.ammo_icon and not m.energy_icon then
                 factor=(top-bottom)/fire_icon.h
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
@@ -7569,7 +7585,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         text(footer,0,pixel and math.min(-19,-7-label_top) or -19,9,ink,0.8)
     end
     if heat then
-        local icon=HUD.fire_icons[m.energy_icon or m.fire_mode]
+        local icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
         if icon then
             local command
             for _,v in ipairs(d) do if v.type=='text' and v.text==number..'%' then command=v end end
