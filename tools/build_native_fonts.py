@@ -40,6 +40,19 @@ def main(cache):
         _,nt,n=struct.unpack_from('<III',b)
         for r in struct.iter_unpack('<7Q6I',b[72+nt*32:72+nt*32+n*80]):resources.append((r[0],r[1],b[r[2]:r[2]+r[7]],g[r[4]:r[4]+r[9]]))
     depth_source=next(r[2] for r in resources if r[1]==hash64('material'))
+    # The shared renderer group must register both native text and solid HUD depth shaders.
+    with zipfile.ZipFile(ROOT.parent/'DBF-HUD-WorldGUI-Depth-Probe-0.3.zip') as z:
+        stem='DepthState/ee6b1ba7e22d71ed.patch_0';b=z.read(stem);g=z.read(stem+'.gpu_resources')
+        _,nt,n=struct.unpack_from('<III',b)
+        for r in struct.iter_unpack('<7Q6I',b[72+nt*32:72+nt*32+n*80]):
+            if r[1]!=hash64('shader_library_group'):resources.append((r[0],r[1],b[r[2]:r[2]+r[7]],g[r[4]:r[4]+r[9]]))
+            else:
+                extra=b[r[2]+640:r[2]+r[7]]
+                for i,item in enumerate(resources):
+                    if item[1]==hash64('shader_library_group'):
+                        group=bytearray(item[2]);struct.pack_into('<I',group,16,struct.unpack_from('<I',group,16)[0]+len(extra)//8)
+                        resources[i]=(item[0],item[1],bytes(group)+extra,item[3])
+
     lua=['-- Native font metrics only; no rectangle glyph data.','local M={faces={},order={}}']
     reports=[];selected={}
     for family in catalog['families']:
@@ -108,8 +121,8 @@ def main(cache):
     order=old+[k for k in sorted(selected) if k not in old]
     lua.append('M.order={'+','.join(json.dumps(k) for k in order)+'}');lua.append('return M')
     (ROOT/'src/native_font_data.lua').write_text('\n'.join(lua)+'\n')
-    body,gpu=archive(resources);output=ROOT.parent/'DBF-HUD-Native-Fonts-0.1.zip'
-    manifest={'Version':1,'Guid':'ed90893b-9a66-4c80-8b30-8d1240f6bd60','Name':'DBF-HUD Native Fonts 0.1','Description':'72 converted font families. Only Hack has been visually validated.','Options':[{'Name':'Native font library','Include':['NativeFonts']}]}
+    body,gpu=archive(resources);output=ROOT.parent/'DBF-HUD-Native-Fonts-0.2.zip'
+    manifest={'Version':1,'Guid':'ed90893b-9a66-4c80-8b30-8d1240f6bd60','Name':'DBF-HUD Native Fonts 0.2','Description':'72 converted font families. Only Hack has been visually validated.','Options':[{'Name':'Native font library','Include':['NativeFonts']}]}
     with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:
         z.writestr('manifest.json',json.dumps(manifest,indent=2));stem='NativeFonts/ee6b1ba7e22d71ed.patch_0'
         z.writestr(stem,body);z.writestr(stem+'.stream',b'');z.writestr(stem+'.gpu_resources',gpu)

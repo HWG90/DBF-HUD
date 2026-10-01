@@ -272,6 +272,7 @@ function M.start(sr,backend,options)
             local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
             world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
+            if aiming~=true and not self.config.always_visible then world_config.decoration='none' end
             local aim_opacity=1
             if self.config.fade_3d_unless_aiming and not self.config.always_visible then
                 local wanted=aiming==true and 1 or 0
