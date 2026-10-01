@@ -2,7 +2,7 @@
 local M={}
 function M.pixel(size) return math.max(1,math.floor(size/12+0.5)) end
 function M.supported(name) return name=='bigblue' or (HUD.nerd_font_data and HUD.nerd_font_data[name]~=nil) end
-function M.measure(text,size,name)
+function M.measure(text,size,name,continuous)
     local face=HUD.nerd_font_data and HUD.nerd_font_data[name or 'bigblue']
     if face then
         local scale=size/face.em;local left,bottom,right,top,offset=0,0,0,0,0
@@ -11,7 +11,7 @@ function M.measure(text,size,name)
         end
         return left*scale,bottom*scale,right*scale,top*scale
     end
-    local p=M.pixel(size);local left,bottom,right,top=0,0,0,0
+    local p=continuous and size/12 or M.pixel(size);local left,bottom,right,top=0,0,0,0
     for i=1,#text do
         local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
         local b=g.bounds;local offset=(i-1)*8
@@ -20,7 +20,7 @@ function M.measure(text,size,name)
     end
     return left*p,bottom*p,right*p,top*p
 end
-function M.draw(text,size,x,y,emit,name)
+function M.draw(text,size,x,y,emit,name,continuous)
     local face=HUD.nerd_font_data and HUD.nerd_font_data[name or 'bigblue']
     if face then
         local scale=size/face.em;local offset=0
@@ -30,8 +30,8 @@ function M.draw(text,size,x,y,emit,name)
         end
         return
     end
-    local p=M.pixel(size)
-    x=math.floor(x+0.5);y=math.floor(y+0.5)
+    local p=continuous and size/12 or M.pixel(size)
+    if not continuous then x=math.floor(x+0.5);y=math.floor(y+0.5) end
     for i=1,#text do
         local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
         local offset=(i-1)*8*p

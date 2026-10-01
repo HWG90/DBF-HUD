@@ -211,6 +211,15 @@ function M.start(sr,backend,options)
         self.camera_mode_status=mode_status
         self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)
+        if self.config.anchor_mode=='weapon' and self.weapon_pose then
+            local p=self.weapon_pose;local m=p.matrix
+            local x,y,z
+            if p.sight then x,y,z=p.sight.x,p.sight.y,p.sight.z
+            else x,y,z=HUD.scene_test.mount(p,self.config) end
+            point=projection.poll(binding_base,{x=p.x+m[1]*x+m[5]*y+m[9]*z,
+                y=p.y+m[2]*x+m[6]*y+m[10]*z,
+                z=p.z+m[3]*x+m[7]*y+m[11]*z},w/h)
+        end
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))
             self.next_camera_sample=self.clock+1
@@ -218,6 +227,10 @@ function M.start(sr,backend,options)
         self.projection_status=projection.status
         local use_weapon=self.config.anchor_mode=='weapon' and point~=nil and not provider and self.clock>=manual_until
         if use_weapon~=attachment_active then motion.ready=false;attached.ready=false;attachment_active=use_weapon end
+        local attachment_view=self.first_person and 'first' or 'third'
+        if self.hybrid_view~=attachment_view then
+            attached.ready=false;self.hybrid_view=attachment_view
+        end
         local x,y
         if use_weapon then
             x,y=HUD.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config)
@@ -249,9 +262,19 @@ function M.start(sr,backend,options)
         if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
+            world_config.style_clock=self.clock
             local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
             world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
-            local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
+            world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
+            local aim_opacity=1
+            if self.config.fade_3d_unless_aiming then
+                local wanted=aiming==true and 1 or 0
+                local previous=self.aim_opacity or wanted
+                aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
+            end
+            self.aim_opacity=aim_opacity
+            if aim_opacity<.01 then world_display.release();view.clear();return end
+            local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity*aim_opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
             if world_display.draw(self.weapon_pose,world_config,nil,dt,nil,world_commands) then
@@ -260,10 +283,16 @@ function M.start(sr,backend,options)
         end
         world_display.release()
         local s=h/1080
-        x=w/2+(x+(use_weapon and self.config.weapon_offset_x or self.config.offset_x))*s;y=h/2+(y+(use_weapon and self.config.weapon_offset_y or self.config.offset_y))*s
+        local offset_x,offset_y=self.config.offset_x,self.config.offset_y
+        if use_weapon then offset_x,offset_y=20,-15 end
+        if self.config.anchor_mode=='weapon' and self.first_person then
+            offset_x=use_weapon and 80 or self.config.offset_x+75
+        end
+        x=w/2+(x+offset_x)*s;y=h/2+(y+offset_y)*s
         local scale=s*self.config.scale
         local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
-        local frame=commands[1];local margin=4*scale
+        local frame=commands[1]
+        local margin=4*scale
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
         for _,c in ipairs(commands) do c.x=c.x+dx;c.y=c.y+dy end

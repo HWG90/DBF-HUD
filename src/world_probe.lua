@@ -93,8 +93,16 @@ function M.new(sr,log,direct)
                     solid(v.x,v.y,v.w,v.h,2,color)
                 elseif HUD.font.supported(v.font) then
                     HUD.font.draw(v.text,v.size,v.x,v.y,function(x,y,w,h)
-                        solid(x,y,w,h,3,color)
-                    end,v.font)
+                        if c.style_3d=='hologram' then
+                            local at=y
+                            while at<y+h do
+                                local edge=math.min(y+h,(math.floor(at/4)+1)*4)
+                                local dim=math.floor(at/4)%2==0 and .78 or 1
+                                solid(x,at,w,edge-at,3,sr.Color(math.floor(v.a*255*dim+.5),v.c[1],v.c[2],v.c[3]))
+                                at=edge
+                            end
+                        else solid(x,y,w,h,3,color) end
+                    end,v.font,true)
                 else
                     local font='core/performance_hud/debug'
                     G.text(gui,v.text,font,v.size,font,sr.Vector3(v.x,v.y,3),color)

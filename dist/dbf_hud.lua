@@ -12,7 +12,7 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
+M.defaults={style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -47,7 +47,8 @@ function M.apply(config,values)
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif k=='style_3d' then assert(v=='standard' or v=='hologram','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='fp_auto_side' then assert(v=='left' or v=='right','invalid first-person side')
@@ -85,6 +86,7 @@ function M.serialize(config)
     end
     out[#out+1]='}';return table.concat(out,'\n')..'\n'
 end
+
 return M
 
 end)()
@@ -1172,7 +1174,7 @@ HUD.font=(function()
 local M={}
 function M.pixel(size) return math.max(1,math.floor(size/12+0.5)) end
 function M.supported(name) return name=='bigblue' or (HUD.nerd_font_data and HUD.nerd_font_data[name]~=nil) end
-function M.measure(text,size,name)
+function M.measure(text,size,name,continuous)
     local face=HUD.nerd_font_data and HUD.nerd_font_data[name or 'bigblue']
     if face then
         local scale=size/face.em;local left,bottom,right,top,offset=0,0,0,0,0
@@ -1181,7 +1183,7 @@ function M.measure(text,size,name)
         end
         return left*scale,bottom*scale,right*scale,top*scale
     end
-    local p=M.pixel(size);local left,bottom,right,top=0,0,0,0
+    local p=continuous and size/12 or M.pixel(size);local left,bottom,right,top=0,0,0,0
     for i=1,#text do
         local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
         local b=g.bounds;local offset=(i-1)*8
@@ -1190,7 +1192,7 @@ function M.measure(text,size,name)
     end
     return left*p,bottom*p,right*p,top*p
 end
-function M.draw(text,size,x,y,emit,name)
+function M.draw(text,size,x,y,emit,name,continuous)
     local face=HUD.nerd_font_data and HUD.nerd_font_data[name or 'bigblue']
     if face then
         local scale=size/face.em;local offset=0
@@ -1200,8 +1202,8 @@ function M.draw(text,size,x,y,emit,name)
         end
         return
     end
-    local p=M.pixel(size)
-    x=math.floor(x+0.5);y=math.floor(y+0.5)
+    local p=continuous and size/12 or M.pixel(size)
+    if not continuous then x=math.floor(x+0.5);y=math.floor(y+0.5) end
     for i=1,#text do
         local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
         local offset=(i-1)*8*p
@@ -2340,8 +2342,16 @@ function M.new(sr,log,direct)
                     solid(v.x,v.y,v.w,v.h,2,color)
                 elseif HUD.font.supported(v.font) then
                     HUD.font.draw(v.text,v.size,v.x,v.y,function(x,y,w,h)
-                        solid(x,y,w,h,3,color)
-                    end,v.font)
+                        if c.style_3d=='hologram' then
+                            local at=y
+                            while at<y+h do
+                                local edge=math.min(y+h,(math.floor(at/4)+1)*4)
+                                local dim=math.floor(at/4)%2==0 and .78 or 1
+                                solid(x,at,w,edge-at,3,sr.Color(math.floor(v.a*255*dim+.5),v.c[1],v.c[2],v.c[3]))
+                                at=edge
+                            end
+                        else solid(x,y,w,h,3,color) end
+                    end,v.font,true)
                 else
                     local font='core/performance_hud/debug'
                     G.text(gui,v.text,font,v.size,font,sr.Vector3(v.x,v.y,3),color)
@@ -2592,37 +2602,10 @@ end
 return M
 
 end)()
-HUD.scene_test=(function()
--- Experimental scene-mesh carrier; uses only engine-owned handles.
+HUD.world_style=(function()
+-- Pure WorldGUI geometry scaling, frame fitting and visual presets.
 local M={}
-function M.mount(p,c)
-    if c.placement_mode=='auto' and p.auto_mount then return p.auto_mount.x,p.auto_mount.y,p.auto_mount.z end
-    if p.first_person then return c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+.2 end
-    if p.left_shoulder then return c.left_mount_x,c.left_mount_y,c.left_mount_z+.2 end
-    return c.mount_x,c.mount_y,c.mount_z+.2
-end
-function M.new(sr,log,side)
-    if not side then
-        local front,back=M.new(sr,log,1),M.new(sr,log,-1)
-        local overlay=HUD.world_probe.new(sr,log,true)
-        local depth_overlay=HUD.world_probe.new(sr,log,false)
-        local active_mode
-        return {
-            draw=function(p,c,target,dt,aspect,commands)
-                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'gui_depth' or 'gui')
-                if mode=='mesh' then mode='gui_depth' end -- archived selection
-                local occluded=mode=='mesh'
-                if active_mode~=mode then
-                    front.release();back.release();overlay.release();depth_overlay.release()
-                    active_mode=mode
-                    log('HUD occlusion mode '..mode)
-                end
-                --[[ Archived mesh dispatch; retained for future research.
-                if occluded then front.draw(p,c,target,dt,aspect);back.draw(p,c,target,dt,aspect)
-                else
-                ]]
-                do
-                    if not commands then overlay.release();depth_overlay.release();return end
+function M.prepare(commands,p,c)
                     local f=commands[1];local scale=240*(c.scale or 1)/f.w
                     if c.placement_mode=='auto' and p.first_person then scale=scale*.5 end;local centered={}
                     for _,command in ipairs(commands) do
@@ -2633,12 +2616,50 @@ function M.new(sr,log,side)
                         if v.size then v.size=v.size*scale end
                         centered[#centered+1]=v
                     end
-                    if mode=='gui_depth' then return depth_overlay.draw(p,c,centered,dt) else return overlay.draw(p,c,centered,dt) end
-                end
-            end,
-            release=function() overlay.release();depth_overlay.release();front.release();back.release();active_mode=nil end
-        }
-    end
+                    -- Pixel glyphs quantize after world scaling; fit their actual bounds.
+                    if HUD.font.supported(c.font) then
+                        local panel=centered[1]
+                        local left,bottom,right,top=panel.x,panel.y,panel.x+panel.w,panel.y+panel.h
+                        local padding=math.max(1,8*2*(c.scale or 1)*scale)
+                        for _,v in ipairs(centered) do
+                            if v.type=='text' then
+                                local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
+                                left=math.min(left,v.x+a-padding);bottom=math.min(bottom,v.y+b-padding)
+                                right=math.max(right,v.x+e+padding);top=math.max(top,v.y+f+padding)
+                            end
+                        end
+                        for _,v in ipairs(centered) do
+                            if v.decoration then
+                                v.x=left+(v.x-panel.x)*(right-left)/panel.w
+                                v.y=bottom+(v.y-panel.y)*(top-bottom)/panel.h
+                                v.w=v.w*(right-left)/panel.w
+                                v.h=v.h*(top-bottom)/panel.h
+                            end
+                        end
+                        panel.x,panel.y,panel.w,panel.h=left,bottom,right-left,top-bottom
+                    end
+                    if c.style_3d=='hologram' then
+                        local panel=centered[1];local clock=c.style_clock or 0
+                        local flicker=.96+.025*math.sin(clock*17)+.015*math.sin(clock*31)
+                        for _,v in ipairs(centered) do v.a=v.a*flicker end
+                        panel.a=panel.a*.18
+                        local ink=HUD.config.rgb(c.text_color)
+                        local strength=commands[2] and commands[2].a or 1
+                        local thickness=math.max(.3,panel.w/500)
+                        for _,edge in ipairs({{panel.x,panel.y,panel.w,thickness},{panel.x,panel.y+panel.h-thickness,panel.w,thickness}}) do
+                            centered[#centered+1]={type='rect',x=edge[1],y=edge[2],w=edge[3],h=edge[4],c=ink,a=.18*strength}
+                        end
+                        centered[#centered+1]={type='rect',x=panel.x,y=panel.y+(clock*.35%1)*(panel.h-thickness),w=panel.w,h=thickness,c=ink,a=.10*strength}
+                    end
+    return centered
+end
+return M
+
+end)()
+HUD.archived_mesh=(function()
+-- Archived mesh carrier. Production uses direct WorldGUI.
+local M={}
+function M.new(sr,log,side)
     local A,W,U,Mesh=sr.Application,sr.World,sr.Unit,sr.Mesh
     local unit,world,bound,scene_material,last_emission,screen_test;local failed=false;local smooth={}
     local self={}
@@ -2735,7 +2756,7 @@ function M.new(sr,log,side)
                 last_emission=c.emissive_intensity
             end
             local m=p.matrix
-            local x,y,z=M.mount(p,c)
+            local x,y,z=HUD.scene_test.mount(p,c)
             local px=p.x+m[1]*x+m[5]*y+m[9]*z
             local py=p.y+m[2]*x+m[6]*y+m[10]*z
             local pz=p.z+m[3]*x+m[7]*y+m[11]*z
@@ -2766,7 +2787,7 @@ function M.fullbright(sr,log)
             if gui and world~=main then self.release() end
             local name='mods/dbf_hud/materials/fullbright_depth_image'
             if not A.can_get('material',name) then return end
-            local x,y,z=M.mount(p,c)
+            local x,y,z=HUD.scene_test.mount(p,c)
             local m=p.matrix
             local px=p.x+m[1]*x+m[5]*y+m[9]*z
             local py=p.y+m[2]*x+m[6]*y+m[10]*z
@@ -2792,6 +2813,45 @@ function M.fullbright(sr,log)
     end
     return self
 end
+return M
+
+end)()
+HUD.scene_test=(function()
+-- WorldGUI display selection; archived mesh access remains for research.
+local M={}
+function M.mount(p,c)
+    if c.placement_mode=='auto' and p.auto_mount then return p.auto_mount.x,p.auto_mount.y,p.auto_mount.z end
+    if p.first_person then return c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+.2 end
+    if p.left_shoulder then return c.left_mount_x,c.left_mount_y,c.left_mount_z+.2 end
+    return c.mount_x,c.mount_y,c.mount_z+.2
+end
+function M.new(sr,log,side)
+    if not side then
+        local front,back=M.new(sr,log,1),M.new(sr,log,-1)
+        local overlay=HUD.world_probe.new(sr,log,true)
+        local depth_overlay=HUD.world_probe.new(sr,log,false)
+        local active_mode
+        return {
+            draw=function(p,c,target,dt,aspect,commands)
+                local mode=c.occlusion_mode or (c.hud_occlusion~=false and 'gui_depth' or 'gui')
+                if mode=='mesh' then mode='gui_depth' end -- archived selection
+                if active_mode~=mode then
+                    front.release();back.release();overlay.release();depth_overlay.release()
+                    active_mode=mode
+                    log('HUD occlusion mode '..mode)
+                end
+                do
+                    if not commands then overlay.release();depth_overlay.release();return end
+                    local centered=HUD.world_style.prepare(commands,p,c)
+                    if mode=='gui_depth' then return depth_overlay.draw(p,c,centered,dt) else return overlay.draw(p,c,centered,dt) end
+                end
+            end,
+            release=function() overlay.release();depth_overlay.release();front.release();back.release();active_mode=nil end
+        }
+    end
+    return HUD.archived_mesh.new(sr,log,side)
+end
+function M.fullbright(sr,log)return HUD.archived_mesh.fullbright(sr,log)end
 return M
 
 end)()
@@ -2908,6 +2968,8 @@ function M.new(hud)
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
         set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
         set('keep_hud_upright',hud.config.keep_hud_upright)
+        set('fade_3d_unless_aiming',hud.config.fade_3d_unless_aiming)
+        set('style_3d',hud.config.style_3d=='hologram' and 2 or 1)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
@@ -2957,6 +3019,12 @@ function M.new(hud)
             end)
             add('font',{type='choice',label='HUD font',choices={'BigBlue Terminal (pixel)','Original debug font','JetBrainsMono Nerd Font','FiraCode Nerd Font','Meslo Nerd Font','Hack Nerd Font','CascadiaCode Nerd Font','Iosevka Nerd Font','0xProto Nerd Font','SourceCodePro Nerd Font','FiraMono Nerd Font','CascadiaMono Nerd Font'},default=font_index()},function(v)
                 hud.configure({font=assert(HUD.config.fonts[v])});hud.save_tuning()
+            end)
+            add('fade_3d_unless_aiming',{type='toggle',label='Fade 3D HUD when not aiming',default=hud.config.fade_3d_unless_aiming},function(v)
+                hud.configure({fade_3d_unless_aiming=v});hud.save_tuning()
+            end)
+            add('style_3d',{type='choice',label='3D HUD style',choices={'Standard','Hologram'},default=hud.config.style_3d=='hologram' and 2 or 1},function(v)
+                hud.configure({style_3d=v==2 and 'hologram' or 'standard'});hud.save_tuning()
             end)
             add('frosted',{type='toggle',label='Frosted background (2D)',default=hud.config.frosted},function(v)
                 hud.configure({frosted=v});hud.save_tuning()
@@ -3192,6 +3260,15 @@ function M.start(sr,backend,options)
         self.camera_mode_status=mode_status
         self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)
+        if self.config.anchor_mode=='weapon' and self.weapon_pose then
+            local p=self.weapon_pose;local m=p.matrix
+            local x,y,z
+            if p.sight then x,y,z=p.sight.x,p.sight.y,p.sight.z
+            else x,y,z=HUD.scene_test.mount(p,self.config) end
+            point=projection.poll(binding_base,{x=p.x+m[1]*x+m[5]*y+m[9]*z,
+                y=p.y+m[2]*x+m[6]*y+m[10]*z,
+                z=p.z+m[3]*x+m[7]*y+m[11]*z},w/h)
+        end
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))
             self.next_camera_sample=self.clock+1
@@ -3199,6 +3276,10 @@ function M.start(sr,backend,options)
         self.projection_status=projection.status
         local use_weapon=self.config.anchor_mode=='weapon' and point~=nil and not provider and self.clock>=manual_until
         if use_weapon~=attachment_active then motion.ready=false;attached.ready=false;attachment_active=use_weapon end
+        local attachment_view=self.first_person and 'first' or 'third'
+        if self.hybrid_view~=attachment_view then
+            attached.ready=false;self.hybrid_view=attachment_view
+        end
         local x,y
         if use_weapon then
             x,y=HUD.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config)
@@ -3230,9 +3311,19 @@ function M.start(sr,backend,options)
         if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
+            world_config.style_clock=self.clock
             local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
             world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
-            local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
+            world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
+            local aim_opacity=1
+            if self.config.fade_3d_unless_aiming then
+                local wanted=aiming==true and 1 or 0
+                local previous=self.aim_opacity or wanted
+                aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
+            end
+            self.aim_opacity=aim_opacity
+            if aim_opacity<.01 then world_display.release();view.clear();return end
+            local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity*aim_opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
             if world_display.draw(self.weapon_pose,world_config,nil,dt,nil,world_commands) then
@@ -3241,10 +3332,16 @@ function M.start(sr,backend,options)
         end
         world_display.release()
         local s=h/1080
-        x=w/2+(x+(use_weapon and self.config.weapon_offset_x or self.config.offset_x))*s;y=h/2+(y+(use_weapon and self.config.weapon_offset_y or self.config.offset_y))*s
+        local offset_x,offset_y=self.config.offset_x,self.config.offset_y
+        if use_weapon then offset_x,offset_y=20,-15 end
+        if self.config.anchor_mode=='weapon' and self.first_person then
+            offset_x=use_weapon and 80 or self.config.offset_x+75
+        end
+        x=w/2+(x+offset_x)*s;y=h/2+(y+offset_y)*s
         local scale=s*self.config.scale
         local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
-        local frame=commands[1];local margin=4*scale
+        local frame=commands[1]
+        local margin=4*scale
         local dx=math.max(margin,math.min(w-margin-frame.w,frame.x))-frame.x
         local dy=math.max(margin,math.min(h-margin-frame.h,frame.y))-frame.y
         for _,c in ipairs(commands) do c.x=c.x+dx;c.y=c.y+dy end

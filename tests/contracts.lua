@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','scene_test','placement','weapon_offsets','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','model','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','world_style','archived_mesh','scene_test','placement','weapon_offsets','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -422,7 +422,7 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==23)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==25)
     callbacks['dbf_hud_placement.fp_auto_side'](1);assert(h.config.fp_auto_side=='left');writes=writes-1
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
@@ -432,7 +432,7 @@ test('native menu keeps colors config-only and persists placement',function()
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==9 and groups['DBF-HUD Placement']==14)
+    assert(groups['DBF-HUD']==11 and groups['DBF-HUD Placement']==14)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -610,7 +610,7 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     update(1/60);assert(h.anchor_status=='weapon attachment')
     assert(draw_x>0 and draw_x<1920,'screen geometry must stay in GUI coordinates despite a larger back buffer')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
-    assert(received.x==1 and received.y==2.5 and received.z==3)
+    assert(received.x==1 and received.y==2.5 and math.abs(received.z-3.2)<1e-6)
     local before=pose_reads;for i=1,10 do update(1/144)end;assert(pose_reads==before+10)
     local alpha=h.opacity;valid=false;update(1/60)
     assert(h.anchor_status~='weapon attachment' and h.opacity>=alpha)
@@ -700,7 +700,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==23)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==25)
         callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
@@ -717,6 +717,38 @@ test('live menu reuses boot registrations with changed saved defaults',function(
     local menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
     callbacks['dbf_hud_placement.offset_x'](188);assert(h.config.offset_x==188)
     menu.retire();ModOptionsMenu=nil
+end)
+
+test('world pixel glyphs scale proportionally below one pixel',function()
+    local bounds={math.huge,math.huge,-math.huge,-math.huge}
+    HUD.font.draw('AMMO',6,0,0,function(x,y,w,h)
+        bounds[1]=math.min(bounds[1],x);bounds[2]=math.min(bounds[2],y)
+        bounds[3]=math.max(bounds[3],x+w);bounds[4]=math.max(bounds[4],y+h)
+    end,'bigblue',true)
+    local a,b,c,d=HUD.font.measure('AMMO',6,'bigblue',true)
+    assert(bounds[1]>=a and bounds[2]>=b and bounds[3]<=c and bounds[4]<=d)
+    local _,_,full=HUD.font.measure('AMMO',12,'bigblue',true)
+    assert(math.abs(c-full*.5)<1e-8)
+end)
+
+test('first-person world frame contains quantized glyphs after scaling',function()
+    local saved=HUD.world_probe.new;local captured
+    HUD.world_probe.new=function()return {draw=function(_,_,commands)captured=commands;return true end,release=function()end}end
+    local c=HUD.config.new();c.decoration='brackets';local carrier=HUD.scene_test.new({},function()end)
+    local commands=HUD.layout.compose({kind='magazine',value=7,label='AMMO',reserve=2,reserve_kind='MAGS',state='READY'},0,0,2,1,c,0)
+    carrier.draw({first_person=true},c,nil,.016,nil,commands)
+    local frame=captured[1]
+    for _,v in ipairs(captured) do if v.type=='text' then
+        local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
+        assert(v.x+a>=frame.x and v.y+b>=frame.y and v.x+e<=frame.x+frame.w and v.y+f<=frame.y+frame.h)
+    end end
+    local right_edge=false
+    for _,v in ipairs(captured) do if v.decoration then
+        assert(v.x>=frame.x-1e-8 and v.y>=frame.y-1e-8 and v.x+v.w<=frame.x+frame.w+1e-8 and v.y+v.h<=frame.y+frame.h+1e-8)
+        if math.abs(v.x+v.w-frame.x-frame.w)<1e-8 then right_edge=true end
+    end end
+    assert(right_edge)
+    HUD.world_probe.new=saved
 end)
 
 test('3D smoothing preserves rigid axes, bounds lag and resets on weapon changes',function()

@@ -31,3 +31,7 @@ Visibility is fixed: non-occluded while the observed game aiming state is active
 Profiles use stable weapon resource identities, with separate `right`, `left`, `first_left`, and `first_right` entries. Each axis is an additional weapon-local correction in metres; absent axes and views add zero. Menu saves never overwrite this file. An empty return table disables built-in corrections. Invalid files log a rejection and use built-in defaults.
 
 The Scythe and autocannon currently have right-shoulder profiles. Automatic model-clearance queries and backpack detection remain unimplemented. The layout editor is deferred until this cleanup is verified in-game.
+
+## Rendering organization
+
+`scene_test.lua` selects direct WorldGUI depth behavior. `world_style.lua` prepares scaled geometry, fits pixel glyph bounds, and applies style presets. Mesh experiments are retained separately in `archived_mesh.lua`. Placement and external profile validation remain in their own modules.
