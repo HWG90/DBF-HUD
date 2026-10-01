@@ -1,10 +1,12 @@
 -- WorldGUI display selection; archived mesh access remains for research.
 local M={}
 function M.mount(p,c)
-    if c.placement_mode=='auto' and p.auto_mount then return p.auto_mount.x,p.auto_mount.y,p.auto_mount.z end
-    if p.first_person then return c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+.2 end
-    if p.left_shoulder then return c.left_mount_x,c.left_mount_y,c.left_mount_z+.2 end
-    return c.mount_x,c.mount_y,c.mount_z+.2
+    local x,y,z
+    if c.placement_mode=='auto' and p.auto_mount then x,y,z=p.auto_mount.x,p.auto_mount.y,p.auto_mount.z
+    elseif p.first_person then x,y,z=c.fp_mount_x,c.fp_mount_y,c.fp_mount_z+.2
+    elseif p.left_shoulder then x,y,z=c.left_mount_x,c.left_mount_y,c.left_mount_z+.2
+    else x,y,z=c.mount_x,c.mount_y,c.mount_z+.2 end
+    return x,y+.0762,z -- Shared three-inch forward shift in every weapon view.
 end
 function M.new(sr,log,side)
     if not side then

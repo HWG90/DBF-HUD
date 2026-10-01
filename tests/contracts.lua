@@ -402,10 +402,10 @@ test('auto placement projects to its target and preserves manual offsets',functi
         local a=HUD.projection.auto_mount(m,p,1,16/9,.1)
         local screen=assert(HUD.projection.project(m,p.x+a.x,p.y+a.y,p.z+a.z,1,16/9,.1))
         assert(math.abs(screen.x-(left and .42 or .58))<1e-6 and math.abs(screen.y-.48)<1e-6)
-        p.auto_mount=a;c.placement_mode='auto';local x,y,z=HUD.scene_test.mount(p,c);assert(x==a.x and y==a.y and z==a.z)
+        p.auto_mount=a;c.placement_mode='auto';local x,y,z=HUD.scene_test.mount(p,c);assert(x==a.x and math.abs(y-a.y-.0762)<1e-9 and z==a.z)
     end
     c.placement_mode='manual';p.left_shoulder=false
-    local x,y,z=HUD.scene_test.mount(p,c);assert(x==.3 and y==.4 and z==.7)
+    local x,y,z=HUD.scene_test.mount(p,c);assert(x==.3 and math.abs(y-.4762)<1e-9 and z==.7)
     assert(c.mount_x==.3 and c.mount_y==.4 and c.mount_z==.5)
 end)
 
@@ -569,7 +569,7 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     update(1/60);assert(h.anchor_status=='weapon attachment')
     assert(draw_x>0 and draw_x<1920,'screen geometry must stay in GUI coordinates despite a larger back buffer')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
-    assert(received.x==1 and received.y==2.5 and math.abs(received.z-3.2)<1e-6)
+    assert(math.abs(received.x-.9238)<1e-6 and received.y==2.5 and math.abs(received.z-3.2)<1e-6)
     local before=pose_reads;for i=1,10 do update(1/144)end;assert(pose_reads==before+10)
     local alpha=h.opacity;valid=false;update(1/60)
     assert(h.anchor_status~='weapon attachment' and h.opacity>=alpha)
@@ -1125,6 +1125,15 @@ test('catalog first-person profiles are at least six inches down',function()
     for resource,views in pairs(profiles) do
         local baseline=resource=='fb3a19078694708a' and -.1016 or -.1524
         assert(views.first_left.z<=baseline+1e-9 and views.first_right.z<=baseline+1e-9)
+    end
+end)
+test('all weapon mount views add three inches forward after profile corrections',function()
+    local cfg=HUD.config.new();cfg.placement_mode='auto'
+    local x,y,z=HUD.scene_test.mount({auto_mount={x=.1,y=.2,z=.3}},cfg)
+    assert(x==.1 and math.abs(y-.2762)<1e-9 and z==.3)
+    cfg.placement_mode='manual'
+    for _,p in ipairs({{}, {first_person=true}, {left_shoulder=true}}) do
+        local a,b,c=HUD.scene_test.mount(p,cfg);assert(math.abs(b-.0762)<1e-9)
     end
 end)
 print(string.format('%d contract tests passed',tests))

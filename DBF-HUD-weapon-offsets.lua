@@ -72,7 +72,7 @@ return {
     ['4c786785c79d44e7'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- marksman_rifle_vigilance_burst: third-person six inches down
     ['6e68194b95d60145'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- marksman_rifle_vigilance_counter_sniper: third-person six inches down
     ['eea5e3cef1e12c14'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- plasma_rifle: third-person six inches down
-    ['fb3a19078694708a'] = { right = { z = -0.1524 }, first_left = { z = -0.1016, x = 0.0508 }, first_right = { z = -0.1016, x = 0.0508 } }, -- plasma_rifle_charge: third-person six inches down
+    ['fb3a19078694708a'] = { right = { z = -0.1524, y = 0.0762 }, first_left = { z = -0.1016, x = 0.0508, y = 0.0762 }, first_right = { z = -0.1016, x = 0.0508, y = 0.0762 }, left = { y = 0.0762 } }, -- plasma_rifle_charge: third-person six inches down
     ['efdcef306cea63fe'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- plasma_rifle_charge: third-person six inches down
     ['30061f91af477f5e'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- sniper_rifle_helghast: third-person six inches down
     ['006e44327bb953fe'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- pump_grenade_launcher
