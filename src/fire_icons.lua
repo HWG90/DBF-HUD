@@ -12,10 +12,4 @@ M.SHELL={w=9,h=24,runs={{0,0,9,3},{1,3,7,19},{2,22,5,2}}}
 M.GRENADE={w=13,h=20,runs={{3,0,7,2},{1,2,11,3},{0,5,13,9},{2,14,9,2},{5,16,3,4},{8,18,4,2}}}
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 M.FUEL={w=14,h=22,runs={{3,0,8,2},{1,2,12,3},{0,5,14,5},{2,10,10,4},{4,14,7,3},{6,17,4,3},{7,20,2,2}}}
--- Rotate the game bullet masks from right-facing to tip-up.
-for _,key in ipairs({'AUTO','SEMI','BURST'}) do
-    local icon=M[key];local old_h=icon.h
-    for _,r in ipairs(icon.runs) do r[1],r[2],r[3],r[4]=old_h-r[2]-r[4],r[1],r[4],r[3] end
-    icon.w,icon.h=icon.h,icon.w
-end
 return M
