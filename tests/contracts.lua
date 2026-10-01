@@ -1108,6 +1108,8 @@ test('fixed mode weapons use upright ammo symbols without replacing fire selecti
     assert(fixed.ammo_icon=='BULLET' and HUD.fire_icons.BULLET.h>HUD.fire_icons.BULLET.w)
     local selected=HUD.ammo_types.apply({kind='rounds',resource_hex='ffc18b2ce10ca381',fire_mode='AUTO'})
     assert(not selected.ammo_icon and selected.fire_mode=='AUTO')
+    local stoker=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9'})
+    assert(stoker.label=='ROUNDS' and stoker.ammo_icon=='BULLET')
 end)
 print(string.format('%d contract tests passed',tests))
 
