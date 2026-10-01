@@ -28,7 +28,6 @@ function M.new(hud)
         set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('fade_3d_unless_aiming',hud.config.fade_3d_unless_aiming)
-        set('always_visible',hud.config.always_visible)
         set('style_3d',hud.config.style_3d=='hologram' and 2 or 1)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
@@ -49,6 +48,7 @@ function M.new(hud)
         for id,route in pairs(routes) do
             if not id:find('dbf_hud_v4.',1,true) and not id:find('dbf_hud_placement.',1,true) then route.callback=nil;route.owner=nil end
         end
+        if routes['dbf_hud_v4.always_visible'] then routes['dbf_hud_v4.always_visible'].callback=nil end
         for id,route in pairs(routes) do if id=='dbf_hud_v4.font_nerd' or id:find('dbf_hud_v4.font_page_',1,true) then route.callback=nil end end
         if routes['dbf_hud_v4.show_3d'] then routes['dbf_hud_v4.show_3d'].callback=nil end
         if routes['dbf_hud_v4.always_show_3d'] then routes['dbf_hud_v4.always_show_3d'].callback=nil end
@@ -95,9 +95,6 @@ function M.new(hud)
                     hud.configure({font=assert(HUD.config.fonts[first+v-1])});hud.save_tuning()
                 end)
             end
-            add('always_visible',{type='toggle',label='Always show HUD',default=hud.config.always_visible,description='Keep the HUD visible when the reticle is hidden or aim is released. Aiming still controls occlusion.'},function(v)
-                hud.configure({always_visible=v});hud.save_tuning()
-            end)
             add('fade_3d_unless_aiming',{type='toggle',label='Fade 3D HUD when not aiming',default=hud.config.fade_3d_unless_aiming},function(v)
                 hud.configure({fade_3d_unless_aiming=v});hud.save_tuning()
             end)

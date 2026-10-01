@@ -246,7 +246,7 @@ function M.start(sr,backend,options)
             self.attachment_status='reticle fallback: '..projection.status
         end
         -- Movement must not control alpha. Native reticle hiding only changes the anchor.
-        local visible=model and not self.hidden and not (live and not anchor.visible and not self.config.always_visible)
+        local visible=model and not self.hidden and not (live and not anchor.visible)
         if sr.Window and sr.Window.show_cursor then
             local ok,cursor=pcall(sr.Window.show_cursor);if ok and cursor then visible=false end
         end
@@ -272,9 +272,8 @@ function M.start(sr,backend,options)
             local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
             world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
-            if aiming~=true and not self.config.always_visible then world_config.decoration='none' end
             local aim_opacity=1
-            if self.config.fade_3d_unless_aiming and not self.config.always_visible then
+            if self.config.fade_3d_unless_aiming then
                 local wanted=aiming==true and 1 or 0
                 local previous=self.aim_opacity or wanted
                 aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
