@@ -11,7 +11,7 @@ return {
     ['d54b9505c0f72873'] = { first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = -0.1892, z = -0.1524 } }, -- laser_cannon: first-person left override
     ['3575aabc5f1f9326'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- automatic_pistol
     ['0b882808c6f498e8'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- caustic_dart_gun
-    ['416d053372c4e433'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- energy_revolver
+    ['416d053372c4e433'] = { right = { x = 0.0254, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- energy_revolver
     ['3f92ba65ef65cca9'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- flamer_pistol
     ['52e4334e6a128caf'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- grenade_pistol
     ['e91f569c2ad8af01'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- hornet_pistol
