@@ -47,7 +47,11 @@ def build():
             resources.append((row[0],row[1],body[row[2]:row[2]+row[7]],external[row[4]:row[4]+row[9]]))
     base=next(r[2] for r in resources if r[1]==hash64('material'))
     material=bytearray(base)
-    struct.pack_into('<Q',material,136,hash64(FONT))
+    # +0x88 is the four-byte sampler-name hash; the texture hash follows it.
+    assert struct.unpack_from('<I',material,136)[0]==0x3aa8b87e
+    assert struct.unpack_from('<Q',material,140)[0]==hash64('core/performance_hud/debug')
+    struct.pack_into('<Q',material,140,hash64(FONT))
+    assert struct.unpack_from('<I',material,136)[0]==0x3aa8b87e
     resources += [(hash64(FONT),hash64('font'),bytes(template),b''),
                   (hash64(FONT),hash64('texture'),bytes(texture),bytes(gpu)),
                   (hash64(MATERIAL),hash64('material'),bytes(material),b'')]
@@ -68,8 +72,8 @@ def build():
         assert row[2]%row[10]==0 and row[4]%row[11]==0
         assert row[2]+row[7]<=len(body) and row[4]+row[9]<=len(external)
         assert row[5]+row[7]<=cpu and row[6]+row[9]<=gp
-    output=ROOT.parent/'DBF-HUD-Native-Hack-Test-0.1.zip'
-    manifest={'Version':1,'Guid':'caf20b85-619d-4bc2-8895-353d8e6c2014','Name':'DBF-HUD Native Hack Font Test 0.1','Description':'Isolated Hack Regular font and validated depth shader. Metrics and texture require live validation.','Options':[{'Name':'Native Hack test','Include':['HackTest']}]}
+    output=ROOT.parent/'DBF-HUD-Native-Hack-Test-0.2.zip'
+    manifest={'Version':1,'Guid':'caf20b85-619d-4bc2-8895-353d8e6c2014','Name':'DBF-HUD Native Hack Font Test 0.2','Description':'Isolated Hack Regular font with corrected texture binding. Metrics and texture require live validation.','Options':[{'Name':'Native Hack test','Include':['HackTest']}]}
     with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:
         z.writestr('manifest.json',json.dumps(manifest,indent=2))
         stem='HackTest/ee6b1ba7e22d71ed.patch_0'
