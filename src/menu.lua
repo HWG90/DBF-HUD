@@ -7,6 +7,8 @@ function M.new(hud)
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
     local function option_id(k)if k=='font' then return 'dbf_hud_v4.font_nerd' end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
+    local font_choices={}
+    for i,name in ipairs(HUD.config.fonts) do font_choices[i]=name=='debug' and 'Original debug font' or HUD.native_font_data.faces[name].label end
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
@@ -74,7 +76,7 @@ function M.new(hud)
             add('decoration',{type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame'},default=decoration_index()},function(v)
                 hud.configure({decoration=assert(HUD.config.decorations[v])});hud.save_tuning()
             end)
-            add('font',{type='choice',label='HUD font',choices={'BigBlue Terminal (pixel)','Original debug font','JetBrainsMono Nerd Font','FiraCode Nerd Font','Meslo Nerd Font','Hack Nerd Font','CascadiaCode Nerd Font','Iosevka Nerd Font','0xProto Nerd Font','SourceCodePro Nerd Font','FiraMono Nerd Font','CascadiaMono Nerd Font'},default=font_index()},function(v)
+            add('font',{type='choice',label='HUD font',choices=font_choices,default=font_index()},function(v)
                 hud.configure({font=assert(HUD.config.fonts[v])});hud.save_tuning()
             end)
             add('fade_3d_unless_aiming',{type='toggle',label='Fade 3D HUD when not aiming',default=hud.config.fade_3d_unless_aiming},function(v)

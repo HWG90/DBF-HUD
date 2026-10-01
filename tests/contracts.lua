@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'config','font_data','nerd_font_data','font','motion','ammo_types','model','fire_icons','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','world_style','archived_mesh','scene_test','placement','weapon_offsets','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'native_font_data','native_font','config','font','motion','ammo_types','model','fire_icons','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','world_style','archived_mesh','scene_test','placement','weapon_offsets','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -359,27 +359,6 @@ test('configuration validates atomically and roundtrips as Lua',function()
     assert(not pcall(HUD.config.apply,c,{scale=1.5,archived_mesh={unknown=1}}) and c.scale==1)
     assert(not pcall(HUD.config.apply,c,{saturation=1,archived_mesh={saturation=2}}))
 end)
-test('all ten Nerd Fonts draw within measured bounds and fit panel frames',function()
-    assert(#HUD.config.fonts==12)
-    for i=3,#HUD.config.fonts do
-        local name=HUD.config.fonts[i];local cfg=HUD.config.new();HUD.config.apply(cfg,{font=name})
-        for _,size in ipairs({12,24,36,53.5}) do
-            local text='0123456789 % HEAT SINKS /?';local l,b,r,t=HUD.font.measure(text,size,name);local count=0
-            HUD.font.draw(text,size,0,0,function(x,y,w,h)
-                assert(w>0 and h>0 and x>=l-1e-6 and y>=b-1e-6 and x+w<=r+1e-6 and y+h<=t+1e-6);count=count+1
-            end,name)
-            assert(count>0)
-        end
-        local commands=HUD.layout.compose({kind='heat',fraction=.8,value=80,reserve=3,state='READY'},0,0,1,1,cfg,0)
-        local frame=commands[1]
-        for _,c in ipairs(commands) do if c.type=='text' then
-            local l,b,r,t=HUD.font.measure(c.text,c.size,name)
-            assert(c.x+l>=frame.x-1e-6 and c.y+b>=frame.y-1e-6 and c.x+r<=frame.x+frame.w+1e-6 and c.y+t<=frame.y+frame.h+1e-6)
-        end end
-        local restored=HUD.config.new();HUD.config.apply(restored,assert(loadstring(HUD.config.serialize(cfg)))());assert(restored.font==name)
-    end
-end)
-
 test('decorations default off, fit dynamic perimeter and preserve content',function()
     local c=HUD.config.new();assert(c.decoration=='none')
     local model={kind='heat',fraction=.8,value=80,reserve=3,state='READY'}
@@ -504,43 +483,7 @@ test('frame fits measured text including bearings and grows for content',functio
     assert(b[1].w>a[1].w)
 end)
 
-test('BigBlue glyph drawing snaps to pixels and fits its measured bounds',function()
-    for code=32,126 do
-        for _,size in ipairs({6,12,18,24,36,72,144}) do
-            local text=string.char(code);local a,b,c,d=HUD.font.measure(text,size);local n=0
-            HUD.font.draw(text,size,.3,-.3,function(x,y,w,h)
-                n=n+1;assert(x==math.floor(x) and y==math.floor(y))
-                assert(w>0 and h>0 and w==math.floor(w) and h==math.floor(h))
-                assert(x>=a and y>=b and x+w<=c and y+h<=d)
-            end)
-            assert(n<=12)
-        end
-    end
-end)
-
-test('BigBlue frame contains glyphs and stacked labels across scales',function()
-    for _,scale in ipairs({.25,.5,.67,1,1.25,1.5,2,3,4}) do
-        for _,heat in ipairs({.62,1}) do
-            local m=HUD.model.normalize({kind='heat',heat=heat,reserve=3})
-            local commands=HUD.layout.compose(m,100.3,120.7,scale,1,HUD.config.new(),0)
-            local panel=commands[1];local header,number,footer
-            for _,c in ipairs(commands) do
-                if c.type=='text' then
-                    assert(c.a==1 and c.font=='bigblue')
-                    local a,b,e,f=HUD.font.measure(c.text,c.size)
-                    if c.text=='HEAT' then header=c elseif c.text==string.format('%02d',m.value)..'%' then number={c.y+b,c.y+f} elseif c.text:find('SINKS') or c.text=='OVERHEAT' then footer={c.y+b,c.y+f} end
-                    HUD.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)
-                        assert(x>=panel.x and x+w<=panel.x+panel.w)
-                        assert(y>=panel.y and y+h<=panel.y+panel.h)
-                    end)
-                end
-            end
-            assert(header.y>number[2] and footer[2]<number[1])
-        end
-    end
-end)
-
-test('BigBlue renderer uses rectangles and releases all of them',function()
+test('native text renderer releases engine text objects',function()
     local active={};local index=0;local texts=0
     local function add()index=index+1;active[index]=true;return index end
     local sr={Application={worlds=function()return {1}end,main_world=function()return 1 end},
@@ -551,9 +494,9 @@ test('BigBlue renderer uses rectangles and releases all of them',function()
             destroy_text=function(g,id)assert(active[id]);active[id]=nil end}}
     local v=HUD.view.new(sr)
     local cmd={type='text',text='0123456789 HEAT SINKS',font='bigblue',size=24,x=.4,y=.7,a=1,c={255,255,255}}
-    v.draw({cmd});assert(texts==0 and index>0 and index<=12*#cmd.text)
+    v.draw({cmd});assert(texts==1 and index==1)
     v.clear();assert(next(active)==nil)
-    cmd.font='debug';v.draw({cmd});assert(texts==1);v.release();assert(next(active)==nil)
+    cmd.font='debug';v.draw({cmd});assert(texts==2);v.release();assert(next(active)==nil)
     local cfg=HUD.config.new();assert(not pcall(HUD.config.apply,cfg,{font='unverified/path'}))
 end)
 
@@ -728,18 +671,6 @@ test('live menu reuses boot registrations with changed saved defaults',function(
     menu.retire();ModOptionsMenu=nil
 end)
 
-test('world pixel glyphs scale proportionally below one pixel',function()
-    local bounds={math.huge,math.huge,-math.huge,-math.huge}
-    HUD.font.draw('AMMO',6,0,0,function(x,y,w,h)
-        bounds[1]=math.min(bounds[1],x);bounds[2]=math.min(bounds[2],y)
-        bounds[3]=math.max(bounds[3],x+w);bounds[4]=math.max(bounds[4],y+h)
-    end,'bigblue',true)
-    local a,b,c,d=HUD.font.measure('AMMO',6,'bigblue',true)
-    assert(bounds[1]>=a and bounds[2]>=b and bounds[3]<=c and bounds[4]<=d)
-    local _,_,full=HUD.font.measure('AMMO',12,'bigblue',true)
-    assert(math.abs(c-full*.5)<1e-8)
-end)
-
 test('first-person world frame contains quantized glyphs after scaling',function()
     local saved=HUD.world_probe.new;local captured
     HUD.world_probe.new=function()return {draw=function(_,_,commands)captured=commands;return true end,release=function()end}end
@@ -789,7 +720,7 @@ test('world GUI probe uses live worlds, moves and releases without stale handles
         Matrix4x4={from_axes=function(x,y,z,t)return {x,y,z,t}end},
         World={create_world_gui=function(w,p,x,y,mode)assert(w==worlds[1] and x==1000 and mode=='immediate');created=created+1;return created end,
             destroy_gui=function(w,g)assert(w==worlds[1]);destroyed=destroyed+1 end},
-        Gui={move=function()moved=moved+1 end,rect=function()drawn=drawn+1 end}}
+        Gui={move=function()moved=moved+1 end,rect=function()drawn=drawn+1 end,text=function()drawn=drawn+1 end}}
     local probe=HUD.world_probe.new(sr,function()end);local cfg=HUD.config.new();cfg.world_probe=true
     local p={x=0,y=0,z=0,matrix={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}}
     probe.draw(p,cfg);probe.draw(p,cfg);assert(created==1 and moved==1 and drawn==4)
@@ -1128,6 +1059,41 @@ test('laser catalog symbols and heat rows share centered presentation',function(
     assert(symbols==#HUD.fire_icons.LASER.runs)
     raw=HUD.ammo_types.apply({kind='rounds',resource_hex='5990123d142b16cb'})
     assert(not raw.energy_icon,'laser-guided missiles are not beam weapons')
+end)
+test('all 72 native families have finite bounds and selectable labels',function()
+    local count=0
+    for name,face in pairs(HUD.native_font_data.faces) do
+        count=count+1;assert(face.font and face.depth and face.clear and face.label)
+        local cfg=HUD.config.new();HUD.config.apply(cfg,{font=name})
+        for _,size in ipairs({6,12,36,53.5}) do
+            local a,b,e,f=HUD.font.measure('0123456789 AMMO +1 HEAT',size,name)
+            assert(a==a and b==b and e>a and f>b)
+        end
+    end
+    assert(count==72 and #HUD.config.fonts==73)
+end)
+test('native resource resolver selects separate clear and depth materials',function()
+    local sr={Application={can_get=function()return true end}}
+    local face=HUD.native_font_data.faces.hack
+    local font,material=HUD.native_font.resolve(sr,'hack',false);assert(font==face.font and material==face.clear)
+    font,material=HUD.native_font.resolve(sr,'hack',true);assert(font==face.font and material==face.depth)
+    assert(not HUD.font.draw,'rectangle glyph renderer must not exist')
+end)
+test('missing native resources use native debug and fail closed for unverified depth',function()
+    local sr={Application={can_get=function()return false end}}
+    local font,material=HUD.native_font.resolve(sr,'hack',false)
+    assert(font=='core/performance_hud/debug' and material==font)
+    assert(HUD.native_font.resolve(sr,'hack',true)==nil)
+end)
+test('screen font commands make one native draw and no glyph rectangles',function()
+    local texts,rects,destroyed=0,0,0
+    local sr={Application={worlds=function()return {1}end,main_world=function()return 1 end,can_get=function()return true end},
+        World={create_screen_gui=function()return 2 end,destroy_gui=function()end},
+        Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
+        Gui={rect=function()rects=rects+1 end,text=function(g,t,font,size,material)texts=texts+1;assert(font==HUD.native_font_data.faces.hack.font and material==HUD.native_font_data.faces.hack.clear);return texts end,destroy_text=function()destroyed=destroyed+1 end}}
+    local view=HUD.view.new(sr)
+    view.draw({{type='text',text='40MM HE',font='hack',size=36,x=0,y=0,a=1,c={255,255,255}}})
+    assert(texts==1 and rects==0);view.release();assert(destroyed==1)
 end)
 print(string.format('%d contract tests passed',tests))
 

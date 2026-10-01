@@ -6,14 +6,14 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ORDER = ['config','font_data','nerd_font_data','font','motion', 'ammo_types','model', 'fire_icons', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe', 'offscreen_test', 'world_style','archived_mesh','scene_test','placement','weapon_offsets', 'menu', 'runtime']
+ORDER = ['native_font_data','native_font','config','font','motion', 'ammo_types','model', 'fire_icons', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe', 'offscreen_test', 'world_style','archived_mesh','scene_test','placement','weapon_offsets', 'menu', 'runtime']
 
 def bundle():
     parts = ['-- HD2-Addon: mods/dbf_hud/hud\nlocal HUD={}\n']
     for name in ORDER:
         parts.append(f'HUD.{name}=(function()\n{(ROOT / "src" / (name+".lua")).read_text(encoding="utf-8")}\nend)()\n')
     parts.append('local ok,result=pcall(function() return HUD.runtime.start(assert(rawget(_G,"stingray"),"stingray missing"),HUD.memory.native()) end)\n'
-                 'if not ok then rawset(_G,"DBFHUD",{status=tostring(result),version="0.3.40"}) end\nreturn rawget(_G,"DBFHUD")\n')
+                 'if not ok then rawset(_G,"DBFHUD",{status=tostring(result),version="0.3.41"}) end\nreturn rawget(_G,"DBFHUD")\n')
     target = ROOT / 'dist' / 'dbf_hud.lua'
     target.parent.mkdir(exist_ok=True)
     target.write_text(''.join(parts), encoding='utf-8')
@@ -24,7 +24,7 @@ def bundle():
         live_parts.append(f'HUD.{name}=(function()\n{(ROOT / "src" / (name+".lua")).read_text(encoding="utf-8")}\nend)()\n')
     live_parts.append(f'return (function()\n{(ROOT / "src" / "mdl.lua").read_text(encoding="utf-8")}\nend)()\n')
     live.write_text(''.join(live_parts), encoding='utf-8')
-    with zipfile.ZipFile(ROOT.parent / 'DBF-HUD-MDL-0.3.40.zip','w',zipfile.ZIP_DEFLATED) as archive:
+    with zipfile.ZipFile(ROOT.parent / 'DBF-HUD-MDL-0.3.41.zip','w',zipfile.ZIP_DEFLATED) as archive:
         archive.write(live,'dbf_hud/mod.lua')
         if (ROOT / 'MDL.md').exists(): archive.write(ROOT / 'MDL.md','dbf_hud/README.md')
         archive.write(ROOT / 'DBF-HUD-weapon-offsets.lua','DBF-HUD-weapon-offsets.lua')
@@ -37,10 +37,10 @@ if __name__ == '__main__':
     target=bundle();print(target)
     if args.addon_builder:
         subprocess.run([sys.executable,str(args.addon_builder),'--name','mods/dbf_hud/hud','--entry',str(target),
-            '--guid','eb9de2f7-5733-46a0-96d8-8750becccd53','--display-name','DBF-HUD — Configurable HUD 0.3.40',
-            '--output',str(ROOT.parent / 'DBF-HUD-0.3.40.zip')],check=True)
+            '--guid','eb9de2f7-5733-46a0-96d8-8750becccd53','--display-name','DBF-HUD — Configurable HUD 0.3.41',
+            '--output',str(ROOT.parent / 'DBF-HUD-0.3.41.zip')],check=True)
 
-        with zipfile.ZipFile(ROOT.parent / 'DBF-HUD-0.3.40.zip','a',zipfile.ZIP_DEFLATED) as archive:
+        with zipfile.ZipFile(ROOT.parent / 'DBF-HUD-0.3.41.zip','a',zipfile.ZIP_DEFLATED) as archive:
             for name in ['README.md','NATIVE_ANCHOR.md','DBF-HUD-tuning.lua','DBF-HUD-weapon-offsets.lua']:
                 archive.write(ROOT / name,name)
             for path in sorted((ROOT / 'licenses').rglob('*')):

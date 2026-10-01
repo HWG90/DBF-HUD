@@ -56,13 +56,10 @@ function M.new(sr)
                 id=G.rect(gui,sr.Vector3(c.x,c.y,49),sr.Vector2(c.w,c.h),color);kind='rect'
             elseif c.type=='rect' then
                 id=G.rect(gui,sr.Vector3(c.x,c.y,50),sr.Vector2(c.w,c.h),color)
-            elseif HUD.font.supported(c.font) then
-                HUD.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)
-                    local rid=G.rect(gui,sr.Vector3(x,y,51),sr.Vector2(w,h),color)
-                    if rid then ids[#ids+1]={type='rect',id=rid} end
-                end,c.font)
             else
-                id=G.text(gui,c.text,font,c.size,font,sr.Vector3(c.x,c.y,51),color)
+                local resource,material=HUD.native_font.resolve(sr,c.font,false)
+                if resource then id=G.text(gui,c.text,resource,c.size,material,sr.Vector3(c.x,c.y,51),color) end
+
             end
             if id then ids[#ids+1]={type=kind,id=id} end
         end

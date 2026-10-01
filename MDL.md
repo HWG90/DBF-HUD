@@ -1,10 +1,10 @@
-# DBF-HUD live reload (0.3.40)
+# DBF-HUD live reload (0.3.41)
 
 Requires MDL API 2. The adapter was checked against installed MDL 1.4.2 source and tested offline. Live enable and reload produced valid pose samples. Testing exposed a concurrent startup copy; deploy with the packaged DBF-HUD addon disabled.
 
 ## First use
 
-Place the `dbf_hud` directory from `DBF-HUD-MDL-0.3.40.zip` inside `%LOCALAPPDATA%/MDL/Helldivers2/Mods`. This is a loose MDL mod, not an Arsenal archive.
+Place the `dbf_hud` directory from `DBF-HUD-MDL-0.3.41.zip` inside `%LOCALAPPDATA%/MDL/Helldivers2/Mods`. This is a loose MDL mod, not an Arsenal archive.
 
 With MDL 1.4.2 deployed and running, open its in-game panel and enable **DBF-HUD (Live)** under live Lua mods. Mod Options Menu may cause MDL to appear as a floating panel instead of an ESC tab. Refresh/rescan if the new entry has not appeared.
 
@@ -14,7 +14,7 @@ Disable the packaged DBF-HUD addon in Arsenal and redeploy before using the live
 
 Build with `python tools/build.py`. Copy the resulting `mdl/dbf_hud/mod.lua` into the installed folder, then use MDL's Reload action. MDL also provides an optional **Auto reload changed Lua files** setting; it is enabled in the current development setup. Publish future file updates atomically so MDL cannot read a partially written script.
 
-Menu settings still save to the same game-root `DBF-HUD-tuning.lua`. This adapter does not overwrite that file. Font glyphs, layout, reader diagnostics and other bundled Lua changes can reload through this path. New engine assets still require the normal asset deployment process.
+Menu settings still save to the same game-root `DBF-HUD-tuning.lua`. This adapter does not overwrite that file. Native font selection, layout, reader diagnostics and other bundled Lua changes can reload through this path. New engine assets still require the normal asset deployment process.
 
 ## Lifecycle
 
@@ -69,3 +69,7 @@ Requires the separate material-only DBF-HUD-Depth-Materials-0.1.zip deployed thr
 ## Offscreen experiment disabled
 
 Version 0.3.34 disables offscreen startup after a CTD. MDL tracks writes to the global render callback even through its wrapped rawset and deletes the restored callback on teardown. Do not enable the archived experiment under auto-reload. Normal ammo rendering continues through MDL updates.
+
+## Native font library
+
+Deploy DBF-HUD-Native-Fonts-0.1.zip in Arsenal, replacing older Hack/native font test assets, and restart for all 72 converted families. The MDL bundle uses engine text exclusively; rectangle glyph fonts are removed. Keep original sources and licenses for regeneration. Only Hack’s isolated native rendering path has been visually verified; the combined library and remaining faces need in-game checks.

@@ -1,13 +1,13 @@
 # DBF-HUD
 
-Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.40**.
+Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.41**.
 
 ## Working features
 
 - Dynamic crosshair tracking with damped movement.
 - Weapon-following hybrid mode and an angled world-GUI panel mode.
 - Weapon-pose smoothing, configurable mounting offsets, scale, opacity and config-file colors.
-- Content-sized frames and BigBlue Terminal pixel typography.
+- Content-sized frames and native engine font rendering across 72 converted font families.
 - Centered horizontal heat gauge: white below 75%, yellow from 75%, red from 86%; vent mode pulses red.
 - MDL API 2 live Lua reload and menu/Lua tuning.
 
@@ -23,9 +23,9 @@ An existing live installation may retain its `astra_ammo` folder to preserve MDL
 - Recognized fire-selection modes have a matching-width child panel with a two-reference-pixel gap. Fixed-mode weapons hide this panel.
 - Game-derived Auto/Semi/Burst/underbarrel masks share depth-aware rectangle rendering. Laser catalog entries use a beam/starburst symbol. Text, count/icon groups, bars and reserves are centered; heat is shown with a horizontal bar.
 - The verified rifle alternate source displays its grenade count, grenade reserves and 40MM HE heading. Other auxiliary modes still require live validation; unknown modes are not presented as verified.
-- Native-font depth assets and their builder are preserved as an isolated experiment and are not wired into the HUD. MDL panel resizing and the layout editor remain deferred.
+- Native fonts are integrated into the HUD, with separate clear and depth-tested materials. Rectangle font tables and their renderers are removed. MDL panel resizing and the layout editor remain deferred.
 
-The installable checkpoint is in `releases/DBF-HUD-MDL-0.3.40.zip`.
+The installable checkpoint is in `releases/DBF-HUD-MDL-0.3.41.zip`.
 
 ## Current limitations
 
@@ -61,7 +61,7 @@ Source, generated Lua bundles, preview, tests and development notes are included
 
 Ammo layout facts originated from Reticle Ammo HUD. This implementation was developed independently of HD2UI; Derive was used for read-only investigation.
 
-BigBlue Terminal printable ASCII glyphs were imported from Nerd Fonts v3.5.1. Font attribution and CC BY-SA 4.0 terms are preserved in [licenses/BigBlueTerminal](licenses/BigBlueTerminal). See `tools/import_bigblue.py` for regeneration. No blanket license is granted for the remaining project code in this snapshot.
+BigBlue Terminal printable ASCII glyphs were imported from Nerd Fonts v3.5.1. Font attribution and CC BY-SA 4.0 terms are preserved in [licenses/BigBlueTerminal](licenses/BigBlueTerminal). Use `tools/build_native_fonts.py` for native conversion. No blanket license is granted for the remaining project code in this snapshot.
 
 Nerd Fonts v3.5.1 has been converted into a future font library: 72 families and 2,252 faces, with 48px grayscale atlases, glyph metrics, source checksums and upstream license documents. HUD text uses printable ASCII; SymbolsOnly includes all 10,624 supported symbols per face. Runtime font selection beyond BigBlue/debug is still deferred. See [font assets](assets/fonts/README.md) and [BACKLOG.md](BACKLOG.md).
 
@@ -72,3 +72,9 @@ See [complete installation](INSTALL-COMPLETE.md). `tools/build_complete.py --add
 Debug logging is opt-in; active and archived tuning are separated. See [TUNING.md](TUNING.md).
 
 HUD font now offers ten additional Nerd Font families, ranked by v3.5.1 GitHub release ZIP plus tar.xz download counts (2026-09-30), excluding Symbols Only. BigBlue remains the default. Regular Mono faces are baked into printable-ASCII glyph geometry; no system font installation or intermediate texture is needed. Source selection and face details are in assets/fonts/runtime-selection.json and runtime-faces.json. Regenerate with tools/build_runtime_fonts.py.
+
+## Native font installation
+
+Import `releases/DBF-HUD-Native-Fonts-0.1.zip` in Arsenal, replacing earlier Hack and native-font test packages, then deploy and restart. Install the matching MDL 0.3.41 bundle. The font selector includes 72 families plus native Debug; unavailable assets use native Debug with the appropriate material, and occluded text is hidden if no depth-tested fallback material exists.
+
+Hack’s template rendering, spacing and occlusion were visually verified. The other converted faces and this combined library still require live checks. Conversion covers the native template’s 193 Latin characters, not all Nerd Font Unicode symbols; Symbols Only uses Hack for ordinary text. Runtime metrics retain ASCII HUD characters. Hologram flicker, scan band and frame effects remain; per-glyph rectangle scanline shading is retired. Original font sources and licenses remain available for conversion.

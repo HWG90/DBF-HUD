@@ -1,5 +1,5 @@
 local M={}
-M.fonts={'bigblue','debug','jetbrainsmono','firacode','meslo','hack','cascadiacode','iosevka','0xproto','sourcecodepro','firamono','cascadiamono'}
+M.fonts=HUD.native_font_data.order
 M.decorations={'none','outline','brackets','helldivers','double'}
 M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
 -- Auto clearance in weapon-local metres; independent entries for each view.

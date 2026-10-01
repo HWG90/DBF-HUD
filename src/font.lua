@@ -1,41 +1,17 @@
--- Pixel glyph geometry: no native font calls, handle conversions or asset loading.
+-- Native text bounds; no rectangle glyph renderer.
 local M={}
-function M.pixel(size) return math.max(1,math.floor(size/12+0.5)) end
-function M.supported(name) return name=='bigblue' or (HUD.nerd_font_data and HUD.nerd_font_data[name]~=nil) end
+function M.supported(name)return HUD.native_font_data.faces[name or 'bigblue']~=nil end
 function M.measure(text,size,name,continuous)
-    local face=HUD.nerd_font_data and HUD.nerd_font_data[name or 'bigblue']
-    if face then
-        local scale=size/face.em;local left,bottom,right,top,offset=0,0,0,0,0
-        for i=1,#text do local g=face.glyphs[text:byte(i)] or face.glyphs[63];local b=g.bounds
-            left=math.min(left,offset+b[1]);bottom=math.min(bottom,b[2]);right=math.max(right,offset+b[3]);top=math.max(top,b[4]);offset=offset+g.advance
-        end
-        return left*scale,bottom*scale,right*scale,top*scale
-    end
-    local p=continuous and size/12 or M.pixel(size);local left,bottom,right,top=0,0,0,0
+    local face=HUD.native_font_data.faces[name or 'bigblue']
+    local sr=rawget(_G,'stingray')
+    if sr and HUD.native_font then local f,m,active=HUD.native_font.resolve(sr,name,false);face=active end
+    if not face then return 0,-size*.2,#text*size*.6,size*.8 end
+    local factor=size/face.em;local left,bottom,right,top,offset=0,0,0,0,0
     for i=1,#text do
-        local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
-        local b=g.bounds;local offset=(i-1)*8
-        left=math.min(left,offset+b[1]);bottom=math.min(bottom,b[2])
-        right=math.max(right,offset+b[3]);top=math.max(top,b[4])
+        local g=face.glyphs[text:byte(i)] or face.glyphs[63]
+        left=math.min(left,offset+g[2]);bottom=math.min(bottom,g[3])
+        right=math.max(right,offset+g[4]);top=math.max(top,g[5]);offset=offset+g[1]
     end
-    return left*p,bottom*p,right*p,top*p
-end
-function M.draw(text,size,x,y,emit,name,continuous)
-    local face=HUD.nerd_font_data and HUD.nerd_font_data[name or 'bigblue']
-    if face then
-        local scale=size/face.em;local offset=0
-        for i=1,#text do local g=face.glyphs[text:byte(i)] or face.glyphs[63]
-            for _,r in ipairs(g.runs) do emit(x+(offset+r[1])*scale,y+r[2]*scale,r[3]*scale,r[4]*scale) end
-            offset=offset+g.advance
-        end
-        return
-    end
-    local p=continuous and size/12 or M.pixel(size)
-    if not continuous then x=math.floor(x+0.5);y=math.floor(y+0.5) end
-    for i=1,#text do
-        local g=HUD.font_data[text:byte(i)] or HUD.font_data[63]
-        local offset=(i-1)*8*p
-        for _,r in ipairs(g.runs) do emit(x+offset+r[1]*p,y+r[2]*p,r[3]*p,r[4]*p) end
-    end
+    return left*factor,bottom*factor,right*factor,top*factor
 end
 return M

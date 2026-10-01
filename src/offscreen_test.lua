@@ -47,7 +47,7 @@ function M.start(sr,log,globals,panel_provider,show_preview)
                 end
                 for _,c in ipairs(commands) do
                     if c.type=='text' then
-                        HUD.font.draw(c.text,c.size,c.x,c.y,function(x,y,w,h)rect(x,y,w,h,c.c,c.a)end)
+                        -- Archived mesh glyph rendering removed.
                     else rect(c.x,c.y,c.w,c.h,c.c,c.a) end
                 end
                 world_ready=false;submitted=false

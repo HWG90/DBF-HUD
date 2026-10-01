@@ -1,0 +1,679 @@
+[
+  {
+    "family": "0xProto",
+    "id": "0xproto",
+    "face": "0xProtoNerdFontMono-Regular.ttf",
+    "source_sha256": "9d8f521c75a8aa804a942baa3f6438cbfd311d12d59251af955aa75f51b8e135",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "3270",
+    "id": "3270",
+    "face": "3270NerdFontMono-Regular.ttf",
+    "source_sha256": "c14de7dc63d3af5a9556a5210c5567366707e3938da39daa9bbe3f20e35beeef",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "AdwaitaMono",
+    "id": "adwaitamono",
+    "face": "AdwaitaMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "b87d5879f6d0a75683d1ab8427f8262ddd3b8a75c49c4bf226b3bc48e97d812a",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Agave",
+    "id": "agave",
+    "face": "AgaveNerdFontMono-Regular.ttf",
+    "source_sha256": "896711f20d7dcbb915b9e0c0926da5b4eb5e7b2e6d56950d98b62c3d62b5da1a",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "AnnotationMono",
+    "id": "annotationmono",
+    "face": "AnnotationMNerdFontMono-Regular.ttf",
+    "source_sha256": "62008d934ab73fe49c6f2538d2e23d895f7883f9375cb516e92d0261794db924",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "AnonymousPro",
+    "id": "anonymouspro",
+    "face": "AnonymiceProNerdFontMono-Regular.ttf",
+    "source_sha256": "173a56f1aaa12a71fd5a411a93411b97524c2a4d290478fab3852164e01764d2",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Arimo",
+    "id": "arimo",
+    "face": "ArimoNerdFont-Regular.ttf",
+    "source_sha256": "a6cae94960612218efc285af562db57ea1ed2fe1e7bb1f684582ce610d32eb86",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "AtkinsonHyperlegibleMono",
+    "id": "atkinsonhyperlegiblemono",
+    "face": "AtkynsonMonoNerdFontMono-Regular.otf",
+    "source_sha256": "a3654b5233ba3f6a6f04fe740d9b544f267cad969e217b1b7a2889e7393cb02c",
+    "ascii_fallback": [
+      96
+    ],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "AurulentSansMono",
+    "id": "aurulentsansmono",
+    "face": "AurulentSansMNerdFontMono-Regular.otf",
+    "source_sha256": "c87070c7deba6c3984a03a884020d13d85ad615c6cfa84a118f646480f2b47f5",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "BigBlueTerminal",
+    "id": "bigblue",
+    "face": "BigBlueTerm437NerdFontMono-Regular.ttf",
+    "source_sha256": "8ecc26541cfb550995baebdf9152eeb298b26b58752f4f5fae05b0f42a751fba",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "BitstreamVeraSansMono",
+    "id": "bitstreamverasansmono",
+    "face": "BitstromWeraNerdFontMono-Regular.ttf",
+    "source_sha256": "60e2b4dbc3b5e9bc7676657412a5db4c19177526bdd1acc6605fbfbeb5007253",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "CascadiaCode",
+    "id": "cascadiacode",
+    "face": "CaskaydiaCoveNerdFontMono-Regular.ttf",
+    "source_sha256": "4e1e371b188bca589ec1ee7df494ca7bbb187c1c38228c059e5705f4029a9dc0",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "CascadiaMono",
+    "id": "cascadiamono",
+    "face": "CaskaydiaMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "0bc1e80eb7d1c0a1debb433a21da6e686b15556e1d54fcfe47f87f7379276830",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "CodeNewRoman",
+    "id": "codenewroman",
+    "face": "CodeNewRomanNerdFontMono-Regular.otf",
+    "source_sha256": "25027ac653b92de5f463c4479f010dbe4683c784bff80c253d89e3a8e05d5025",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "ComicShannsMono",
+    "id": "comicshannsmono",
+    "face": "ComicShannsMonoNerdFontMono-Regular.otf",
+    "source_sha256": "74763d9655f4f446ed7ba145cfcaa27ccf4093d079be9e4dff41027645da0946",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "CommitMono",
+    "id": "commitmono",
+    "face": "CommitMonoNerdFontMono-Regular.otf",
+    "source_sha256": "24776d3423687cb3c18e5872f44678c9c2d0fe9564e50ee393931b80d7663fa5",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Cousine",
+    "id": "cousine",
+    "face": "CousineNerdFontMono-Regular.ttf",
+    "source_sha256": "6b00669c50a3d02fd73488325d8ce6a92b5b78a6630fb81220c4f4153799ee9b",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "D2Coding",
+    "id": "d2coding",
+    "face": "D2KodingLigatureNerdFontMono-Regular.ttf",
+    "source_sha256": "7cb0d9ff115ce2de495cfc42768781268652d99548be26f43a9c14f9e566c485",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "DaddyTimeMono",
+    "id": "daddytimemono",
+    "face": "DaddyTimeMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "3892fc5dfbe684dbe250ba4fad2cd65ec7595cfe02aead9c5f9f35176426135c",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "DejaVuSansMono",
+    "id": "dejavusansmono",
+    "face": "DejaVuSansMNerdFontMono-Regular.ttf",
+    "source_sha256": "9b55ade625f2d3f2a273ed16d9db2d924ad6236222920f9fd1324941cdc3c712",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "DepartureMono",
+    "id": "departuremono",
+    "face": "DepartureMonoNerdFontMono-Regular.otf",
+    "source_sha256": "534cb9e9f8292ceec427f8524a92b94f15d798a9d96139f890d63ba4a5284a1d",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "DroidSansMono",
+    "id": "droidsansmono",
+    "face": "DroidSansMNerdFontMono-Regular.otf",
+    "source_sha256": "8fd8bf911e16ceb8ba8482c598898eaba29c28cc21142bc2d58dd5cf424e78d3",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "EnvyCodeR",
+    "id": "envycoder",
+    "face": "EnvyCodeRNerdFontMono-Regular.ttf",
+    "source_sha256": "60a953d5ce8423b5d8234a13e5275b434fff0fff6007b5426ba096d408ef2e5d",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "FantasqueSansMono",
+    "id": "fantasquesansmono",
+    "face": "FantasqueSansMNerdFontMono-Regular.ttf",
+    "source_sha256": "5c6baeb053844f734e9b7e1d22e0cd696322d6708729ce90829680e55475121f",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "FiraCode",
+    "id": "firacode",
+    "face": "FiraCodeNerdFontMono-Regular.ttf",
+    "source_sha256": "53eebbaaa09c483ebb27fdd5cf21073cc4b760308e5d666728e9db2f41616c00",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "FiraMono",
+    "id": "firamono",
+    "face": "FiraMonoNerdFontMono-Regular.otf",
+    "source_sha256": "648bf8fd0fe6c08ca7737fcd3757830f2b4e31870fc81d3de0344f6864988b64",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "GeistMono",
+    "id": "geistmono",
+    "face": "GeistMonoNerdFontMono-Regular.otf",
+    "source_sha256": "ac1fd18ba4cf7c2d0e58af2765f7c913f88c0f43b49f7b6609f9572755112756",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Go-Mono",
+    "id": "gomono",
+    "face": "GoMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "6002170e222b8f9dba20ed6116b42d1ebde52cb24289cd69b3e4ad7960c40b12",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Gohu",
+    "id": "gohu",
+    "face": "GohuFont11NerdFontMono-Regular.ttf",
+    "source_sha256": "3b8170f8f89679942c29fa144d85e7ca55eb90a15f4faad3b81d77ccd7afd5bc",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "GoogleSansCode",
+    "id": "googlesanscode",
+    "face": "GoogleSansCodeNerdFontMono-Regular.ttf",
+    "source_sha256": "6a0afe60cd75d889e039ab3841d328588355d69ef0283efa84f4edd5b43a7186",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Hack",
+    "id": "hack",
+    "face": "HackNerdFont-Regular.ttf",
+    "source_sha256": "8cba545f0ab36d8f313a448676df9988d6c679a014ffed863e52305844e7b113",
+    "ascii_fallback": [],
+    "template_path_live_verified": true
+  },
+  {
+    "family": "Hasklig",
+    "id": "hasklig",
+    "face": "HasklugNerdFontMono-Regular.otf",
+    "source_sha256": "ef891b4d7480774e0d2a9ec7cf87dbb91e30fd597197288b9d427b1c137b25ff",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "HeavyData",
+    "id": "heavydata",
+    "face": "HeavyDataNerdFont-Regular.ttf",
+    "source_sha256": "86eaf937a2e00bb74499e23a9f5ba0361c010a85b534f6e9e09c3c6f8aabbb1d",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Hermit",
+    "id": "hermit",
+    "face": "HurmitNerdFontMono-Regular.otf",
+    "source_sha256": "ff38d918302a09fa554c929bebc31fe8493d0d171e91d50d5cea5966a1a4f132",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "IBMPlexMono",
+    "id": "ibmplexmono",
+    "face": "BlexMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "9f8fe62fc71c7463677fb8dc6e47fe77aa470649383be0731706f746468b61eb",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Inconsolata",
+    "id": "inconsolata",
+    "face": "InconsolataNerdFontMono-Regular.ttf",
+    "source_sha256": "80f6d19d66666b90420893585383934e62b710a031c7003c81536f896fdaaa7c",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "InconsolataGo",
+    "id": "inconsolatago",
+    "face": "InconsolataGoNerdFontMono-Regular.ttf",
+    "source_sha256": "e186c3417454475bf2a00f66cdb2c416942130f3e9e3531669d61698daed9e6f",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "InconsolataLGC",
+    "id": "inconsolatalgc",
+    "face": "InconsolataLGCNerdFontMono-Regular.ttf",
+    "source_sha256": "ea0e473a1af2aa8895831d99107712c7ef6ddb03f6a9029af8510105f20b01ad",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "IntelOneMono",
+    "id": "intelonemono",
+    "face": "IntoneMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "a252e33ca5dcb50b9c34a6396bdaec55e4864ccf1f515e15029195d23dc79088",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Iosevka",
+    "id": "iosevka",
+    "face": "IosevkaNerdFontMono-Regular.ttf",
+    "source_sha256": "f803b8eac0897b94eef776c54dd0468cd1780ec065b6877ad839cf79fcc6f162",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "IosevkaTerm",
+    "id": "iosevkaterm",
+    "face": "IosevkaTermNerdFontMono-Regular.ttf",
+    "source_sha256": "a1cd7f03639dd9b8c8ba94d1a17fe3785623ed81f2ddf22f08d72f4f79e18c8c",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "IosevkaTermSlab",
+    "id": "iosevkatermslab",
+    "face": "IosevkaTermSlabNerdFontMono-Regular.ttf",
+    "source_sha256": "0884de27bd0ffc7354d354baa562972b08ea2e95538c98323cf27b148f7bbb15",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "JetBrainsMono",
+    "id": "jetbrainsmono",
+    "face": "JetBrainsMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "f2a5ea6cfab397445ffab00c0370927b66d61e560a05db5db271b42006381c1a",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Lekton",
+    "id": "lekton",
+    "face": "LektonNerdFontMono-Regular.ttf",
+    "source_sha256": "bab2a0f0a7c7f1f4e9b4969476d234734134ac7ef6de37b22820ebfde6d937c0",
+    "ascii_fallback": [
+      94,
+      96
+    ],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "LiberationMono",
+    "id": "liberationmono",
+    "face": "LiterationMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "454eb6757b20c23447bab3657abd6a8261aab317358754c8671ab6a80d1c966a",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Lilex",
+    "id": "lilex",
+    "face": "LilexNerdFontMono-Regular.ttf",
+    "source_sha256": "91b302cffd04cc5ff24d71a6eded03f9b6d7354e16c95376181d29038a852735",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "MPlus",
+    "id": "mplus",
+    "face": "M+1CodeNerdFontMono-Regular.ttf",
+    "source_sha256": "431f9a0945f2daddbfd9e68a3cc162052710cb26a52545d2af3d35eadeaad351",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "MartianMono",
+    "id": "martianmono",
+    "face": "MartianMonoNerdFontMono-CondensedRegular.ttf",
+    "source_sha256": "d723cf02fe9f6c4c52f47d2ab827f9ca8e2a2f41c2d949561bc6a5d955ab2b51",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Meslo",
+    "id": "meslo",
+    "face": "MesloLGMNerdFontMono-Regular.ttf",
+    "source_sha256": "35c4453cc6d0861e505b62fc7039b3fb8db9966ed75fd13dda2115e2ca94c7f7",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Monaspace",
+    "id": "monaspace",
+    "face": "MonaspiceArNerdFontMono-Regular.otf",
+    "source_sha256": "171a9cccb9c8a108e45b7b2ef8b53daa84a2cd50f6fc175d7361c73bd175824f",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Monofur",
+    "id": "monofur",
+    "face": "MonofurNerdFontMono-Regular.ttf",
+    "source_sha256": "a5aaa5d168f57eadc0824baba936054413ad9a0a9738a7fcf003821196e07842",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Monoid",
+    "id": "monoid",
+    "face": "MonoidNerdFontMono-Regular.ttf",
+    "source_sha256": "4253ca7816d423af878eb057e416942930710d9b42ae450b216aecebaa55961c",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Mononoki",
+    "id": "mononoki",
+    "face": "MononokiNerdFontMono-Regular.ttf",
+    "source_sha256": "0d01bc20457ceae88bcd2a006fb4054c91768ba3b0e662ae703f4d0033531e2e",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "NerdFontsSymbolsOnly",
+    "id": "nerdfontssymbolsonly",
+    "face": "SymbolsNerdFontMono-Regular.ttf",
+    "source_sha256": "fe471e538392f51910faab985fa8e192a39dd3426125edd15b71b3680df0e749",
+    "ascii_fallback": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126
+    ],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Noto",
+    "id": "noto",
+    "face": "NotoMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "7b5775cb997e7bda3151c31c0072cacd42638d0ed6afd8a9757b6913911bcdbe",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "OpenDyslexic",
+    "id": "opendyslexic",
+    "face": "OpenDyslexicMNerdFontMono-Regular.otf",
+    "source_sha256": "6a17d6675bdf9838ae1be5273af479fe3f5c2d79a79feb062c0e24c9bba35fb3",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Overpass",
+    "id": "overpass",
+    "face": "OverpassMNerdFontMono-Regular.otf",
+    "source_sha256": "28587185a8bdd10e330a197557668c01d002341c31cb37039b085c9a37a62bdf",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "ProFont",
+    "id": "profont",
+    "face": "ProFontWindowsNerdFontMono-Regular.ttf",
+    "source_sha256": "b74a9cf119f766c0b7f3a8578d92fe34dc7dd452ea5df498767f46d4741b367d",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "ProggyClean",
+    "id": "proggyclean",
+    "face": "ProggyCleanCENerdFontMono-Regular.ttf",
+    "source_sha256": "056ac2e74e7175f254eadd0976ed4ce51a4ffa77eaebb06e9bd4ab57943df4c7",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Recursive",
+    "id": "recursive",
+    "face": "RecMonoCasualNerdFontMono-Regular.ttf",
+    "source_sha256": "acfc16f69487dd72c2828b0ef00125741ae7c16844d4e3e42e3c23d00c7a8e48",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "RobotoMono",
+    "id": "robotomono",
+    "face": "RobotoMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "bed2c53786d6ca07be14c73371f23638e97261426028b119da4adf8c47b8fd13",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "ShareTechMono",
+    "id": "sharetechmono",
+    "face": "ShureTechMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "9a821c1499aeab3c7cb03ab606678ffaca681497d5e0f0aa96a610ba9ff92a01",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "SourceCodePro",
+    "id": "sourcecodepro",
+    "face": "SauceCodeProNerdFontMono-Regular.ttf",
+    "source_sha256": "cbfe6a91123b9d78a1b593cb2efa10a806a704490e3cea6b894078b86d67c0b1",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "SpaceMono",
+    "id": "spacemono",
+    "face": "SpaceMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "193a8f8864bb1ca515ce86018e547ce2b3ac7d66a868f3afe425c002a9dec1de",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Terminus",
+    "id": "terminus",
+    "face": "TerminessNerdFontMono-Regular.ttf",
+    "source_sha256": "1f0b30594e217a4771770dbdcae90ecbf1620b8b15429d01a23481865cce4de8",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Tinos",
+    "id": "tinos",
+    "face": "TinosNerdFont-Regular.ttf",
+    "source_sha256": "2b866077f46a38dbceaccb62f2606f65af29fbc0fcf9d828cfc1edf6a90a68f2",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "Ubuntu",
+    "id": "ubuntu",
+    "face": "UbuntuNerdFont-Regular.ttf",
+    "source_sha256": "c52a40fa70e12dc84d58e1bc0b9f65678876eac3d639657f8afd13e9f5a322bd",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "UbuntuMono",
+    "id": "ubuntumono",
+    "face": "UbuntuMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "6ac1e06816ef535f4d28f564a855032783784731ff8c7c8ec62955a08bb83932",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "UbuntuSans",
+    "id": "ubuntusans",
+    "face": "UbuntuSansMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "7934e268068b085be274cb695fa508d62ffab26cc5b05cdca629142199d617b8",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "VictorMono",
+    "id": "victormono",
+    "face": "VictorMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "9e43726e7c3ff61785a05a7f0691dde1a361cafaab849ae28467f84eb42ad7d1",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "ZedMono",
+    "id": "zedmono",
+    "face": "ZedMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "331624c1876100a91b86acab15350b492bfb5d65e158a3c94a8a9da4820c34d9",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  },
+  {
+    "family": "iA-Writer",
+    "id": "iawriter",
+    "face": "iMWritingMonoNerdFontMono-Regular.ttf",
+    "source_sha256": "bc7f059cddd87cacb3fbcf0d48288b91ecf0482768edbf2b5506fc64b9d14b94",
+    "ascii_fallback": [],
+    "template_path_live_verified": false
+  }
+]
