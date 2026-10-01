@@ -1118,5 +1118,13 @@ test('fixed mode weapons use upright ammo symbols without replacing fire selecti
     local stoker=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9'})
     assert(stoker.label=='ROUNDS' and stoker.ammo_icon=='BULLET')
 end)
+test('catalog first-person profiles are at least six inches down',function()
+    local profiles=assert(loadfile('DBF-HUD-weapon-offsets.lua'))()
+    local loaded=HUD.weapon_offsets.load({read_weapon_offsets=function()return profiles end},function(message)error(message)end)
+    assert(loaded==profiles)
+    for _,views in pairs(profiles) do
+        assert(views.first_left.z<=-.1524+1e-9 and views.first_right.z<=-.1524+1e-9)
+    end
+end)
 print(string.format('%d contract tests passed',tests))
 
