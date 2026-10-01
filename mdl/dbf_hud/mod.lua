@@ -7363,6 +7363,11 @@ function M.apply(raw)
     if raw.alternate_fire and category=='GRENADES' then raw.label='GRENADES';raw.reserve_kind='GRENADES' end
     if raw.alternate_fire and raw.ammo_resource_hex=='02cd7321cd8445f5' then raw.label='40MM HE' end
     if raw.reserve_kind=='ROUNDS' then raw.reserve_kind=category end
+    -- Stoker primary ammunition is bullets; its auxiliary entity supplies fuel.
+    if raw.resource_hex=='8a307bd1811a5fe9' then
+        raw.label=raw.alternate_fire and 'FUEL' or 'ROUNDS'
+        if raw.alternate_fire then raw.energy_icon='NONE';raw.chamber_supported=false end
+    end
     return raw
 end
 return M

@@ -1095,5 +1095,13 @@ test('screen font commands make one native draw and no glyph rectangles',functio
     view.draw({{type='text',text='40MM HE',font='hack',size=36,x=0,y=0,a=1,c={255,255,255}}})
     assert(texts==1 and rects==0);view.release();assert(destroyed==1)
 end)
+test('Stoker labels follow its active ammo source and fuel has no grenade icon or chamber bonus',function()
+    local primary=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9',rounds=41,capacity=40,chamber_supported=true,chamber_rounds=1,fire_mode='AUTO'})
+    assert(primary.label=='ROUNDS' and HUD.model.normalize(primary).chamber_bonus==1)
+    local alt=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9',ammo_resource_hex='unknown',alternate_fire=true,rounds=41,capacity=40,chamber_supported=true,chamber_rounds=1,fire_mode='ALT'})
+    local model=HUD.model.normalize(alt)
+    assert(alt.label=='FUEL' and model.energy_icon=='NONE' and not model.chamber_bonus)
+    assert(not HUD.fire_icons[model.energy_icon or model.fire_mode])
+end)
 print(string.format('%d contract tests passed',tests))
 
