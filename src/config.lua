@@ -68,7 +68,7 @@ M.archived={archived_mesh={weapon_screen_test=true,saturation=true,scanline_stre
 function M.serialize(config)
     local keys={};local archived={}
     for _,group in pairs(M.archived) do for k in pairs(group) do archived[k]=true end end
-    for k in pairs(M.defaults) do if not archived[k] and k~='occlusion_mode' and k~='hud_occlusion' then keys[#keys+1]=k end end
+    for k in pairs(M.defaults) do if not archived[k] and k~='occlusion_mode' and k~='hud_occlusion' and k~='show_3d' and k~='always_show_3d' and k~='placement_mode' and not k:match('^left_mount_') and not k:match('^fp_mount_') and not k:match('^mount_') then keys[#keys+1]=k end end
     table.sort(keys)
     local out={'-- DBF-HUD tuning. Active settings below; camera placement is unchanged.','return {','    -- Active display, palette, placement and diagnostics.'}
     local function value(v)return type(v)=='string' and string.format('%q',v) or tostring(v)end

@@ -20,9 +20,9 @@ Offsets in metres relative to the named sight:
 - First person: (+/-0.12, +0.45, +0.01), with half-size rendering. Left is the default side.
 - Left shoulder fallback: (+0.16, -0.25, +0.12); the sampled pistol adds (+0.05, -0.08, 0).
 
-For shoulder-specific placement, left-shoulder aim uses the character's named right shoulder. Its root-relative position is sampled once per avatar to avoid bone animation. Clearance is camera-relative (+0.06 right, -0.20 forward, +0.12 up), and orientation faces the camera.
+Third-person placement uses the same sight mount for both shoulders. Character-shoulder relocation and camera-facing shoulder transforms have been removed from the active path.
 
-The default visibility mode is When aiming. It draws through geometry during observed aiming and restores scene depth on release. In this mode both third-person shoulders use the standard sight mount, without shoulder relocation. First person remains separate. Validation failure keeps occlusion enabled.
+Visibility is fixed: non-occluded while the observed game aiming state is active, scene-depth-tested otherwise. The menu has no visibility selector. Validation failure keeps occlusion enabled. Old saved visibility settings are accepted for compatibility but cannot change the fixed runtime behavior.
 
 ## Editable profiles
 

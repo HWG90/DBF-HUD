@@ -36,12 +36,7 @@ function M.new(sr,log,direct)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
-        if c.placement_mode=='auto' and (p.left_shoulder or p.first_person) then m=HUD.pose_motion.upright(m) end
-        if c.placement_mode=='auto' and p.left_shoulder and p.camera_facing then
-            local camera=p.camera_facing
-            -- WorldGUI's visible plane uses right/up (X/Z), with forward Y.
-            m=camera
-        end
+        if c.placement_mode=='auto' and p.first_person then m=HUD.pose_motion.upright(m) end
         if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
         m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(c.placement_mode)..':'..tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]

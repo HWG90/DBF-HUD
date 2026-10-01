@@ -344,7 +344,9 @@ test('configuration validates atomically and roundtrips as Lua',function()
     HUD.config.apply(c,{always_show_3d=true});assert(c.occlusion_mode=='gui' and not c.hud_occlusion)
     local f=assert(loadstring(HUD.config.serialize(c)));setfenv(f,{})
     local loaded=f();assert(loaded.archived_mesh and loaded.research and loaded.saturation==nil)
-    local restored=HUD.config.new();HUD.config.apply(restored,loaded);for k,v in pairs(c) do assert(restored[k]==v) end
+    local restored=HUD.config.new();HUD.config.apply(restored,loaded);for k,v in pairs(c) do
+        if k~='show_3d' and k~='always_show_3d' and k~='occlusion_mode' and k~='hud_occlusion' and k~='placement_mode' and not k:match('^left_mount_') and not k:match('^fp_mount_') and not k:match('^mount_') then assert(restored[k]==v) end
+    end
     assert(not pcall(HUD.config.apply,c,{scale=1.5,archived_mesh={unknown=1}}) and c.scale==1)
     assert(not pcall(HUD.config.apply,c,{saturation=1,archived_mesh={saturation=2}}))
 end)
@@ -420,7 +422,7 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==24)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==23)
     callbacks['dbf_hud_placement.fp_auto_side'](1);assert(h.config.fp_auto_side=='left');writes=writes-1
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
@@ -430,14 +432,11 @@ test('native menu keeps colors config-only and persists placement',function()
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==10 and groups['DBF-HUD Placement']==14)
+    assert(groups['DBF-HUD']==9 and groups['DBF-HUD Placement']==14)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
     callbacks['dbf_hud_v4.display_mode'](3);assert(h.config.anchor_mode=='world')
-    callbacks['dbf_hud_v4.show_3d'](2);assert(h.config.occlusion_mode=='gui' and h.config.always_show_3d)
-    callbacks['dbf_hud_v4.show_3d'](1);assert(h.config.occlusion_mode=='gui_depth' and not h.config.always_show_3d)
-    callbacks['dbf_hud_v4.show_3d'](3);assert(h.config.show_3d=='aiming' and h.config.occlusion_mode=='gui_depth')
     menu.retire();callbacks['dbf_hud_placement.offset_x'](42);assert(h.config.offset_x==-120)
     ModOptionsMenu=nil;assert(HUD.menu.new(h).status=='Mod Options Menu not installed')
 end)
@@ -618,7 +617,7 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     valid=true;update(1/60);assert(math.abs(h.motion_x-576)<1e-6)
     h.configure({anchor_mode='crosshair'});update(1/60);assert(h.anchor_status~='weapon attachment')
     h.configure({anchor_mode='world',always_show_3d=false});update(1/60);assert(world_draws==1 and selected_mode=='gui_depth')
-    h.configure({always_show_3d=true});update(1/60);assert(world_draws==2 and selected_mode=='gui')
+    h.configure({always_show_3d=true});update(1/60);assert(world_draws==2 and selected_mode=='gui_depth')
     h.configure({anchor_mode='weapon'});update(1/60);assert(world_draws==2)
     h.retire();HUD.pose.new,HUD.projection.new,HUD.scene_test.new=saved_pose,saved_projection,saved_scene
 end)
@@ -701,7 +700,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==24)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==23)
         callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end

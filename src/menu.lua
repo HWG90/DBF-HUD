@@ -23,7 +23,6 @@ function M.new(hud)
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
-        set('show_3d',hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1))
         set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('frosted',hud.config.frosted)
@@ -41,6 +40,7 @@ function M.new(hud)
         for id,route in pairs(routes) do
             if not id:find('dbf_hud_v4.',1,true) and not id:find('dbf_hud_placement.',1,true) then route.callback=nil;route.owner=nil end
         end
+        if routes['dbf_hud_v4.show_3d'] then routes['dbf_hud_v4.show_3d'].callback=nil end
         if routes['dbf_hud_v4.always_show_3d'] then routes['dbf_hud_v4.always_show_3d'].callback=nil end
         local function add(k,spec,callback)
             spec.mod=placement[k] and 'DBF-HUD Placement' or 'DBF-HUD'
@@ -63,10 +63,6 @@ function M.new(hud)
             end)
             add('fp_auto_side',{type='choice',label='Auto first-person HUD side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1},function(v)
                 hud.configure({fp_auto_side=v==2 and 'right' or 'left'});hud.save_tuning()
-            end)
-            add('show_3d',{type='choice',label='Always Show HUD (3D)',choices={'Off (occluded)','Always','When aiming'},default=hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1),
-                description='On: draw through characters and scenery. Off: scene geometry hides the 3D HUD.'},function(v)
-                hud.configure({show_3d=v==2 and 'always' or (v==3 and 'aiming' or 'occluded')});hud.save_tuning()
             end)
             for _,s in ipairs(sliders) do
                 local k=s[1];add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)

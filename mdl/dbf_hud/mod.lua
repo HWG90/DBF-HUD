@@ -71,7 +71,7 @@ M.archived={archived_mesh={weapon_screen_test=true,saturation=true,scanline_stre
 function M.serialize(config)
     local keys={};local archived={}
     for _,group in pairs(M.archived) do for k in pairs(group) do archived[k]=true end end
-    for k in pairs(M.defaults) do if not archived[k] and k~='occlusion_mode' and k~='hud_occlusion' then keys[#keys+1]=k end end
+    for k in pairs(M.defaults) do if not archived[k] and k~='occlusion_mode' and k~='hud_occlusion' and k~='show_3d' and k~='always_show_3d' and k~='placement_mode' and not k:match('^left_mount_') and not k:match('^fp_mount_') and not k:match('^mount_') then keys[#keys+1]=k end end
     table.sort(keys)
     local out={'-- DBF-HUD tuning. Active settings below; camera placement is unchanged.','return {','    -- Active display, palette, placement and diagnostics.'}
     local function value(v)return type(v)=='string' and string.format('%q',v) or tostring(v)end
@@ -1860,15 +1860,7 @@ function M.new(backend)
         if not ok then self.status=tostring(value);return nil end
         self.status='verified root pose';self.samples=self.samples+1;return value
     end
-    function self.shoulder(raw)
-        local ok,value=pcall(function()
-            local b=assert(raw.binding)
-            return self.snapshot({id=b.avatar_id,unit_ref=raw.avatar_unit_ref,
-                binding={module_base=b.module_base,record=b.avatar_record,candidate=b.avatar_candidate}},nil,0x1620b2ce)
-        end)
-        self.shoulder_status=ok and (value.sight and 'right shoulder resolved' or 'right shoulder name absent') or tostring(value)
-        if ok and value.sight then return value end
-    end
+
     return self
 end
 return M
@@ -2291,12 +2283,7 @@ function M.new(sr,log,direct)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
-        if c.placement_mode=='auto' and (p.left_shoulder or p.first_person) then m=HUD.pose_motion.upright(m) end
-        if c.placement_mode=='auto' and p.left_shoulder and p.camera_facing then
-            local camera=p.camera_facing
-            -- WorldGUI's visible plane uses right/up (X/Z), with forward Y.
-            m=camera
-        end
+        if c.placement_mode=='auto' and p.first_person then m=HUD.pose_motion.upright(m) end
         if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
         m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(c.placement_mode)..':'..tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]
@@ -2815,13 +2802,13 @@ local M={}
 function M.update(self,pose,projection,latest_raw,log)
     if self.weapon_pose then
         self.weapon_pose.first_person=self.first_person
-        self.weapon_pose.left_shoulder=self.left_shoulder
+        self.weapon_pose.left_shoulder=false
         self.weapon_pose.auto_mount=nil
         self.weapon_pose.camera_facing=nil
         if self.config.placement_mode=='auto' then
             local equip=tostring(self.weapon_pose.id)..':'..tostring(self.weapon_pose.candidate)..':'..tostring(latest_raw.avatar_unit_ref)
             if self.auto_equip~=equip then self.auto_equip=equip;self.auto_mounts={};self.auto_view=nil end
-            local view=self.first_person and 'first' or (self.left_shoulder and 'left' or 'right')
+            local view=self.first_person and 'first' or 'right'
             if self.auto_view~=view then self.auto_view=view;self.auto_sample_after=self.clock+.4 end
             local mount=self.auto_mounts[view]
             local sight=self.weapon_pose.sight
@@ -2829,35 +2816,6 @@ function M.update(self,pose,projection,latest_raw,log)
                 -- Named anchors need neither camera settling nor cached screen seeds.
                 if self.first_person then
                     mount={x=sight.x+(self.config.fp_auto_side=='right' and .12 or -.12),y=sight.y+.45,z=sight.z+.01}
-                elseif self.left_shoulder then
-                    mount={x=sight.x+.16,y=sight.y-.25,z=sight.z+.12}
-                    if self.weapon_pose.resource_hex=='05e4e5c2db6e44a2' then
-                        mount.x=mount.x+.05;mount.y=mount.y-.08
-                    end
-                    local player=pose.shoulder(latest_raw)
-                    if self.config.debug_logging and self.clock>=(self.next_shoulder_log or 0) then
-                        log('SHOULDER_ANCHOR '..tostring(pose.shoulder_status));self.next_shoulder_log=self.clock+1
-                    end
-                    if player then
-                        local shoulder_owner=tostring(player.id)..':'..tostring(player.candidate)
-                        if self.shoulder_owner~=shoulder_owner then
-                            self.shoulder_owner=shoulder_owner;self.shoulder_rest=player.sight
-                        end
-                        -- Character-relative anchor is sampled once per avatar;
-                        -- bone animation no longer drives the mounted position.
-                        local a=self.shoulder_rest;local pm=player.matrix;local wm=self.weapon_pose.matrix
-                        local delta={}
-                        for j=1,3 do
-                            delta[j]=pm[12+j]+pm[j]*a.x+pm[4+j]*a.y+pm[8+j]*a.z-wm[12+j]
-                            local basis=projection.camera_matrix or pm
-                            delta[j]=delta[j]+basis[j]*.06-basis[4+j]*.20+basis[8+j]*.12
-                        end
-                        for axis,k in ipairs({1,5,9}) do
-                            local v=0;for j=1,3 do v=v+delta[j]*wm[k+j-1] end
-                            mount[({'x','y','z'})[axis]]=v
-                        end
-                        self.weapon_pose.camera_facing=projection.camera_matrix
-                    end
                 else
                     mount={x=sight.x+.16,y=sight.y+.10,z=sight.z+.04}
                 end
@@ -2868,12 +2826,10 @@ function M.update(self,pose,projection,latest_raw,log)
                 mount.x=math.max(-.8,math.min(.8,mount.x))
                 mount.y=math.max(-.15,math.min(.4,mount.y))
                 mount.z=math.max(-.2,math.min(.4,mount.z))
-                local side=(self.first_person or self.left_shoulder) and -1 or 1
+                local side=self.first_person and -1 or 1
                 mount.x=side*math.max(.13,math.min(.18,math.abs(mount.x)+.05))
-                if self.left_shoulder and not self.first_person then mount.x=mount.x-.40 end
                 mount.y=math.max(-.05,math.min(.10,mount.y*.4))
                 mount.z=math.max(.03,math.min(.10,mount.z*.4))
-                if self.left_shoulder and not self.first_person then mount.y=mount.y-.15;mount.z=mount.z+.08 end
                 if self.first_person then mount.x=-.12;mount.y=.35;mount.z=.22 end
                 self.auto_mounts[view]=mount
             end
@@ -2950,7 +2906,6 @@ function M.new(hud)
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
-        set('show_3d',hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1))
         set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('frosted',hud.config.frosted)
@@ -2968,6 +2923,7 @@ function M.new(hud)
         for id,route in pairs(routes) do
             if not id:find('dbf_hud_v4.',1,true) and not id:find('dbf_hud_placement.',1,true) then route.callback=nil;route.owner=nil end
         end
+        if routes['dbf_hud_v4.show_3d'] then routes['dbf_hud_v4.show_3d'].callback=nil end
         if routes['dbf_hud_v4.always_show_3d'] then routes['dbf_hud_v4.always_show_3d'].callback=nil end
         local function add(k,spec,callback)
             spec.mod=placement[k] and 'DBF-HUD Placement' or 'DBF-HUD'
@@ -2990,10 +2946,6 @@ function M.new(hud)
             end)
             add('fp_auto_side',{type='choice',label='Auto first-person HUD side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1},function(v)
                 hud.configure({fp_auto_side=v==2 and 'right' or 'left'});hud.save_tuning()
-            end)
-            add('show_3d',{type='choice',label='Always Show HUD (3D)',choices={'Off (occluded)','Always','When aiming'},default=hud.config.show_3d=='always' and 2 or (hud.config.show_3d=='aiming' and 3 or 1),
-                description='On: draw through characters and scenery. Off: scene geometry hides the 3D HUD.'},function(v)
-                hud.configure({show_3d=v==2 and 'always' or (v==3 and 'aiming' or 'occluded')});hud.save_tuning()
             end)
             for _,s in ipairs(sliders) do
                 local k=s[1];add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)
@@ -3145,7 +3097,7 @@ function M.start(sr,backend,options)
     local menu
     function self.configure(values)
         local was_debug=self.config.debug_logging
-        HUD.config.apply(self.config,values);self.config.placement_mode='auto'
+        HUD.config.apply(self.config,values);self.config.placement_mode='auto';self.config.show_3d='aiming'
         if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
     end
@@ -3238,14 +3190,7 @@ function M.start(sr,backend,options)
         if native_first~=nil then self.first_person=native_first
         else self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
         self.camera_mode_status=mode_status
-        local native_left,shoulder_status=HUD.camera_mode.read_shoulder(backend,latest_raw)
-        if self.first_person then self.left_shoulder=false
-        elseif native_left~=nil then self.left_shoulder=native_left
-        else self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,false) end
-        self.shoulder_mode_status=shoulder_status
-        -- Aim-only unoccluded rendering makes shoulder-clearance relocation
-        -- unnecessary. Keep the standard sight mount for either shoulder.
-        if self.config.show_3d=='aiming' then self.left_shoulder=false end
+        self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))
@@ -3285,10 +3230,8 @@ function M.start(sr,backend,options)
         if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
-            if self.config.show_3d=='aiming' then
-                local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
-                world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
-            end
+            local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
+            world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
             local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end

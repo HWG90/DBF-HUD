@@ -116,7 +116,7 @@ function M.start(sr,backend,options)
     local menu
     function self.configure(values)
         local was_debug=self.config.debug_logging
-        HUD.config.apply(self.config,values);self.config.placement_mode='auto'
+        HUD.config.apply(self.config,values);self.config.placement_mode='auto';self.config.show_3d='aiming'
         if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
     end
@@ -209,14 +209,7 @@ function M.start(sr,backend,options)
         if native_first~=nil then self.first_person=native_first
         else self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
         self.camera_mode_status=mode_status
-        local native_left,shoulder_status=HUD.camera_mode.read_shoulder(backend,latest_raw)
-        if self.first_person then self.left_shoulder=false
-        elseif native_left~=nil then self.left_shoulder=native_left
-        else self.left_shoulder=HUD.projection.left_shoulder(self.left_shoulder,projection.camera_lateral,false) end
-        self.shoulder_mode_status=shoulder_status
-        -- Aim-only unoccluded rendering makes shoulder-clearance relocation
-        -- unnecessary. Keep the standard sight mount for either shoulder.
-        if self.config.show_3d=='aiming' then self.left_shoulder=false end
+        self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)
         if self.config.debug_logging and projection.camera_distance and self.clock>=(self.next_camera_sample or 0) then
             log(string.format('CAMERA placement distance=%.3f fov=%.3f lateral=%.3f first_person=%s source=%s',projection.camera_distance,projection.camera_fov,projection.camera_lateral,tostring(self.first_person),mode_status))
@@ -256,10 +249,8 @@ function M.start(sr,backend,options)
         if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
         if self.config.anchor_mode=='world' and self.weapon_pose then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
-            if self.config.show_3d=='aiming' then
-                local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
-                world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
-            end
+            local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
+            world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
             local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end

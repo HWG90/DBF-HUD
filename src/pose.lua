@@ -114,15 +114,7 @@ function M.new(backend)
         if not ok then self.status=tostring(value);return nil end
         self.status='verified root pose';self.samples=self.samples+1;return value
     end
-    function self.shoulder(raw)
-        local ok,value=pcall(function()
-            local b=assert(raw.binding)
-            return self.snapshot({id=b.avatar_id,unit_ref=raw.avatar_unit_ref,
-                binding={module_base=b.module_base,record=b.avatar_record,candidate=b.avatar_candidate}},nil,0x1620b2ce)
-        end)
-        self.shoulder_status=ok and (value.sight and 'right shoulder resolved' or 'right shoulder name absent') or tostring(value)
-        if ok and value.sight then return value end
-    end
+
     return self
 end
 return M
