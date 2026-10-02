@@ -89,7 +89,26 @@ function M.new(hud)
             local preset_name='My preset'
             local preset_choices=hud.list_presets and hud.list_presets() or {}
             if #preset_choices==0 then preset_choices={'No saved presets'} end
-            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD Appearance',
+            local placement_controls={
+                {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
+                {id='first_person_side',type='choice',label='First-person side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1,on_change=function(v)save('fp_auto_side',v==2 and 'right' or 'left')end},
+                {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
+                {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
+            for _,row in ipairs(sliders)do
+                if placement[row[1]] then
+                    local key=row[1]
+                    placement_controls[#placement_controls+1]={id=key,type='slider',label=row[2],min=row[3],max=row[4],step=row[5],default=hud.config[key],on_change=function(v)save(key,v)end}
+                end
+            end
+            local e=hud.layout_editor
+            local layout_controls={{type='text',label='F6 edits equipped weapon; F7 saves; F8 restores starting layout.'}}
+            if e then
+                layout_controls[#layout_controls+1]={id='edit_layout',type='button',label='Edit equipped weapon',on_activate=function()assert(e.bind(),'Equip a weapon first')end}
+                layout_controls[#layout_controls+1]={id='save_layout',type='button',label='Save layout',on_activate=function()assert(e.save(),'Layout save failed')end}
+                layout_controls[#layout_controls+1]={id='restore_layout',type='button',label='Restore starting layout',on_activate=function()assert(e.reset(),'Enable editing first')end}
+                layout_controls[#layout_controls+1]={id='close_editor',type='button',label='Close editor',on_activate=function()e.active=false end}
+            end
+            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
                 description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
                     {id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
                         default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2),
@@ -123,7 +142,7 @@ function M.new(hud)
                         on_change=function(v)save('text_opacity',v)end},
                     {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
                         on_change=function(v)save('panel_opacity',v)end}
-                }},{id='presets',name='Presets',require_confirmation=true,controls={
+                }},{id='layout',name='Layout',controls=layout_controls},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
                     {id='save_preset',type='button',label='Save named preset',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
@@ -132,7 +151,7 @@ function M.new(hud)
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
                 }}}})
-            font_host=host
+            font_host=host;self.status='MCM > DBF-HUD'
         end
         if attempted then return end
         api=rawget(_G,'ModOptionsMenu')
