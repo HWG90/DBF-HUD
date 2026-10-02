@@ -10923,7 +10923,7 @@ function M.new(hud,backend,log)
         if not e.notice_visible then return {} end
         local x,y,z=e.values();local s=h/1080
         local offset=(hud.weapon_clearance[e.resource] or {})[e.view] or {}
-        local point=offset.attach_point or 'sight';local point_label=point
+        local point=offset.attach_point or 'root';local point_label=point
         for _,item in ipairs(e.points()) do if item.value==point then point_label=item.label;break end end
         local label=e.active and string.format('EDIT %s | %s | %s | X %.2f Y %.2f Z %.2f in | SCALE %.0f%%',e.name,e.view=='right' and (e.shared and 'SHARED' or 'THIRD') or 'FIRST',point_label,x,y,z,e.scale()*100) or e.status
         if e.active and not screen() then label=label..string.format(' | ROLL %.0f PITCH %.0f YAW %.0f deg',e.rotation(),e.rotation('pitch'),e.rotation('yaw')) end
