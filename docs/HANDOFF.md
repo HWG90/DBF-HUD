@@ -38,7 +38,7 @@ Read the relevant source module, make the smallest coherent change, run proporti
 - Appearance includes all 72 font families, text/panel/decoration color controls, separate text/panel opacity, display mode, scale and visibility. The retired global opacity is ignored when loading old settings.
 - Styles control interiors; Decorations controls borders. Scanlines, Flicker and Scanning sweep are independent Appearance toggles and follow visibility fading.
 - MCM Appearance provides an equipped-weapon HUD preview. Presets save settings and all layouts to `%LOCALAPPDATA%/DBF/Presets/DBF-HUD-preset-<name>.layout`; the dropdown loads saved presets. Saving has been tested live; reset/load still need verification.
-- The installed MCM file has repeatedly reverted to an older build. Reinstalling restores grouping and preview, but the writer causing the rollback remains unidentified. MCM is a separate local project and is not included in this source repository.
+- The installed MCM file has repeatedly reverted to an older build. Reinstalling restores grouping and preview, but the writer causing the rollback remains unidentified. MCM source is preserved in `integrations/ModConfigurationMenu`; its installed copy remains a separate mod.
 - Complete installer with optional MDL remains unfinished. The first-person rotation wiggle remains unresolved. Existing checks are not a substitute for native visual testing.
 
 ## Latest appearance checkpoint
