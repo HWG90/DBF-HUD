@@ -91,4 +91,13 @@ local spear=M.SPEAR
 local upright={w=spear.h,h=spear.w,runs={}}
 for _,r in ipairs(spear.runs) do upright.runs[#upright.runs+1]={spear.h-r[2]-r[4],r[1],r[4],r[3]} end
 M.SPEAR=upright
+-- Napalm rocket with an orange flame beside the warhead.
+M.NAPALM_ROCKET={w=18,h=26,runs={}}
+for _,run in ipairs(M.ROCKET.runs) do
+    M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4]}
+end
+local flame={255,133,45}
+for _,run in ipairs({{12,14,5,3},{11,17,7,3},{12,20,5,2},{13,22,3,2},{14,24,1,2},{11,20,1,3},{17,19,1,3}}) do
+    M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4],flame}
+end
 return M

@@ -263,7 +263,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 end
             end
             for _,run in ipairs(fire_icon.runs) do
-                local color=ink
+                local color=run[5] or ink
                 if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then color=run[2]<9 and {218,172,78} or {65,145,235} end
                 rect(edge+8+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,color,.9)
                 d[#d].mode_icon=true

@@ -7557,7 +7557,7 @@ function M.apply(raw)
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
-    if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='ROCKET' end
+    if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='NAPALM_ROCKET' end
     if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
@@ -7741,6 +7741,15 @@ local spear=M.SPEAR
 local upright={w=spear.h,h=spear.w,runs={}}
 for _,r in ipairs(spear.runs) do upright.runs[#upright.runs+1]={spear.h-r[2]-r[4],r[1],r[4],r[3]} end
 M.SPEAR=upright
+-- Napalm rocket with an orange flame beside the warhead.
+M.NAPALM_ROCKET={w=18,h=26,runs={}}
+for _,run in ipairs(M.ROCKET.runs) do
+    M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4]}
+end
+local flame={255,133,45}
+for _,run in ipairs({{12,14,5,3},{11,17,7,3},{12,20,5,2},{13,22,3,2},{14,24,1,2},{11,20,1,3},{17,19,1,3}}) do
+    M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4],flame}
+end
 return M
 
 end)()
@@ -8010,7 +8019,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 end
             end
             for _,run in ipairs(fire_icon.runs) do
-                local color=ink
+                local color=run[5] or ink
                 if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then color=run[2]<9 and {218,172,78} or {65,145,235} end
                 rect(edge+8+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,color,.9)
                 d[#d].mode_icon=true
