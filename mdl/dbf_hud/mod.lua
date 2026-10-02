@@ -7526,6 +7526,7 @@ function M.apply(raw)
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
+    if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='ROCKET' end
     if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
@@ -10727,9 +10728,6 @@ function M.new(hud,backend,log)
     end
     function e.points()
         local list={{value='node:4d25685a',label='Attach optic (default)'},{value='root',label='Weapon root'}}
-        if hud.first_person then
-            list={{value='root',label='Weapon root (default)'},{value='node:4d25685a',label='Attach optic'}}
-        end
         for _,node in ipairs((hud.weapon_pose or {}).anchors or {}) do
             list[#list+1]={value='node:'..node.hash,label=(node_names[node.hash] or 'Unnamed')..' [node '..node.index..']'}
         end
@@ -10743,7 +10741,7 @@ function M.new(hud,backend,log)
         local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
         local offset=views[e.view] or {};views[e.view]=offset
         local list=e.points();local current=1
-        local default_point=hud.first_person and 'root' or 'node:4d25685a'
+        local default_point='node:4d25685a'
         for i,item in ipairs(list)do if item.value==(offset.attach_point or default_point)then current=i;break end end
         local item=list[(current-1+direction)%#list+1];offset.attach_point=item.value
         e.point_label=item.label;hud.auto_mounts={};e.status='Attach: '..item.label..'; save to keep it';return true
@@ -11465,7 +11463,7 @@ function M.start(sr,backend,options)
         local selected_view=(profiles and profiles[active_view] and profiles[active_view].attach_point) and active_view or (self.placement_view_parity and 'right' or active_view)
         local selected_profile=profiles and profiles[selected_view]
         local attach_point=selected_profile and selected_profile.attach_point
-        if not attach_point then attach_point=self.first_person and 'root' or 'node:4d25685a' end
+        if not attach_point then attach_point='node:4d25685a' end
         local anchor_hash=attach_point and attach_point:match('^node:(%x+)$')
         if attach_point=='sight' then anchor_hash='527c9c73' end
         self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active) or nil

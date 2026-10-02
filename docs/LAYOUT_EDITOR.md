@@ -2,7 +2,7 @@
 
 First-person placement uses the right-side profile. Older side settings are accepted for compatibility and normalized to right; the side selector is retired.
 
-Profiles without an explicit attachment use Weapon root in first person and Attach optic in third person. Saved attachment choices, including legacy Sight selections, remain overrides.
+Profiles without an explicit attachment use Attach optic in both views. Saved attachment choices, including legacy Sight selections, remain overrides.
 
 ## Controls
 

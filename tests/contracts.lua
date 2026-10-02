@@ -1459,7 +1459,7 @@ test('attachment points persist per view and bone cycling preserves offsets',fun
         [key]={right={x=.1},first_right={y=.2}}}}
     local e=HUD.layout_editor.new(h,{write_weapon_offsets=function(body)saved=assert(loadstring(body))()end},function()end)
     assert(e.bind() and e.name=='AR-23 Liberator')
-    e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='node:4d25685a' and h.weapon_clearance[key].first_right.y==.2)
+    e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='root' and h.weapon_clearance[key].first_right.y==.2)
     e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='node:12345678')
     e.set_scale(1.4)
     assert(e.zero_position())
