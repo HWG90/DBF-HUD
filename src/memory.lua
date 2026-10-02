@@ -131,8 +131,14 @@ function M.native()
         local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
         assert(not stem:upper():match('^(CON)$') and not stem:upper():match('^(NUL)$'),'Reserved filename')
         local path=preset_folder()..'/DBF-HUD-preset-'..stem..'.layout'
-        local existing=io.open(path,'rb');if existing then existing:close();error('Preset already exists; choose another name')end
-        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close());assert(os.rename(path..'.tmp',path));return path
+        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close())
+        local existing=io.open(path,'rb');local had_previous=existing~=nil
+        if existing then
+            existing:close();os.remove(path..'.bak');assert(os.rename(path,path..'.bak'))
+        end
+        local moved,why=os.rename(path..'.tmp',path)
+        if not moved then if had_previous then os.rename(path..'.bak',path)end;error(why)end
+        return path
     end
     function backend.write_weapon_offsets(body)
         assert(type(body)=='string' and #body<=65536,'weapon offsets file too large')

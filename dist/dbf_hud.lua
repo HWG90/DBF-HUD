@@ -8325,8 +8325,14 @@ function M.native()
         local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
         assert(not stem:upper():match('^(CON)$') and not stem:upper():match('^(NUL)$'),'Reserved filename')
         local path=preset_folder()..'/DBF-HUD-preset-'..stem..'.layout'
-        local existing=io.open(path,'rb');if existing then existing:close();error('Preset already exists; choose another name')end
-        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close());assert(os.rename(path..'.tmp',path));return path
+        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close())
+        local existing=io.open(path,'rb');local had_previous=existing~=nil
+        if existing then
+            existing:close();os.remove(path..'.bak');assert(os.rename(path,path..'.bak'))
+        end
+        local moved,why=os.rename(path..'.tmp',path)
+        if not moved then if had_previous then os.rename(path..'.bak',path)end;error(why)end
+        return path
     end
     function backend.write_weapon_offsets(body)
         assert(type(body)=='string' and #body<=65536,'weapon offsets file too large')
@@ -10906,7 +10912,7 @@ function M.new(hud)
                         on_change=function(v)save('panel_opacity',v)end}
                 }},{id='layout',name='Layout',controls=layout_controls},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
-                    {id='save_preset',type='button',label='Save named preset',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
+                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
                     {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
                     {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
