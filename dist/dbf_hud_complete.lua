@@ -10436,6 +10436,7 @@ end)()
 HUD.weapon_names=(function()
 -- Readable names from the installed runtime catalog; unique identities only.
 return {
+    ['d54b9505c0f72873'] = "LAS-98 Laser Cannon",
     ['27ee1ed8f6fb6356'] = "LAS-5 Scythe",
     ['3f92ba65ef65cca9'] = "P-72 Crisper",
     ['a6a735accb4a327f'] = "M-105 Stalwart",
