@@ -36,6 +36,22 @@ for _,offset in ipairs({0,10,20}) do
         M.RIFLE_AUTO.runs[#M.RIFLE_AUTO.runs+1]={r[1],r[2]+offset,r[3],r[4],r[5]}
     end
 end
+-- Amendment: polished medium rifle cartridge with rim, neck and copper tip.
+M.AMENDMENT_CARTRIDGE={w=14,h=34,runs={
+    {0,0,14,2,{218,172,78}},{1,2,12,2,{159,115,47}},
+    {2,5,10,17,{218,172,78}},{3,6,2,15,{250,216,137}},
+    {10,6,2,15,{159,115,47}},{3,22,8,2,{218,172,78}},
+    {4,24,6,3,{218,172,78}},{4,27,6,1,{95,73,48}},
+    {4,28,6,2,{192,120,72}},{5,30,4,2,{192,120,72}},
+    {6,32,2,2,{192,120,72}},{5,28,1,3,{230,162,106}},
+    {2,4,10,1,{255,226,153}}
+}}
+M.AMENDMENT_BURST={w=46,h=34,runs={}}
+for _,offset in ipairs({0,16,32}) do
+    for _,r in ipairs(M.AMENDMENT_CARTRIDGE.runs) do
+        M.AMENDMENT_BURST.runs[#M.AMENDMENT_BURST.runs+1]={offset+r[1],r[2],r[3],r[4],r[5]}
+    end
+end
 -- Heavy bolt cartridge: rim, straight case, shoulder and broad pointed projectile.
 M.BOLT_ROUND={w=14,h=28,runs={
     {0,0,14,2},{1,2,12,2},{2,5,10,13},
