@@ -583,7 +583,9 @@ function M.start(sr,backend,options)
         if not retired then
             if profile then profile.drew=false end
             local started=profile and os.clock()
+            HUD.native_font.begin_frame()
             local ok,err=pcall(self.frame,dt)
+            HUD.native_font.end_frame()
             if profile and profile.drew then
                 local cost=os.clock()-started
                 profile.elapsed=profile.elapsed+math.max(0,dt or 0)

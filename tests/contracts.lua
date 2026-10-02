@@ -1658,4 +1658,13 @@ test('screen numeric grouping retains leading-zero opacity and proportional spac
     local variable={glyphs={}};for digit=48,57 do variable.glyphs[digit]={digit} end
     assert(#HUD.screen_scene.text_parts({text='145',numeric_display=true,size=36,font='profont'},variable)==3)
 end)
+test('font availability checks reuse results only within one frame',function()
+    local calls=0;local sr={Application={can_get=function()calls=calls+1;return true end}}
+    HUD.native_font.begin_frame()
+    local f,m,face=HUD.native_font.resolve(sr,'profont',false)
+    local again=HUD.native_font.resolve(sr,'profont',false)
+    assert(f==again and face and calls==2)
+    HUD.native_font.end_frame();HUD.native_font.resolve(sr,'profont',false);assert(calls==4)
+    HUD.native_font.begin_frame();HUD.native_font.resolve(sr,'profont',false);assert(calls==6);HUD.native_font.end_frame()
+end)
 print(string.format('%d contract tests passed',tests))
