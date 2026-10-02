@@ -100,6 +100,14 @@ function M.new(hud,backend,log)
         else log('LAYOUT_EDITOR '..e.status) end
         return ok
     end
+    function e.zero_position()
+        if not e.active then return false end
+        e.set_view(hud.first_person)
+        e.set('x',0);e.set('y',0);e.set('z',0)
+        e.status='Position zeroed for current weapon/view; F7 saves'
+        log('LAYOUT_EDITOR '..e.status)
+        return true
+    end
     function e.reset()
         if not e.active then return false end
         local restored={};for view,offset in pairs(original)do restored[view]=copy(offset)end
@@ -136,6 +144,7 @@ function M.new(hud,backend,log)
         end
         if pressed(118) and e.active then e.save();notice_until=now+4 end -- F7
         if pressed(119) and e.active then e.reset();notice_until=now+4 end -- F8
+        if pressed(120) and e.active then e.zero_position();notice_until=now+4 end -- F9
         if pressed(219) and e.active then e.cycle(-1) end -- [
         if pressed(221) and e.active then e.cycle(1) end -- ]
         if pressed(188) and e.active then e.rotate(-(backend.editor_key(16) and 5 or 45),backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- comma
@@ -173,7 +182,7 @@ function M.new(hud,backend,log)
         if e.active and screen() then label=string.format('EDIT %s | %s | X %.0f Y %.0f px | SCALE %.0f%%',e.name,e.view,x,z,e.scale()*100) end
         return {{type='text',text=label,font=font,x=32*s,y=h-160*s,size=18*s,c={255,255,255},a=1},
             {type='text',text=e.status,font=font,x=32*s,y=h-135*s,size=16*s,c=e.status:match('^Saved:') and {100,255,160} or {255,255,255},a=1},
-            {type='text',text='F6 edit  F7 save  F8 reset | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | , / . roll | Ctrl+,/. pitch | Alt+,/. yaw | Shift fine',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
+            {type='text',text='F6 edit  F7 save  F8 restore  F9 zero position | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | , / . roll | Ctrl+,/. pitch | Alt+,/. yaw | Shift fine',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
     end
     return e
 end

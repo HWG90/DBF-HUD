@@ -24,7 +24,7 @@ Styles affect interiors; Decorations controls borders. Scanlines, Flicker and Sc
 
 ## Layout editor
 
-Equip and aim, then F6 enables editing. Arrows move; Page Up/Down changes 3D depth; minus/plus scales; brackets cycle 3D nodes. Comma/period rolls in 45-degree steps; Ctrl selects pitch, Alt selects yaw, and Shift uses 5-degree steps. Movement follows the rotated axes. F7 saves; F8 restores the starting edit; F6 closes. First/third person and 2D mode profiles are separate. Re-enable editing after switching weapons.
+Equip and aim, then F6 enables editing. Arrows move; Page Up/Down changes 3D depth; minus/plus scales; brackets cycle 3D nodes. Comma/period rolls in 45-degree steps; Ctrl selects pitch, Alt selects yaw, and Shift uses 5-degree steps. Movement follows the rotated axes. F7 saves; F8 restores the starting edit; F9 zeros current position offsets; F6 closes. First/third person and 2D mode profiles are separate. Re-enable editing after switching weapons.
 
 ## Presets
 

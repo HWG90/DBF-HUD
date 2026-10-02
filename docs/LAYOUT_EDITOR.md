@@ -17,6 +17,7 @@ Equip and aim with the weapon before entering editing.
 | - / = (+ key) | Smaller / larger scale |
 | F7 | Save all profiles; displays readable weapon and view confirmation |
 | F8 | Restore this weapon's profiles from when this edit session began |
+| F9 | Zero position offsets for the selected weapon and current mode/view; F7 saves. Rotation, scale and attachment stay unchanged. |
 
 Movement repeats while held; scale and attachment cycling are press-edge operations. Keys are read without consuming game input. Changing weapons closes the editor; use F6 again for the next weapon. Closing without saving leaves preview changes in memory. The close status currently says unsaved preview even if the last action was a save.
 

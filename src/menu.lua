@@ -102,7 +102,7 @@ function M.new(hud)
                 end
             end
             local e=hud.layout_editor
-            local layout_controls={{type='text',label='F6 edits equipped weapon; F7 saves; F8 restores starting layout.'}}
+            local layout_controls={{type='text',label='F6 edits equipped weapon; F7 saves; F8 restores starting layout; F9 zeros position.'}}
             if e then
                 layout_controls[#layout_controls+1]={id='edit_layout',type='button',label='Edit equipped weapon',on_activate=function()assert(e.bind(),'Equip a weapon first')end}
                 layout_controls[#layout_controls+1]={id='save_layout',type='button',label='Save layout',on_activate=function()assert(e.save(),'Layout save failed')end}
