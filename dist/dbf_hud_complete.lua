@@ -10906,6 +10906,7 @@ function M.new(hud)
             local preset_choices=hud.list_presets and hud.list_presets() or {}
             if #preset_choices==0 then preset_choices={'No saved presets'} end
             local placement_controls={
+                {id='debug_occlusion',type='toggle',label='Debug: force occlusion',default=hud.config.force_occlusion,on_change=function(v)save('force_occlusion',v)end},
                 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
                 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
             for _,row in ipairs(sliders)do
@@ -10913,14 +10914,6 @@ function M.new(hud)
                     local key=row[1]
                     placement_controls[#placement_controls+1]={id=key,type='slider',label=row[2],min=row[3],max=row[4],step=row[5],default=hud.config[key],on_change=function(v)save(key,v)end}
                 end
-            end
-            local e=hud.layout_editor
-            local layout_controls={{type='text',label='F6 edits equipped weapon; F7 saves; F8 restores starting layout; F9 zeros position.'}}
-            if e then
-                layout_controls[#layout_controls+1]={id='edit_layout',type='button',label='Edit equipped weapon',on_activate=function()assert(e.bind(),'Equip a weapon first')end}
-                layout_controls[#layout_controls+1]={id='save_layout',type='button',label='Save layout',on_activate=function()assert(e.save(),'Layout save failed')end}
-                layout_controls[#layout_controls+1]={id='restore_layout',type='button',label='Restore starting layout',on_activate=function()assert(e.reset(),'Enable editing first')end}
-                layout_controls[#layout_controls+1]={id='close_editor',type='button',label='Close editor',on_activate=function()e.active=false end}
             end
             local function refresh_presets()
                 preset_choices=hud.list_presets and hud.list_presets() or {}
@@ -10969,12 +10962,16 @@ function M.new(hud)
                         on_change=function(v)save('text_opacity',v)end},
                     {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
                         on_change=function(v)save('panel_opacity',v)end}
-                }},{id='layout',name='Layout',controls=layout_controls},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
+                }},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
-                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=function()local name=font_handle.get('preset_name');local overwrite=false;for _,existing in ipairs(hud.list_presets())do if existing:lower()==name:lower() then overwrite=true end end;local ok,err=hud.save_preset(name);assert(ok,err);refresh_presets();if overwrite then return 'Overwrote '..name..'.layout' end end},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
+                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=function()local name=font_handle.get('preset_name');local overwrite=false;for _,existing in ipairs(hud.list_presets())do if existing:lower()==name:lower() then overwrite=true end end;local ok,err=hud.save_preset(name);assert(ok,err);refresh_presets();if overwrite then return 'Overwrote '..name..'.layout' end end},
                     {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
                     {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);refresh_presets() end},
+                    {type='text',label=''},
+                    {type='text',label=''},
+                    {type='text',label=''},
+                    {type='text',label='Reset all settings and weapon layouts'},
                     {id='default_setup',type='button',label='Reset to Default setup',
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
