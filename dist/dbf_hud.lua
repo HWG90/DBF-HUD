@@ -11066,10 +11066,11 @@ function M.start(sr,backend,options)
         return commands
     end
     function self.appearance_preview(bounds)
-        if not model then return {} end
+        -- A presentation-only example keeps Appearance useful on the ship.
+        local preview_model=model or HUD.model.normalize({id='appearance_sample',kind='magazine',rounds=24,capacity=30,reserve=4,reserve_kind='mags',label='ROUNDS',fire_mode='AUTO'})
         local cfg={};for k,v in pairs(self.config)do cfg[k]=v end
         cfg.frosted=false;cfg.placement_mode='manual'
-        local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        local commands=HUD.layout.compose(preview_model,0,0,2,1,cfg,self.clock)
         commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
         local minx,miny,maxx,maxy=math.huge,math.huge,-math.huge,-math.huge
         for _,c in ipairs(commands)do
