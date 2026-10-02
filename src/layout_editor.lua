@@ -58,7 +58,7 @@ function M.new(hud,backend,log)
     end
     function e.set_scale(value)
         if not e.active then return false end
-        assert(type(value)=='number' and value==value and value>=.25 and value<=3,'invalid editor scale')
+        assert(type(value)=='number' and value==value and value>=.05 and value<=3,'invalid editor scale')
         local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
         views[e.view]=views[e.view] or {};views[e.view].scale=value;e.status='Scale preview updated; save to keep it';return true
     end
@@ -152,7 +152,7 @@ function M.new(hud,backend,log)
         if pressed(221) and e.active then e.cycle(1) end -- ]
         if pressed(188) and e.active then e.rotate(-(backend.editor_key(16) and 5 or 45),backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- comma
         if pressed(190) and e.active then e.rotate(backend.editor_key(16) and 5 or 45,backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- period
-        if pressed(189) and e.active then e.set_scale(math.max(.25,e.scale()-(backend.editor_key(16) and .01 or .05))) end -- -
+        if pressed(189) and e.active then e.set_scale(math.max(.05,e.scale()-(backend.editor_key(16) and .01 or .05))) end -- -
         if pressed(187) and e.active then e.set_scale(math.min(3,e.scale()+(backend.editor_key(16) and .01 or .05))) end -- = / +
         if e.active then
             local pose=hud.weapon_pose

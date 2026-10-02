@@ -973,6 +973,16 @@ test('sight placement updates without cache and profiles affect only their weapo
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
     assert(math.abs(p.auto_mount.z-.16)<1e-9)
 end)
+test('five percent weapon scales persist and smaller values are rejected',function()
+    local key='0123456789abcdef'
+    local profiles={[key]={right={scale=.05}}}
+    local parsed=assert(loadstring(HUD.weapon_offsets.serialize(profiles)))()
+    local loaded=HUD.weapon_offsets.load({read_weapon_offsets=function()return parsed end},function()end)
+    assert(loaded[key].right.scale==.05)
+    profiles[key].right.scale=.049
+    assert(not pcall(HUD.weapon_offsets.serialize,profiles))
+end)
+
 test('missing attachment placement is stable across reload and first view entry',function()
     local function instance()
         return {weapon_pose={id=1,candidate=2,resource_hex='test'},config=HUD.config.new(),clock=0,

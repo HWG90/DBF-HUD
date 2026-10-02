@@ -17,7 +17,7 @@ function M.load(backend,log)
                         if axis=='rotation' or axis=='pitch' or axis=='yaw' then
                             assert(type(value)=='number' and value==value and math.abs(value)<=180,'invalid weapon rotation')
                         elseif axis=='scale' then
-                            assert(type(value)=='number' and value==value and value>=.25 and value<=3,'invalid weapon scale')
+                            assert(type(value)=='number' and value==value and value>=.05 and value<=3,'invalid weapon scale')
                         elseif axis=='attach_point' then
                             assert(value=='sight' or value=='root' or (type(value)=='string' and value:match('^node:%x%x%x%x%x%x%x%x$')),'invalid attach point')
                         else
@@ -52,7 +52,7 @@ function M.serialize(profiles)
                     end
                 end
                 if offset.scale then
-                    assert(type(offset.scale)=='number' and offset.scale>=.25 and offset.scale<=3,'invalid weapon scale')
+                    assert(type(offset.scale)=='number' and offset.scale>=.05 and offset.scale<=3,'invalid weapon scale')
                     axes[#axes+1]='scale = '..string.format('%.9f',offset.scale)
                 end
                 if offset.attach_point then

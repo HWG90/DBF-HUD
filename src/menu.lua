@@ -226,7 +226,7 @@ function M.new(hud)
                     add('editor_'..axis,{type='slider',label=row[2],min=-72,max=72,step=.25,default=0,
                         description='Additional position from the automatic mount. APPLY, close the menu, and inspect while aiming.'},function(v)e.set(axis,v)end)
                 end
-                add('editor_scale',{type='slider',label='Weapon view scale',min=.25,max=3,step=.05,default=1,
+                add('editor_scale',{type='slider',label='Weapon view scale',min=.05,max=3,step=.05,default=1,
                     description='Size multiplier for this weapon and view. F7 or Save layout keeps it.'},function(v)e.set_scale(v)end)
                 add('editor_save',{type='toggle',label='Save layout',default=false,
                     description='Turn on and APPLY to save all weapon positions. A backup is kept.'},function(v)if v then e.save() end;set('editor_save',false)end)

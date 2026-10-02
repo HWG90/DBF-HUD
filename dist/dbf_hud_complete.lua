@@ -10713,7 +10713,7 @@ function M.load(backend,log)
                         if axis=='rotation' or axis=='pitch' or axis=='yaw' then
                             assert(type(value)=='number' and value==value and math.abs(value)<=180,'invalid weapon rotation')
                         elseif axis=='scale' then
-                            assert(type(value)=='number' and value==value and value>=.25 and value<=3,'invalid weapon scale')
+                            assert(type(value)=='number' and value==value and value>=.05 and value<=3,'invalid weapon scale')
                         elseif axis=='attach_point' then
                             assert(value=='sight' or value=='root' or (type(value)=='string' and value:match('^node:%x%x%x%x%x%x%x%x$')),'invalid attach point')
                         else
@@ -10748,7 +10748,7 @@ function M.serialize(profiles)
                     end
                 end
                 if offset.scale then
-                    assert(type(offset.scale)=='number' and offset.scale>=.25 and offset.scale<=3,'invalid weapon scale')
+                    assert(type(offset.scale)=='number' and offset.scale>=.05 and offset.scale<=3,'invalid weapon scale')
                     axes[#axes+1]='scale = '..string.format('%.9f',offset.scale)
                 end
                 if offset.attach_point then
@@ -10834,7 +10834,7 @@ function M.new(hud,backend,log)
     end
     function e.set_scale(value)
         if not e.active then return false end
-        assert(type(value)=='number' and value==value and value>=.25 and value<=3,'invalid editor scale')
+        assert(type(value)=='number' and value==value and value>=.05 and value<=3,'invalid editor scale')
         local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
         views[e.view]=views[e.view] or {};views[e.view].scale=value;e.status='Scale preview updated; save to keep it';return true
     end
@@ -10928,7 +10928,7 @@ function M.new(hud,backend,log)
         if pressed(221) and e.active then e.cycle(1) end -- ]
         if pressed(188) and e.active then e.rotate(-(backend.editor_key(16) and 5 or 45),backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- comma
         if pressed(190) and e.active then e.rotate(backend.editor_key(16) and 5 or 45,backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- period
-        if pressed(189) and e.active then e.set_scale(math.max(.25,e.scale()-(backend.editor_key(16) and .01 or .05))) end -- -
+        if pressed(189) and e.active then e.set_scale(math.max(.05,e.scale()-(backend.editor_key(16) and .01 or .05))) end -- -
         if pressed(187) and e.active then e.set_scale(math.min(3,e.scale()+(backend.editor_key(16) and .01 or .05))) end -- = / +
         if e.active then
             local pose=hud.weapon_pose
@@ -11197,7 +11197,7 @@ function M.new(hud)
                     add('editor_'..axis,{type='slider',label=row[2],min=-72,max=72,step=.25,default=0,
                         description='Additional position from the automatic mount. APPLY, close the menu, and inspect while aiming.'},function(v)e.set(axis,v)end)
                 end
-                add('editor_scale',{type='slider',label='Weapon view scale',min=.25,max=3,step=.05,default=1,
+                add('editor_scale',{type='slider',label='Weapon view scale',min=.05,max=3,step=.05,default=1,
                     description='Size multiplier for this weapon and view. F7 or Save layout keeps it.'},function(v)e.set_scale(v)end)
                 add('editor_save',{type='toggle',label='Save layout',default=false,
                     description='Turn on and APPLY to save all weapon positions. A backup is kept.'},function(v)if v then e.save() end;set('editor_save',false)end)
