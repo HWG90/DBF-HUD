@@ -11,7 +11,7 @@ The live editor supports position, scale and attachment cycling. Save confirms t
 ## Current weapon presentation
 
 - Ammo and reserves use fixed digit slots and dim leading zeros. Speargun loaded count is a single digit, with native upward arrowheads, no heading and reserves even when empty.
-- Heat/fuel/gas use textured gauges and calibration ticks. Heat’s final section flashes red/white; fuel/gas drain with remaining capacity.
+- Heat/fuel/gas use textured gauges and calibration ticks. Heatâ€™s final section flashes red/white; fuel/gas drain with remaining capacity.
 - Railgun has Safe/Unsafe status and a vertical charge meter; its final warning threshold remains provisional.
 - Recoilless HEAT/HE labels/icons and pack reserves are separate from loaded count.
 - Autocannon pulses at five or fewer; first-clip reload correction was confirmed in game.
@@ -38,8 +38,8 @@ Read the relevant source module, make the smallest coherent change, run proporti
 - Appearance includes all 72 font families, text/panel/decoration color controls, separate text/panel opacity, display mode, scale and visibility. The retired global opacity is ignored when loading old settings.
 - Styles control interiors; Decorations controls borders. Scanlines, Flicker and Scanning sweep are independent Appearance toggles and follow visibility fading.
 - MCM Appearance provides an equipped-weapon HUD preview. Presets save settings and all layouts to `%LOCALAPPDATA%/DBF/Presets/DBF-HUD-preset-<name>.layout`; the dropdown loads saved presets. Saving has been tested live; reset/load still need verification.
-- The installed MCM file has repeatedly reverted to an older build. Reinstalling restores grouping and preview, but the writer causing the rollback remains unidentified. MCM source is preserved in `integrations/ModConfigurationMenu`; its installed copy remains a separate mod.
-- Complete installer with optional MDL remains unfinished. The first-person rotation wiggle remains unresolved. Existing checks are not a substitute for native visual testing.
+- The installed MCM file has repeatedly reverted to an older build. Reinstalling restores grouping and preview, but the writer causing the rollback remains unidentified. MCM source and prereleases are maintained separately in https://github.com/HWG90/DBF-MCM.
+- Complete archive now bundles current fonts/depth assets with startup and optional MDL installation choices; fresh live installation remains unverified. The first-person rotation wiggle remains unresolved. Existing checks are not a substitute for native visual testing.
 
 ## Latest appearance checkpoint
 
