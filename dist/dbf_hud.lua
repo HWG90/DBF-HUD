@@ -7565,7 +7565,7 @@ function M.apply(raw)
     if (raw.ammo_resource_hex or raw.resource_hex)=='3828e2051aa9e897' then raw.label='';raw.reserve_kind='SPEARS';raw.ammo_icon='SPEAR' end
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
-    if raw.resource_hex=='14d5d4506056c7a4' then raw.label='';raw.reserve_kind='MISSILES';raw.ammo_icon='MISSILE_SIDE' end
+    if raw.resource_hex=='14d5d4506056c7a4' then raw.label='';raw.reserve_kind='MSL';raw.ammo_icon='MISSILE_SIDE' end
     if raw.resource_hex=='5f3ec9bda2bd8553' then raw.label='';raw.reserve_kind='CHARGES';raw.ammo_icon='HAMMER' end
     if raw.resource_hex=='25aa2fd4643cf4ee' then raw.label='GUIDED RCKT';raw.ammo_icon='SPEAR_ROCKET' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
@@ -8056,8 +8056,17 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,charged and (run[5] or color) or color,alpha*(run[6] or 1))
             d[#d].hammer_indicator=true
         end
-        local reserve_label=missile and 'MISSILES' or 'CHARGES'
-        text(m.reserve and (string.format('%03d',m.reserve)..' '..reserve_label) or '-- '..reserve_label,0,-19,9,ink,.8)
+        if missile then
+            local function centered(t,y,size,alpha)
+                local width=#t*size*.6
+                if measure then local a,b,c=measure(t,size*scale);if c then width=(c-(a or 0))/scale end end
+                text(t,(icon.w*factor-width)/2,y,size,ink,alpha)
+            end
+            centered(m.reserve~=nil and string.format('%03d',m.reserve) or '--',-14,12,1)
+            centered('MSL',-29,8,.8)
+        else
+            text(m.reserve and (string.format('%03d',m.reserve)..' CHARGES') or '-- CHARGES',0,-19,9,ink,.8)
+        end
         if missile and m.ammo_mode then text(m.ammo_mode,0,46,8,ink,.9) end
     elseif m.resource_hex=='72170a55a1f37ff1' then
         local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
