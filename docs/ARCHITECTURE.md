@@ -6,7 +6,7 @@
 MDL on_enable -> memory.native -> runtime.start(managed=true)
 MDL on_update -> runtime.tick -> identity-checked reader sample
  -> model.normalize -> pose + camera state -> placement.update
- -> layout.compose -> WorldGUI or screen view
+ -> layout.compose -> screen_scene projected geometry and native text
  -> editor/debug screen overlays
 ```
 
@@ -40,7 +40,7 @@ MDL on_update -> runtime.tick -> identity-checked reader sample
 | menu | Mod Options Menu routes, native ModBindingsMenu shortcut and debug notice |
 | mdl | MDL enable/update/disable adapter and cleanup |
 
-Offscreen/scene/mesh modules remain as archived experiments. Their presence in the bundle does not mean the public renderer uses them. `camera_research_mdl.lua` is separate research instrumentation, not normal HUD data flow.
+Camera research instrumentation is separate from normal HUD data flow.
 
 ## Identity and native boundaries
 
@@ -50,7 +50,7 @@ The memory helper enforces bounded read sizes and per-operation budgets. IO load
 
 ## Rendering and color
 
-`layout.compose` produces command tables, including text/rect/panel primitives and metadata used by renderers. Coordinates begin as logical layout units, then scale. WorldGUI uses native text and geometry; it does not require an intermediate offscreen texture.
+`layout.compose` produces command tables, including text/rect/panel primitives and metadata used by renderers. Coordinates begin as logical layout units, then scale. The active renderer projects geometry and native text directly.
 
 Heat zones are white below 65%, yellow 65-85%, red from 85%. The final 95-100% bar section alternates bright red/white once heat reaches 95%. Percentage warning logic separately still alternates configured red/yellow at 95%; do not assume both effects share their palette. Non-percentage heat labels remain neutral except during venting. Venting turns the HUD red and replaces the gauge with flashing OVERHEAT.
 
@@ -78,7 +78,7 @@ Mod Options Menu registrations use stable IDs and reusable dispatch routes. Reti
 ## Extension recipes
 
 - New weapon label/icon: resolve its stable identity, inspect active-ammo classification in reader/model/ammo_types, map the symbol in fire_icons, and check alternate modes separately.
-- New display layout: add command composition in layout; keep native reads out of layout. Confirm both screen and WorldGUI renderers understand new command metadata.
+- New display layout: add command composition in layout; keep native reads out of layout. Confirm the screen renderer understands new command metadata.
 - New attachment name: add only a justified hash/name mapping in layout_editor. Keep unmatched nodes labeled by index. A candidate hash match is not proof of behavior on every weapon.
 - New editor field: extend profile validation/serializer, editor copy/save/reset, overlay/menu controls, placement/render consumption and contracts together.
 - New native signal: compare labeled released/held/returned samples on the same weapon, validate identity and build, and keep thresholds provisional until confirmed.
