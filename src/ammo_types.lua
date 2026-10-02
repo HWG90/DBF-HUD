@@ -167,6 +167,9 @@ function M.recoilless_mode(control)
     if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
     return ({[0x50]='HEAT',[0x54]='HE'})[control]
 end
+function M.missile_pistol_mode(control)
+    return ({[0x50]='GUIDED',[0x54]='UNGUIDED'})[control]
+end
 function M.airburst_mode(control)
     return ({[0x50]='FLAK',[0x54]='CLUSTER'})[control]
 end

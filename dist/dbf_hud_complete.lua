@@ -7519,6 +7519,9 @@ function M.recoilless_mode(control)
     if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
     return ({[0x50]='HEAT',[0x54]='HE'})[control]
 end
+function M.missile_pistol_mode(control)
+    return ({[0x50]='GUIDED',[0x54]='UNGUIDED'})[control]
+end
 function M.airburst_mode(control)
     return ({[0x50]='FLAK',[0x54]='CLUSTER'})[control]
 end
@@ -8111,10 +8114,10 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             end
             centered(m.reserve~=nil and string.format('%03d',m.reserve) or '--',-14,12,1)
             centered('MSL',-29,8,.8)
+            centered(m.ammo_mode or 'GUIDANCE --',46,8,.9)
         else
             text(m.reserve and (string.format('%03d',m.reserve)..' CHARGES') or '-- CHARGES',0,-19,9,ink,.8)
         end
-        if missile and m.ammo_mode then text(m.ammo_mode,0,46,8,ink,.9) end
     elseif m.resource_hex=='72170a55a1f37ff1' then
         local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
         for barrel=1,2 do
@@ -8923,6 +8926,7 @@ function M.new(backend)
                 local mode=result.resource_hex=='a8cffb316f0b5c5f' and HUD.ammo_types.autocannon_mode(r.u(controls,4)) or nil
                 if result.resource_hex=='9f80d67a12a7e40f' then mode=HUD.ammo_types.recoilless_mode(r.u(controls,4)) end
                 if result.resource_hex=='26e40437ea275296' then mode=HUD.ammo_types.airburst_mode(r.u(controls,4)) end
+                if result.resource_hex=='14d5d4506056c7a4' then mode=HUD.ammo_types.missile_pistol_mode(r.u(controls,4)) end
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)

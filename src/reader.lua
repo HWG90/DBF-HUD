@@ -259,6 +259,7 @@ function M.new(backend)
                 local mode=result.resource_hex=='a8cffb316f0b5c5f' and HUD.ammo_types.autocannon_mode(r.u(controls,4)) or nil
                 if result.resource_hex=='9f80d67a12a7e40f' then mode=HUD.ammo_types.recoilless_mode(r.u(controls,4)) end
                 if result.resource_hex=='26e40437ea275296' then mode=HUD.ammo_types.airburst_mode(r.u(controls,4)) end
+                if result.resource_hex=='14d5d4506056c7a4' then mode=HUD.ammo_types.missile_pistol_mode(r.u(controls,4)) end
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)

@@ -994,6 +994,28 @@ test('sight placement updates without cache and profiles affect only their weapo
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
     assert(math.abs(p.auto_mount.z-.16)<1e-9)
 end)
+test('missile pistol shows verified guidance and centered three-digit missile reserves',function()
+    local cfg=HUD.config.new()
+    for control,label in pairs({[0x50]='GUIDED',[0x54]='UNGUIDED'}) do
+        local mode=HUD.ammo_types.missile_pistol_mode(control);assert(mode==label)
+        for _,rounds in ipairs({0,1}) do
+            local raw=HUD.ammo_types.apply({resource_hex='14d5d4506056c7a4',kind='magazine',rounds=rounds,capacity=1,reserve=4,ammo_mode=mode})
+            local list=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,cfg,0)
+            local found={}
+            for _,c in ipairs(list) do
+                if c.type=='text' then
+                    assert(c.text==label or c.text=='004' or c.text=='MSL')
+                    found[c.text]=c
+                end
+                if c.hammer_indicator and rounds==0 then assert(c.c[1]==255 and c.c[2]==55) end
+            end
+            assert(found[label] and found['004'] and found.MSL)
+            assert(found['004'].y>found.MSL.y)
+        end
+    end
+    assert(HUD.ammo_types.missile_pistol_mode(0x58)==nil)
+end)
+
 test('hammer uses an icon charge indicator and keeps reserve charges when empty',function()
     local cfg=HUD.config.new()
     local function commands(value,clock)

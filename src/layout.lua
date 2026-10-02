@@ -241,10 +241,10 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             end
             centered(m.reserve~=nil and string.format('%03d',m.reserve) or '--',-14,12,1)
             centered('MSL',-29,8,.8)
+            centered(m.ammo_mode or 'GUIDANCE --',46,8,.9)
         else
             text(m.reserve and (string.format('%03d',m.reserve)..' CHARGES') or '-- CHARGES',0,-19,9,ink,.8)
         end
-        if missile and m.ammo_mode then text(m.ammo_mode,0,46,8,ink,.9) end
     elseif m.resource_hex=='72170a55a1f37ff1' then
         local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
         for barrel=1,2 do
