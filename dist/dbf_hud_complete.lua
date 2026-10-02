@@ -7736,6 +7736,22 @@ M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{
 -- Short, broad guided missile with tapered nose, casing seam and rear fins.
 -- Native StratagemHammer path, cropped to its hammer silhouette.
 M.HAMMER={w=48,h=19,runs={{41,18,7,1},{41,17,7,1},{41,16,7,1},{41,15,7,1},{41,14,7,1},{41,13,7,1},{40,12,8,1},{0,11,12,1},{38,11,10,1},{0,10,48,1},{0,9,48,1},{0,8,48,1},{0,7,48,1},{40,6,8,1},{41,5,7,1},{41,4,7,1},{41,3,7,1},{41,2,7,1},{41,0,7,1}}}
+-- Charcoal hammer with industrial yellow bands and a small skull on its head.
+do
+    local icon=M.HAMMER
+    for _,run in ipairs(icon.runs) do
+        run[5]={91,97,103}
+    end
+    local yellow={245,201,48};local charcoal={68,73,78}
+    local details={
+        {2,8,2,4,yellow},{12,8,2,4,yellow},{38,8,2,4,yellow},
+        {42,16,5,1,yellow},{42,2,5,1,yellow},
+        {43,9,4,3,yellow},{44,8,2,1,yellow},{44,7,2,1,yellow},
+        {43,10,1,1,charcoal},{46,10,1,1,charcoal},
+        {44,6,1,1,yellow},{46,6,1,1,yellow}
+    }
+    for _,run in ipairs(details) do icon.runs[#icon.runs+1]=run end
+end
 M.SPEAR_ROCKET={w=16,h=24,runs={{7,23,2,1},{6,21,4,2},{5,19,6,2},{4,8,8,11},{3,6,10,1},{4,3,8,2},{1,0,3,7},{12,0,3,7},{5,0,6,2}}}
 -- Detailed horizontal missile, with separated fins and subdued casing fill.
 -- Run alpha retains the selected text color and follows the loaded-state pulse.
