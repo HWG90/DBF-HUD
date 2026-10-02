@@ -60,6 +60,8 @@ def main():
   out.write(ROOT/'docs/GETTING_STARTED.md','GETTING_STARTED.md')
   for path in sorted(ROOT.glob('*.md')):out.write(path,'Source/'+path.name)
   out.write(ROOT/'DBF-HUD-tuning.lua','Configuration/DBF-HUD-tuning.lua')
+  out.write(ROOT/'DBF-HUD-weapon-offsets.lua','Configuration/DBF-HUD-weapon-offsets.lua')
+  for path in sorted((ROOT/'presets').glob('*.layout')):out.write(path,'Presets/'+path.name)
   out.write(ROOT/'mdl/dbf_hud/mod.lua','MDL/dbf_hud/mod.lua')
   out.write(ROOT/'MDL.md','MDL/dbf_hud/README.md')
   for path in sorted((ROOT/'licenses').rglob('*')):

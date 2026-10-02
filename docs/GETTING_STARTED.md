@@ -1,35 +1,51 @@
 # Getting started with DBF-HUD
 
-## Downloads
+## Downloads and requirements
 
-- [HUD prerelease and Complete bundle](https://github.com/HWG90/DBF-HUD/releases/tag/hud-v0.3.41-preview.1)
-- [Optional MCM prerelease](https://github.com/HWG90/DBF-MCM/releases/tag/mcm-v0.1.24-preview.1)
-- [Bingus Shared Loader releases](https://github.com/CowboyBingus/BingusSharedLoader/releases)
-- [Arsenal download](https://www.nexusmods.com/helldivers2/mods/4664)
-- [Official Arsenal instructions](https://docs.rsnl.gg/)
+- [DBF-HUD downloads](https://github.com/HWG90/DBF-HUD/releases): choose the Complete ZIP.
+- [Bingus Shared Loader](https://github.com/CowboyBingus/BingusSharedLoader/releases): required to start the Complete HUD.
+- [Arsenal](https://www.nexusmods.com/helldivers2/mods/4664): installs and deploys the mod archive. See [Arsenal documentation](https://docs.rsnl.gg/) for setup.
+- [DBF-MCM](https://github.com/HWG90/DBF-MCM/releases): optional configuration menu, presets and Appearance preview. Choose its Shared Loader startup package for use without MDL. Bingus Mod Options is not required.
 
-## First installation
+## Install with Bingus Shared Loader
 
-Download Complete, install Bingus Shared Loader, and import Complete into Arsenal. Choose **Complete HUD - startup** for installation without MDL. Disable earlier separate HUD/font/depth/probe packages and duplicate MDL HUD instances. Deploy and restart. Keep the loader at the priority specified by its own installation instructions.
+1. Close the game. Install Shared Loader following its own instructions.
+2. Import the DBF-HUD Complete ZIP into Arsenal.
+3. Choose **Complete HUD - startup**. Disable an existing MDL HUD instance and older separate HUD, font or depth packages to avoid duplicate startup or competing assets.
+4. Enable the package and deploy with Arsenal. Follow Shared Loader's documented deployment order.
+5. Start the game. The Complete archive includes HUD code, render bridge, fonts and depth assets; MDL is not required for this installation.
+6. For configuration, install DBF-MCM's Shared Loader startup package separately, deploy and restart. Press F10 and open DBF-HUD.
 
-Alternatively choose **MDL live reload - bridge and all assets**, copy the included MDL/dbf_hud folder into `%LOCALAPPDATA%/MDL/Helldivers2/Mods`, and enable it with MDL API 2. A verified public MDL download link is still pending; use startup installation if you do not already have MDL.
+Use exactly one startup path for each mod. Arsenal does not need to remain open while playing.
 
-Preserve existing settings and layouts. Bundled Configuration files are examples. The newly merged Complete archive is offline-validated; clean startup installation still needs live testing.
+## Optional MDL live reload
 
-## Appearance and optional MCM
+Choose **MDL live reload - bridge and all assets** in the Complete archive instead of startup. Install the included MDL/dbf_hud folder in your MDL Mods folder and use MDL API 2. The bridge and assets still need deployment. Lua reload does not install updated fonts or shaders.
 
-MCM currently requires MDL API 2. Install its dbf_mcm folder beside dbf_hud, preserving settings. Enable it and press F10. DBF-HUD > Appearance provides display mode, scale, 72 fonts, styles, decorations, colors, text/panel opacity, effects and an equipped-weapon preview.
+## First setup
 
-Styles affect interiors; Decorations controls borders. Scanlines, Flicker and Scanning sweep are independent checkboxes. Fade when not aiming works across modes; HUD always visible disables world-depth occlusion for the 3D path.
+New installations use the bundled tuned settings and weapon layouts. The three approved starter presets are copied into the preset folder only when those filenames do not already exist. Existing local settings, layouts and presets take priority during updates.
+
+Appearance contains fonts, colors, text and panel opacity, scale, styles, decorations, effects, frosted backgrounds and aiming fade. Its preview uses the held weapon, or a fallback HUD when no weapon is equipped. Placement contains the occlusion debug control and weapon blacklist actions.
 
 ## Layout editor
 
-Equip and aim, then F6 enables editing. Arrows move; Page Up/Down changes 3D depth; minus/plus scales; brackets cycle 3D nodes. Comma/period rolls in 45-degree steps; Ctrl selects pitch, Alt selects yaw, and Shift uses 5-degree steps. Movement follows the rotated axes. F7 saves; F8 restores the starting edit; F9 zeros current position offsets; F6 closes. First/third person and 2D mode profiles are separate. Re-enable editing after switching weapons.
+- F6: toggle editor.
+- Arrows: move; Page Up/Down: depth in 3D; plus/minus: scale, down to 5 percent.
+- Hold Shift for finer adjustments.
+- Brackets: select attachment node. Weapon Root is the default.
+- Comma/period: rotate 45 degrees; Ctrl adjusts pitch, Alt adjusts yaw, Shift uses 5 degrees.
+- F7: save the selected weapon and view. F8: restore the editor's starting layout.
+- F9: reset position to zero and scale to one.
 
-## Presets
+First- and third-person layouts save independently. Movement follows the panel's rotated axes.
 
-MCM > DBF-HUD > Presets saves appearance and all layouts. Enter and accept a name, save and confirm. Use the saved-presets dropdown to load. Files are `%LOCALAPPDATA%/DBF/Presets/DBF-HUD-preset-<name>.layout`; existing names are not overwritten. Default reset makes backups. Loading/reset still need live verification.
+## Presets and storage
 
-## Known issues
+In MCM's Presets page, type a filename and choose Save. Clicking away accepts typed text. Select a saved preset to load or delete it, then confirm. Overwriting keeps a backup. Reset to defaults restores the bundled setup; it is separate from normal preset actions.
 
-First-person rotation wiggle remains unresolved. MCM installed files have reverted to older versions; the writer is unidentified. Menu-label retention is a trial awaiting live confirmation. Report weapon, view, mode and reproduction steps, preserving logs before restart. See [Handoff](HANDOFF.md).
+Active settings and weapon layouts are stored in `%LOCALAPPDATA%/DBF`. Named `.layout` presets are in `%LOCALAPPDATA%/DBF/Presets`. Legacy configuration migrates only when no current copy exists. Back up this folder before manual changes.
+
+## Preview limitations
+
+This is a prerelease. Offline contracts and archive validation do not replace a clean installation test. Intermittently disappearing MCM dropdown labels remain under investigation. Some attachment orientations and first-person scope occlusion may require layout adjustment. Report the weapon, view, startup path and steps to reproduce when filing an issue.

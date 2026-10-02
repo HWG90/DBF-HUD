@@ -1,32 +1,59 @@
--- Optional starter tuning. Copy into the Helldivers 2 installation root, beside bin.
--- The preview exports this format. Native menu edits save here automatically.
--- Restart to load edits, or call DBFHUD.reload_tuning() from your Lua integration.
+-- DBF-HUD tuning. Active settings below; camera placement is unchanged.
 return {
-    decoration = 'none', -- none, outline, brackets, helldivers, double
-    debug_logging = false, -- Research traces off; errors are always logged.
-    always_show_3d = false,
-    font = "bigblue", -- "bigblue" pixel font or "debug" original renderer
-    text_color = "#C4CECA",
-    background_color = "#202628",
-    heat_white = "#E5E7E2",
-    heat_yellow = "#E7C85C",
-    heat_red = "#E16D65",
-    offset_x = 62,
-    offset_y = -5, -- positive is up; values use 1080p reference pixels
-    scale = 1,
-    opacity = 0.92,
-    panel_opacity = 0.55,
+    -- Active display, palette, placement and diagnostics.
+    anchor_mode = "world",
+    background_color = "#000000",
+    debug_logging = false,
+    debug_sight_root_orientation = true,
+    decoration = "helldivers",
+    decoration_color = "#FFFFFF",
+    effect_flicker = false,
+    effect_scanlines = false,
+    effect_sweep = false,
+    fade_3d_unless_aiming = false,
+    flash_hz = 2,
+    follow = 0.65000000000000002,
+    font = "bigblue",
+    force_occlusion = true,
+    fp_auto_side = "right",
     frosted = true,
-    follow = 0.65,
-    travel = 55,
+    heat_red = "#E16D65",
+    heat_red_alpha = 255,
+    heat_white = "#E5E7E2",
+    heat_white_alpha = 255,
+    heat_yellow = "#E7C85C",
+    heat_yellow_alpha = 255,
+    keep_hud_upright = false,
+    offset_x = 62,
+    offset_y = -5,
+    opacity = 1,
+    panel_opacity = 0.55000000000000004,
+    scale = 1,
     settle = 0.22,
-    flash_hz = 2, -- complete red/yellow cycles per second
-    -- Inactive mesh settings retained for future research.
+    style_3d = "retro",
+    text_color = "#FFFFFF",
+    text_color_alpha = 255,
+    text_opacity = 1,
+    travel = 55,
+    weapon_blacklist = "",
+    weapon_lag = 40,
+    weapon_offset_x = 62,
+    weapon_offset_y = 30,
+    weapon_settle = 0.10000000000000001,
+    world_max_lag = 0,
+    world_position_smooth = 0,
+    world_rotation_smooth = 0,
+    -- Retained settings; mesh is disabled. Research markers require debug_logging.
     archived_mesh = {
-        saturation = 1.3,
-        scanline_strength = 0.18,
-        texture_refresh_hz = 0,
         emissive_intensity = 3,
+        saturation = 1.3,
+        scanline_strength = 0.17999999999999999,
+        texture_refresh_hz = 0,
+        weapon_screen_test = false,
     },
-    research = { pose_marker = false, world_probe = false },
+    -- Retained settings; mesh is disabled. Research markers require debug_logging.
+    research = {
+        pose_marker = false,
+        world_probe = false,
+    },
 }

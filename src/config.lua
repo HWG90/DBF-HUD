@@ -107,4 +107,8 @@ function M.serialize(config)
     out[#out+1]='}';return table.concat(out,'\n')..'\n'
 end
 
+if HUD.bundled_defaults then
+    M.apply(M.defaults,HUD.bundled_defaults.settings)
+    M.weapon_clearance=HUD.bundled_defaults.layouts
+end
 return M

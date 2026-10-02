@@ -6,10 +6,9 @@ A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current devel
 
 ## Installation
 
-This repository is an experimental source checkpoint, not a complete one-click installer.
-Use the loose MDL Lua bundle alongside the compatible deployed font and screen-depth
-assets. See [installation and troubleshooting](docs/DEVELOPMENT.md) before changing
-an existing installation. Lua reload does not install shader or font assets.
+Download the [Complete prerelease](https://github.com/HWG90/DBF-HUD/releases) and install it through Arsenal with Bingus Shared Loader. It includes the HUD, render bridge, fonts and depth assets. MDL is optional for live reload; DBF-MCM is optional for configuration. Bingus Mod Options is not required.
+
+Follow the [Getting Started guide](docs/GETTING_STARTED.md) for requirements, installation, editor controls and presets. Existing local settings are preserved; fresh installations receive the bundled tuned defaults and three starter presets.
 
 ## Start here
 
@@ -24,13 +23,13 @@ The linked guides describe the current implementation. Older root research notes
 
 ## Current features
 
-- 72 native font families, selected through the custom **DBF-HUD Fonts** page.
+- 72 native font families, selected under **Appearance**.
 - Screen-projected weapon panels with scene-depth occlusion.
 - Weapon-specific ammo labels and projectile symbols, fire-mode child panels, fuel and heat gauges, and a railgun charge gauge.
 - Fixed three-digit numeric slots with dimmed leading zeros; counts above 999 can expand. The single-shot speargun uses one loaded digit.
 - Live layout editor with saved per-weapon/per-view position, scale and attachment points.
-- Configurable decorations and shared settings through Mod Options Menu and the custom configuration menu.
-- Native Force occlusion binding under **Debug tools - DBF HUD**, with a three-second debug state notice.
+- Configurable decorations, effects and settings through DBF-MCM.
+- Occlusion debug control under **Placement**.
 - MDL API 2 lifecycle and live Lua reload.
 
 ## Quick development loop
@@ -40,11 +39,11 @@ python tests/run.py
 python tools/build.py
 ```
 
-The test runner uses the installed game's LuaJIT DLL by default; `--lua-dll` overrides its path. **101 offline contracts passed at the October 2 checkpoint.** They do not replace an in-game visual check.
+The test runner uses the installed game's LuaJIT DLL by default; `--lua-dll` overrides its path. **113 offline contracts pass for this release.** They do not replace an in-game visual check.
 
 Build outputs include `dist/dbf_hud.lua`, `mdl/dbf_hud/mod.lua` and an MDL ZIP in the parent directory. The active loose MDL mod is installed under `%LOCALAPPDATA%/MDL/Helldivers2/Mods/dbf_hud`.
 
-**Never replace the live game-root weapon-offsets file with the repository example during a code update.** The live file contains user-edited layouts. Back it up before any profile migration.
+Active configuration lives in Local AppData\DBF. Back it up before manual profile changes; updates preserve existing files.
 
 ## Assets and attribution
 

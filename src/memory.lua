@@ -111,7 +111,19 @@ function M.native()
         root=root..'/Presets';win.CreateDirectoryA(root,nil)
         return root
     end
+    local seeded_presets=false
     function backend.list_presets()
+        if not seeded_presets and HUD.bundled_defaults then
+            local folder=preset_folder()
+            for filename,body in pairs(HUD.bundled_defaults.presets) do
+                local path=folder..'/'..filename
+                local existing=io.open(path,'rb')
+                if existing then existing:close() else
+                    local file=assert(io.open(path,'wb'));assert(file:write(body));file:close()
+                end
+            end
+            seeded_presets=true
+        end
         pcall(ffi.cdef,[[typedef struct { unsigned long attributes; unsigned long times[6]; unsigned long sizeHigh,sizeLow,reserved0,reserved1; char name[260]; char alternate[14]; } DBF_PRESET_FIND_DATA;
         void* FindFirstFileA(const char*, DBF_PRESET_FIND_DATA*); int FindNextFileA(void*,DBF_PRESET_FIND_DATA*); int FindClose(void*);]])
         local win=ffi.load('kernel32');local data=ffi.new('DBF_PRESET_FIND_DATA[1]')

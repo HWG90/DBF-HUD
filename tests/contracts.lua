@@ -1449,16 +1449,27 @@ test('fixed mode weapons use upright ammo symbols without replacing fire selecti
     local stoker=HUD.ammo_types.apply({kind='magazine',resource_hex='8a307bd1811a5fe9'})
     assert(stoker.label=='ROUNDS' and stoker.ammo_icon=='BULLET')
 end)
-test('catalog first-person profiles are at least six inches down',function()
+test('published starter layouts are valid and include both tuned and untouched views',function()
     local profiles=assert(loadfile('DBF-HUD-weapon-offsets.lua'))()
     local loaded=HUD.weapon_offsets.load({read_weapon_offsets=function()return profiles end},function(message)error(message)end)
     assert(loaded==profiles)
-    for resource,views in pairs(profiles) do
-        local baseline=resource=='3828e2051aa9e897' and -.0462 or ((resource=='fb3a19078694708a' or resource=='89c5493e08ca4207') and -.1016 or ((resource=='27ee1ed8f6fb6356' or resource=='d54b9505c0f72873') and -.0762 or -.1524))
-        if resource=='35a61296619cc47e' then baseline=-.1270 end
-        assert(views.first_left.z<=baseline+1e-9 and views.first_right.z<=baseline+1e-9)
+    local bundled=assert(loadfile('src/bundled_defaults.lua'))()
+    local old=HUD.bundled_defaults;HUD.bundled_defaults=bundled
+    local defaults=assert(loadfile('src/config.lua'))()
+    HUD.bundled_defaults=old
+    assert(defaults.defaults.font==bundled.settings.font and defaults.defaults.style_3d==bundled.settings.style_3d)
+    assert(defaults.weapon_clearance['14d5d4506056c7a4'].right.x==profiles['14d5d4506056c7a4'].right.x)
+    local names=0
+    for filename,body in pairs(bundled.presets) do
+        assert(filename:match('%.layout$'))
+        local value=assert(loadstring(body))();assert(type(value.settings)=='table' and type(value.layouts)=='table')
+        HUD.config.apply(HUD.config.new(),value.settings)
+        assert(HUD.weapon_offsets.load({read_weapon_offsets=function()return value.layouts end},function(message)error(message)end)==value.layouts)
+        names=names+1
     end
+    assert(names>=3)
 end)
+
 test('all weapon mount views add three inches forward after profile corrections',function()
     local cfg=HUD.config.new();cfg.placement_mode='auto'
     local x,y,z=HUD.scene_test.mount({auto_mount={x=.1,y=.2,z=.3}},cfg)
@@ -1541,17 +1552,18 @@ test('catalog numeric counters keep fixed slots and dim unused leading zeros',fu
     local p=HUD.font.numeric_parts({text='-- RES',size=12})
     assert(#p==1 and p[1].text=='-- RES' and p[1].alpha==1)
 end)
-test('autocannon keeps its first-person anchor with the shared position correction',function()
+test('autocannon first-person corrections remain separate for each saved view',function()
     local profiles=assert(loadfile('DBF-HUD-weapon-offsets.lua'))()
     local p={id=1,candidate=2,resource_hex='a8cffb316f0b5c5f',sight={x=.1,y=.2,z=.3}}
     local h={weapon_pose=p,config=HUD.config.new(),clock=0,weapon_clearance=profiles,first_person=true}
     for _,side in ipairs({'left','right'}) do
         h.config.fp_auto_side=side
+        local correction=profiles[p.resource_hex]['first_'..side]
         HUD.placement.update(h,{}, {}, {avatar_unit_ref=3},function()end)
         local target=p.auto_mount
-        assert(math.abs(target.x-(.1-.04))<1e-9)
-        assert(math.abs(target.y-(.2+.45-.1016))<1e-9)
-        assert(math.abs(target.z-(.3+.01-.1524))<1e-9)
+        assert(math.abs(target.x-(.1+(side=='right' and .12 or -.12)+(correction.x or 0)))<1e-9)
+        assert(math.abs(target.y-(.2+.45+(correction.y or 0)))<1e-9)
+        assert(math.abs(target.z-(.3+.01+(correction.z or 0)))<1e-9)
     end
 end)
 

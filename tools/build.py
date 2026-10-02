@@ -6,7 +6,7 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ORDER = ['native_font_data','native_font_uv','native_font','config','font','motion', 'ammo_types','model', 'fire_icons', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe','depth_marker', 'offscreen_test', 'world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor', 'menu', 'runtime']
+ORDER = ['bundled_defaults','native_font_data','native_font_uv','native_font','config','font','motion', 'ammo_types','model', 'fire_icons', 'layout', 'memory', 'layouts', 'reader', 'pose','camera_mode','projection', 'anchor', 'view','pose_motion','world_probe','depth_marker', 'offscreen_test', 'world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor', 'menu', 'runtime']
 
 def bundle():
     parts = ['-- HD2-Addon: mods/dbf_hud/hud\nlocal HUD={}\n']
@@ -28,6 +28,8 @@ def bundle():
         archive.write(live,'dbf_hud/mod.lua')
         if (ROOT / 'MDL.md').exists(): archive.write(ROOT / 'MDL.md','dbf_hud/README.md')
         archive.write(ROOT / 'DBF-HUD-weapon-offsets.lua','DBF-HUD-weapon-offsets.lua')
+        archive.write(ROOT / 'DBF-HUD-tuning.lua','DBF-HUD-tuning.lua')
+        for path in sorted((ROOT/'presets').glob('*.layout')): archive.write(path,'Presets/'+path.name)
         for path in sorted((ROOT / 'licenses').rglob('*')):
             if path.is_file(): archive.write(path,'dbf_hud/'+path.relative_to(ROOT).as_posix())
     return target
