@@ -90,6 +90,7 @@ function M.new(hud)
             local preset_choices=hud.list_presets and hud.list_presets() or {}
             if #preset_choices==0 then preset_choices={'No saved presets'} end
             local placement_controls={
+                {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
                 {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
                 {id='first_person_side',type='choice',label='First-person side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1,on_change=function(v)save('fp_auto_side',v==2 and 'right' or 'left')end},
                 {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
@@ -258,6 +259,10 @@ function M.new(hud)
             add('debug_logging',{type='toggle',label='Debug logging',default=hud.config.debug_logging,
                 description='Enable research traces and capability inspection. Errors are always logged.'},function(v)
                 hud.configure({debug_logging=v});hud.save_tuning()
+            end)
+            add('debug_sight_root_orientation',{type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,
+                description='Restore attachment positioning in weapon-root axes and legacy root orientation.'},function(v)
+                hud.configure({debug_sight_root_orientation=v});hud.save_tuning()
             end)
             self.sync()
         end)

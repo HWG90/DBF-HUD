@@ -5,7 +5,7 @@ function M.panel_pose(p,c,commands)
     local m=p.matrix;local x,y,z=HUD.scene_test.mount(p,c)
     local at={x=p.x+m[1]*x+m[5]*y+m[9]*z,
         y=p.y+m[2]*x+m[6]*y+m[10]*z,z=p.z+m[3]*x+m[7]*y+m[11]*z}
-    if p.attach_point~='root' and p.sight and p.sight.matrix then
+    if not c.debug_sight_root_orientation and p.attach_point~='root' and p.sight and p.sight.matrix then
         local anchor=p.sight
         local dx,dy,dz=x-anchor.x,y-anchor.y,z-anchor.z
         m=anchor.matrix
