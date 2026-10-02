@@ -8413,6 +8413,7 @@ function M.apply(raw)
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='2b28e17ffed05f7c' then raw.ammo_icon=raw.fire_mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL' end
+    if raw.resource_hex=='a6a735accb4a327f' then raw.ammo_icon='LINKED_BELT' end
     if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
     if raw.resource_hex=='84354339522c932d' then
         raw.label='INCDRY'
@@ -8515,6 +8516,18 @@ local M={
 M.BULLET={w=M.SEMI.h,h=M.SEMI.w,runs={}}
 for _,r in ipairs(M.SEMI.runs) do
     M.BULLET.runs[#M.BULLET.runs+1]={M.SEMI.h-r[2]-r[4],r[1],r[4],r[3]}
+end
+-- Three cartridges held by visible dark steel belt links.
+M.LINKED_BELT={w=29,h=24,runs={}}
+for _,offset in ipairs({0,11,22}) do
+    for _,r in ipairs(M.BULLET.runs) do
+        M.LINKED_BELT.runs[#M.LINKED_BELT.runs+1]={offset+r[1],r[2],r[3],r[4],r[2]>=18 and {190,150,100} or {218,172,78}}
+    end
+end
+for _,offset in ipairs({0,11}) do
+    for _,r in ipairs({{4,6,11,2},{4,13,11,2},{4,6,2,9},{13,6,2,9}}) do
+        M.LINKED_BELT.runs[#M.LINKED_BELT.runs+1]={offset+r[1],r[2],r[3],r[4],{125,135,145}}
+    end
 end
 -- Heavy bolt cartridge: rim, straight case, shoulder and broad pointed projectile.
 M.BOLT_ROUND={w=14,h=28,runs={
