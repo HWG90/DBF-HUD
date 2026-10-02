@@ -75,6 +75,7 @@ function M.native()
         local f=io.open(path,'r');if not f then return nil end
         local body=f:read(65537);f:close();assert(#body<=65536,'weapon offsets file too large')
         local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
+        if backend.log then backend.log('WEAPON_OFFSETS reading '..path..' ('..#body..' bytes)') end
         return chunk()
     end
     function backend.write_tuning(body)

@@ -196,6 +196,14 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
+    do
+        local weapons,views=0,0
+        for _,entries in pairs(self.weapon_clearance) do
+            weapons=weapons+1
+            for _ in pairs(entries) do views=views+1 end
+        end
+        log('WEAPON_OFFSETS active profiles: '..weapons..' weapons, '..views..' views')
+    end
     function self.list_presets()local ok,names=pcall(backend.list_presets);return ok and names or {} end
     function self.delete_preset(name)
         if not backend.delete_preset then return false,'Preset deletion unavailable' end
