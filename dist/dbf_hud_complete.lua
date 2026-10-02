@@ -10553,6 +10553,11 @@ function M.update(self,pose,projection,latest_raw,log)
             local profile=self.weapon_clearance[self.weapon_pose.resource_hex]
             local profile_view=self.first_person and ('first_'..self.config.fp_auto_side) or view
             local correction=profile and (profile[profile_view] or (view_parity and profile.right))
+            local identity=tostring(self.weapon_pose.resource_hex)..':'..profile_view..':'..tostring(self.weapon_pose.attach_point)
+            if identity~=self.applied_profile_identity then
+                self.applied_profile_identity=identity
+                log('PLACEMENT_PROFILE weapon='..tostring(self.weapon_pose.resource_hex)..' view='..profile_view..' attachment='..tostring(self.weapon_pose.attach_point)..' source='..tostring(self.camera_mode_status))
+            end
             self.profile_scale=correction and correction.scale or 1
             self.profile_rotation=correction and correction.rotation or 0
             self.profile_pitch=correction and correction.pitch or 0
@@ -11654,6 +11659,8 @@ function M.start(sr,backend,options)
         end
         -- Pose follows the render/update cadence; ammo discovery remains at 30 Hz.
         -- Holding pose samples caused stepped targets and lag-limit corrections.
+        local native_first,mode_status=HUD.camera_mode.read(backend,latest_raw)
+        if native_first~=nil then self.first_person=native_first;self.native_view_seen=true end
         local profiles=latest_raw and self.weapon_clearance[latest_raw.resource_hex]
         local active_view=self.first_person and ('first_'..self.config.fp_auto_side) or 'right'
         local selected_view=(profiles and profiles[active_view] and profiles[active_view].attach_point) and active_view or (self.placement_view_parity and 'right' or active_view)
@@ -11686,11 +11693,10 @@ function M.start(sr,backend,options)
                 z=p.z+m[3]*c.mount_x+m[7]*c.mount_y+m[11]*c.mount_z}
             point=projection.poll(binding_base,mount,w/h)
         end
-        local native_first,mode_status=HUD.camera_mode.read(backend,latest_raw)
         if depth_marker then depth_marker.draw(self.bone_marker_enabled and bone_marker_position or nil,
             projection.camera_matrix,projection.camera_fov,h,w) end
         if native_first~=nil then self.first_person=native_first
-        else self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
+        elseif not self.native_view_seen then self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
         self.camera_mode_status=mode_status
         self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)

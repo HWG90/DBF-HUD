@@ -42,6 +42,11 @@ function M.update(self,pose,projection,latest_raw,log)
             local profile=self.weapon_clearance[self.weapon_pose.resource_hex]
             local profile_view=self.first_person and ('first_'..self.config.fp_auto_side) or view
             local correction=profile and (profile[profile_view] or (view_parity and profile.right))
+            local identity=tostring(self.weapon_pose.resource_hex)..':'..profile_view..':'..tostring(self.weapon_pose.attach_point)
+            if identity~=self.applied_profile_identity then
+                self.applied_profile_identity=identity
+                log('PLACEMENT_PROFILE weapon='..tostring(self.weapon_pose.resource_hex)..' view='..profile_view..' attachment='..tostring(self.weapon_pose.attach_point)..' source='..tostring(self.camera_mode_status))
+            end
             self.profile_scale=correction and correction.scale or 1
             self.profile_rotation=correction and correction.rotation or 0
             self.profile_pitch=correction and correction.pitch or 0
