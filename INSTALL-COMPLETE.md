@@ -1,17 +1,12 @@
 # DBF-HUD Complete
 
-One archive containing the HUD, render bridge, verified WorldGUI depth assets, optional MDL live mod, starter configuration, source and font licenses.
+One Arsenal archive contains HUD startup Lua, render bridge, native fonts and current screen-depth assets. Bingus Shared Loader remains external. MDL is optional.
 
-Requires Bingus Shared Loader v15+ / API 1. MDL API 2 is required only for the live-reload installation choice. These external loaders are not bundled.
+Close the game. Disable earlier separate HUD startup/bridge, font and depth/probe packages to avoid overriding the merged shader group. Keep Bingus Shared Loader enabled. Import this Complete ZIP and choose exactly one option:
 
-## Install or upgrade
+- **Complete HUD - startup:** HUD and all assets. Disable the separate DBF-HUD MDL mod to avoid duplicate instances.
+- **MDL live reload - bridge and all assets:** assets and bridge only. Copy `MDL/dbf_hud` to `%LOCALAPPDATA%/MDL/Helldivers2/Mods`, and enable it in MDL API 2.
 
-1. Disable the previous separate DBF-HUD startup, render-bridge, fullbright-material, shader-loader-control and depth-test/probe addons in Arsenal. Keep Bingus Shared Loader enabled.
-2. Import this ZIP into Arsenal and choose exactly one option:
-   - **Complete HUD - startup:** installs the HUD and bridge together, plus depth assets. Disable DBF-HUD (Live) in MDL to avoid duplicate HUDs.
-   - **MDL live reload - bridge and depth assets:** installs only the startup bridge and depth assets. Copy `MDL/dbf_hud` from this ZIP into `%LOCALAPPDATA%/MDL/Helldivers2/Mods`, replacing the existing live mod, and enable DBF-HUD (Live).
-3. Deploy and restart the game. In Options > Mods > DBF-HUD choose **3D, WorldGUI**. Leave **Always Show HUD (3D)** off for occlusion; turn it on to draw through geometry. The other display modes are **2D, Anchor to Weapon (Hybrid)** and **2D, Anchor to HUD/Crosshair**.
+Deploy and restart. Keep the loader at its documented highest priority. MCM is an optional separate download for Appearance preview and presets. Existing tuning/layouts are not replaced; Configuration contains examples only.
 
-Existing tuning is preserved. `Configuration/DBF-HUD-tuning.lua` is an optional starter example; do not overwrite your saved game-root tuning unless you intend to reset it.
-
-The depth assets are byte-identical to the visually confirmed depth probe. The combined installation packaging has been checked offline; its startup installation choice has not yet had a separate in-game verification. World-space frost and reliable camera-state detection remain unresolved. Mesh rendering and its texture/effect controls are archived in code and disabled. The menu has only DBF-HUD and DBF-HUD Placement. Old menu rows can remain until the next game restart. The Fonts directory contains prepared font atlases and metrics for future integration; they are not selectable at runtime yet.
+Combined startup Lua and archive structure are checked offline. This new combined archive still needs a fresh in-game test, especially its standalone startup option. Rotation wiggle and MCM rollback/label issues remain pending. See GETTING_STARTED.md.

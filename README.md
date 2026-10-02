@@ -1,4 +1,4 @@
-![Diver's Best Friend — Holographic Utility Display](assets/branding/banner.png)
+![Diver's Best Friend â€” Holographic Utility Display](assets/branding/banner.png)
 
 # DBF-HUD
 
@@ -53,3 +53,7 @@ Lua reload changes code, not compiled engine assets. Native text and decoration 
 See [MDL lifecycle notes](MDL.md) and the current guides above for development and deployment.
 
 Game binaries, private captures and private testing-tool packages are not project documentation artifacts. Preserve font attribution and terms in `licenses/`. No blanket license is granted for the remaining project code in this snapshot.
+
+## Getting started
+
+[Installation, downloads and first setup](docs/GETTING_STARTED.md).
