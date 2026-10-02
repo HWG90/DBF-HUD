@@ -11810,7 +11810,7 @@ function M.start(sr,backend,options)
             if profile then profile.drew=false end
             local started=profile and os.clock()
             local ok,err=pcall(self.frame,dt)
-            if profile then
+            if profile and profile.drew then
                 local cost=os.clock()-started
                 profile.elapsed=profile.elapsed+math.max(0,dt or 0)
                 profile.frames=profile.frames+1;profile.total=profile.total+cost;profile.max=math.max(profile.max,cost)
