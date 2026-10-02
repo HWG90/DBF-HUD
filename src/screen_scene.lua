@@ -95,6 +95,24 @@ function M.new(sr,log)
             for _,v in ipairs(commands) do if v.type=='panel' then v.a=math.min(1,v.a/.18) end end
         end
         local m,at=M.panel_pose(p,c,commands)
+        -- Temporary zoom demo: retain the widest observed first-person FOV per weapon.
+        if c.first_person_zoom_demo and fov then
+            self.zoom_reference=self.zoom_reference or {}
+            local key=p.resource_hex or 'unknown'
+            local reference=math.max(self.zoom_reference[key] or fov,fov)
+            self.zoom_reference[key]=reference
+            local ratio=math.max(.1,math.min(1,math.tan(fov*.5)/math.tan(reference*.5)))
+            local dx,dy,dz=at.x-camera[13],at.y-camera[14],at.z-camera[15]
+            local right=dx*camera[1]+dy*camera[2]+dz*camera[3]
+            local up=dx*camera[9]+dy*camera[10]+dz*camera[11]
+            at={x=at.x+(ratio-1)*(right*camera[1]+up*camera[9]),
+                y=at.y+(ratio-1)*(right*camera[2]+up*camera[10]),
+                z=at.z+(ratio-1)*(right*camera[3]+up*camera[11])}
+            local scaled={};for i=1,16 do scaled[i]=m[i] end
+            for _,base in ipairs({1,5,9}) do for j=0,2 do scaled[base+j]=m[base+j]*ratio end end
+            m=scaled
+        end
+
         local body,fold={},{ }
         for _,v in ipairs(commands) do
             local list=v.fold_child and fold or body;list[#list+1]=v

@@ -516,6 +516,7 @@ function M.start(sr,backend,options)
             world_config.panel_rotation=self.profile_rotation or 0
             world_config.panel_pitch=self.profile_pitch or 0
             world_config.panel_yaw=self.profile_yaw or 0
+            world_config.first_person_zoom_demo=self.first_person and self.config.zoom_compensation
             world_config.style_clock=self.clock
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true

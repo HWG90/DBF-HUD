@@ -7942,7 +7942,7 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={weapon_blacklist="",debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -7991,7 +7991,7 @@ function M.apply(config,values)
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
@@ -11323,6 +11323,24 @@ function M.new(sr,log)
             for _,v in ipairs(commands) do if v.type=='panel' then v.a=math.min(1,v.a/.18) end end
         end
         local m,at=M.panel_pose(p,c,commands)
+        -- Temporary zoom demo: retain the widest observed first-person FOV per weapon.
+        if c.first_person_zoom_demo and fov then
+            self.zoom_reference=self.zoom_reference or {}
+            local key=p.resource_hex or 'unknown'
+            local reference=math.max(self.zoom_reference[key] or fov,fov)
+            self.zoom_reference[key]=reference
+            local ratio=math.max(.1,math.min(1,math.tan(fov*.5)/math.tan(reference*.5)))
+            local dx,dy,dz=at.x-camera[13],at.y-camera[14],at.z-camera[15]
+            local right=dx*camera[1]+dy*camera[2]+dz*camera[3]
+            local up=dx*camera[9]+dy*camera[10]+dz*camera[11]
+            at={x=at.x+(ratio-1)*(right*camera[1]+up*camera[9]),
+                y=at.y+(ratio-1)*(right*camera[2]+up*camera[10]),
+                z=at.z+(ratio-1)*(right*camera[3]+up*camera[11])}
+            local scaled={};for i=1,16 do scaled[i]=m[i] end
+            for _,base in ipairs({1,5,9}) do for j=0,2 do scaled[base+j]=m[base+j]*ratio end end
+            m=scaled
+        end
+
         local body,fold={},{ }
         for _,v in ipairs(commands) do
             local list=v.fold_child and fold or body;list[#list+1]=v
@@ -12001,6 +12019,7 @@ function M.new(hud)
             local placement_controls={
                 {id='hide_weapon_hud',type='button',label='Hide equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(true);assert(ok,message);return message end},
                 {id='show_weapon_hud',type='button',label='Show equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(false);assert(ok,message);return message end},
+                {id='zoom_compensation',type='toggle',label='Debug: Zoom compensation',default=hud.config.zoom_compensation,on_change=function(v)save('zoom_compensation',v)end},
                 {id='debug_occlusion',type='toggle',label='Debug: force occlusion',default=hud.config.force_occlusion,on_change=function(v)save('force_occlusion',v)end},
                 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
                 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
@@ -12727,6 +12746,7 @@ function M.start(sr,backend,options)
             world_config.panel_rotation=self.profile_rotation or 0
             world_config.panel_pitch=self.profile_pitch or 0
             world_config.panel_yaw=self.profile_yaw or 0
+            world_config.first_person_zoom_demo=self.first_person and self.config.zoom_compensation
             world_config.style_clock=self.clock
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true

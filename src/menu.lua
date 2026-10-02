@@ -90,6 +90,7 @@ function M.new(hud)
             local placement_controls={
                 {id='hide_weapon_hud',type='button',label='Hide equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(true);assert(ok,message);return message end},
                 {id='show_weapon_hud',type='button',label='Show equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(false);assert(ok,message);return message end},
+                {id='zoom_compensation',type='toggle',label='Debug: Zoom compensation',default=hud.config.zoom_compensation,on_change=function(v)save('zoom_compensation',v)end},
                 {id='debug_occlusion',type='toggle',label='Debug: force occlusion',default=hud.config.force_occlusion,on_change=function(v)save('force_occlusion',v)end},
                 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
                 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
