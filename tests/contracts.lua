@@ -621,7 +621,7 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     update(1/60);assert(h.anchor_status=='weapon attachment')
     assert(draw_x>0 and draw_x<1920,'screen geometry must stay in GUI coordinates despite a larger back buffer')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
-    assert(math.abs(received.x-.9238)<1e-6 and received.y==2.5 and math.abs(received.z-3.2)<1e-6)
+    assert(math.abs(received.x-.8738)<1e-6 and math.abs(received.y-2.18)<1e-6 and math.abs(received.z-3.1)<1e-6)
     local before=pose_reads;for i=1,10 do update(1/144)end;assert(pose_reads==before+10)
     local alpha=h.opacity;valid=false;update(1/60)
     assert(h.anchor_status~='weapon attachment' and h.opacity>=alpha)
@@ -973,6 +973,29 @@ test('sight placement updates without cache and profiles affect only their weapo
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
     assert(math.abs(p.auto_mount.z-.16)<1e-9)
 end)
+test('missing attachment placement is stable across reload and first view entry',function()
+    local function instance()
+        return {weapon_pose={id=1,candidate=2,resource_hex='test'},config=HUD.config.new(),clock=0,
+            weapon_clearance={test={right={x=.03},first_right={y=-.2}}}}
+    end
+    local h=instance()
+    local mounts={}
+    for _,first in ipairs({false,true,false,true}) do
+        h.first_person=first
+        HUD.placement.update(h,{}, {}, {avatar_unit_ref=3},function()end)
+        local m=h.weapon_pose.auto_mount
+        assert(m)
+        local key=first and 'first' or 'third'
+        if mounts[key] then assert(m.x==mounts[key].x and m.y==mounts[key].y and m.z==mounts[key].z) end
+        mounts[key]=m
+        h.clock=h.clock+10
+    end
+    h=instance();h.first_person=true
+    HUD.placement.update(h,{}, {}, {avatar_unit_ref=3},function()end)
+    local m=h.weapon_pose.auto_mount
+    assert(m.x==mounts.first.x and m.y==mounts.first.y and m.z==mounts.first.z)
+end)
+
 test('automatic clearance follows scale around sight without accumulating or changing depth',function()
     local p={id=1,candidate=2,resource_hex='0123456789abcdef',sight={x=.3,y=.2,z=.4}}
     local h={weapon_pose=p,config=HUD.config.new(),clock=0,weapon_clearance={}}

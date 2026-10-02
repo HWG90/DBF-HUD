@@ -10479,7 +10479,7 @@ return M
 end)()
 HUD.placement=(function()
 -- Weapon/view placement. Native readers remain in pose and camera_mode.
--- Sight anchors update live; only the legacy root fallback caches a screen seed.
+-- Sight anchors update live; missing nodes use a stable per-view root base.
 local M={}
 function M.update(self,pose,projection,latest_raw,log)
     self.profile_scale=1;self.profile_rotation=0;self.profile_pitch=0;self.profile_yaw=0
@@ -10505,19 +10505,11 @@ function M.update(self,pose,projection,latest_raw,log)
                 else
                     mount={x=sight.x+.16,y=sight.y+.10,z=sight.z+.04}
                 end
-            elseif not mount and projection.camera_matrix and self.clock>=self.auto_sample_after then
-                mount=HUD.projection.auto_mount(projection.camera_matrix,self.weapon_pose,
-                    projection.camera_fov,projection.camera_aspect,projection.camera_near)
-                -- Keep the seed close to the gun; no model-clearance claim yet.
-                mount.x=math.max(-.8,math.min(.8,mount.x))
-                mount.y=math.max(-.15,math.min(.4,mount.y))
-                mount.z=math.max(-.2,math.min(.4,mount.z))
-                local side=self.first_person and -1 or 1
-                mount.x=side*math.max(.13,math.min(.18,math.abs(mount.x)+.05))
-                mount.y=math.max(-.05,math.min(.10,mount.y*.4))
-                mount.z=math.max(.03,math.min(.10,mount.z*.4))
-                if self.first_person then mount.x=-.12;mount.y=.35;mount.z=.22 end
-                self.auto_mounts[view]=mount
+            else
+                -- Missing named nodes must not seed placement from the camera.
+                -- Apply a stable per-view root base immediately after reload.
+                if self.first_person then mount={x=-.12,y=.35,z=.22}
+                else mount={x=.18,y=.05,z=.10} end
             end
             local profile=self.weapon_clearance[self.weapon_pose.resource_hex]
             local profile_view=self.first_person and ('first_'..self.config.fp_auto_side) or view
@@ -10541,6 +10533,15 @@ function M.update(self,pose,projection,latest_raw,log)
                 local scale=self.config.scale or 1
                 mount={x=anchor.x+(mount.x-anchor.x)*scale,y=mount.y,
                     z=anchor.z+(mount.z-anchor.z)*scale}
+            end
+            local source=sight and (self.weapon_pose.sight and 'attachment' or 'root') or 'root-fallback'
+            local signature=identity..':'..source..':'..tostring(mount~=nil)
+            if signature~=self.applied_mount_signature then
+                self.applied_mount_signature=signature
+                log(string.format('PLACEMENT_MOUNT weapon=%s view=%s source=%s bone=%s correction=%.6f,%.6f,%.6f mount=%s scale=%.4f root_debug=%s',
+                    tostring(self.weapon_pose.resource_hex),profile_view,source,tostring(self.weapon_pose.sight and self.weapon_pose.sight.index),
+                    correction and correction.x or 0,correction and correction.y or 0,correction and correction.z or 0,
+                    mount and string.format('%.6f,%.6f,%.6f',mount.x,mount.y,mount.z) or 'pending',self.profile_scale,tostring(self.config.debug_sight_root_orientation)))
             end
             self.weapon_pose.auto_mount=mount
         else
