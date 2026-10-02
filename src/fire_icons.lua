@@ -99,7 +99,7 @@ for _,mode in ipairs({'AUTO','SEMI'}) do
     for _,run in ipairs(base.runs) do
         local finish=run[1]+run[3]
         local body_width=math.max(0,math.min(finish,tip_start)-run[1])
-        if body_width>0 then icon.runs[#icon.runs+1]={run[1],run[2],body_width,run[4]} end
+        if body_width>0 then icon.runs[#icon.runs+1]={run[1],run[2],body_width,run[4],{218,172,78}} end
         local tip_x=math.max(run[1],tip_start)
         if finish>tip_x then icon.runs[#icon.runs+1]={tip_x,run[2],finish-tip_x,run[4],{255,133,45}} end
     end
