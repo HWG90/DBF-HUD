@@ -8177,7 +8177,12 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             if cfg.effect_scanlines then
                 for k=1,21 do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/22,w=frame.w,h=thickness,c=ink,a=.12*opacity} end
             end
-            if cfg.effect_sweep then out[#out+1]={type='rect',x=frame.x,y=frame.y+((clock or 0)*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.2*opacity} end
+            if cfg.effect_sweep then
+                local band=math.min(frame.h,thickness*2)
+                for k=0,2 do
+                    out[#out+1]={type='rect',x=frame.x,y=frame.y+(((clock or 0)*.35+k/3)%1)*(frame.h-band),w=frame.w,h=band,c=ink,a=.2*opacity}
+                end
+            end
         end
     end
     for _,command in ipairs(out)do if command.type=='text' then command.a=command.a*(cfg.text_opacity or 1) end end
@@ -9877,10 +9882,10 @@ function M.prepare(commands,p,c)
                     end
     if c.style_3d=='instrument' or c.style_3d=='blueprint' or c.style_3d=='retro' then
         local blueprint,retro=c.style_3d=='blueprint',c.style_3d=='retro'
-        local accent=retro and {125,230,140} or blueprint and {92,194,230} or {235,175,70}
+        local accent=retro and HUD.config.rgb(c.text_color) or blueprint and {92,194,230} or {235,175,70}
         local frames={};for _,v in ipairs(centered) do if v.type=='panel' then frames[#frames+1]=v end end
         for _,frame in ipairs(frames) do
-            if c.background_color=='#202628' then frame.c=retro and {12,25,16} or blueprint and {12,28,42} or {35,28,17} end
+            if not retro and c.background_color=='#202628' then frame.c=blueprint and {12,28,42} or {35,28,17} end
             local t=math.max(.45,frame.w/180)
             local function line(x,y,w,h,alpha)
                 centered[#centered+1]={type='rect',x=x,y=y,w=w,h=h,c=accent,a=alpha*(c.visibility_alpha or 1)}

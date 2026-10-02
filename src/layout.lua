@@ -462,7 +462,12 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             if cfg.effect_scanlines then
                 for k=1,21 do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/22,w=frame.w,h=thickness,c=ink,a=.12*opacity} end
             end
-            if cfg.effect_sweep then out[#out+1]={type='rect',x=frame.x,y=frame.y+((clock or 0)*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.2*opacity} end
+            if cfg.effect_sweep then
+                local band=math.min(frame.h,thickness*2)
+                for k=0,2 do
+                    out[#out+1]={type='rect',x=frame.x,y=frame.y+(((clock or 0)*.35+k/3)%1)*(frame.h-band),w=frame.w,h=band,c=ink,a=.2*opacity}
+                end
+            end
         end
     end
     for _,command in ipairs(out)do if command.type=='text' then command.a=command.a*(cfg.text_opacity or 1) end end

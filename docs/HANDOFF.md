@@ -40,3 +40,7 @@ Read the relevant source module, make the smallest coherent change, run proporti
 - MCM Appearance provides an equipped-weapon HUD preview. Presets save settings and all layouts to `%LOCALAPPDATA%/DBF/Presets/DBF-HUD-preset-<name>.layout`; the dropdown loads saved presets. Saving has been tested live; reset/load still need verification.
 - The installed MCM file has repeatedly reverted to an older build. Reinstalling restores grouping and preview, but the writer causing the rollback remains unidentified. MCM is a separate local project and is not included in this source repository.
 - Complete installer with optional MDL remains unfinished. The first-person rotation wiggle remains unresolved. Existing checks are not a substitute for native visual testing.
+
+## Latest appearance checkpoint
+
+Retro CRT uses the configured text and panel colors. The optional scanning sweep has three bands at twice the original thickness and the original speed; its appearance was accepted in-game. MCM has a separate local trial retaining unchanged label primitives to investigate disappearing menu labels; its live result is still pending.
