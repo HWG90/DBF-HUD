@@ -91,19 +91,18 @@ local spear=M.SPEAR
 local upright={w=spear.h,h=spear.w,runs={}}
 for _,r in ipairs(spear.runs) do upright.runs[#upright.runs+1]={spear.h-r[2]-r[4],r[1],r[4],r[3]} end
 M.SPEAR=upright
--- Coyote bullets sit inside a jagged orange flame envelope.
+-- Coyote fire selectors layer native bullets over the flamethrower flame mask.
 for _,mode in ipairs({'AUTO','SEMI'}) do
     local base=M[mode]
-    local icon={w=base.w+4,h=base.h+4,runs={}}
-    local count=mode=='AUTO' and 3 or 1
-    for bullet=1,count do
-        local bottom=(bullet-1)*base.h/count
-        local height=base.h/count
-        for _,run in ipairs({{0,bottom+1,base.w+4,height+2},{3,bottom,5,1},{12,bottom,4,1},{7,bottom+height+3,4,1},{18,bottom+height+3,3,1}}) do
-            icon.runs[#icon.runs+1]={run[1],run[2],run[3],run[4],{255,133,45}}
+    local icon={w=base.w+4,h=34,runs={}}
+    for _,layer in ipairs({{scale=34/24,y=0,color={255,112,30}}, {scale=23/24,y=3,color={255,191,61}}}) do
+        local x=(icon.w-M.FUEL.w*layer.scale)/2
+        for _,run in ipairs(M.FUEL.runs) do
+            icon.runs[#icon.runs+1]={x+run[1]*layer.scale,layer.y+run[2]*layer.scale,run[3]*layer.scale,run[4]*layer.scale,layer.color}
         end
     end
-    for _,run in ipairs(base.runs) do icon.runs[#icon.runs+1]={run[1]+2,run[2]+2,run[3],run[4]} end
+    local y=(26-base.h)/2
+    for _,run in ipairs(base.runs) do icon.runs[#icon.runs+1]={run[1]+2,run[2]+y,run[3],run[4]} end
     M['FIRE_'..mode]=icon
 end
 -- Napalm rocket with an orange flame beside the warhead.
