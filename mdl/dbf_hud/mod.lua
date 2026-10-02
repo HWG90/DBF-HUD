@@ -8016,7 +8016,23 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         local cannon_mode=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.resource_hex~='26e40437ea275296'
         local heading=cannon_mode and m.ammo_mode or m.label
         local heading_y=pixel and math.max(42,5+number_top+3) or 42
-        text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
+        if m.resource_hex=='4dbd74f49c8ffc13' and m.compass_heading then
+            -- Fixed-width compass window; only the heading strip moves.
+            local labels={[0]='N',[90]='E',[180]='S',[270]='W'}
+            for tick=0,345,15 do
+                local delta=(tick-m.compass_heading+180)%360-180
+                local tx=38+delta*.8
+                if tx>=2 and tx<=74 then
+                    rect(tx,heading_y,1,labels[tick] and 5 or 3,ink,.7);d[#d].compass_piece=true
+                    if labels[tick] and tx>=7 and tx<=69 then
+                        text(labels[tick],tx-4,heading_y+7,8,ink,.9);d[#d].compass_piece=true
+                    end
+                end
+            end
+            rect(37,heading_y-4,3,3,{255,210,70},1);d[#d].compass_piece=true
+        else
+            text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
+        end
         if cannon_mode then d[#d].size=(pixel and 18 or 12)*scale end
         text(number,0,5,32,ink)
         local fire_icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
@@ -8102,9 +8118,9 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     do
         local center=(left+right)/2
         local bar_left,bar_right=math.huge,-math.huge
-        for _,v in ipairs(d) do if v.type=='rect' and not v.mode_icon and not v.heat_vertical then bar_left=math.min(bar_left,v.x);bar_right=math.max(bar_right,v.x+v.w) end end
+        for _,v in ipairs(d) do if v.type=='rect' and not v.mode_icon and not v.heat_vertical and not v.compass_piece then bar_left=math.min(bar_left,v.x);bar_right=math.max(bar_right,v.x+v.w) end end
         for _,c in ipairs(d) do
-            if c.type=='text' then
+            if c.type=='text' and not c.compass_piece then
                 c.center_in_frame=true
                 local a,b,e,f
                 if measure then a,b,e,f=measure(c.text,c.size) end
@@ -8122,7 +8138,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                         c.x=left+pad+prefix_width+(c.heat_digit_slot or 0)*slot_width
                     else c.x=c.heat_label=='left' and left+pad-a or right-pad-e end
                 else c.x=center-(a+e)/2 end
-            elseif c.type=='rect' and not c.mode_icon and not c.heat_vertical then
+            elseif c.type=='rect' and not c.mode_icon and not c.heat_vertical and not c.compass_piece then
                 c.center_bar=true
                 -- Ammo bar retains its own cell spacing, centered as a group.
                 c.x=c.x+center-(bar_left+bar_right)/2
@@ -11640,6 +11656,10 @@ function M.start(sr,backend,options)
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        if model.resource_hex=='4dbd74f49c8ffc13' then
+            local matrix=self.weapon_pose and self.weapon_pose.matrix
+            model.compass_heading=matrix and (math.deg(math.atan2(matrix[5],matrix[6]))%360) or nil
+        end
         local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
         local aim_opacity=1
         if self.config.fade_3d_unless_aiming then

@@ -468,6 +468,10 @@ function M.start(sr,backend,options)
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        if model.resource_hex=='4dbd74f49c8ffc13' then
+            local matrix=self.weapon_pose and self.weapon_pose.matrix
+            model.compass_heading=matrix and (math.deg(math.atan2(matrix[5],matrix[6]))%360) or nil
+        end
         local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
         local aim_opacity=1
         if self.config.fade_3d_unless_aiming then
