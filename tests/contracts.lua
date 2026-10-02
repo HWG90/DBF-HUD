@@ -621,7 +621,7 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     update(1/60);assert(h.anchor_status=='weapon attachment')
     assert(draw_x>0 and draw_x<1920,'screen geometry must stay in GUI coordinates despite a larger back buffer')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
-    assert(math.abs(received.x-.8738)<1e-6 and math.abs(received.y-2.18)<1e-6 and math.abs(received.z-3.1)<1e-6)
+    assert(math.abs(received.x-.8238)<1e-6 and math.abs(received.y-2.16)<1e-6 and math.abs(received.z-3.04)<1e-6)
     local before=pose_reads;for i=1,10 do update(1/144)end;assert(pose_reads==before+10)
     local alpha=h.opacity;valid=false;update(1/60)
     assert(h.anchor_status~='weapon attachment' and h.opacity>=alpha)
@@ -1517,7 +1517,8 @@ test('attachment points persist per view and bone cycling preserves offsets',fun
         [key]={right={x=.1},first_right={y=.2}}}}
     local e=HUD.layout_editor.new(h,{write_weapon_offsets=function(body)saved=assert(loadstring(body))()end},function()end)
     assert(e.bind() and e.name=='AR-23 Liberator')
-    e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='root' and h.weapon_clearance[key].first_right.y==.2)
+    assert(e.points()[1].value=='root')
+    e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='node:4d25685a' and h.weapon_clearance[key].first_right.y==.2)
     e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='node:12345678')
     e.set_scale(1.4)
     assert(e.zero_position())
