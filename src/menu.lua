@@ -90,8 +90,6 @@ function M.new(hud)
             if #preset_choices==0 then preset_choices={'No saved presets'} end
             local placement_controls={
                 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
-                {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
-                {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
                 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
             for _,row in ipairs(sliders)do
                 if placement[row[1]] then
@@ -142,6 +140,8 @@ function M.new(hud)
                     {id='always_visible',type='toggle',label='HUD always visible',default=not hud.config.force_occlusion,
                         description='Draw through geometry. Turn off to use world-depth occlusion in 3D mode.',
                         on_change=function(v)save('force_occlusion',not v)end},
+                    {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
+                    {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
                     {id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
                         on_change=function(v)save('effect_scanlines',v)end},
                     {id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
