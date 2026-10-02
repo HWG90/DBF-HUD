@@ -8971,8 +8971,7 @@ function M.new(backend)
                 end
             end
         end)
-        local anchor_status=sight and 'selected node verified' or 'selected node absent'
-        if not sight_ok then sight=nil;anchors={};anchor_status=tostring(sight_value) end
+        if not sight_ok then sight=nil;anchors={} end
         local node_parts
         if research then
             assert(nodes<=128,'research node limit')
@@ -9018,7 +9017,7 @@ function M.new(backend)
         assert(r.read(generations+index,1):byte()==generation and r.p(array+index*8)==object,'unit recycled during read')
         assert(r.u(r.read(object+8,4),0)==b.candidate and r.p(object+0x88)==address,'pose owner changed')
         return {id=raw.id,resource_hex=raw.resource_hex,candidate=b.candidate,node_count=nodes,
-            node_parts=node_parts,sight=sight,anchors=anchors,anchor_status=anchor_status,matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
+            node_parts=node_parts,sight=sight,anchors=anchors,matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
     end
     function self.poll(raw,anchor_hash,enumerate)
         local ok,value=pcall(self.snapshot,raw,nil,anchor_hash,enumerate)
@@ -10684,7 +10683,7 @@ function M.load(backend,log)
                             assert(type(value)=='number' and value==value and math.abs(value)<=180,'invalid weapon rotation')
                         elseif axis=='scale' then
                             assert(type(value)=='number' and value==value and value>=.25 and value<=3,'invalid weapon scale')
-                        elseif axis=='attach_point' or axis=='root_from' then
+                        elseif axis=='attach_point' then
                             assert(value=='sight' or value=='root' or (type(value)=='string' and value:match('^node:%x%x%x%x%x%x%x%x$')),'invalid attach point')
                         else
                         assert(axis=='x' or axis=='y' or axis=='z','invalid offset axis')
@@ -10699,28 +10698,6 @@ function M.load(backend,log)
         if not ok then log('WEAPON_OFFSETS rejected: '..tostring(profiles)) end
     end
     return profiles_loaded
-end
--- Convert only after the original attachment has been sampled in this view.
--- Root-oriented rendering permits exact translation without changing Euler angles.
-function M.convert_root(offset,p,first,config)
-    if not offset or not offset.root_from then return false end
-    if not config.debug_sight_root_orientation then return false,'root orientation required' end
-    if not p.sight and p.anchor_status~='selected node absent' then return false,'attachment read unavailable' end
-    local sight=p.sight
-    local base=first and {x=.12,y=.45,z=.01} or {x=.16,y=.10,z=.04}
-    local old=sight and base or (first and {x=-.12,y=.35,z=.22} or {x=.18,y=.05,z=.10})
-    local scale=config.scale or 1
-    local converted={}
-    for _,axis in ipairs({'x','y','z'}) do
-        local anchor=sight and sight[axis] or 0
-        local divisor=axis=='y' and 1 or scale
-        local value=(offset[axis] or 0)+old[axis]-base[axis]+anchor/divisor
-        if value~=value or math.abs(value)>2 then return false,'converted offset out of bounds' end
-        converted[axis]=value
-    end
-    for axis,value in pairs(converted) do offset[axis]=value end
-    offset.attach_point='root';offset.root_from=nil
-    return true
 end
 function M.serialize(profiles)
     local keys={};for key in pairs(profiles) do keys[#keys+1]=key end;table.sort(keys)
@@ -10743,12 +10720,10 @@ function M.serialize(profiles)
                     assert(type(offset.scale)=='number' and offset.scale>=.25 and offset.scale<=3,'invalid weapon scale')
                     axes[#axes+1]='scale = '..string.format('%.9f',offset.scale)
                 end
-                for _,field in ipairs({'attach_point','root_from'}) do
-                if offset[field] then
-                    local point=offset[field]
+                if offset.attach_point then
+                    local point=offset.attach_point
                     assert(point=='sight' or point=='root' or point:match('^node:%x%x%x%x%x%x%x%x$'),'invalid attach point')
-                    axes[#axes+1]=field..' = '..string.format('%q',point)
-                end
+                    axes[#axes+1]='attach_point = '..string.format('%q',point)
                 end
                 for _,axis in ipairs({'x','y','z'}) do
                     local value=offset[axis]
@@ -11662,31 +11637,10 @@ function M.start(sr,backend,options)
         local selected_profile=profiles and profiles[selected_view]
         local attach_point=selected_profile and selected_profile.attach_point
         if not attach_point then attach_point='node:4d25685a' end
-        local sampled_point=selected_profile and selected_profile.root_from or attach_point
-        local anchor_hash=sampled_point and sampled_point:match('^node:(%x+)$')
-        if sampled_point=='sight' then anchor_hash='527c9c73' end
+        local anchor_hash=attach_point and attach_point:match('^node:(%x+)$')
+        if attach_point=='sight' then anchor_hash='527c9c73' end
         self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active) or nil
-        if self.weapon_pose then
-            if selected_profile and selected_profile.root_from then
-                local converted,reason=HUD.weapon_offsets.convert_root(selected_profile,self.weapon_pose,self.first_person,self.config)
-                if converted then
-                    local saved,err=pcall(function()
-                        assert(backend.write_weapon_offsets,'layout writer unavailable')
-                        return backend.write_weapon_offsets(HUD.weapon_offsets.serialize(self.weapon_clearance))
-                    end)
-                    log('ROOT_CONVERSION weapon='..tostring(latest_raw.resource_hex)..' view='..active_view..' saved='..tostring(saved and err~=false)..(saved and '' or ' error='..tostring(err)))
-                else
-                    attach_point=sampled_point
-                end
-            end
-            self.weapon_pose.attach_point=attach_point
-            local p=self.weapon_pose
-            local signature=tostring(p.resource_hex)..':'..attach_point..':'..tostring(p.anchor_status)
-            if attach_point~='root' and signature~=self.anchor_lookup_signature then
-                self.anchor_lookup_signature=signature
-                log('ATTACHMENT_LOOKUP weapon='..tostring(p.resource_hex)..' requested='..attach_point..' nodes='..tostring(p.node_count)..' result='..tostring(p.anchor_status))
-            end
-        end
+        if self.weapon_pose then self.weapon_pose.attach_point=attach_point end
         draw_bone_marker(dt)
         self.pose_status=latest_raw and pose.status or 'no weapon'
         local w,h=sr.Gui.resolution()

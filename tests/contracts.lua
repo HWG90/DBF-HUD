@@ -973,38 +973,6 @@ test('sight placement updates without cache and profiles affect only their weapo
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
     assert(math.abs(p.auto_mount.z-.16)<1e-9)
 end)
-test('root conversion preserves named and missing node positions and roundtrips pending work',function()
-    local cfg=HUD.config.new();cfg.debug_sight_root_orientation=true
-    for _,first in ipairs({false,true}) do
-        for _,node in ipairs({false,true}) do
-            cfg.scale=1.5
-            local p={anchor_status='selected node absent'}
-            if node then p.sight={x=.3,y=.2,z=-.1} end
-            local offset={attach_point='root',root_from='node:4d25685a',x=.1,y=-.2,z=.15,scale=.55,rotation=45}
-            local base=first and {x=.12,y=.45,z=.01} or {x=.16,y=.10,z=.04}
-            local old=node and base or (first and {x=-.12,y=.35,z=.22} or {x=.18,y=.05,z=.10})
-            local expected={}
-            for _,axis in ipairs({'x','y','z'}) do
-                local scale=axis=='y' and 1 or cfg.scale
-                expected[axis]=(node and p.sight[axis] or 0)+(old[axis]+offset[axis])*scale
-            end
-            assert(HUD.weapon_offsets.convert_root(offset,p,first,cfg))
-            for _,axis in ipairs({'x','y','z'}) do
-                local scale=axis=='y' and 1 or cfg.scale
-                assert(math.abs((base[axis]+offset[axis])*scale-expected[axis])<1e-9)
-            end
-            assert(not offset.root_from and offset.scale==.55 and offset.rotation==45)
-        end
-    end
-    local o={attach_point='root',root_from='node:0844391a',x=.1}
-    assert(not HUD.weapon_offsets.convert_root(o,{},true,cfg) and o.root_from)
-    local profiles={['0123456789abcdef']={right=o}}
-    local serialized=HUD.weapon_offsets.serialize(profiles)
-    local parsed=assert(loadstring(serialized))()
-    local loaded=HUD.weapon_offsets.load({read_weapon_offsets=function()return parsed end},function()end)
-    assert(loaded['0123456789abcdef'].right.root_from=='node:0844391a')
-end)
-
 test('missing attachment placement is stable across reload and first view entry',function()
     local function instance()
         return {weapon_pose={id=1,candidate=2,resource_hex='test'},config=HUD.config.new(),clock=0,
