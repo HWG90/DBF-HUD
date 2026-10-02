@@ -7565,6 +7565,7 @@ function M.apply(raw)
     if (raw.ammo_resource_hex or raw.resource_hex)=='3828e2051aa9e897' then raw.label='';raw.reserve_kind='SPEARS';raw.ammo_icon='SPEAR' end
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
+    if raw.resource_hex=='25aa2fd4643cf4ee' then raw.label='GUIDED RCKT';raw.ammo_icon='SPEAR_ROCKET' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
     if raw.resource_hex=='692eb345969d368e' or raw.resource_hex=='80932fa0ed6901d3' then raw.label='RCKT';raw.ammo_icon='ROCKET' end
     if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='NAPALM_ROCKET' end
@@ -7699,6 +7700,8 @@ for _,offset in ipairs({0,15})do
     for _,r in ipairs(M.SHELL.runs)do M.DOUBLE_SHELL.runs[#M.DOUBLE_SHELL.runs+1]={r[1]+offset,r[2],r[3],r[4]} end
 end
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
+-- Short, broad guided missile with tapered nose, casing seam and rear fins.
+M.SPEAR_ROCKET={w=16,h=24,runs={{7,23,2,1},{6,21,4,2},{5,19,6,2},{4,8,8,11},{3,6,10,1},{4,3,8,2},{1,0,3,7},{12,0,3,7},{5,0,6,2}}}
 -- Distinct HUD silhouettes for the Recoilless Rifle's two rocket modes.
 M.ROCKET_HEAT={w=11,h=24,runs={{5,22,1,2},{4,19,3,3},{3,8,5,11},{4,5,3,3},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 M.ROCKET_HE={w=11,h=24,runs={{4,22,3,2},{3,20,5,2},{2,14,7,6},{3,6,5,8},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
@@ -8778,14 +8781,15 @@ function M.new(backend)
                 end
                 -- Inventory ownership plus the matching pack resource survives respawns;
                 -- adjacent entity IDs alone do not identify an autocannon backpack.
-                local autocannon=result.resource_hex=='a8cffb316f0b5c5f'
-                if autocannon or (cfg and reserve_max==0 and not mounted) then
+                local pack_resource=({['a8cffb316f0b5c5f']='e60ae045e0090f4c',
+                    ['25aa2fd4643cf4ee']='8ec3026b5f2e579a'})[result.resource_hex]
+                if pack_resource or (cfg and reserve_max==0 and not mounted) then
                     for off=12,24,4 do
                         local bid=r.u(inventory,off)
-                        local matches=not autocannon and bid==wid+1
-                        if autocannon and bid~=wid then
+                        local matches=not pack_resource and bid==wid+1
+                        if pack_resource and bid~=wid then
                             local pack=entity(owner,bid)
-                            matches=pack and string.format('%08x%08x',r.u(pack,4),r.u(pack,0))=='e60ae045e0090f4c'
+                            matches=pack and string.format('%08x%08x',r.u(pack,4),r.u(pack,0))==pack_resource
                         end
                         if matches then
                             local count=deposit(owner,bid)

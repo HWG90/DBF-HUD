@@ -212,14 +212,15 @@ function M.new(backend)
                 end
                 -- Inventory ownership plus the matching pack resource survives respawns;
                 -- adjacent entity IDs alone do not identify an autocannon backpack.
-                local autocannon=result.resource_hex=='a8cffb316f0b5c5f'
-                if autocannon or (cfg and reserve_max==0 and not mounted) then
+                local pack_resource=({['a8cffb316f0b5c5f']='e60ae045e0090f4c',
+                    ['25aa2fd4643cf4ee']='8ec3026b5f2e579a'})[result.resource_hex]
+                if pack_resource or (cfg and reserve_max==0 and not mounted) then
                     for off=12,24,4 do
                         local bid=r.u(inventory,off)
-                        local matches=not autocannon and bid==wid+1
-                        if autocannon and bid~=wid then
+                        local matches=not pack_resource and bid==wid+1
+                        if pack_resource and bid~=wid then
                             local pack=entity(owner,bid)
-                            matches=pack and string.format('%08x%08x',r.u(pack,4),r.u(pack,0))=='e60ae045e0090f4c'
+                            matches=pack and string.format('%08x%08x',r.u(pack,4),r.u(pack,0))==pack_resource
                         end
                         if matches then
                             local count=deposit(owner,bid)
