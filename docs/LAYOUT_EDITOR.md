@@ -29,7 +29,7 @@ The options panel also provides editor/view/position/scale/save/reset controls. 
 
 ## Storage
 
-One game-root `DBF-HUD-weapon-offsets.lua` stores every weapon. Each entry may contain `right`, `left`, `first_left`, `first_right` views. The active third-person path currently uses `right`; do not assume left shoulder independently consumes the retained `left` profile.
+`%LOCALAPPDATA%/DBF/DBF-HUD-weapon-offsets.lua` stores every weapon. Appearance and behavior use `%LOCALAPPDATA%/DBF/DBF-HUD-tuning.lua`. Missing files migrate automatically from the game folder; an existing AppData file takes priority. Legacy files remain as backups. Each entry may contain `right`, `left`, `first_left`, `first_right` views. The active third-person path currently uses `right`; do not assume left shoulder independently consumes the retained `left` profile.
 
 ```lua
 return {

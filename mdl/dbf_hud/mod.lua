@@ -8247,38 +8247,53 @@ function M.native()
             file:write(line..'\n');file:flush();log_size=log_size+#line+1
         end
     end
-    local function tuning_path()
+    local function legacy_tuning_path()
         local buf=ffi.new('char[4096]');local n=tonumber(k.dbf_hud_filename(nil,buf,4096))
         assert(n>0 and n<4096,'executable path unavailable')
         local root=ffi.string(buf,n):gsub('\\','/'):match('^(.*)/[Bb][Ii][Nn]/[^/]+$')
         assert(root,'game installation root unavailable')
         return root..'/DBF-HUD-tuning.lua'
     end
-    function backend.camera_log_path() return tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-camera.log') end
+    local function config_folder()
+        local root=assert(os.getenv('LOCALAPPDATA'),'Local AppData unavailable')..'/DBF'
+        pcall(ffi.cdef,'int CreateDirectoryA(const char*, void*);')
+        k.CreateDirectoryA(root,nil)
+        return root
+    end
+    local function tuning_path()return config_folder()..'/DBF-HUD-tuning.lua' end
+    local function read_config(name,legacy_name)
+        local path=config_folder()..'/'..name
+        local f=io.open(path,'r');local migrate=false
+        if not f then
+            local old=legacy_tuning_path():gsub('DBF%-HUD%-tuning.lua$',name)
+            f=io.open(old,'r')
+            if not f and legacy_name then f=io.open(old:gsub(name:gsub('([^%w])','%%%1')..'$',legacy_name),'r') end
+            migrate=f~=nil
+        end
+        if not f then return nil end
+        local body=f:read(65537);f:close();assert(#body<=65536,'config file too large')
+        local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
+        local values=chunk();assert(type(values)=='table','config must return a table')
+        if migrate then
+            local out=assert(io.open(path..'.tmp','w'));assert(out:write(body));assert(out:close())
+            assert(os.rename(path..'.tmp',path));backend.log('CONFIG migrated '..name..' to Local AppData')
+        end
+        backend.log('CONFIG reading '..path..' ('..#body..' bytes)')
+        return values
+    end
+    function backend.camera_log_path() return legacy_tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-camera.log') end
     function backend.camera_request()
-        local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-camera-request.txt')
+        local path=legacy_tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-camera-request.txt')
         local file=io.open(path,'r');if not file then return nil end
         local label=file:read(65);file:close();assert(os.remove(path),'camera request acknowledgement failed')
         assert(#label<=64 and label:match('^[%w_%-]+%s*$'),'invalid camera snapshot label')
         return label:match('^[%w_%-]+')
     end
     function backend.read_tuning()
-        local path=tuning_path();local f=io.open(path,'r')
-        -- Compatibility: old settings are readable; writes use the new filename.
-        if not f then path=path:gsub('DBF%-HUD%-tuning.lua$','AstraAmmo-tuning.lua');f=io.open(path,'r') end
-        if not f then return nil end
-        local body=f:read(65537);f:close();assert(#body<=65536,'tuning file too large')
-        local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
-        local values=chunk();assert(type(values)=='table','tuning file must return a table')
-        return values
+        return read_config('DBF-HUD-tuning.lua','AstraAmmo-tuning.lua')
     end
     function backend.read_weapon_offsets()
-        local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-weapon-offsets.lua')
-        local f=io.open(path,'r');if not f then return nil end
-        local body=f:read(65537);f:close();assert(#body<=65536,'weapon offsets file too large')
-        local chunk=assert(loadstring(body,'@'..path));setfenv(chunk,{})
-        if backend.log then backend.log('WEAPON_OFFSETS reading '..path..' ('..#body..' bytes)') end
-        return chunk()
+        return read_config('DBF-HUD-weapon-offsets.lua')
     end
     function backend.write_tuning(body)
         local path=tuning_path();local tmp=path..'.tmp'
