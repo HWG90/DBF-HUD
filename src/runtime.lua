@@ -366,6 +366,12 @@ function M.start(sr,backend,options)
                     log('AIRBURST_CONTROL '..control);self.last_airburst_control=control
                 end
             end
+            if raw and raw.resource_hex=='14d5d4506056c7a4' and raw.binding and raw.binding.ammo_controls then
+                local control=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+                if control~=self.last_missile_control then
+                    log('MISSILE_CONTROL '..control);self.last_missile_control=control
+                end
+            end
             if self.config.debug_logging and raw and raw.binding then
                 local b=raw.binding
                 if raw.resource_hex=='9f80d67a12a7e40f' and b.ammo_controls then

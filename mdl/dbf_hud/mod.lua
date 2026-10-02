@@ -7565,6 +7565,7 @@ function M.apply(raw)
     if (raw.ammo_resource_hex or raw.resource_hex)=='3828e2051aa9e897' then raw.label='';raw.reserve_kind='SPEARS';raw.ammo_icon='SPEAR' end
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
+    if raw.resource_hex=='14d5d4506056c7a4' then raw.label='';raw.reserve_kind='MISSILES';raw.ammo_icon='MISSILE_SIDE' end
     if raw.resource_hex=='5f3ec9bda2bd8553' then raw.label='';raw.reserve_kind='CHARGES';raw.ammo_icon='HAMMER' end
     if raw.resource_hex=='25aa2fd4643cf4ee' then raw.label='GUIDED RCKT';raw.ammo_icon='SPEAR_ROCKET' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
@@ -7705,6 +7706,17 @@ M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{
 -- Native StratagemHammer path, cropped to its hammer silhouette.
 M.HAMMER={w=48,h=19,runs={{41,18,7,1},{41,17,7,1},{41,16,7,1},{41,15,7,1},{41,14,7,1},{41,13,7,1},{40,12,8,1},{0,11,12,1},{38,11,10,1},{0,10,48,1},{0,9,48,1},{0,8,48,1},{0,7,48,1},{40,6,8,1},{41,5,7,1},{41,4,7,1},{41,3,7,1},{41,2,7,1},{41,0,7,1}}}
 M.SPEAR_ROCKET={w=16,h=24,runs={{7,23,2,1},{6,21,4,2},{5,19,6,2},{4,8,8,11},{3,6,10,1},{4,3,8,2},{1,0,3,7},{12,0,3,7},{5,0,6,2}}}
+-- Horizontal missile: swept tail fins, straight casing, shoulder and pointed nose.
+M.MISSILE_SIDE={w=48,h=18,runs={
+    {2,1,3,1},{3,2,4,1},{4,3,5,1},{5,4,5,1},
+    {2,16,3,1},{3,15,4,1},{4,14,5,1},{5,13,5,1},
+    {2,6,3,6},{0,7,2,4},
+    {7,5,28,1},{7,12,28,1},{6,6,1,6},
+    {8,7,25,4},{8,6,5,1},{8,11,5,1},
+    {14,6,18,1},{14,11,18,1},
+    {34,6,2,6},{37,6,2,6},{39,7,3,4},{42,8,3,2},{45,8,3,1},
+    {10,4,3,1},{10,13,3,1}
+}}
 -- Distinct HUD silhouettes for the Recoilless Rifle's two rocket modes.
 M.ROCKET_HEAT={w=11,h=24,runs={{5,22,1,2},{4,19,3,3},{3,8,5,11},{4,5,3,3},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 M.ROCKET_HE={w=11,h=24,runs={{4,22,3,2},{3,20,5,2},{2,14,7,6},{3,6,5,8},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
@@ -8023,8 +8035,9 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             warning.overheat_warning=true
         end
 
-    elseif m.resource_hex=='5f3ec9bda2bd8553' then
-        local icon=HUD.fire_icons.HAMMER;local factor=1.5
+    elseif m.resource_hex=='5f3ec9bda2bd8553' or m.resource_hex=='14d5d4506056c7a4' then
+        local missile=m.resource_hex=='14d5d4506056c7a4'
+        local icon=missile and HUD.fire_icons.MISSILE_SIDE or HUD.fire_icons.HAMMER;local factor=1.5
         local charged=(tonumber(m.value) or 0)>0
         local color=charged and ink or {255,55,55}
         local alpha=charged and 1 or (.35+.65*(.5+.5*math.sin((clock or 0)*6)))
@@ -8032,7 +8045,9 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,color,alpha)
             d[#d].hammer_indicator=true
         end
-        text(m.reserve and (string.format('%03d',m.reserve)..' CHARGES') or '-- CHARGES',0,-19,9,ink,.8)
+        local reserve_label=missile and 'MISSILES' or 'CHARGES'
+        text(m.reserve and (string.format('%03d',m.reserve)..' '..reserve_label) or '-- '..reserve_label,0,-19,9,ink,.8)
+        if missile and m.ammo_mode then text(m.ammo_mode,0,46,8,ink,.9) end
     elseif m.resource_hex=='72170a55a1f37ff1' then
         local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
         for barrel=1,2 do
@@ -11622,6 +11637,12 @@ function M.start(sr,backend,options)
                 local control=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
                 if control~=self.last_airburst_control then
                     log('AIRBURST_CONTROL '..control);self.last_airburst_control=control
+                end
+            end
+            if raw and raw.resource_hex=='14d5d4506056c7a4' and raw.binding and raw.binding.ammo_controls then
+                local control=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+                if control~=self.last_missile_control then
+                    log('MISSILE_CONTROL '..control);self.last_missile_control=control
                 end
             end
             if self.config.debug_logging and raw and raw.binding then
