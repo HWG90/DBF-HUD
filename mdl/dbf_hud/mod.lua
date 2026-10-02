@@ -7210,13 +7210,20 @@ end)()
 HUD.font=(function()
 -- Native text bounds; no rectangle glyph renderer.
 local M={}
+-- Bounds are in immutable face units; size is applied after lookup.
+local bounds_cache=setmetatable({}, {__mode='k'})
 function M.supported(name)return HUD.native_font_data.faces[name or 'bigblue']~=nil end
 function M.measure(text,size,name,continuous)
     local face=HUD.native_font_data.faces[name or 'bigblue']
     local sr=rawget(_G,'stingray')
     if sr and HUD.native_font then local f,m,active=HUD.native_font.resolve(sr,name,false);face=active end
     if not face then return 0,-size*.2,#text*size*.6,size*.8 end
-    local factor=size/face.em;local left,bottom,right,top,offset=0,0,0,0,0
+    local factor=size/face.em
+    local cache=bounds_cache[face]
+    if not cache then cache={count=0};bounds_cache[face]=cache end
+    local cached=cache[text]
+    if cached then return cached[1]*factor,cached[2]*factor,cached[3]*factor,cached[4]*factor end
+    local left,bottom,right,top,offset=0,0,0,0,0
     local digits=text:match('^(%d%d%d%d*)')
     local fixed
     if digits then
@@ -7229,6 +7236,8 @@ function M.measure(text,size,name,continuous)
         left=math.min(left,offset+g[2]);bottom=math.min(bottom,g[3])
         right=math.max(right,offset+g[4]);top=math.max(top,g[5]);offset=offset+g[1]
     end
+    if cache.count>=128 then cache={count=0};bounds_cache[face]=cache end
+    cache[text]={left,bottom,right,top};cache.count=cache.count+1
     return left*factor,bottom*factor,right*factor,top*factor
 end
 function M.numeric_parts(command)
@@ -10340,20 +10349,10 @@ function M.new(sr,log)
                 end
                 return name
             end
-            -- Adjacent icon runs and rails share corners within this draw only.
-            local projected={}
             local function project(x,y)
-                local column=projected[x]
-                if column and column[y] then return column[y][1],column[y][2] end
                 local wx,wy,wz=M.point(axes,origin,x,y)
                 local point=HUD.projection.project(camera,wx,wy,wz,fov,width/height,near or .05)
-                if point then
-                    local vector=sr.Vector3(point.x*width,0,point.y*height)
-                    local pixel={x=point.x*width,y=point.y*height}
-                    if not column then column={};projected[x]=column end
-                    column[y]={vector,pixel}
-                    return vector,pixel
-                end
+                if point then return sr.Vector3(point.x*width,0,point.y*height),{x=point.x*width,y=point.y*height} end
             end
             local function quad(x,y,w,h,name,color,layer,uv,texture)
                 if w<=0 or h<=0 then return end

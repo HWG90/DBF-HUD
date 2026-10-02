@@ -98,20 +98,10 @@ function M.new(sr,log)
                 end
                 return name
             end
-            -- Adjacent icon runs and rails share corners within this draw only.
-            local projected={}
             local function project(x,y)
-                local column=projected[x]
-                if column and column[y] then return column[y][1],column[y][2] end
                 local wx,wy,wz=M.point(axes,origin,x,y)
                 local point=HUD.projection.project(camera,wx,wy,wz,fov,width/height,near or .05)
-                if point then
-                    local vector=sr.Vector3(point.x*width,0,point.y*height)
-                    local pixel={x=point.x*width,y=point.y*height}
-                    if not column then column={};projected[x]=column end
-                    column[y]={vector,pixel}
-                    return vector,pixel
-                end
+                if point then return sr.Vector3(point.x*width,0,point.y*height),{x=point.x*width,y=point.y*height} end
             end
             local function quad(x,y,w,h,name,color,layer,uv,texture)
                 if w<=0 or h<=0 then return end
