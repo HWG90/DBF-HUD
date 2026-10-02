@@ -10371,10 +10371,20 @@ function M.new(sr,log)
                 end
                 return name
             end
+            -- Adjacent icon runs and rails share corners within this draw only.
+            local projected={}
             local function project(x,y)
+                local column=projected[x]
+                if column and column[y] then return column[y][1],column[y][2] end
                 local wx,wy,wz=M.point(axes,origin,x,y)
                 local point=HUD.projection.project(camera,wx,wy,wz,fov,width/height,near or .05)
-                if point then return sr.Vector3(point.x*width,0,point.y*height),{x=point.x*width,y=point.y*height} end
+                if point then
+                    local vector=sr.Vector3(point.x*width,0,point.y*height)
+                    local pixel={x=point.x*width,y=point.y*height}
+                    if not column then column={};projected[x]=column end
+                    column[y]={vector,pixel}
+                    return vector,pixel
+                end
             end
             local function quad(x,y,w,h,name,color,layer,uv,texture)
                 if w<=0 or h<=0 then return end
@@ -11234,20 +11244,38 @@ function M.start(sr,backend,options)
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
     local self={version='0.3.41',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local profile={elapsed=0,frames=0,total=0,max=0,buckets={}}
+    local function timed(name,fn)
+        return function(...)
+            if not profile then return fn(...) end
+            local started=os.clock();local active=profile
+            local function finish(...)
+                local bucket=active.buckets[name] or {total=0,calls=0,max=0};active.buckets[name]=bucket
+                local cost=os.clock()-started
+                bucket.total=bucket.total+cost;bucket.calls=bucket.calls+1;bucket.max=math.max(bucket.max,cost)
+                return ...
+            end
+            return finish(fn(...))
+        end
+    end
+    local compose=timed('layout',HUD.layout.compose)
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
+    reader.poll=timed('weapon_read',reader.poll);view.draw=timed('screen_draw',view.draw)
     local native=HUD.anchor.new(backend);self.native_anchor=native
     local pose=HUD.pose.new(backend);local next_pose_log=0;local last_pose_status
+    pose.poll=timed('pose_read',pose.poll)
     local original=rawget(_G,'update');local shutdown=rawget(_G,'shutdown')
     if not managed and type(original)~='function' then self.status='update callback missing';return self end
     local projection=HUD.projection.new(backend);local binding_base;local next_projection_log=0
+    projection.poll=timed('camera_projection',projection.poll)
     local latest_raw;local next_sample=0;local model;local anchor;local anchor_at=-10;local provider;local failures=0
     function self.texture_commands()
         if not model then return nil end
         local cfg={};for k,v in pairs(self.config) do cfg[k]=v end
         cfg.font='bigblue';cfg.frosted=false
-        local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        local commands=compose(model,0,0,2,1,cfg,self.clock)
         return commands
     end
     function self.appearance_preview(bounds)
@@ -11255,7 +11283,7 @@ function M.start(sr,backend,options)
         local preview_model=model or HUD.model.normalize({id='appearance_sample',kind='magazine',rounds=24,capacity=30,reserve=4,reserve_kind='mags',label='ROUNDS',fire_mode='AUTO'})
         local cfg={};for k,v in pairs(self.config)do cfg[k]=v end
         cfg.frosted=false;cfg.placement_mode='manual'
-        local commands=HUD.layout.compose(preview_model,0,0,2,1,cfg,self.clock)
+        local commands=compose(preview_model,0,0,2,1,cfg,self.clock)
         commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
         local minx,miny,maxx,maxy=math.huge,math.huge,-math.huge,-math.huge
         for _,c in ipairs(commands)do
@@ -11294,6 +11322,8 @@ function M.start(sr,backend,options)
     local world_probe=HUD.world_probe.new(sr,research_log)
     local world_display=HUD.scene_test.new(sr,research_log)
     local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log)
+    world_display.draw=timed('world_draw',world_display.draw)
+    if screen_scene then screen_scene.draw=timed('depth_draw',screen_scene.draw) end
     self.screen_scene_hud=true -- Auto-migrate only when the new shader package is available.
     local bone_marker=HUD.world_probe.new(sr,research_log,true)
     local bone_marker_position
@@ -11720,7 +11750,7 @@ function M.start(sr,backend,options)
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
-            local world_commands=HUD.layout.compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
+            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
@@ -11759,7 +11789,7 @@ function M.start(sr,backend,options)
             scale=scale*math.max(.25,math.min(4,(self.hybrid_scale_depth or point.depth)/point.depth))
         end
         if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
-        local commands=HUD.layout.compose(model,x,y,scale,alpha*aim_opacity,self.config,self.clock)
+        local commands=compose(model,x,y,scale,alpha*aim_opacity,self.config,self.clock)
         local frame=commands[1]
         local frame_bottom=frame.y
         for _,command in ipairs(commands) do if command.type=='panel' then frame_bottom=math.min(frame_bottom,command.y) end end
@@ -11785,9 +11815,24 @@ function M.start(sr,backend,options)
         view.draw(commands)
         if self.config.debug_logging then world_probe.draw(self.weapon_pose,self.config,nil,dt) else world_probe.release() end
     end
+    -- Short startup timing trial; one aggregate line, no per-frame logging.
+
     function self.tick(dt)
         if not retired then
+            local started=profile and os.clock()
             local ok,err=pcall(self.frame,dt)
+            if profile then
+                local cost=os.clock()-started
+                profile.elapsed=profile.elapsed+math.max(0,dt or 0)
+                profile.frames=profile.frames+1;profile.total=profile.total+cost;profile.max=math.max(profile.max,cost)
+                if profile.elapsed>=20 then
+                    log(string.format('PROFILE HUD frames=%d avg_ms=%.3f max_ms=%.3f view=%s mode=%s',profile.frames,1000*profile.total/profile.frames,1000*profile.max,self.first_person and 'first' or 'third',tostring(self.config.anchor_mode)))
+                    for name,bucket in pairs(profile.buckets) do
+                        log(string.format('PROFILE_PHASE %s per_frame_ms=%.3f per_call_ms=%.3f max_ms=%.3f calls=%d',name,1000*bucket.total/profile.frames,1000*bucket.total/bucket.calls,1000*bucket.max,bucket.calls))
+                    end
+                    profile=nil
+                end
+            end
             if not ok then self.status=tostring(err);failures=failures+1;log('ERROR '..self.status);pcall(view.clear)
                 if failures>=10 then self.status='disabled: '..self.status;self.retire() end
             else failures=0 end
