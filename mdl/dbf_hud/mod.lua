@@ -11780,19 +11780,21 @@ function M.new(hud,backend,log)
         if screen() then
             local x,y,z=e.values();return e.set(axis,({x=x,y=y,z=z})[axis]+amount)
         end
-        -- Match panel_pose's local roll, pitch and yaw basis, without rebasing saved offsets.
-        local m={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
-        for _,turn in ipairs({{e.rotation(),1,9},{e.rotation('pitch'),5,9},{e.rotation('yaw'),1,5}}) do
-            local co,si=math.cos(math.rad(turn[1])),math.sin(math.rad(turn[1]))
-            for j=0,2 do
-                local a,b=turn[2]+j,turn[3]+j;local av,bv=m[a],m[b]
-                m[a]=av*co+bv*si;m[b]=bv*co-av*si
-            end
-        end
+        -- Translate camera directions into the saved attachment-local coordinates.
+        -- Panel rotation changes its face, never the editor's movement directions.
+        local camera=hud.editor_camera_matrix
+        local pose=hud.weapon_pose
+        local m=pose and pose.matrix
+        if pose and not hud.config.debug_sight_root_orientation and pose.attach_point~='root'
+            and pose.sight and pose.sight.matrix then m=pose.sight.matrix end
+        if not camera or not m then e.status='Camera unavailable; movement paused';return false end
         local column=({x=1,y=5,z=9})[axis]
+        assert(column,'invalid editor axis')
         local x,y,z=e.values()
         for j,item in ipairs({{'x',x},{'y',y},{'z',z}}) do
-            e.set(item[1],math.max(-72,math.min(72,item[2]+m[column+j-1]*amount)))
+            local base=1+(j-1)*4
+            local delta=m[base]*camera[column]+m[base+1]*camera[column+1]+m[base+2]*camera[column+2]
+            e.set(item[1],math.max(-72,math.min(72,item[2]+delta*amount)))
         end
         return true
     end
@@ -12637,6 +12639,7 @@ function M.start(sr,backend,options)
         self.camera_mode_status=mode_status
         self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)
+        self.editor_camera_matrix=projection.camera_matrix
         self.layout_editor.tick(dt)
         local locked_bone_point
         if self.screen_bone_hud and bone_marker_position and projection.camera_matrix then

@@ -436,6 +436,7 @@ function M.start(sr,backend,options)
         self.camera_mode_status=mode_status
         self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)
+        self.editor_camera_matrix=projection.camera_matrix
         self.layout_editor.tick(dt)
         local locked_bone_point
         if self.screen_bone_hud and bone_marker_position and projection.camera_matrix then

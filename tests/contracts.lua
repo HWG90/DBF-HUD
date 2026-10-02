@@ -1576,7 +1576,8 @@ test('forward panel tilt preserves mount and pitches top forty-five degrees',fun
 end)
 test('layout editor locks weapon, previews active view, saves all profiles and restores baseline',function()
     local key='0123456789abcdef';local other='1111111111111111';local body;local keys={}
-    local h={clock=0,config={fp_auto_side='left'},weapon_pose={resource_hex=key},weapon_clearance={
+    local identity={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    local h={clock=0,config={fp_auto_side='left'},editor_camera_matrix=identity,weapon_pose={resource_hex=key,matrix=identity},weapon_clearance={
         [key]={right={x=.0254},first_left={z=-.1524}},[other]={right={y=.3}}}}
     local e=HUD.layout_editor.new(h,{write_weapon_offsets=function(v)body=v end,editor_key=function(k)return keys[k] or false end},function()end)
     assert(e.bind());e.set('x',4);assert(math.abs(h.weapon_clearance[key].right.x-.1016)<1e-9)
@@ -1792,4 +1793,20 @@ test('Bushwhacker selector uses shell symbols in semi and volley',function()
         assert(label and blue)
     end
 end)
+
+
+ test('editor movement follows camera axes regardless of panel rotation',function()
+    local key='968211c0033dce64'
+    local identity={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    local turned={0,1,0,0,-1,0,0,0,0,0,1,0,0,0,0,1}
+    local h={config={fp_auto_side='right'},weapon_pose={resource_hex=key,matrix=turned,attach_point='root'},
+        editor_camera_matrix=identity,weapon_clearance={[key]={right={rotation=90,pitch=45,yaw=90}}}}
+    local e=HUD.layout_editor.new(h,{},function()end);assert(e.bind())
+    assert(e.move('x',1));local x,y,z=e.values();assert(math.abs(x)<1e-9 and math.abs(y+1)<1e-9 and z==0)
+    assert(e.move('z',1));x,y,z=e.values();assert(z==1)
+    h.config.debug_sight_root_orientation=false;h.weapon_pose.attach_point='sight';h.weapon_pose.sight={matrix=identity}
+    assert(e.move('x',1));x,y,z=e.values();assert(math.abs(x-1)<1e-9)
+    h.editor_camera_matrix=nil;assert(not e.move('x',1));assert(e.values()==x)
+ end)
+
 print(string.format('%d contract tests passed',tests))
