@@ -994,6 +994,29 @@ test('sight placement updates without cache and profiles affect only their weapo
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
     assert(math.abs(p.auto_mount.z-.16)<1e-9)
 end)
+test('hammer uses an icon charge indicator and keeps reserve charges when empty',function()
+    local cfg=HUD.config.new()
+    local function commands(value,clock)
+        local raw=HUD.ammo_types.apply({resource_hex='5f3ec9bda2bd8553',kind='magazine',rounds=value,capacity=1,reserve=4,reserve_kind='MAGS'})
+        assert(raw.label=='' and raw.reserve_kind=='CHARGES' and raw.ammo_icon=='HAMMER')
+        return HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,cfg,clock)
+    end
+    local function inspect(list,empty)
+        local icon,reserve
+        for _,c in ipairs(list) do
+            if c.hammer_indicator then icon=c;if empty then assert(c.c[1]==255 and c.c[2]==55) end end
+            if c.type=='text' then
+                assert(not c.numeric_display or c.text=='004 CHARGES')
+                if c.text=='004 CHARGES' then reserve=true end
+            end
+        end
+        assert(icon and reserve);return icon.a
+    end
+    local full=inspect(commands(1,0),false)
+    local a=inspect(commands(0,0),true);local b=inspect(commands(0,.2),true)
+    assert(a~=b and full>=a)
+end)
+
 test('five percent weapon scales persist and smaller values are rejected',function()
     local key='0123456789abcdef'
     local profiles={[key]={right={scale=.05}}}

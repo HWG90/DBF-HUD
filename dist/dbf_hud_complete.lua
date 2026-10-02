@@ -7596,6 +7596,7 @@ function M.apply(raw)
     if (raw.ammo_resource_hex or raw.resource_hex)=='3828e2051aa9e897' then raw.label='';raw.reserve_kind='SPEARS';raw.ammo_icon='SPEAR' end
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
+    if raw.resource_hex=='5f3ec9bda2bd8553' then raw.label='';raw.reserve_kind='CHARGES';raw.ammo_icon='HAMMER' end
     if raw.resource_hex=='25aa2fd4643cf4ee' then raw.label='GUIDED RCKT';raw.ammo_icon='SPEAR_ROCKET' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
     if raw.resource_hex=='692eb345969d368e' or raw.resource_hex=='80932fa0ed6901d3' then raw.label='RCKT';raw.ammo_icon='ROCKET' end
@@ -7732,6 +7733,8 @@ for _,offset in ipairs({0,15})do
 end
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 -- Short, broad guided missile with tapered nose, casing seam and rear fins.
+-- Native StratagemHammer path, cropped to its hammer silhouette.
+M.HAMMER={w=48,h=19,runs={{41,18,7,1},{41,17,7,1},{41,16,7,1},{41,15,7,1},{41,14,7,1},{41,13,7,1},{40,12,8,1},{0,11,12,1},{38,11,10,1},{0,10,48,1},{0,9,48,1},{0,8,48,1},{0,7,48,1},{40,6,8,1},{41,5,7,1},{41,4,7,1},{41,3,7,1},{41,2,7,1},{41,0,7,1}}}
 M.SPEAR_ROCKET={w=16,h=24,runs={{7,23,2,1},{6,21,4,2},{5,19,6,2},{4,8,8,11},{3,6,10,1},{4,3,8,2},{1,0,3,7},{12,0,3,7},{5,0,6,2}}}
 -- Distinct HUD silhouettes for the Recoilless Rifle's two rocket modes.
 M.ROCKET_HEAT={w=11,h=24,runs={{5,22,1,2},{4,19,3,3},{3,8,5,11},{4,5,3,3},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
@@ -8051,6 +8054,16 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             warning.overheat_warning=true
         end
 
+    elseif m.resource_hex=='5f3ec9bda2bd8553' then
+        local icon=HUD.fire_icons.HAMMER;local factor=1.5
+        local charged=(tonumber(m.value) or 0)>0
+        local color=charged and ink or {255,55,55}
+        local alpha=charged and 1 or (.35+.65*(.5+.5*math.sin((clock or 0)*6)))
+        for _,run in ipairs(icon.runs) do
+            rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,color,alpha)
+            d[#d].hammer_indicator=true
+        end
+        text(m.reserve and (string.format('%03d',m.reserve)..' CHARGES') or '-- CHARGES',0,-19,9,ink,.8)
     elseif m.resource_hex=='72170a55a1f37ff1' then
         local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
         for barrel=1,2 do
@@ -10590,6 +10603,7 @@ end)()
 HUD.weapon_names=(function()
 -- Readable names from the installed runtime catalog; unique identities only.
 return {
+    ['5f3ec9bda2bd8553'] = "CQC-20 Breaching Hammer",
     ['d54b9505c0f72873'] = "LAS-98 Laser Cannon",
     ['27ee1ed8f6fb6356'] = "LAS-5 Scythe",
     ['3f92ba65ef65cca9'] = "P-72 Crisper",

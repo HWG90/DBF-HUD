@@ -223,6 +223,16 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             warning.overheat_warning=true
         end
 
+    elseif m.resource_hex=='5f3ec9bda2bd8553' then
+        local icon=HUD.fire_icons.HAMMER;local factor=1.5
+        local charged=(tonumber(m.value) or 0)>0
+        local color=charged and ink or {255,55,55}
+        local alpha=charged and 1 or (.35+.65*(.5+.5*math.sin((clock or 0)*6)))
+        for _,run in ipairs(icon.runs) do
+            rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,color,alpha)
+            d[#d].hammer_indicator=true
+        end
+        text(m.reserve and (string.format('%03d',m.reserve)..' CHARGES') or '-- CHARGES',0,-19,9,ink,.8)
     elseif m.resource_hex=='72170a55a1f37ff1' then
         local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
         for barrel=1,2 do

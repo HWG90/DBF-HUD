@@ -244,6 +244,7 @@ function M.apply(raw)
     if (raw.ammo_resource_hex or raw.resource_hex)=='3828e2051aa9e897' then raw.label='';raw.reserve_kind='SPEARS';raw.ammo_icon='SPEAR' end
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
+    if raw.resource_hex=='5f3ec9bda2bd8553' then raw.label='';raw.reserve_kind='CHARGES';raw.ammo_icon='HAMMER' end
     if raw.resource_hex=='25aa2fd4643cf4ee' then raw.label='GUIDED RCKT';raw.ammo_icon='SPEAR_ROCKET' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
     if raw.resource_hex=='692eb345969d368e' or raw.resource_hex=='80932fa0ed6901d3' then raw.label='RCKT';raw.ammo_icon='ROCKET' end
