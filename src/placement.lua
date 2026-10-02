@@ -2,7 +2,7 @@
 -- Sight anchors update live; only the legacy root fallback caches a screen seed.
 local M={}
 function M.update(self,pose,projection,latest_raw,log)
-    self.profile_scale=1
+    self.profile_scale=1;self.profile_rotation=0;self.profile_pitch=0;self.profile_yaw=0
     if self.weapon_pose then
         self.weapon_pose.first_person=self.first_person
         self.weapon_pose.left_shoulder=false
@@ -40,9 +40,12 @@ function M.update(self,pose,projection,latest_raw,log)
                 self.auto_mounts[view]=mount
             end
             local profile=self.weapon_clearance[self.weapon_pose.resource_hex]
-            local profile_view=view_parity and 'right' or (self.first_person and ('first_'..self.config.fp_auto_side) or view)
-            local correction=profile and profile[profile_view]
+            local profile_view=self.first_person and ('first_'..self.config.fp_auto_side) or view
+            local correction=profile and (profile[profile_view] or (view_parity and profile.right))
             self.profile_scale=correction and correction.scale or 1
+            self.profile_rotation=correction and correction.rotation or 0
+            self.profile_pitch=correction and correction.pitch or 0
+            self.profile_yaw=correction and correction.yaw or 0
             if mount and correction then
                 mount={x=mount.x+(correction.x or 0),y=mount.y+(correction.y or 0),z=mount.z+(correction.z or 0)}
             end

@@ -46,13 +46,13 @@ function M.new(sr)
             if c.type=='panel' then
                 local drawn=false
                 if c.frosted and blur then
-                    local ok,bid=pcall(G.bitmap,gui,blur,sr.Vector3(c.x,c.y,48),sr.Vector2(c.w,c.h),sr.Color(255,255,255,255))
+                    local ok,bid=pcall(G.bitmap,gui,blur,sr.Vector3(c.x,c.y,48),sr.Vector2(c.w,c.h),sr.Color(math.floor((c.frost_a or c.a)*255+.5),255,255,255))
                     if ok and bid then ids[#ids+1]={type='bitmap',id=bid};drawn=true
                     else blur=nil;probe_frames=1 end
                 end
                 self.material_status=drawn and ('native frost: '..blur) or 'opaque panel (native frost unavailable or disabled)'
                 -- No fake translucent fallback when the game's blur resource is unavailable.
-                if not drawn then color=sr.Color(255,c.c[1],c.c[2],c.c[3]) end
+                if not drawn then color=sr.Color(math.floor(c.a*255+.5),c.c[1],c.c[2],c.c[3]) end
                 id=G.rect(gui,sr.Vector3(c.x,c.y,49),sr.Vector2(c.w,c.h),color);kind='rect'
             elseif c.type=='rect' then
                 id=G.rect(gui,sr.Vector3(c.x,c.y,c.fuel_marker_piece and 51 or 50),sr.Vector2(c.w,c.h),color)

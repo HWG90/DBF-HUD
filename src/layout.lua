@@ -32,7 +32,7 @@ function M.decorate(out,frame,scale,cfg,opacity)
     -- Shared rectangle commands preserve direct WorldGUI depth and all screen renderers.
     local style=cfg.decoration or 'none'
     local w,h=right-left,top-bottom;local line=scale
-    local neutral=HUD.config.rgb(cfg.text_color)
+    local neutral=HUD.config.rgb(cfg.decoration_color or cfg.text_color)
     local function border(dx,dy,bw,bh,color,strength)
         out[#out+1]={type='rect',decoration=true,x=left+dx,y=bottom+dy,w=bw,h=bh,
             c=color or neutral,a=opacity*(cfg.text_color_alpha or 255)/255*(strength or .7)}
@@ -59,9 +59,27 @@ function M.decorate(out,frame,scale,cfg,opacity)
         for _,cx in ipairs({0,w-length}) do
             for _,cy in ipairs({0,h-2*line}) do border(cx,cy,length,2*line,nil,.9) end
         end
-    elseif style=='double' then outline(0,.65);outline(3*scale,.25) end
+    elseif style=='double' then outline(0,.65);outline(3*scale,.25)
+    end
 end
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
+    if m.snow_party then
+        local function rainbow(phase)
+            local t=(clock or 0)*3+phase
+            return {math.floor(128+127*math.sin(t)),math.floor(128+127*math.sin(t+2.094)),math.floor(128+127*math.sin(t+4.189))}
+        end
+        local color=rainbow(0);local out={{type='panel',x=x-55*scale,y=y-55*scale,w=110*scale,h=125*scale,c=color,a=.5*opacity,frosted=false}}
+        for row=0,47 do
+            local dy=row-23.5;local half=math.sqrt(math.max(0,24*24-dy*dy))
+            out[#out+1]={type='rect',x=x-half*scale,y=y+dy*scale,w=2*half*scale,h=scale,c={235,247,255},a=opacity}
+        end
+        for _,r in ipairs({{-55,-55,110,2},{-55,68,110,2},{-55,-55,2,125},{53,-55,2,125}})do
+            out[#out+1]={type='rect',x=x+r[1]*scale,y=y+r[2]*scale,w=r[3]*scale,h=r[4]*scale,c=rainbow(math.pi),a=opacity}
+        end
+        out[#out+1]={type='text',x=x-40*scale,y=y-40*scale,text='SNOWBALL',size=12*scale,font=cfg.font,c={255,255,255},a=opacity}
+        return out
+    end
+
     cfg=cfg or HUD.config.defaults
     local pixel=HUD.font.supported(cfg.font)
     if pixel and not measure then measure=function(text,size)return HUD.font.measure(text,size,cfg.font)end end
@@ -205,6 +223,19 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             warning.overheat_warning=true
         end
 
+    elseif m.resource_hex=='72170a55a1f37ff1' then
+        local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
+        for barrel=1,2 do
+            local alpha=(tonumber(m.value) or 0)>=(3-barrel) and .95 or .18
+            rect((barrel-1)*20+3*factor,5+11*factor,6*factor,14*factor,{65,145,235},alpha*.4)
+            d[#d].barrel_indicator=barrel
+            for _,run in ipairs(icon.runs)do
+                local shell_color=run[2]<9 and {218,172,78} or {65,145,235}
+                rect((barrel-1)*20+run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,shell_color,alpha)
+                d[#d].barrel_indicator=barrel
+            end
+        end
+        text(m.reserve and (string.format('%03d',m.reserve)..' '..(m.reserve_kind or 'SHELLS')) or '-- SHELLS',0,-19,9,ink,.8)
     else
         local heading=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.ammo_mode or m.label
         local heading_y=pixel and math.max(42,5+number_top+3) or 42
@@ -362,7 +393,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
 
     local child_label=m.safety_mode or m.fire_mode
     if m.rpm then child_label=(child_label and (child_label..'  ') or '')..tostring(m.rpm)..' RPM' end
-    if m.rpm or child_label=='SAFE' or child_label=='UNSAFE' or child_label=='AUTO' or child_label=='SEMI' or child_label=='BURST' or child_label=='ALT' then
+    if m.rpm or child_label=='SAFE' or child_label=='UNSAFE' or child_label=='AUTO' or child_label=='SEMI' or child_label=='BURST' or child_label=='ALT' or child_label=='VOLLEY' then
         local size=(pixel and 12 or 8)*scale
         local a,b,e,f
         if measure then a,b,e,f=measure(child_label,size) end
@@ -418,6 +449,23 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         for _,command in ipairs(out) do command.c=red end
     end
     if fuel then M.fuel_marker(out,measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end) end
+    -- Optional effects share the composed panel and its visibility fade in every mode.
+    if cfg.effect_flicker then
+        local strength=.94+.04*math.sin((clock or 0)*17)+.02*math.sin((clock or 0)*31)
+        for _,v in ipairs(out) do v.a=v.a*strength;if v.frost_a then v.frost_a=v.frost_a*strength end end
+    end
+    if cfg.effect_scanlines or cfg.effect_sweep then
+        local frames={};for _,v in ipairs(out)do if v.type=='panel' then frames[#frames+1]=v end end
+        local ink=HUD.config.rgb(cfg.text_color)
+        for _,frame in ipairs(frames)do
+            local thickness=math.max(.3,scale*.35)
+            if cfg.effect_scanlines then
+                for k=1,21 do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/22,w=frame.w,h=thickness,c=ink,a=.12*opacity} end
+            end
+            if cfg.effect_sweep then out[#out+1]={type='rect',x=frame.x,y=frame.y+((clock or 0)*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.2*opacity} end
+        end
+    end
+    for _,command in ipairs(out)do if command.type=='text' then command.a=command.a*(cfg.text_opacity or 1) end end
     return out
 end
 return M

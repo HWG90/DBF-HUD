@@ -466,10 +466,10 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==30)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==25)
     callbacks['dbf_hud_v4.force_occlusion'](true);assert(h.config.force_occlusion and writes==1);writes=writes-1
     callbacks['dbf_hud_placement.fp_auto_side'](1);assert(h.config.fp_auto_side=='left');writes=writes-1
-    callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
+    callbacks['dbf_hud_placement.travel'](120);assert(h.config.travel==120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
     callbacks['dbf_hud_v6.font_native'](2);assert(h.config.font=='hack' and writes==2)
     callbacks['dbf_hud_v6.font_native'](1);assert(h.config.font=='bigblue' and writes==3)
@@ -477,12 +477,12 @@ test('native menu keeps colors config-only and persists placement',function()
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==16 and groups['DBF-HUD Placement']==14)
+    assert(groups['DBF-HUD']==15 and groups['DBF-HUD Placement']==10)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
     callbacks['dbf_hud_v4.display_mode'](3);assert(h.config.anchor_mode=='world')
-    menu.retire();callbacks['dbf_hud_placement.offset_x'](42);assert(h.config.offset_x==-120)
+    menu.retire();callbacks['dbf_hud_placement.travel'](42);assert(h.config.travel==120)
     ModOptionsMenu=nil;assert(HUD.menu.new(h).status=='Mod Options Menu not installed')
 end)
 test('native frost is availability gated and bitmap lifecycle is released',function()
@@ -496,7 +496,7 @@ test('native frost is availability gated and bitmap lifecycle is released',funct
         Gui={rect=function(g,p,s,c)panelalpha=c[1];return add()end,text=add,
             bitmap=function()bitmaps=bitmaps+1;return add()end,destroy_rect=remove,destroy_text=remove,destroy_bitmap=remove}}
     local v=HUD.view.new(sr);local command={{type='panel',x=0,y=0,w=103,h=83,c={32,38,40},a=.55,frosted=true}}
-    v.draw(command);assert(bitmaps==0 and panelalpha==255)
+    v.draw(command);assert(bitmaps==0 and panelalpha==140)
     v.release();assert(next(active)==nil);available=true
     v.draw(command);assert(bitmaps==1 and panelalpha==140 and v.material_status:find('native frost',1,true))
     v.release();assert(next(active)==nil)
@@ -625,8 +625,8 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     assert(h.anchor_status~='weapon attachment' and h.opacity>=alpha)
     valid=true;update(1/60);assert(math.abs(h.motion_x-576)<1e-6)
     h.configure({anchor_mode='crosshair'});update(1/60);assert(h.anchor_status~='weapon attachment')
-    h.configure({anchor_mode='world',always_show_3d=false});update(1/60);assert(world_draws==1 and selected_mode=='gui_depth')
-    h.configure({always_show_3d=true});update(1/60);assert(world_draws==2 and selected_mode=='gui_depth')
+    h.configure({anchor_mode='world',always_show_3d=false});update(1/60);assert(world_draws==1 and selected_mode=='gui')
+    h.configure({always_show_3d=true});update(1/60);assert(world_draws==2 and selected_mode=='gui')
     h.configure({anchor_mode='weapon'});update(1/60);assert(world_draws==2)
     h.retire();HUD.pose.new,HUD.projection.new,HUD.scene_test.new=saved_pose,saved_projection,saved_scene
 end)
@@ -709,9 +709,9 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==30)
-        callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
-        menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==25)
+        callbacks['dbf_hud_placement.travel'](77);assert(h.config.travel==77 and writes==cycle)
+        menu.retire();callbacks['dbf_hud_placement.travel'](88);assert(h.config.travel==77 and writes==cycle)
     end
     ModOptionsMenu=nil
 end)
@@ -724,7 +724,7 @@ test('live menu reuses boot registrations with changed saved defaults',function(
         on_change=function(id,fn)callbacks[id]=fn;return true end,set=function()return true end}
     h.configure=function(v)HUD.config.apply(h.config,v)end
     local menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    callbacks['dbf_hud_placement.offset_x'](188);assert(h.config.offset_x==188)
+    callbacks['dbf_hud_placement.travel'](128);assert(h.config.travel==128)
     menu.retire();ModOptionsMenu=nil
 end)
 
@@ -1253,6 +1253,23 @@ test('all 72 native families have finite bounds and selectable labels',function(
     end
     assert(count==72 and #HUD.config.fonts==72)
 end)
+test('direct appearance menu exposes all fonts styles and color wheels',function()
+    local spec,removed,writes
+    writes=0
+    DBFMCM={register=function(v)spec=v;return {unregister=function()removed=true end}end}
+    local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
+    h.configure=function(v)HUD.config.apply(h.config,v)end
+    local menu=HUD.menu.new(h);menu.poll()
+    assert(spec)
+    local controls={};for _,v in ipairs(spec.pages[1].controls)do controls[v.id]=v end
+    assert(#controls.family.choices==72 and controls.hud_scale.type=='slider' and #controls.display_mode.choices==3)
+    assert(#controls.style.choices==5 and controls.panel_color.type=='color' and controls.decoration_color.type=='color')
+    controls.style.on_change(5);assert(h.config.style_3d=='retro')
+    controls.panel_color.on_change('#123456');assert(h.config.background_color=='#123456')
+    controls.decoration_color.on_change('#ABCDEF');assert(h.config.decoration_color=='#ABCDEF' and writes==3)
+    menu.retire();assert(removed);controls.style.on_change(1);assert(h.config.style_3d=='retro')
+    DBFMCM=nil
+end)
 test('native resource resolver selects separate clear and depth materials',function()
     local sr={Application={can_get=function()return true end}}
     local face=HUD.native_font_data.faces.hack
@@ -1335,7 +1352,7 @@ test('railgun safety child retains projectile and parent width',function()
         assert(math.abs(child.w-commands[1].w)<.001)
     end
 end)
-test('laser aiming HUD shares third-person mount at every scale and first-person side',function()
+test('laser aiming HUD honors independent first-person profiles at every scale',function()
     local p={id=1,candidate=2,resource_hex='27ee1ed8f6fb6356',sight={x=.3,y=.2,z=.4}}
     local h={weapon_pose=p,config=HUD.config.new(),clock=0,weapon_clearance={['27ee1ed8f6fb6356']={right={x=-.0508,z=-.0381},first_left={x=.12,z=-.127},first_right={x=-.12,z=-.127}}}}
     for _,scale in ipairs({.5,1,2}) do
@@ -1345,7 +1362,9 @@ test('laser aiming HUD shares third-person mount at every scale and first-person
         for _,side in ipairs({'left','right'}) do
             h.first_person=true;h.config.fp_auto_side=side
             HUD.placement.update(h,{}, {}, {avatar_unit_ref=3,energy_icon='LASER'},function()end)
-            for _,axis in ipairs({'x','y','z'}) do assert(math.abs(p.auto_mount[axis]-expected[axis])<1e-9) end
+            local correction=h.weapon_clearance[p.resource_hex]['first_'..side]
+            assert(math.abs(p.auto_mount.x-(p.sight.x+(.16+correction.x)*scale))<1e-9)
+            assert(math.abs(p.auto_mount.z-(p.sight.z+(.04+correction.z)*scale))<1e-9)
         end
     end
 end)
@@ -1414,7 +1433,7 @@ test('layout editor locks weapon, previews active view, saves all profiles and r
     e.reset();assert(h.weapon_clearance[key].right.x==.0254 and h.weapon_clearance[key].first_left.z==-.1524)
     keys[38]=true;h.clock=.1;e.tick(.1);assert(math.abs(h.weapon_clearance[key].first_left.z+.1397)<1e-9)
     h.weapon_pose.resource_hex=other;h.clock=.2;e.tick(.1);assert(not e.active and h.weapon_clearance[other].right.y==.3)
-    h.weapon_pose.resource_hex=key;h.placement_view_parity=true;assert(e.bind());e.set_view(true);assert(e.view=='right')
+    h.weapon_pose.resource_hex=key;h.placement_view_parity=true;assert(e.bind());e.set_view(true);assert(e.view=='first_left')
     local failed=HUD.layout_editor.new(h,{write_weapon_offsets=function()error('disk full')end},function()end)
     assert(failed.bind() and not failed.save());assert(failed.status:find('Save failed',1,true))
 end)
@@ -1571,5 +1590,14 @@ test('RPM presentation requires an explicit selected live rate',function()
     assert(HUD.model.normalize(raw).rpm==nil)
     raw.rpm_selectable=true;assert(HUD.model.normalize(raw).rpm==750)
     raw.rpm=0/0;assert(HUD.model.normalize(raw).rpm==nil)
+end)
+test('rotation profiles roundtrip and retired opacity cannot dim the HUD',function()
+    local key='0123456789abcdef'
+    local profiles={[key]={right={rotation=90,pitch=-45,yaw=135},first_left={rotation=-90}}}
+    local encoded=HUD.weapon_offsets.serialize(profiles)
+    local loaded=HUD.weapon_offsets.load({read_weapon_offsets=function()return assert(loadstring(encoded))()end},function(e)error(e)end)
+    assert(loaded[key].right.pitch==-45 and loaded[key].right.yaw==135 and loaded[key].first_left.rotation==-90)
+    local c=HUD.config.new();HUD.config.apply(c,{opacity=.2,effect_scanlines=true,effect_flicker=true,effect_sweep=true})
+    assert(c.opacity==1 and c.effect_scanlines and c.effect_flicker and c.effect_sweep)
 end)
 print(string.format('%d contract tests passed',tests))

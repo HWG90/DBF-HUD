@@ -7099,8 +7099,9 @@ local M={}
 M.fonts={'bigblue','hack','jetbrainsmono','firacode','iosevka'}
 local listed={bigblue=true,hack=true,jetbrainsmono=true,firacode=true,iosevka=true}
 for _,name in ipairs(HUD.native_font_data.order) do if name~='debug' and not listed[name] then M.fonts[#M.fonts+1]=name end end
+M.styles={'standard','hologram','instrument','blueprint','retro'}
 M.decorations={'none','outline','brackets','helldivers','double'}
-M.colors={'text_color','background_color','heat_white','heat_yellow','heat_red'}
+M.colors={'text_color','decoration_color','background_color','heat_white','heat_yellow','heat_red'}
 -- Auto clearance in weapon-local metres; independent entries for each view.
 -- Resource identity is stable across equip/respawn; never key by entity handle.
 M.weapon_clearance={
@@ -7108,10 +7109,10 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=0.92,
-    panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',background_color='#202628',
+M.defaults={effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+    panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -7143,8 +7144,8 @@ function M.apply(config,values)
         assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
         local limits=M.limits[k]
         if limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
-        elseif k=='style_3d' then assert(v=='standard' or v=='hologram','invalid 3D style')
+        elseif (k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
         elseif k=='fp_auto_side' then assert(v=='left' or v=='right','invalid first-person side')
@@ -7153,7 +7154,8 @@ function M.apply(config,values)
         elseif k=='decoration' then local found=false;for _,name in ipairs(M.decorations) do if v==name then found=true end end;assert(found,'unknown decoration')
         elseif k=='font' then assert(v=='debug' or HUD.native_font_data.faces[v],'unknown HUD font')
         else v=M.hex(v) end
-        clean[k]=v
+        -- Retired global opacity is accepted for old presets but no longer dims the HUD.
+        clean[k]=k=='opacity' and 1 or v
     end
     if clean.hud_occlusion~=nil and clean.occlusion_mode==nil then clean.occlusion_mode=clean.hud_occlusion and 'gui_depth' or 'gui' end
     -- Migrate retired mesh selection to the verified direct WorldGUI path.
@@ -7528,6 +7530,11 @@ function M.apply(raw)
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
+    if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
+    if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
+    if raw.resource_hex=='52e4334e6a128caf' or raw.resource_hex=='02cd7321cd8445f5' then
+        raw.label='GRNDS';raw.ammo_icon='GL_GRENADE'
+    end
     return raw
 end
 -- Deposit capacities from generated_entities DepositComponentData (58 slots, 152-byte records).
@@ -7623,7 +7630,23 @@ M.BULLET={w=M.SEMI.h,h=M.SEMI.w,runs={}}
 for _,r in ipairs(M.SEMI.runs) do
     M.BULLET.runs[#M.BULLET.runs+1]={M.SEMI.h-r[2]-r[4],r[1],r[4],r[3]}
 end
+-- Heavy bolt cartridge: rim, straight case, shoulder and broad pointed projectile.
+M.BOLT_ROUND={w=14,h=28,runs={
+    {0,0,14,2},{1,2,12,2},{2,5,10,13},
+    {3,18,8,2},{4,20,6,4},{5,24,4,2},{6,26,2,2}
+}}
 M.SHELL={w=9,h=24,runs={{0,0,9,3},{1,3,7,19},{2,22,5,2}}}
+-- Outlined hull, crimped mouth and separate rim/base for barrel indicators.
+M.BARREL_SHELL={w=12,h=28,runs={
+    {0,0,12,2},{1,2,10,5},{1,8,10,1},
+    {1,10,2,16},{9,10,2,16},
+    {3,10,6,1},{3,25,6,2},{1,27,10,1},
+    {4,23,1,2},{7,23,1,2}
+}}
+M.DOUBLE_SHELL={w=21,h=24,runs={}}
+for _,offset in ipairs({0,12})do
+    for _,r in ipairs(M.SHELL.runs)do M.DOUBLE_SHELL.runs[#M.DOUBLE_SHELL.runs+1]={r[1]+offset,r[2],r[3],r[4]} end
+end
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 -- Distinct HUD silhouettes for the Recoilless Rifle's two rocket modes.
 M.ROCKET_HEAT={w=11,h=24,runs={{5,22,1,2},{4,19,3,3},{3,8,5,11},{4,5,3,3},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
@@ -7724,7 +7747,7 @@ function M.decorate(out,frame,scale,cfg,opacity)
     -- Shared rectangle commands preserve direct WorldGUI depth and all screen renderers.
     local style=cfg.decoration or 'none'
     local w,h=right-left,top-bottom;local line=scale
-    local neutral=HUD.config.rgb(cfg.text_color)
+    local neutral=HUD.config.rgb(cfg.decoration_color or cfg.text_color)
     local function border(dx,dy,bw,bh,color,strength)
         out[#out+1]={type='rect',decoration=true,x=left+dx,y=bottom+dy,w=bw,h=bh,
             c=color or neutral,a=opacity*(cfg.text_color_alpha or 255)/255*(strength or .7)}
@@ -7751,9 +7774,27 @@ function M.decorate(out,frame,scale,cfg,opacity)
         for _,cx in ipairs({0,w-length}) do
             for _,cy in ipairs({0,h-2*line}) do border(cx,cy,length,2*line,nil,.9) end
         end
-    elseif style=='double' then outline(0,.65);outline(3*scale,.25) end
+    elseif style=='double' then outline(0,.65);outline(3*scale,.25)
+    end
 end
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
+    if m.snow_party then
+        local function rainbow(phase)
+            local t=(clock or 0)*3+phase
+            return {math.floor(128+127*math.sin(t)),math.floor(128+127*math.sin(t+2.094)),math.floor(128+127*math.sin(t+4.189))}
+        end
+        local color=rainbow(0);local out={{type='panel',x=x-55*scale,y=y-55*scale,w=110*scale,h=125*scale,c=color,a=.5*opacity,frosted=false}}
+        for row=0,47 do
+            local dy=row-23.5;local half=math.sqrt(math.max(0,24*24-dy*dy))
+            out[#out+1]={type='rect',x=x-half*scale,y=y+dy*scale,w=2*half*scale,h=scale,c={235,247,255},a=opacity}
+        end
+        for _,r in ipairs({{-55,-55,110,2},{-55,68,110,2},{-55,-55,2,125},{53,-55,2,125}})do
+            out[#out+1]={type='rect',x=x+r[1]*scale,y=y+r[2]*scale,w=r[3]*scale,h=r[4]*scale,c=rainbow(math.pi),a=opacity}
+        end
+        out[#out+1]={type='text',x=x-40*scale,y=y-40*scale,text='SNOWBALL',size=12*scale,font=cfg.font,c={255,255,255},a=opacity}
+        return out
+    end
+
     cfg=cfg or HUD.config.defaults
     local pixel=HUD.font.supported(cfg.font)
     if pixel and not measure then measure=function(text,size)return HUD.font.measure(text,size,cfg.font)end end
@@ -7897,6 +7938,19 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             warning.overheat_warning=true
         end
 
+    elseif m.resource_hex=='72170a55a1f37ff1' then
+        local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
+        for barrel=1,2 do
+            local alpha=(tonumber(m.value) or 0)>=(3-barrel) and .95 or .18
+            rect((barrel-1)*20+3*factor,5+11*factor,6*factor,14*factor,{65,145,235},alpha*.4)
+            d[#d].barrel_indicator=barrel
+            for _,run in ipairs(icon.runs)do
+                local shell_color=run[2]<9 and {218,172,78} or {65,145,235}
+                rect((barrel-1)*20+run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,shell_color,alpha)
+                d[#d].barrel_indicator=barrel
+            end
+        end
+        text(m.reserve and (string.format('%03d',m.reserve)..' '..(m.reserve_kind or 'SHELLS')) or '-- SHELLS',0,-19,9,ink,.8)
     else
         local heading=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.ammo_mode or m.label
         local heading_y=pixel and math.max(42,5+number_top+3) or 42
@@ -8054,7 +8108,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
 
     local child_label=m.safety_mode or m.fire_mode
     if m.rpm then child_label=(child_label and (child_label..'  ') or '')..tostring(m.rpm)..' RPM' end
-    if m.rpm or child_label=='SAFE' or child_label=='UNSAFE' or child_label=='AUTO' or child_label=='SEMI' or child_label=='BURST' or child_label=='ALT' then
+    if m.rpm or child_label=='SAFE' or child_label=='UNSAFE' or child_label=='AUTO' or child_label=='SEMI' or child_label=='BURST' or child_label=='ALT' or child_label=='VOLLEY' then
         local size=(pixel and 12 or 8)*scale
         local a,b,e,f
         if measure then a,b,e,f=measure(child_label,size) end
@@ -8110,6 +8164,23 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         for _,command in ipairs(out) do command.c=red end
     end
     if fuel then M.fuel_marker(out,measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end) end
+    -- Optional effects share the composed panel and its visibility fade in every mode.
+    if cfg.effect_flicker then
+        local strength=.94+.04*math.sin((clock or 0)*17)+.02*math.sin((clock or 0)*31)
+        for _,v in ipairs(out) do v.a=v.a*strength;if v.frost_a then v.frost_a=v.frost_a*strength end end
+    end
+    if cfg.effect_scanlines or cfg.effect_sweep then
+        local frames={};for _,v in ipairs(out)do if v.type=='panel' then frames[#frames+1]=v end end
+        local ink=HUD.config.rgb(cfg.text_color)
+        for _,frame in ipairs(frames)do
+            local thickness=math.max(.3,scale*.35)
+            if cfg.effect_scanlines then
+                for k=1,21 do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/22,w=frame.w,h=thickness,c=ink,a=.12*opacity} end
+            end
+            if cfg.effect_sweep then out[#out+1]={type='rect',x=frame.x,y=frame.y+((clock or 0)*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.2*opacity} end
+        end
+    end
+    for _,command in ipairs(out)do if command.type=='text' then command.a=command.a*(cfg.text_opacity or 1) end end
     return out
 end
 return M
@@ -8205,6 +8276,41 @@ function M.native()
         local moved,why=os.rename(tmp,path)
         if not moved then os.rename(path..'.bak',path);error(why) end
         return path
+    end
+    local function preset_folder()
+        local root=assert(os.getenv('LOCALAPPDATA'),'Local AppData unavailable')..'/DBF'
+        pcall(ffi.cdef,'int CreateDirectoryA(const char*, void*);')
+        local win=ffi.load('kernel32');win.CreateDirectoryA(root,nil)
+        root=root..'/Presets';win.CreateDirectoryA(root,nil)
+        return root
+    end
+    function backend.list_presets()
+        pcall(ffi.cdef,[[typedef struct { unsigned long attributes; unsigned long times[6]; unsigned long sizeHigh,sizeLow,reserved0,reserved1; char name[260]; char alternate[14]; } DBF_PRESET_FIND_DATA;
+        void* FindFirstFileA(const char*, DBF_PRESET_FIND_DATA*); int FindNextFileA(void*,DBF_PRESET_FIND_DATA*); int FindClose(void*);]])
+        local win=ffi.load('kernel32');local data=ffi.new('DBF_PRESET_FIND_DATA[1]')
+        local mask=preset_folder()..'/DBF-HUD-preset-*.*'
+        local handle=win.FindFirstFileA(mask,data);local names={}
+        if handle==ffi.cast('void*',-1) then return names end
+        repeat local filename=ffi.string(data[0].name);local name=filename:match('^DBF%-HUD%-preset%-(.+)%.layout$') or filename:match('^DBF%-HUD%-preset%-(.+)%.lua$')
+            if name and #name<=48 and name:match('^[%w _-]+$') then local exists=false;for _,v in ipairs(names)do if v==name then exists=true end end;if not exists then names[#names+1]=name end end
+        until win.FindNextFileA(handle,data)==0
+        win.FindClose(handle);table.sort(names);return names
+    end
+    function backend.read_preset(name)
+        assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
+        local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
+        local path=preset_folder()..'/DBF-HUD-preset-'..stem..'.layout'
+        local f=io.open(path,'rb') or io.open(path:gsub('%.layout$','.lua'),'rb');assert(f,'Preset not found');local body=f:read(131073);f:close();assert(#body<=131072,'Preset too large')
+        local chunk=assert(loadstring(body,'DBF-HUD preset'));setfenv(chunk,{})
+        local value=chunk();assert(type(value)=='table' and type(value.settings)=='table' and type(value.layouts)=='table','Invalid preset format');return value
+    end
+    function backend.write_preset(name,body)
+        assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
+        local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
+        assert(not stem:upper():match('^(CON)$') and not stem:upper():match('^(NUL)$'),'Reserved filename')
+        local path=preset_folder()..'/DBF-HUD-preset-'..stem..'.layout'
+        local existing=io.open(path,'rb');if existing then existing:close();error('Preset already exists; choose another name')end
+        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close());assert(os.rename(path..'.tmp',path));return path
     end
     function backend.write_weapon_offsets(body)
         assert(type(body)=='string' and #body<=65536,'weapon offsets file too large')
@@ -8544,7 +8650,9 @@ function M.new(backend)
                 if ok and count then result.rounds=count;result.capacity=capacity;break end
             end
             if not result.rounds then return nil,'resource provider unavailable' end
-        else return nil,'unsupported ammo component' end
+        elseif result.resource_hex=='ccfae6d4a601c741' then
+            result.kind='rounds';result.rounds=1;result.capacity=1;result.label='SNOWBALL';result.ammo_icon='SNOWBALL'
+        else return nil,'unsupported ammo component weapon='..result.resource_hex..' unit='..tostring(result.unit_ref) end
         do
             -- Optional mode metadata must not suppress otherwise valid ammunition.
             local ok,mode,fire_mode,safety_mode=pcall(function()
@@ -8562,6 +8670,7 @@ function M.new(backend)
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
+                if result.resource_hex=='72170a55a1f37ff1' and r.u(controls,0)==4 then fire_mode='VOLLEY' end
                 local safety_mode=result.resource_hex=='2e9d0bdc48b09e60' and ({[5]='SAFE',[6]='UNSAFE'})[r.u(controls,0)] or nil
                 return mode,fire_mode,safety_mode
             end)
@@ -9068,13 +9177,13 @@ function M.new(sr)
             if c.type=='panel' then
                 local drawn=false
                 if c.frosted and blur then
-                    local ok,bid=pcall(G.bitmap,gui,blur,sr.Vector3(c.x,c.y,48),sr.Vector2(c.w,c.h),sr.Color(255,255,255,255))
+                    local ok,bid=pcall(G.bitmap,gui,blur,sr.Vector3(c.x,c.y,48),sr.Vector2(c.w,c.h),sr.Color(math.floor((c.frost_a or c.a)*255+.5),255,255,255))
                     if ok and bid then ids[#ids+1]={type='bitmap',id=bid};drawn=true
                     else blur=nil;probe_frames=1 end
                 end
                 self.material_status=drawn and ('native frost: '..blur) or 'opaque panel (native frost unavailable or disabled)'
                 -- No fake translucent fallback when the game's blur resource is unavailable.
-                if not drawn then color=sr.Color(255,c.c[1],c.c[2],c.c[3]) end
+                if not drawn then color=sr.Color(math.floor(c.a*255+.5),c.c[1],c.c[2],c.c[3]) end
                 id=G.rect(gui,sr.Vector3(c.x,c.y,49),sr.Vector2(c.w,c.h),color);kind='rect'
             elseif c.type=='rect' then
                 id=G.rect(gui,sr.Vector3(c.x,c.y,c.fuel_marker_piece and 51 or 50),sr.Vector2(c.w,c.h),color)
@@ -9755,7 +9864,7 @@ function M.prepare(commands,p,c)
                         panel.a=panel.a*.18
                         if child_panel then child_panel.a=child_panel.a*.18 end
                         local ink=HUD.config.rgb(c.text_color)
-                        local strength=commands[2] and commands[2].a or 1
+                        local strength=c.visibility_alpha or (commands[2] and commands[2].a) or 1
                         local frames={panel}
                         if child_panel then frames[#frames+1]=child_panel end
                         for _,frame in ipairs(frames) do
@@ -9766,6 +9875,24 @@ function M.prepare(commands,p,c)
                             centered[#centered+1]={type='rect',x=frame.x,y=frame.y+(clock*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.10*strength}
                         end
                     end
+    if c.style_3d=='instrument' or c.style_3d=='blueprint' or c.style_3d=='retro' then
+        local blueprint,retro=c.style_3d=='blueprint',c.style_3d=='retro'
+        local accent=retro and {125,230,140} or blueprint and {92,194,230} or {235,175,70}
+        local frames={};for _,v in ipairs(centered) do if v.type=='panel' then frames[#frames+1]=v end end
+        for _,frame in ipairs(frames) do
+            if c.background_color=='#202628' then frame.c=retro and {12,25,16} or blueprint and {12,28,42} or {35,28,17} end
+            local t=math.max(.45,frame.w/180)
+            local function line(x,y,w,h,alpha)
+                centered[#centered+1]={type='rect',x=x,y=y,w=w,h=h,c=accent,a=alpha*(c.visibility_alpha or 1)}
+            end
+            if retro then
+                for k=1,21 do line(frame.x,frame.y+frame.h*k/22,frame.w,t*.5,.14) end
+            elseif blueprint then
+                for k=1,7 do line(frame.x+frame.w*k/8,frame.y,t*.4,frame.h,.09) end
+                for k=1,3 do line(frame.x,frame.y+frame.h*k/4,frame.w,t*.4,.09) end
+            end
+        end
+    end
     HUD.layout.fuel_marker(centered,function(t,size,font)return HUD.font.measure(t,size,font,true)end)
     return centered
 end
@@ -9990,6 +10117,27 @@ function M.panel_pose(p,c,commands)
             z=m[15]+m[3]*dx+m[7]*dy+m[11]*dz}
     elseif c.placement_mode=='auto' and p.first_person then m=HUD.pose_motion.upright(m) end
     if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
+    local angle=math.rad(c.panel_rotation or 0)
+    if angle~=0 then
+        local rotated={};for i=1,16 do rotated[i]=m[i] end
+        local co,si=math.cos(angle),math.sin(angle)
+        for i=1,3 do
+            rotated[i]=m[i]*co+m[i+8]*si
+            rotated[i+8]=m[i+8]*co-m[i]*si
+        end
+        m=rotated
+    end
+    for _,turn in ipairs({{c.panel_pitch or 0,5,9},{c.panel_yaw or 0,1,5}}) do
+        if turn[1]~=0 then
+            local rotated={};for i=1,16 do rotated[i]=m[i] end
+            local co,si=math.cos(math.rad(turn[1])),math.sin(math.rad(turn[1]))
+            for i=0,2 do
+                local a,b=turn[2]+i,turn[3]+i
+                rotated[a]=m[a]*co+m[b]*si;rotated[b]=m[b]*co-m[a]*si
+            end
+            m=rotated
+        end
+    end
     return m,at
 end
 function M.point(m,at,x,y)
@@ -10159,7 +10307,7 @@ HUD.placement=(function()
 -- Sight anchors update live; only the legacy root fallback caches a screen seed.
 local M={}
 function M.update(self,pose,projection,latest_raw,log)
-    self.profile_scale=1
+    self.profile_scale=1;self.profile_rotation=0;self.profile_pitch=0;self.profile_yaw=0
     if self.weapon_pose then
         self.weapon_pose.first_person=self.first_person
         self.weapon_pose.left_shoulder=false
@@ -10197,9 +10345,12 @@ function M.update(self,pose,projection,latest_raw,log)
                 self.auto_mounts[view]=mount
             end
             local profile=self.weapon_clearance[self.weapon_pose.resource_hex]
-            local profile_view=view_parity and 'right' or (self.first_person and ('first_'..self.config.fp_auto_side) or view)
-            local correction=profile and profile[profile_view]
+            local profile_view=self.first_person and ('first_'..self.config.fp_auto_side) or view
+            local correction=profile and (profile[profile_view] or (view_parity and profile.right))
             self.profile_scale=correction and correction.scale or 1
+            self.profile_rotation=correction and correction.rotation or 0
+            self.profile_pitch=correction and correction.pitch or 0
+            self.profile_yaw=correction and correction.yaw or 0
             if mount and correction then
                 mount={x=mount.x+(correction.x or 0),y=mount.y+(correction.y or 0),z=mount.z+(correction.z or 0)}
             end
@@ -10223,6 +10374,7 @@ end)()
 HUD.weapon_names=(function()
 -- Readable names from the installed runtime catalog; unique identities only.
 return {
+    ['27ee1ed8f6fb6356'] = "LAS-5 Scythe",
     ['3f92ba65ef65cca9'] = "P-72 Crisper",
     ['a6a735accb4a327f'] = "M-105 Stalwart",
     ['006e44327bb953fe'] = "GL-15 Evictor",
@@ -10342,10 +10494,12 @@ function M.load(backend,log)
                 assert(type(resource)=='string' and #resource==16 and resource:match('^%x+$'),'invalid weapon resource')
                 assert(type(views)=='table','weapon views must be a table')
                 for view,offset in pairs(views) do
-                    assert(view=='right' or view=='left' or view=='first_left' or view=='first_right','invalid weapon view')
+                    assert(view=='right' or view=='left' or view=='first_left' or view=='first_right' or view=='screen_weapon_first' or view=='screen_weapon_third' or view=='screen_crosshair_first' or view=='screen_crosshair_third','invalid weapon view')
                     assert(type(offset)=='table','weapon offset must be a table')
                     for axis,value in pairs(offset) do
-                        if axis=='scale' then
+                        if axis=='rotation' or axis=='pitch' or axis=='yaw' then
+                            assert(type(value)=='number' and value==value and math.abs(value)<=180,'invalid weapon rotation')
+                        elseif axis=='scale' then
                             assert(type(value)=='number' and value==value and value>=.25 and value<=3,'invalid weapon scale')
                         elseif axis=='attach_point' then
                             assert(value=='sight' or value=='root' or (type(value)=='string' and value:match('^node:%x%x%x%x%x%x%x%x$')),'invalid attach point')
@@ -10365,14 +10519,21 @@ function M.load(backend,log)
 end
 function M.serialize(profiles)
     local keys={};for key in pairs(profiles) do keys[#keys+1]=key end;table.sort(keys)
-    local lines={'-- Saved by DBF-HUD Layout Editor. Weapon-local metres.','return {'}
+    local lines={'-- Saved by DBF-HUD Layout Editor. 3D: weapon-local metres. Screen profiles: reference pixels divided by 1000.','return {'}
     for _,key in ipairs(keys) do
         assert(type(key)=='string' and #key==16 and key:match('^%x+$'),'invalid weapon resource')
         local parts={}
-        for _,view in ipairs({'right','left','first_left','first_right'}) do
+        for _,view in ipairs({'right','left','first_left','first_right','screen_weapon_first','screen_weapon_third','screen_crosshair_first','screen_crosshair_third'}) do
             local offset=profiles[key][view]
             if offset then
                 local axes={}
+                for _,axis in ipairs({'rotation','pitch','yaw'}) do
+                    local value=offset[axis]
+                    if value~=nil then
+                        assert(type(value)=='number' and value==value and math.abs(value)<=180,'invalid weapon rotation')
+                        axes[#axes+1]=axis..' = '..string.format('%.9f',value)
+                    end
+                end
                 if offset.scale then
                     assert(type(offset.scale)=='number' and offset.scale>=.25 and offset.scale<=3,'invalid weapon scale')
                     axes[#axes+1]='scale = '..string.format('%.9f',offset.scale)
@@ -10424,20 +10585,39 @@ function M.new(hud,backend,log)
     local e={active=false,view='right',status='Equip a weapon, then enable editing'}
     local original
     local function copy(t)local out={};for k,v in pairs(t or {})do out[k]=v end;return out end
+    local function screen()return hud.config.anchor_mode=='weapon' or hud.config.anchor_mode=='crosshair' end
+    local function view_key(first)
+        if screen() then return 'screen_'..hud.config.anchor_mode..'_'..(first and 'first' or 'third') end
+        return (first and not e.shared) and ('first_'..hud.config.fp_auto_side) or 'right'
+    end
     function e.bind()
         local pose=hud.weapon_pose;local key=pose and pose.resource_hex
         if not key or #key~=16 or not key:match('^%x+$') then e.status='No equipped weapon';e.active=false;return false end
-        e.resource=key;e.name=(HUD.weapon_names or {})[key] or 'Unknown weapon';e.active=true;e.shared=hud.placement_view_parity;e.view=(hud.first_person and not e.shared) and ('first_'..hud.config.fp_auto_side) or 'right'
+        e.resource=key;e.name=(HUD.weapon_names or {})[key] or 'Unknown weapon';e.active=true;e.shared=false;e.view=view_key(hud.first_person)
         original={};for view,offset in pairs(hud.weapon_clearance[key] or {}) do original[view]=copy(offset) end
         e.status='Editing equipped weapon';return true
     end
     function e.values()
         local t=e.resource and hud.weapon_clearance[e.resource] or {}
-        t=(t or {})[e.view] or {};return (t.x or 0)/.0254,(t.y or 0)/.0254,(t.z or 0)/.0254
+        t=(t or {})[e.view] or {};local unit=screen() and .001 or .0254;return (t.x or 0)/unit,(t.y or 0)/unit,(t.z or 0)/unit
     end
-    function e.set_view(first)e.view=(first and not e.shared) and ('first_'..hud.config.fp_auto_side) or 'right' end
+    function e.set_view(first)e.view=view_key(first) end
     function e.scale()
         local views=e.resource and hud.weapon_clearance[e.resource] or {};return ((views or {})[e.view] or {}).scale or 1
+    end
+    function e.rotation(axis)
+        axis=axis or 'rotation'
+        local views=e.resource and hud.weapon_clearance[e.resource] or {}
+        return ((views or {})[e.view] or {})[axis] or 0
+    end
+    function e.rotate(delta,axis)
+        axis=axis or 'rotation'
+        if not e.active or screen() then return false end
+        e.set_view(hud.first_person)
+        local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
+        views[e.view]=views[e.view] or {}
+        views[e.view][axis]=(e.rotation(axis)+delta+180)%360-180
+        e.status='Rotation preview updated; save to keep it';return true
     end
     function e.set_scale(value)
         if not e.active then return false end
@@ -10448,10 +10628,30 @@ function M.new(hud,backend,log)
     function e.set(axis,inches)
         if not e.active then return false end
         assert(axis=='x' or axis=='y' or axis=='z','invalid editor axis')
-        assert(type(inches)=='number' and inches==inches and math.abs(inches)<=72,'invalid editor position')
+        assert(type(inches)=='number' and inches==inches and math.abs(inches)<=(screen() and 2000 or 72),'invalid editor position')
         local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
-        views[e.view]=views[e.view] or {};views[e.view][axis]=inches*.0254
+        views[e.view]=views[e.view] or {};views[e.view][axis]=inches*(screen() and .001 or .0254)
         hud.auto_mounts={};e.status='Preview updated; use Save layout to keep it';return true
+    end
+    function e.move(axis,amount)
+        if screen() then
+            local x,y,z=e.values();return e.set(axis,({x=x,y=y,z=z})[axis]+amount)
+        end
+        -- Match panel_pose's local roll, pitch and yaw basis, without rebasing saved offsets.
+        local m={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+        for _,turn in ipairs({{e.rotation(),1,9},{e.rotation('pitch'),5,9},{e.rotation('yaw'),1,5}}) do
+            local co,si=math.cos(math.rad(turn[1])),math.sin(math.rad(turn[1]))
+            for j=0,2 do
+                local a,b=turn[2]+j,turn[3]+j;local av,bv=m[a],m[b]
+                m[a]=av*co+bv*si;m[b]=bv*co-av*si
+            end
+        end
+        local column=({x=1,y=5,z=9})[axis]
+        local x,y,z=e.values()
+        for j,item in ipairs({{'x',x},{'y',y},{'z',z}}) do
+            e.set(item[1],math.max(-72,math.min(72,item[2]+m[column+j-1]*amount)))
+        end
+        return true
     end
     function e.save()
         if not e.active or not backend.write_weapon_offsets then e.status='Layout writer unavailable';return false end
@@ -10476,7 +10676,7 @@ function M.new(hud,backend,log)
         return list
     end
     function e.cycle(direction)
-        if not e.active then return false end
+        if not e.active or screen() then return false end
         -- Selecting a bone explicitly opts this camera view out of shared mounting.
         e.shared=false;e.set_view(hud.first_person)
         local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
@@ -10501,6 +10701,8 @@ function M.new(hud,backend,log)
         if pressed(119) and e.active then e.reset();notice_until=now+4 end -- F8
         if pressed(219) and e.active then e.cycle(-1) end -- [
         if pressed(221) and e.active then e.cycle(1) end -- ]
+        if pressed(188) and e.active then e.rotate(-(backend.editor_key(16) and 5 or 45),backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- comma
+        if pressed(190) and e.active then e.rotate(backend.editor_key(16) and 5 or 45,backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- period
         if pressed(189) and e.active then e.set_scale(math.max(.25,e.scale()-(backend.editor_key(16) and .01 or .05))) end -- -
         if pressed(187) and e.active then e.set_scale(math.min(3,e.scale()+(backend.editor_key(16) and .01 or .05))) end -- = / +
         if e.active then
@@ -10508,14 +10710,14 @@ function M.new(hud,backend,log)
             if not pose or pose.resource_hex~=e.resource then e.active=false;e.status='Weapon changed; editor closed';notice_until=now+4;return end
             local active_view=hud.first_person and ('first_'..hud.config.fp_auto_side) or 'right'
             local views=hud.weapon_clearance[e.resource] or {}
-            e.shared=hud.placement_view_parity and not (views[active_view] and views[active_view].attach_point)
+            e.shared=false
             e.set_view(hud.first_person)
-            local step=backend.editor_key(16) and .125 or (backend.editor_key(17) and 2 or .5)
+            local step=screen() and (backend.editor_key(16) and 1 or (backend.editor_key(17) and 20 or 5)) or (backend.editor_key(16) and .125 or (backend.editor_key(17) and 2 or .5))
             for _,binding in ipairs({{37,'x',-1},{39,'x',1},{38,'z',1},{40,'z',-1},{33,'y',1},{34,'y',-1}}) do
                 local key,axis,sign=binding[1],binding[2],binding[3];local down=backend.editor_key(key)
                 if down and (not repeats[key] or now>=repeats[key]) then
                     local x,y,z=e.values();local value=({x=x,y=y,z=z})[axis]
-                    e.set(axis,math.max(-72,math.min(72,value+step*sign)))
+                    if not screen() or axis~='y' then local limit=screen() and 2000 or 72;e.move(axis,step*sign) end
                     repeats[key]=now+(held[key] and .08 or .3)
                 elseif not down then repeats[key]=nil end
                 held[key]=down
@@ -10530,9 +10732,11 @@ function M.new(hud,backend,log)
         local point=offset.attach_point or 'sight';local point_label=point
         for _,item in ipairs(e.points()) do if item.value==point then point_label=item.label;break end end
         local label=e.active and string.format('EDIT %s | %s | %s | X %.2f Y %.2f Z %.2f in | SCALE %.0f%%',e.name,e.view=='right' and (e.shared and 'SHARED' or 'THIRD') or 'FIRST',point_label,x,y,z,e.scale()*100) or e.status
+        if e.active and not screen() then label=label..string.format(' | ROLL %.0f PITCH %.0f YAW %.0f deg',e.rotation(),e.rotation('pitch'),e.rotation('yaw')) end
+        if e.active and screen() then label=string.format('EDIT %s | %s | X %.0f Y %.0f px | SCALE %.0f%%',e.name,e.view,x,z,e.scale()*100) end
         return {{type='text',text=label,font=font,x=32*s,y=h-160*s,size=18*s,c={255,255,255},a=1},
             {type='text',text=e.status,font=font,x=32*s,y=h-135*s,size=16*s,c=e.status:match('^Saved:') and {100,255,160} or {255,255,255},a=1},
-            {type='text',text='F6 edit  F7 save  F8 reset | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | Shift fine  Ctrl coarse',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
+            {type='text',text='F6 edit  F7 save  F8 reset | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | , / . roll | Ctrl+,/. pitch | Alt+,/. yaw | Shift fine',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
     end
     return e
 end
@@ -10577,18 +10781,16 @@ function M.new(hud)
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
-    local function option_id(k)if k:match('^editor_') then return 'dbf_hud_editor.'..k end;if k=='font' then return 'dbf_hud_v6.font_native' end;if k:match('^font_page_') then return 'dbf_hud_v6.'..k end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
+    local function option_id(k)if k:match('^editor_') then return 'dbf_hud_editor.'..k end;if k=='style_3d' then return 'dbf_hud_v6.style_3d' end;if k=='font' then return 'dbf_hud_v6.font_native' end;if k:match('^font_page_') then return 'dbf_hud_v6.'..k end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
     local font_choices={}
     for i,name in ipairs(HUD.config.fonts) do font_choices[i]=HUD.native_font_data.faces[name].label or name end
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
         {'world_position_smooth','3D position damping',0,0.5,0.005},{'world_rotation_smooth','3D rotation damping',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
-        {'weapon_offset_x','2D hybrid: horizontal offset',-1920,1920,1},{'weapon_offset_y','2D hybrid: vertical offset',-1080,1080,1},
         {'weapon_settle','2D hybrid: settling time',0.04,1,0.01},{'weapon_lag','2D hybrid: maximum lag',0,160,1},
-        {'offset_x','2D crosshair: horizontal offset',-1920,1920,1},{'offset_y','2D crosshair: vertical offset',-1080,1080,1},
         {'follow','2D crosshair: reticle follow',0,1,0.01},{'travel','2D crosshair: maximum travel',1,160,1},{'settle','2D crosshair: settling time',0.04,1,0.01},
-        {'scale','HUD scale',0.5,2,0.05},{'opacity','HUD opacity',0.1,1,0.01},{'panel_opacity','Panel tint',0,1,0.01},{'flash_hz','Heat warning pulse rate',0.5,3,0.5}}
+        {'scale','HUD scale',0.5,2,0.05},{'panel_opacity','Panel tint',0,1,0.01},{'flash_hz','Heat warning pulse rate',0.5,3,0.5}}
     -- Mesh-only emission, texture cap and CRT sliders are intentionally archived.
     -- Their configuration and implementations remain in source for future work.
     local function set(k,v) assert(api.set(option_id(k),v)) end
@@ -10608,7 +10810,8 @@ function M.new(hud)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('fade_3d_unless_aiming',hud.config.fade_3d_unless_aiming)
         set('force_occlusion',hud.config.force_occlusion)
-        set('style_3d',hud.config.style_3d=='hologram' and 2 or 1)
+        local style_index=1;for i,name in ipairs(HUD.config.styles) do if name==hud.config.style_3d then style_index=i end end
+        set('style_3d',style_index)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
@@ -10624,11 +10827,57 @@ function M.new(hud)
         local host=rawget(_G,'DBFMCM')
         if host and type(host.register)=='function' and host~=font_host then
             if font_handle then font_handle.unregister();font_handle=nil end
-            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD Fonts',
-                description='All native HUD font families.',pages={{id='fonts',name='Fonts',controls={{
-                    id='family',type='choice',label='HUD font',choices=font_choices,default=font_index(),
-                    on_change=function(v)if not retired then hud.configure({font=HUD.config.fonts[v]});hud.save_tuning()end end
-                }}}}})
+            local function save(key,value)
+                if not retired then hud.configure({[key]=value});hud.save_tuning() end
+            end
+            local styles={'Standard','Hologram','Instrument','Blueprint','Retro CRT'}
+            local selected_style=1;for i,name in ipairs(HUD.config.styles)do if name==hud.config.style_3d then selected_style=i end end
+            local preset_name='My preset'
+            local preset_choices=hud.list_presets and hud.list_presets() or {}
+            if #preset_choices==0 then preset_choices={'No saved presets'} end
+            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD Appearance',
+                description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
+                    {id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
+                        default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2),
+                        on_change=function(v)save('anchor_mode',v==1 and 'weapon' or v==3 and 'world' or 'crosshair')end},
+                    {id='hud_scale',type='slider',label='HUD scale',min=.5,max=2,step=.05,default=hud.config.scale,
+                        on_change=function(v)save('scale',v)end},
+                    {id='family',type='choice',label='HUD font',choices=font_choices,default=font_index(),
+                        on_change=function(v)save('font',HUD.config.fonts[v])end},
+                    {id='style',type='choice',label='HUD style',choices=styles,default=selected_style,
+                        on_change=function(v)save('style_3d',HUD.config.styles[v])end},
+                    {id='decoration',type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame'},default=decoration_index(),
+                        on_change=function(v)save('decoration',HUD.config.decorations[v])end},
+                    {id='panel_color',type='color',label='Panel color',default=hud.config.background_color,
+                        on_change=function(v)save('background_color',v)end},
+                    {id='text_color',type='color',label='Text color',default=hud.config.text_color,
+                        on_change=function(v)save('text_color',v)end},
+                    {id='decoration_color',type='color',label='Decoration color',default=hud.config.decoration_color,
+                        on_change=function(v)save('decoration_color',v)end},
+                    {id='fade_when_not_aiming',type='toggle',label='Fade when not aiming',default=hud.config.fade_3d_unless_aiming,
+                        on_change=function(v)save('fade_3d_unless_aiming',v)end},
+                    {id='always_visible',type='toggle',label='HUD always visible',default=not hud.config.force_occlusion,
+                        description='Draw through geometry. Turn off to use world-depth occlusion in 3D mode.',
+                        on_change=function(v)save('force_occlusion',not v)end},
+                    {id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
+                        on_change=function(v)save('effect_scanlines',v)end},
+                    {id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
+                        on_change=function(v)save('effect_flicker',v)end},
+                    {id='effect_sweep',type='toggle',label='HUD effect: Scanning sweep',default=hud.config.effect_sweep,
+                        on_change=function(v)save('effect_sweep',v)end},
+                    {id='text_opacity',type='slider',label='Text opacity',min=0,max=1,step=.01,default=hud.config.text_opacity,
+                        on_change=function(v)save('text_opacity',v)end},
+                    {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
+                        on_change=function(v)save('panel_opacity',v)end}
+                }},{id='presets',name='Presets',require_confirmation=true,controls={
+                    {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
+                    {id='save_preset',type='button',label='Save named preset',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
+                    {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
+                    {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
+                    {id='default_setup',type='button',label='Reset to Default setup',
+                        description='Restore bundled settings and weapon layouts. Previous files are backed up.',
+                        on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
+                }}}})
             font_host=host
         end
         if attempted then return end
@@ -10715,8 +10964,8 @@ function M.new(hud)
                 description='Use depth occlusion on every 3D weapon HUD, including while aiming.'},function(v)
                 hud.configure({force_occlusion=v});hud.save_tuning()
             end)
-            add('style_3d',{type='choice',label='3D HUD style',choices={'Standard','Hologram'},default=hud.config.style_3d=='hologram' and 2 or 1},function(v)
-                hud.configure({style_3d=v==2 and 'hologram' or 'standard'});hud.save_tuning()
+            add('style_3d',{type='choice',label='3D HUD style',choices={'Standard','Hologram','Instrument','Blueprint','Retro CRT'},default=(function()for i,name in ipairs(HUD.config.styles)do if name==hud.config.style_3d then return i end end;return 1 end)()},function(v)
+                hud.configure({style_3d=assert(HUD.config.styles[v])});hud.save_tuning()
             end)
             add('frosted',{type='toggle',label='Frosted background (2D)',default=hud.config.frosted},function(v)
                 hud.configure({frosted=v});hud.save_tuning()
@@ -10762,6 +11011,39 @@ function M.start(sr,backend,options)
         cfg.font='bigblue';cfg.frosted=false
         local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
         return commands
+    end
+    function self.appearance_preview(bounds)
+        if not model then return {} end
+        local cfg={};for k,v in pairs(self.config)do cfg[k]=v end
+        cfg.frosted=false;cfg.placement_mode='manual'
+        local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
+        local minx,miny,maxx,maxy=math.huge,math.huge,-math.huge,-math.huge
+        for _,c in ipairs(commands)do
+            minx=math.min(minx,c.x);miny=math.min(miny,c.y)
+            maxx=math.max(maxx,c.x+(c.w or #(c.text or '')*(c.size or 0)*.65))
+            maxy=math.max(maxy,c.y+(c.h or c.size or 0))
+        end
+        if maxx<=minx or maxy<=miny then return {} end
+        local factor=math.min(bounds.w/(maxx-minx),bounds.h/(maxy-miny),bounds.scale*1.5)
+        local x=bounds.x+(bounds.w-(maxx-minx)*factor)/2
+        local y=bounds.y+(bounds.h-(maxy-miny)*factor)/2
+        local result={}
+        for _,c in ipairs(commands)do
+            local v={};for k,value in pairs(c)do v[k]=value end
+            v.x=x+(c.x-minx)*factor;v.y=y+(c.y-miny)*factor
+            if v.w then v.w=v.w*factor end;if v.h then v.h=v.h*factor end
+            if v.size then v.size=v.size*factor end
+            if v.type=='panel' then v.type='rect';v.a=cfg.panel_opacity end
+            if v.type=='text' then
+                v.font_resource,v.font_material=HUD.native_font.resolve(sr,v.font,false)
+                for _,part in ipairs(HUD.font.numeric_parts(v))do
+                    local t={};for k,value in pairs(v)do t[k]=value end
+                    t.text=part.text;t.x=v.x+part.dx;t.a=v.a*part.alpha;result[#result+1]=t
+                end
+            else result[#result+1]=v end
+        end
+        return result
     end
     local retired=false;local cleaned=false;local alpha=0;local last_id;local width,height
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
@@ -10904,6 +11186,51 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
+    function self.list_presets()local ok,names=pcall(backend.list_presets);return ok and names or {} end
+    function self.save_preset(name)
+        if not backend.write_preset then return false,'Preset writer unavailable' end
+        local settings=self.export_tuning():gsub('return {','settings = {',1)
+        local layouts=HUD.weapon_offsets.serialize(self.weapon_clearance):gsub('return {','layouts = {',1)
+        local body='-- DBF-HUD named preset: settings and all weapon layouts.\nreturn {\n'..settings..',\n'..layouts..',\n}\n'
+        local ok,result=pcall(backend.write_preset,name,body)
+        log(ok and ('PRESET saved: '..name) or ('PRESET save failed: '..tostring(result)))
+        return ok,result
+    end
+    function self.load_preset(name)
+        if not backend.read_preset or not backend.write_tuning or not backend.write_weapon_offsets then return false,'Preset storage unavailable' end
+        local ok,result=pcall(function()
+            local preset=backend.read_preset(name)
+            local config=HUD.config.new();HUD.config.apply(config,preset.settings)
+            local rejected
+            local profiles=HUD.weapon_offsets.load({read_weapon_offsets=function()return preset.layouts end},function(err)rejected=err end)
+            assert(not rejected,rejected)
+            local layouts=HUD.weapon_offsets.serialize(profiles)
+            backend.write_weapon_offsets(layouts);backend.write_tuning(HUD.config.serialize(config))
+            self.config=config;self.weapon_clearance=profiles;self.auto_mounts={}
+            self.hybrid_scale_weapon=nil;self.hybrid_scale_depth=nil
+            self.layout_editor.active=false;if menu then menu.sync() end
+            return name
+        end)
+        log(ok and ('PRESET loaded: '..name) or ('PRESET load failed: '..tostring(result)))
+        return ok,result
+    end
+    function self.reset_defaults()
+        if not backend.write_tuning or not backend.write_weapon_offsets then return false,'Settings writer unavailable' end
+        local function clone(t)local out={};for k,v in pairs(t)do out[k]=type(v)=='table' and clone(v) or v end;return out end
+        local defaults=HUD.config.new()
+        local profiles=clone(HUD.config.weapon_clearance)
+        local ok,err=pcall(function()
+            backend.write_weapon_offsets(HUD.weapon_offsets.serialize(profiles))
+            backend.write_tuning(HUD.config.serialize(defaults))
+        end)
+        if not ok then log('PRESET Default setup failed: '..tostring(err));return false,err end
+        self.config=defaults;self.weapon_clearance=profiles;self.auto_mounts={}
+        self.hybrid_scale_weapon=nil;self.hybrid_scale_depth=nil
+        if self.layout_editor then self.layout_editor.active=false end
+        if menu then menu.sync() end
+        log('PRESET Default setup applied; previous settings and layouts backed up')
+        return true
+    end
     self.layout_editor=HUD.layout_editor.new(self,backend,log)
     menu=HUD.menu.new(self)
     local function screen_overlay(w,h)
@@ -10952,7 +11279,15 @@ function M.start(sr,backend,options)
         end
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
-            local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
+            local raw=reader.poll()
+            if raw and raw.resource_hex=='ccfae6d4a601c741' then
+                if self.snowball_unit~=raw.unit_ref then self.snowball_unit=raw.unit_ref;self.snowball_pickups=(self.snowball_pickups or 0)+1 end
+            end -- Returning to the gun between throws is not another pickup.
+            latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);if model then model.snow_party=raw.resource_hex=='ccfae6d4a601c741' and (self.snowball_pickups or 0)>=3;if raw.resource_hex=='ccfae6d4a601c741' and not model.snow_party then model=nil end end;self.status=reader.status
+            if raw and raw.resource_hex=='72170a55a1f37ff1' and raw.binding and raw.binding.ammo_controls then
+                local value=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+                if value~=self.last_double_mode then log('DOUBLE_FREEDOM_CONTROL '..value);self.last_double_mode=value end
+            end
             if self.config.debug_logging and self.clock<90 and raw and raw.label=='FUEL' then
                 local entry=string.format('FUEL_GAUGE weapon=%s count=%s capacity=%s fraction=%s',raw.resource_hex,tostring(raw.rounds),tostring(raw.capacity),tostring(model and model.fraction))
                 if entry~=self.last_fuel_trace then log(entry);self.last_fuel_trace=entry end
@@ -11092,22 +11427,26 @@ function M.start(sr,backend,options)
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
+        local aim_opacity=1
+        if self.config.fade_3d_unless_aiming then
+            local wanted=aiming==true and 1 or 0
+            local previous=self.aim_opacity or wanted
+            aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
+        end
+        self.aim_opacity=aim_opacity
         if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
             world_config.scale=self.config.scale*(self.profile_scale or 1)
+            world_config.visibility_alpha=alpha*aim_opacity
+            world_config.panel_rotation=self.profile_rotation or 0
+            world_config.panel_pitch=self.profile_pitch or 0
+            world_config.panel_yaw=self.profile_yaw or 0
             world_config.style_clock=self.clock
-            local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
-            world_config.occlusion_mode=(self.config.force_occlusion or aiming~=true) and 'gui_depth' or 'gui'
+            world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
-            local aim_opacity=1
-            if self.config.fade_3d_unless_aiming then
-                local wanted=aiming==true and 1 or 0
-                local previous=self.aim_opacity or wanted
-                aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
-            end
-            self.aim_opacity=aim_opacity
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
-            local world_commands=HUD.layout.compose(model,0,0,2*world_config.scale,alpha*self.config.opacity*aim_opacity,world_config,self.clock)
+            local world_commands=HUD.layout.compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
@@ -11122,6 +11461,7 @@ function M.start(sr,backend,options)
         end
         world_display.release()
         if screen_scene then screen_scene.release() end
+        if aim_opacity<.01 then view.draw(screen_overlay(w,h));return end
         local s=h/1080
         local offset_x,offset_y=self.config.offset_x,self.config.offset_y
         if use_weapon then offset_x,offset_y=20,-15 end
@@ -11129,9 +11469,23 @@ function M.start(sr,backend,options)
         if self.config.anchor_mode=='weapon' and self.first_person then
             offset_x=use_weapon and 80 or self.config.offset_x+75
         end
+        local screen_key='screen_'..self.config.anchor_mode..'_'..(self.first_person and 'first' or 'third')
+        local screen_profile=((self.weapon_clearance[(latest_raw or {}).resource_hex] or {})[screen_key] or {})
+        offset_x=offset_x+(screen_profile.x or 0)*1000
+        offset_y=offset_y+(screen_profile.z or 0)*1000
         x=w/2+(x+offset_x)*s;y=h/2+(y+offset_y)*s
-        local scale=s*self.config.scale*(self.profile_scale or 1)
-        local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
+        -- Screen HUD size is independent of per-view 3D mount corrections.
+        local scale=.5*s*self.config.scale*(screen_profile.scale or 1)
+        if self.config.anchor_mode=='weapon' and use_weapon and point and point.depth and point.depth>.05 then
+            local key=(latest_raw or {}).resource_hex
+            if self.hybrid_scale_weapon~=key then
+                self.hybrid_scale_weapon=key;self.hybrid_scale_depth=point.depth
+            end
+            -- Preserve the initial size, then follow perspective as the camera approaches.
+            scale=scale*math.max(.25,math.min(4,(self.hybrid_scale_depth or point.depth)/point.depth))
+        end
+        if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
+        local commands=HUD.layout.compose(model,x,y,scale,alpha*aim_opacity,self.config,self.clock)
         local frame=commands[1]
         local frame_bottom=frame.y
         for _,command in ipairs(commands) do if command.type=='panel' then frame_bottom=math.min(frame_bottom,command.y) end end

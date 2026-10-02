@@ -12,7 +12,23 @@ M.BULLET={w=M.SEMI.h,h=M.SEMI.w,runs={}}
 for _,r in ipairs(M.SEMI.runs) do
     M.BULLET.runs[#M.BULLET.runs+1]={M.SEMI.h-r[2]-r[4],r[1],r[4],r[3]}
 end
+-- Heavy bolt cartridge: rim, straight case, shoulder and broad pointed projectile.
+M.BOLT_ROUND={w=14,h=28,runs={
+    {0,0,14,2},{1,2,12,2},{2,5,10,13},
+    {3,18,8,2},{4,20,6,4},{5,24,4,2},{6,26,2,2}
+}}
 M.SHELL={w=9,h=24,runs={{0,0,9,3},{1,3,7,19},{2,22,5,2}}}
+-- Outlined hull, crimped mouth and separate rim/base for barrel indicators.
+M.BARREL_SHELL={w=12,h=28,runs={
+    {0,0,12,2},{1,2,10,5},{1,8,10,1},
+    {1,10,2,16},{9,10,2,16},
+    {3,10,6,1},{3,25,6,2},{1,27,10,1},
+    {4,23,1,2},{7,23,1,2}
+}}
+M.DOUBLE_SHELL={w=21,h=24,runs={}}
+for _,offset in ipairs({0,12})do
+    for _,r in ipairs(M.SHELL.runs)do M.DOUBLE_SHELL.runs[#M.DOUBLE_SHELL.runs+1]={r[1]+offset,r[2],r[3],r[4]} end
+end
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 -- Distinct HUD silhouettes for the Recoilless Rifle's two rocket modes.
 M.ROCKET_HEAT={w=11,h=24,runs={{5,22,1,2},{4,19,3,3},{3,8,5,11},{4,5,3,3},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}

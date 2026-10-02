@@ -14,6 +14,27 @@ function M.panel_pose(p,c,commands)
             z=m[15]+m[3]*dx+m[7]*dy+m[11]*dz}
     elseif c.placement_mode=='auto' and p.first_person then m=HUD.pose_motion.upright(m) end
     if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
+    local angle=math.rad(c.panel_rotation or 0)
+    if angle~=0 then
+        local rotated={};for i=1,16 do rotated[i]=m[i] end
+        local co,si=math.cos(angle),math.sin(angle)
+        for i=1,3 do
+            rotated[i]=m[i]*co+m[i+8]*si
+            rotated[i+8]=m[i+8]*co-m[i]*si
+        end
+        m=rotated
+    end
+    for _,turn in ipairs({{c.panel_pitch or 0,5,9},{c.panel_yaw or 0,1,5}}) do
+        if turn[1]~=0 then
+            local rotated={};for i=1,16 do rotated[i]=m[i] end
+            local co,si=math.cos(math.rad(turn[1])),math.sin(math.rad(turn[1]))
+            for i=0,2 do
+                local a,b=turn[2]+i,turn[3]+i
+                rotated[a]=m[a]*co+m[b]*si;rotated[b]=m[b]*co-m[a]*si
+            end
+            m=rotated
+        end
+    end
     return m,at
 end
 function M.point(m,at,x,y)

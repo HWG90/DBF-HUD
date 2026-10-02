@@ -240,7 +240,9 @@ function M.new(backend)
                 if ok and count then result.rounds=count;result.capacity=capacity;break end
             end
             if not result.rounds then return nil,'resource provider unavailable' end
-        else return nil,'unsupported ammo component' end
+        elseif result.resource_hex=='ccfae6d4a601c741' then
+            result.kind='rounds';result.rounds=1;result.capacity=1;result.label='SNOWBALL';result.ammo_icon='SNOWBALL'
+        else return nil,'unsupported ammo component weapon='..result.resource_hex..' unit='..tostring(result.unit_ref) end
         do
             -- Optional mode metadata must not suppress otherwise valid ammunition.
             local ok,mode,fire_mode,safety_mode=pcall(function()
@@ -258,6 +260,7 @@ function M.new(backend)
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
+                if result.resource_hex=='72170a55a1f37ff1' and r.u(controls,0)==4 then fire_mode='VOLLEY' end
                 local safety_mode=result.resource_hex=='2e9d0bdc48b09e60' and ({[5]='SAFE',[6]='UNSAFE'})[r.u(controls,0)] or nil
                 return mode,fire_mode,safety_mode
             end)

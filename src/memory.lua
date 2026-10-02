@@ -88,6 +88,41 @@ function M.native()
         if not moved then os.rename(path..'.bak',path);error(why) end
         return path
     end
+    local function preset_folder()
+        local root=assert(os.getenv('LOCALAPPDATA'),'Local AppData unavailable')..'/DBF'
+        pcall(ffi.cdef,'int CreateDirectoryA(const char*, void*);')
+        local win=ffi.load('kernel32');win.CreateDirectoryA(root,nil)
+        root=root..'/Presets';win.CreateDirectoryA(root,nil)
+        return root
+    end
+    function backend.list_presets()
+        pcall(ffi.cdef,[[typedef struct { unsigned long attributes; unsigned long times[6]; unsigned long sizeHigh,sizeLow,reserved0,reserved1; char name[260]; char alternate[14]; } DBF_PRESET_FIND_DATA;
+        void* FindFirstFileA(const char*, DBF_PRESET_FIND_DATA*); int FindNextFileA(void*,DBF_PRESET_FIND_DATA*); int FindClose(void*);]])
+        local win=ffi.load('kernel32');local data=ffi.new('DBF_PRESET_FIND_DATA[1]')
+        local mask=preset_folder()..'/DBF-HUD-preset-*.*'
+        local handle=win.FindFirstFileA(mask,data);local names={}
+        if handle==ffi.cast('void*',-1) then return names end
+        repeat local filename=ffi.string(data[0].name);local name=filename:match('^DBF%-HUD%-preset%-(.+)%.layout$') or filename:match('^DBF%-HUD%-preset%-(.+)%.lua$')
+            if name and #name<=48 and name:match('^[%w _-]+$') then local exists=false;for _,v in ipairs(names)do if v==name then exists=true end end;if not exists then names[#names+1]=name end end
+        until win.FindNextFileA(handle,data)==0
+        win.FindClose(handle);table.sort(names);return names
+    end
+    function backend.read_preset(name)
+        assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
+        local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
+        local path=preset_folder()..'/DBF-HUD-preset-'..stem..'.layout'
+        local f=io.open(path,'rb') or io.open(path:gsub('%.layout$','.lua'),'rb');assert(f,'Preset not found');local body=f:read(131073);f:close();assert(#body<=131072,'Preset too large')
+        local chunk=assert(loadstring(body,'DBF-HUD preset'));setfenv(chunk,{})
+        local value=chunk();assert(type(value)=='table' and type(value.settings)=='table' and type(value.layouts)=='table','Invalid preset format');return value
+    end
+    function backend.write_preset(name,body)
+        assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
+        local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
+        assert(not stem:upper():match('^(CON)$') and not stem:upper():match('^(NUL)$'),'Reserved filename')
+        local path=preset_folder()..'/DBF-HUD-preset-'..stem..'.layout'
+        local existing=io.open(path,'rb');if existing then existing:close();error('Preset already exists; choose another name')end
+        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close());assert(os.rename(path..'.tmp',path));return path
+    end
     function backend.write_weapon_offsets(body)
         assert(type(body)=='string' and #body<=65536,'weapon offsets file too large')
         local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-weapon-offsets.lua')

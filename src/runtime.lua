@@ -21,6 +21,39 @@ function M.start(sr,backend,options)
         local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
         return commands
     end
+    function self.appearance_preview(bounds)
+        if not model then return {} end
+        local cfg={};for k,v in pairs(self.config)do cfg[k]=v end
+        cfg.frosted=false;cfg.placement_mode='manual'
+        local commands=HUD.layout.compose(model,0,0,2,1,cfg,self.clock)
+        commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
+        local minx,miny,maxx,maxy=math.huge,math.huge,-math.huge,-math.huge
+        for _,c in ipairs(commands)do
+            minx=math.min(minx,c.x);miny=math.min(miny,c.y)
+            maxx=math.max(maxx,c.x+(c.w or #(c.text or '')*(c.size or 0)*.65))
+            maxy=math.max(maxy,c.y+(c.h or c.size or 0))
+        end
+        if maxx<=minx or maxy<=miny then return {} end
+        local factor=math.min(bounds.w/(maxx-minx),bounds.h/(maxy-miny),bounds.scale*1.5)
+        local x=bounds.x+(bounds.w-(maxx-minx)*factor)/2
+        local y=bounds.y+(bounds.h-(maxy-miny)*factor)/2
+        local result={}
+        for _,c in ipairs(commands)do
+            local v={};for k,value in pairs(c)do v[k]=value end
+            v.x=x+(c.x-minx)*factor;v.y=y+(c.y-miny)*factor
+            if v.w then v.w=v.w*factor end;if v.h then v.h=v.h*factor end
+            if v.size then v.size=v.size*factor end
+            if v.type=='panel' then v.type='rect';v.a=cfg.panel_opacity end
+            if v.type=='text' then
+                v.font_resource,v.font_material=HUD.native_font.resolve(sr,v.font,false)
+                for _,part in ipairs(HUD.font.numeric_parts(v))do
+                    local t={};for k,value in pairs(v)do t[k]=value end
+                    t.text=part.text;t.x=v.x+part.dx;t.a=v.a*part.alpha;result[#result+1]=t
+                end
+            else result[#result+1]=v end
+        end
+        return result
+    end
     local retired=false;local cleaned=false;local alpha=0;local last_id;local width,height
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
     local last_binding
@@ -162,6 +195,51 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
+    function self.list_presets()local ok,names=pcall(backend.list_presets);return ok and names or {} end
+    function self.save_preset(name)
+        if not backend.write_preset then return false,'Preset writer unavailable' end
+        local settings=self.export_tuning():gsub('return {','settings = {',1)
+        local layouts=HUD.weapon_offsets.serialize(self.weapon_clearance):gsub('return {','layouts = {',1)
+        local body='-- DBF-HUD named preset: settings and all weapon layouts.\nreturn {\n'..settings..',\n'..layouts..',\n}\n'
+        local ok,result=pcall(backend.write_preset,name,body)
+        log(ok and ('PRESET saved: '..name) or ('PRESET save failed: '..tostring(result)))
+        return ok,result
+    end
+    function self.load_preset(name)
+        if not backend.read_preset or not backend.write_tuning or not backend.write_weapon_offsets then return false,'Preset storage unavailable' end
+        local ok,result=pcall(function()
+            local preset=backend.read_preset(name)
+            local config=HUD.config.new();HUD.config.apply(config,preset.settings)
+            local rejected
+            local profiles=HUD.weapon_offsets.load({read_weapon_offsets=function()return preset.layouts end},function(err)rejected=err end)
+            assert(not rejected,rejected)
+            local layouts=HUD.weapon_offsets.serialize(profiles)
+            backend.write_weapon_offsets(layouts);backend.write_tuning(HUD.config.serialize(config))
+            self.config=config;self.weapon_clearance=profiles;self.auto_mounts={}
+            self.hybrid_scale_weapon=nil;self.hybrid_scale_depth=nil
+            self.layout_editor.active=false;if menu then menu.sync() end
+            return name
+        end)
+        log(ok and ('PRESET loaded: '..name) or ('PRESET load failed: '..tostring(result)))
+        return ok,result
+    end
+    function self.reset_defaults()
+        if not backend.write_tuning or not backend.write_weapon_offsets then return false,'Settings writer unavailable' end
+        local function clone(t)local out={};for k,v in pairs(t)do out[k]=type(v)=='table' and clone(v) or v end;return out end
+        local defaults=HUD.config.new()
+        local profiles=clone(HUD.config.weapon_clearance)
+        local ok,err=pcall(function()
+            backend.write_weapon_offsets(HUD.weapon_offsets.serialize(profiles))
+            backend.write_tuning(HUD.config.serialize(defaults))
+        end)
+        if not ok then log('PRESET Default setup failed: '..tostring(err));return false,err end
+        self.config=defaults;self.weapon_clearance=profiles;self.auto_mounts={}
+        self.hybrid_scale_weapon=nil;self.hybrid_scale_depth=nil
+        if self.layout_editor then self.layout_editor.active=false end
+        if menu then menu.sync() end
+        log('PRESET Default setup applied; previous settings and layouts backed up')
+        return true
+    end
     self.layout_editor=HUD.layout_editor.new(self,backend,log)
     menu=HUD.menu.new(self)
     local function screen_overlay(w,h)
@@ -210,7 +288,15 @@ function M.start(sr,backend,options)
         end
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
-            local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
+            local raw=reader.poll()
+            if raw and raw.resource_hex=='ccfae6d4a601c741' then
+                if self.snowball_unit~=raw.unit_ref then self.snowball_unit=raw.unit_ref;self.snowball_pickups=(self.snowball_pickups or 0)+1 end
+            end -- Returning to the gun between throws is not another pickup.
+            latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);if model then model.snow_party=raw.resource_hex=='ccfae6d4a601c741' and (self.snowball_pickups or 0)>=3;if raw.resource_hex=='ccfae6d4a601c741' and not model.snow_party then model=nil end end;self.status=reader.status
+            if raw and raw.resource_hex=='72170a55a1f37ff1' and raw.binding and raw.binding.ammo_controls then
+                local value=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+                if value~=self.last_double_mode then log('DOUBLE_FREEDOM_CONTROL '..value);self.last_double_mode=value end
+            end
             if self.config.debug_logging and self.clock<90 and raw and raw.label=='FUEL' then
                 local entry=string.format('FUEL_GAUGE weapon=%s count=%s capacity=%s fraction=%s',raw.resource_hex,tostring(raw.rounds),tostring(raw.capacity),tostring(model and model.fraction))
                 if entry~=self.last_fuel_trace then log(entry);self.last_fuel_trace=entry end
@@ -350,22 +436,26 @@ function M.start(sr,backend,options)
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
+        local aim_opacity=1
+        if self.config.fade_3d_unless_aiming then
+            local wanted=aiming==true and 1 or 0
+            local previous=self.aim_opacity or wanted
+            aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
+        end
+        self.aim_opacity=aim_opacity
         if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
             world_config.scale=self.config.scale*(self.profile_scale or 1)
+            world_config.visibility_alpha=alpha*aim_opacity
+            world_config.panel_rotation=self.profile_rotation or 0
+            world_config.panel_pitch=self.profile_pitch or 0
+            world_config.panel_yaw=self.profile_yaw or 0
             world_config.style_clock=self.clock
-            local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
-            world_config.occlusion_mode=(self.config.force_occlusion or aiming~=true) and 'gui_depth' or 'gui'
+            world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
-            local aim_opacity=1
-            if self.config.fade_3d_unless_aiming then
-                local wanted=aiming==true and 1 or 0
-                local previous=self.aim_opacity or wanted
-                aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
-            end
-            self.aim_opacity=aim_opacity
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
-            local world_commands=HUD.layout.compose(model,0,0,2*world_config.scale,alpha*self.config.opacity*aim_opacity,world_config,self.clock)
+            local world_commands=HUD.layout.compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
@@ -380,6 +470,7 @@ function M.start(sr,backend,options)
         end
         world_display.release()
         if screen_scene then screen_scene.release() end
+        if aim_opacity<.01 then view.draw(screen_overlay(w,h));return end
         local s=h/1080
         local offset_x,offset_y=self.config.offset_x,self.config.offset_y
         if use_weapon then offset_x,offset_y=20,-15 end
@@ -387,9 +478,23 @@ function M.start(sr,backend,options)
         if self.config.anchor_mode=='weapon' and self.first_person then
             offset_x=use_weapon and 80 or self.config.offset_x+75
         end
+        local screen_key='screen_'..self.config.anchor_mode..'_'..(self.first_person and 'first' or 'third')
+        local screen_profile=((self.weapon_clearance[(latest_raw or {}).resource_hex] or {})[screen_key] or {})
+        offset_x=offset_x+(screen_profile.x or 0)*1000
+        offset_y=offset_y+(screen_profile.z or 0)*1000
         x=w/2+(x+offset_x)*s;y=h/2+(y+offset_y)*s
-        local scale=s*self.config.scale*(self.profile_scale or 1)
-        local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
+        -- Screen HUD size is independent of per-view 3D mount corrections.
+        local scale=.5*s*self.config.scale*(screen_profile.scale or 1)
+        if self.config.anchor_mode=='weapon' and use_weapon and point and point.depth and point.depth>.05 then
+            local key=(latest_raw or {}).resource_hex
+            if self.hybrid_scale_weapon~=key then
+                self.hybrid_scale_weapon=key;self.hybrid_scale_depth=point.depth
+            end
+            -- Preserve the initial size, then follow perspective as the camera approaches.
+            scale=scale*math.max(.25,math.min(4,(self.hybrid_scale_depth or point.depth)/point.depth))
+        end
+        if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
+        local commands=HUD.layout.compose(model,x,y,scale,alpha*aim_opacity,self.config,self.clock)
         local frame=commands[1]
         local frame_bottom=frame.y
         for _,command in ipairs(commands) do if command.type=='panel' then frame_bottom=math.min(frame_bottom,command.y) end end

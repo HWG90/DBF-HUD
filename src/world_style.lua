@@ -129,7 +129,7 @@ function M.prepare(commands,p,c)
                         panel.a=panel.a*.18
                         if child_panel then child_panel.a=child_panel.a*.18 end
                         local ink=HUD.config.rgb(c.text_color)
-                        local strength=commands[2] and commands[2].a or 1
+                        local strength=c.visibility_alpha or (commands[2] and commands[2].a) or 1
                         local frames={panel}
                         if child_panel then frames[#frames+1]=child_panel end
                         for _,frame in ipairs(frames) do
@@ -140,6 +140,24 @@ function M.prepare(commands,p,c)
                             centered[#centered+1]={type='rect',x=frame.x,y=frame.y+(clock*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.10*strength}
                         end
                     end
+    if c.style_3d=='instrument' or c.style_3d=='blueprint' or c.style_3d=='retro' then
+        local blueprint,retro=c.style_3d=='blueprint',c.style_3d=='retro'
+        local accent=retro and {125,230,140} or blueprint and {92,194,230} or {235,175,70}
+        local frames={};for _,v in ipairs(centered) do if v.type=='panel' then frames[#frames+1]=v end end
+        for _,frame in ipairs(frames) do
+            if c.background_color=='#202628' then frame.c=retro and {12,25,16} or blueprint and {12,28,42} or {35,28,17} end
+            local t=math.max(.45,frame.w/180)
+            local function line(x,y,w,h,alpha)
+                centered[#centered+1]={type='rect',x=x,y=y,w=w,h=h,c=accent,a=alpha*(c.visibility_alpha or 1)}
+            end
+            if retro then
+                for k=1,21 do line(frame.x,frame.y+frame.h*k/22,frame.w,t*.5,.14) end
+            elseif blueprint then
+                for k=1,7 do line(frame.x+frame.w*k/8,frame.y,t*.4,frame.h,.09) end
+                for k=1,3 do line(frame.x,frame.y+frame.h*k/4,frame.w,t*.4,.09) end
+            end
+        end
+    end
     HUD.layout.fuel_marker(centered,function(t,size,font)return HUD.font.measure(t,size,font,true)end)
     return centered
 end

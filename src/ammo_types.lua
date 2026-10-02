@@ -246,6 +246,11 @@ function M.apply(raw)
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
+    if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
+    if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
+    if raw.resource_hex=='52e4334e6a128caf' or raw.resource_hex=='02cd7321cd8445f5' then
+        raw.label='GRNDS';raw.ammo_icon='GL_GRENADE'
+    end
     return raw
 end
 -- Deposit capacities from generated_entities DepositComponentData (58 slots, 152-byte records).

@@ -35,18 +35,16 @@ function M.new(hud)
         mount_x=true,mount_y=true,mount_z=true,world_position_smooth=true,world_rotation_smooth=true,world_max_lag=true,
         weapon_offset_x=true,weapon_offset_y=true,weapon_settle=true,weapon_lag=true,offset_x=true,offset_y=true,
         follow=true,travel=true,settle=true}
-    local function option_id(k)if k:match('^editor_') then return 'dbf_hud_editor.'..k end;if k=='font' then return 'dbf_hud_v6.font_native' end;if k:match('^font_page_') then return 'dbf_hud_v6.'..k end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
+    local function option_id(k)if k:match('^editor_') then return 'dbf_hud_editor.'..k end;if k=='style_3d' then return 'dbf_hud_v6.style_3d' end;if k=='font' then return 'dbf_hud_v6.font_native' end;if k:match('^font_page_') then return 'dbf_hud_v6.'..k end;return (placement[k] and 'dbf_hud_placement.' or 'dbf_hud_v4.')..k end
     local font_choices={}
     for i,name in ipairs(HUD.config.fonts) do font_choices[i]=HUD.native_font_data.faces[name].label or name end
     local function font_index()for i,name in ipairs(HUD.config.fonts) do if name==hud.config.font then return i end end;return 1 end
     local function decoration_index()for i,name in ipairs(HUD.config.decorations) do if name==hud.config.decoration then return i end end;return 1 end
     local sliders={
         {'world_position_smooth','3D position damping',0,0.5,0.005},{'world_rotation_smooth','3D rotation damping',0,0.5,0.005},{'world_max_lag','3D maximum position lag',0,0.5,0.01},
-        {'weapon_offset_x','2D hybrid: horizontal offset',-1920,1920,1},{'weapon_offset_y','2D hybrid: vertical offset',-1080,1080,1},
         {'weapon_settle','2D hybrid: settling time',0.04,1,0.01},{'weapon_lag','2D hybrid: maximum lag',0,160,1},
-        {'offset_x','2D crosshair: horizontal offset',-1920,1920,1},{'offset_y','2D crosshair: vertical offset',-1080,1080,1},
         {'follow','2D crosshair: reticle follow',0,1,0.01},{'travel','2D crosshair: maximum travel',1,160,1},{'settle','2D crosshair: settling time',0.04,1,0.01},
-        {'scale','HUD scale',0.5,2,0.05},{'opacity','HUD opacity',0.1,1,0.01},{'panel_opacity','Panel tint',0,1,0.01},{'flash_hz','Heat warning pulse rate',0.5,3,0.5}}
+        {'scale','HUD scale',0.5,2,0.05},{'panel_opacity','Panel tint',0,1,0.01},{'flash_hz','Heat warning pulse rate',0.5,3,0.5}}
     -- Mesh-only emission, texture cap and CRT sliders are intentionally archived.
     -- Their configuration and implementations remain in source for future work.
     local function set(k,v) assert(api.set(option_id(k),v)) end
@@ -66,7 +64,8 @@ function M.new(hud)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('fade_3d_unless_aiming',hud.config.fade_3d_unless_aiming)
         set('force_occlusion',hud.config.force_occlusion)
-        set('style_3d',hud.config.style_3d=='hologram' and 2 or 1)
+        local style_index=1;for i,name in ipairs(HUD.config.styles) do if name==hud.config.style_3d then style_index=i end end
+        set('style_3d',style_index)
         set('frosted',hud.config.frosted)
         set('decoration',decoration_index())
         set('debug_logging',hud.config.debug_logging)
@@ -82,11 +81,57 @@ function M.new(hud)
         local host=rawget(_G,'DBFMCM')
         if host and type(host.register)=='function' and host~=font_host then
             if font_handle then font_handle.unregister();font_handle=nil end
-            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD Fonts',
-                description='All native HUD font families.',pages={{id='fonts',name='Fonts',controls={{
-                    id='family',type='choice',label='HUD font',choices=font_choices,default=font_index(),
-                    on_change=function(v)if not retired then hud.configure({font=HUD.config.fonts[v]});hud.save_tuning()end end
-                }}}}})
+            local function save(key,value)
+                if not retired then hud.configure({[key]=value});hud.save_tuning() end
+            end
+            local styles={'Standard','Hologram','Instrument','Blueprint','Retro CRT'}
+            local selected_style=1;for i,name in ipairs(HUD.config.styles)do if name==hud.config.style_3d then selected_style=i end end
+            local preset_name='My preset'
+            local preset_choices=hud.list_presets and hud.list_presets() or {}
+            if #preset_choices==0 then preset_choices={'No saved presets'} end
+            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD Appearance',
+                description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
+                    {id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
+                        default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2),
+                        on_change=function(v)save('anchor_mode',v==1 and 'weapon' or v==3 and 'world' or 'crosshair')end},
+                    {id='hud_scale',type='slider',label='HUD scale',min=.5,max=2,step=.05,default=hud.config.scale,
+                        on_change=function(v)save('scale',v)end},
+                    {id='family',type='choice',label='HUD font',choices=font_choices,default=font_index(),
+                        on_change=function(v)save('font',HUD.config.fonts[v])end},
+                    {id='style',type='choice',label='HUD style',choices=styles,default=selected_style,
+                        on_change=function(v)save('style_3d',HUD.config.styles[v])end},
+                    {id='decoration',type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame'},default=decoration_index(),
+                        on_change=function(v)save('decoration',HUD.config.decorations[v])end},
+                    {id='panel_color',type='color',label='Panel color',default=hud.config.background_color,
+                        on_change=function(v)save('background_color',v)end},
+                    {id='text_color',type='color',label='Text color',default=hud.config.text_color,
+                        on_change=function(v)save('text_color',v)end},
+                    {id='decoration_color',type='color',label='Decoration color',default=hud.config.decoration_color,
+                        on_change=function(v)save('decoration_color',v)end},
+                    {id='fade_when_not_aiming',type='toggle',label='Fade when not aiming',default=hud.config.fade_3d_unless_aiming,
+                        on_change=function(v)save('fade_3d_unless_aiming',v)end},
+                    {id='always_visible',type='toggle',label='HUD always visible',default=not hud.config.force_occlusion,
+                        description='Draw through geometry. Turn off to use world-depth occlusion in 3D mode.',
+                        on_change=function(v)save('force_occlusion',not v)end},
+                    {id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
+                        on_change=function(v)save('effect_scanlines',v)end},
+                    {id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
+                        on_change=function(v)save('effect_flicker',v)end},
+                    {id='effect_sweep',type='toggle',label='HUD effect: Scanning sweep',default=hud.config.effect_sweep,
+                        on_change=function(v)save('effect_sweep',v)end},
+                    {id='text_opacity',type='slider',label='Text opacity',min=0,max=1,step=.01,default=hud.config.text_opacity,
+                        on_change=function(v)save('text_opacity',v)end},
+                    {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
+                        on_change=function(v)save('panel_opacity',v)end}
+                }},{id='presets',name='Presets',require_confirmation=true,controls={
+                    {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
+                    {id='save_preset',type='button',label='Save named preset',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
+                    {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
+                    {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
+                    {id='default_setup',type='button',label='Reset to Default setup',
+                        description='Restore bundled settings and weapon layouts. Previous files are backed up.',
+                        on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
+                }}}})
             font_host=host
         end
         if attempted then return end
@@ -173,8 +218,8 @@ function M.new(hud)
                 description='Use depth occlusion on every 3D weapon HUD, including while aiming.'},function(v)
                 hud.configure({force_occlusion=v});hud.save_tuning()
             end)
-            add('style_3d',{type='choice',label='3D HUD style',choices={'Standard','Hologram'},default=hud.config.style_3d=='hologram' and 2 or 1},function(v)
-                hud.configure({style_3d=v==2 and 'hologram' or 'standard'});hud.save_tuning()
+            add('style_3d',{type='choice',label='3D HUD style',choices={'Standard','Hologram','Instrument','Blueprint','Retro CRT'},default=(function()for i,name in ipairs(HUD.config.styles)do if name==hud.config.style_3d then return i end end;return 1 end)()},function(v)
+                hud.configure({style_3d=assert(HUD.config.styles[v])});hud.save_tuning()
             end)
             add('frosted',{type='toggle',label='Frosted background (2D)',default=hud.config.frosted},function(v)
                 hud.configure({frosted=v});hud.save_tuning()

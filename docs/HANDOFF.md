@@ -4,7 +4,7 @@ Start with README, ARCHITECTURE, LAYOUT_EDITOR and DEVELOPMENT. This is an exper
 
 ## Current system
 
-MDL owns the HUD lifecycle. Weapon state is read with identity and build guards. A render-independent layout supplies screen-projected geometry and oriented native text. Scene-depth materials provide occlusion. Saved per-weapon/per-view profiles supply attachment, position and scale; live profiles must survive code updates.
+MDL owns the HUD lifecycle. Weapon state is read with identity and build guards. A render-independent layout supplies screen-projected geometry and oriented native text. Scene-depth materials provide occlusion. Saved per-weapon/per-view profiles supply attachment, position, scale and rotation; live profiles must survive code updates.
 
 The live editor supports position, scale and attachment cycling. Save confirms the readable weapon name and view. Force occlusion has a native binding and debug notice. The custom DBF-HUD Fonts page exposes 72 families directly; its latest menu update still needs live confirmation.
 
@@ -30,3 +30,13 @@ Never overwrite live tuning or weapon profiles with repository examples. Keep lo
 ## Next edit
 
 Read the relevant source module, make the smallest coherent change, run proportional checks, build the Lua bundle and verify live behavior separately. Asset changes require deployment and restart; Lua changes normally need MDL reload only.
+
+## Latest editor and Appearance changes
+
+- Comma/period roll in 45-degree steps; Ctrl selects pitch, Alt selects yaw, and Shift changes the step to 5 degrees. F7 saves each weapon/view. Movement follows the rotated panel basis. These rotation controls need continued live verification.
+- Hybrid and anchored layouts save separate screen positions and scales per weapon/view. First- and third-person laser layouts now save independently.
+- Appearance includes all 72 font families, text/panel/decoration color controls, separate text/panel opacity, display mode, scale and visibility. The retired global opacity is ignored when loading old settings.
+- Styles control interiors; Decorations controls borders. Scanlines, Flicker and Scanning sweep are independent Appearance toggles and follow visibility fading.
+- MCM Appearance provides an equipped-weapon HUD preview. Presets save settings and all layouts to `%LOCALAPPDATA%/DBF/Presets/DBF-HUD-preset-<name>.layout`; the dropdown loads saved presets. Saving has been tested live; reset/load still need verification.
+- The installed MCM file has repeatedly reverted to an older build. Reinstalling restores grouping and preview, but the writer causing the rollback remains unidentified. MCM is a separate local project and is not included in this source repository.
+- Complete installer with optional MDL remains unfinished. The first-person rotation wiggle remains unresolved. Existing checks are not a substitute for native visual testing.

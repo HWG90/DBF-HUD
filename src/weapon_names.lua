@@ -1,5 +1,6 @@
 -- Readable names from the installed runtime catalog; unique identities only.
 return {
+    ['27ee1ed8f6fb6356'] = "LAS-5 Scythe",
     ['3f92ba65ef65cca9'] = "P-72 Crisper",
     ['a6a735accb4a327f'] = "M-105 Stalwart",
     ['006e44327bb953fe'] = "GL-15 Evictor",
