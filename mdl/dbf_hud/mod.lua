@@ -8032,7 +8032,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 factor=(top-bottom)/fire_icon.h
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
-            local icon_gap=m.resource_hex=='84354339522c932d' and -9 or 8
+            local icon_gap=m.resource_hex=='84354339522c932d' and 4 or 8
             if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then
                 for _,offset in ipairs(fire_icon==HUD.fire_icons.DOUBLE_SHELL and {0,15} or {0}) do
                     rect(edge+icon_gap+(offset+3)*factor,icon_y+11*factor,6*factor,14*factor,{65,145,235},.36)
@@ -8094,7 +8094,8 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         left,bottom,right,top=math.min(left,x0),math.min(bottom,y0),math.max(right,x1),math.max(top,y1)
     end
     local pad=8*scale
-    left,bottom,right,top=left-pad,bottom-pad,right+pad,top+pad
+    local horizontal_pad=m.resource_hex=='84354339522c932d' and 16*scale or pad
+    left,bottom,right,top=left-horizontal_pad,bottom-pad,right+horizontal_pad,top+pad
     do
         local center=(left+right)/2
         local bar_left,bar_right=math.huge,-math.huge
@@ -8142,7 +8143,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         local h=heading_command;local a,b,e,f
         if measure then a,b,e,f=measure(h.text,h.size) end
         if not e then a,e=0,#h.text*h.size*.6 end
-        local gap=8*scale;local width=e-a+gap+icon_edge-icon_left
+        local gap=(m.resource_hex=='84354339522c932d' and 4 or 8)*scale;local width=e-a+gap+icon_edge-icon_left
         local start=(left+right-width)/2
         h.x=start-a
         local shift=start+e-a+gap-icon_left
