@@ -11237,6 +11237,7 @@ function M.start(sr,backend,options)
             if not profile then return fn(...) end
             local started=os.clock();local active=profile
             local function finish(...)
+                if name=='depth_draw' and select(1,...)==true then active.drew=true end
                 local bucket=active.buckets[name] or {total=0,calls=0,max=0};active.buckets[name]=bucket
                 local cost=os.clock()-started
                 bucket.total=bucket.total+cost;bucket.calls=bucket.calls+1;bucket.max=math.max(bucket.max,cost)
@@ -11806,6 +11807,7 @@ function M.start(sr,backend,options)
 
     function self.tick(dt)
         if not retired then
+            if profile then profile.drew=false end
             local started=profile and os.clock()
             local ok,err=pcall(self.frame,dt)
             if profile then
@@ -11820,6 +11822,7 @@ function M.start(sr,backend,options)
                     profile=nil
                 end
             end
+            if profile and not profile.drew then profile={elapsed=0,frames=0,total=0,max=0,buckets={}} end
             if not ok then self.status=tostring(err);failures=failures+1;log('ERROR '..self.status);pcall(view.clear)
                 if failures>=10 then self.status='disabled: '..self.status;self.retire() end
             else failures=0 end
