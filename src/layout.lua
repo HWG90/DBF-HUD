@@ -334,6 +334,16 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
         left,bottom,right,top=math.min(left,x0),math.min(bottom,y0),math.max(right,x1),math.max(top,y1)
     end
+    if m.resource_hex=='4dbd74f49c8ffc13' and m.compass_heading then
+        -- Reserve the compass lettering envelope even when no cardinal is visible.
+        local a,b,e,f
+        if measure then a,b,e,f=measure('N',(pixel and 12 or 8)*scale) end
+        if not f then b,f=-(pixel and 12 or 8)*scale*.2,(pixel and 12 or 8)*scale*.8 end
+        local heading_y=pixel and math.max(42,5+number_top+3) or 42
+        left=math.min(left,x);right=math.max(right,x+76*scale)
+        bottom=math.min(bottom,y+(heading_y-4)*scale)
+        top=math.max(top,y+(heading_y+7)*scale+f)
+    end
     local pad=8*scale
     local has_mode_icon=false
     for _,command in ipairs(d) do if command.mode_icon then has_mode_icon=true;break end end
