@@ -8020,7 +8020,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         text(number,0,5,32,ink)
         local fire_icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
         if fire_icon and (not m.ammo_mode or m.ammo_mode=='HEAT' or m.ammo_mode=='HE' or m.resource_hex=='26e40437ea275296') then
-            d[#d].mode_count=true
+            d[#d].mode_count=true;d[#d].mode_gap=m.resource_hex=='84354339522c932d' and 2 or 8
             local edge=#number*(pixel and 36 or 32)*.6
             if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
             -- Fit both dimensions: wide single/burst icons must not be
@@ -8032,7 +8032,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 factor=(top-bottom)/fire_icon.h
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
-            local icon_gap=m.resource_hex=='84354339522c932d' and 4 or 8
+            local icon_gap=m.resource_hex=='84354339522c932d' and 2 or 8
             if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then
                 for _,offset in ipairs(fire_icon==HUD.fire_icons.DOUBLE_SHELL and {0,15} or {0}) do
                     rect(edge+icon_gap+(offset+3)*factor,icon_y+11*factor,6*factor,14*factor,{65,145,235},.36)
@@ -8046,7 +8046,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 d[#d].mode_icon=true
             end
         end
-        if cannon_mode then d[#d].mode_count=true end
+        if cannon_mode then d[#d].mode_count=true;d[#d].mode_gap=m.resource_hex=='84354339522c932d' and 2 or 8 end
         if cannon_mode then
             local edge=#number*(pixel and 36 or 32)*.6
             if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
@@ -8143,7 +8143,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         local h=heading_command;local a,b,e,f
         if measure then a,b,e,f=measure(h.text,h.size) end
         if not e then a,e=0,#h.text*h.size*.6 end
-        local gap=(m.resource_hex=='84354339522c932d' and 4 or 8)*scale;local width=e-a+gap+icon_edge-icon_left
+        local gap=(m.resource_hex=='84354339522c932d' and 2 or 8)*scale;local width=e-a+gap+icon_edge-icon_left
         local start=(left+right-width)/2
         h.x=start-a
         local shift=start+e-a+gap-icon_left
@@ -9915,7 +9915,7 @@ function M.prepare(commands,p,c)
                         local a,b,e,f
                         if HUD.font.supported(heading.font) then a,b,e,f=HUD.font.measure(heading.text,heading.size,heading.font,true) end
                         if not e then a,e=0,#heading.text*heading.size*.6 end
-                        local gap=8*scale;local width=e-a+gap+icon_right-icon_left
+                        local gap=(heading.mode_gap or 8)*scale;local width=e-a+gap+icon_right-icon_left
                         local start=middle-width/2;heading.x=start-a
                         local shift=start+e-a+gap-icon_left
                         for _,v in ipairs(centered) do if v.mode_icon then v.x=v.x+shift end end

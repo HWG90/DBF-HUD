@@ -70,7 +70,7 @@ function M.prepare(commands,p,c)
                         local a,b,e,f
                         if HUD.font.supported(heading.font) then a,b,e,f=HUD.font.measure(heading.text,heading.size,heading.font,true) end
                         if not e then a,e=0,#heading.text*heading.size*.6 end
-                        local gap=8*scale;local width=e-a+gap+icon_right-icon_left
+                        local gap=(heading.mode_gap or 8)*scale;local width=e-a+gap+icon_right-icon_left
                         local start=middle-width/2;heading.x=start-a
                         local shift=start+e-a+gap-icon_left
                         for _,v in ipairs(centered) do if v.mode_icon then v.x=v.x+shift end end
