@@ -10292,6 +10292,25 @@ function M.point(m,at,x,y)
     return at.x+(m[1]*x+m[9]*y)/1000,
         at.y+(m[2]*x+m[10]*y)/1000,at.z+(m[3]*x+m[11]*y)/1000
 end
+function M.merge_rects(commands)
+    local out={}
+    for _,v in ipairs(commands) do
+        local previous=out[#out];local horizontal,vertical
+        if previous and previous.type=='rect' and v.type=='rect'
+            and previous.a==v.a and previous.fold_child==v.fold_child
+            and previous.fuel_marker_piece==v.fuel_marker_piece
+            and previous.c[1]==v.c[1] and previous.c[2]==v.c[2] and previous.c[3]==v.c[3] then
+            horizontal=previous.y==v.y and previous.h==v.h and math.abs(previous.x+previous.w-v.x)<1e-7
+            vertical=previous.x==v.x and previous.w==v.w and math.abs(previous.y+previous.h-v.y)<1e-7
+        end
+        if horizontal or vertical then
+            local merged={};for key,value in pairs(previous) do merged[key]=value end
+            if horizontal then merged.w=previous.w+v.w else merged.h=previous.h+v.h end
+            out[#out]=merged
+        else out[#out+1]=v end
+    end
+    return out
+end
 function M.new(sr,log)
     local A,W,G=sr.Application,sr.World,sr.Gui
     local fill='mods/dbf_hud/materials/screen_hud_fill'
@@ -10323,7 +10342,7 @@ function M.new(sr,log)
         if gui and (world~=target or not live(world)) then self.release() end
         if not gui then world=target;gui=assert(W.create_screen_gui(world,'scale',1,1),'screen scene GUI missing') end
         clear()
-        commands=HUD.world_style.prepare(commands,p,c)
+        commands=M.merge_rects(HUD.world_style.prepare(commands,p,c))
         if c.style_3d=='hologram' then
             for _,v in ipairs(commands) do if v.type=='panel' then v.a=math.min(1,v.a/.18) end end
         end

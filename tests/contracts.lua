@@ -1649,4 +1649,16 @@ test('rotation profiles roundtrip and retired opacity cannot dim the HUD',functi
     local c=HUD.config.new();HUD.config.apply(c,{opacity=.2,effect_scanlines=true,effect_flicker=true,effect_sweep=true})
     assert(c.opacity==1 and c.effect_scanlines and c.effect_flicker and c.effect_sweep)
 end)
+test('rectangle batching preserves coverage and draw boundaries',function()
+    local function r(x,y,w,h,color,alpha,fold)
+        return {type='rect',x=x,y=y,w=w,h=h,c=color or {255,255,255},a=alpha or 1,fold_child=fold}
+    end
+    local input={r(0,0,2,1),r(0,1,2,1),r(0,2,2,1),r(2,0,1,3,{255,0,0}),r(3,0,1,3,nil,.5),r(4,0,1,3,nil,.5,true)}
+    local output=HUD.screen_scene.merge_rects(input)
+    assert(#output==4 and output[1].h==3 and input[1].h==1)
+    local horizontal=HUD.screen_scene.merge_rects({r(0,0,2,3),r(2,0,2,3)})
+    assert(#horizontal==1 and horizontal[1].w==4 and horizontal[1].h==3)
+    local separated=HUD.screen_scene.merge_rects({r(0,0,2,1),{type='text'},r(0,1,2,1)})
+    assert(#separated==3)
+end)
 print(string.format('%d contract tests passed',tests))
