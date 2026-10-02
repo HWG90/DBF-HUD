@@ -7560,6 +7560,10 @@ function M.apply(raw)
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
+    if raw.resource_hex=='84354339522c932d' then
+        raw.label='INCDRY'
+        if raw.fire_mode=='AUTO' or raw.fire_mode=='SEMI' then raw.ammo_icon='FIRE_'..raw.fire_mode end
+    end
     if raw.resource_hex=='52e4334e6a128caf' or raw.resource_hex=='02cd7321cd8445f5' then
         raw.label='GRNDS';raw.ammo_icon='GL_GRENADE'
     end
@@ -7737,6 +7741,21 @@ local spear=M.SPEAR
 local upright={w=spear.h,h=spear.w,runs={}}
 for _,r in ipairs(spear.runs) do upright.runs[#upright.runs+1]={spear.h-r[2]-r[4],r[1],r[4],r[3]} end
 M.SPEAR=upright
+-- Coyote bullets sit inside a jagged orange flame envelope.
+for _,mode in ipairs({'AUTO','SEMI'}) do
+    local base=M[mode]
+    local icon={w=base.w+4,h=base.h+4,runs={}}
+    local count=mode=='AUTO' and 3 or 1
+    for bullet=1,count do
+        local bottom=(bullet-1)*base.h/count
+        local height=base.h/count
+        for _,run in ipairs({{0,bottom+1,base.w+4,height+2},{3,bottom,5,1},{12,bottom,4,1},{7,bottom+height+3,4,1},{18,bottom+height+3,3,1}}) do
+            icon.runs[#icon.runs+1]={run[1],run[2],run[3],run[4],{255,133,45}}
+        end
+    end
+    for _,run in ipairs(base.runs) do icon.runs[#icon.runs+1]={run[1]+2,run[2]+2,run[3],run[4]} end
+    M['FIRE_'..mode]=icon
+end
 -- Napalm rocket with an orange flame beside the warhead.
 M.NAPALM_ROCKET={w=18,h=26,runs={}}
 M.AIRBURST={w=20,h=20,runs={{8,8,4,4},{9,15,2,5},{9,0,2,5},{0,9,5,2},{15,9,5,2},{3,3,3,3},{14,14,3,3},{3,14,3,3},{14,3,3,3}}}

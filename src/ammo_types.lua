@@ -257,6 +257,10 @@ function M.apply(raw)
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
+    if raw.resource_hex=='84354339522c932d' then
+        raw.label='INCDRY'
+        if raw.fire_mode=='AUTO' or raw.fire_mode=='SEMI' then raw.ammo_icon='FIRE_'..raw.fire_mode end
+    end
     if raw.resource_hex=='52e4334e6a128caf' or raw.resource_hex=='02cd7321cd8445f5' then
         raw.label='GRNDS';raw.ammo_icon='GL_GRENADE'
     end
