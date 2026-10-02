@@ -1,3 +1,5 @@
+![Diver's Best Friend — Holographic Utility Display](assets/branding/banner.png)
+
 # DBF-HUD
 
 A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current development version: **0.3.41**. This is the source checkout; generated releases may lag behind it.
