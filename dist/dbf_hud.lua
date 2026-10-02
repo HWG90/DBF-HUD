@@ -7706,17 +7706,28 @@ M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{
 -- Native StratagemHammer path, cropped to its hammer silhouette.
 M.HAMMER={w=48,h=19,runs={{41,18,7,1},{41,17,7,1},{41,16,7,1},{41,15,7,1},{41,14,7,1},{41,13,7,1},{40,12,8,1},{0,11,12,1},{38,11,10,1},{0,10,48,1},{0,9,48,1},{0,8,48,1},{0,7,48,1},{40,6,8,1},{41,5,7,1},{41,4,7,1},{41,3,7,1},{41,2,7,1},{41,0,7,1}}}
 M.SPEAR_ROCKET={w=16,h=24,runs={{7,23,2,1},{6,21,4,2},{5,19,6,2},{4,8,8,11},{3,6,10,1},{4,3,8,2},{1,0,3,7},{12,0,3,7},{5,0,6,2}}}
--- Horizontal missile: swept tail fins, straight casing, shoulder and pointed nose.
-M.MISSILE_SIDE={w=48,h=18,runs={
-    {2,1,3,1},{3,2,4,1},{4,3,5,1},{5,4,5,1},
-    {2,16,3,1},{3,15,4,1},{4,14,5,1},{5,13,5,1},
-    {2,6,3,6},{0,7,2,4},
-    {7,5,28,1},{7,12,28,1},{6,6,1,6},
-    {8,7,25,4},{8,6,5,1},{8,11,5,1},
-    {14,6,18,1},{14,11,18,1},
-    {34,6,2,6},{37,6,2,6},{39,7,3,4},{42,8,3,2},{45,8,3,1},
-    {10,4,3,1},{10,13,3,1}
+-- Detailed horizontal missile, with separated fins and subdued casing fill.
+-- Run alpha retains the selected text color and follows the loaded-state pulse.
+M.MISSILE_SIDE={w=64,h=24,runs={
+    {5,1,3,1},{6,2,4,1},{7,3,5,1},{8,4,5,1},{9,5,5,1},{10,6,5,1},
+    {5,22,3,1},{6,21,4,1},{7,20,5,1},{8,19,5,1},{9,18,5,1},{10,17,5,1},
+    {0,10,3,4},{3,9,3,6},{6,10,3,4},
+    {10,7,33,1},{10,16,33,1},{9,8,1,8},
+    {11,8,31,8,nil,.28},
+    {11,8,4,2},{11,14,4,2},
+    {17,8,1,8,nil,.8},{38,8,1,8,nil,.8},
+    {20,9,15,1,nil,.65},{20,14,15,1,nil,.45},
+    {21,11,8,2,nil,.65},
+    {43,8,2,8},{46,8,3,8,nil,.85},
+    {49,9,3,6},{52,10,3,4},{55,11,4,2},{59,11,5,1},
+    {12,6,4,1},{12,17,4,1}
 }}
+for _,run in ipairs(M.MISSILE_SIDE.runs) do
+    if run[1]>=43 then run[5]={235,158,62}
+    elseif run[1]<17 then run[5]={117,158,105}
+    elseif run[1]==38 then run[5]={235,191,87}
+    else run[5]={209,220,229} end
+end
 -- Distinct HUD silhouettes for the Recoilless Rifle's two rocket modes.
 M.ROCKET_HEAT={w=11,h=24,runs={{5,22,1,2},{4,19,3,3},{3,8,5,11},{4,5,3,3},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 M.ROCKET_HE={w=11,h=24,runs={{4,22,3,2},{3,20,5,2},{2,14,7,6},{3,6,5,8},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
@@ -8037,12 +8048,12 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
 
     elseif m.resource_hex=='5f3ec9bda2bd8553' or m.resource_hex=='14d5d4506056c7a4' then
         local missile=m.resource_hex=='14d5d4506056c7a4'
-        local icon=missile and HUD.fire_icons.MISSILE_SIDE or HUD.fire_icons.HAMMER;local factor=1.5
+        local icon=missile and HUD.fire_icons.MISSILE_SIDE or HUD.fire_icons.HAMMER;local factor=missile and 1.25 or 1.5
         local charged=(tonumber(m.value) or 0)>0
         local color=charged and ink or {255,55,55}
         local alpha=charged and 1 or (.35+.65*(.5+.5*math.sin((clock or 0)*6)))
         for _,run in ipairs(icon.runs) do
-            rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,color,alpha)
+            rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,charged and (run[5] or color) or color,alpha*(run[6] or 1))
             d[#d].hammer_indicator=true
         end
         local reserve_label=missile and 'MISSILES' or 'CHARGES'

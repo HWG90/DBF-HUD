@@ -225,12 +225,12 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
 
     elseif m.resource_hex=='5f3ec9bda2bd8553' or m.resource_hex=='14d5d4506056c7a4' then
         local missile=m.resource_hex=='14d5d4506056c7a4'
-        local icon=missile and HUD.fire_icons.MISSILE_SIDE or HUD.fire_icons.HAMMER;local factor=1.5
+        local icon=missile and HUD.fire_icons.MISSILE_SIDE or HUD.fire_icons.HAMMER;local factor=missile and 1.25 or 1.5
         local charged=(tonumber(m.value) or 0)>0
         local color=charged and ink or {255,55,55}
         local alpha=charged and 1 or (.35+.65*(.5+.5*math.sin((clock or 0)*6)))
         for _,run in ipairs(icon.runs) do
-            rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,color,alpha)
+            rect(run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,charged and (run[5] or color) or color,alpha*(run[6] or 1))
             d[#d].hammer_indicator=true
         end
         local reserve_label=missile and 'MISSILES' or 'CHARGES'
