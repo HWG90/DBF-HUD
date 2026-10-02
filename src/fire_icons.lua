@@ -24,6 +24,18 @@ for _,offset in ipairs({0,11}) do
         M.LINKED_BELT.runs[#M.LINKED_BELT.runs+1]={offset+r[1],r[2],r[3],r[4],{125,135,145}}
     end
 end
+-- Adjudicator: horizontal bottleneck rifle cartridges with copper projectiles.
+M.RIFLE_SEMI={w=32,h=8,runs={
+    {0,0,2,8,{218,172,78}},{3,1,17,6,{218,172,78}},
+    {20,2,3,4,{218,172,78}},{24,2,4,4,{192,120,72}},
+    {28,3,3,2,{192,120,72}},{31,3,1,1,{192,120,72}}
+}}
+M.RIFLE_AUTO={w=32,h=28,runs={}}
+for _,offset in ipairs({0,10,20}) do
+    for _,r in ipairs(M.RIFLE_SEMI.runs) do
+        M.RIFLE_AUTO.runs[#M.RIFLE_AUTO.runs+1]={r[1],r[2]+offset,r[3],r[4],r[5]}
+    end
+end
 -- Heavy bolt cartridge: rim, straight case, shoulder and broad pointed projectile.
 M.BOLT_ROUND={w=14,h=28,runs={
     {0,0,14,2},{1,2,12,2},{2,5,10,13},

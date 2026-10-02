@@ -8444,6 +8444,7 @@ function M.apply(raw)
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='2b28e17ffed05f7c' then raw.ammo_icon=raw.fire_mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL' end
+    if raw.resource_hex=='5fecab819f96a3e8' and (raw.fire_mode=='SEMI' or raw.fire_mode=='AUTO') then raw.ammo_icon='RIFLE_'..raw.fire_mode end
     if raw.resource_hex=='a6a735accb4a327f' then raw.ammo_icon='LINKED_BELT' end
     if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
     if raw.resource_hex=='84354339522c932d' then
@@ -8558,6 +8559,18 @@ end
 for _,offset in ipairs({0,11}) do
     for _,r in ipairs({{4,6,11,2},{4,13,11,2},{4,6,2,9},{13,6,2,9}}) do
         M.LINKED_BELT.runs[#M.LINKED_BELT.runs+1]={offset+r[1],r[2],r[3],r[4],{125,135,145}}
+    end
+end
+-- Adjudicator: horizontal bottleneck rifle cartridges with copper projectiles.
+M.RIFLE_SEMI={w=32,h=8,runs={
+    {0,0,2,8,{218,172,78}},{3,1,17,6,{218,172,78}},
+    {20,2,3,4,{218,172,78}},{24,2,4,4,{192,120,72}},
+    {28,3,3,2,{192,120,72}},{31,3,1,1,{192,120,72}}
+}}
+M.RIFLE_AUTO={w=32,h=28,runs={}}
+for _,offset in ipairs({0,10,20}) do
+    for _,r in ipairs(M.RIFLE_SEMI.runs) do
+        M.RIFLE_AUTO.runs[#M.RIFLE_AUTO.runs+1]={r[1],r[2]+offset,r[3],r[4],r[5]}
     end
 end
 -- Heavy bolt cartridge: rim, straight case, shoulder and broad pointed projectile.
