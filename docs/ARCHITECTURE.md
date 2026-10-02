@@ -33,6 +33,8 @@ MDL on_update -> runtime.tick -> identity-checked reader sample
 | fire_icons | Game-derived projectile/fire-mode shapes |
 | native_font / native_font_data / font | Native font mapping and measurement support |
 | view | Screen renderer and numeric/text handling |
+| screen_scene | Projects panel geometry and native text using the weapon anchor; selects scene-depth materials |
+| depth_marker | Optional diagnostic marker comparison; disabled by default |
 | world_probe | Direct WorldGUI command rendering and depth-material selection |
 | pose_motion / world_style | World transform smoothing and style helpers |
 | menu | Mod Options Menu routes, native ModBindingsMenu shortcut and debug notice |
@@ -58,7 +60,16 @@ Global opacity applies to filled gauges; unfilled warning zones retain a 25% mul
 
 ## Occlusion
 
-In the active 3D path, runtime selects `gui_depth` when Force occlusion is enabled or the weapon is not aiming. Otherwise it selects `gui`. The global toggle applies across weapon WorldGUI panels, including while aiming. It does not turn screen-space 2D text into world-occluded geometry.
+The current MDL weapon-panel path uses screen projection and materials that sample
+scene depth. This preserves the tracking observed in the screen marker tests while
+comparing each panel draw against geometry. Force occlusion selects depth-aware
+materials; disabling it selects the clear path. Native text uses a matching
+projected orientation and font material. The older WorldGUI renderer is retained
+for compatibility and research; it is not the fix for the original trailing.
+
+Tracking and occlusion were user-confirmed. A separate first-person wiggle remains
+unresolved, and the native/manual camera comparison does not prove viewmodel
+alignment in every frame.
 
 The native binding is registered through `_G.ModBindingsMenu.register_binding` with ID `dbf_hud_debug.force_occlusion`, label Force occlusion, category Debug tools - DBF HUD and automatic native action allocation. `is_down` is sampled once per update and edge-triggered. A press configures the toggle, saves tuning and starts a three-second `[DEBUG] Occlusion ON/OFF` screen notice. Polling stops when the menu instance retires; the manager has no unregister API in the inspected installation.
 
@@ -71,3 +82,11 @@ Mod Options Menu registrations use stable IDs and reusable dispatch routes. Reti
 - New attachment name: add only a justified hash/name mapping in layout_editor. Keep unmatched nodes labeled by index. A candidate hash match is not proof of behavior on every weapon.
 - New editor field: extend profile validation/serializer, editor copy/save/reset, overlay/menu controls, placement/render consumption and contracts together.
 - New native signal: compare labeled released/held/returned samples on the same weapon, validate identity and build, and keep thresholds provisional until confirmed.
+
+## Font settings
+
+The native font data table holds 72 families and glyph metrics. Configuration
+preserves the original five choices first, then adds the remaining families.
+The menu registers a direct DBFMCM font page with lifetime cleanup and saves the
+selected family into ordinary HUD tuning. Legacy Mod Options Menu font groups
+remain available, but their registrations can survive hot reload.

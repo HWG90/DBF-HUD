@@ -2,6 +2,13 @@
 
 A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current development version: **0.3.41**. This is the source checkout; generated releases may lag behind it.
 
+## Installation
+
+This repository is an experimental source checkpoint, not a complete one-click installer.
+Use the loose MDL Lua bundle alongside the compatible deployed font and screen-depth
+assets. See [installation and troubleshooting](docs/DEVELOPMENT.md) before changing
+an existing installation. Lua reload does not install shader or font assets.
+
 ## Start here
 
 For a new coding chat, read these in order:
@@ -15,12 +22,12 @@ Historical research remains in the root Markdown files. It records experiments, 
 
 ## Current features
 
-- Native engine fonts: BigBlue Terminal, Hack, JetBrains Mono, Fira Code and Iosevka.
-- Direct WorldGUI panels, a weapon-following 2D mode and a crosshair-relative 2D mode.
+- 72 native font families, selected through the custom **DBF-HUD Fonts** page.
+- Screen-projected weapon panels with scene-depth occlusion, plus retained WorldGUI and 2D modes.
 - Weapon-specific ammo labels and projectile symbols, fire-mode child panels, fuel and heat gauges, and a railgun charge gauge.
-- Fixed three-digit numeric slots with dimmed leading zeros; counts above 999 can expand.
+- Fixed three-digit numeric slots with dimmed leading zeros; counts above 999 can expand. The single-shot speargun uses one loaded digit.
 - Live layout editor with saved per-weapon/per-view position, scale and attachment points.
-- Configurable decorations and shared settings through Mod Options Menu.
+- Configurable decorations and shared settings through Mod Options Menu and the custom configuration menu.
 - Native Force occlusion binding under **Debug tools - DBF HUD**, with a three-second debug state notice.
 - MDL API 2 lifecycle and live Lua reload.
 
@@ -31,7 +38,7 @@ python tests/run.py
 python tools/build.py
 ```
 
-The test runner uses the installed game's LuaJIT DLL by default; `--lua-dll` overrides its path. **93 offline contracts passed at the October 1 documentation checkpoint.** They do not replace an in-game visual check.
+The test runner uses the installed game's LuaJIT DLL by default; `--lua-dll` overrides its path. **101 offline contracts passed at the October 2 checkpoint.** They do not replace an in-game visual check.
 
 Build outputs include `dist/dbf_hud.lua`, `mdl/dbf_hud/mod.lua` and an MDL ZIP in the parent directory. The active loose MDL mod is installed under `%LOCALAPPDATA%/MDL/Helldivers2/Mods/dbf_hud`.
 

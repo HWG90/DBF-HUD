@@ -9,7 +9,7 @@ python tests/run.py
 python tools/build.py
 ```
 
-`tests/run.py` loads `tests/contracts.lua` with the game's LuaJIT DLL and stops on a contract failure. Override the DLL using `--lua-dll`. The October 1 checkpoint has 93 contracts covering model/layout, numerical display, guarded reads, lifecycle, profiles, editor save/reset/scale/attachments, menu behavior and edge-triggered occlusion notice behavior.
+`tests/run.py` loads `tests/contracts.lua` with the game's LuaJIT DLL and stops on a contract failure. Override the DLL using `--lua-dll`. The October 2 checkpoint has 101 contracts covering model/layout, numerical display, guarded reads, lifecycle, profiles, editor save/reset/scale/attachments, menu behavior and edge-triggered occlusion notice behavior.
 
 `tools/build.py` generates the startup bundle, loose MDL bundle and parent-directory MDL ZIP. `--addon-builder` can generate an Arsenal addon through the external Bingus builder. Font conversion/depth asset builders are separate tools; normal Lua build does not rebuild deployed native assets.
 
@@ -66,3 +66,21 @@ Offline contracts establish code behavior. Native GPU rendering, memory signals 
 - **Reader fails after update:** revalidate build signatures and owned components. Do not patch bounds or guesses just to suppress errors.
 
 For unresolved signals, capture same-weapon released/held/returned states with labeled samples and stable identity. Avoid mixing damage, reload, equip or expired capture windows with the state being isolated.
+
+## Fonts and menu refresh
+
+The custom configuration menu exposes **DBF-HUD Fonts**, with all 72 families in
+one scrollable dropdown. It registers directly with DBFMCM rather than importing
+the legacy five-choice row. Reload DBF-HUD, then close and reopen the custom menu.
+Old legacy rows may remain until a game restart. Selecting a family saves HUD
+configuration; assets must already be deployed. Missing resources can fall back
+to a supported native font, so a visible dropdown is not proof that every asset
+is installed.
+
+## Shader build inputs
+
+Screen-depth builders consume local extracted shader-library donor files. Those
+files are deliberately not included in the public checkpoint. The HLSL and
+compiled custom pixel shaders are included; packaging requires the matching local
+game inputs described in SCREEN_DEPTH_RESEARCH.md. Do not assume a fresh clone
+can build the complete asset package without those inputs.
