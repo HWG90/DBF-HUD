@@ -8340,13 +8340,30 @@ function M.native()
         local chunk=assert(loadstring(body,'DBF-HUD preset'));setfenv(chunk,{})
         local value=chunk();assert(type(value)=='table' and type(value.settings)=='table' and type(value.layouts)=='table','Invalid preset format');return value
     end
+    function backend.delete_preset(name)
+        assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
+        local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
+        local base=preset_folder()..'/DBF-HUD-preset-'..stem
+        local found=false
+        for _,extension in ipairs({'.layout','.lua'})do
+            local path=base..extension;local f=io.open(path,'rb')
+            if f then f:close();assert(os.remove(path));found=true end
+        end
+        assert(found,'Preset not found');return true
+    end
     function backend.write_preset(name,body)
         assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
         local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
         assert(not stem:upper():match('^(CON)$') and not stem:upper():match('^(NUL)$'),'Reserved filename')
         local path=preset_folder()..'/DBF-HUD-preset-'..stem..'.layout'
-        local existing=io.open(path,'rb');if existing then existing:close();error('Preset already exists; choose another name')end
-        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close());assert(os.rename(path..'.tmp',path));return path
+        local f=assert(io.open(path..'.tmp','wb'));assert(f:write(body));assert(f:close())
+        local existing=io.open(path,'rb');local had_previous=existing~=nil
+        if existing then
+            existing:close();os.remove(path..'.bak');assert(os.rename(path,path..'.bak'))
+        end
+        local moved,why=os.rename(path..'.tmp',path)
+        if not moved then if had_previous then os.rename(path..'.bak',path)end;error(why)end
+        return path
     end
     function backend.write_weapon_offsets(body)
         assert(type(body)=='string' and #body<=65536,'weapon offsets file too large')
@@ -10748,7 +10765,7 @@ function M.new(hud,backend,log)
             local views=hud.weapon_clearance[e.resource] or {}
             e.shared=false
             e.set_view(hud.first_person)
-            local step=screen() and (backend.editor_key(16) and 1 or (backend.editor_key(17) and 20 or 5)) or (backend.editor_key(16) and .125 or (backend.editor_key(17) and 2 or .5))
+            local step=screen() and (backend.editor_key(16) and .25 or (backend.editor_key(17) and 20 or 5)) or (backend.editor_key(16) and .03125 or (backend.editor_key(17) and 2 or .5))
             for _,binding in ipairs({{37,'x',-1},{39,'x',1},{38,'z',1},{40,'z',-1},{33,'y',1},{34,'y',-1}}) do
                 local key,axis,sign=binding[1],binding[2],binding[3];local down=backend.editor_key(key)
                 if down and (not repeats[key] or now>=repeats[key]) then
@@ -10871,7 +10888,37 @@ function M.new(hud)
             local preset_name='My preset'
             local preset_choices=hud.list_presets and hud.list_presets() or {}
             if #preset_choices==0 then preset_choices={'No saved presets'} end
-            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD Appearance',
+            local placement_controls={
+                {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
+                {id='first_person_side',type='choice',label='First-person side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1,on_change=function(v)save('fp_auto_side',v==2 and 'right' or 'left')end},
+                {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
+                {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
+            for _,row in ipairs(sliders)do
+                if placement[row[1]] then
+                    local key=row[1]
+                    placement_controls[#placement_controls+1]={id=key,type='slider',label=row[2],min=row[3],max=row[4],step=row[5],default=hud.config[key],on_change=function(v)save(key,v)end}
+                end
+            end
+            local e=hud.layout_editor
+            local layout_controls={{type='text',label='F6 edits equipped weapon; F7 saves; F8 restores starting layout.'}}
+            if e then
+                layout_controls[#layout_controls+1]={id='edit_layout',type='button',label='Edit equipped weapon',on_activate=function()assert(e.bind(),'Equip a weapon first')end}
+                layout_controls[#layout_controls+1]={id='save_layout',type='button',label='Save layout',on_activate=function()assert(e.save(),'Layout save failed')end}
+                layout_controls[#layout_controls+1]={id='restore_layout',type='button',label='Restore starting layout',on_activate=function()assert(e.reset(),'Enable editing first')end}
+                layout_controls[#layout_controls+1]={id='close_editor',type='button',label='Close editor',on_activate=function()e.active=false end}
+            end
+            local function refresh_presets()
+                preset_choices=hud.list_presets and hud.list_presets() or {}
+                if #preset_choices==0 then preset_choices={'No saved presets'}end
+                local mod=host.mods and host.mods.dbf_hud_fonts
+                if mod then for _,page in ipairs(mod.pages)do
+                    if page.id=='presets' then for _,control in ipairs(page.controls)do
+                        if control.id=='saved_preset' then control.choices=preset_choices end
+                    end end
+                end end
+                if font_handle then font_handle.set('saved_preset',1)end
+            end
+            font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
                 description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
                     {id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
                         default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2),
@@ -10905,16 +10952,17 @@ function M.new(hud)
                         on_change=function(v)save('text_opacity',v)end},
                     {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
                         on_change=function(v)save('panel_opacity',v)end}
-                }},{id='presets',name='Presets',require_confirmation=true,controls={
+                }},{id='layout',name='Layout',controls=layout_controls},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
-                    {id='save_preset',type='button',label='Save named preset',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
+                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=function()local name=font_handle.get('preset_name');local overwrite=false;for _,existing in ipairs(hud.list_presets())do if existing:lower()==name:lower() then overwrite=true end end;local ok,err=hud.save_preset(name);assert(ok,err);refresh_presets();if overwrite then return 'Overwrote '..name..'.layout' end end},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
                     {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
+                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);refresh_presets() end},
                     {id='default_setup',type='button',label='Reset to Default setup',
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
                 }}}})
-            font_host=host
+            font_host=host;self.status='MCM > DBF-HUD'
         end
         if attempted then return end
         api=rawget(_G,'ModOptionsMenu')
@@ -11223,6 +11271,12 @@ function M.start(sr,backend,options)
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
     function self.list_presets()local ok,names=pcall(backend.list_presets);return ok and names or {} end
+    function self.delete_preset(name)
+        if not backend.delete_preset then return false,'Preset deletion unavailable' end
+        local ok,result=pcall(backend.delete_preset,name)
+        log(ok and ('PRESET deleted: '..name) or ('PRESET delete failed: '..tostring(result)))
+        return ok,result
+    end
     function self.save_preset(name)
         if not backend.write_preset then return false,'Preset writer unavailable' end
         local settings=self.export_tuning():gsub('return {','settings = {',1)
