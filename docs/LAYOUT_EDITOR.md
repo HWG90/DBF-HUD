@@ -1,5 +1,7 @@
 # Layout editor and weapon profiles
 
+First-person placement uses the right-side profile. Older side settings are accepted for compatibility and normalized to right; the side selector is retired.
+
 ## Controls
 
 Equip and aim with the weapon before entering editing.

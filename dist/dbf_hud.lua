@@ -7109,7 +7109,7 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='left',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -7155,7 +7155,7 @@ function M.apply(config,values)
         elseif k=='font' then assert(v=='debug' or HUD.native_font_data.faces[v],'unknown HUD font')
         else v=M.hex(v) end
         -- Retired global opacity is accepted for old presets but no longer dims the HUD.
-        clean[k]=k=='opacity' and 1 or v
+        clean[k]=k=='opacity' and 1 or (k=='fp_auto_side' and 'right' or v)
     end
     if clean.hud_occlusion~=nil and clean.occlusion_mode==nil then clean.occlusion_mode=clean.hud_occlusion and 'gui_depth' or 'gui' end
     -- Migrate retired mesh selection to the verified direct WorldGUI path.
@@ -7635,7 +7635,6 @@ M.BOLT_ROUND={w=14,h=28,runs={
     {0,0,14,2},{1,2,12,2},{2,5,10,13},
     {3,18,8,2},{4,20,6,4},{5,24,4,2},{6,26,2,2}
 }}
-M.SHELL={w=9,h=24,runs={{0,0,9,3},{1,3,7,19},{2,22,5,2}}}
 -- Outlined hull, crimped mouth and separate rim/base for barrel indicators.
 M.BARREL_SHELL={w=12,h=28,runs={
     {0,0,12,2},{1,2,10,5},{1,8,10,1},
@@ -7643,8 +7642,9 @@ M.BARREL_SHELL={w=12,h=28,runs={
     {3,10,6,1},{3,25,6,2},{1,27,10,1},
     {4,23,1,2},{7,23,1,2}
 }}
-M.DOUBLE_SHELL={w=21,h=24,runs={}}
-for _,offset in ipairs({0,12})do
+M.SHELL=M.BARREL_SHELL
+M.DOUBLE_SHELL={w=27,h=28,runs={}}
+for _,offset in ipairs({0,15})do
     for _,r in ipairs(M.SHELL.runs)do M.DOUBLE_SHELL.runs[#M.DOUBLE_SHELL.runs+1]={r[1]+offset,r[2],r[3],r[4]} end
 end
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
@@ -7971,8 +7971,16 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 factor=(top-bottom)/fire_icon.h
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
+            if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then
+                for _,offset in ipairs(fire_icon==HUD.fire_icons.DOUBLE_SHELL and {0,15} or {0}) do
+                    rect(edge+8+(offset+3)*factor,icon_y+11*factor,6*factor,14*factor,{65,145,235},.36)
+                    d[#d].mode_icon=true
+                end
+            end
             for _,run in ipairs(fire_icon.runs) do
-                rect(edge+8+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,ink,.9)
+                local color=ink
+                if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then color=run[2]<9 and {218,172,78} or {65,145,235} end
+                rect(edge+8+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,color,.9)
                 d[#d].mode_icon=true
             end
         end
@@ -10838,7 +10846,6 @@ function M.new(hud)
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
-        set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('fade_3d_unless_aiming',hud.config.fade_3d_unless_aiming)
         set('force_occlusion',hud.config.force_occlusion)
@@ -10870,7 +10877,6 @@ function M.new(hud)
             local placement_controls={
                 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
                 {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
-                {id='first_person_side',type='choice',label='First-person side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1,on_change=function(v)save('fp_auto_side',v==2 and 'right' or 'left')end},
                 {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
                 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
             for _,row in ipairs(sliders)do
@@ -10996,9 +11002,6 @@ function M.new(hud)
             end)
             add('keep_hud_upright',{type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,description='Remove sideways roll in every 3D view while preserving facing direction.'},function(v)
                 hud.configure({keep_hud_upright=v});hud.save_tuning()
-            end)
-            add('fp_auto_side',{type='choice',label='Auto first-person HUD side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1},function(v)
-                hud.configure({fp_auto_side=v==2 and 'right' or 'left'});hud.save_tuning()
             end)
             for _,s in ipairs(sliders) do
                 local k=s[1];add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)

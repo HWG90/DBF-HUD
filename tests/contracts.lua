@@ -466,10 +466,11 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==26)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==25)
     callbacks['dbf_hud_v4.debug_sight_root_orientation'](true);assert(h.config.debug_sight_root_orientation and writes==1);writes=writes-1
     callbacks['dbf_hud_v4.force_occlusion'](true);assert(h.config.force_occlusion and writes==1);writes=writes-1
-    callbacks['dbf_hud_placement.fp_auto_side'](1);assert(h.config.fp_auto_side=='left');writes=writes-1
+    assert(not options['dbf_hud_placement.fp_auto_side'] and h.config.fp_auto_side=='right')
+    HUD.config.apply(h.config,{fp_auto_side='left'});assert(h.config.fp_auto_side=='right')
     callbacks['dbf_hud_placement.travel'](120);assert(h.config.travel==120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
     callbacks['dbf_hud_v6.font_native'](2);assert(h.config.font=='hack' and writes==2)
@@ -478,7 +479,7 @@ test('native menu keeps colors config-only and persists placement',function()
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==16 and groups['DBF-HUD Placement']==10)
+    assert(groups['DBF-HUD']==16 and groups['DBF-HUD Placement']==9)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -710,7 +711,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==26)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==25)
         callbacks['dbf_hud_placement.travel'](77);assert(h.config.travel==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.travel'](88);assert(h.config.travel==77 and writes==cycle)
     end
@@ -967,7 +968,7 @@ test('sight placement updates without cache and profiles affect only their weapo
     assert(math.abs(p.auto_mount.x-.21)<1e-9 and math.abs(p.auto_mount.y)<1e-9)
     p.sight.z=.1;h.first_person=true
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
-    assert(p.auto_mount.x==-.12 and math.abs(p.auto_mount.z-.11)<1e-9)
+    assert(p.auto_mount.x==.12 and math.abs(p.auto_mount.z-.11)<1e-9)
     p.sight.z=.15
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
     assert(math.abs(p.auto_mount.z-.16)<1e-9)
@@ -988,6 +989,20 @@ test('automatic clearance follows scale around sight without accumulating or cha
             assert(m.y==base.y)
         end
     end
+end)
+
+test('shotgun shell icons share Double Freedom hull and brass colors',function()
+    assert(HUD.fire_icons.SHELL==HUD.fire_icons.BARREL_SHELL)
+    local m=HUD.model.normalize({kind='magazine',rounds=4,capacity=8,reserve=2,label='SHELLS',ammo_icon='SHELL'})
+    local commands=HUD.layout.compose(m,0,0,1,1,HUD.config.new(),0)
+    local blue,gold=false,false
+    for _,command in ipairs(commands) do
+        if command.mode_icon and command.c then
+            blue=blue or (command.c[1]==65 and command.c[2]==145 and command.c[3]==235)
+            gold=gold or (command.c[1]==218 and command.c[2]==172 and command.c[3]==78)
+        end
+    end
+    assert(blue and gold)
 end)
 
 test('external profiles reject malformed data and empty table clears built-in profiles',function()

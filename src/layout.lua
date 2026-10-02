@@ -256,8 +256,16 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 factor=(top-bottom)/fire_icon.h
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
+            if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then
+                for _,offset in ipairs(fire_icon==HUD.fire_icons.DOUBLE_SHELL and {0,15} or {0}) do
+                    rect(edge+8+(offset+3)*factor,icon_y+11*factor,6*factor,14*factor,{65,145,235},.36)
+                    d[#d].mode_icon=true
+                end
+            end
             for _,run in ipairs(fire_icon.runs) do
-                rect(edge+8+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,ink,.9)
+                local color=ink
+                if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then color=run[2]<9 and {218,172,78} or {65,145,235} end
+                rect(edge+8+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,color,.9)
                 d[#d].mode_icon=true
             end
         end

@@ -60,7 +60,6 @@ function M.new(hud)
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
-        set('fp_auto_side',hud.config.fp_auto_side=='right' and 2 or 1)
         set('keep_hud_upright',hud.config.keep_hud_upright)
         set('fade_3d_unless_aiming',hud.config.fade_3d_unless_aiming)
         set('force_occlusion',hud.config.force_occlusion)
@@ -92,7 +91,6 @@ function M.new(hud)
             local placement_controls={
                 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
                 {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
-                {id='first_person_side',type='choice',label='First-person side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1,on_change=function(v)save('fp_auto_side',v==2 and 'right' or 'left')end},
                 {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
                 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
             for _,row in ipairs(sliders)do
@@ -218,9 +216,6 @@ function M.new(hud)
             end)
             add('keep_hud_upright',{type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,description='Remove sideways roll in every 3D view while preserving facing direction.'},function(v)
                 hud.configure({keep_hud_upright=v});hud.save_tuning()
-            end)
-            add('fp_auto_side',{type='choice',label='Auto first-person HUD side',choices={'Left','Right'},default=hud.config.fp_auto_side=='right' and 2 or 1},function(v)
-                hud.configure({fp_auto_side=v==2 and 'right' or 'left'});hud.save_tuning()
             end)
             for _,s in ipairs(sliders) do
                 local k=s[1];add(k,{type='slider',label=s[2],min=s[3],max=s[4],step=s[5],default=hud.config[k]},function(v)

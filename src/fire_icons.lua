@@ -17,7 +17,6 @@ M.BOLT_ROUND={w=14,h=28,runs={
     {0,0,14,2},{1,2,12,2},{2,5,10,13},
     {3,18,8,2},{4,20,6,4},{5,24,4,2},{6,26,2,2}
 }}
-M.SHELL={w=9,h=24,runs={{0,0,9,3},{1,3,7,19},{2,22,5,2}}}
 -- Outlined hull, crimped mouth and separate rim/base for barrel indicators.
 M.BARREL_SHELL={w=12,h=28,runs={
     {0,0,12,2},{1,2,10,5},{1,8,10,1},
@@ -25,8 +24,9 @@ M.BARREL_SHELL={w=12,h=28,runs={
     {3,10,6,1},{3,25,6,2},{1,27,10,1},
     {4,23,1,2},{7,23,1,2}
 }}
-M.DOUBLE_SHELL={w=21,h=24,runs={}}
-for _,offset in ipairs({0,12})do
+M.SHELL=M.BARREL_SHELL
+M.DOUBLE_SHELL={w=27,h=28,runs={}}
+for _,offset in ipairs({0,15})do
     for _,r in ipairs(M.SHELL.runs)do M.DOUBLE_SHELL.runs[#M.DOUBLE_SHELL.runs+1]={r[1]+offset,r[2],r[3],r[4]} end
 end
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
