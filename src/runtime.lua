@@ -397,10 +397,31 @@ function M.start(sr,backend,options)
         local selected_profile=profiles and profiles[selected_view]
         local attach_point=selected_profile and selected_profile.attach_point
         if not attach_point then attach_point='node:4d25685a' end
-        local anchor_hash=attach_point and attach_point:match('^node:(%x+)$')
-        if attach_point=='sight' then anchor_hash='527c9c73' end
+        local sampled_point=selected_profile and selected_profile.root_from or attach_point
+        local anchor_hash=sampled_point and sampled_point:match('^node:(%x+)$')
+        if sampled_point=='sight' then anchor_hash='527c9c73' end
         self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active) or nil
-        if self.weapon_pose then self.weapon_pose.attach_point=attach_point end
+        if self.weapon_pose then
+            if selected_profile and selected_profile.root_from then
+                local converted,reason=HUD.weapon_offsets.convert_root(selected_profile,self.weapon_pose,self.first_person,self.config)
+                if converted then
+                    local saved,err=pcall(function()
+                        assert(backend.write_weapon_offsets,'layout writer unavailable')
+                        return backend.write_weapon_offsets(HUD.weapon_offsets.serialize(self.weapon_clearance))
+                    end)
+                    log('ROOT_CONVERSION weapon='..tostring(latest_raw.resource_hex)..' view='..active_view..' saved='..tostring(saved and err~=false)..(saved and '' or ' error='..tostring(err)))
+                else
+                    attach_point=sampled_point
+                end
+            end
+            self.weapon_pose.attach_point=attach_point
+            local p=self.weapon_pose
+            local signature=tostring(p.resource_hex)..':'..attach_point..':'..tostring(p.anchor_status)
+            if attach_point~='root' and signature~=self.anchor_lookup_signature then
+                self.anchor_lookup_signature=signature
+                log('ATTACHMENT_LOOKUP weapon='..tostring(p.resource_hex)..' requested='..attach_point..' nodes='..tostring(p.node_count)..' result='..tostring(p.anchor_status))
+            end
+        end
         draw_bone_marker(dt)
         self.pose_status=latest_raw and pose.status or 'no weapon'
         local w,h=sr.Gui.resolution()

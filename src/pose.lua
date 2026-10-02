@@ -70,7 +70,8 @@ function M.new(backend)
                 end
             end
         end)
-        if not sight_ok then sight=nil;anchors={} end
+        local anchor_status=sight and 'selected node verified' or 'selected node absent'
+        if not sight_ok then sight=nil;anchors={};anchor_status=tostring(sight_value) end
         local node_parts
         if research then
             assert(nodes<=128,'research node limit')
@@ -116,7 +117,7 @@ function M.new(backend)
         assert(r.read(generations+index,1):byte()==generation and r.p(array+index*8)==object,'unit recycled during read')
         assert(r.u(r.read(object+8,4),0)==b.candidate and r.p(object+0x88)==address,'pose owner changed')
         return {id=raw.id,resource_hex=raw.resource_hex,candidate=b.candidate,node_count=nodes,
-            node_parts=node_parts,sight=sight,anchors=anchors,matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
+            node_parts=node_parts,sight=sight,anchors=anchors,anchor_status=anchor_status,matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
     end
     function self.poll(raw,anchor_hash,enumerate)
         local ok,value=pcall(self.snapshot,raw,nil,anchor_hash,enumerate)
