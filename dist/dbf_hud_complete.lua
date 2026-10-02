@@ -8445,7 +8445,7 @@ function M.apply(raw)
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='2b28e17ffed05f7c' then raw.ammo_icon=raw.fire_mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL' end
     if raw.resource_hex=='5fecab819f96a3e8' and (raw.fire_mode=='SEMI' or raw.fire_mode=='AUTO') then raw.ammo_icon='RIFLE_'..raw.fire_mode end
-    if raw.resource_hex=='a6a735accb4a327f' then raw.ammo_icon='LINKED_BELT' end
+    if raw.resource_hex=='a6a735accb4a327f' or raw.resource_hex=='11c27d3babb38956' then raw.ammo_icon='LINKED_BELT' end
     if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
     if raw.resource_hex=='84354339522c932d' then
         raw.label='INCDRY'
