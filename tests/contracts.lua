@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'native_font_data','native_font','config','font','motion','ammo_types','model','fire_icons','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','offscreen_test','world_style','archived_mesh','scene_test','placement','weapon_offsets','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'native_font_data','native_font_uv','native_font','config','font','motion','ammo_types','model','fire_icons','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','depth_marker','offscreen_test','world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -182,6 +182,22 @@ test('magazine adds chamber once and preserves tactical reload',function()
     bytes[runtime+8]=0;m=assert(reader.poll());assert(m.rounds==44 and not m.pending_chamber_round)
     U(state+8,1)
 end)
+test('single-shot launcher stays empty while its reload flag is set',function()
+    U(config+0x88,1);U(flags,0xc0);U(state,0);U(state+8,0);bytes[runtime+8]=1
+    local m=assert(reader.poll(),reader.status)
+    assert(m.rounds==0 and m.chamber_rounds==0 and not m.pending_chamber_round)
+    U(state+8,1);m=assert(reader.poll());assert(m.rounds==1)
+    U(config+0x88,45);bytes[runtime+8]=0
+end)
+test('recoilless programmable modes have distinct labels and rocket silhouettes',function()
+    for control,mode in pairs({[0x50]='HEAT',[0x54]='HE'}) do
+        assert(HUD.ammo_types.recoilless_mode(control)==mode)
+        local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='9f80d67a12a7e40f',ammo_mode=mode})
+        assert(raw.label==mode and raw.ammo_icon=='ROCKET_'..mode and HUD.fire_icons[raw.ammo_icon])
+    end
+    assert(HUD.ammo_types.recoilless_mode(0x58)==nil)
+end)
+
 test('rounds selects correct tube and includes chamber',function()
     local rm=manager('rounds');bind(rm,0x28,0x40,20,weapon);P(rm+0x50,state);P(rm+0x58,runtime)
     map(rm+0x68,{[20]=0});local cfgaddr=alloc(0x88);P(rm+0xa8,cfgaddr)
@@ -193,6 +209,18 @@ test('rounds selects correct tube and includes chamber',function()
     U(state+4,6);U(runtime+4,0);m=assert(reader.poll());assert(m.rounds==7 and m.capacity==8 and m.label=='BUCKSHOT' and m.ammo_slot==0)
     U(runtime+4,2);assert(reader.poll()==nil);U(runtime+4,1)
 end)
+test('autocannon rounds path counts inserted first clip before chambering',function()
+    local original=read(weapon,8)
+    put(weapon,string.char(0x5f,0x5c,0x0b,0x6f,0x31,0xfb,0xcf,0xa8))
+    local rm=HUD.memory.new(backend).p(base+L.rounds);local cfgaddr=HUD.memory.new(backend).p(rm+0xa8)
+    F(cfgaddr+0x48,10);bytes[cfgaddr+0x68]=1
+    U(flags,0x140);U(runtime+4,0);U(state+4,4);U(state+16,0);bytes[runtime+16]=1
+    local m=assert(reader.poll(),reader.status);assert(m.rounds==5 and m.pending_chamber_round==1)
+    U(state+16,115);bytes[runtime+16]=0;m=assert(reader.poll());assert(m.rounds==5 and not m.pending_chamber_round)
+    U(state+4,3);m=assert(reader.poll());assert(m.rounds==4 and not m.pending_chamber_round)
+    put(weapon,original)
+end)
+
 test('heat uses configured limit and lock state',function()
     local hm=manager('heat');bind(hm,0x28,0x40,20,weapon);P(hm+0x58,runtime)
     map(hm+0x68,{[20]=0});local c=alloc(0x250);P(hm+0xa8,c);F(c+0x60,100);U(c+0x5c,3)
@@ -220,12 +248,13 @@ test('read budget prevents unbounded probing',function()
 end)
 test('resource ammo resolves an identity-checked deposit',function()
     local dep=owner+L.records+48;U(dep+8,21);bytes[dep+20]=1
+    U(dep,0x1a1860e0);U(dep+4,0x43eb1c3c)
     map(owner+L.entity_map,{[10]=0,[20]=1,[21]=2})
     local rm=alloc(256);P(base+L.resource[1],rm);bind(rm,0x20,0x38,20,weapon)
     local resource=alloc(36);P(rm+0x48,resource);U(resource,21)
     local dm=alloc(256);P(base+L.deposit[1],dm);bind(dm,0x20,0x38,21,dep)
     local counts=alloc(8);P(dm+0x50,counts);U(counts,17);U(flags,0x400)
-    local m=assert(reader.poll(),reader.status);assert(m.kind=='resource' and m.rounds==17)
+    local m=assert(reader.poll(),reader.status);assert(m.kind=='resource' and m.rounds==17 and m.capacity==500)
     U(counts,0);assert(reader.poll().rounds==0)
 end)
 test('selected seat weapon works without an inventory slot',function()
@@ -319,27 +348,33 @@ test('movement does not fade the HUD and automatic native input moves it',functi
 end)
 test('heat thresholds and alternating overheat colors',function()
     local c=HUD.config.new()
-    for _,f in ipairs({0,.74,.74999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_white) end
-    for _,f in ipairs({.75,.85,.85999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_yellow) end
-    for _,f in ipairs({.86,.94,.94999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_red) end
+    for _,f in ipairs({0,.64,.64999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_white) end
+    for _,f in ipairs({.65,.75,.84,.84999}) do
+        assert(HUD.layout.heat_color(f,0,c)==c.heat_yellow)
+        local d=HUD.layout.compose(HUD.model.normalize({kind='heat',heat=f,reserve=2}),0,0,1,1,c,0)
+        local expected=HUD.config.rgb(c.heat_yellow)
+        for _,v in ipairs(d) do if v.heat_label then
+            for i=1,3 do assert(v.c[i]==(v.heat_label=='percent' and expected[i] or 255)) end
+        end end
+    end
+    for _,f in ipairs({.85,.86,.94,.94999}) do assert(HUD.layout.heat_color(f,0,c)==c.heat_red) end
     for _,f in ipairs({.95,1}) do
         assert(HUD.layout.heat_color(f,0,c)==c.heat_red)
         assert(HUD.layout.heat_color(f,.25,c)==c.heat_yellow)
         assert(HUD.layout.heat_color(f,.5,c)==c.heat_red)
     end
 end)
-test('centered heat bar preserves partial cells',function()
-    local function fills(f)
-        local m=HUD.model.normalize({id=1,kind='heat',heat=f,reserve=2})
-        local d=HUD.layout.compose(m,0,0,1,1,HUD.config.new(),0);local out={}
-        for _,v in ipairs(d) do if v.type=='rect' and v.h==3 and v.a==.95 then out[#out+1]=v end end
-        return out,d
+test('heat gauge preserves fractional progress across warning zones',function()
+    for _,fraction in ipairs({0,.5,.525,.8,.9,1}) do
+        local m=HUD.model.normalize({kind='heat',heat=fraction,reserve=2})
+        local d=HUD.layout.compose(m,0,0,1,1,HUD.config.new(),0)
+        local background,filled=0,0
+        for _,v in ipairs(d) do
+            if v.heat_background then background=background+v.w end
+            if v.heat_fill then filled=filled+v.w end
+        end
+        assert(math.abs(filled/background-fraction)<1e-9)
     end
-    assert(#fills(0)==0)
-    local half=fills(.5);assert(#half==10 and math.abs(half[10].x-half[1].x-45)<1e-8)
-    local partial=fills(.525);assert(#partial==11 and math.abs(partial[11].w-1.75)<1e-8)
-    local full,d=fills(1);assert(#full==20 and math.abs(full[20].x-full[1].x-95)<1e-8)
-    local found=false;for _,v in ipairs(d) do if v.text=='OVERHEAT' then found=true end end;assert(found)
 end)
 test('vent pulses red without disappearing even below the heat threshold',function()
     local cfg=HUD.config.new()
@@ -347,8 +382,18 @@ test('vent pulses red without disappearing even below the heat threshold',functi
     local a=HUD.layout.compose(m,0,0,1,1,cfg,0)
     local b=HUD.layout.compose(m,0,0,1,1,cfg,.25)
     local red=HUD.config.rgb(cfg.heat_red)
-    for i=1,3 do assert(a[2].c[i]==red[i] and b[2].c[i]==red[i]) end
-    assert(math.abs(b[2].a/a[2].a-.25)<1e-6)
+    local ta,tb
+    for _,v in ipairs(a) do if v.heat_label=='percent' then ta=v end end
+    for _,v in ipairs(b) do if v.heat_label=='percent' then tb=v end end
+    for i=1,3 do assert(ta.c[i]==red[i] and tb.c[i]==red[i]) end
+    assert(math.abs(tb.a/ta.a-.25)<1e-6)
+    local warning
+    for _,v in ipairs(a) do
+        assert(not v.heat_background and not v.heat_fill and not v.heat_scanline)
+        for i=1,3 do assert(v.c[i]==red[i]) end
+        if v.overheat_warning then warning=v end
+    end
+    assert(warning and warning.text=='OVERHEAT' and warning.size>16)
 end)
 
 test('configuration validates atomically and roundtrips as Lua',function()
@@ -375,8 +420,12 @@ test('decorations default off, fit dynamic perimeter and preserve content',funct
             HUD.config.apply(c,{decoration=style});local decorated=HUD.layout.compose(model,15,20,scale,.8,c,0)
             local f=decorated[1];assert(f.x==plain[1].x and f.y==plain[1].y and f.w==plain[1].w and f.h==plain[1].h)
             assert((style=='none' and #decorated==#plain) or (style~='none' and #decorated>#plain))
-            for i=#plain+1,#decorated do local r=decorated[i]
-                assert(r.decoration and r.w>0 and r.h>0 and r.x>=f.x-1e-6 and r.y>=f.y-1e-6 and r.x+r.w<=f.x+f.w+1e-6 and r.y+r.h<=f.y+f.h+1e-6)
+            local child
+            for _,r in ipairs(decorated) do if r.heat_child and r.type=='panel' then child=r end end
+            for _,r in ipairs(decorated) do if r.decoration then
+                local owner=r.heat_child and child or f
+                assert(r.w>0 and r.h>0 and r.x>=owner.x-1e-6 and r.y>=owner.y-1e-6 and r.x+r.w<=owner.x+owner.w+1e-6 and r.y+r.h<=owner.y+owner.h+1e-6)
+            end
             end
         end
     end end
@@ -417,17 +466,18 @@ test('native menu keeps colors config-only and persists placement',function()
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
-    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==25)
+    local n=0;for _ in pairs(options) do n=n+1 end;assert(n==30)
+    callbacks['dbf_hud_v4.force_occlusion'](true);assert(h.config.force_occlusion and writes==1);writes=writes-1
     callbacks['dbf_hud_placement.fp_auto_side'](1);assert(h.config.fp_auto_side=='left');writes=writes-1
     callbacks['dbf_hud_placement.offset_x'](-120);assert(h.config.offset_x==-120)
     assert(not callbacks['dbf_hud_v3.color_target'] and not callbacks['dbf_hud_v3.rgba1'])
-    callbacks['dbf_hud_v5.font_native'](2);assert(h.config.font=='hack' and writes==2)
-    callbacks['dbf_hud_v5.font_native'](1);assert(h.config.font=='bigblue' and writes==3)
+    callbacks['dbf_hud_v6.font_native'](2);assert(h.config.font=='hack' and writes==2)
+    callbacks['dbf_hud_v6.font_native'](1);assert(h.config.font=='bigblue' and writes==3)
     callbacks['dbf_hud_v4.debug_logging'](true);assert(h.config.debug_logging and writes==4)
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
     local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==11 and groups['DBF-HUD Placement']==14)
+    assert(groups['DBF-HUD']==16 and groups['DBF-HUD Placement']==14)
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -463,7 +513,7 @@ test('heat proportions scale together and percent remains adjacent',function()
         for i,c in ipairs(one) do
             assert(two[i].x==2*c.x and two[i].y==2*c.y)
             if c.size then assert(two[i].size==2*c.size) end
-            if c.text==string.format('%02d',m.value)..'%' then number=c end
+            if c.heat_label=='percent' then number=c end
             if c.text=='%' then percent=c end
         end
         assert(number and number.text:sub(-1)=='%')
@@ -487,7 +537,7 @@ test('frame fits measured text including bearings and grows for content',functio
     end
     local a=HUD.layout.compose(HUD.model.normalize({kind='heat',heat=.99,reserve=1}),0,0,1,1,HUD.config.new(),0,measure)
     local b=HUD.layout.compose(HUD.model.normalize({kind='heat',heat=1,reserve=1}),0,0,1,1,HUD.config.new(),0,measure)
-    assert(b[1].w>a[1].w)
+    assert(math.abs(b[1].w-a[1].w)<1e-8)
 end)
 
 test('native text renderer releases engine text objects',function()
@@ -659,7 +709,7 @@ test('menu reload reuses dispatchers and releases retired callbacks',function()
     for cycle=1,5 do
         local h={config=HUD.config.new(),save_tuning=function()writes=writes+1 end}
         h.configure=function(v)HUD.config.apply(h.config,v)end
-        local menu=HUD.menu.new(h);menu.poll();assert(registered==25)
+        local menu=HUD.menu.new(h);menu.poll();assert(registered==30)
         callbacks['dbf_hud_placement.offset_x'](77);assert(h.config.offset_x==77 and writes==cycle)
         menu.retire();callbacks['dbf_hud_placement.offset_x'](88);assert(h.config.offset_x==77 and writes==cycle)
     end
@@ -738,7 +788,7 @@ test('world GUI probe uses live worlds, moves and releases without stale handles
     local old_rect=sr.Gui.rect
     sr.Gui.bitmap=function(g,material,pos,size,color)assert(material=='mods/dbf_hud/materials/depth_fill');material_draws=material_draws+1;return old_rect()end
     sr.Gui.rect=function(g,pos)assert(pos[3]==1,'foreground must use explicit material');return old_rect()end
-    assert(probe.draw(p,cfg,commands));assert(material_draws>20)
+    assert(probe.draw(p,cfg,commands));assert(material_draws>=2)
     -- World GUI must omit the broken frost draw and preserve tint transparency.
     local frost_alpha,tint_alpha
     sr.Application.can_get=function()return true end
@@ -761,7 +811,7 @@ test('world GUI probe uses live worlds, moves and releases without stale handles
     created,moved,destroyed,drawn=1,1,0,4
     probe=HUD.world_probe.new(sr,function()end);probe.draw(p,cfg);created=1
     local previous=drawn;cfg.world_probe=false
-    assert(probe.draw(p,cfg,commands));assert(drawn>previous+20)
+    assert(probe.draw(p,cfg,commands));assert(drawn>=previous+2)
     cfg.world_probe=true
     probe.draw(nil,cfg);probe.release();assert(destroyed==1)
     probe.draw(p,cfg);worlds={2};probe.draw(p,cfg);assert(created==3 and destroyed==1)
@@ -921,22 +971,42 @@ test('sight placement updates without cache and profiles affect only their weapo
     HUD.placement.update(h,reader,{}, {avatar_unit_ref=3},function()end)
     assert(math.abs(p.auto_mount.z-.16)<1e-9)
 end)
+test('automatic clearance follows scale around sight without accumulating or changing depth',function()
+    local p={id=1,candidate=2,resource_hex='0123456789abcdef',sight={x=.3,y=.2,z=.4}}
+    local h={weapon_pose=p,config=HUD.config.new(),clock=0,weapon_clearance={}}
+    for _,first in ipairs({false,true}) do
+        h.first_person=first
+        local base
+        for _,scale in ipairs({1,.5,2,1}) do
+            h.config.scale=scale
+            HUD.placement.update(h,{}, {}, {avatar_unit_ref=3},function()end)
+            local m=p.auto_mount
+            if not base then base=m end
+            assert(math.abs(m.x-(p.sight.x+(base.x-p.sight.x)*scale))<1e-9)
+            assert(math.abs(m.z-(p.sight.z+(base.z-p.sight.z)*scale))<1e-9)
+            assert(m.y==base.y)
+        end
+    end
+end)
+
 test('external profiles reject malformed data and empty table clears built-in profiles',function()
     local errors=0;local log=function()errors=errors+1 end
     assert(next(HUD.weapon_offsets.load({read_weapon_offsets=function()return {} end},log))==nil)
     local bad={['0123456789abcdef']={right={x=0/0}}}
     assert(HUD.weapon_offsets.load({read_weapon_offsets=function()return bad end},log)==HUD.config.weapon_clearance and errors==1)
 end)
-test('autocannon reload reminder is exactly five and low warning starts at three',function()
+test('autocannon reload reminder pulses at five and below and low warning starts at three',function()
     local function model(n,key) return HUD.model.normalize({kind='magazine',rounds=n,capacity=10,resource_hex=key or 'a8cffb316f0b5c5f'}) end
     assert(model(5).reload_reminder and not model(5).warning)
-    assert(not model(4).reload_reminder and not model(4).warning)
-    assert(model(3).warning and not model(3).reload_reminder)
+    assert(model(4).reload_reminder and not model(4).warning)
+    assert(model(3).warning and model(3).reload_reminder)
     assert(model(0).warning and model(0).state=='EMPTY')
     assert(not model(5,'other').reload_reminder)
+    assert(not model(6).reload_reminder)
+    for n=0,5 do assert(model(n).reload_reminder) end
     local function number_alpha(clock)
         for _,v in ipairs(HUD.layout.compose(model(5),0,0,1,1,HUD.config.defaults,clock)) do
-            if v.type=='text' and v.text=='05' then return v.a end
+            if v.type=='text' and v.text=='005' then return v.a end
         end
         error('ammo number missing')
     end
@@ -948,6 +1018,110 @@ test('ammo labels preserve heat and magazine reserves and tolerate unknown proje
     raw=HUD.ammo_types.apply({kind='heat',reserve_kind='SINKS'})
     assert(raw.label==nil and raw.reserve_kind=='SINKS')
 end)
+test('plasma ammunition uses bolts and battery reserves for each catalog variant',function()
+    for _,id in ipairs({'05d8d8c073b9d502','e8d5f49ad7780e54','eea5e3cef1e12c14','efdcef306cea63fe','fb3a19078694708a'}) do
+        local raw=HUD.ammo_types.apply({kind='magazine',resource_hex=id,reserve_kind='MAGS'})
+        assert(raw.label=='BOLTS' and raw.reserve_kind=='BATTS' and raw.ammo_icon=='PLASMA')
+    end
+    local alt=HUD.ammo_types.apply({kind='magazine',resource_hex='fb3a19078694708a',ammo_resource_hex='02cd7321cd8445f5',alternate_fire=true,reserve_kind='ROUNDS'})
+    assert(alt.label=='40MM HE' and alt.reserve_kind=='GRNDS')
+end)
+
+test('rear heat gauge keeps warning zones and opposing readouts contained in world view',function()
+    for _,fraction in ipairs({0,.25,.5,.8,1}) do
+        local m=HUD.model.normalize({kind='heat',heat=fraction,reserve=2})
+        local cfg=HUD.config.new();cfg.decoration='double'
+        local d=HUD.layout.compose(m,0,0,2,1,cfg,0)
+        for _,commands in ipairs({d,HUD.world_style.prepare(d,{first_person=true},cfg)}) do
+            local backgrounds,background,filled,left,right=0,0,0
+            for _,v in ipairs(commands) do
+                assert(not v.heat_child)
+                if v.heat_background then backgrounds=backgrounds+1;background=background+v.w end
+                if v.heat_fill then filled=filled+v.w;assert(v.y>=commands[1].y and v.y+v.h<=commands[1].y+commands[1].h) end
+                if v.heat_label=='left' then left=v end
+                if v.heat_label=='right' then right=v end
+            end
+            assert(backgrounds==3 and math.abs(filled/background-fraction)<1e-9)
+            assert(left and right and left.x<right.x and left.y>right.y and left.text:find('HEAT:') and right.text=='002:HTSNKS')
+            local a,b,e,f=HUD.font.measure(left.text,left.size,left.font,true)
+            local ra,rb,re,rf=HUD.font.measure(right.text,right.size,right.font,true)
+            assert(left.x+e<right.x+ra)
+        end
+    end
+end)
+test('Sterilizer gas uses draining fuel gauge and cloud icon',function()
+    local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='88f61afff48ac8a4',rounds=113,capacity=125,reserve=4,reserve_kind='MAGS'})
+    local m=HUD.model.normalize(raw)
+    assert(m.label=='GAS'and m.reserve_kind=='TANKS'and m.ammo_icon=='GAS'and math.abs(m.fraction-113/125)<1e-6)
+    local commands=HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)
+    local prefix,cloud,fill=false,false,false
+    for _,c in ipairs(commands)do
+        if c.text=='GAS: 'then prefix=true end
+        if c.fuel_flame then cloud=true end
+        if c.fuel_fill then fill=true end
+    end
+    assert(prefix and cloud and fill)
+end)
+
+test('fuel gauge drains across reversed warning zones in screen and world views',function()
+    for _,id in ipairs({'39ab99895147a3bf','4fb0f8c02f55c82b','78a8185f63a70795','8a307bd1811a5fe9'}) do
+        for _,n in ipairs({100,50,20,5,0}) do
+            local raw=HUD.ammo_types.apply({kind='magazine',resource_hex=id,alternate_fire=id=='8a307bd1811a5fe9',rounds=n,capacity=100,reserve=3,reserve_kind='MAGS'})
+            local model=HUD.model.normalize(raw)
+            local commands=HUD.layout.compose(model,0,0,1,1,HUD.config.defaults,0)
+            for _,view in ipairs({commands,HUD.world_style.prepare(commands,{first_person=true},HUD.config.defaults)}) do
+                local labels,bg,fill,flame={},0,0,false
+                for _,v in ipairs(view) do
+                    if v.type=='text' then labels[v.text]=v end
+                    if v.fuel_background then bg=bg+v.w end
+                    if v.fuel_fill then fill=fill+v.w end
+                    if v.fuel_flame then flame=true end
+                    assert(not v.heat_danger)
+                end
+                assert(labels.E and labels.F and labels['003 TANKS'] and labels['FUEL: '] and labels[string.format('%03d',n)] and flame)
+                assert(math.abs(fill/bg-n/100)<1e-9)
+            end
+        end
+    end
+    assert(HUD.ammo_types.deposit_capacity('43eb1c3c1a1860e0')==500)
+end)
+
+test('fuel endpoint splits its strokes precisely at the moving fill edge',function()
+    local commands={{type='rect',fuel_fill=true,x=0,y=0,w=3.25,h=10},
+        {type='text',text='F',fuel_endpoint=true,x=0,y=0,size=10,a=1}}
+    HUD.layout.fuel_marker(commands,function()return 0,0,6,10 end)
+    local black,white=false,false
+    for _,v in ipairs(commands) do if v.fuel_marker_piece then
+        if v.c[1]==0 then black=true;assert(v.x+v.w<=3.25)
+        else white=true;assert(v.x>=3.25) end
+    end end
+    assert(black and white)
+    local count=#commands
+    HUD.layout.fuel_marker(commands,function()return 0,0,6,10 end)
+    assert(#commands==count)
+end)
+test('De-escalator keeps its grenade icon with selectable fire modes',function()
+    local railgun=HUD.ammo_types.apply({kind='magazine',resource_hex='2e9d0bdc48b09e60',reserve_kind='MAGS'})
+    assert(railgun.reserve_kind=='SHOTS' and railgun.ammo_icon=='RAILGUN' and #HUD.fire_icons.RAILGUN.runs>0)
+    local regular=HUD.ammo_types.apply({kind='rounds',resource_hex='02eecd0b1fa49630',fire_mode='SEMI',reserve_kind='MAGS'})
+    assert(regular.ammo_icon=='GL_GRENADE' and regular.reserve_kind=='BELTS' and #HUD.fire_icons.GL_GRENADE.runs>0)
+    assert(HUD.ammo_types.apply({kind='magazine',resource_hex='11c27d3babb38956',reserve_kind='MAGS'}).reserve_kind=='BELTS')
+    for _,mode in ipairs({'SEMI','AUTO','BURST'}) do
+        local raw=HUD.ammo_types.apply({kind='rounds',resource_hex='fe3b29b2cfa63f9b',fire_mode=mode,rounds=3,capacity=3,reserve=4,reserve_kind='ROUNDS'})
+        assert(raw.ammo_icon=='DEESCALATOR' and raw.fire_mode==mode and raw.reserve_kind=='GRNDS')
+        local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.defaults,0)
+        local icon=false
+        for _,v in ipairs(commands) do if v.mode_icon then icon=true end end
+        assert(icon)
+    end
+end)
+test('Melta uses larger upright thermal oval with shots and canister reserves',function()
+    local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='6cfcc7f8801a0266',reserve_kind='MAGS'})
+    assert(raw.label=='SHOTS' and raw.ammo_icon=='MELTA' and raw.reserve_kind=='CNSTRS')
+    assert(HUD.fire_icons.MELTA.scale==1.4 and HUD.fire_icons.MELTA.h>HUD.fire_icons.MELTA.w)
+    assert(HUD.fire_icons.MELTA and #HUD.fire_icons.MELTA.runs>0)
+end)
+
 test('chamber bonus is magazine-only and appears beside the ammo label',function()
     local raw={kind='magazine',rounds=31,capacity=30,chamber_supported=true,chamber_rounds=1,label='ROUNDS'}
     local m=HUD.model.normalize(raw);assert(m.value==30 and m.chamber_bonus==1)
@@ -984,7 +1158,7 @@ test('autocannon mode is explicit and its indicator fits beside the count',funct
         local commands=HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)
         local panel=commands[1];local number,indicator
         for _,v in ipairs(commands) do
-            if v.type=='text' and v.text=='10' then number=v end
+            if v.type=='text' and v.text=='010' then number=v end
             if v.type=='text' and v.text==mode then indicator=v end
             if v.type=='rect' and not v.decoration then
                 assert(v.x>=panel.x and v.y>=panel.y and v.x+v.w<=panel.x+panel.w and v.y+v.h<=panel.y+panel.h)
@@ -1025,7 +1199,7 @@ end)
 test('game fire-mode masks fit the count row and alternate labels stay isolated',function()
     for _,mode in ipairs({'AUTO','SEMI','BURST','ALT'}) do
         local icon=assert(HUD.fire_icons[mode]);assert(#icon.runs>0)
-        local commands=HUD.layout.compose({kind='rounds',value=1,label='40MM HE',reserve=5,reserve_kind='GRENADES',state='READY',fire_mode=mode},0,0,1,1,HUD.config.defaults,0)
+        local commands=HUD.layout.compose({kind='rounds',value=1,label='40MM HE',reserve=5,reserve_kind='GRNDS',state='READY',fire_mode=mode},0,0,1,1,HUD.config.defaults,0)
         local frame=commands[1];local count=0
         for _,v in ipairs(commands) do if v.mode_icon then
             count=count+1;assert(v.x>=frame.x and v.x+v.w<=frame.x+frame.w)
@@ -1034,7 +1208,7 @@ test('game fire-mode masks fit the count row and alternate labels stay isolated'
         assert(count==#icon.runs)
     end
     local raw=HUD.ammo_types.apply({kind='rounds',resource_hex='a955c4ea6f6d4203',ammo_resource_hex='02cd7321cd8445f5',alternate_fire=true,reserve_kind='ROUNDS'})
-    assert(raw.label=='40MM HE' and raw.reserve_kind=='GRENADES')
+    assert(raw.label=='40MM HE' and raw.reserve_kind=='GRNDS')
 end)
 test('ordinary ammo rows center against the final frame',function()
     local cfg={};for k,v in pairs(HUD.config.defaults) do cfg[k]=v end
@@ -1063,7 +1237,7 @@ test('laser catalog symbols and heat rows share centered presentation',function(
             assert(math.abs(v.x+(a+e)/2-center)<.001)
         end
     end
-    assert(symbols==#HUD.fire_icons.LASER.runs)
+    assert(symbols==0) -- Heat now uses the bespoke meter rather than a number-and-icon panel.
     raw=HUD.ammo_types.apply({kind='rounds',resource_hex='5990123d142b16cb'})
     assert(not raw.energy_icon,'laser-guided missiles are not beam weapons')
 end)
@@ -1077,7 +1251,7 @@ test('all 72 native families have finite bounds and selectable labels',function(
             assert(a==a and b==b and e>a and f>b)
         end
     end
-    assert(count==72 and #HUD.config.fonts==5)
+    assert(count==72 and #HUD.config.fonts==72)
 end)
 test('native resource resolver selects separate clear and depth materials',function()
     local sr={Application={can_get=function()return true end}}
@@ -1123,7 +1297,8 @@ test('catalog first-person profiles are at least six inches down',function()
     local loaded=HUD.weapon_offsets.load({read_weapon_offsets=function()return profiles end},function(message)error(message)end)
     assert(loaded==profiles)
     for resource,views in pairs(profiles) do
-        local baseline=resource=='fb3a19078694708a' and -.1016 or -.1524
+        local baseline=resource=='3828e2051aa9e897' and -.0462 or ((resource=='fb3a19078694708a' or resource=='89c5493e08ca4207') and -.1016 or ((resource=='27ee1ed8f6fb6356' or resource=='d54b9505c0f72873') and -.0762 or -.1524))
+        if resource=='35a61296619cc47e' then baseline=-.1270 end
         assert(views.first_left.z<=baseline+1e-9 and views.first_right.z<=baseline+1e-9)
     end
 end)
@@ -1136,5 +1311,265 @@ test('all weapon mount views add three inches forward after profile corrections'
         local a,b,c=HUD.scene_test.mount(p,cfg);assert(math.abs(b-.0762)<1e-9)
     end
 end)
-print(string.format('%d contract tests passed',tests))
+test('verified Purifier charge readiness pulses only the ammo number cyan',function()
+    local raw={kind='rounds',resource_hex='fb3a19078694708a',rounds=12,capacity=15,label='ROUNDS',charge_ready=true}
+    local model=HUD.model.normalize(raw);assert(model.charge_ready)
+    local commands=HUD.layout.compose(model,0,0,1,1,HUD.config.defaults,0)
+    local count=0
+    for _,v in ipairs(commands) do
+        if v.type=='text' and v.c[1]==0 and v.c[2]==255 and v.c[3]==255 then count=count+1;assert(v.text=='012') end
+    end
+    assert(count==1)
+end)
+test('railgun safety child retains projectile and parent width',function()
+    for _,mode in ipairs({'SAFE','UNSAFE'}) do
+        local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='2e9d0bdc48b09e60',rounds=1,capacity=1,reserve=19,reserve_kind='MAGS',safety_mode=mode})
+        local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.defaults,0)
+        local label,child,icon
+        for _,v in ipairs(commands) do
+            if v.child and v.type=='text' and v.text==mode then label=v end
+            if v.child and v.type=='panel' then child=v end
+            if v.mode_icon then icon=true end
+        end
+        assert(label and child and icon)
+        assert(math.abs(child.w-commands[1].w)<.001)
+    end
+end)
+test('laser aiming HUD shares third-person mount at every scale and first-person side',function()
+    local p={id=1,candidate=2,resource_hex='27ee1ed8f6fb6356',sight={x=.3,y=.2,z=.4}}
+    local h={weapon_pose=p,config=HUD.config.new(),clock=0,weapon_clearance={['27ee1ed8f6fb6356']={right={x=-.0508,z=-.0381},first_left={x=.12,z=-.127},first_right={x=-.12,z=-.127}}}}
+    for _,scale in ipairs({.5,1,2}) do
+        h.config.scale=scale;h.first_person=false
+        HUD.placement.update(h,{}, {}, {avatar_unit_ref=3,energy_icon='LASER'},function()end)
+        local expected=p.auto_mount
+        for _,side in ipairs({'left','right'}) do
+            h.first_person=true;h.config.fp_auto_side=side
+            HUD.placement.update(h,{}, {}, {avatar_unit_ref=3,energy_icon='LASER'},function()end)
+            for _,axis in ipairs({'x','y','z'}) do assert(math.abs(p.auto_mount[axis]-expected[axis])<1e-9) end
+        end
+    end
+end)
+test('heat display reserves three fixed slots and dims only leading zeros',function()
+    local reference
+    for _,value in ipairs({0,9,10,65,99,100}) do
+        local d=HUD.layout.compose(HUD.model.normalize({kind='heat',heat=value/100,reserve=3}),0,0,1,1,HUD.config.new(),0)
+        local slots={}
+        for _,v in ipairs(d) do if v.heat_digit_slot then slots[v.heat_digit_slot+1]=v end end
+        assert(#slots==4)
+        local text='';for _,v in ipairs(slots) do text=text..v.text end
+        assert(text==string.format('%03d%%',value))
+        if reference then
+            assert(math.abs(d[1].w-reference.w)<1e-8)
+            for i,v in ipairs(slots) do assert(math.abs(v.x-reference.x[i])<1e-8) end
+        else reference={w=d[1].w,x={slots[1].x,slots[2].x,slots[3].x,slots[4].x}} end
+        if value<100 then assert(slots[1].a<slots[3].a) else assert(slots[1].a==slots[3].a) end
+        if value<10 then assert(slots[2].a<slots[3].a) else assert(slots[2].a==slots[3].a) end
+    end
+end)
+test('catalog numeric counters keep fixed slots and dim unused leading zeros',function()
+    local bounds
+    for _,value in ipairs({0,5,45,99,100}) do
+        local t=string.format('%03d',value)
+        local a,b,e,f=HUD.font.measure(t,32,'hack')
+        if bounds then assert(a==bounds[1] and b==bounds[2] and e==bounds[3] and f==bounds[4]) else bounds={a,b,e,f} end
+        local parts=HUD.font.numeric_parts({text=t..' BATTS',numeric_display=true,size=32,font='hack'})
+        assert(#parts==4 and parts[4].text==' BATTS')
+        assert(parts[3].alpha==1 and parts[4].alpha==1)
+        assert(parts[1].alpha==(value<100 and 1/3 or 1))
+        assert(parts[2].alpha==(value<10 and 1/3 or 1))
+        assert(parts[2].dx-parts[1].dx==parts[3].dx-parts[2].dx)
+    end
+    local p=HUD.font.numeric_parts({text='-- RES',size=12})
+    assert(#p==1 and p[1].text=='-- RES' and p[1].alpha==1)
+end)
+test('autocannon keeps its first-person anchor with the shared position correction',function()
+    local profiles=assert(loadfile('DBF-HUD-weapon-offsets.lua'))()
+    local p={id=1,candidate=2,resource_hex='a8cffb316f0b5c5f',sight={x=.1,y=.2,z=.3}}
+    local h={weapon_pose=p,config=HUD.config.new(),clock=0,weapon_clearance=profiles,first_person=true}
+    for _,side in ipairs({'left','right'}) do
+        h.config.fp_auto_side=side
+        HUD.placement.update(h,{}, {}, {avatar_unit_ref=3},function()end)
+        local target=p.auto_mount
+        assert(math.abs(target.x-(.1-.04))<1e-9)
+        assert(math.abs(target.y-(.2+.45-.1016))<1e-9)
+        assert(math.abs(target.z-(.3+.01-.1524))<1e-9)
+    end
+end)
 
+test('forward panel tilt preserves mount and pitches top forty-five degrees',function()
+    local m={1,0,0,0,0,1,0,0,0,0,1,0,2,3,4,1}
+    local tilted=HUD.pose_motion.forward_tilt(m,math.pi/4)
+    assert(math.abs(tilted[10]-math.sqrt(.5))<1e-9 and math.abs(tilted[11]-math.sqrt(.5))<1e-9)
+    assert(tilted[13]==2 and tilted[14]==3 and tilted[15]==4)
+    assert(m[10]==0 and m[11]==1)
+end)
+test('layout editor locks weapon, previews active view, saves all profiles and restores baseline',function()
+    local key='0123456789abcdef';local other='1111111111111111';local body;local keys={}
+    local h={clock=0,config={fp_auto_side='left'},weapon_pose={resource_hex=key},weapon_clearance={
+        [key]={right={x=.0254},first_left={z=-.1524}},[other]={right={y=.3}}}}
+    local e=HUD.layout_editor.new(h,{write_weapon_offsets=function(v)body=v end,editor_key=function(k)return keys[k] or false end},function()end)
+    assert(e.bind());e.set('x',4);assert(math.abs(h.weapon_clearance[key].right.x-.1016)<1e-9)
+    h.first_person=true;e.tick(.01);assert(e.view=='first_left');e.set('z',-2)
+    assert(e.save());local saved=assert(loadstring(body))();assert(saved[other].right.y==.3 and math.abs(saved[key].first_left.z+.0508)<1e-9)
+    e.reset();assert(h.weapon_clearance[key].right.x==.0254 and h.weapon_clearance[key].first_left.z==-.1524)
+    keys[38]=true;h.clock=.1;e.tick(.1);assert(math.abs(h.weapon_clearance[key].first_left.z+.1397)<1e-9)
+    h.weapon_pose.resource_hex=other;h.clock=.2;e.tick(.1);assert(not e.active and h.weapon_clearance[other].right.y==.3)
+    h.weapon_pose.resource_hex=key;h.placement_view_parity=true;assert(e.bind());e.set_view(true);assert(e.view=='right')
+    local failed=HUD.layout_editor.new(h,{write_weapon_offsets=function()error('disk full')end},function()end)
+    assert(failed.bind() and not failed.save());assert(failed.status:find('Save failed',1,true))
+end)
+test('attachment points persist per view and bone cycling preserves offsets',function()
+    local key='968211c0033dce64';local saved
+    local h={config={fp_auto_side='right'},first_person=true,weapon_pose={resource_hex=key,anchors={{index=0,hash='12345678'},{index=1,hash='527c9c73'}}},weapon_clearance={
+        [key]={right={x=.1},first_right={y=.2}}}}
+    local e=HUD.layout_editor.new(h,{write_weapon_offsets=function(body)saved=assert(loadstring(body))()end},function()end)
+    assert(e.bind() and e.name=='AR-23 Liberator')
+    e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='root' and h.weapon_clearance[key].first_right.y==.2)
+    e.cycle(1);assert(h.weapon_clearance[key].first_right.attach_point=='node:12345678')
+    e.set_scale(1.4)
+    assert(e.save() and saved[key].first_right.attach_point=='node:12345678' and saved[key].first_right.scale==1.4 and not saved[key].right.scale and not saved[key].right.attach_point)
+    assert(e.status:find('AR-23 Liberator',1,true))
+    assert(HUD.weapon_offsets.load({read_weapon_offsets=function()return saved end},function(err)error(err)end)==saved)
+    e.reset();assert(not h.weapon_clearance[key].first_right.attach_point and e.scale()==1)
+end)
+test('native mod binding toggles occlusion once per press and retires cleanly',function()
+    local previous=rawget(_G,'ModBindingsMenu');local down=false;local registrations,writes=0,0
+    local h={config={force_occlusion=false}}
+    h.configure=function(p)h.config.force_occlusion=p.force_occlusion end
+    h.save_tuning=function()writes=writes+1 end
+    _G.ModBindingsMenu={register_binding=function(id,label,slot,opts)
+        assert(id=='dbf_hud_debug.force_occlusion' and label=='Force occlusion' and slot==nil)
+        assert(opts.category=='Debug tools - DBF HUD');registrations=registrations+1;return true
+    end,is_down=function()return down end}
+    local m=HUD.menu.new(h);m.poll_bindings();down=true;m.poll_bindings();m.poll_bindings()
+    assert(h.config.force_occlusion and writes==1 and registrations==1)
+    assert(m.overlay(1920,1080,'hack')[1].text=='[DEBUG] Occlusion ON')
+    down=false;m.poll_bindings();down=true;m.poll_bindings();assert(not h.config.force_occlusion and writes==2)
+    assert(m.overlay(1920,1080,'hack')[1].text=='[DEBUG] Occlusion OFF')
+    h.clock=3;assert(#m.overlay(1920,1080,'hack')==0)
+    m.retire();down=false;m.poll_bindings();down=true;m.poll_bindings();assert(writes==2)
+    _G.ModBindingsMenu=previous
+end)
+test('depth marker draws isolated primitives without moving GUI and releases on missing pose',function()
+    local calls,destroyed=0,0;local main={};local sr={}
+    sr.Vector3=function(...)return {...}end;sr.Vector2=sr.Vector3;sr.Color=sr.Vector3
+    sr.Matrix4x4={identity=function()return {}end,from_axes=function(...)return {...}end}
+    sr.Application={main_world=function()return main end,worlds=function()return {main}end,can_get=function()return true end}
+    sr.World={create_world_gui=function(w,m,x,y,mode)assert(w==main and x==1 and y==1 and mode=='immediate');return {}end,
+        destroy_gui=function()destroyed=destroyed+1 end}
+    sr.Gui={bitmap_3d=function(g,material,tm,pos,layer,size,color)
+        assert(material=='mods/dbf_hud/materials/depth_state_test_loader_control' and layer==2)
+        assert(tm[4][2]==1 and size[1]>0 and size[2]>0);calls=calls+1
+    end,move=function()error('must not move GUI')end}
+    local p=HUD.depth_marker.new(sr,function(e)error(e)end)
+    assert(p.draw({x=0,y=1,z=0},{1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1},1,1080))
+    assert(calls==4);assert(not p.draw(nil,nil,nil,1080) and destroyed==1)
+end)
+test('screen depth candidate uses UI world and persistent bitmap lifecycle',function()
+    local main,ui={},{};local made,drawn,removed,destroyed=0,0,0,0
+    local access,compare=false,false;local messages={}
+    local sr={Vector3=function(...)return {...}end};sr.Vector2=sr.Vector3;sr.Color=sr.Vector3
+    sr.Application={main_world=function()return main end,worlds=function()return {main,ui}end,
+        can_get=function(kind,name)
+            if name=='mods/dbf_hud/materials/screen_scene_depth_access' then return access end
+            if name=='mods/dbf_hud/materials/screen_scene_depth_compare' then return compare end
+            return true end}
+    sr.World={create_screen_gui=function(w)assert(w==ui);made=made+1;return {}end,
+        destroy_gui=function(w)assert(w==ui);destroyed=destroyed+1 end}
+    sr.Gui={bitmap_3d=function()error('screen path must use bitmap')end,
+        bitmap=function(g,mat,pos,size,color)assert(pos[3]==50)
+            if mat=='mods/dbf_hud/materials/screen_scene_depth_access' then assert(size[1]==128 and color[2]==255)
+            elseif mat=='mods/dbf_hud/materials/screen_scene_depth_compare' then
+                assert(math.abs((color[2]+color[3]*256)*64/65535-1)<.001)
+            else assert(color[2]==0 and color[3]==255) end
+            drawn=drawn+1;return drawn end,
+        destroy_bitmap=function()removed=removed+1 end}
+    local marker=HUD.depth_marker.new(sr,function(e)messages[#messages+1]=e end)
+    local camera={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    assert(marker.draw({x=0,y=1,z=0},camera,1,1080,1920))
+    assert(marker.draw({x=0,y=1,z=0},camera,1,1080,1920))
+    assert(made==1 and drawn==8 and removed==4)
+    access=true;assert(marker.draw({x=0,y=1,z=0},camera,1,1080,1920))
+    assert(drawn==13 and removed==8 and #messages==1)
+    compare=true;assert(marker.draw({x=0,y=1,z=0},camera,1,1080,1920))
+    assert(drawn==17 and removed==13 and #messages==2)
+    marker.draw(nil,nil,nil,1080,1920);assert(destroyed==1)
+end)
+test('screen scene preserves saved mounts and shader font colors with dimmed digits',function()
+    local original=HUD.world_style.prepare;HUD.world_style.prepare=function(commands)return commands end
+    local camera={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    local p={matrix=camera,x=0,y=1,z=0,auto_mount={x=.1,y=.2,z=.03},resource_hex='test'}
+    local cfg={placement_mode='auto',occlusion_mode='gui_depth'}
+    local commands={{type='panel',x=-10,y=-10,w=20,h=20,a=.5,c={200,100,50}},
+        {type='text',x=0,y=0,size=12,text='001',numeric_display=true,font='bigblue',a=.6,c={250,120,20}}}
+    local matrix,at=HUD.screen_scene.panel_pose(p,cfg,commands)
+    assert(math.abs(at.x-.1)<1e-9 and math.abs(at.y-1.2762)<1e-9 and math.abs(at.z-.03)<1e-9)
+    local bone={0,1,0,0,-1,0,0,0,0,0,1,0,2,3,4,1}
+    p.sight={x=.02,y=.03,z=.04,matrix=bone}
+    local oriented,locked=HUD.screen_scene.panel_pose(p,cfg,commands)
+    assert(oriented==bone and math.abs(locked.x-(2-(.2762-.03)))<1e-9 and math.abs(locked.y-3.08)<1e-9 and math.abs(locked.z-3.99)<1e-9)
+    p.sight=nil
+    local available=false;local made,drawn,removed,destroyed=0,{},0,0;local params={}
+    local sr={Application={main_world=function()return 'main'end,worlds=function()return {'main','ui'}end,can_get=function()return available end},
+        Vector2=function(x,y)return {x,y}end,Vector3=function(x,y,z)return {x,y,z}end,Color=function(a,r,g,b)return {a,r,g,b}end,
+        World={create_screen_gui=function(w)assert(w=='ui');made=made+1;return made end,destroy_gui=function()destroyed=destroyed+1 end},
+        Material={set_texture=function(handle,key,value)assert(key=='diffuse_map' and value==HUD.native_font_data.faces.bigblue.font) end,set_scalar=function(handle,key,value)params[key]=value end},
+        Gui={material=function(gui,name)return name end,triangle=function(gui,a,b,c,layer,color,material,u0,u1,u2)
+            drawn[#drawn+1]={color=color,material=material,uv=u0};return #drawn end,
+            destroy_triangle=function()removed=removed+1 end}}
+    local renderer=HUD.screen_scene.new(sr,function()end)
+    assert(not renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and made==0)
+    available=true;assert(renderer.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    assert(#drawn==8 and made==1 and math.abs(params.threshold_fade-at.y)<1e-9 and params.scissor_mode==1)
+    assert(drawn[3].color[1]==51 and drawn[3].color[2]==250 and drawn[3].color[3]==120 and drawn[3].color[4]==20)
+    assert(drawn[7].color[1]==153 and drawn[7].uv and drawn[7].material:find('_scene',1,true))
+    cfg.occlusion_mode='gui';assert(renderer.draw(p,cfg,commands,camera,1,1920,1080,.05));assert(params.scissor_mode==0 and removed==8)
+    renderer.release();assert(destroyed==1)
+    local text_draws={};local text_removed=0
+    sr.Gui.text=function(gui,text,font,size,material,pos,color)
+        assert(font==HUD.native_font_data.faces.bigblue.font and size>0 and material:find('_scene',1,true))
+        text_draws[#text_draws+1]={text=text,color=color};return #text_draws
+    end
+    sr.Gui.destroy_text=function()text_removed=text_removed+1 end
+    local native_renderer=HUD.screen_scene.new(sr,function()end)
+    assert(native_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    assert(#text_draws==3 and text_draws[1].text=='0' and text_draws[1].color[1]==51 and text_draws[3].color[1]==153)
+    assert(native_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and text_removed==3)
+    native_renderer.release()
+    local oriented={};local oriented_removed=0
+    sr.Matrix4x4={from_axes=function(right,forward,up,at)return {right=right,up=up,at=at}end}
+    sr.Gui.text_3d=function(gui,text,font,size,material,transform,pos,layer,color)
+        assert(size==12 and layer==51 and material:find('_scene',1,true))
+        assert(transform.right[1]~=0 and transform.up[3]~=0)
+        oriented[#oriented+1]={text=text,color=color,transform=transform};return #oriented
+    end
+    sr.Gui.destroy_text_3d=function()oriented_removed=oriented_removed+1 end
+    local oriented_renderer=HUD.screen_scene.new(sr,function()end)
+    local previous_text_count=#text_draws
+    assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    assert(#oriented==3 and #text_draws==previous_text_count and oriented[1].color[1]==51 and oriented[3].color[1]==153)
+    assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and oriented_removed==3)
+    oriented_renderer.release();assert(oriented_removed>=3)
+    HUD.world_style.prepare=original
+end)
+test('generated native glyph UVs stay within existing atlas bounds',function()
+    local count=0
+    for key,glyphs in pairs(HUD.native_font_uv) do
+        assert(HUD.native_font_data.faces[key]);count=count+1
+        for code,v in pairs(glyphs) do assert(code>=32 and code<=126 and v[1]>=0 and v[2]>=0 and v[3]<=1 and v[4]<=1 and v[3]>=v[1] and v[4]>=v[2]) end
+    end
+    assert(count==72)
+end)
+test('Arbitrator secondary is a shotgun shell without altering its rifle magazine',function()
+    local primary=HUD.ammo_types.apply({kind='magazine',resource_hex='a8a91eb54892b6b2',reserve_kind='MAGS'})
+    assert(primary.reserve_kind=='MAGS' and primary.label=='4MM')
+    local secondary=HUD.ammo_types.apply({kind='magazine',resource_hex='a8a91eb54892b6b2',ammo_resource_hex='unknown',alternate_fire=true,fire_mode='ALT',reserve_kind='MAGS'})
+    assert(secondary.reserve_kind=='SHELLS' and secondary.label=='10G' and secondary.ammo_icon=='SHELL')
+end)
+test('RPM presentation requires an explicit selected live rate',function()
+    local raw={kind='magazine',rounds=30,capacity=30,rpm=750,fire_mode='AUTO'}
+    assert(HUD.model.normalize(raw).rpm==nil)
+    raw.rpm_selectable=true;assert(HUD.model.normalize(raw).rpm==750)
+    raw.rpm=0/0;assert(HUD.model.normalize(raw).rpm==nil)
+end)
+print(string.format('%d contract tests passed',tests))

@@ -29,6 +29,16 @@ function M.upright(m)
     local rx,ry=fy/n,-fx/n
     return {rx,ry,0,0,fx,fy,fz,0,ry*fz,-rx*fz,rx*fy-ry*fx,0,m[13],m[14],m[15],1}
 end
+-- Pitch the panel's top toward the weapon's forward axis.
+function M.forward_tilt(m,angle)
+    local result={};for i=1,16 do result[i]=m[i] end
+    local cosine,sine=math.cos(angle),math.sin(angle)
+    for i=0,2 do
+        result[5+i]=m[5+i]*cosine-m[9+i]*sine
+        result[9+i]=m[5+i]*sine+m[9+i]*cosine
+    end
+    return result
+end
 function M.step(s,m,x,y,z,key,dt,c)
     dt=type(dt)=='number' and dt==dt and dt>=0 and dt or 1/60
     local q=quaternion(m)

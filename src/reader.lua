@@ -5,6 +5,7 @@ local function valid(v,limit) return v>=0 and v<=limit end
 function M.new(backend)
     local r=Memory.new(backend);local base;local checked=false
     local self={status='starting'}
+    local rpm_cache
     local function global(name) return r.p(base+Layout[name]) end
     local function component(m,map,registry,id,record)
         local index=r.map(m+map,id,65536)
@@ -46,9 +47,15 @@ function M.new(backend)
                 local m=r.p(base+off);local i=component(m,0x20,0x38,id,rec)
                 if not i then return nil end
                 local c=r.i(r.read(r.p(m+0x50)+i*8,8),0)
-                if valid(c,5000) then return c end
+                if valid(c,5000) then
+                    local resource=string.format('%08x%08x',r.u(rec,4),r.u(rec,0))
+                    return c,HUD.ammo_types.deposit_capacity(resource)
+                end
             end)
-            if ok and v then return v end
+            if ok and v then
+                local resource=string.format('%08x%08x',r.u(rec,4),r.u(rec,0))
+                return v,HUD.ammo_types.deposit_capacity(resource)
+            end
         end
     end
     function self.validate()
@@ -185,11 +192,18 @@ function M.new(backend)
                     if valid(capacity,5000) and capacity>=1 then result.capacity=capacity end
                     -- A full replacement magazine reserves its chamber round before
                     -- the bolt animation completes. Observed runtime +8 clears on chambering.
-                    if mag and chambered and chamber==0 and result.capacity and
+                    if mag and chambered and chamber==0 and result.capacity and result.capacity>1 and
                         result.rounds==result.capacity-1 and rt:byte(9)==1 then
                         result.pending_chamber_round=1
                         result.rounds=result.rounds+1
                     end
+                end
+                -- Autocannon tube reload reserves the fifth clip round until chambering.
+                -- Live rounds runtime +16 is set during that stage and clears on chambering.
+                if not mag and result.resource_hex=='a8cffb316f0b5c5f' and chambered and
+                    chamber==0 and result.rounds==4 and rt:byte(17)==1 then
+                    result.pending_chamber_round=1
+                    result.rounds=result.rounds+1
                 end
                 local reserve=r.i(rt,0)
                 local reserve_max=cfg and r.u(cfg,mag and 0x94 or 0x50)
@@ -217,19 +231,19 @@ function M.new(backend)
         elseif flag(flags,0x400) then
             result.kind='resource'
             for _,off in ipairs(Layout.resource) do
-                local ok,count=pcall(function()
+                local ok,count,capacity=pcall(function()
                     local m=r.p(base+off);local i=component(m,0x20,0x38,wid,rec)
                     if not i then return nil end
                     local provider=r.u(r.read(r.p(m+0x48)+i*36,36),0)
                     return deposit(owner,provider)
                 end)
-                if ok and count then result.rounds=count;break end
+                if ok and count then result.rounds=count;result.capacity=capacity;break end
             end
             if not result.rounds then return nil,'resource provider unavailable' end
         else return nil,'unsupported ammo component' end
         do
             -- Optional mode metadata must not suppress otherwise valid ammunition.
-            local ok,mode,fire_mode=pcall(function()
+            local ok,mode,fire_mode,safety_mode=pcall(function()
                 assert(r.read(base+0x75673a,7)==string.char(0x4c,0x8b,0x15,0x9f,0x05,0xbd,0x02),'ammo control getter binding')
                 local manager=r.p(base+0x3326ce0)
                 local index=component(manager,0x30,0x48,main_wid,main_rec)
@@ -237,14 +251,69 @@ function M.new(backend)
                 local count=r.u(r.read(manager+0x20,4),0)
                 assert(count<=4096 and index<count,'ammo control bounds')
                 local controls=r.read(r.p(manager+0x60)+index*12,12)
+                result.binding.ammo_controls=controls
                 assert(r.read(main_address,24)==main_rec,'ammo control weapon changed')
                 local mode=result.resource_hex=='a8cffb316f0b5c5f' and HUD.ammo_types.autocannon_mode(r.u(controls,4)) or nil
+                if result.resource_hex=='9f80d67a12a7e40f' then mode=HUD.ammo_types.recoilless_mode(r.u(controls,4)) end
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
-                return mode,fire_mode
+                local safety_mode=result.resource_hex=='2e9d0bdc48b09e60' and ({[5]='SAFE',[6]='UNSAFE'})[r.u(controls,0)] or nil
+                return mode,fire_mode,safety_mode
             end)
-            if ok then result.ammo_mode=mode;result.fire_mode=fire_mode end
+            if ok then result.ammo_mode=mode;result.fire_mode=fire_mode;result.safety_mode=safety_mode end
+        end
+        do
+            local ok,rpm=pcall(function()
+                assert(r.read(base+0x617974,7)=='\072\139\029\093\237\208\002','RPM selector binding')
+                local manager=r.p(base+0x33266d8)
+                local count=r.u(r.read(manager+0x38,4),0)
+                assert(count>0 and count<=384,'RPM component bounds')
+                local entities=r.p(manager+0x68)
+                local index
+                if rpm_cache and rpm_cache.manager==manager and rpm_cache.index<count and
+                    r.p(entities+rpm_cache.index*8)==main_address then index=rpm_cache.index end
+                if not index then
+                    local pointers=r.read(entities,count*8)
+                    for i=0,count-1 do
+                        local ptr=r.u(pointers,i*8)+r.u(pointers,i*8+4)*2^32
+                        if ptr==main_address then index=i;break end
+                    end
+                end
+                if not index then return nil end
+                rpm_cache={manager=manager,index=index}
+                local data=r.read(r.p(manager+0x70)+index*0x20,0x20)
+                local selected=r.u(data,0x1c);assert(selected<3,'RPM selected index')
+                local enabled=0
+                for i=0,2 do local rate=r.f(data,0x10+i*4);assert(rate>=0 and rate<=10000,'RPM slot range');if rate>0 then enabled=enabled+1 end end
+                if enabled<2 then return nil end
+                local rate=r.f(data,0x10+selected*4)
+                assert(rate>0 and r.read(main_address,24)==main_rec,'RPM weapon changed')
+                assert(r.read(r.p(manager+0x70)+index*0x20+0x1c,4)==data:sub(29,32),'RPM selection changed')
+                return rate
+            end)
+            if ok and rpm then result.rpm=rpm;result.rpm_selectable=true end
+        end
+        if result.resource_hex=='2e9d0bdc48b09e60' then
+            local ok,charge=pcall(function()
+                -- Verified native getter: manager +0x40, 40-byte records, first float.
+                assert(r.read(base+0x745b85,14)==string.char(0x8b,0xc8,0x49,0x8b,0x43,0x40,0x48,0x8d,0x14,0x89,0xf3,0x0f,0x10,0x04),'charge getter binding')
+                local manager=r.p(base+0x3326c20)
+                local index=component(manager,0x20,0x38,main_wid,main_rec)
+                if not index then return nil end
+                local count=r.u(r.read(manager+0x10,4),0)
+                assert(count<=4096 and index<count,'charge component bounds')
+                local data=r.read(r.p(manager+0x40)+index*40,40)
+                local value=r.f(data,0)
+                assert(value>=0 and value<=10,'charge value range')
+                assert(r.read(main_address,24)==main_rec,'charge weapon changed')
+                return value
+            end)
+            if ok and charge then
+                result.charge_fraction=math.min(1,charge)
+                -- Provisional visual-test threshold, not a verified firing deadline.
+                result.charge_warning=charge>=.95
+            end
         end
         if control_address then assert(r.u(r.read(control_address,4),0)==active_mode,'fire mode changed during snapshot') end
         self.status='ok';return HUD.ammo_types.apply(result)

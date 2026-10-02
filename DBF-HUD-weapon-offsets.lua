@@ -8,10 +8,10 @@ return {
     ['be70ee0d8d44028e'] = { right = { x = -0.0508, z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- Halo SMG: six inches down in all views
     ['f0338468dcdb6a6c'] = { right = { x = -0.0254, z = -0.1524 }, first_left = { x = -0.0254, z = -0.1524 }, first_right = { x = -0.0254, z = -0.1524 } }, -- Sensor: one inch left, six down in all views
     ['e6d932be83729076'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- Deadeye: third-person six inches down; first-person six inches down
-    ['d54b9505c0f72873'] = { first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = -0.1892, z = -0.1524 } }, -- laser_cannon: first-person left override
+    ['d54b9505c0f72873'] = { right = { x = -0.0254, z = 0.0254 }, first_left = { x = 0.1524, z = -0.0762 }, first_right = { x = -0.0876, z = -0.0762 } }, -- Laser Cannon: gauge nearer the receiver, above the low first-person position
     ['3575aabc5f1f9326'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- automatic_pistol
     ['0b882808c6f498e8'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- caustic_dart_gun
-    ['416d053372c4e433'] = { right = { x = 0.0254, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- energy_revolver
+    ['416d053372c4e433'] = { right = { x = 0.0254, z = -0.1524 }, first_left = { x = 0.0508, y = -0.0762, z = -0.1524 }, first_right = { x = 0.0508, y = -0.0762, z = -0.1524 } }, -- Talon: first-person HUD three inches back
     ['3f92ba65ef65cca9'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- flamer_pistol
     ['52e4334e6a128caf'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- grenade_pistol
     ['e91f569c2ad8af01'] = { right = { x = 0.0762, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- hornet_pistol
@@ -34,13 +34,6 @@ return {
     ['9f80d67a12a7e40f'] = { -- Recoilless rifle
         right = { x = 0.1524 },
         first_right = { x = -0.24 }, -- Mirror the default +0.12 mount to -0.12 (left).
-    },
-    ['27ee1ed8f6fb6356'] = { -- Scythe
-        right = { x = 0.0762, y = 0.1270, z = -0.1524 },
-    },
-    ['a8cffb316f0b5c5f'] = { -- Autocannon
-        right = { x = 0.12, y = -0.08, z = 0.10 },
-        first_right = { x = -0.24 }, -- Keep first person on the left, like the recoilless.
     },
     ['968211c0033dce64'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- assault_rifle: third-person six inches down
     ['43cb1033961a2276'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- assault_rifle_ap: third-person six inches down
@@ -75,27 +68,27 @@ return {
     ['fb3a19078694708a'] = { right = { z = -0.1524, y = 0.127, x = 0.0508 }, first_left = { z = -0.1016, x = 0.1016, y = 0.127 }, first_right = { z = -0.1016, x = 0.1016, y = 0.127 }, left = { y = 0.127, x = 0.0508 } }, -- plasma_rifle_charge: third-person six inches down
     ['efdcef306cea63fe'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- plasma_rifle_charge: third-person six inches down
     ['30061f91af477f5e'] = { right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- sniper_rifle_helghast: third-person six inches down
-    ['006e44327bb953fe'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- pump_grenade_launcher
+    ['006e44327bb953fe'] = { left = { z = -0.1524 }, right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- pump_grenade_launcher
     ['02cd7321cd8445f5'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- Verified auxiliary grenade entity on the equipped rifle.
-    ['02eecd0b1fa49630'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- grenade_launcher
+    ['02eecd0b1fa49630'] = { left = { z = -0.1524 }, right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- grenade_launcher
     ['05d8d8c073b9d502'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- pump_shotgun_plasma
     ['07419ebc09a1a7c5'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- railgun
     ['076dd5d4f4360204'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- arc_shotgun
     ['0807aea5217e4767'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- personal_defense_weapon
-    ['11c27d3babb38956'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- machinegun
+    ['11c27d3babb38956'] = { right = { x = 0.0508, z = -0.0508 }, first_left = { x = 0.0762, z = -0.1778 }, first_right = { x = 0.0762, z = -0.1778 } }, -- machinegun: receiver-side clearance from exposed belt
     ['11ec8e2296a3d662'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- pump_shotgun_02
     ['16051937941bb709'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- smg_rhino
     ['186ea95de7306b1a'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- smg_solvent
-    ['2152d5147b0ac418'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- heavy_mg
+    ['2152d5147b0ac418'] = { right = { x = 0.0508, z = -0.0762 }, first_left = { x = 0.0508, z = -0.1778 }, first_right = { x = 0.0508, z = -0.1778 } }, -- heavy_mg
     ['2383b0439f0bc465'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- assault_rifle_rico
     ['25aa2fd4643cf4ee'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- faf_missile_launcher
     ['26df5aa208ce216e'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- railgun
     ['26e40437ea275296'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- air_burst_rocket_launcher
-    ['27ee1ed8f6fb6356'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- laser_rifle
+    ['27ee1ed8f6fb6356'] = { right = { x = -0.0508, z = -0.0381 }, first_left = { x = 0.12, z = -0.1270 }, first_right = { x = -0.12, z = -0.1270 } }, -- Scythe: first person centered beneath sight; third person beside receiver
     ['2b28e17ffed05f7c'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- triple_barrel_breakshotgun
     ['2e9d0bdc48b09e60'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- railgun
-    ['35a61296619cc47e'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- laser_pulse_cannon
-    ['3828e2051aa9e897'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- harpoon_gun
+    ['35a61296619cc47e'] = { right = { x = -0.0254, y = -0.0508, z = 0.0254 }, first_left = { x = 0.12, z = -0.1270 }, first_right = { x = -0.12, z = -0.1270 } }, -- Quasar: first-person gauge centered below the built-in display; third person nearer receiver
+    ['3828e2051aa9e897'] = { right = { x = -0.16, z = -0.0762 }, first_left = { x = 0.12, z = -0.0462 }, first_right = { x = -0.12, z = -0.0462 } }, -- Speargun: flat spear panel centered over weapon
     ['39ab99895147a3bf'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- flamethrower
     ['3c86e871923f3970'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- laser_shotgun
     ['41eac4a03987faa0'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- pump_shotgun
@@ -124,8 +117,8 @@ return {
     ['8039834a4b7489b9'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- assault_rifle_penetrator
     ['80932fa0ed6901d3'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- lat_oneshot
     ['8666e5f49f440d44'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- faf_missile_launcher
-    ['88c2d09ad85a7c9f'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- belt_fed_grenade_launcher
-    ['89c5493e08ca4207'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- sniper_rifle
+    ['88c2d09ad85a7c9f'] = { left = { z = -0.1524 }, right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- belt_fed_grenade_launcher
+    ['89c5493e08ca4207'] = { right = { y = -0.0508, z = -0.1016 }, first_left = { y = 0.0762, z = -0.1016 }, first_right = { y = 0.0762, z = -0.1016 } }, -- sniper_rifle
     ['8a307bd1811a5fe9'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- smg_flamer
     ['8a35c1dc19f41870'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- bolt_action_rifle
     ['90ddc374f4e3d756'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- shotgun_nacho
@@ -135,8 +128,8 @@ return {
     ['96de9cd50f7306e6'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- arc_thrower
     ['9b0a7b78126c2fec'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- missile_launcher
     ['9f80d67a12a7e40f'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- recoilless_rifle
-    ['a6a735accb4a327f'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- lmg_stalwart
-    ['a8cffb316f0b5c5f'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- automatic_cannon
+    ['a6a735accb4a327f'] = { right = { x = 0.0254, z = -0.1524 }, first_left = { x = 0.0254, z = -0.2540 }, first_right = { x = 0.0254, z = -0.2540 } }, -- lmg_stalwart: display beside the box magazine
+    ['a8cffb316f0b5c5f'] = { right = { x = -0.0508, y = -0.2032, z = -0.1016 }, first_left = { x = 0.08, y = -0.1016, z = -0.1524 }, first_right = { x = -0.16, y = -0.1016, z = -0.1524 } }, -- Autocannon: close to rear receiver with camera-specific first-person placement
     ['a9e574cd953d3b3a'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- faf_missile_helghast
     ['b16c9d490aa59b77'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- expendable_machinegun
     ['b2b5e0d185605f9e'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- expendable_napalm_launcher
@@ -146,7 +139,7 @@ return {
     ['c0a9ee8ce12f682a'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- railgun
     ['c12a34f375bd5a87'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- assault_shotgun_incendiary
     ['c4232a0e62166d91'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- personal_defense_weapon_pepper
-    ['c85f576d5e086147'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- laser_smg_blaster
+    ['c85f576d5e086147'] = { left = { x = 0.0508, z = -0.1524 }, right = { x = 0.0508, z = -0.1524 }, first_left = { x = 0.0508, z = -0.1524 }, first_right = { x = 0.0508, z = -0.1524 } }, -- Psi: all views six inches down, two inches right
     ['cc786f6491fe7e65'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- faf_missile_launcher_helghast
     ['cdf733b0106a23c3'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- assault_shotgun_incendiary
     ['d323de60855898ac'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- pump_shotgun_dragon
@@ -156,6 +149,6 @@ return {
     ['e8ffad77b73c221c'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- railgun
     ['f49227a0630a3f7f'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- crossbow_greyfax
     ['f992ce97577c8a7f'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- volley_gun
-    ['fe3b29b2cfa63f9b'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- grenade_launcher_tactical
+    ['fe3b29b2cfa63f9b'] = { left = { z = -0.1524 }, right = { z = -0.1524 }, first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- grenade_launcher_tactical
     ['ffc18b2ce10ca381'] = { first_left = { z = -0.1524 }, first_right = { z = -0.1524 } }, -- battle_rifle
 }

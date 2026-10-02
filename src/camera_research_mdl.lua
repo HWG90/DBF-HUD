@@ -25,6 +25,22 @@ return {
   next_poll=next_poll-(dt or 0);if next_poll>0 then return end;next_poll=1
   local hud=rawget(_G,'DBFHUD');if not hud or not hud.config or not hud.config.debug_logging then return end
   local label=backend.camera_request();if not label then return end
+  if label:match('^railgun_charge_candidate_') then
+   local ok,err=pcall(function()
+    local raw=assert(reader.poll(),reader.status);assert(raw.resource_hex=='2e9d0bdc48b09e60','railgun required')
+    local r=HUD.memory.new(backend);local record=r.read(raw.binding.record,24)
+    local manager=r.p(raw.binding.module_base+0x3326c20)
+    local index=assert(r.map(manager+0x20,raw.id,4096));assert(index<64)
+    assert(r.read(r.p(r.p(manager+0x38)+index*8),24)==record,'charge candidate owner')
+    file:write(string.format('CHARGE_CANDIDATE weapon=%s id=%d index=%d\n',raw.resource_hex,raw.id,index))
+    for _,off in ipairs({0x40,0x48,0x68}) do
+     local data=r.read(r.p(manager+off),256)
+     file:write(string.format('CHARGE_ARRAY offset=%X hex=%s\n',off,data:gsub('.',function(ch)return string.format('%02X',ch:byte())end)))
+    end
+    assert(r.read(raw.binding.record,24)==record,'charge candidate changed weapon')
+   end)
+   file:write('CAMERA_CAPTURE '..(ok and 'complete' or 'failure')..' label='..label..(ok and '' or ' '..tostring(err))..'\n');file:flush();return
+  end
   if label:match('^ammo_driver_') then
    local ok,err=pcall(function()
     local raw=assert(reader.poll(),reader.status);local r=HUD.memory.new(backend)
@@ -53,7 +69,7 @@ return {
    end)
    file:write('CAMERA_CAPTURE '..(ok and 'complete' or 'failure')..' label='..label..(ok and '' or ' '..tostring(err))..'\n');file:flush();return
   end
-  local ammo_page=label:match('^ammo_code_page_(%d+)$') or label:match('^ammo_alias_page_(%d+)$')
+  local ammo_page=label:match('^railgun_charge_code_(%d+)$') or label:match('^ammo_code_page_(%d+)$') or label:match('^ammo_alias_page_(%d+)$')
   if ammo_page then
    local ok,err=pcall(function()
     reader.validate();local r=HUD.memory.new(backend);local base=assert(backend.module('game.dll'))
@@ -65,7 +81,7 @@ return {
       local displacement=r.u(data,at)
       if displacement>=0x80000000 then displacement=displacement-0x100000000 end
       local target=offset+at+4+displacement
-      if target==0x3326B28 or target==0x3326B98 or
+      if (label:match('^railgun_charge_code_') and target==0x3326C20) or target==0x3326B28 or target==0x3326B98 or
        (label:match('^ammo_alias_page_') and (target==0x3326640 or target==0x3326698 or target==0x3326730 or
         target==0x3326940 or target==0x3326A68 or target==0x3326AC0 or target==0x3326BE8)) then match=true;break end
      end

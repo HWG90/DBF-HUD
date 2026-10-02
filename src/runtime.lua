@@ -30,6 +30,32 @@ function M.start(sr,backend,options)
     end
     local world_probe=HUD.world_probe.new(sr,research_log)
     local world_display=HUD.scene_test.new(sr,research_log)
+    local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log)
+    self.screen_scene_hud=true -- Auto-migrate only when the new shader package is available.
+    local bone_marker=HUD.world_probe.new(sr,research_log,true)
+    local bone_marker_position
+    local depth_marker=HUD.depth_marker and HUD.depth_marker.new(sr,log)
+    self.bone_marker_enabled=false -- Tracking diagnostics disabled; not saved in tuning.
+    self.screen_bone_hud=options and options.screen_bone_hud==true -- Trial, opt-in by adapter.
+    function self.set_bone_marker(enabled)
+        self.bone_marker_enabled=enabled==true
+        if not self.bone_marker_enabled then bone_marker.release() end
+    end
+    local function draw_bone_marker(dt)
+        bone_marker_position=nil
+        local p=self.weapon_pose
+        if not self.bone_marker_enabled or not p then bone_marker.release();return end
+        local m=p.matrix
+        local anchor=p.attach_point=='root' and {x=0,y=0,z=0} or p.sight
+        if not anchor then bone_marker.release();return end
+        local x,y,z=anchor.x,anchor.y,anchor.z
+        local marker={matrix=m,x=p.x+m[1]*x+m[5]*y+m[9]*z,
+            y=p.y+m[2]*x+m[6]*y+m[10]*z,z=p.z+m[3]*x+m[7]*y+m[11]*z,
+            id=p.id,candidate='bone diagnostic',gui_pose=true}
+        bone_marker_position={x=marker.x,y=marker.y,z=marker.z}
+        -- Keep the sampled anchor for the magenta experiment without drawing cyan.
+        bone_marker.release();return
+    end
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     local function research_snapshot()
     if not self.config.debug_logging then return end
@@ -61,7 +87,7 @@ function M.start(sr,backend,options)
         log('SCREEN_BINDING '..entry[1]..'.'..entry[2]..' '..(ok and address or 'unavailable'))
     end
     -- Enumerate exposed names rather than guessing the game's custom bindings.
-    for _,namespace in ipairs({'Viewport','Renderer','Material','Unit','Gui','World'}) do
+    for _,namespace in ipairs({'Camera','Application','Viewport','Renderer','Material','Unit','Gui','World'}) do
         local ok,names=pcall(function()
             local ns=sr[namespace];local found={}
             if type(ns)~='table' then return {'namespace='..type(ns)} end
@@ -136,7 +162,32 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
+    self.layout_editor=HUD.layout_editor.new(self,backend,log)
     menu=HUD.menu.new(self)
+    local function screen_overlay(w,h)
+        local commands=self.layout_editor.overlay(w,h,self.config.font)
+        for _,c in ipairs(menu.overlay(w,h,self.config.font)) do commands[#commands+1]=c end
+        if self.bone_marker_enabled and bone_marker_position and projection.camera_matrix then
+            local p=bone_marker_position
+            local ok,point=pcall(HUD.projection.project,projection.camera_matrix,p.x,p.y,p.z,
+                projection.camera_fov,w/h,projection.camera_near)
+            if ok and point then
+                local native_point=projection.native_point(p.x,p.y,p.z)
+                if native_point and self.clock>=(self.next_native_projection_log or 0) then
+                    self.next_native_projection_log=self.clock+1
+                    log(string.format('CAMERA_PROJECTION_COMPARE manual=%.6f,%.6f native=%.6f,%.6f,%.6f',
+                        point.x,point.y,native_point.x,native_point.y,native_point.depth))
+                end
+                local x,y,s=point.x*w,point.y*h,h/1080
+                -- Hollow magenta square shares the cyan cross's center; no smoothing.
+                for _,edge in ipairs({{-9,-9,18,1.5},{-9,7.5,18,1.5},{-9,-9,1.5,18},{7.5,-9,1.5,18}}) do
+                    commands[#commands+1]={type='rect',x=x+edge[1]*s,y=y+edge[2]*s,
+                        w=edge[3]*s,h=edge[4]*s,c={255,0,255},a=1}
+                end
+            end
+        end
+        return commands
+    end
     local next_weapon_screen_lookup=0;local last_weapon_screen_available
     function self.frame(dt)
         if retired then return end
@@ -160,6 +211,10 @@ function M.start(sr,backend,options)
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
             local raw=reader.poll();latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);self.status=reader.status
+            if self.config.debug_logging and self.clock<90 and raw and raw.label=='FUEL' then
+                local entry=string.format('FUEL_GAUGE weapon=%s count=%s capacity=%s fraction=%s',raw.resource_hex,tostring(raw.rounds),tostring(raw.capacity),tostring(model and model.fraction))
+                if entry~=self.last_fuel_trace then log(entry);self.last_fuel_trace=entry end
+            end
             if self.config.debug_logging and self.clock<90 and raw and raw.binding and raw.binding.ammo_state then
                 local b=raw.binding
                 local function hex(s)return s:gsub('.',function(ch)return string.format('%02X',ch:byte())end)end
@@ -176,6 +231,14 @@ function M.start(sr,backend,options)
             end
             if self.config.debug_logging and raw and raw.binding then
                 local b=raw.binding
+                if raw.resource_hex=='9f80d67a12a7e40f' and b.ammo_controls then
+                    local bytes=b.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+                    local state=tostring(raw.rounds)..':'..tostring(raw.reserve)..':'..bytes
+                    if state~=self.last_recoilless_trace then
+                        log('RECOILLESS_STATE count='..tostring(raw.rounds)..' reserve='..tostring(raw.reserve)..' controls='..bytes)
+                        self.last_recoilless_trace=state
+                    end
+                end
                 local identity=string.format('weapon=%d native=%d candidate=0x%X record=0x%X resource=%s avatar=%d avatar_native=%d avatar_candidate=0x%X avatar_record=0x%X game_base=0x%X',
                     raw.id,raw.unit_ref,b.candidate,b.record,raw.resource_hex,b.avatar_id,raw.avatar_unit_ref,b.avatar_candidate,b.avatar_record,b.module_base)
                 if identity~=last_binding then log('BINDING '..identity);last_binding=identity end
@@ -189,7 +252,15 @@ function M.start(sr,backend,options)
         end
         -- Pose follows the render/update cadence; ammo discovery remains at 30 Hz.
         -- Holding pose samples caused stepped targets and lag-limit corrections.
-        self.weapon_pose=latest_raw and pose.poll(latest_raw) or nil
+        local profiles=latest_raw and self.weapon_clearance[latest_raw.resource_hex]
+        local active_view=self.first_person and ('first_'..self.config.fp_auto_side) or 'right'
+        local selected_view=(profiles and profiles[active_view] and profiles[active_view].attach_point) and active_view or (self.placement_view_parity and 'right' or active_view)
+        local selected_profile=profiles and profiles[selected_view]
+        local attach_point=selected_profile and selected_profile.attach_point
+        local anchor_hash=attach_point and attach_point:match('^node:(%x+)$')
+        self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active) or nil
+        if self.weapon_pose then self.weapon_pose.attach_point=attach_point end
+        draw_bone_marker(dt)
         self.pose_status=latest_raw and pose.status or 'no weapon'
         local w,h=sr.Gui.resolution()
         -- Screen GUI coordinates use Gui.resolution(), not the output back buffer.
@@ -212,11 +283,21 @@ function M.start(sr,backend,options)
             point=projection.poll(binding_base,mount,w/h)
         end
         local native_first,mode_status=HUD.camera_mode.read(backend,latest_raw)
+        if depth_marker then depth_marker.draw(self.bone_marker_enabled and bone_marker_position or nil,
+            projection.camera_matrix,projection.camera_fov,h,w) end
         if native_first~=nil then self.first_person=native_first
         else self.first_person=HUD.projection.first_person(self.first_person,projection.camera_distance,projection.camera_fov) end
         self.camera_mode_status=mode_status
         self.left_shoulder=false
         HUD.placement.update(self,pose,projection,latest_raw,log)
+        self.layout_editor.tick(dt)
+        local locked_bone_point
+        if self.screen_bone_hud and bone_marker_position and projection.camera_matrix then
+            local p=bone_marker_position
+            local ok,result=pcall(HUD.projection.project,projection.camera_matrix,p.x,p.y,p.z,
+                projection.camera_fov,w/h,projection.camera_near)
+            if ok then locked_bone_point=result end
+        end
         if self.config.anchor_mode=='weapon' and self.weapon_pose then
             local p=self.weapon_pose;local m=p.matrix
             local x,y,z
@@ -231,7 +312,8 @@ function M.start(sr,backend,options)
             self.next_camera_sample=self.clock+1
         end
         self.projection_status=projection.status
-        local use_weapon=self.config.anchor_mode=='weapon' and point~=nil and not provider and self.clock>=manual_until
+        if self.screen_bone_hud then point=locked_bone_point end
+        local use_weapon=(self.screen_bone_hud or self.config.anchor_mode=='weapon') and point~=nil and not provider and self.clock>=manual_until
         if use_weapon~=attachment_active then motion.ready=false;attached.ready=false;attachment_active=use_weapon end
         local attachment_view=self.first_person and 'first' or 'third'
         if self.hybrid_view~=attachment_view then
@@ -239,7 +321,9 @@ function M.start(sr,backend,options)
         end
         local x,y
         if use_weapon then
-            x,y=HUD.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config)
+            if self.screen_bone_hud then
+                x,y=(point.x-.5)*w*1080/h,(point.y-.5)*1080
+            else x,y=HUD.motion.attach(attached,{x=(point.x-.5)*w*1080/h,y=(point.y-.5)*1080},dt,self.config) end
             self.anchor_status='weapon attachment'
         else
             x,y=HUD.motion.step(motion,target,dt,self.config)
@@ -265,12 +349,13 @@ function M.start(sr,backend,options)
         end
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
-        if not model or alpha<0.01 then world_display.release();world_probe.draw(nil,self.config);view.clear();return end
-        if self.config.anchor_mode=='world' and self.weapon_pose then
+        if not model or alpha<0.01 then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
             local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
+            world_config.scale=self.config.scale*(self.profile_scale or 1)
             world_config.style_clock=self.clock
             local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
-            world_config.occlusion_mode=aiming==true and 'gui' or 'gui_depth'
+            world_config.occlusion_mode=(self.config.force_occlusion or aiming~=true) and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             local aim_opacity=1
             if self.config.fade_3d_unless_aiming then
@@ -279,23 +364,31 @@ function M.start(sr,backend,options)
                 aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
             end
             self.aim_opacity=aim_opacity
-            if aim_opacity<.01 then world_display.release();view.clear();return end
-            local world_commands=HUD.layout.compose(model,0,0,2*self.config.scale,alpha*self.config.opacity*aim_opacity,world_config,self.clock)
+            if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
+            local world_commands=HUD.layout.compose(model,0,0,2*world_config.scale,alpha*self.config.opacity*aim_opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
             for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
+            if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
+                projection.camera_matrix,projection.camera_fov,w,h,projection.camera_near) then
+                world_display.release();view.draw(screen_overlay(w,h));self.anchor_status='screen-projected scene-depth HUD';return
+            end
+            if screen_scene then screen_scene.release() end
             if world_display.draw(self.weapon_pose,world_config,nil,dt,nil,world_commands) then
-                view.clear();self.anchor_status='weapon 3D WorldGUI';return
+                view.draw(screen_overlay(w,h))
+                self.anchor_status='weapon 3D WorldGUI';return
             end
         end
         world_display.release()
+        if screen_scene then screen_scene.release() end
         local s=h/1080
         local offset_x,offset_y=self.config.offset_x,self.config.offset_y
         if use_weapon then offset_x,offset_y=20,-15 end
+        if self.screen_bone_hud then offset_x,offset_y=0,0 end
         if self.config.anchor_mode=='weapon' and self.first_person then
             offset_x=use_weapon and 80 or self.config.offset_x+75
         end
         x=w/2+(x+offset_x)*s;y=h/2+(y+offset_y)*s
-        local scale=s*self.config.scale
+        local scale=s*self.config.scale*(self.profile_scale or 1)
         local commands=HUD.layout.compose(model,x,y,scale,alpha*self.config.opacity,self.config,self.clock)
         local frame=commands[1]
         local frame_bottom=frame.y
@@ -318,6 +411,7 @@ function M.start(sr,backend,options)
                 commands[#commands+1]={type='rect',x=px-1*s,y=py-7*s,w=2*s,h=14*s,a=alpha,c={229,231,226}}
             end
         end
+        for _,command in ipairs(screen_overlay(w,h)) do commands[#commands+1]=command end
         view.draw(commands)
         if self.config.debug_logging then world_probe.draw(self.weapon_pose,self.config,nil,dt) else world_probe.release() end
     end
@@ -347,7 +441,7 @@ function M.start(sr,backend,options)
     function self.retire()
         if cleaned then return end
         cleaned=true
-        retired=true;menu.retire();pcall(world_display.release);pcall(world_probe.release);pcall(view.release)
+        retired=true;menu.retire();if depth_marker then pcall(depth_marker.release) end;if screen_scene then pcall(screen_scene.release) end;pcall(bone_marker.release);pcall(world_display.release);pcall(world_probe.release);pcall(view.release)
         if backend.close then pcall(backend.close) end
         if not managed then
             if rawget(_G,'update')==wrapper then rawset(_G,'update',original) end

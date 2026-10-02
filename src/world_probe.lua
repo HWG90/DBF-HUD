@@ -2,7 +2,7 @@
 local M={}
 function M.new(sr,log,direct)
     local A,W,G=sr.Application,sr.World,sr.Gui
-    local smooth={};local depth_fill;local blur;local gui,world;local failed=false;local first=true
+    local folded;local smooth={};local depth_fill;local blur;local gui,world;local failed=false;local first=true
     local self={status='not started'}
     local function identity(handle)
         -- LuaJIT %p bypasses the engine's generic '[Material]' __tostring.
@@ -17,6 +17,7 @@ function M.new(sr,log,direct)
         return false
     end
     function self.release()
+        if folded then folded.release();folded=nil end
         if gui and live(world) then
             log('WORLD_GUI destroy begin');W.destroy_gui(world,gui);log('WORLD_GUI destroy complete')
         end
@@ -31,13 +32,16 @@ function M.new(sr,log,direct)
         local main=A.main_world()
         if not live(main) then self.status='no live main world';return end
         if gui and main~=world then self.release() end
+        local fold_commands
+        if folded then folded.release();folded=nil end
         local m=p.matrix
         local x,y,z=HUD.scene_test.mount(p,c)
         local px=p.x+m[1]*x+m[5]*y+m[9]*z
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
-        if c.placement_mode=='auto' and p.first_person then m=HUD.pose_motion.upright(m) end
-        if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
+        if p.gui_pose then px,py,pz=p.x,p.y,p.z end
+        if c.placement_mode=='auto' and p.first_person and not p.gui_pose then m=HUD.pose_motion.upright(m) end
+        if c.keep_hud_upright and not p.gui_pose then m=HUD.pose_motion.upright(m) end
         m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(c.placement_mode)..':'..tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]
         if first then log('WORLD_GUI matrix begin') end
@@ -90,12 +94,36 @@ function M.new(sr,log,direct)
                     -- depth fill on foreground primitives only during this comparison.
                     solid(v.x,v.y,v.w,v.h,1,color)
                 elseif v.type=='rect' then
-                    solid(v.x,v.y,v.w,v.h,2,color)
+                    solid(v.x,v.y,v.w,v.h,v.fuel_marker_piece and 3 or 2,color)
                 else
                     local resource,material=HUD.native_font.resolve(sr,v.font,c.occlusion_mode~='gui')
-                    if resource then G.text(gui,v.text,resource,v.size,material,sr.Vector3(v.x,v.y,3),color) end
+                    if resource and not v.fuel_endpoint then
+                        for _,part in ipairs(HUD.font.numeric_parts(v)) do
+                            local part_color=sr.Color(math.floor(v.a*part.alpha*255+.5),v.c[1],v.c[2],v.c[3])
+                            G.text(gui,part.text,resource,v.size,material,sr.Vector3(v.x+part.dx,v.y,3),part_color)
+                        end
+                    end
 
                 end
+            end
+            if fold_commands and #fold_commands>0 then
+                folded=folded or M.new(sr,log,direct)
+                local child_panel=fold_commands[1];local edge=child_panel.y+child_panel.h
+                local child={}
+                for _,v in ipairs(fold_commands) do
+                    local copy={};for k,value in pairs(v) do copy[k]=value end
+                    copy.y=v.y-edge
+                    if copy.type=='text' then
+                        local a,b,e,f=HUD.font.measure(copy.text,copy.size,copy.font,true)
+                        copy.x=child_panel.x+child_panel.w/2-(a+e)/2
+                        copy.y=-child_panel.h/2-(b+f)/2
+                    end
+                    child[#child+1]=copy
+                end
+                local hinge=commands[1].y-2
+                local upright=HUD.pose_motion.forward_tilt(m,-math.pi/2)
+                local child_pose={matrix=upright,x=px+m[9]*hinge/1000,y=py+m[10]*hinge/1000,z=pz+m[11]*hinge/1000,id=p.id,candidate='folded reserve',gui_pose=true}
+                folded.draw(child_pose,c,child,dt)
             end
             if first then log('WORLD_GUI panel submitted: '..(depth_fill and 'explicit material bitmap path' or 'default rectangle path'));first=false end
             self.status='world panel; frost unavailable on this rendering path';return true

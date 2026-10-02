@@ -1,80 +1,46 @@
 # DBF-HUD
 
-Experimental modular ammo HUD for Helldivers 2, branded **DBF-HUD**. Current development snapshot: **0.3.41**.
+A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current development version: **0.3.41**. This is the source checkout; generated releases may lag behind it.
 
-## Working features
+## Start here
 
-- Dynamic crosshair tracking with damped movement.
-- Weapon-following hybrid mode and an angled world-GUI panel mode.
-- Weapon-pose smoothing, configurable mounting offsets, scale, opacity and config-file colors.
-- Content-sized frames and native engine font rendering across 72 converted font families.
-- Centered horizontal heat gauge: white below 75%, yellow from 75%, red from 86%; vent mode pulses red.
-- MDL API 2 live Lua reload and menu/Lua tuning.
+For a new coding chat, read these in order:
 
-Runtime global: `DBFHUD`; new MDL folder and resource namespace: `dbf_hud`. Tuning and logs use `DBF-HUD-tuning.lua` and `DBF-HUD.log`. Legacy tuning, runtime retirement and optional material lookup remain supported for upgrades. The addon GUID is unchanged.
+1. [Handoff and current state](docs/HANDOFF.md): current environment, verified behavior, unfinished work and preservation rules.
+2. [Architecture](docs/ARCHITECTURE.md): data flow, module responsibilities and safe extension points.
+3. [Layout editor and profiles](docs/LAYOUT_EDITOR.md): controls, coordinates, attachment points, scale and persistence.
+4. [Development and deployment](docs/DEVELOPMENT.md): build, validation, live reload and troubleshooting.
 
-An existing live installation may retain its `astra_ammo` folder to preserve MDL enablement. For a fresh installation, disable/remove that entry before enabling `dbf_hud`; never enable both. Historical archives keep their original names.
+Historical research remains in the root Markdown files. It records experiments, not necessarily current functionality. Current source and these guides take precedence when describing the active implementation.
 
-## October 1 checkpoint
+## Current features
 
-- Sparse external weapon profiles retain weapon-specific first-person side and position corrections.
-- Magazine insertion includes the pending chamber round immediately. Eligible tactical reloads show a small +1 beside the heading; round-by-round weapons are excluded.
-- Autocannon APHET/FLAK selection survives Semi/Auto changes, with the mode heading and symbol separate from backpack reserves. Five rounds pulse as a reload reminder; three or fewer warn yellow and empty warns red.
-- Recognized fire-selection modes have a matching-width child panel with a two-reference-pixel gap. Fixed-mode weapons hide this panel.
-- Game-derived Auto/Semi/Burst/underbarrel masks share depth-aware rectangle rendering. Laser catalog entries use a beam/starburst symbol. Text, count/icon groups, bars and reserves are centered; heat is shown with a horizontal bar.
-- The verified rifle alternate source displays its grenade count, grenade reserves and 40MM HE heading. Other auxiliary modes still require live validation; unknown modes are not presented as verified.
-- Native fonts are integrated into the HUD, with separate clear and depth-tested materials. Rectangle font tables and their renderers are removed. MDL panel resizing and the layout editor remain deferred.
+- Native engine fonts: BigBlue Terminal, Hack, JetBrains Mono, Fira Code and Iosevka.
+- Direct WorldGUI panels, a weapon-following 2D mode and a crosshair-relative 2D mode.
+- Weapon-specific ammo labels and projectile symbols, fire-mode child panels, fuel and heat gauges, and a railgun charge gauge.
+- Fixed three-digit numeric slots with dimmed leading zeros; counts above 999 can expand.
+- Live layout editor with saved per-weapon/per-view position, scale and attachment points.
+- Configurable decorations and shared settings through Mod Options Menu.
+- Native Force occlusion binding under **Debug tools - DBF HUD**, with a three-second debug state notice.
+- MDL API 2 lifecycle and live Lua reload.
 
-The installable checkpoint is in `releases/DBF-HUD-MDL-0.3.41.zip`.
+## Quick development loop
 
-## Current limitations
-
-Direct WorldGUI occlusion was visually confirmed on September 30 using the registered depth-enable-only shader probe. The scene mesh is now archived in code and commented out of public dispatch. The main menu exposes three display modes. The 3D HUD is unoccluded while aiming and depth-tested otherwise; both third-person shoulders share the sight mount. First-person and aiming state use validated native flags. World-space frosted blur remains unresolved.
-
-The complete archive retains the startup bridge for compatibility. Direct WorldGUI renders text and bars without an intermediate texture; the active MDL path no longer allocates or updates mesh textures. The verified depth assets are included; the combined startup installation still needs its own live verification.
-
-See [native display research](NATIVE_DISPLAY_TRACE.md), [depth investigation](DEPTH_RENDERING.md), and [weapon binding](WEAPON_BINDING.md). These documents include chronological experiments and results; earlier proposed steps are not claims of current functionality.
-
-## Build and install
-
-```sh
+```powershell
+python tests/run.py
 python tools/build.py
 ```
 
-This produces `dist/dbf_hud.lua`, `mdl/dbf_hud/mod.lua`, and an MDL ZIP in the parent directory. Optional Arsenal packaging requires an external Bingus addon builder, supplied with `--addon-builder`.
+The test runner uses the installed game's LuaJIT DLL by default; `--lua-dll` overrides its path. **93 offline contracts passed at the October 1 documentation checkpoint.** They do not replace an in-game visual check.
 
-Copy `mdl/dbf_hud` into `%LOCALAPPDATA%/MDL/Helldivers2/Mods`, then enable **DBF-HUD (Live)**. Disable the packaged startup copy to avoid duplicate HUDs. See [MDL setup](MDL.md). With auto-reload enabled, installed Lua file writes take effect immediately; validate locally and copy atomically.
+Build outputs include `dist/dbf_hud.lua`, `mdl/dbf_hud/mod.lua` and an MDL ZIP in the parent directory. The active loose MDL mod is installed under `%LOCALAPPDATA%/MDL/Helldivers2/Mods/dbf_hud`.
 
-Configure through the mod menu or game-root `DBF-HUD-tuning.lua`. The file in this repository is an example, not a copy of personal live settings. Open `preview/index.html` for the browser design preview; it does not reproduce the native rendering pipeline.
+**Never replace the live game-root weapon-offsets file with the repository example during a code update.** The live file contains user-edited layouts. Back it up before any profile migration.
 
-## Validation
+## Assets and attribution
 
-```sh
-python tests/run.py --lua-dll "path/to/lua51.dll"
-```
+Lua reload changes code, not compiled engine assets. Native text and decoration depth materials require the deployed combined font/depth package. The native-font update was confirmed working in-game during this session; retained archive versions must still be checked before deployment.
 
-The runner uses a local Windows LuaJIT DLL. **69 offline contracts pass** at this snapshot. They cover data/layout behavior, smoothing, lifecycle and guarded render integration; they cannot establish native GPU behavior or in-game occlusion.
+See [MDL lifecycle notes](MDL.md), [native display research](NATIVE_DISPLAY_TRACE.md), [depth research](DEPTH_RENDERING.md) and [weapon identity research](WEAPON_BINDING.md). Browser preview is a design aid and does not reproduce native rendering or occlusion.
 
-## Contents and attribution
-
-Source, generated Lua bundles, preview, tests and development notes are included. Game binaries, memory captures, private logs and anti-cheat bypass code are not included. The complete install archive contains the verified compiled GUI depth resources needed by this renderer. The complete install archive includes the verified WorldGUI depth assets. Older experiments remain separate and should be disabled when installing it.
-
-Ammo layout facts originated from Reticle Ammo HUD. This implementation was developed independently of HD2UI; Derive was used for read-only investigation.
-
-BigBlue Terminal printable ASCII glyphs were imported from Nerd Fonts v3.5.1. Font attribution and CC BY-SA 4.0 terms are preserved in [licenses/BigBlueTerminal](licenses/BigBlueTerminal). Use `tools/build_native_fonts.py` for native conversion. No blanket license is granted for the remaining project code in this snapshot.
-
-Nerd Fonts v3.5.1 has been converted into a future font library: 72 families and 2,252 faces, with 48px grayscale atlases, glyph metrics, source checksums and upstream license documents. HUD text uses printable ASCII; SymbolsOnly includes all 10,624 supported symbols per face. Runtime font selection beyond BigBlue/debug is still deferred. See [font assets](assets/fonts/README.md) and [BACKLOG.md](BACKLOG.md).
-
-## Complete install archive
-
-See [complete installation](INSTALL-COMPLETE.md). `tools/build_complete.py --addon-builder <path-to-build_addon.py>` creates one Arsenal archive with startup and MDL installation choices, the render bridge, verified depth assets, loose MDL Lua, starter tuning, source and font licenses. Disable the previous component addons before deployment.
-
-Debug logging is opt-in; active and archived tuning are separated. See [TUNING.md](TUNING.md).
-
-HUD font now offers ten additional Nerd Font families, ranked by v3.5.1 GitHub release ZIP plus tar.xz download counts (2026-09-30), excluding Symbols Only. BigBlue remains the default. Regular Mono faces are baked into printable-ASCII glyph geometry; no system font installation or intermediate texture is needed. Source selection and face details are in assets/fonts/runtime-selection.json and runtime-faces.json. Regenerate with tools/build_runtime_fonts.py.
-
-## Native font installation
-
-Import `releases/DBF-HUD-Native-Fonts-0.1.zip` in Arsenal, replacing earlier Hack and native-font test packages, then deploy and restart. Install the matching MDL 0.3.41 bundle. The font selector includes 72 families plus native Debug; unavailable assets use native Debug with the appropriate material, and occluded text is hidden if no depth-tested fallback material exists.
-
-Hack’s template rendering, spacing and occlusion were visually verified. The other converted faces and this combined library still require live checks. Conversion covers the native template’s 193 Latin characters, not all Nerd Font Unicode symbols; Symbols Only uses Hack for ordinary text. Runtime metrics retain ASCII HUD characters. Hologram flicker, scan band and frame effects remain; per-glyph rectangle scanline shading is retired. Original font sources and licenses remain available for conversion.
+Game binaries, private captures and private testing-tool packages are not project documentation artifacts. Preserve font attribution and terms in `licenses/`. No blanket license is granted for the remaining project code in this snapshot.

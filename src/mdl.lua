@@ -17,7 +17,7 @@ return {
         local backend=HUD.memory.native()
         local started=false
         ctx.on_cleanup(function() disable();if not started and backend.close then backend.close() end end)
-        hud=HUD.runtime.start(sr,backend,{managed=true})
+        hud=HUD.runtime.start(sr,backend,{managed=true,screen_bone_hud=false})
         started=true
         ctx.global('DBFHUD',hud)
         -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.

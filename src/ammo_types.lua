@@ -32,9 +32,10 @@ local projectiles={
     [350]='HE',
 }
 local weapons={
-    ['02cd7321cd8445f5']='GRENADES', -- Verified auxiliary grenade entity on the equipped rifle.
-    ['006e44327bb953fe']='GRENADES', -- pump_grenade_launcher
-    ['02eecd0b1fa49630']='GRENADES', -- grenade_launcher
+    ['3f92ba65ef65cca9']='FUEL', -- flamer_pistol
+    ['02cd7321cd8445f5']='GRNDS', -- Verified auxiliary grenade entity on the equipped rifle.
+    ['006e44327bb953fe']='GRNDS', -- pump_grenade_launcher
+    ['02eecd0b1fa49630']='GRNDS', -- grenade_launcher
     ['03e67a19b07c6523']='ROUNDS', -- marksman_rifle_vigilance
     ['05d8d8c073b9d502']='SHELLS', -- pump_shotgun_plasma
     ['07419ebc09a1a7c5']='ROUNDS', -- railgun
@@ -51,7 +52,7 @@ local weapons={
     ['2383b0439f0bc465']='ROUNDS', -- assault_rifle_rico
     ['25aa2fd4643cf4ee']='ROUNDS', -- faf_missile_launcher
     ['26df5aa208ce216e']='ROUNDS', -- railgun
-    ['26e40437ea275296']='ROCKETS', -- air_burst_rocket_launcher
+    ['26e40437ea275296']='RCKTS', -- air_burst_rocket_launcher
     ['27ee1ed8f6fb6356']='ROUNDS', -- laser_rifle
     ['295beb26dc4f8ff1']='ROUNDS', -- laser_rifle_long_hotshot
     ['2b28e17ffed05f7c']='SHELLS', -- triple_barrel_breakshotgun
@@ -88,7 +89,7 @@ local weapons={
     ['708ea298c82093d0']='ROUNDS', -- assault_rifle_whisper
     ['719f42b7d137789c']='ROUNDS', -- jet_rifle_phoenix
     ['72170a55a1f37ff1']='SHELLS', -- shotgun_double_freedom
-    ['7617642765ac38c7']='ROCKETS', -- expendable_massive_rocket_launcher
+    ['7617642765ac38c7']='RCKTS', -- expendable_massive_rocket_launcher
     ['78a8185f63a70795']='FUEL', -- heavy_flamethrower
     ['7b75e5132ffd4ca6']='ROUNDS', -- bolt_action_rifle
     ['7c47244d3b030884']='ROUNDS', -- railgun
@@ -99,7 +100,7 @@ local weapons={
     ['84354339522c932d']='ROUNDS', -- assault_rifle_large_calibre_01
     ['8645f167b3c813a2']='ROUNDS', -- laser_rifle_long
     ['8666e5f49f440d44']='ROUNDS', -- faf_missile_launcher
-    ['88c2d09ad85a7c9f']='GRENADES', -- belt_fed_grenade_launcher
+    ['88c2d09ad85a7c9f']='GRNDS', -- belt_fed_grenade_launcher
     ['89c5493e08ca4207']='ROUNDS', -- sniper_rifle
     ['8a307bd1811a5fe9']='FUEL', -- smg_flamer
     ['8a35c1dc19f41870']='ROUNDS', -- bolt_action_rifle
@@ -111,7 +112,7 @@ local weapons={
     ['968211c0033dce64']='ROUNDS', -- assault_rifle
     ['96de9cd50f7306e6']='ROUNDS', -- arc_thrower
     ['9b0a7b78126c2fec']='ROUNDS', -- missile_launcher
-    ['9f80d67a12a7e40f']='ROCKETS', -- recoilless_rifle
+    ['9f80d67a12a7e40f']='RCKTS', -- recoilless_rifle
     ['a6a735accb4a327f']='ROUNDS', -- lmg_stalwart
     ['a7ee1ebf58fcdf1f']='ROUNDS', -- assault_rifle_patriot
     ['a8a91eb54892b6b2']='ROUNDS', -- assault_rifle_risk
@@ -150,7 +151,7 @@ local weapons={
     ['f49227a0630a3f7f']='ROUNDS', -- crossbow_greyfax
     ['f992ce97577c8a7f']='ROUNDS', -- volley_gun
     ['fb3a19078694708a']='ROUNDS', -- plasma_rifle
-    ['fe3b29b2cfa63f9b']='GRENADES', -- grenade_launcher_tactical
+    ['fe3b29b2cfa63f9b']='GRNDS', -- grenade_launcher_tactical
     ['ffc18b2ce10ca381']='ROUNDS', -- battle_rifle
 }
 -- APHET/Flak values verified by a matched return sequence. Full auto adds
@@ -160,6 +161,11 @@ function M.autocannon_mode(control)
     if type(control)~='number' or control~=math.floor(control) or control<0 or control>0xffffffff then return nil end
     if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
     return ({[0x50]='APHET',[0x54]='FLAK'})[control]
+end
+function M.recoilless_mode(control)
+    if type(control)~='number' or control~=math.floor(control) or control<0 or control>0xffffffff then return nil end
+    if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
+    return ({[0x50]='HEAT',[0x54]='HE'})[control]
 end
 function M.fire_mode(control)
     -- Standard catalog modes plus native mode 8, whose setter enables the
@@ -175,6 +181,8 @@ function M.selectable_fire_mode(control,choices)
     if count>1 and seen[control] then return M.fire_mode(control) end
 end
 local lasers={['416d053372c4e433']=true,['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
+local plasma={['05d8d8c073b9d502']=true,['e8d5f49ad7780e54']=true,
+    ['eea5e3cef1e12c14']=true,['efdcef306cea63fe']=true,['fb3a19078694708a']=true}
 function M.apply(raw)
     if raw then raw.energy_icon=lasers[raw.ammo_resource_hex or raw.resource_hex] and 'LASER' or nil end
     if not raw or raw.kind=='heat' or raw.kind=='infinite' then return raw end
@@ -182,9 +190,16 @@ function M.apply(raw)
     local special=raw.projectile_type and projectiles[raw.projectile_type]
     raw.label=special or category
     if raw.resource_hex=='a8cffb316f0b5c5f' then raw.label='AMMO' end
-    if raw.alternate_fire and category=='GRENADES' then raw.label='GRENADES';raw.reserve_kind='GRENADES' end
+    if raw.alternate_fire and category=='GRNDS' then raw.label='GRNDS';raw.reserve_kind='GRNDS' end
     if raw.alternate_fire and raw.ammo_resource_hex=='02cd7321cd8445f5' then raw.label='40MM HE' end
     if raw.reserve_kind=='ROUNDS' then raw.reserve_kind=category end
+    if raw.resource_hex=='9f80d67a12a7e40f' and (raw.ammo_mode=='HEAT' or raw.ammo_mode=='HE') then
+        raw.label=raw.ammo_mode;raw.ammo_icon='ROCKET_'..raw.ammo_mode
+    end
+    if plasma[raw.ammo_resource_hex or raw.resource_hex] then
+        raw.label='BOLTS'
+        if raw.reserve_kind=='MAGS' then raw.reserve_kind='BATTS' end
+    end
     -- Stoker primary ammunition is bullets; its auxiliary entity supplies fuel.
     if raw.resource_hex=='8a307bd1811a5fe9' then
         category=raw.alternate_fire and 'FUEL' or 'ROUNDS'
@@ -192,9 +207,78 @@ function M.apply(raw)
         if raw.alternate_fire then raw.energy_icon=nil;raw.chamber_supported=false;raw.reserve_kind='TANKS' end
     end
     if not raw.energy_icon and not raw.ammo_mode then
-        local ammo=raw.label=='FUEL' and 'FUEL' or ({ROUNDS='BULLET',SHELLS='SHELL',GRENADES='GRENADE',ROCKETS='ROCKET'})[category]
+        local ammo=raw.label=='FUEL' and 'FUEL' or ({ROUNDS='BULLET',SHELLS='SHELL',GRNDS='GRENADE',RCKTS='ROCKET'})[category]
         if not raw.fire_mode or raw.alternate_fire then raw.ammo_icon=ammo end
     end
+    if raw.resource_hex=='6cfcc7f8801a0266' then
+        raw.label='SHOTS'
+        raw.ammo_icon='MELTA'
+        if raw.reserve_kind=='MAGS' then raw.reserve_kind='CNSTRS' end
+    end
+    -- Arbitrator's underbarrel is a 10-gauge shotgun, not its rifle magazine.
+    if raw.resource_hex=='a8a91eb54892b6b2' then
+        if raw.alternate_fire then
+            raw.label='10G';raw.ammo_icon='SHELL';raw.reserve_kind='SHELLS'
+        else
+            raw.label='4MM'
+        end
+    end
+    if plasma[raw.ammo_resource_hex or raw.resource_hex] then raw.ammo_icon='PLASMA' end
+    if (raw.ammo_resource_hex or raw.resource_hex)=='fe3b29b2cfa63f9b' then
+        raw.ammo_icon='DEESCALATOR'
+    end
+    if (raw.ammo_resource_hex or raw.resource_hex)=='02eecd0b1fa49630' then
+        raw.ammo_icon='GL_GRENADE'
+        if raw.reserve_kind=='MAGS' then raw.reserve_kind='BELTS' end
+    end
+    if raw.label=='FUEL' and raw.reserve_kind=='MAGS' then raw.reserve_kind='TANKS' end
+    if (raw.ammo_resource_hex or raw.resource_hex)=='2e9d0bdc48b09e60' then
+        raw.ammo_icon='RAILGUN'
+        raw.label=''
+        if raw.reserve_kind=='MAGS' then raw.reserve_kind='SHOTS' end
+    end
+    if (raw.ammo_resource_hex or raw.resource_hex)=='11c27d3babb38956' and raw.reserve_kind=='MAGS' then raw.reserve_kind='BELTS' end
+    if (raw.ammo_resource_hex or raw.resource_hex)=='3828e2051aa9e897' then raw.label='';raw.reserve_kind='SPEARS';raw.ammo_icon='SPEAR' end
+    local launcher=raw.ammo_resource_hex or raw.resource_hex
+    if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
+    if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
+    if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
+    if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
+    if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
+    if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     return raw
 end
+-- Deposit capacities from generated_entities DepositComponentData (58 slots, 152-byte records).
+local deposit_capacities={
+    ['dfc8b9519169b67a']=4,
+    ['bb4b15b588f974fd']=120,
+    ['96dfc6542aa22980']=5,
+    ['255ebc5767d7ceec']=8,
+    ['e60ae045e0090f4c']=10,
+    ['af9b683ccb6ddc02']=4,
+    ['b0c9faf4af8903f9']=10,
+    ['0a55e504092b981d']=4,
+    ['43eb1c3c1a1860e0']=500,
+    ['9ace8638421abc8e']=1,
+    ['0801b6b3c5d12ebc']=10,
+    ['9a1f728716da05b5']=4,
+    ['35f50dec0ec647c6']=20,
+    ['8ec3026b5f2e579a']=4,
+    ['16474112801385b6']=10,
+    ['056de1c5e21e723e']=1000,
+    ['4ef9a47109239a58']=4,
+    ['35b5af8b1e859540']=3,
+    ['3015626aa69f8d4d']=6,
+    ['1b00bca55e364292']=5,
+    ['b8feb0cc191c1ef3']=5,
+    ['e75cd68e858a12ac']=5,
+    ['2a18f81c44a26771']=6,
+    ['423ff97d57ab04f5']=10,
+    ['bffcb4cd971a8eda']=6,
+    ['c28da712b12e3dfa']=6,
+    ['26bddf070c31b275']=15,
+    ['9b2140378640432e']=8,
+    ['e88a5aa58abb9d81']=4,
+}
+function M.deposit_capacity(resource)return deposit_capacities[resource] end
 return M

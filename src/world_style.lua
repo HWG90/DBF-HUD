@@ -38,7 +38,17 @@ function M.prepare(commands,p,c)
                     local panel=centered[1];local middle=panel.x+panel.w/2
                     local bar_left,bar_right=math.huge,-math.huge
                     for _,v in ipairs(centered) do
-                        if v.center_in_frame then
+                        if v.heat_label then
+                            local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
+                            if not e then a,e=0,#v.text*v.size*.6 end
+                            local pad=8*2*(c.scale or 1)*scale
+                            if v.heat_label=='percent' then
+                                local pa,pb,pe=HUD.font.measure(v.heat_prefix,v.size,v.font,true)
+                                local slot_width=0
+                                for digit=0,9 do local da,db,de=HUD.font.measure(tostring(digit),v.size,v.font,true);slot_width=math.max(slot_width,(de or v.size*.6)-(da or 0)) end
+                                v.x=panel.x+pad+(pe or #v.heat_prefix*v.size*.6)+(v.heat_digit_slot or 0)*slot_width
+                            else v.x=v.heat_label=='left' and panel.x+pad-a or panel.x+panel.w-pad-e end
+                        elseif v.center_in_frame then
                             local a,b,e,f
                             if HUD.font.supported(v.font) then a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true) end
                             if not e then a,e=0,#v.text*v.size*.6 end
@@ -65,10 +75,26 @@ function M.prepare(commands,p,c)
                         local shift=start+e-a+gap-icon_left
                         for _,v in ipairs(centered) do if v.mode_icon then v.x=v.x+shift end end
                     end
+                    local fuel_left,fuel_right=math.huge,-math.huge
+                    for _,v in ipairs(centered) do
+                        if v.fuel_group then
+                            local a,e=0,v.w or 0
+                            if v.type=='text' then
+                                local b,f
+                                a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
+                                if not e then a,e=0,#v.text*v.size*.6 end
+                            end
+                            fuel_left=math.min(fuel_left,v.x+a);fuel_right=math.max(fuel_right,v.x+e)
+                        end
+                    end
+                    if fuel_left<math.huge then
+                        local shift=middle-(fuel_left+fuel_right)/2
+                        for _,v in ipairs(centered) do if v.fuel_group then v.x=v.x+shift end end
+                    end
                     local child_panel,child_text
                     for _,v in ipairs(centered) do
-                        if v.child and v.type=='panel' then child_panel=v end
-                        if v.child and v.type=='text' then child_text=v end
+                        if v.child and not v.heat_child and v.type=='panel' then child_panel=v end
+                        if v.child and not v.heat_child and v.type=='text' then child_text=v end
                     end
                     if child_panel and child_text then
                         local old={x=child_panel.x,y=child_panel.y,w=child_panel.w,h=child_panel.h}
@@ -81,11 +107,19 @@ function M.prepare(commands,p,c)
                         child_panel.w,child_panel.h=width,height
                         child_text.x=middle-(a+e)/2;child_text.y=child_panel.y+pad-b
                         for _,v in ipairs(centered) do
-                            if v.child and v.decoration then
+                            if v.child and not v.heat_child and v.decoration then
                                 v.x=child_panel.x+(v.x-old.x)*width/old.w
                                 v.y=child_panel.y+(v.y-old.y)*height/old.h
                                 v.w=v.w*width/old.w;v.h=v.h*height/old.h
                             end
+                        end
+                    end
+                    for _,v in ipairs(centered) do
+                        if v.heat_overlay then
+                            local inset=2*(c.scale or 1)*scale
+                            v.x,v.y=panel.x+inset,panel.y+inset
+                            v.w=math.max(0,panel.w-2*inset)*v.heat_fraction
+                            v.h=math.max(0,panel.h-2*inset)
                         end
                     end
                     if c.style_3d=='hologram' then
@@ -96,7 +130,9 @@ function M.prepare(commands,p,c)
                         if child_panel then child_panel.a=child_panel.a*.18 end
                         local ink=HUD.config.rgb(c.text_color)
                         local strength=commands[2] and commands[2].a or 1
-                        for _,frame in ipairs(child_panel and {panel,child_panel} or {panel}) do
+                        local frames={panel}
+                        if child_panel then frames[#frames+1]=child_panel end
+                        for _,frame in ipairs(frames) do
                             local thickness=math.max(.3,frame.w/500)
                             for _,edge in ipairs({{frame.x,frame.y,frame.w,thickness},{frame.x,frame.y+frame.h-thickness,frame.w,thickness}}) do
                                 centered[#centered+1]={type='rect',x=edge[1],y=edge[2],w=edge[3],h=edge[4],c=ink,a=.18*strength}
@@ -104,6 +140,7 @@ function M.prepare(commands,p,c)
                             centered[#centered+1]={type='rect',x=frame.x,y=frame.y+(clock*.35%1)*(frame.h-thickness),w=frame.w,h=thickness,c=ink,a=.10*strength}
                         end
                     end
+    HUD.layout.fuel_marker(centered,function(t,size,font)return HUD.font.measure(t,size,font,true)end)
     return centered
 end
 return M

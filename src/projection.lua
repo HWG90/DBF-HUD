@@ -71,14 +71,22 @@ function M.new(backend)
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        self.native_camera=camera;self.native_getter=getter
         self.camera_matrix=matrix;self.camera_near=near;self.camera_aspect=aspect
         self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
         self.camera_fov=fov
         self.camera_lateral=(pose.x-matrix[13])*matrix[1]+(pose.y-matrix[14])*matrix[2]+(pose.z-matrix[15])*matrix[3]
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
+    function self.native_point(x,y,z)
+        if not backend.project_camera or not self.native_camera or not self.native_getter then return nil end
+        local ok,a,b,d=pcall(backend.project_camera,self.native_getter,self.native_camera,x,y,z)
+        if not ok or type(a)~='number' or a~=a or b~=b or d~=d then return nil end
+        return {x=a,y=b,depth=d}
+    end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
+        self.native_camera=nil;self.native_getter=nil
         self.camera_matrix=nil;self.camera_near=nil;self.camera_aspect=nil
         self.camera_distance=nil;self.camera_fov=nil;self.camera_lateral=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)

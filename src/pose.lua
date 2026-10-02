@@ -9,7 +9,7 @@ local resolver_body=unhex('8bc325ffff3f003b8698000000720433dbeb1c8bc8488b86a0000
 function M.new(backend)
     local r=HUD.memory.new(backend)
     local self={status='not sampled',samples=0}
-    function self.snapshot(raw,research,anchor_hash)
+    function self.snapshot(raw,research,anchor_hash,enumerate)
         assert(raw and raw.binding,'no weapon binding')
         local b=raw.binding;r.reset()
         -- The reader must validate the game build before returning this binding.
@@ -42,26 +42,34 @@ function M.new(backend)
             assert(math.abs(dot)<.05,'matrix axes')
         end
         for i=13,15 do assert(math.abs(matrix[i])<1e7,'matrix position') end
-        local sight
+        local sight;local anchors={}
         -- Optional named anchor; any unavailable or changing table keeps root fallback.
         local sight_ok,sight_value=pcall(function()
             assert(nodes<=128,'sight node limit')
             local hashes=r.p(object+0xa0);local data=r.read(hashes,nodes*4)
             for n=0,nodes-1 do
-                if r.u(data,n*4)==(anchor_hash or 0x527c9c73) then
+                local hash=r.u(data,n*4)
+                if enumerate then anchors[#anchors+1]={index=n,hash=string.format('%08x',hash)} end
+                if hash==(anchor_hash or 0x527c9c73) then
                     local pose=r.read(address+n*64,64);local delta={}
                     for j=1,3 do delta[j]=r.f(pose,(11+j)*4)-matrix[12+j];assert(math.abs(delta[j])<5,'sight bounds') end
                     assert(r.p(object+0xa0)==hashes and r.read(hashes,nodes*4)==data,'sight table changed')
-                    local result={index=n}
+                    local node_matrix={}
+                    for j=1,16 do node_matrix[j]=r.f(pose,(j-1)*4) end
+                    for _,k in ipairs({1,5,9}) do
+                        local norm=0;for j=0,2 do norm=norm+node_matrix[k+j]^2 end
+                        assert(math.abs(norm-1)<.05,'attachment axis scale')
+                    end
+                    local result={index=n,matrix=node_matrix}
                     for axis,k in ipairs({1,5,9}) do
                         local v=0;for j=1,3 do v=v+delta[j]*matrix[k+j-1] end
                         result[({'x','y','z'})[axis]]=v
                     end
-                    return result
+                    sight=result
                 end
             end
         end)
-        if sight_ok then sight=sight_value end
+        if not sight_ok then sight=nil;anchors={} end
         local node_parts
         if research then
             assert(nodes<=128,'research node limit')
@@ -107,10 +115,10 @@ function M.new(backend)
         assert(r.read(generations+index,1):byte()==generation and r.p(array+index*8)==object,'unit recycled during read')
         assert(r.u(r.read(object+8,4),0)==b.candidate and r.p(object+0x88)==address,'pose owner changed')
         return {id=raw.id,resource_hex=raw.resource_hex,candidate=b.candidate,node_count=nodes,
-            node_parts=node_parts,sight=sight,matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
+            node_parts=node_parts,sight=sight,anchors=anchors,matrix=matrix,x=matrix[13],y=matrix[14],z=matrix[15]}
     end
-    function self.poll(raw)
-        local ok,value=pcall(self.snapshot,raw)
+    function self.poll(raw,anchor_hash,enumerate)
+        local ok,value=pcall(self.snapshot,raw,nil,anchor_hash,enumerate)
         if not ok then self.status=tostring(value);return nil end
         self.status='verified root pose';self.samples=self.samples+1;return value
     end

@@ -55,10 +55,16 @@ function M.new(sr)
                 if not drawn then color=sr.Color(255,c.c[1],c.c[2],c.c[3]) end
                 id=G.rect(gui,sr.Vector3(c.x,c.y,49),sr.Vector2(c.w,c.h),color);kind='rect'
             elseif c.type=='rect' then
-                id=G.rect(gui,sr.Vector3(c.x,c.y,50),sr.Vector2(c.w,c.h),color)
+                id=G.rect(gui,sr.Vector3(c.x,c.y,c.fuel_marker_piece and 51 or 50),sr.Vector2(c.w,c.h),color)
             else
                 local resource,material=HUD.native_font.resolve(sr,c.font,false)
-                if resource then id=G.text(gui,c.text,resource,c.size,material,sr.Vector3(c.x,c.y,51),color) end
+                if resource and not c.fuel_endpoint then
+                    for _,part in ipairs(HUD.font.numeric_parts(c)) do
+                        local part_color=sr.Color(math.floor(c.a*part.alpha*255+.5),c.c[1],c.c[2],c.c[3])
+                        local tid=G.text(gui,part.text,resource,c.size,material,sr.Vector3(c.x+part.dx,c.y,51),part_color)
+                        if tid then ids[#ids+1]={type=kind,id=tid} end
+                    end
+                end
 
             end
             if id then ids[#ids+1]={type=kind,id=id} end

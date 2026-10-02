@@ -7,6 +7,10 @@ function M.native()
     void *dbf_hud_process(void) __asm__("GetCurrentProcess");
     int dbf_hud_read(void*,const void*,void*,size_t,size_t*) __asm__("ReadProcessMemory");
     unsigned long dbf_hud_filename(void*,char*,unsigned long) __asm__("GetModuleFileNameA");
+    unsigned long dbf_hud_pid(void) __asm__("GetCurrentProcessId");
+    void *dbf_hud_foreground(void) __asm__("GetForegroundWindow");
+    unsigned long dbf_hud_window_pid(void*,unsigned long*) __asm__("GetWindowThreadProcessId");
+    short dbf_hud_key(int) __asm__("GetAsyncKeyState");
     ]])
     local k=ffi.load('kernel32'); local process=k.dbf_hud_process()
     local buffer=ffi.new('uint8_t[4096]');local got=ffi.new('size_t[1]')
@@ -20,6 +24,12 @@ function M.native()
             return ffi.string(buffer,size)
         end
     }
+    local input=ffi.load('user32');local window_pid=ffi.new('unsigned long[1]')
+    function backend.editor_key(code)
+        local window=input.dbf_hud_foreground();if window==nil then return false end
+        input.dbf_hud_window_pid(window,window_pid)
+        return tonumber(window_pid[0])==tonumber(k.dbf_hud_pid()) and tonumber(input.dbf_hud_key(code))<0
+    end
     function backend.log(line)
         if not log_attempted then
             log_attempted=true
@@ -77,6 +87,27 @@ function M.native()
         local moved,why=os.rename(tmp,path)
         if not moved then os.rename(path..'.bak',path);error(why) end
         return path
+    end
+    function backend.write_weapon_offsets(body)
+        assert(type(body)=='string' and #body<=65536,'weapon offsets file too large')
+        local path=tuning_path():gsub('DBF%-HUD%-tuning.lua$','DBF-HUD-weapon-offsets.lua')
+        local tmp=path..'.tmp';local f=assert(io.open(tmp,'w'))
+        local ok,err=f:write(body);local closed,cerr=f:close();assert(ok and closed,err or cerr)
+        local previous=io.open(path,'r')
+        if previous then previous:close();os.remove(path..'.bak');assert(os.rename(path,path..'.bak')) end
+        local moved,why=os.rename(tmp,path)
+        if not moved then os.rename(path..'.bak',path);error(why) end
+        return path
+    end
+    -- Read-only projection call. The caller must validate the native wrapper and
+    -- camera owner immediately before use. x64 disassembly confirms explicit
+    -- result buffer, camera pointer and input-vector pointer (three arguments).
+    local project_in=ffi.new('float[4]');local project_out=ffi.new('float[4]')
+    function backend.project_camera(fn,camera,x,y,z)
+        project_in[0],project_in[1],project_in[2]=x,y,z
+        local call=ffi.cast('float* (*)(float*, const void*, const float*)',fn)
+        call(project_out,ffi.cast('const void*',camera),project_in)
+        return tonumber(project_out[0]),tonumber(project_out[1]),tonumber(project_out[2])
     end
     function backend.close() if file then file:close();file=nil end end
     return backend
