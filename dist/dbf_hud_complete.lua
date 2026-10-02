@@ -7140,7 +7140,7 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={weapon_blacklist="",debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -7155,6 +7155,20 @@ function M.rgb(v)
     v=M.hex(v);return {tonumber(v:sub(2,3),16),tonumber(v:sub(4,5),16),tonumber(v:sub(6,7),16)}
 end
 function M.new() local t={};for k,v in pairs(M.defaults) do t[k]=v end;return t end
+function M.is_blacklisted(config,resource)
+    if not resource then return false end
+    for key in (config.weapon_blacklist or ''):gmatch('[^,]+') do if key==resource then return true end end
+    return false
+end
+function M.blacklist_value(config,resource,hidden)
+    assert(type(resource)=='string' and #resource==16 and resource:match('^%x+$'),'Invalid weapon resource')
+    local keys,seen={},{}
+    for key in (config.weapon_blacklist or ''):gmatch('[^,]+') do
+        if key~=resource and not seen[key] then keys[#keys+1]=key;seen[key]=true end
+    end
+    if hidden then keys[#keys+1]=resource end
+    table.sort(keys);return table.concat(keys,',')
+end
 function M.apply(config,values)
     assert(type(values)=='table','configuration must be a table')
     local flattened={}
@@ -7179,6 +7193,11 @@ function M.apply(config,values)
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')
+        elseif k=='weapon_blacklist' then
+            assert(type(v)=='string' and #v<=8192 and (v=='' or v:match('^[%x,]+$')),'Invalid weapon blacklist')
+            local keys={}
+            for key in v:gmatch('[^,]+') do assert(#key==16,'Invalid blacklisted weapon');keys[#keys+1]=key end
+            assert(table.concat(keys,',')==v,'Invalid blacklist separators')
         elseif k=='fp_auto_side' then assert(v=='left' or v=='right','invalid first-person side')
         elseif k=='placement_mode' then assert(v=='manual' or v=='auto','invalid placement mode')
         elseif k=='anchor_mode' then assert(v=='weapon' or v=='crosshair' or v=='world','invalid anchor mode')
@@ -7559,6 +7578,7 @@ function M.apply(raw)
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
     if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='NAPALM_ROCKET' end
     if raw.resource_hex=='5990123d142b16cb' then raw.label='RCKT' end
+    if raw.resource_hex=='26e40437ea275296' then raw.label='BRST';raw.ammo_icon='AIRBURST' end
     if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
@@ -7744,6 +7764,7 @@ for _,r in ipairs(spear.runs) do upright.runs[#upright.runs+1]={spear.h-r[2]-r[4
 M.SPEAR=upright
 -- Napalm rocket with an orange flame beside the warhead.
 M.NAPALM_ROCKET={w=18,h=26,runs={}}
+M.AIRBURST={w=20,h=20,runs={{8,8,4,4},{9,15,2,5},{9,0,2,5},{0,9,5,2},{15,9,5,2},{3,3,3,3},{14,14,3,3},{3,14,3,3},{14,3,3,3}}}
 for _,run in ipairs(M.ROCKET.runs) do
     M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4]}
 end
@@ -10936,6 +10957,8 @@ function M.new(hud)
             local preset_choices=hud.list_presets and hud.list_presets() or {}
             if #preset_choices==0 then preset_choices={'No saved presets'} end
             local placement_controls={
+                {id='hide_weapon_hud',type='button',label='Hide equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(true);assert(ok,message);return message end},
+                {id='show_weapon_hud',type='button',label='Show equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(false);assert(ok,message);return message end},
                 {id='debug_occlusion',type='toggle',label='Debug: force occlusion',default=hud.config.force_occlusion,on_change=function(v)save('force_occlusion',v)end},
                 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
                 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
@@ -11342,6 +11365,15 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
+    function self.blacklist_equipped(hidden)
+        local resource=latest_raw and latest_raw.resource_hex
+        if not resource then return false,'Equip a weapon first' end
+        local previous=self.config.weapon_blacklist
+        self.configure({weapon_blacklist=HUD.config.blacklist_value(self.config,resource,hidden)})
+        local ok,err=self.save_tuning()
+        if not ok then self.configure({weapon_blacklist=previous});return false,err end
+        return true,(hidden and 'HUD hidden for ' or 'HUD enabled for ')..((HUD.weapon_names or {})[resource] or 'equipped weapon')
+    end
     do
         local weapons,views=0,0
         for _,entries in pairs(self.weapon_clearance) do
@@ -11476,6 +11508,12 @@ function M.start(sr,backend,options)
                 elseif self.pose_status~=last_pose_status then log('POSE unavailable: '..self.pose_status) end
                 last_pose_status=self.pose_status;next_pose_log=self.clock+1
             end
+            if raw and raw.resource_hex=='26e40437ea275296' and raw.binding and raw.binding.ammo_controls then
+                local control=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+                if control~=self.last_airburst_control then
+                    log('AIRBURST_CONTROL '..control);self.last_airburst_control=control
+                end
+            end
             if self.config.debug_logging and raw and raw.binding then
                 local b=raw.binding
                 if raw.resource_hex=='9f80d67a12a7e40f' and b.ammo_controls then
@@ -11598,7 +11636,7 @@ function M.start(sr,backend,options)
         end
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
-        if not model or alpha<0.01 then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
         local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
         local aim_opacity=1
         if self.config.fade_3d_unless_aiming then

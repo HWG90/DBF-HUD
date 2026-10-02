@@ -1005,6 +1005,18 @@ test('shotgun shell icons share Double Freedom hull and brass colors',function()
     assert(blue and gold)
 end)
 
+test('weapon blacklist persists and removing one weapon preserves others',function()
+    local cfg=HUD.config.new();local a,b='0123456789abcdef','fedcba9876543210'
+    assert(not HUD.config.is_blacklisted(cfg,a))
+    HUD.config.apply(cfg,{weapon_blacklist=HUD.config.blacklist_value(cfg,a,true)})
+    HUD.config.apply(cfg,{weapon_blacklist=HUD.config.blacklist_value(cfg,b,true)})
+    local saved=assert(loadstring(HUD.config.serialize(cfg)))()
+    assert(HUD.config.is_blacklisted(saved,a) and HUD.config.is_blacklisted(saved,b))
+    HUD.config.apply(cfg,{weapon_blacklist=HUD.config.blacklist_value(cfg,a,false)})
+    assert(not HUD.config.is_blacklisted(cfg,a) and HUD.config.is_blacklisted(cfg,b))
+    assert(not pcall(HUD.config.apply,cfg,{weapon_blacklist='abc'}))
+end)
+
 test('external profiles reject malformed data and empty table clears built-in profiles',function()
     local errors=0;local log=function()errors=errors+1 end
     assert(next(HUD.weapon_offsets.load({read_weapon_offsets=function()return {} end},log))==nil)

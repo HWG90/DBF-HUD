@@ -196,6 +196,15 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
+    function self.blacklist_equipped(hidden)
+        local resource=latest_raw and latest_raw.resource_hex
+        if not resource then return false,'Equip a weapon first' end
+        local previous=self.config.weapon_blacklist
+        self.configure({weapon_blacklist=HUD.config.blacklist_value(self.config,resource,hidden)})
+        local ok,err=self.save_tuning()
+        if not ok then self.configure({weapon_blacklist=previous});return false,err end
+        return true,(hidden and 'HUD hidden for ' or 'HUD enabled for ')..((HUD.weapon_names or {})[resource] or 'equipped weapon')
+    end
     do
         local weapons,views=0,0
         for _,entries in pairs(self.weapon_clearance) do
@@ -330,6 +339,12 @@ function M.start(sr,backend,options)
                 elseif self.pose_status~=last_pose_status then log('POSE unavailable: '..self.pose_status) end
                 last_pose_status=self.pose_status;next_pose_log=self.clock+1
             end
+            if raw and raw.resource_hex=='26e40437ea275296' and raw.binding and raw.binding.ammo_controls then
+                local control=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
+                if control~=self.last_airburst_control then
+                    log('AIRBURST_CONTROL '..control);self.last_airburst_control=control
+                end
+            end
             if self.config.debug_logging and raw and raw.binding then
                 local b=raw.binding
                 if raw.resource_hex=='9f80d67a12a7e40f' and b.ammo_controls then
@@ -452,7 +467,7 @@ function M.start(sr,backend,options)
         end
         end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
-        if not model or alpha<0.01 then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
         local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
         local aim_opacity=1
         if self.config.fade_3d_unless_aiming then

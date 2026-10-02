@@ -93,6 +93,7 @@ for _,r in ipairs(spear.runs) do upright.runs[#upright.runs+1]={spear.h-r[2]-r[4
 M.SPEAR=upright
 -- Napalm rocket with an orange flame beside the warhead.
 M.NAPALM_ROCKET={w=18,h=26,runs={}}
+M.AIRBURST={w=20,h=20,runs={{8,8,4,4},{9,15,2,5},{9,0,2,5},{0,9,5,2},{15,9,5,2},{3,3,3,3},{14,14,3,3},{3,14,3,3},{14,3,3,3}}}
 for _,run in ipairs(M.ROCKET.runs) do
     M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4]}
 end
