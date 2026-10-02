@@ -149,7 +149,7 @@ function M.new(hud,backend,log)
             local views=hud.weapon_clearance[e.resource] or {}
             e.shared=false
             e.set_view(hud.first_person)
-            local step=screen() and (backend.editor_key(16) and 1 or (backend.editor_key(17) and 20 or 5)) or (backend.editor_key(16) and .125 or (backend.editor_key(17) and 2 or .5))
+            local step=screen() and (backend.editor_key(16) and .25 or (backend.editor_key(17) and 20 or 5)) or (backend.editor_key(16) and .03125 or (backend.editor_key(17) and 2 or .5))
             for _,binding in ipairs({{37,'x',-1},{39,'x',1},{38,'z',1},{40,'z',-1},{33,'y',1},{34,'y',-1}}) do
                 local key,axis,sign=binding[1],binding[2],binding[3];local down=backend.editor_key(key)
                 if down and (not repeats[key] or now>=repeats[key]) then
