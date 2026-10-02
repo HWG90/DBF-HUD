@@ -102,6 +102,9 @@ for _,mode in ipairs({'AUTO','SEMI'}) do
         if body_width>0 then icon.runs[#icon.runs+1]={run[1],run[2],body_width,run[4],{218,172,78}} end
         local tip_x=math.max(run[1],tip_start)
         if finish>tip_x then icon.runs[#icon.runs+1]={tip_x,run[2],finish-tip_x,run[4],{255,133,45}} end
+        if run[1]<tip_start and finish>tip_start then
+            icon.runs[#icon.runs+1]={tip_start-1,run[2],1,run[4],{58,48,35}}
+        end
     end
     M['FIRE_'..mode]=icon
 end

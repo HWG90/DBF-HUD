@@ -7783,6 +7783,9 @@ for _,mode in ipairs({'AUTO','SEMI'}) do
         if body_width>0 then icon.runs[#icon.runs+1]={run[1],run[2],body_width,run[4],{218,172,78}} end
         local tip_x=math.max(run[1],tip_start)
         if finish>tip_x then icon.runs[#icon.runs+1]={tip_x,run[2],finish-tip_x,run[4],{255,133,45}} end
+        if run[1]<tip_start and finish>tip_start then
+            icon.runs[#icon.runs+1]={tip_start-1,run[2],1,run[4],{58,48,35}}
+        end
     end
     M['FIRE_'..mode]=icon
 end
@@ -8060,7 +8063,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 factor=(top-bottom)/fire_icon.h
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
-            local icon_gap=m.resource_hex=='84354339522c932d' and 3 or 8
+            local icon_gap=m.resource_hex=='84354339522c932d' and -9 or 8
             if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then
                 for _,offset in ipairs(fire_icon==HUD.fire_icons.DOUBLE_SHELL and {0,15} or {0}) do
                     rect(edge+icon_gap+(offset+3)*factor,icon_y+11*factor,6*factor,14*factor,{65,145,235},.36)
