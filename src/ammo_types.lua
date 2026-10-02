@@ -245,6 +245,7 @@ function M.apply(raw)
     local launcher=raw.ammo_resource_hex or raw.resource_hex
     if launcher=='006e44327bb953fe' or launcher=='02eecd0b1fa49630' or launcher=='88c2d09ad85a7c9f' or launcher=='fe3b29b2cfa63f9b' then raw.label='' end
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
+    if raw.resource_hex=='692eb345969d368e' or raw.resource_hex=='80932fa0ed6901d3' then raw.label='RCKT';raw.ammo_icon='ROCKET' end
     if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='NAPALM_ROCKET' end
     if raw.resource_hex=='5990123d142b16cb' then raw.label='RCKT' end
     if raw.resource_hex=='26e40437ea275296' then
