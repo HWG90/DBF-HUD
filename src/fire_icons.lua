@@ -91,18 +91,18 @@ local spear=M.SPEAR
 local upright={w=spear.h,h=spear.w,runs={}}
 for _,r in ipairs(spear.runs) do upright.runs[#upright.runs+1]={spear.h-r[2]-r[4],r[1],r[4],r[3]} end
 M.SPEAR=upright
--- Coyote fire selectors layer native bullets over the flamethrower flame mask.
+-- Coyote fire selectors keep native silhouettes with orange incendiary tips.
 for _,mode in ipairs({'AUTO','SEMI'}) do
     local base=M[mode]
-    local icon={w=base.w+4,h=34,runs={}}
-    for _,layer in ipairs({{scale=34/24,y=0,color={255,112,30}}, {scale=23/24,y=3,color={255,191,61}}}) do
-        local x=(icon.w-M.FUEL.w*layer.scale)/2
-        for _,run in ipairs(M.FUEL.runs) do
-            icon.runs[#icon.runs+1]={x+run[1]*layer.scale,layer.y+run[2]*layer.scale,run[3]*layer.scale,run[4]*layer.scale,layer.color}
-        end
+    local icon={w=base.w,h=base.h,runs={}}
+    local tip_start=base.w-7
+    for _,run in ipairs(base.runs) do
+        local finish=run[1]+run[3]
+        local body_width=math.max(0,math.min(finish,tip_start)-run[1])
+        if body_width>0 then icon.runs[#icon.runs+1]={run[1],run[2],body_width,run[4]} end
+        local tip_x=math.max(run[1],tip_start)
+        if finish>tip_x then icon.runs[#icon.runs+1]={tip_x,run[2],finish-tip_x,run[4],{255,133,45}} end
     end
-    local y=(26-base.h)/2
-    for _,run in ipairs(base.runs) do icon.runs[#icon.runs+1]={run[1]+2,run[2]+y,run[3],run[4]} end
     M['FIRE_'..mode]=icon
 end
 -- Napalm rocket with an orange flame beside the warhead.
