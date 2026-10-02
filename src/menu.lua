@@ -147,6 +147,7 @@ function M.new(hud)
                     {id='save_preset',type='button',label='Save named preset',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
                     {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
+                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
                     {id='default_setup',type='button',label='Reset to Default setup',
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}

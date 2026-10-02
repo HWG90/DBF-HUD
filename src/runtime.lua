@@ -196,6 +196,12 @@ function M.start(sr,backend,options)
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
     function self.list_presets()local ok,names=pcall(backend.list_presets);return ok and names or {} end
+    function self.delete_preset(name)
+        if not backend.delete_preset then return false,'Preset deletion unavailable' end
+        local ok,result=pcall(backend.delete_preset,name)
+        log(ok and ('PRESET deleted: '..name) or ('PRESET delete failed: '..tostring(result)))
+        return ok,result
+    end
     function self.save_preset(name)
         if not backend.write_preset then return false,'Preset writer unavailable' end
         local settings=self.export_tuning():gsub('return {','settings = {',1)

@@ -8309,6 +8309,17 @@ function M.native()
         local chunk=assert(loadstring(body,'DBF-HUD preset'));setfenv(chunk,{})
         local value=chunk();assert(type(value)=='table' and type(value.settings)=='table' and type(value.layouts)=='table','Invalid preset format');return value
     end
+    function backend.delete_preset(name)
+        assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
+        local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
+        local base=preset_folder()..'/DBF-HUD-preset-'..stem
+        local found=false
+        for _,extension in ipairs({'.layout','.lua'})do
+            local path=base..extension;local f=io.open(path,'rb')
+            if f then f:close();assert(os.remove(path));found=true end
+        end
+        assert(found,'Preset not found');return true
+    end
     function backend.write_preset(name,body)
         assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
         local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
@@ -10898,6 +10909,7 @@ function M.new(hud)
                     {id='save_preset',type='button',label='Save named preset',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
                     {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
+                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
                     {id='default_setup',type='button',label='Reset to Default setup',
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
@@ -11211,6 +11223,12 @@ function M.start(sr,backend,options)
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
     function self.list_presets()local ok,names=pcall(backend.list_presets);return ok and names or {} end
+    function self.delete_preset(name)
+        if not backend.delete_preset then return false,'Preset deletion unavailable' end
+        local ok,result=pcall(backend.delete_preset,name)
+        log(ok and ('PRESET deleted: '..name) or ('PRESET delete failed: '..tostring(result)))
+        return ok,result
+    end
     function self.save_preset(name)
         if not backend.write_preset then return false,'Preset writer unavailable' end
         local settings=self.export_tuning():gsub('return {','settings = {',1)

@@ -115,6 +115,17 @@ function M.native()
         local chunk=assert(loadstring(body,'DBF-HUD preset'));setfenv(chunk,{})
         local value=chunk();assert(type(value)=='table' and type(value.settings)=='table' and type(value.layouts)=='table','Invalid preset format');return value
     end
+    function backend.delete_preset(name)
+        assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
+        local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
+        local base=preset_folder()..'/DBF-HUD-preset-'..stem
+        local found=false
+        for _,extension in ipairs({'.layout','.lua'})do
+            local path=base..extension;local f=io.open(path,'rb')
+            if f then f:close();assert(os.remove(path));found=true end
+        end
+        assert(found,'Preset not found');return true
+    end
     function backend.write_preset(name,body)
         assert(type(name)=='string' and #name<=48 and name:match('^[%w _-]+$'),'Invalid preset filename')
         local stem=name:gsub('^%s+',''):gsub('%s+$','');assert(#stem>0,'Preset name is empty')
