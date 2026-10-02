@@ -167,6 +167,9 @@ function M.recoilless_mode(control)
     if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
     return ({[0x50]='HEAT',[0x54]='HE'})[control]
 end
+function M.airburst_mode(control)
+    return ({[0x50]='FLAK',[0x54]='CLUSTER'})[control]
+end
 function M.fire_mode(control)
     -- Standard catalog modes plus native mode 8, whose setter enables the
     -- auxiliary weapon entity. Safety/charge enums remain unverified.
@@ -244,7 +247,10 @@ function M.apply(raw)
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
     if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='NAPALM_ROCKET' end
     if raw.resource_hex=='5990123d142b16cb' then raw.label='RCKT' end
-    if raw.resource_hex=='26e40437ea275296' then raw.label='BRST';raw.ammo_icon='AIRBURST' end
+    if raw.resource_hex=='26e40437ea275296' then
+        raw.label=raw.ammo_mode or 'BRST'
+        raw.ammo_icon=raw.ammo_mode=='CLUSTER' and 'AIRBURST_CLUSTER' or 'AIRBURST'
+    end
     if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end

@@ -94,6 +94,7 @@ M.SPEAR=upright
 -- Napalm rocket with an orange flame beside the warhead.
 M.NAPALM_ROCKET={w=18,h=26,runs={}}
 M.AIRBURST={w=20,h=20,runs={{8,8,4,4},{9,15,2,5},{9,0,2,5},{0,9,5,2},{15,9,5,2},{3,3,3,3},{14,14,3,3},{3,14,3,3},{14,3,3,3}}}
+M.AIRBURST_CLUSTER={w=20,h=20,runs={{8,9,4,8},{9,17,2,3},{1,2,4,8},{2,10,2,3},{15,2,4,8},{16,10,2,3},{6,4,2,2},{12,4,2,2},{9,1,2,2}}}
 for _,run in ipairs(M.ROCKET.runs) do
     M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4]}
 end

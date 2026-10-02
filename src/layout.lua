@@ -237,13 +237,14 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
         text(m.reserve and (string.format('%03d',m.reserve)..' '..(m.reserve_kind or 'SHELLS')) or '-- SHELLS',0,-19,9,ink,.8)
     else
-        local heading=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.ammo_mode or m.label
+        local cannon_mode=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.resource_hex~='26e40437ea275296'
+        local heading=cannon_mode and m.ammo_mode or m.label
         local heading_y=pixel and math.max(42,5+number_top+3) or 42
         text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
-        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].size=(pixel and 18 or 12)*scale end
+        if cannon_mode then d[#d].size=(pixel and 18 or 12)*scale end
         text(number,0,5,32,ink)
         local fire_icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
-        if fire_icon and (not m.ammo_mode or m.ammo_mode=='HEAT' or m.ammo_mode=='HE') then
+        if fire_icon and (not m.ammo_mode or m.ammo_mode=='HEAT' or m.ammo_mode=='HE' or m.resource_hex=='26e40437ea275296') then
             d[#d].mode_count=true
             local edge=#number*(pixel and 36 or 32)*.6
             if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
@@ -269,8 +270,8 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 d[#d].mode_icon=true
             end
         end
-        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].mode_count=true end
-        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then
+        if cannon_mode then d[#d].mode_count=true end
+        if cannon_mode then
             local edge=#number*(pixel and 36 or 32)*.6
             if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
             local ix,iy=edge+8,5

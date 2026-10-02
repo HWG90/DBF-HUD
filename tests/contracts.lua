@@ -1005,6 +1005,19 @@ test('shotgun shell icons share Double Freedom hull and brass colors',function()
     assert(blue and gold)
 end)
 
+test('Airburst live controls select flak and cluster labels and icons',function()
+    for control,mode in pairs({[0x50]='FLAK',[0x54]='CLUSTER'}) do
+        assert(HUD.ammo_types.airburst_mode(control)==mode)
+        local raw=HUD.ammo_types.apply({resource_hex='26e40437ea275296',ammo_mode=mode,rounds=1,capacity=1})
+        assert(raw.label==mode and raw.ammo_icon==(mode=='CLUSTER' and 'AIRBURST_CLUSTER' or 'AIRBURST'))
+        local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.new(),0)
+        local icon=false
+        for _,command in ipairs(commands) do icon=icon or command.mode_icon==true end
+        assert(icon)
+    end
+    assert(HUD.ammo_types.airburst_mode(0x51)==nil)
+end)
+
 test('weapon blacklist persists and removing one weapon preserves others',function()
     local cfg=HUD.config.new();local a,b='0123456789abcdef','fedcba9876543210'
     assert(not HUD.config.is_blacklisted(cfg,a))

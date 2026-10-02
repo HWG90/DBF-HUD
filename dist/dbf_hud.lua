@@ -7470,6 +7470,9 @@ function M.recoilless_mode(control)
     if math.floor(control/0x1000)%2==1 then control=control-0x1000 end
     return ({[0x50]='HEAT',[0x54]='HE'})[control]
 end
+function M.airburst_mode(control)
+    return ({[0x50]='FLAK',[0x54]='CLUSTER'})[control]
+end
 function M.fire_mode(control)
     -- Standard catalog modes plus native mode 8, whose setter enables the
     -- auxiliary weapon entity. Safety/charge enums remain unverified.
@@ -7547,7 +7550,10 @@ function M.apply(raw)
     if raw.resource_hex=='7617642765ac38c7' then raw.label='WARHEAD'; raw.ammo_icon='WARHEAD' end
     if raw.resource_hex=='b2b5e0d185605f9e' then raw.label='RCKT';raw.ammo_icon='NAPALM_ROCKET' end
     if raw.resource_hex=='5990123d142b16cb' then raw.label='RCKT' end
-    if raw.resource_hex=='26e40437ea275296' then raw.label='BRST';raw.ammo_icon='AIRBURST' end
+    if raw.resource_hex=='26e40437ea275296' then
+        raw.label=raw.ammo_mode or 'BRST'
+        raw.ammo_icon=raw.ammo_mode=='CLUSTER' and 'AIRBURST_CLUSTER' or 'AIRBURST'
+    end
     if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
@@ -7734,6 +7740,7 @@ M.SPEAR=upright
 -- Napalm rocket with an orange flame beside the warhead.
 M.NAPALM_ROCKET={w=18,h=26,runs={}}
 M.AIRBURST={w=20,h=20,runs={{8,8,4,4},{9,15,2,5},{9,0,2,5},{0,9,5,2},{15,9,5,2},{3,3,3,3},{14,14,3,3},{3,14,3,3},{14,3,3,3}}}
+M.AIRBURST_CLUSTER={w=20,h=20,runs={{8,9,4,8},{9,17,2,3},{1,2,4,8},{2,10,2,3},{15,2,4,8},{16,10,2,3},{6,4,2,2},{12,4,2,2},{9,1,2,2}}}
 for _,run in ipairs(M.ROCKET.runs) do
     M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4]}
 end
@@ -7984,13 +7991,14 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
         text(m.reserve and (string.format('%03d',m.reserve)..' '..(m.reserve_kind or 'SHELLS')) or '-- SHELLS',0,-19,9,ink,.8)
     else
-        local heading=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.ammo_mode or m.label
+        local cannon_mode=(m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') and m.resource_hex~='26e40437ea275296'
+        local heading=cannon_mode and m.ammo_mode or m.label
         local heading_y=pixel and math.max(42,5+number_top+3) or 42
         text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
-        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].size=(pixel and 18 or 12)*scale end
+        if cannon_mode then d[#d].size=(pixel and 18 or 12)*scale end
         text(number,0,5,32,ink)
         local fire_icon=HUD.fire_icons[m.energy_icon or m.ammo_icon or m.fire_mode]
-        if fire_icon and (not m.ammo_mode or m.ammo_mode=='HEAT' or m.ammo_mode=='HE') then
+        if fire_icon and (not m.ammo_mode or m.ammo_mode=='HEAT' or m.ammo_mode=='HE' or m.resource_hex=='26e40437ea275296') then
             d[#d].mode_count=true
             local edge=#number*(pixel and 36 or 32)*.6
             if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
@@ -8016,8 +8024,8 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 d[#d].mode_icon=true
             end
         end
-        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then d[#d].mode_count=true end
-        if m.ammo_mode=='APHET' or m.ammo_mode=='FLAK' then
+        if cannon_mode then d[#d].mode_count=true end
+        if cannon_mode then
             local edge=#number*(pixel and 36 or 32)*.6
             if measure then local a,b,c=measure(number,(pixel and 36 or 32)*scale);if c then edge=c/scale end end
             local ix,iy=edge+8,5
@@ -8745,6 +8753,7 @@ function M.new(backend)
                 assert(r.read(main_address,24)==main_rec,'ammo control weapon changed')
                 local mode=result.resource_hex=='a8cffb316f0b5c5f' and HUD.ammo_types.autocannon_mode(r.u(controls,4)) or nil
                 if result.resource_hex=='9f80d67a12a7e40f' then mode=HUD.ammo_types.recoilless_mode(r.u(controls,4)) end
+                if result.resource_hex=='26e40437ea275296' then mode=HUD.ammo_types.airburst_mode(r.u(controls,4)) end
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
