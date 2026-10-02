@@ -9424,7 +9424,6 @@ function M.new(sr,log,direct)
         local py=p.y+m[2]*x+m[6]*y+m[10]*z
         local pz=p.z+m[3]*x+m[7]*y+m[11]*z
         if p.gui_pose then px,py,pz=p.x,p.y,p.z end
-        if c.placement_mode=='auto' and p.first_person and not p.gui_pose then m=HUD.pose_motion.upright(m) end
         if c.keep_hud_upright and not p.gui_pose then m=HUD.pose_motion.upright(m) end
         m=HUD.pose_motion.step(smooth,m,px,py,pz,tostring(c.placement_mode)..':'..tostring(p.id)..':'..tostring(p.candidate),dt,c)
         px,py,pz=m[13],m[14],m[15]
@@ -10225,7 +10224,7 @@ function M.panel_pose(p,c,commands)
         at={x=m[13]+m[1]*dx+m[5]*dy+m[9]*dz,
             y=m[14]+m[2]*dx+m[6]*dy+m[10]*dz,
             z=m[15]+m[3]*dx+m[7]*dy+m[11]*dz}
-    elseif c.placement_mode=='auto' and p.first_person then m=HUD.pose_motion.upright(m) end
+    end
     if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
     local angle=math.rad(c.panel_rotation or 0)
     if angle~=0 then

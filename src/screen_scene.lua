@@ -12,7 +12,7 @@ function M.panel_pose(p,c,commands)
         at={x=m[13]+m[1]*dx+m[5]*dy+m[9]*dz,
             y=m[14]+m[2]*dx+m[6]*dy+m[10]*dz,
             z=m[15]+m[3]*dx+m[7]*dy+m[11]*dz}
-    elseif c.placement_mode=='auto' and p.first_person then m=HUD.pose_motion.upright(m) end
+    end
     if c.keep_hud_upright then m=HUD.pose_motion.upright(m) end
     local angle=math.rad(c.panel_rotation or 0)
     if angle~=0 then
