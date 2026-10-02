@@ -260,7 +260,7 @@ function M.apply(raw)
     end
     if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
-    if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
+    if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS';raw.ammo_icon='DART' end
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='2b28e17ffed05f7c' then raw.ammo_icon=raw.fire_mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL' end

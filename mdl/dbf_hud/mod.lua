@@ -8409,7 +8409,7 @@ function M.apply(raw)
     end
     if raw.resource_hex=='80f1a156d9fa1e36' then raw.label='15x100MM' end
     if raw.resource_hex=='f49227a0630a3f7f' then raw.label='BOLTS';raw.ammo_icon='BOLT' end
-    if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
+    if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS';raw.ammo_icon='DART' end
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='2b28e17ffed05f7c' then raw.ammo_icon=raw.fire_mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL' end
@@ -8559,6 +8559,14 @@ for _,offset in ipairs({0,16,32}) do
         M.AMENDMENT_BURST.runs[#M.AMENDMENT_BURST.runs+1]={offset+r[1],r[2],r[3],r[4],r[5]}
     end
 end
+-- Re-Educator: slim silver dart, pointed needle and distinct rear vanes.
+M.DART={w=11,h=34,runs={
+    {4,2,3,24,{180,195,205}},{4,3,1,22,{240,245,250}},
+    {1,0,3,7,{88,125,145}},{7,0,3,7,{88,125,145}},
+    {2,7,2,3,{88,125,145}},{7,7,2,3,{88,125,145}},
+    {3,0,5,2,{220,228,232}},{3,24,5,2,{105,120,130}},
+    {4,26,3,4,{225,232,238}},{5,30,1,4,{245,248,250}}
+}}
 -- Heavy bolt cartridge: rim, straight case, shoulder and broad pointed projectile.
 M.BOLT_ROUND={w=14,h=28,runs={
     {0,0,14,2},{1,2,12,2},{2,5,10,13},
