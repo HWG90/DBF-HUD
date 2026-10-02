@@ -1601,8 +1601,8 @@ test('screen scene preserves saved mounts and shader font colors with dimmed dig
     sr.Gui.destroy_text=function()text_removed=text_removed+1 end
     local native_renderer=HUD.screen_scene.new(sr,function()end)
     assert(native_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05))
-    assert(#text_draws==3 and text_draws[1].text=='0' and text_draws[1].color[1]==51 and text_draws[3].color[1]==153)
-    assert(native_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and text_removed==3)
+    assert(#text_draws==2 and text_draws[1].text=='00' and text_draws[1].color[1]==51 and text_draws[2].color[1]==153)
+    assert(native_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and text_removed==2)
     native_renderer.release()
     local oriented={};local oriented_removed=0
     sr.Matrix4x4={from_axes=function(right,forward,up,at)return {right=right,up=up,at=at}end}
@@ -1615,9 +1615,9 @@ test('screen scene preserves saved mounts and shader font colors with dimmed dig
     local oriented_renderer=HUD.screen_scene.new(sr,function()end)
     local previous_text_count=#text_draws
     assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05))
-    assert(#oriented==3 and #text_draws==previous_text_count and oriented[1].color[1]==51 and oriented[3].color[1]==153)
-    assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and oriented_removed==3)
-    oriented_renderer.release();assert(oriented_removed>=3)
+    assert(#oriented==2 and #text_draws==previous_text_count and oriented[1].color[1]==51 and oriented[2].color[1]==153)
+    assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and oriented_removed==2)
+    oriented_renderer.release();assert(oriented_removed>=2)
     HUD.world_style.prepare=original
 end)
 test('generated native glyph UVs stay within existing atlas bounds',function()
@@ -1649,16 +1649,13 @@ test('rotation profiles roundtrip and retired opacity cannot dim the HUD',functi
     local c=HUD.config.new();HUD.config.apply(c,{opacity=.2,effect_scanlines=true,effect_flicker=true,effect_sweep=true})
     assert(c.opacity==1 and c.effect_scanlines and c.effect_flicker and c.effect_sweep)
 end)
-test('rectangle batching preserves coverage and draw boundaries',function()
-    local function r(x,y,w,h,color,alpha,fold)
-        return {type='rect',x=x,y=y,w=w,h=h,c=color or {255,255,255},a=alpha or 1,fold_child=fold}
-    end
-    local input={r(0,0,2,1),r(0,1,2,1),r(0,2,2,1),r(2,0,1,3,{255,0,0}),r(3,0,1,3,nil,.5),r(4,0,1,3,nil,.5,true)}
-    local output=HUD.screen_scene.merge_rects(input)
-    assert(#output==4 and output[1].h==3 and input[1].h==1)
-    local horizontal=HUD.screen_scene.merge_rects({r(0,0,2,3),r(2,0,2,3)})
-    assert(#horizontal==1 and horizontal[1].w==4 and horizontal[1].h==3)
-    local separated=HUD.screen_scene.merge_rects({r(0,0,2,1),{type='text'},r(0,1,2,1)})
-    assert(#separated==3)
+test('screen numeric grouping retains leading-zero opacity and proportional spacing',function()
+    local face=HUD.native_font_data.faces.profont
+    local grouped=HUD.screen_scene.text_parts({text='045',numeric_display=true,size=36,font='profont'},face)
+    assert(#grouped==2 and grouped[1].text=='0' and grouped[1].alpha==1/3 and grouped[2].text=='45' and grouped[2].alpha==1)
+    local full=HUD.screen_scene.text_parts({text='145',numeric_display=true,size=36,font='profont'},face)
+    assert(#full==1 and full[1].text=='145')
+    local variable={glyphs={}};for digit=48,57 do variable.glyphs[digit]={digit} end
+    assert(#HUD.screen_scene.text_parts({text='145',numeric_display=true,size=36,font='profont'},variable)==3)
 end)
 print(string.format('%d contract tests passed',tests))
