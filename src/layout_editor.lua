@@ -104,7 +104,8 @@ function M.new(hud,backend,log)
         if not e.active then return false end
         e.set_view(hud.first_person)
         e.set('x',0);e.set('y',0);e.set('z',0)
-        e.status='Position zeroed for current weapon/view; F7 saves'
+        e.set_scale(1)
+        e.status='Position zeroed and scale reset to 1 for current weapon/view; F7 saves'
         log('LAYOUT_EDITOR '..e.status)
         return true
     end

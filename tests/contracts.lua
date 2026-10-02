@@ -1464,9 +1464,9 @@ test('attachment points persist per view and bone cycling preserves offsets',fun
     e.set_scale(1.4)
     assert(e.zero_position())
     local zero=h.weapon_clearance[key].first_right
-    assert(zero.x==0 and zero.y==0 and zero.z==0 and zero.scale==1.4 and zero.attach_point=='node:12345678')
+    assert(zero.x==0 and zero.y==0 and zero.z==0 and zero.scale==1 and zero.attach_point=='node:12345678')
     assert(h.weapon_clearance[key].right.x==.1)
-    assert(e.save() and saved[key].first_right.attach_point=='node:12345678' and saved[key].first_right.scale==1.4 and not saved[key].right.scale and not saved[key].right.attach_point)
+    assert(e.save() and saved[key].first_right.attach_point=='node:12345678' and saved[key].first_right.scale==1 and not saved[key].right.scale and not saved[key].right.attach_point)
     assert(e.status:find('AR-23 Liberator',1,true))
     assert(HUD.weapon_offsets.load({read_weapon_offsets=function()return saved end},function(err)error(err)end)==saved)
     e.reset();assert(not h.weapon_clearance[key].first_right.attach_point and e.scale()==1)
