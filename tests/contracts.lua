@@ -1779,4 +1779,17 @@ test('font availability checks reuse results only within one frame',function()
     HUD.native_font.end_frame();HUD.native_font.resolve(sr,'profont',false);assert(calls==4)
     HUD.native_font.begin_frame();HUD.native_font.resolve(sr,'profont',false);assert(calls==6);HUD.native_font.end_frame()
 end)
+test('Bushwhacker selector uses shell symbols in semi and volley',function()
+    for _,mode in ipairs({'SEMI','VOLLEY'}) do
+        local raw=HUD.ammo_types.apply({resource_hex='2b28e17ffed05f7c',kind='magazine',rounds=3,capacity=3,reserve=12,fire_mode=mode})
+        assert(raw.ammo_icon==(mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL'))
+        local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.new(),0)
+        local label=false;local blue=false
+        for _,c in ipairs(commands) do
+            label=label or c.text==mode
+            blue=blue or (c.mode_icon and c.c[1]==65 and c.c[2]==145 and c.c[3]==235)
+        end
+        assert(label and blue)
+    end
+end)
 print(string.format('%d contract tests passed',tests))

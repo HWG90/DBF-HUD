@@ -8443,6 +8443,7 @@ function M.apply(raw)
     if raw.resource_hex=='0b882808c6f498e8' then raw.label='DARTS' end
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
+    if raw.resource_hex=='2b28e17ffed05f7c' then raw.ammo_icon=raw.fire_mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL' end
     if raw.resource_hex=='dbb6c961c59fadc1' then raw.ammo_icon='BOLT_ROUND' end
     if raw.resource_hex=='84354339522c932d' then
         raw.label='INCDRY'
@@ -8562,6 +8563,10 @@ M.SHELL=M.BARREL_SHELL
 M.DOUBLE_SHELL={w=27,h=28,runs={}}
 for _,offset in ipairs({0,15})do
     for _,r in ipairs(M.SHELL.runs)do M.DOUBLE_SHELL.runs[#M.DOUBLE_SHELL.runs+1]={r[1]+offset,r[2],r[3],r[4]} end
+end
+M.TRIPLE_SHELL={w=42,h=28,runs={}}
+for _,offset in ipairs({0,15,30}) do
+    for _,r in ipairs(M.SHELL.runs) do M.TRIPLE_SHELL.runs[#M.TRIPLE_SHELL.runs+1]={r[1]+offset,r[2],r[3],r[4]} end
 end
 M.ROCKET={w=11,h=24,runs={{4,21,3,2},{5,23,1,1},{3,5,5,16},{1,0,3,7},{7,0,3,7},{4,0,3,3}}}
 -- Short, broad guided missile with tapered nose, casing seam and rear fins.
@@ -8997,15 +9002,15 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             end
             local icon_y=5+(bottom+top-fire_icon.h*factor)/2
             local icon_gap=2
-            if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then
-                for _,offset in ipairs(fire_icon==HUD.fire_icons.DOUBLE_SHELL and {0,15} or {0}) do
+            if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL or fire_icon==HUD.fire_icons.TRIPLE_SHELL then
+                for _,offset in ipairs(fire_icon==HUD.fire_icons.TRIPLE_SHELL and {0,15,30} or fire_icon==HUD.fire_icons.DOUBLE_SHELL and {0,15} or {0}) do
                     rect(edge+icon_gap+(offset+3)*factor,icon_y+11*factor,6*factor,14*factor,{65,145,235},.36)
                     d[#d].mode_icon=true
                 end
             end
             for _,run in ipairs(fire_icon.runs) do
                 local color=run[5] or ink
-                if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL then color=run[2]<9 and {218,172,78} or {65,145,235} end
+                if fire_icon==HUD.fire_icons.SHELL or fire_icon==HUD.fire_icons.DOUBLE_SHELL or fire_icon==HUD.fire_icons.TRIPLE_SHELL then color=run[2]<9 and {218,172,78} or {65,145,235} end
                 rect(edge+icon_gap+run[1]*factor,icon_y+run[2]*factor,run[3]*factor,run[4]*factor,color,.9)
                 d[#d].mode_icon=true
             end
@@ -9770,7 +9775,7 @@ function M.new(backend)
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
-                if result.resource_hex=='72170a55a1f37ff1' and r.u(controls,0)==4 then fire_mode='VOLLEY' end
+                if (result.resource_hex=='72170a55a1f37ff1' or result.resource_hex=='2b28e17ffed05f7c') and r.u(controls,0)==4 then fire_mode='VOLLEY' end
                 local safety_mode=result.resource_hex=='2e9d0bdc48b09e60' and ({[5]='SAFE',[6]='UNSAFE'})[r.u(controls,0)] or nil
                 return mode,fire_mode,safety_mode
             end)

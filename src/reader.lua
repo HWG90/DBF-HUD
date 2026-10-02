@@ -263,7 +263,7 @@ function M.new(backend)
                 local settings=config('weapon_data',manager,main_wid,main_rec,owner)
                 local choices=settings and {r.u(settings,0x90),r.u(settings,0x94),r.u(settings,0x98)}
                 local fire_mode=result.alternate_fire and 'ALT' or HUD.ammo_types.selectable_fire_mode(r.u(controls,0),choices)
-                if result.resource_hex=='72170a55a1f37ff1' and r.u(controls,0)==4 then fire_mode='VOLLEY' end
+                if (result.resource_hex=='72170a55a1f37ff1' or result.resource_hex=='2b28e17ffed05f7c') and r.u(controls,0)==4 then fire_mode='VOLLEY' end
                 local safety_mode=result.resource_hex=='2e9d0bdc48b09e60' and ({[5]='SAFE',[6]='UNSAFE'})[r.u(controls,0)] or nil
                 return mode,fire_mode,safety_mode
             end)
