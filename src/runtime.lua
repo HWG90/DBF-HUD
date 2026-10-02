@@ -358,7 +358,9 @@ function M.start(sr,backend,options)
         local selected_view=(profiles and profiles[active_view] and profiles[active_view].attach_point) and active_view or (self.placement_view_parity and 'right' or active_view)
         local selected_profile=profiles and profiles[selected_view]
         local attach_point=selected_profile and selected_profile.attach_point
+        if not attach_point then attach_point=self.first_person and 'root' or 'node:4d25685a' end
         local anchor_hash=attach_point and attach_point:match('^node:(%x+)$')
+        if attach_point=='sight' then anchor_hash='527c9c73' end
         self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active) or nil
         if self.weapon_pose then self.weapon_pose.attach_point=attach_point end
         draw_bone_marker(dt)

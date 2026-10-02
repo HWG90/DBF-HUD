@@ -42,7 +42,7 @@ function M.new(backend)
             assert(math.abs(dot)<.05,'matrix axes')
         end
         for i=13,15 do assert(math.abs(matrix[i])<1e7,'matrix position') end
-        local sight;local anchors={}
+        local sight,selected_hash;local anchors={}
         -- Optional named anchor; any unavailable or changing table keeps root fallback.
         local sight_ok,sight_value=pcall(function()
             assert(nodes<=128,'sight node limit')
@@ -50,7 +50,7 @@ function M.new(backend)
             for n=0,nodes-1 do
                 local hash=r.u(data,n*4)
                 if enumerate then anchors[#anchors+1]={index=n,hash=string.format('%08x',hash)} end
-                if hash==(anchor_hash or 0x527c9c73) then
+                if hash==(anchor_hash or 0x4d25685a) or (not anchor_hash and hash==0x527c9c73 and selected_hash~=0x4d25685a) then
                     local pose=r.read(address+n*64,64);local delta={}
                     for j=1,3 do delta[j]=r.f(pose,(11+j)*4)-matrix[12+j];assert(math.abs(delta[j])<5,'sight bounds') end
                     assert(r.p(object+0xa0)==hashes and r.read(hashes,nodes*4)==data,'sight table changed')
@@ -66,6 +66,7 @@ function M.new(backend)
                         result[({'x','y','z'})[axis]]=v
                     end
                     sight=result
+                    selected_hash=hash
                 end
             end
         end)

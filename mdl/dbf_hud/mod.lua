@@ -8832,7 +8832,7 @@ function M.new(backend)
             assert(math.abs(dot)<.05,'matrix axes')
         end
         for i=13,15 do assert(math.abs(matrix[i])<1e7,'matrix position') end
-        local sight;local anchors={}
+        local sight,selected_hash;local anchors={}
         -- Optional named anchor; any unavailable or changing table keeps root fallback.
         local sight_ok,sight_value=pcall(function()
             assert(nodes<=128,'sight node limit')
@@ -8840,7 +8840,7 @@ function M.new(backend)
             for n=0,nodes-1 do
                 local hash=r.u(data,n*4)
                 if enumerate then anchors[#anchors+1]={index=n,hash=string.format('%08x',hash)} end
-                if hash==(anchor_hash or 0x527c9c73) then
+                if hash==(anchor_hash or 0x4d25685a) or (not anchor_hash and hash==0x527c9c73 and selected_hash~=0x4d25685a) then
                     local pose=r.read(address+n*64,64);local delta={}
                     for j=1,3 do delta[j]=r.f(pose,(11+j)*4)-matrix[12+j];assert(math.abs(delta[j])<5,'sight bounds') end
                     assert(r.p(object+0xa0)==hashes and r.read(hashes,nodes*4)==data,'sight table changed')
@@ -8856,6 +8856,7 @@ function M.new(backend)
                         result[({'x','y','z'})[axis]]=v
                     end
                     sight=result
+                    selected_hash=hash
                 end
             end
         end)
@@ -10724,10 +10725,14 @@ function M.new(hud,backend,log)
         hud.weapon_clearance[e.resource]=restored;hud.auto_mounts={};e.status='Original position restored; save to keep it';return true
     end
     function e.points()
-        local list={{value='sight',label='Sight (default)'},{value='root',label='Weapon root'}}
+        local list={{value='node:4d25685a',label='Attach optic (default)'},{value='root',label='Weapon root'}}
+        if hud.first_person then
+            list={{value='root',label='Weapon root (default)'},{value='node:4d25685a',label='Attach optic'}}
+        end
         for _,node in ipairs((hud.weapon_pose or {}).anchors or {}) do
             list[#list+1]={value='node:'..node.hash,label=(node_names[node.hash] or 'Unnamed')..' [node '..node.index..']'}
         end
+        list[#list+1]={value='sight',label='Sight (legacy)'}
         return list
     end
     function e.cycle(direction)
@@ -10737,7 +10742,8 @@ function M.new(hud,backend,log)
         local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
         local offset=views[e.view] or {};views[e.view]=offset
         local list=e.points();local current=1
-        for i,item in ipairs(list)do if item.value==(offset.attach_point or 'sight')then current=i;break end end
+        local default_point=hud.first_person and 'root' or 'node:4d25685a'
+        for i,item in ipairs(list)do if item.value==(offset.attach_point or default_point)then current=i;break end end
         local item=list[(current-1+direction)%#list+1];offset.attach_point=item.value
         e.point_label=item.label;hud.auto_mounts={};e.status='Attach: '..item.label..'; save to keep it';return true
     end
@@ -11458,7 +11464,9 @@ function M.start(sr,backend,options)
         local selected_view=(profiles and profiles[active_view] and profiles[active_view].attach_point) and active_view or (self.placement_view_parity and 'right' or active_view)
         local selected_profile=profiles and profiles[selected_view]
         local attach_point=selected_profile and selected_profile.attach_point
+        if not attach_point then attach_point=self.first_person and 'root' or 'node:4d25685a' end
         local anchor_hash=attach_point and attach_point:match('^node:(%x+)$')
+        if attach_point=='sight' then anchor_hash='527c9c73' end
         self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active) or nil
         if self.weapon_pose then self.weapon_pose.attach_point=attach_point end
         draw_bone_marker(dt)

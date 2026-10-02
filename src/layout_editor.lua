@@ -114,10 +114,14 @@ function M.new(hud,backend,log)
         hud.weapon_clearance[e.resource]=restored;hud.auto_mounts={};e.status='Original position restored; save to keep it';return true
     end
     function e.points()
-        local list={{value='sight',label='Sight (default)'},{value='root',label='Weapon root'}}
+        local list={{value='node:4d25685a',label='Attach optic (default)'},{value='root',label='Weapon root'}}
+        if hud.first_person then
+            list={{value='root',label='Weapon root (default)'},{value='node:4d25685a',label='Attach optic'}}
+        end
         for _,node in ipairs((hud.weapon_pose or {}).anchors or {}) do
             list[#list+1]={value='node:'..node.hash,label=(node_names[node.hash] or 'Unnamed')..' [node '..node.index..']'}
         end
+        list[#list+1]={value='sight',label='Sight (legacy)'}
         return list
     end
     function e.cycle(direction)
@@ -127,7 +131,8 @@ function M.new(hud,backend,log)
         local views=hud.weapon_clearance[e.resource] or {};hud.weapon_clearance[e.resource]=views
         local offset=views[e.view] or {};views[e.view]=offset
         local list=e.points();local current=1
-        for i,item in ipairs(list)do if item.value==(offset.attach_point or 'sight')then current=i;break end end
+        local default_point=hud.first_person and 'root' or 'node:4d25685a'
+        for i,item in ipairs(list)do if item.value==(offset.attach_point or default_point)then current=i;break end end
         local item=list[(current-1+direction)%#list+1];offset.attach_point=item.value
         e.point_label=item.label;hud.auto_mounts={};e.status='Attach: '..item.label..'; save to keep it';return true
     end
