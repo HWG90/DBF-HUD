@@ -85,7 +85,6 @@ function M.new(hud)
             end
             local styles={'Standard','Hologram','Instrument','Blueprint','Retro CRT'}
             local selected_style=1;for i,name in ipairs(HUD.config.styles)do if name==hud.config.style_3d then selected_style=i end end
-            local preset_name='My preset'
             local preset_choices=hud.list_presets and hud.list_presets() or {}
             if #preset_choices==0 then preset_choices={'No saved presets'} end
             local placement_controls={
@@ -108,6 +107,35 @@ function M.new(hud)
                     end end
                 end end
                 if font_handle then font_handle.set('saved_preset',1)end
+            end
+            local function selected_preset()
+                local name=preset_choices[font_handle.get('saved_preset')]
+                assert(name~='No saved presets','Save a preset first')
+                return name
+            end
+            local function save_preset()
+                local name=font_handle.get('preset_name')
+                local overwrite=false
+                for _,existing in ipairs(hud.list_presets()) do
+                    if existing:lower()==name:lower() then overwrite=true end
+                end
+                local ok,err=hud.save_preset(name)
+                assert(ok,err)
+                refresh_presets()
+                if overwrite then return 'Overwrote '..name..'.layout' end
+            end
+            local function load_preset()
+                local ok,err=hud.load_preset(selected_preset())
+                assert(ok,err)
+            end
+            local function delete_preset()
+                local ok,err=hud.delete_preset(selected_preset())
+                assert(ok,err)
+                refresh_presets()
+            end
+            local function reset_defaults()
+                local ok,err=hud.reset_defaults()
+                assert(ok,err)
             end
             font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
                 description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
@@ -143,18 +171,18 @@ function M.new(hud)
                     {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
                         on_change=function(v)save('panel_opacity',v)end}
                 }},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
-                    {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
+                    {id='preset_name',type='input',label='Preset filename',default='My preset'},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
-                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=function()local name=font_handle.get('preset_name');local overwrite=false;for _,existing in ipairs(hud.list_presets())do if existing:lower()==name:lower() then overwrite=true end end;local ok,err=hud.save_preset(name);assert(ok,err);refresh_presets();if overwrite then return 'Overwrote '..name..'.layout' end end},
-                    {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
-                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);refresh_presets() end},
+                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=save_preset},
+                    {id='load_preset',type='button',label='Load selected preset',on_activate=load_preset},
+                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=delete_preset},
                     {type='text',label=''},
                     {type='text',label=''},
                     {type='text',label=''},
                     {type='text',label='Reset all settings and weapon layouts'},
                     {id='default_setup',type='button',label='Reset to Default setup',
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
-                        on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
+                        on_activate=reset_defaults}
                 }}}})
             font_host=host;self.status='MCM > DBF-HUD'
         end
