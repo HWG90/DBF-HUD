@@ -108,6 +108,17 @@ function M.new(hud)
                 layout_controls[#layout_controls+1]={id='restore_layout',type='button',label='Restore starting layout',on_activate=function()assert(e.reset(),'Enable editing first')end}
                 layout_controls[#layout_controls+1]={id='close_editor',type='button',label='Close editor',on_activate=function()e.active=false end}
             end
+            local function refresh_presets()
+                preset_choices=hud.list_presets and hud.list_presets() or {}
+                if #preset_choices==0 then preset_choices={'No saved presets'}end
+                local mod=host.mods and host.mods.dbf_hud_fonts
+                if mod then for _,page in ipairs(mod.pages)do
+                    if page.id=='presets' then for _,control in ipairs(page.controls)do
+                        if control.id=='saved_preset' then control.choices=preset_choices end
+                    end end
+                end end
+                if font_handle then font_handle.set('saved_preset',1)end
+            end
             font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
                 description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
                     {id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
@@ -144,10 +155,10 @@ function M.new(hud)
                         on_change=function(v)save('panel_opacity',v)end}
                 }},{id='layout',name='Layout',controls=layout_controls},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset',on_change=function(v)preset_name=v end},
-                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
+                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=function()local ok,err=hud.save_preset(font_handle.get('preset_name'));assert(ok,err);refresh_presets() end},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
                     {id='load_preset',type='button',label='Load selected preset',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.load_preset(name);assert(ok,err)end},
-                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);font_handle.unregister();font_handle=nil;font_host=nil end},
+                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=function()local name=preset_choices[font_handle.get('saved_preset')];assert(name~='No saved presets','Save a preset first');local ok,err=hud.delete_preset(name);assert(ok,err);refresh_presets() end},
                     {id='default_setup',type='button',label='Reset to Default setup',
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=function()local ok,err=hud.reset_defaults();assert(ok,err)end}
