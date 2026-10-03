@@ -99,3 +99,6 @@ Approved close-up installed: only senator_panel changed; 165 contract checks pas
 
 ### Publication scope correction
 The alternate Senator cylinder is local-only. Its source and previews were removed from the current public tree by a normal corrective commit; they remain in earlier Git history. Public source retains the approved upright Senator.
+
+### Extra artwork bays retired; laser family restored
+The added catalogue housing/artwork bays are disabled and ineligible. Nine identified laser resources and all native heat gauges bypass the later theming layer, preserving their preceding common telemetry layout and selected decorations. See docs/LASER-ROLLBACK.md. 166 contracts passed. Local alternate Senator remains excluded from the current public tree.

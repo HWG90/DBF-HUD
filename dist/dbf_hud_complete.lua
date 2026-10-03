@@ -8403,6 +8403,7 @@ function M.selectable_fire_mode(control,choices)
     if count>1 and seen[control] then return M.fire_mode(control) end
 end
 local lasers={['416d053372c4e433']=true,['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
+M.laser_weapons=lasers
 local plasma={['05d8d8c073b9d502']=true,['e8d5f49ad7780e54']=true,
     ['eea5e3cef1e12c14']=true,['efdcef306cea63fe']=true,['fb3a19078694708a']=true}
 function M.apply(raw)
@@ -8528,9 +8529,6 @@ local deposit_capacities={
 }
 function M.deposit_capacity(resource)return deposit_capacities[resource] end
 return M
-
-
-
 
 end)()
 HUD.model=(function()
@@ -8867,9 +8865,6 @@ for _,run in ipairs({{12,14,5,3},{11,17,7,3},{12,20,5,2},{13,22,3,2},{14,24,1,2}
     M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4],flame}
 end
 return M
-
-
-
 
 end)()
 HUD.munition_art=(function()
@@ -9589,8 +9584,11 @@ end)()
 HUD.catalog_housing=(function()
 -- Shared physical instrument finish. Existing telemetry and meter geometry remain authoritative.
 local M={protected={['e6d932be83729076']=true,['89c5493e08ca4207']=true,['52e4334e6a128caf']=true,['2e9d0bdc48b09e60']=true,['11c27d3babb38956']=true,['a8cffb316f0b5c5f']=true,['6cfcc7f8801a0266']=true,['3828e2051aa9e897']=true,['9f80d67a12a7e40f']=true,['84354339522c932d']=true,['5fecab819f96a3e8']=true,['0f83639ab8c86165']=true,['a6a735accb4a327f']=true,['14d5d4506056c7a4']=true,['5f3ec9bda2bd8553']=true,['4dbd74f49c8ffc13']=true,['0b882808c6f498e8']=true,['e5796355a8fd67e0']=true,['416d053372c4e433']=true,['b2b5e0d185605f9e']=true,['26e40437ea275296']=true,['2b28e17ffed05f7c']=true}}
-function M.eligible(id) return not M.protected[id] end
+-- Retired added artwork bays. Earlier weapon presentation remains authoritative.
+M.enabled=false
+function M.eligible(id) return M.enabled and not M.protected[id] end
 function M.apply(out,m,s,cfg,opacity,style,fallback,measure)
+ if not M.enabled then return out end
  if not M.eligible(m.resource_hex) then return out end
  local frame=out[1];if not frame or frame.type~='panel' then return out end
  -- Double Freedom: a retro shotgun status slab, rather than nested instrument frames.
@@ -9912,6 +9910,8 @@ end
 function M.apply(out,m,scale,cfg,opacity,measure,decorate,clock)
  local style=M.catalog[m.resource_hex]
  if not style then return out end
+ -- All native heat gauges and identified laser variants use the preceding shared layout.
+ if m.kind=='heat' or HUD.ammo_types.laser_weapons[m.resource_hex] or m.energy_icon=='LASER' then return out end
  -- Restore the preceding fuel/gas gauge; telemetry and warning zones stay in layout.lua.
  if m.label=='FUEL' or m.label=='GAS' then return out end
  if HUD.shared_suite and (HUD.shared_suite.enabled or cfg.shared_suite_preview==true) and HUD.shared_suite.eligible(m.resource_hex) then return HUD.shared_suite.compose(out,m,scale,cfg,opacity,style,measure,decorate) end
@@ -10910,8 +10910,6 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
 end
 return M
 
-
-
 end)()
 HUD.memory=(function()
 -- Private FFI symbols prevent collisions with other addons' declarations.
@@ -11888,7 +11886,6 @@ function M.new(backend)
     return self
 end
 return M
-
 
 end)()
 HUD.anchor=(function()
@@ -13341,8 +13338,6 @@ function M.new(sr,log)
 end
 return M
 
-
-
 end)()
 HUD.placement=(function()
 -- Weapon/view placement. Native readers remain in pose and camera_mode.
@@ -13876,9 +13871,6 @@ function M.new(hud,backend,log)
     return e
 end
 return M
-
-
-
 
 end)()
 HUD.menu=(function()

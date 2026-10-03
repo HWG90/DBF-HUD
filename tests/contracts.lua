@@ -1572,7 +1572,7 @@ test('catalog themes cover all known names and preserve bounded geometry and liv
                 local m=assert(HUD.model.normalize(raw));local original=m.value
                 local commands=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0)
                 assert(m.value==original and m.reserve==8 and m.fire_mode==mode,id)
-                assert((m.label=='FUEL' or m.label=='GAS') and commands[1].weapon_theme==nil or commands[1].weapon_theme==style.family,id)
+                assert((m.label=='FUEL' or m.label=='GAS' or HUD.ammo_types.laser_weapons[id]) and commands[1].weapon_theme==nil or commands[1].weapon_theme==style.family,id)
                 local frame=commands[1];local minx,maxx=math.huge,-math.huge
                 for _,v in ipairs(commands) do
                     assert(v.x==v.x and v.y==v.y,id)
@@ -2268,7 +2268,7 @@ local file=assert(io.open(assert(DBF_APPROVED_SNAPSHOT,'run tests/run.py to unpa
 for _,id in ipairs({'e6d932be83729076','89c5493e08ca4207','52e4334e6a128caf','2e9d0bdc48b09e60','11c27d3babb38956','a8cffb316f0b5c5f','6cfcc7f8801a0266','3828e2051aa9e897','9f80d67a12a7e40f','84354339522c932d','5fecab819f96a3e8','0f83639ab8c86165','a6a735accb4a327f','72170a55a1f37ff1','14d5d4506056c7a4','5f3ec9bda2bd8553','4dbd74f49c8ffc13','0b882808c6f498e8','e5796355a8fd67e0','416d053372c4e433','b2b5e0d185605f9e','26e40437ea275296','2b28e17ffed05f7c'}) do for _,scale in ipairs({.05,1,2}) do for _,mode in ipairs({'SEMI','AUTO','BURST'}) do for _,cap in ipairs({1,10}) do for _,n in ipairs({0,1}) do
 local raw=HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=n,capacity=cap,reserve=8,reserve_kind='MAGS',fire_mode=mode,ammo_mode=id=='a8cffb316f0b5c5f' and 'FLAK' or nil,safety_mode=id=='2e9d0bdc48b09e60' and 'UNSAFE' or nil})
 local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,scale,1,HUD.config.defaults,.3)
-index=index+1;local expected=file:read('*l');if id~='72170a55a1f37ff1' and id~='a8cffb316f0b5c5f' and id~='9f80d67a12a7e40f' then assert(serial(commands)==expected,'accepted panel changed '..id..' sample '..index) end
+index=index+1;local expected=file:read('*l');if id~='72170a55a1f37ff1' and id~='a8cffb316f0b5c5f' and id~='9f80d67a12a7e40f' and id~='416d053372c4e433' then assert(serial(commands)==expected,'accepted panel changed '..id..' sample '..index) end
 end end end end end
 assert(file:read('*l')==nil);file:close()
 end)
@@ -2282,17 +2282,17 @@ test('machined catalog covers unapproved families without changing telemetry or 
     local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=7,capacity=10,reserve=8,reserve_kind='MAGS',fire_mode=mode}))
     local before=m.value;local out=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0)
     local fuel=m.label=='FUEL' or m.label=='GAS'
-    assert(fuel and not out[1].machined_catalog or id=='72170a55a1f37ff1' and out[1].type=='panel' or out[1].machined_catalog or out[1].shared_suite,id);assert(m.value==before and m.reserve==8 and m.fire_mode==mode,id)
+    assert(not HUD.catalog_housing.enabled or fuel and not out[1].machined_catalog or id=='72170a55a1f37ff1' and out[1].type=='panel' or out[1].machined_catalog or out[1].shared_suite,id);assert(m.value==before and m.reserve==8 and m.fire_mode==mode,id)
     local hardware=0
     for _,d in ipairs(out) do if d.machined_detail then
      hardware=hardware+1;local f=out[1]
      assert(d.x>=f.x-.001 and d.y>=f.y-.001 and d.x+d.w<=f.x+f.w+.001 and d.y+d.h<=f.y+f.h+.001,id)
     end end
-    if fuel or out[1].shared_suite or id=='72170a55a1f37ff1' then assert(hardware==0,id) else assert(hardware>20,id) end
+    if not HUD.catalog_housing.enabled or fuel or out[1].shared_suite or id=='72170a55a1f37ff1' then assert(hardware==0,id) else assert(hardware>20,id) end
    end end
   end
  end
- assert(total==148 and eligible==126)
+ assert(total==148 and eligible==0)
  for _,kind in ipairs({'heat','rounds'}) do
   local raw={resource_hex='27ee1ed8f6fb6356',kind=kind,rounds=30,capacity=100,heat=.7,reserve=3}
   local m=HUD.model.normalize(raw);local out=HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)
@@ -2359,17 +2359,15 @@ test('authoritative Doom GIF preserves timed sequence and aspect-fit bounds',fun
  end
 end)
 
-test('catalog single-shot bay removes loaded number and empties its projectile cradle',function()
+test('retired single-shot artwork bay restores earlier numeric ammunition display',function()
  local cfg=HUD.config.new()
  for _,value in ipairs({0,1}) do
   local m=HUD.model.normalize({resource_hex='692eb345969d368e',kind='magazine',rounds=value,capacity=1,reserve=3})
-  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);local art=false;local state=false
-  for _,d in ipairs(out) do art=art or d.catalog_heading;state=state or d.text==(value==0 and 'EMPTY' or 'LOADED');assert(d.text~='001' and d.text~='000') end
-  assert((not not art)==(value==1) and state and m.value==value and m.reserve==3)
+  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);local count=false
+  for _,d in ipairs(out) do count=count or d.text==string.format('%03d',value);assert(not d.machined_detail and not d.machined_catalog) end
+  assert(count and m.value==value and m.reserve==3)
  end
 end)
-
-
 
 -- Snapshot projector must preserve bounds and near-plane decisions exactly.
 test('snapshot projector matches guarded projection and rejects invalid cameras',function()
@@ -2493,7 +2491,7 @@ test('fuel rollback reproduces the gauge before catalog styling and leaves Stoke
   end end
  end
  local bullets=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='8a307bd1811a5fe9',kind='magazine',rounds=7,capacity=10,reserve=3,reserve_kind='MAGS'}))
- assert(bullets.label=='ROUNDS' and HUD.layout.compose(bullets,0,0,1,1,HUD.config.defaults,0)[1].machined_catalog)
+ assert(bullets.label=='ROUNDS' and not HUD.layout.compose(bullets,0,0,1,1,HUD.config.defaults,0)[1].machined_catalog)
 end)
 
 test('Double Freedom open crimps follow observed firing and clear on reload or ownership loss',function()
@@ -2542,7 +2540,7 @@ test('shared-suite proposal scope protects accepted panels and aliases and prese
    local old=HUD.layout.compose(m,0,0,scale,1,cfg,0);cfg.shared_suite_preview=true
    local out=HUD.layout.compose(m,0,0,scale,1,cfg,0)
    assert(m.value==n and m.reserve==8 and m.fire_mode==mode)
-   if not eligible then assert(same(old,out),'protected panel or deferred alias changed '..id)
+   if not eligible or HUD.ammo_types.laser_weapons[id] then assert(same(old,out),'protected panel or deferred alias changed '..id)
    else
     assert(out[1].shared_suite and out[1].weapon_theme==style.family,id)
     local title=false;local count=false;local reserve=false;local label=false
@@ -2561,7 +2559,7 @@ test('shared-suite proposal scope protects accepted panels and aliases and prese
  for _,kind in ipairs({'heat','infinite'}) do
   local cfg=HUD.config.new();cfg.shared_suite_preview=true
   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='27ee1ed8f6fb6356',kind=kind,heat=.9,reserve=3,locked=false}))
-  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);assert(out[1].shared_suite)
+  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);assert(not out[1].shared_suite)
   if kind=='heat' then local fill=false;for _,v in ipairs(out) do fill=fill or v.heat_fill end;assert(fill and m.fraction==.9 and m.warning) else assert(m.value=='--') end
  end
 end)
@@ -2776,6 +2774,26 @@ test('Senator approved six-round layout follows observed firing refills and owne
   step(6);step(0);HUD.senator_state.step(tracker,nil);local reset=step(0);for _,v in ipairs(reset.senator_slots) do assert(not v.case) end
   assert(not HUD.senator_state.supports_speedloader and not HUD.senator_state.supports_ejection)
  end
+end)
+
+test('extra artwork bays are retired and laser variants share their earlier telemetry layout',function()
+ assert(not HUD.catalog_housing.enabled and not HUD.shared_suite.enabled)
+ local cfg=HUD.config.new();cfg.decoration='deadeye'
+ local old=HUD.weapon_styles.apply
+ local total=0
+ for id in pairs(HUD.ammo_types.laser_weapons) do
+  total=total+1
+  for _,kind in ipairs({'heat','rounds','infinite'}) do for _,scale in ipairs({.05,1,2}) do
+   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=id,kind=kind,heat=.88,rounds=4,capacity=10,reserve=2,reserve_kind='HTSNKS'}))
+   local a=HUD.layout.compose(m,0,0,scale,1,cfg,0)
+   HUD.weapon_styles.apply=function(out)return out end
+   local b=HUD.layout.compose(m,0,0,scale,1,cfg,0);HUD.weapon_styles.apply=old
+   assert(#a==#b,id)
+   for i,v in ipairs(a) do local q=b[i];assert(v.type==q.type and v.text==q.text and v.x==q.x and v.y==q.y and v.w==q.w and v.h==q.h,id);assert(not v.catalog_heading and not v.machined_detail and not v.catalog_detail,id) end
+   assert(m.reserve==2 and (kind~='heat' or m.fraction==.88 and m.warning))
+  end end
+ end
+ assert(total==9)
 end)
 
 print(string.format('%d contract tests passed',tests))

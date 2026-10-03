@@ -1,7 +1,10 @@
 -- Shared physical instrument finish. Existing telemetry and meter geometry remain authoritative.
 local M={protected={['e6d932be83729076']=true,['89c5493e08ca4207']=true,['52e4334e6a128caf']=true,['2e9d0bdc48b09e60']=true,['11c27d3babb38956']=true,['a8cffb316f0b5c5f']=true,['6cfcc7f8801a0266']=true,['3828e2051aa9e897']=true,['9f80d67a12a7e40f']=true,['84354339522c932d']=true,['5fecab819f96a3e8']=true,['0f83639ab8c86165']=true,['a6a735accb4a327f']=true,['14d5d4506056c7a4']=true,['5f3ec9bda2bd8553']=true,['4dbd74f49c8ffc13']=true,['0b882808c6f498e8']=true,['e5796355a8fd67e0']=true,['416d053372c4e433']=true,['b2b5e0d185605f9e']=true,['26e40437ea275296']=true,['2b28e17ffed05f7c']=true}}
-function M.eligible(id) return not M.protected[id] end
+-- Retired added artwork bays. Earlier weapon presentation remains authoritative.
+M.enabled=false
+function M.eligible(id) return M.enabled and not M.protected[id] end
 function M.apply(out,m,s,cfg,opacity,style,fallback,measure)
+ if not M.enabled then return out end
  if not M.eligible(m.resource_hex) then return out end
  local frame=out[1];if not frame or frame.type~='panel' then return out end
  -- Double Freedom: a retro shotgun status slab, rather than nested instrument frames.

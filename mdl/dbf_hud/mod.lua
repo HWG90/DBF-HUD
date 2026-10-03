@@ -8078,6 +8078,7 @@ if HUD.bundled_defaults then
     M.weapon_clearance=HUD.bundled_defaults.layouts
 end
 return M
+
 end)()
 HUD.font=(function()
 -- Native text bounds; no rectangle glyph renderer.
@@ -8371,6 +8372,7 @@ function M.selectable_fire_mode(control,choices)
     if count>1 and seen[control] then return M.fire_mode(control) end
 end
 local lasers={['416d053372c4e433']=true,['27ee1ed8f6fb6356']=true,['295beb26dc4f8ff1']=true,['35a61296619cc47e']=true,['3c86e871923f3970']=true,['7e3145a5baa4b948']=true,['8645f167b3c813a2']=true,['c85f576d5e086147']=true,['d54b9505c0f72873']=true}
+M.laser_weapons=lasers
 local plasma={['05d8d8c073b9d502']=true,['e8d5f49ad7780e54']=true,
     ['eea5e3cef1e12c14']=true,['efdcef306cea63fe']=true,['fb3a19078694708a']=true}
 function M.apply(raw)
@@ -8496,9 +8498,6 @@ local deposit_capacities={
 }
 function M.deposit_capacity(resource)return deposit_capacities[resource] end
 return M
-
-
-
 
 end)()
 HUD.model=(function()
@@ -8835,6 +8834,7 @@ for _,run in ipairs({{12,14,5,3},{11,17,7,3},{12,20,5,2},{13,22,3,2},{14,24,1,2}
     M.NAPALM_ROCKET.runs[#M.NAPALM_ROCKET.runs+1]={run[1],run[2],run[3],run[4],flame}
 end
 return M
+
 end)()
 HUD.munition_art=(function()
 -- Presentation geometry only: the profiles describe artwork, never ammunition telemetry.
@@ -9198,6 +9198,123 @@ end
 return M
 
 end)()
+HUD.recoilless_state=(function()
+-- Display latch for an observed shot; not physical casing occupancy.
+local M={}
+function M.new() return {} end
+function M.step(s,m)
+ if not m or m.resource_hex~='9f80d67a12a7e40f' or type(m.value)~='number' then
+  s.key=nil;s.count=nil;s.spent=nil;return
+ end
+ local key=tostring(m.id)..'/'..tostring(m.unit_ref)
+ if s.key~=key or m.value>0 then s.spent=false
+ elseif s.count and s.count>0 and m.value==0 then s.spent=true end
+ m.recoilless_spent=s.spent==true
+ s.key=key;s.count=m.value
+end
+return M
+
+end)()
+HUD.senator_state=(function()
+-- Observed six-slot presentation. Count transitions do not identify physical chambers.
+local M={supports_speedloader=false,supports_ejection=false}
+function M.new() return {} end
+function M.step(s,m)
+ if not m or m.resource_hex~='8d3d52a3b2f19402' or type(m.value)~='number' or m.value<0 or m.value>6 or m.value%1~=0 then
+  s.key=nil;s.count=nil;s.spent=nil;return
+ end
+ local key=tostring(m.id)..'/'..tostring(m.unit_ref)
+ if s.key~=key then s.spent={false,false,false,false,false,false} end
+ local transition
+ if s.key==key and s.count then
+  if m.value<s.count then
+   transition='decrease'
+   for i=7-s.count,6-m.value do s.spent[i]=true end
+  elseif m.value>s.count then transition='increase' end
+ end
+ local slots={}
+ for i=1,6 do
+  local loaded=i>6-m.value
+  if loaded then s.spent[i]=false end
+  slots[i]={loaded=loaded,projectile=loaded,case=loaded or s.spent[i],observed_spent=s.spent[i]}
+ end
+ m.senator_slots=slots;m.senator_count_transition=transition
+ s.key=key;s.count=m.value
+end
+return M
+
+end)()
+HUD.senator_panel=(function()
+-- Approved Senator upper-round close-up, based on the supplied six-cartridge reference.
+local M={}
+function M.compose(m,x,y,s,opacity,cfg,measure)
+ local w,h=132,104
+ for _,item in ipairs({{'P-4 SENATOR',11,90},{m.reserve~=nil and string.format('%03d ROUNDS',m.reserve) or '--- ROUNDS',12,13}}) do
+  local a,b,e,t=HUD.font.measure(item[1],item[2]*s,cfg.font)
+  w=math.max(w,(e-a)/s+16);h=math.max(h,item[3]+t/s+5)
+ end
+ local steel,silver,gold={24,31,36},{198,210,218},{218,172,78}
+ local out={{type='panel',x=x,y=y,w=w*s,h=h*s,c=steel,a=cfg.panel_opacity*opacity,frosted=cfg.frosted}}
+ local function rect(dx,dy,rw,rh,c,tag,slot)
+  if slot then
+   local center=w/2+(slot-3.5)*18
+   if tag=='case' or tag=='projectile' then
+    local old=(w-90)/2+(slot-1)*16+5
+    dx,dy=center+(dx-old)*1.6,80+(dy-76)*1.6
+    rw,rh=rw*1.6,rh*1.6
+    local top=math.min(80,dy+rh);dy=math.max(32,dy);rh=top-dy
+    if rh<=0 then return end
+   elseif tag=='slot' then dx,rw=center-7,14 end
+  end
+  out[#out+1]={type='rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=opacity*.92,senator_part=tag,senator_slot=slot}
+ end
+ local function text(t,dy,size,c,child)
+  local a,b,e,f=HUD.font.measure(t,size*s,cfg.font)
+  out[#out+1]={type='text',text=t,x=x+w*s/2-(a+e)/2,y=y+dy*s,size=size*s,font=cfg.font,c=c,a=opacity,center_in_frame=true,child=child,weapon_label=not child and t=='P-4 SENATOR' or nil}
+ end
+ text('P-4 SENATOR',90,11,gold)
+ rect(8,83,w-16,.7,gold)
+ local metals={{92,65,31},{139,104,55},{196,158,93},{234,201,138},{248,226,175},{216,183,117},{168,132,70},{112,81,37}}
+ for i=1,6 do
+  local state=m.senator_slots and m.senator_slots[i]
+  local xx=(w-90)/2+(i-1)*16
+  rect(xx-1,28,12,1,{100,112,119},'slot',i)
+  if state and state.case then
+   -- Long straight case, subtle cylindrical sheen and a small base rim.
+   for k,c in ipairs(metals) do rect(xx+k,34,1,33,c,'case',i) end
+   rect(xx,32,10,.8,{96,71,36},'case',i)
+   rect(xx,32.8,10,1,{219,188,123},'case',i)
+   rect(xx+1,33.8,8,.4,{128,96,47},'case',i)
+   rect(xx+2,32.9,5,.3,{248,229,188},'case',i)
+   if state.projectile then
+    -- Rounded projectile above the reference seam; same brass material.
+    rect(xx+1,67,8,.6,{112,84,44},'projectile',i)
+    for k,c in ipairs(metals) do
+     local hh=(k==1 or k==8) and 4 or (k==2 or k==7) and 6 or 8
+     rect(xx+k,68,1,hh,c,'projectile',i)
+    end
+    rect(xx+3,75.5,4,.5,{232,201,145},'projectile',i)
+   else
+    -- Simple case edge at the known seam; no invented hidden mouth structures.
+    rect(xx+1,67,8,.6,{68,51,30},'case',i)
+    rect(xx+2,67.4,6,.3,{188,153,95},'case',i)
+   end
+  end
+ end
+ text(m.reserve~=nil and string.format('%03d ROUNDS',m.reserve) or '--- ROUNDS',13,12,silver)
+ rect(8,8,w-16,.7,{95,108,117})
+ HUD.layout.decorate(out,out[1],s,cfg,opacity)
+ local fa,fb,fe,ft=HUD.font.measure(m.fire_mode or '--',11*s,cfg.font)
+ local ch=math.max(18,(ft-fb)/s+8)
+ local child={type='panel',child=true,x=x,y=y-(2+ch)*s,w=w*s,h=ch*s,c=steel,a=cfg.panel_opacity*opacity,frosted=cfg.frosted}
+ out[#out+1]=child;text(m.fire_mode or '--',-2-ch/2-(fb+ft)/(2*s),11,silver,true)
+ local group={};HUD.layout.decorate(group,child,s,cfg,opacity)
+ for _,v in ipairs(group) do v.child=true;out[#out+1]=v end
+ return out
+end
+return M
+
+end)()
 HUD.melta_panel=(function()
 -- Meltagun receiver instrument: physical thermal chamber art, actual shot telemetry.
 local M={}
@@ -9332,22 +9449,6 @@ end
 return M
 
 end)()
-HUD.recoilless_state=(function()
--- Display latch for an observed shot; not physical casing occupancy.
-local M={}
-function M.new() return {} end
-function M.step(s,m)
- if not m or m.resource_hex~='9f80d67a12a7e40f' or type(m.value)~='number' then
-  s.key=nil;s.count=nil;s.spent=nil;return
- end
- local key=tostring(m.id)..'/'..tostring(m.unit_ref)
- if s.key~=key or m.value>0 then s.spent=false
- elseif s.count and s.count>0 and m.value==0 then s.spent=true end
- m.recoilless_spent=s.spent==true
- s.key=key;s.count=m.value
-end
-return M
-end)()
 HUD.recoilless_panel=(function()
 -- GR-8 ammunition cradle, driven only by native loaded count and mode.
 local M={}
@@ -9447,12 +9548,16 @@ function M.compose(frame,m,s,cfg,opacity,measure)
  return out
 end
 return M
+
 end)()
 HUD.catalog_housing=(function()
 -- Shared physical instrument finish. Existing telemetry and meter geometry remain authoritative.
 local M={protected={['e6d932be83729076']=true,['89c5493e08ca4207']=true,['52e4334e6a128caf']=true,['2e9d0bdc48b09e60']=true,['11c27d3babb38956']=true,['a8cffb316f0b5c5f']=true,['6cfcc7f8801a0266']=true,['3828e2051aa9e897']=true,['9f80d67a12a7e40f']=true,['84354339522c932d']=true,['5fecab819f96a3e8']=true,['0f83639ab8c86165']=true,['a6a735accb4a327f']=true,['14d5d4506056c7a4']=true,['5f3ec9bda2bd8553']=true,['4dbd74f49c8ffc13']=true,['0b882808c6f498e8']=true,['e5796355a8fd67e0']=true,['416d053372c4e433']=true,['b2b5e0d185605f9e']=true,['26e40437ea275296']=true,['2b28e17ffed05f7c']=true}}
-function M.eligible(id) return not M.protected[id] end
+-- Retired added artwork bays. Earlier weapon presentation remains authoritative.
+M.enabled=false
+function M.eligible(id) return M.enabled and not M.protected[id] end
 function M.apply(out,m,s,cfg,opacity,style,fallback,measure)
+ if not M.enabled then return out end
  if not M.eligible(m.resource_hex) then return out end
  local frame=out[1];if not frame or frame.type~='panel' then return out end
  -- Double Freedom: a retro shotgun status slab, rather than nested instrument frames.
@@ -9774,8 +9879,11 @@ end
 function M.apply(out,m,scale,cfg,opacity,measure,decorate,clock)
  local style=M.catalog[m.resource_hex]
  if not style then return out end
+ -- All native heat gauges and identified laser variants use the preceding shared layout.
+ if m.kind=='heat' or HUD.ammo_types.laser_weapons[m.resource_hex] or m.energy_icon=='LASER' then return out end
  -- Restore the preceding fuel/gas gauge; telemetry and warning zones stay in layout.lua.
  if m.label=='FUEL' or m.label=='GAS' then return out end
+ if HUD.shared_suite and (HUD.shared_suite.enabled or cfg.shared_suite_preview==true) and HUD.shared_suite.eligible(m.resource_hex) then return HUD.shared_suite.compose(out,m,scale,cfg,opacity,style,measure,decorate) end
  if m.resource_hex=='72170a55a1f37ff1' then out[1].weapon_theme='shotgun';return out end -- Original compact HUD and its shared child boxes.
  if m.resource_hex=='9f80d67a12a7e40f' and m.capacity==1 then return HUD.recoilless_panel.compose(out[1],m,scale,cfg,opacity,measure) end
  if m.resource_hex=='3828e2051aa9e897' and m.capacity==1 then return HUD.speargun_panel.compose(out[1],m,scale,cfg,opacity,measure) end
@@ -9946,104 +10054,6 @@ function M.apply(out,m,scale,cfg,opacity,measure,decorate,clock)
 end
 return M
 
-end)()
-HUD.senator_state=(function()
--- Observed six-slot presentation. Count transitions do not identify physical chambers.
-local M={supports_speedloader=false,supports_ejection=false}
-function M.new() return {} end
-function M.step(s,m)
- if not m or m.resource_hex~='8d3d52a3b2f19402' or type(m.value)~='number' or m.value<0 or m.value>6 or m.value%1~=0 then
-  s.key=nil;s.count=nil;s.spent=nil;return
- end
- local key=tostring(m.id)..'/'..tostring(m.unit_ref)
- if s.key~=key then s.spent={false,false,false,false,false,false} end
- local transition
- if s.key==key and s.count then
-  if m.value<s.count then
-   transition='decrease'
-   for i=7-s.count,6-m.value do s.spent[i]=true end
-  elseif m.value>s.count then transition='increase' end
- end
- local slots={}
- for i=1,6 do
-  local loaded=i>6-m.value
-  if loaded then s.spent[i]=false end
-  slots[i]={loaded=loaded,projectile=loaded,case=loaded or s.spent[i],observed_spent=s.spent[i]}
- end
- m.senator_slots=slots;m.senator_count_transition=transition
- s.key=key;s.count=m.value
-end
-return M
-end)()
-HUD.senator_panel=(function()
--- Approved Senator upper-round close-up, based on the supplied six-cartridge reference.
-local M={}
-function M.compose(m,x,y,s,opacity,cfg,measure)
- local w,h=132,104
- for _,item in ipairs({{'P-4 SENATOR',11,90},{m.reserve~=nil and string.format('%03d ROUNDS',m.reserve) or '--- ROUNDS',12,13}}) do
-  local a,b,e,t=HUD.font.measure(item[1],item[2]*s,cfg.font)
-  w=math.max(w,(e-a)/s+16);h=math.max(h,item[3]+t/s+5)
- end
- local steel,silver,gold={24,31,36},{198,210,218},{218,172,78}
- local out={{type='panel',x=x,y=y,w=w*s,h=h*s,c=steel,a=cfg.panel_opacity*opacity,frosted=cfg.frosted}}
- local function rect(dx,dy,rw,rh,c,tag,slot)
-  if slot then
-   local center=w/2+(slot-3.5)*18
-   if tag=='case' or tag=='projectile' then
-    local old=(w-90)/2+(slot-1)*16+5
-    dx,dy=center+(dx-old)*1.6,80+(dy-76)*1.6
-    rw,rh=rw*1.6,rh*1.6
-    local top=math.min(80,dy+rh);dy=math.max(32,dy);rh=top-dy
-    if rh<=0 then return end
-   elseif tag=='slot' then dx,rw=center-7,14 end
-  end
-  out[#out+1]={type='rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=opacity*.92,senator_part=tag,senator_slot=slot}
- end
- local function text(t,dy,size,c,child)
-  local a,b,e,f=HUD.font.measure(t,size*s,cfg.font)
-  out[#out+1]={type='text',text=t,x=x+w*s/2-(a+e)/2,y=y+dy*s,size=size*s,font=cfg.font,c=c,a=opacity,center_in_frame=true,child=child,weapon_label=not child and t=='P-4 SENATOR' or nil}
- end
- text('P-4 SENATOR',90,11,gold)
- rect(8,83,w-16,.7,gold)
- local metals={{92,65,31},{139,104,55},{196,158,93},{234,201,138},{248,226,175},{216,183,117},{168,132,70},{112,81,37}}
- for i=1,6 do
-  local state=m.senator_slots and m.senator_slots[i]
-  local xx=(w-90)/2+(i-1)*16
-  rect(xx-1,28,12,1,{100,112,119},'slot',i)
-  if state and state.case then
-   -- Long straight case, subtle cylindrical sheen and a small base rim.
-   for k,c in ipairs(metals) do rect(xx+k,34,1,33,c,'case',i) end
-   rect(xx,32,10,.8,{96,71,36},'case',i)
-   rect(xx,32.8,10,1,{219,188,123},'case',i)
-   rect(xx+1,33.8,8,.4,{128,96,47},'case',i)
-   rect(xx+2,32.9,5,.3,{248,229,188},'case',i)
-   if state.projectile then
-    -- Rounded projectile above the reference seam; same brass material.
-    rect(xx+1,67,8,.6,{112,84,44},'projectile',i)
-    for k,c in ipairs(metals) do
-     local hh=(k==1 or k==8) and 4 or (k==2 or k==7) and 6 or 8
-     rect(xx+k,68,1,hh,c,'projectile',i)
-    end
-    rect(xx+3,75.5,4,.5,{232,201,145},'projectile',i)
-   else
-    -- Simple case edge at the known seam; no invented hidden mouth structures.
-    rect(xx+1,67,8,.6,{68,51,30},'case',i)
-    rect(xx+2,67.4,6,.3,{188,153,95},'case',i)
-   end
-  end
- end
- text(m.reserve~=nil and string.format('%03d ROUNDS',m.reserve) or '--- ROUNDS',13,12,silver)
- rect(8,8,w-16,.7,{95,108,117})
- HUD.layout.decorate(out,out[1],s,cfg,opacity)
- local fa,fb,fe,ft=HUD.font.measure(m.fire_mode or '--',11*s,cfg.font)
- local ch=math.max(18,(ft-fb)/s+8)
- local child={type='panel',child=true,x=x,y=y-(2+ch)*s,w=w*s,h=ch*s,c=steel,a=cfg.panel_opacity*opacity,frosted=cfg.frosted}
- out[#out+1]=child;text(m.fire_mode or '--',-2-ch/2-(fb+ft)/(2*s),11,silver,true)
- local group={};HUD.layout.decorate(group,child,s,cfg,opacity)
- for _,v in ipairs(group) do v.child=true;out[#out+1]=v end
- return out
-end
-return M
 end)()
 HUD.layout=(function()
 -- Renderer-independent HUD; geometry uses bottom-left coordinates.
@@ -10868,6 +10878,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     return out
 end
 return M
+
 end)()
 HUD.memory=(function()
 -- Private FFI symbols prevent collisions with other addons' declarations.
@@ -11845,7 +11856,6 @@ function M.new(backend)
 end
 return M
 
-
 end)()
 HUD.anchor=(function()
 -- Read the native crosshair controller AFTER the game's update.
@@ -12747,6 +12757,7 @@ function M.prepare(commands,p,c)
     return centered
 end
 return M
+
 end)()
 HUD.archived_mesh=(function()
 -- Archived mesh carrier. Production uses direct WorldGUI.
@@ -13296,8 +13307,6 @@ function M.new(sr,log)
 end
 return M
 
-
-
 end)()
 HUD.placement=(function()
 -- Weapon/view placement. Native readers remain in pose and camera_mode.
@@ -13832,9 +13841,6 @@ function M.new(hud,backend,log)
 end
 return M
 
-
-
-
 end)()
 HUD.menu=(function()
 -- ModOptionsMenu API 1; only main settings and placement are exposed.
@@ -14182,6 +14188,7 @@ function M.new(hud)
     return self
 end
 return M
+
 end)()
 HUD.runtime=(function()
 local M={}
@@ -14965,7 +14972,7 @@ return {
         local started=false
         ctx.on_cleanup(function() disable();if not started and backend.close then backend.close() end end)
         hud=HUD.runtime.start(sr,backend,{managed=true,screen_bone_hud=false,frame_trial=false})
-        if backend.log then backend.log('GLYPH_REUSE_BUILD 20261003-SENATOR-CLOSEUP approved 60 percent enlargement and lower case crop; speedloader pending') end
+        if backend.log then backend.log('GLYPH_REUSE_BUILD 20261003-LASER-ROLLBACK earlier shared gauges; upright Senator public') end
         started=true
         ctx.global('DBFHUD',hud)
         -- Startup bridge owns render; this MDL mod only subscribes/unsubscribes.

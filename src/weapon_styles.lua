@@ -226,6 +226,8 @@ end
 function M.apply(out,m,scale,cfg,opacity,measure,decorate,clock)
  local style=M.catalog[m.resource_hex]
  if not style then return out end
+ -- All native heat gauges and identified laser variants use the preceding shared layout.
+ if m.kind=='heat' or HUD.ammo_types.laser_weapons[m.resource_hex] or m.energy_icon=='LASER' then return out end
  -- Restore the preceding fuel/gas gauge; telemetry and warning zones stay in layout.lua.
  if m.label=='FUEL' or m.label=='GAS' then return out end
  if HUD.shared_suite and (HUD.shared_suite.enabled or cfg.shared_suite_preview==true) and HUD.shared_suite.eligible(m.resource_hex) then return HUD.shared_suite.compose(out,m,scale,cfg,opacity,style,measure,decorate) end
