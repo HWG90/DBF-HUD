@@ -1,4 +1,4 @@
-Current authoritative state: [2026-10-03 session checkpoint](docs/SESSION-20261003.md). Entries below are chronological; later approved decisions supersede earlier candidates. The rotating Senator cylinder remains UNINSTALLED.
+Current authoritative state: [2026-10-03 session checkpoint](docs/SESSION-20261003.md). Entries below are chronological; later approved decisions supersede earlier candidates. The alternate Senator cylinder is local-only and excluded from the current public tree.
 
 Double Freedom visual target: the user-selected rear-facing breech reference posted 2026-10-03. Loaded brass shell heads and primers, dark empty bores, steel housing, reserves and a separate functional SEMI/VOLLEY child panel. DOOM is a major artistic inspiration: tactile industrial ammunition and readable instrumentation. The current primitive approximation is not visually accepted. Further art changes need actual game capture.
 
@@ -97,8 +97,5 @@ Preview only: `preview/senator-larger-closeup-proposal.png`. Uniform 1.6x art en
 
 Approved close-up installed: only senator_panel changed; 165 contract checks passed; ZIP and deployed bytes verified; tuning preserved; automatic game reload confirmed by SENATOR-CLOSEUP marker. Visual acceptance in game still requires user check.
 
-### Senator rear cylinder prototype - uninstalled
-`preview/senator-hex-cylinder-proposal.png`, native rectangles in `preview/senator_cylinder_panel_proposal.lua`. Six brass rear bases and primer rings in pointed hex housing, top/bottom aligned. Bottom then clockwise presentation order only; physical chamber index unverified. Observed count removes individual bases and count increases refill slots. 148x184 frame, 106x120 housing, 30-unit chamber diameter, center radius37. Speedloader/ejection unsupported. Approved upright installed payload unchanged.
-
-### Revised rotating Senator cylinder - UNINSTALLED
-`preview/senator-rotating-cylinder-proposal.png` and `preview/senator-cylinder-rotation-proposal.gif`. Count-driven chamber identity/rotation brings next loaded chamber to fixed bottom after each observed shot; handles multi-shot losses and refills. Clockwise 60 degrees is presentation model, not native chamber telemetry. 1944 checks passed. Exact run merging preserves per-pixel shading, cuts maximum no-decoration commands 3264 -> 2304 (29.4%); displayed decorated preview maximum2332. Stable geometry cached. Native rectangles only. Dense drawing cost and live animation timing remain unverified; speedloader pending. Installed upright payload unchanged.
+### Publication scope correction
+The alternate Senator cylinder is local-only. Its source and previews were removed from the current public tree by a normal corrective commit; they remain in earlier Git history. Public source retains the approved upright Senator.
