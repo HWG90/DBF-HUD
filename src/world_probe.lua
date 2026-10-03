@@ -93,12 +93,13 @@ function M.new(sr,log,direct)
                     -- depth fill on foreground primitives only during this comparison.
                     solid(v.x,v.y,v.w,v.h,1,color)
                 elseif v.type=='rect' then
-                    solid(v.x,v.y,v.w,v.h,v.fuel_marker_piece and 3 or 2,color)
+                    solid(v.x,v.y,v.w,v.h,v.scanline_layer and 2.5 or (v.fuel_marker_piece and 3 or 2),color)
                 else
                     local resource,material=HUD.native_font.resolve(sr,v.font,c.occlusion_mode~='gui')
                     if resource and not v.fuel_endpoint then
                         for _,part in ipairs(HUD.font.numeric_parts(v)) do
-                            local part_color=sr.Color(math.floor(v.a*part.alpha*255+.5),v.c[1],v.c[2],v.c[3])
+                            local ink=part.c or v.c
+                        local part_color=sr.Color(math.floor(v.a*part.alpha*255+.5),ink[1],ink[2],ink[3])
                             G.text(gui,part.text,resource,v.size,material,sr.Vector3(v.x+part.dx,v.y,3),part_color)
                         end
                     end

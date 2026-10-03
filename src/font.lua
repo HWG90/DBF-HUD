@@ -31,7 +31,7 @@ function M.measure(text,size,name,continuous)
     return left*factor,bottom*factor,right*factor,top*factor
 end
 function M.numeric_parts(command)
-    local digits=command.numeric_display and command.text:match('^(%d%d%d%d*)')
+    local digits=(command.numeric_display or command.last_digit_color) and command.text:match(command.last_digit_color and '^(%d+)' or '^(%d%d%d%d*)')
     if not digits then return {{text=command.text,dx=0,alpha=1}} end
     local face=HUD.native_font_data.faces[command.font or 'bigblue']
     local sr=rawget(_G,'stingray')
@@ -43,7 +43,7 @@ function M.numeric_parts(command)
     end
     local leading=digits:match('^(0*)') or '';local dim=math.min(#leading,#digits-1)
     local parts={}
-    for i=1,#digits do parts[#parts+1]={text=digits:sub(i,i),dx=(i-1)*advance,alpha=i<=dim and 1/3 or 1} end
+    for i=1,#digits do parts[#parts+1]={text=digits:sub(i,i),dx=(i-1)*advance,alpha=i<=dim and 1/3 or 1,c=i==#digits and command.last_digit_color or nil} end
     if #command.text>#digits then parts[#parts+1]={text=command.text:sub(#digits+1),dx=#digits*advance,alpha=1} end
     return parts
 end

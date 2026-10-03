@@ -34,7 +34,7 @@ function M.decorate(out,frame,scale,cfg,opacity)
     local w,h=right-left,top-bottom;local line=scale
     local neutral=HUD.config.rgb(cfg.decoration_color or cfg.text_color)
     local function border(dx,dy,bw,bh,color,strength)
-        out[#out+1]={type='rect',decoration=true,x=left+dx,y=bottom+dy,w=bw,h=bh,
+        out[#out+1]={type='rect',decoration=true,charge_meter=frame.charge_meter,x=left+dx,y=bottom+dy,w=bw,h=bh,
             c=color or neutral,a=opacity*(cfg.text_color_alpha or 255)/255*(strength or .7)}
     end
     local function outline(inset,strength)
@@ -60,6 +60,16 @@ function M.decorate(out,frame,scale,cfg,opacity)
             for _,cy in ipairs({0,h-2*line}) do border(cx,cy,length,2*line,nil,.9) end
         end
     elseif style=='double' then outline(0,.65);outline(3*scale,.25)
+    elseif style=='deadeye' then
+        -- Original R-6 receiver perimeter: silver rails and four inset brass squares.
+        local silver,brass={198,210,218},{218,172,78}
+        border(0,0,w,line,silver,.55);border(0,h-line,w,line,silver,.55)
+        border(0,0,line,h,silver,.55);border(w-line,0,line,h,silver,.55)
+        local inset=math.min(4*scale,w/8,h/8)
+        local size=math.min(3*scale,w/10,h/5)
+        for _,dx in ipairs({inset,w-inset-size}) do
+            for _,dy in ipairs({inset,h-inset-size}) do border(dx,dy,size,size,brass,.75) end
+        end
     end
 end
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
@@ -247,13 +257,17 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
     elseif m.resource_hex=='72170a55a1f37ff1' then
         local icon=HUD.fire_icons.BARREL_SHELL;local factor=36/icon.h
+        -- Rear-biased silhouette: broad brass base with only a short exposed hull.
+        local function shell_y(y)
+            return y<=9 and y*22/9 or 22+(y-9)*6/19
+        end
         for barrel=1,2 do
             local alpha=(tonumber(m.value) or 0)>=(3-barrel) and .95 or .18
-            rect((barrel-1)*20+3*factor,5+11*factor,6*factor,14*factor,{65,145,235},alpha*.4)
+            rect((barrel-1)*20+3*factor,5+shell_y(11)*factor,6*factor,(shell_y(25)-shell_y(11))*factor,{65,145,235},alpha*.4)
             d[#d].barrel_indicator=barrel
             for _,run in ipairs(icon.runs)do
                 local shell_color=run[2]<9 and {218,172,78} or {65,145,235}
-                rect((barrel-1)*20+run[1]*factor,5+run[2]*factor,run[3]*factor,run[4]*factor,shell_color,alpha)
+                rect((barrel-1)*20+run[1]*factor,5+shell_y(run[2])*factor,run[3]*factor,(shell_y(run[2]+run[4])-shell_y(run[2]))*factor,shell_color,alpha)
                 d[#d].barrel_indicator=barrel
             end
         end
@@ -277,7 +291,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             end
             rect(37,heading_y-4,3,3,{255,210,70},1);d[#d].compass_piece=true
         else
-            text(heading..(m.chamber_bonus==1 and ' +1' or ''),0,heading_y,8,ink,0.72)
+            text(heading,0,heading_y,8,ink,0.72);d[#d].ammo_heading=true
         end
         if cannon_mode then d[#d].size=(pixel and 18 or 12)*scale end
         text(number,0,5,32,ink)
@@ -366,6 +380,22 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         bottom=math.min(bottom,y+(heading_y-4)*scale)
         top=math.max(top,y+(heading_y+7)*scale+f)
     end
+    if m.resource_hex=='a8cffb316f0b5c5f' and (m.ammo_mode=='APHET' or m.ammo_mode=='FLAK') then
+        -- Reserve both native label envelopes and the larger temporary mode pictogram.
+        -- The final long-case heading replaces these pictograms; their widths must not size the box.
+        local size=(pixel and 18 or 12)*scale
+        local hy=(pixel and math.max(42,5+number_top+3) or 42)*scale
+        for _,label in ipairs({'APHET','FLAK'}) do
+            local a,b,e,f=0,-size*.2,#label*size*.6,size*.8
+            if measure then a,b,e,f=measure(label,size) end
+            left=math.min(left,x+a);right=math.max(right,x+e)
+            bottom=math.min(bottom,y+hy+b);top=math.max(top,y+hy+f)
+        end
+        local edge=#number*(pixel and 36 or 32)*.6
+        if measure then local a,b,e=measure(number,(pixel and 36 or 32)*scale);edge=e/scale end
+        right=math.max(right,x+(edge+8+15*1.8)*scale)
+        top=math.max(top,y+(5+17*1.8)*scale)
+    end
     local pad=8*scale
     local has_mode_icon=false
     for _,command in ipairs(d) do if command.mode_icon then has_mode_icon=true;break end end
@@ -414,7 +444,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         if c.mode_count then heading_command=c end
         if c.mode_icon then icon_left=math.min(icon_left,c.x);icon_edge=math.max(icon_edge,c.x+c.w) end
     end
-    if heading_command and icon_left<math.huge then
+    if heading_command and icon_left<math.huge and m.resource_hex~='a8cffb316f0b5c5f' then
         local h=heading_command;local a,b,e,f
         if measure then a,b,e,f=measure(h.text,h.size) end
         if not e then a,e=0,#h.text*h.size*.6 end
@@ -480,6 +510,70 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             end
         end
     end
+    -- Railgun: electromagnetic instrument styling, retaining charge warning zones.
+    if m.resource_hex=='2e9d0bdc48b09e60' or m.ammo_icon=='RAILGUN' then
+        local charcoal,cyan,ice={17,28,35},{68,211,232},{211,240,243}
+        local frames={}
+        local icon_top=-math.huge
+        local kept={}
+        for _,command in ipairs(out) do
+            if command.mode_icon then icon_top=math.max(icon_top,command.y+command.h)
+            elseif not (command.decoration and not command.child and not command.charge_meter) then kept[#kept+1]=command end
+        end
+        out=kept
+        local frame=out[1]
+        if icon_top>-math.huge and frame.type=='panel' then
+            local factor=scale*.85
+            local px=frame.x+(frame.w-36*factor)/2
+            local old_top=frame.y+frame.h
+            frame.h=frame.h+18*scale
+            M.decorate(out,frame,scale,cfg,opacity)
+            local py=old_top-5*scale
+            for _,run in ipairs(HUD.fire_icons.RAILGUN_DISPLAY.runs) do
+                out[#out+1]={type='rect',railgun_heading=true,x=px+run[1]*factor,y=py+run[2]*factor,w=run[3]*factor,h=run[4]*factor,c=run[5],a=opacity}
+            end
+            if m.safety_mode=='UNSAFE' then
+                local phase=math.floor((clock or 0)*12)%3
+                local function spark(dx,dy,w,h,bright)
+                    out[#out+1]={type='rect',railgun_heading=true,railgun_arc=true,x=px+dx*factor,y=py+dy*factor,w=w*factor,h=h*factor,c=bright and {211,250,255} or cyan,a=opacity*(bright and .85 or .48)}
+                end
+                -- Short stepped arcs stay inside the reserved heading padding.
+                for side=0,1 do
+                    local start=side==0 and 3 or 22
+                    local shift=phase-1
+                    spark(start,13+shift*.4,4,.6,true)
+                    spark(start+3,12.6+shift*.4,.7,1.5,false)
+                    spark(start+3,14+shift*.4,4,.6,true)
+                    spark(start+6,13.3+shift*.4,.7,1.3,false)
+                    spark(start+6,13.3+shift*.4,4,.6,true)
+                end
+                spark(-2,4+phase,1,3,false);spark(-3,6+phase,2,.7,true)
+                spark(37,3+phase,1,3,false);spark(36,5+phase,2,.7,true)
+            end
+        end
+        for _,command in ipairs(out) do
+            if not command.charge_meter then
+                if command.type=='panel' then command.c=charcoal;frames[#frames+1]=command
+                elseif command.type=='text' then
+                    command.c=command.text=='UNSAFE' and {255,104,64} or ice
+                elseif command.type=='rect' and not command.railgun_heading then command.c=cyan end
+            end
+        end
+        for _,frame in ipairs(frames) do
+            if not frame.child then
+                for _,side in ipairs({0,1}) do
+                    local edge=frame.x+(side==0 and 3*scale or frame.w-4*scale)
+                    for k=0,2 do
+                        out[#out+1]={type='rect',x=edge,y=frame.y+frame.h-(5+k*3)*scale,w=scale,h=2*scale,c=cyan,a=.8*opacity}
+                    end
+                end
+            end
+        end
+    end
+    out=HUD.weapon_styles.apply(out,m,scale,cfg,opacity,measure,M.decorate,clock)
+    if m.resource_hex=='8d3d52a3b2f19402' and m.senator_slots then
+        out=HUD.senator_panel.compose(m,x,y,scale,opacity,cfg,measure)
+    end
     -- Charge metadata is supplied only after the native signal is verified.
     if m.safety_mode and type(m.charge_fraction)=='number' then
         local fraction=math.max(0,math.min(1,m.charge_fraction))
@@ -505,6 +599,170 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
         M.decorate(out,panel,scale,cfg,opacity)
     end
+    -- Grenade Pistol: olive ordnance display with amber safety markings.
+    if m.resource_hex=='52e4334e6a128caf' then
+        local olive,amber,ivory={28,38,29},{242,183,54},{229,234,211}
+        local frames={}
+        local heading
+        local kept={}
+        for _,command in ipairs(out) do
+            if command.type=='text' and command.text=='GRNDS' then heading=command
+            elseif not command.mode_icon then kept[#kept+1]=command end
+        end
+        out=kept
+        if heading then
+            local factor=heading.size/12
+            local frame
+            for _,command in ipairs(out) do if command.type=='panel' then frame=command;break end end
+            local shell_x=frame and (frame.x+(frame.w-32*factor)/2) or heading.x
+            for _,run in ipairs(HUD.fire_icons.GRENADE_PISTOL_SHELL.runs) do
+                out[#out+1]={type='rect',grenade_heading=true,x=shell_x+run[1]*factor,y=heading.y+run[2]*factor,w=run[3]*factor,h=run[4]*factor,c=run[5],a=opacity}
+            end
+        end
+        for _,command in ipairs(out) do
+            if command.type=='panel' then
+                command.c=olive;frames[#frames+1]=command
+            elseif command.type=='text' then
+                command.c=ivory
+                if command.text=='GRNDS' then command.text='GRNDS';command.c=amber end
+            elseif command.type=='rect' and not command.mode_icon and not command.grenade_heading then
+                command.c=amber
+            end
+        end
+        for _,frame in ipairs(frames) do
+            for k=0,3 do
+                out[#out+1]={type='rect',x=frame.x+(3+k*4)*scale,y=frame.y+frame.h-3*scale,w=2*scale,h=1*scale,c=amber,a=.8*opacity}
+            end
+        end
+    end
+    -- Anti-Materiel Rifle: restrained precision instrument with a centered heavy cartridge.
+    if m.resource_hex=='89c5493e08ca4207' then
+        local slate,silver,brass={22,29,34},{185,203,213},{209,165,82}
+        local kept,heading={},nil
+        for _,command in ipairs(out) do
+            if command.type=='text' and command.text=='ROUNDS' then heading=command
+            elseif not command.mode_icon then kept[#kept+1]=command end
+        end
+        out=kept
+        local frame=out[1]
+        for _,command in ipairs(out) do
+            if command.type=='panel' then command.c=slate
+            elseif command.type=='text' then command.c={224,231,235}
+            elseif command.type=='rect' then command.c=command.decoration and silver or brass end
+        end
+        if heading then
+            local factor=heading.size/12
+            local px=frame.x+(frame.w-44*factor)/2
+            for _,run in ipairs(HUD.fire_icons.AMR_CARTRIDGE.runs) do
+                out[#out+1]={type='rect',amr_heading=true,x=px+run[1]*factor,y=heading.y+run[2]*factor,w=run[3]*factor,h=run[4]*factor,c=run[5],a=opacity}
+            end
+        end
+        -- Small calibrated edge marks remain inside the main frame.
+        for _,side in ipairs({0,1}) do
+            for k=0,2 do
+                out[#out+1]={type='rect',x=frame.x+(side==0 and 3*scale or frame.w-5*scale),y=frame.y+frame.h-(4+k*3)*scale,w=2*scale,h=.6*scale,c=brass,a=.65*opacity}
+            end
+        end
+    end
+    -- Deadeye trial: dedicated receiver display.
+    if m.resource_hex=='e6d932be83729076' then
+        local steel,silver,brass={24,31,36},{198,210,218},{218,172,78}
+        local w,h=126,100
+        out={{type='panel',x=x,y=y,w=w*scale,h=h*scale,c=steel,a=cfg.panel_opacity*opacity,frosted=cfg.frosted,weapon_theme='precision'}}
+        local function line(dx,dy,bw,bh,color,a)
+            out[#out+1]={type='rect',x=x+dx*scale,y=y+dy*scale,w=bw*scale,h=bh*scale,c=color,a=(a or 1)*opacity}
+        end
+        local function caption(value,dx,dy,size,color)
+            out[#out+1]={type='text',text=value,numeric_display=value:match('^%d%d%d$')~=nil,font=cfg.font,x=x+dx*scale,y=y+dy*scale,size=size*scale,c=color,a=opacity}
+        end
+        if cfg.decoration~='deadeye' then
+            line(0,0,w,1,silver,.55);line(0,h-1,w,1,silver,.55)
+            line(0,0,1,h,silver,.55);line(w-1,0,1,h,silver,.55)
+        end
+        line(8,79,110,1,brass,.65)
+        caption('R-6 DEADEYE',9,84,12,brass)
+        caption(number,10,40,36,ink)
+        for _,r in ipairs(HUD.fire_icons.AMENDMENT_CARTRIDGE.runs) do
+            line(96+r[1]*1.15,34+r[2]*1.3,r[3]*1.15,r[4]*1.3,r[5] or brass)
+        end
+        local fill=math.max(0,math.min(1,m.fraction or 0))
+        for i=0,14 do line(10+i*7,28,5,3,i<math.ceil(fill*15) and brass or silver,i<math.ceil(fill*15) and 1 or .18) end
+        caption(m.reserve and string.format('%03d SHELLS',m.reserve) or '-- SHELLS',10,13,12,silver)
+        line(8,8,110,.7,silver,.25)
+        if cfg.decoration~='deadeye' then
+            for _,dx in ipairs({4,119}) do for _,dy in ipairs({4,93}) do line(dx,dy,3,3,brass,.75) end end
+        end
+    end
+    -- Double Freedom shares Deadeye's receiver display grammar and two-shot capacity.
+    if m.resource_hex=='72170a55a1f37ff1' then
+        local w,h=120,112
+        local reference=142
+        if measure then
+            for _,text in ipairs({'DOUBLE FREEDOM','DBS-2'}) do
+                local a,b,e,t=measure(text,10*scale)
+                w=math.max(w,(e-a)/scale+24)
+                h=math.max(h,(text=='DBS-2' and 99 or 84)+t/scale+4)
+            end
+            local ra,rb,re=measure(m.reserve~=nil and string.format('%03d SHELLS',m.reserve) or '--- SHELLS',12*scale)
+            w=math.max(w,(re-ra)/scale+24)
+            local a,b,e=measure('DBS-2 DOUBLE FREEDOM',10*scale)
+            reference=math.max(reference,5+e/scale+6,6+re/scale+6)
+        end
+        local shift=w/2-73
+        local shared_child={}
+        for _,v in ipairs(out) do if v.child and not v.decoration then shared_child[#shared_child+1]=v end end
+        local steel,silver,brass={24,31,36},{198,210,218},{218,172,78}
+        out={{type='panel',x=x,y=y,w=w*scale,h=h*scale,c=steel,a=cfg.panel_opacity*opacity,frosted=cfg.frosted,weapon_theme='shotgun',world_reference_width=reference*scale}}
+        local function line(dx,dy,pw,ph,color,a)
+            out[#out+1]={type='rect',x=x+(dx+shift)*scale,y=y+dy*scale,w=pw*scale,h=ph*scale,c=color,a=(a or 1)*opacity}
+        end
+        local function caption(value,dx,dy,size,color)
+            out[#out+1]={type='text',text=value,numeric_display=value:match('^%d%d%d$')~=nil,font=cfg.font,x=x+(dx+shift)*scale,y=y+dy*scale,size=size*scale,c=color,a=opacity}
+        end
+        local function centered(value,dy,size,color,weapon)
+            local a,b,e=0,0,#value*size*scale*.6
+            if measure then a,b,e=measure(value,size*scale) end
+            caption(value,(w*scale-a-e)/(2*scale)-shift,dy,size,color)
+            out[#out].center_in_frame=true;out[#out].weapon_label=weapon or nil
+        end
+        line(81-w/2,79,w-16,1,brass,.65)
+        centered('DBS-2',99,10,brass,true)
+        centered('DOUBLE FREEDOM',84,10,brass,true)
+        local shell=HUD.fire_icons.DOUBLE_FREEDOM_SHELL
+        for barrel=1,2 do
+            local loaded=m.fire_mode=='VOLLEY' and m.value>=2 or (m.fire_mode~='VOLLEY' and m.value>=(3-barrel))
+            -- Match native SEMI order: left empties first; VOLLEY empties both.
+            line(27+(barrel-1)*50,26,42,3,loaded and brass or silver,loaded and 1 or .18)
+            out[#out].barrel_indicator=barrel;out[#out].shell_loaded=loaded
+            local spent=not loaded and m.df_shell_spent and m.df_shell_spent[barrel]
+            local symbol=spent and HUD.fire_icons.DOUBLE_FREEDOM_SPENT or shell
+            for _,run in ipairs(symbol.runs) do
+                local xs,origin,ry,rh=1.85,36.9,run[2],run[4]
+                if cfg.double_freedom_proportions_preview~=false then
+                    -- Side-view references suggest ~20% brass; keep total height and anchors.
+                    xs,origin=1.75,37.5
+                    if ry>=11 then ry,rh=6+(ry-11)*24/19,rh*24/19
+                    else ry,rh=ry*6/11,rh*6/11 end
+                end
+                line(origin+(barrel-1)*50+run[1]*xs,32+ry*1.5,run[3]*xs,rh*1.5,
+                    ((loaded or spent) and run[5] or silver),(loaded and .9 or spent and .55 or .18))
+                out[#out].shotgun_shell_art=true;out[#out].shotgun_shell_barrel=barrel;out[#out].shell_spent=spent==true
+            end
+        end
+        centered(m.reserve~=nil and string.format('%03d SHELLS',m.reserve) or '--- SHELLS',13,12,silver)
+        line(81-w/2,8,w-16,.7,silver,.25)
+        M.decorate(out,out[1],scale,cfg,opacity)
+        local child=shared_child[1]
+        if child and child.type=='panel' then
+            local dx=x+w*scale/2-(child.x+child.w/2)
+            local dy=y-2*scale-child.h-child.y
+            for _,v in ipairs(shared_child) do v.x=v.x+dx;v.y=v.y+dy;v.c=v.type=='panel' and steel or silver end
+            child.x=x;child.w=w*scale
+            local group={};M.decorate(group,child,scale,cfg,opacity)
+            for _,v in ipairs(group) do v.child=true;shared_child[#shared_child+1]=v end
+            for _,v in ipairs(shared_child) do out[#out+1]=v end
+        end
+    end
     if vent then
         local red=HUD.config.rgb(cfg.heat_red)
         for _,command in ipairs(out) do command.c=red end
@@ -521,14 +779,41 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         for _,frame in ipairs(frames)do
             local thickness=math.max(.3,scale*.35)
             if cfg.effect_scanlines then
-                for k=1,21 do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/22,w=frame.w,h=thickness,c=ink,a=.12*opacity} end
+                local count=cfg.effect_scanline_count or 21
+                for k=1,count do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/(count+1),w=frame.w,h=thickness,c=ink,a=.12*opacity,df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,df_effect_fraction=k/(count+1)} end
             end
             if cfg.effect_sweep then
                 local band=math.min(frame.h,thickness*2)
                 for k=0,2 do
-                    out[#out+1]={type='rect',x=frame.x,y=frame.y+(((clock or 0)*.35+k/3)%1)*(frame.h-band),w=frame.w,h=band,c=ink,a=.2*opacity}
+                    out[#out+1]={type='rect',x=frame.x,y=frame.y+(((clock or 0)*.35+k/3)%1)*(frame.h-band),w=frame.w,h=band,c=ink,a=.2*opacity,df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,df_effect_fraction=(((clock or 0)*.35+k/3)%1),df_effect_sweep=true}
                 end
             end
+        end
+    end
+    -- One shared tag colors only the loaded count's final digit, including bespoke panels.
+    for _,command in ipairs(out) do
+        if command.type=='text' and command.text==number and command.size>=20*scale and not command.child then
+            command.last_digit_color=m.chamber_bonus==1 and {255,221,0} or nil
+        end
+    end
+    if cfg.decoration=='deadeye' then
+        -- Apply once at final parent/child bounds, including bespoke and fuel panels.
+        local panels={};for _,v in ipairs(out) do if v.type=='panel' then panels[#panels+1]=v end end
+        local kept={}
+        for _,v in ipairs(out) do
+            local perimeter=false
+            if v.type=='rect' then for _,f in ipairs(panels) do
+                local eps=scale*.00001
+                local horizontal=math.abs(v.x-f.x)<eps and math.abs(v.w-f.w)<eps and (math.abs(v.y-f.y)<eps or math.abs(v.y+v.h-f.y-f.h)<eps)
+                local vertical=math.abs(v.y-f.y)<eps and math.abs(v.h-f.h)<eps and (math.abs(v.x-f.x)<eps or math.abs(v.x+v.w-f.x-f.w)<eps)
+                perimeter=perimeter or horizontal or vertical
+            end end
+            if not v.decoration and not perimeter then kept[#kept+1]=v end
+        end
+        out=kept
+        for _,f in ipairs(panels) do
+            local group={};M.decorate(group,f,scale,cfg,opacity)
+            for _,v in ipairs(group) do v.child=f.child;out[#out+1]=v end
         end
     end
     for _,command in ipairs(out)do if command.type=='text' then command.a=command.a*(cfg.text_opacity or 1) end end

@@ -213,7 +213,8 @@ function M.new(backend)
                 -- Inventory ownership plus the matching pack resource survives respawns;
                 -- adjacent entity IDs alone do not identify an autocannon backpack.
                 local pack_resource=({['a8cffb316f0b5c5f']='e60ae045e0090f4c',
-                    ['25aa2fd4643cf4ee']='8ec3026b5f2e579a'})[result.resource_hex]
+                    ['25aa2fd4643cf4ee']='8ec3026b5f2e579a',
+                    ['9f80d67a12a7e40f']='96dfc6542aa22980'})[result.resource_hex]
                 if pack_resource or (cfg and reserve_max==0 and not mounted) then
                     for off=12,24,4 do
                         local bid=r.u(inventory,off)
@@ -300,7 +301,7 @@ function M.new(backend)
             end)
             if ok and rpm then result.rpm=rpm;result.rpm_selectable=true end
         end
-        if result.resource_hex=='2e9d0bdc48b09e60' then
+        if result.resource_hex=='2e9d0bdc48b09e60' or result.resource_hex=='6cfcc7f8801a0266' then
             local ok,charge=pcall(function()
                 -- Verified native getter: manager +0x40, 40-byte records, first float.
                 assert(r.read(base+0x745b85,14)==string.char(0x8b,0xc8,0x49,0x8b,0x43,0x40,0x48,0x8d,0x14,0x89,0xf3,0x0f,0x10,0x04),'charge getter binding')
@@ -315,7 +316,11 @@ function M.new(backend)
                 assert(r.read(main_address,24)==main_rec,'charge weapon changed')
                 return value
             end)
-            if ok and charge then
+            if ok and charge and result.resource_hex=='6cfcc7f8801a0266' then
+                -- Melta live: ramp resets on canceled charges without ammo loss, and on discharge with ammo loss.
+                result.binding.melta_charge_candidate=charge
+                result.melta_charge_level=charge
+            elseif ok and charge then
                 result.charge_fraction=math.min(1,charge)
                 -- Provisional visual-test threshold, not a verified firing deadline.
                 result.charge_warning=charge>=.95

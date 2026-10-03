@@ -4,6 +4,8 @@
 
 A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current development version: **0.3.41**. This is the source checkout; generated releases may lag behind it.
 
+Current weapon-art checkpoint and uninstalled Senator cylinder: [2026-10-03 session notes](docs/SESSION-20261003.md). Source publication does not create a new release or install prototypes.
+
 ## Installation
 
 Download the [Complete prerelease](https://github.com/HWG90/DBF-HUD/releases) and install it through Arsenal with Bingus Shared Loader. It includes the HUD, render bridge, fonts and depth assets. MDL is optional for live reload; DBF-MCM is optional for configuration. Bingus Mod Options is not required.

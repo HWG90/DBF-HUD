@@ -1,6 +1,69 @@
 -- Live per-weapon placement editor; rendering and profile storage remain separate.
 local M={}
 local node_names={
+    ['1245b39c']='standard_pistol',
+    ['12cda115']='hellpod_interact_node',
+    ['15c8ade4']='IK_right',
+    ['16092557']='g_mg_LOD1',
+    ['175f53c9']='g_reciever_LOD4',
+    ['1a26b734']='g_reciever_LOD3',
+    ['1d667f2e']='shadow_mesh',
+    ['1e307614']='g_body_shadow_LOD2',
+    ['1f8155c7']='g_reciever',
+    ['27a837b4']='g_reciever_shadow_LOD2',
+    ['315cd161']='game_mesh',
+    ['32188af1']='bolt_carrier',
+    ['3e2c3cb2']='g_mg_LOD2',
+    ['450a8e24']='g_reciever_shadow',
+    ['4a182741']='StingrayEntityRoot',
+    ['4c3a8f75']='g_body',
+    ['4cc67131']='c_bodycollisionbot',
+    ['51c77b11']='g_body_shadow',
+    ['58c66627']='c_bodycollisiontop',
+    ['6685da74']='bipod_swivel',
+    ['670a7fdd']='feed_arm',
+    ['67c94e4b']='IK_left',
+    ['71b4f330']='g_body_shadow_LOD1',
+    ['754fe6c2']='bolthandle',
+    ['789b7d63']='ejector',
+    ['7950e36e']='attach_underbarrel',
+    ['7a3790c2']='g_body_shadow_LOD3',
+    ['7f30e61c']='FbxAxisSystem_ConvertNode',
+    ['8144a2c2']='pivot',
+    ['817d30f2']='g_mg_shadow_LOD1',
+    ['839f1a10']='g_body_LOD2',
+    ['83c9fe1a']='g_mg_shadow',
+    ['8f998342']='g_mg_shadow_LOD3',
+    ['93d8a8f2']='l_bipod',
+    ['975cebbd']='skeleton',
+    ['97fcfe68']='g_mg_shadow_LOD2',
+    ['98deb5de']='topcover',
+    ['9b115563']='boss',
+    ['9f15b85a']='g_body_LOD1',
+    ['a3d491d1']='collision',
+    ['ade50005']='fire_selector',
+    ['b1f3aa0a']='attach_paintjob',
+    ['b34be51e']='g_mg_LOD3',
+    ['b41f604d']='g_reciever_LOD1',
+    ['b4afc5cb']='c_reciever',
+    ['bbb52fb1']='g_body_LOD4',
+    ['bdae5555']='g_mg',
+    ['bdc96a7f']='r_bipod',
+    ['c372217f']='g_reciever_shadow_LOD1',
+    ['c489b14a']='ejection_cover',
+    ['c4a1d881']='g_reciever_shadow_LOD3',
+    ['c5a432d3']='barrel_handle',
+    ['d5a0518b']='g_body_LOD3',
+    ['d69497c1']='g_reciever_LOD2',
+    ['d7901849']='bolthandle_pivot',
+    ['da874826']='g_mg_LOD4',
+    ['dc0a2993']='ejector_socket',
+    ['e50d157f']='cog',
+    ['e81e9a8c']='assault_rifle',
+    ['e994e9e9']='machinegun',
+    ['faeed71d']='attach_ammo',
+    ['fd2aac63']='feed_plate',
+
     ['0844391a']='slide',
     ['23569738']='attach_mag_2',
     ['2c8ece2b']='muzzle',
@@ -136,12 +199,20 @@ function M.new(hud,backend,log)
         local item=list[(current-1+direction)%#list+1];offset.attach_point=item.value
         e.point_label=item.label;hud.auto_mounts={};e.status='Attach: '..item.label..'; save to keep it';return true
     end
-    local held={};local repeats={};local notice_until=0
+    local held={};local repeats={};local notice_until=0;local next_input_probe=0
     function e.tick(dt)
         if not backend.editor_key then return end
         local now=hud.clock or 0
+        if hud.config.debug_logging and backend.editor_input_diagnostic and now<60 and now>=next_input_probe then
+            backend.editor_input_diagnostic(e.active);next_input_probe=now+2
+        end
         local function pressed(code)
             local down=backend.editor_key(code);local edge=down and not held[code];held[code]=down;return edge
+        end
+        if pressed(116) and backend.editor_key(17) then -- Ctrl+F5: configuration only
+            local ok,message=hud.reload_settings()
+            e.status=ok and message or ('Reload failed: '..tostring(message))
+            notice_until=now+4;log('LAYOUT_EDITOR '..e.status)
         end
         if pressed(117) then -- F6
             if e.active then e.active=false;e.status='Editor closed; unsaved changes remain in preview' else e.bind() end
@@ -187,7 +258,7 @@ function M.new(hud,backend,log)
         if e.active and screen() then label=string.format('EDIT %s | %s | X %.0f Y %.0f px | SCALE %.0f%%',e.name,e.view,x,z,e.scale()*100) end
         return {{type='text',text=label,font=font,x=32*s,y=h-160*s,size=18*s,c={255,255,255},a=1},
             {type='text',text=e.status,font=font,x=32*s,y=h-135*s,size=16*s,c=e.status:match('^Saved:') and {100,255,160} or {255,255,255},a=1},
-            {type='text',text='F6 edit  F7 save  F8 restore  F9 zero position | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | , / . roll | Ctrl+,/. pitch | Alt+,/. yaw | Shift fine',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
+            {type='text',text='Ctrl+F5 reload settings | F6 edit  F7 save  F8 restore  F9 zero position | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | , / . roll | Ctrl+,/. pitch | Alt+,/. yaw | Shift fine',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
     end
     return e
 end

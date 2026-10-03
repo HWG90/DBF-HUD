@@ -4,3 +4,22 @@ __pycache__/
 *.tmp
 assets/*.material
 *.zip
+
+# Local test evidence, user captures/settings and extracted game shader donors.
+/evidence/
+/integrations/
+/art-review/
+/art-review.tsv
+/MACHINED_CATALOG_COVERAGE.json
+/STYLE_COVERAGE.json
+/screen-scene-retention-rejected.lua
+/assets/doom-face-doomguy.gif
+/assets/scene-depth-probe/*.txt
+/assets/scene-depth-probe/*.bin
+/assets/scene-depth-probe/source-*.gpu
+/assets/scene-depth-probe/*package-build.json
+/preview/*commands.tsv
+/preview/*.py
+!/preview/senator_cylinder_preview.py
+/preview/suite-family/
+/preview/suite-family-scope.json

@@ -5,11 +5,13 @@ function M.start(sr,backend,options)
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
     local self={version='0.3.41',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local frame_trial
     local profile={elapsed=0,frames=0,total=0,max=0,buckets={}}
     local function timed(name,fn)
         return function(...)
-            if not profile then return fn(...) end
-            local started=os.clock();local active=profile
+            local active=(frame_trial and frame_trial.collecting) and frame_trial or profile
+            if not active then return fn(...) end
+            local started=os.clock()
             local function finish(...)
                 if name=='depth_draw' and select(1,...)==true then active.drew=true end
                 local bucket=active.buckets[name] or {total=0,calls=0,max=0};active.buckets[name]=bucket
@@ -20,7 +22,20 @@ function M.start(sr,backend,options)
             return finish(fn(...))
         end
     end
-    local compose=timed('layout',HUD.layout.compose)
+    local compose=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure)
+        local out=HUD.layout.compose(m,x,y,scale,opacity,cfg,clock,measure)
+        local override=cfg.weapon_panel_overrides
+        if override then for _,v in ipairs(out)do
+            if v.type=='panel' and override.background_color then v.c=HUD.config.rgb(override.background_color)end
+            if v.type=='text' and override.text_color and not v.weapon_label and not m.warning and v.text~='UNSAFE' then v.c=HUD.config.rgb(override.text_color)end
+        end end
+        return out
+    end)
+    local mg_easter=HUD.mg_easter.new()
+    local df_shell_state=HUD.df_shell_state.new()
+    local recoilless_state=HUD.recoilless_state.new()
+    local senator_state=HUD.senator_state.new()
+    local melta_effect={}
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
@@ -35,7 +50,7 @@ function M.start(sr,backend,options)
     local latest_raw;local next_sample=0;local model;local anchor;local anchor_at=-10;local provider;local failures=0
     function self.texture_commands()
         if not model then return nil end
-        local cfg={};for k,v in pairs(self.config) do cfg[k]=v end
+        local cfg=HUD.config.effective(self.config,model.resource_hex)
         cfg.font='bigblue';cfg.frosted=false
         local commands=compose(model,0,0,2,1,cfg,self.clock)
         return commands
@@ -43,7 +58,7 @@ function M.start(sr,backend,options)
     function self.appearance_preview(bounds)
         -- A presentation-only example keeps Appearance useful on the ship.
         local preview_model=model or HUD.model.normalize({id='appearance_sample',kind='magazine',rounds=24,capacity=30,reserve=4,reserve_kind='mags',label='ROUNDS',fire_mode='AUTO'})
-        local cfg={};for k,v in pairs(self.config)do cfg[k]=v end
+        local cfg=HUD.config.effective(self.config,preview_model.resource_hex)
         cfg.frosted=false;cfg.placement_mode='manual'
         local commands=compose(preview_model,0,0,2,1,cfg,self.clock)
         commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
@@ -68,7 +83,7 @@ function M.start(sr,backend,options)
                 v.font_resource,v.font_material=HUD.native_font.resolve(sr,v.font,false)
                 for _,part in ipairs(HUD.font.numeric_parts(v))do
                     local t={};for k,value in pairs(v)do t[k]=value end
-                    t.text=part.text;t.x=v.x+part.dx;t.a=v.a*part.alpha;result[#result+1]=t
+                    t.text=part.text;t.c=part.c or v.c;t.x=v.x+part.dx;t.a=v.a*part.alpha;result[#result+1]=t
                 end
             else result[#result+1]=v end
         end
@@ -197,9 +212,14 @@ function M.start(sr,backend,options)
     local menu
     function self.configure(values)
         local was_debug=self.config.debug_logging
-        HUD.config.apply(self.config,values);self.config.placement_mode='auto';self.config.show_3d='aiming'
+        HUD.config.apply(self.config,values);self.appearance_revision=(self.appearance_revision or 0)+1;self.config.placement_mode='auto';self.config.show_3d='aiming'
         if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
+    end
+    function self.appearance_weapon()return model and model.resource_hex end
+    function self.panel_settings()return HUD.config.effective(self.config,self.appearance_weapon())end
+    function self.configure_panel(values,resource)
+        HUD.config.set_panel(self.config,resource or self.appearance_weapon(),values);self.appearance_revision=(self.appearance_revision or 0)+1
     end
     function self.export_tuning() return HUD.config.serialize(self.config) end
     function self.save_tuning()
@@ -217,6 +237,19 @@ function M.start(sr,backend,options)
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
+    function self.reload_settings()
+        local failure
+        local profiles=HUD.weapon_offsets.load(backend,function(message)
+            log(message);if message:find('rejected:',1,true) then failure=message end
+        end)
+        if failure then return false,failure end
+        if not self.reload_tuning() then return false,self.tuning_status end
+        self.weapon_clearance=profiles
+        self.auto_mounts={}
+        if self.layout_editor and self.layout_editor.active then self.layout_editor.bind() end
+        log('SETTINGS_RELOAD settings and weapon layouts loaded from disk')
+        return true,'Settings and layouts reloaded from disk'
+    end
     function self.blacklist_equipped(hidden)
         local resource=latest_raw and latest_raw.resource_hex
         if not resource then return false,'Equip a weapon first' end
@@ -260,7 +293,7 @@ function M.start(sr,backend,options)
             assert(not rejected,rejected)
             local layouts=HUD.weapon_offsets.serialize(profiles)
             backend.write_weapon_offsets(layouts);backend.write_tuning(HUD.config.serialize(config))
-            self.config=config;self.weapon_clearance=profiles;self.auto_mounts={}
+            self.config=config;self.appearance_revision=(self.appearance_revision or 0)+1;self.weapon_clearance=profiles;self.auto_mounts={}
             self.hybrid_scale_weapon=nil;self.hybrid_scale_depth=nil
             self.layout_editor.active=false;if menu then menu.sync() end
             return name
@@ -278,7 +311,7 @@ function M.start(sr,backend,options)
             backend.write_tuning(HUD.config.serialize(defaults))
         end)
         if not ok then log('PRESET Default setup failed: '..tostring(err));return false,err end
-        self.config=defaults;self.weapon_clearance=profiles;self.auto_mounts={}
+        self.config=defaults;self.appearance_revision=(self.appearance_revision or 0)+1;self.weapon_clearance=profiles;self.auto_mounts={}
         self.hybrid_scale_weapon=nil;self.hybrid_scale_depth=nil
         if self.layout_editor then self.layout_editor.active=false end
         if menu then menu.sync() end
@@ -337,7 +370,29 @@ function M.start(sr,backend,options)
             if raw and raw.resource_hex=='ccfae6d4a601c741' then
                 if self.snowball_unit~=raw.unit_ref then self.snowball_unit=raw.unit_ref;self.snowball_pickups=(self.snowball_pickups or 0)+1 end
             end -- Returning to the gun between throws is not another pickup.
+            self.sample_weapon=raw and raw.resource_hex
             latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);if model then model.snow_party=raw.resource_hex=='ccfae6d4a601c741' and (self.snowball_pickups or 0)>=3;if raw.resource_hex=='ccfae6d4a601c741' and not model.snow_party then model=nil end end;self.status=reader.status
+            if self.clock<60 and raw and raw.resource_hex=='6cfcc7f8801a0266' and raw.binding then
+                local signature=tostring(raw.rounds)..'/'..tostring(raw.binding.melta_charge_candidate)
+                if signature~=self.melta_candidate and self.clock>=(self.next_melta_candidate or 0) then
+                    self.melta_candidate=signature;self.next_melta_candidate=self.clock+.1
+                    log('MELTA_CHARGE_CANDIDATE count/candidate='..signature..' (research only)')
+                end
+            end
+            if raw and raw.resource_hex=='3828e2051aa9e897' then
+                local sig=tostring(raw.rounds)..'/'..tostring(raw.capacity)..'/'..tostring(raw.reserve)
+                if sig~=self.speargun_sample then self.speargun_sample=sig;log('SPEARGUN_NATIVE rounds/capacity/reserve='..sig) end
+            end
+            if raw and raw.resource_hex=='9f80d67a12a7e40f' then
+                local sig=tostring(raw.rounds)..'/'..tostring(raw.capacity)..'/'..tostring(raw.reserve)..'/'..tostring(raw.ammo_mode)
+                if sig~=self.recoilless_sample then self.recoilless_sample=sig;log('RECOILLESS_NATIVE rounds/capacity/reserve/mode='..sig) end
+            end
+            HUD.df_shell_state.step(df_shell_state,model)
+            HUD.recoilless_state.step(recoilless_state,model)
+            HUD.senator_state.step(senator_state,model)
+            HUD.melta_panel.step(melta_effect,model,self.clock)
+            local mg_flash=HUD.mg_easter.step(mg_easter,model,self.clock,self.config.mg43_easter_egg)
+            if model then model.mg43_flash=mg_flash;model.mg43_flash_start=mg_flash and (mg_easter.until_at-1.1) or nil end
             if raw and raw.resource_hex=='72170a55a1f37ff1' and raw.binding and raw.binding.ammo_controls then
                 local value=raw.binding.ammo_controls:gsub('.',function(ch)return string.format('%02X',ch:byte())end)
                 if value~=self.last_double_mode then log('DOUBLE_FREEDOM_CONTROL '..value);self.last_double_mode=value end
@@ -495,6 +550,7 @@ function M.start(sr,backend,options)
             next_log=self.clock+2
         end
         end
+        if self.frame_stage==4 then return end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
         if model.resource_hex=='4dbd74f49c8ffc13' then
@@ -510,14 +566,21 @@ function M.start(sr,backend,options)
         end
         self.aim_opacity=aim_opacity
         if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
-            local world_config={};for k,v in pairs(self.config)do world_config[k]=v end
+            local world_config=HUD.config.effective(self.config,model.resource_hex)
             world_config.scale=self.config.scale*(self.profile_scale or 1)
+            local appearance_id=(model.resource_hex or '')..'/'..tostring(self.appearance_revision or 0)
+            if appearance_id~=self.logged_appearance then
+                self.logged_appearance=appearance_id
+                log('WEAPON_APPEARANCE resource='..tostring(model.resource_hex)..' override='..tostring(world_config.weapon_panel_overrides~=nil)..' panel_opacity='..tostring(world_config.panel_opacity)..' scanlines='..tostring(world_config.effect_scanlines)..' density='..tostring(world_config.effect_scanline_count))
+            end
             world_config.visibility_alpha=alpha*aim_opacity
             world_config.panel_rotation=self.profile_rotation or 0
             world_config.panel_pitch=self.profile_pitch or 0
             world_config.panel_yaw=self.profile_yaw or 0
             world_config.first_person_zoom_demo=self.first_person and self.config.zoom_compensation
             world_config.style_clock=self.clock
+            world_config.profile_skip_text=self.frame_stage==2
+            world_config.profile_skip_geometry=self.frame_stage==3
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
@@ -560,7 +623,7 @@ function M.start(sr,backend,options)
             scale=scale*math.max(.25,math.min(4,(self.hybrid_scale_depth or point.depth)/point.depth))
         end
         if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
-        local commands=compose(model,x,y,scale,alpha*aim_opacity,self.config,self.clock)
+        local commands=compose(model,x,y,scale,alpha*aim_opacity,HUD.config.effective(self.config,model.resource_hex),self.clock)
         local frame=commands[1]
         local frame_bottom=frame.y
         for _,command in ipairs(commands) do if command.type=='panel' then frame_bottom=math.min(frame_bottom,command.y) end end
@@ -588,22 +651,70 @@ function M.start(sr,backend,options)
     end
     -- Short startup timing trial; one aggregate line, no per-frame logging.
 
+    frame_trial=options and options.frame_trial and {elapsed=0,phase=1,frames=0,max=0,over33=0,over50=0,total=0,cpu_max=0,buckets={}} or nil
+    if frame_trial then profile=nil end
     function self.tick(dt)
+        if frame_trial and not retired then
+            local t=frame_trial;local delta=math.max(0,dt or 0)
+            local eligible=self.first_person and (self.opacity or 0)>.9 and self.sample_weapon
+            t.collecting=eligible and true or false
+            if eligible then
+                if t.weapon and t.weapon~=self.sample_weapon then
+                    log('STAGE_RESET weapon changed; restarting comparison')
+                    t={elapsed=0,phase=1,frames=0,max=0,over33=0,over50=0,total=0,cpu_max=0,buckets={},collecting=true};frame_trial=t
+                end
+                if not t.weapon then t.weapon=self.sample_weapon;log('STAGE_BEGIN phase='..t.phase..' weapon='..t.weapon..' first_person=true') end
+                t.elapsed=t.elapsed+delta;t.frames=t.frames+1;t.total=t.total+delta;t.max=math.max(t.max,delta)
+                if delta>.033 then t.over33=t.over33+1 end
+                if delta>.05 then t.over50=t.over50+1 end
+            end
+            if t.elapsed>=8 then
+                log(string.format('FRAME_TRIAL phase=%d bypass=%s frames=%d avg_ms=%.3f max_ms=%.3f over33=%d over50=%d cpu_max_ms=%.3f heap_kb=%.0f',t.phase,tostring(t.phase==4),t.frames,1000*t.total/t.frames,1000*t.max,t.over33,t.over50,1000*t.cpu_max,collectgarbage('count')))
+                if screen_scene and screen_scene.resource_stats then local a,b,c,d,e,f,g=screen_scene.resource_stats();log(string.format('FRAME_RESOURCES created=%d destroyed=%d released_with_gui=%d live=%d bookkeeping_allocated=%d bookkeeping_reused=%d triangle_updates=%d',a,b,c,d,e,f,g or 0)) end
+                for name,b in pairs(t.buckets) do log(string.format('STAGE_COST phase=%d name=%s per_frame_ms=%.3f max_ms=%.3f',t.phase,name,1000*b.total/t.frames,1000*b.max)) end
+                if t.phase==5 then frame_trial=nil else
+                    frame_trial={elapsed=0,phase=t.phase+1,frames=0,max=0,over33=0,over50=0,total=0,cpu_max=0,buckets={},weapon=t.weapon}
+                    if frame_trial.phase==4 then pcall(screen_scene.release);pcall(view.release) end
+                end
+            end
+            self.frame_stage=frame_trial and frame_trial.phase or nil
+        end
         if not retired then
+            if profile and profile.weapon and (profile.weapon~=self.sample_weapon or profile.view~=self.first_person) then
+                profile={elapsed=0,frames=0,total=0,max=0,buckets={}}
+            end
             if profile then profile.drew=false end
-            local started=profile and os.clock()
+            local started=(profile or frame_trial) and os.clock()
             HUD.native_font.begin_frame()
             local ok,err=pcall(self.frame,dt)
             HUD.native_font.end_frame()
+            if frame_trial and frame_trial.collecting then frame_trial.cpu_max=math.max(frame_trial.cpu_max,os.clock()-started) end
             if profile and profile.drew then
+                profile.dt_total=(profile.dt_total or 0)+math.max(0,dt or 0);profile.dt_max=math.max(profile.dt_max or 0,dt or 0)
+                profile.weapon=self.sample_weapon;profile.view=self.first_person
                 local cost=os.clock()-started
                 profile.elapsed=profile.elapsed+math.max(0,dt or 0)
                 profile.frames=profile.frames+1;profile.total=profile.total+cost;profile.max=math.max(profile.max,cost)
+                profile.intervals=profile.intervals or {}
+                local second=math.floor(profile.elapsed)
+                if second>(profile.last_second or -1) then
+                    profile.last_second=second
+                    profile.intervals[#profile.intervals+1]=string.format('%d:%.2f/%.2f/%.0f',second,1000*(profile.interval_dt_max or 0),1000*(profile.interval_cpu_max or 0),collectgarbage('count'))
+                    profile.interval_dt_max,profile.interval_cpu_max=0,0
+                end
+                profile.interval_dt_max=math.max(profile.interval_dt_max or 0,dt or 0)
+                profile.interval_cpu_max=math.max(profile.interval_cpu_max or 0,cost)
                 if profile.elapsed>=20 then
                     log(string.format('PROFILE HUD frames=%d avg_ms=%.3f max_ms=%.3f view=%s mode=%s',profile.frames,1000*profile.total/profile.frames,1000*profile.max,self.first_person and 'first' or 'third',tostring(self.config.anchor_mode)))
                     for name,bucket in pairs(profile.buckets) do
                         log(string.format('PROFILE_PHASE %s per_frame_ms=%.3f per_call_ms=%.3f max_ms=%.3f calls=%d',name,1000*bucket.total/profile.frames,1000*bucket.total/bucket.calls,1000*bucket.max,bucket.calls))
                     end
+                    log(string.format('VISIBLE_SAMPLE weapon=%s avg_frame_ms=%.3f max_frame_ms=%.3f',tostring(profile.weapon),1000*profile.dt_total/profile.frames,1000*profile.dt_max))
+                    if screen_scene and screen_scene.resource_stats then
+                        local a,b,c,d,e,f,g=screen_scene.resource_stats()
+                        log(string.format('VISIBLE_RESOURCES created=%d destroyed=%d released=%d live=%d allocated=%d reused=%d bitmap_updates=%d',a,b,c,d,e,f,g or 0))
+                    end
+                    log('VISIBLE_INTERVALS second:max_frame_ms/max_hud_cpu_ms/shared_heap_kb '..table.concat(profile.intervals,' '))
                     profile=nil
                 end
             end

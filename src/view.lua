@@ -60,7 +60,8 @@ function M.new(sr)
                 local resource,material=HUD.native_font.resolve(sr,c.font,false)
                 if resource and not c.fuel_endpoint then
                     for _,part in ipairs(HUD.font.numeric_parts(c)) do
-                        local part_color=sr.Color(math.floor(c.a*part.alpha*255+.5),c.c[1],c.c[2],c.c[3])
+                        local ink=part.c or c.c
+                        local part_color=sr.Color(math.floor(c.a*part.alpha*255+.5),ink[1],ink[2],ink[3])
                         local tid=G.text(gui,part.text,resource,c.size,material,sr.Vector3(c.x+part.dx,c.y,51),part_color)
                         if tid then ids[#ids+1]={type=kind,id=tid} end
                     end

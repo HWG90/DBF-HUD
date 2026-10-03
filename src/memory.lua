@@ -25,10 +25,24 @@ function M.native()
         end
     }
     local input=ffi.load('user32');local window_pid=ffi.new('unsigned long[1]')
+    local input_probe={polls=0,focused=0,f6_high=0,f6_tap=0,right_high=0,right_tap=0}
     function backend.editor_key(code)
         local window=input.dbf_hud_foreground();if window==nil then return false end
         input.dbf_hud_window_pid(window,window_pid)
-        return tonumber(window_pid[0])==tonumber(k.dbf_hud_pid()) and tonumber(input.dbf_hud_key(code))<0
+        local focused=tonumber(window_pid[0])==tonumber(k.dbf_hud_pid())
+        local state=tonumber(input.dbf_hud_key(code))
+        if code==117 or code==39 then
+            if code==117 then input_probe.polls=input_probe.polls+1;if focused then input_probe.focused=input_probe.focused+1 end end
+            local name=code==117 and 'f6' or 'right'
+            if state<0 then input_probe[name..'_high']=input_probe[name..'_high']+1 end
+            if state%2~=0 then input_probe[name..'_tap']=input_probe[name..'_tap']+1 end
+        end
+        return focused and state<0
+    end
+    function backend.editor_input_diagnostic(active)
+        backend.log(string.format('EDITOR_INPUT active=%s polls=%d focused=%d f6_held=%d f6_taps=%d right_held=%d right_taps=%d',
+            tostring(active),input_probe.polls,input_probe.focused,input_probe.f6_high,input_probe.f6_tap,input_probe.right_high,input_probe.right_tap))
+        for key in pairs(input_probe) do input_probe[key]=0 end
     end
     function backend.log(line)
         if not log_attempted then

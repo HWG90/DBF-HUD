@@ -7,6 +7,7 @@ function M.normalize(raw)
     if not raw then return nil end
     local m={id=raw.id,unit_ref=raw.unit_ref,avatar_unit_ref=raw.avatar_unit_ref,resource_hex=raw.resource_hex,kind=raw.kind,reserve=count(raw.reserve),reserve_kind=raw.reserve_kind,
         alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, safety_mode=raw.safety_mode, charge_fraction=raw.charge_fraction, charge_warning=raw.charge_warning==true, energy_icon=raw.energy_icon, ammo_icon=raw.ammo_icon, charge_ready=raw.charge_ready==true, lowered=raw.lowered, label=raw.label or 'AMMO'}
+    if raw.resource_hex=='6cfcc7f8801a0266' and type(raw.melta_charge_level)=='number' and raw.melta_charge_level==raw.melta_charge_level and raw.melta_charge_level>=0 and raw.melta_charge_level<=10 then m.melta_charge_level=raw.melta_charge_level end
     if raw.rpm_selectable==true and type(raw.rpm)=='number' and raw.rpm==raw.rpm and raw.rpm>=1 and raw.rpm<=10000 then
         m.rpm=math.floor(raw.rpm+.5)
     end
@@ -22,10 +23,8 @@ function M.normalize(raw)
         m.value=count(raw.rounds)
         if not m.value then return nil end
         m.capacity=count(raw.capacity)
-        if raw.kind=='magazine' and raw.chamber_supported and raw.chamber_rounds==1 and m.capacity and m.value>m.capacity then
-            m.chamber_bonus=1
-            m.value=m.value-1
-        end
+        -- Verified reader already includes the chamber in rounds; never add or subtract it here.
+        if (raw.kind=='magazine' or raw.kind=='rounds') and raw.chamber_supported==true and raw.chamber_rounds==1 and m.capacity and m.value==m.capacity+1 then m.chamber_bonus=1 end
         if m.capacity and m.capacity>0 then m.fraction=math.min(1,m.value/m.capacity) end
         m.state=m.value==0 and (raw.reloadable==false and 'SPENT' or 'EMPTY') or 'READY'
         m.warning=m.value==0 or (m.fraction and m.fraction<=0.2) or false

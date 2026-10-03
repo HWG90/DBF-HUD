@@ -3,6 +3,7 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
     local font_host,font_handle
+    local panel_weapon,panel_refresh,panel_revision
     local binding_host,binding_down
     local binding_id='dbf_hud_debug.force_occlusion'
     local notice,notice_until
@@ -140,6 +141,49 @@ function M.new(hud)
                 local ok,err=hud.reset_defaults()
                 assert(ok,err)
             end
+            local panel_controls={{type='text',label='Equipped weapon appearance',id='weapon_heading'},
+                {id='panel_inherit',type='button',label='Use global appearance',on_activate=function()
+                    hud.configure_panel(false);hud.save_tuning();if panel_refresh then panel_refresh(true)end
+                end}}
+            local panel_definitions={
+                {'background_color','Panel color','color'},{'text_color','Text color','color'},{'decoration_color','Decoration color','color'},
+                {'panel_opacity','Panel opacity','slider',0,1,.01},{'text_opacity','Text opacity','slider',0,1,.01},
+                {'effect_scanline_count','Scanline count','slider',1,80,1},
+                {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background','toggle'},
+                {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
+                {'style_3d','Visual style','choice',styles}}
+            local function panel_value(key)
+                local cfg=hud.panel_settings and hud.panel_settings() or hud.config
+                local v=cfg[key]
+                if key=='decoration' then for i,n in ipairs(HUD.config.decorations)do if n==v then return i end end end
+                if key=='style_3d' then for i,n in ipairs(HUD.config.styles)do if n==v then return i end end end
+                return v
+            end
+            for _,def in ipairs(panel_definitions)do
+                local key=def[1];local c={id='weapon_'..key,type=def[3],label=def[2],default=panel_value(key)}
+                if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
+                c.on_change=function(v)
+                    if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
+                    assert(hud.appearance_weapon and hud.appearance_weapon()==panel_weapon,'Equipped weapon changed; reopen this control')
+                    hud.configure_panel({[key]=v},panel_weapon);hud.save_tuning()
+                end
+                panel_controls[#panel_controls+1]=c
+            end
+            panel_refresh=function(force)
+                local id=hud.appearance_weapon and hud.appearance_weapon()
+                if not force and id==panel_weapon and panel_revision==hud.appearance_revision then return end
+                panel_weapon=id;panel_revision=hud.appearance_revision
+                local mod=host.mods and host.mods.dbf_hud_fonts
+                if not mod then return end
+                for _,c in ipairs(panel_controls)do
+                    local registered=mod.controls and mod.controls[c.id]
+                    if registered then
+                        registered.disabled=id==nil
+                        if c.id=='weapon_heading' then registered.label=id and ((HUD.weapon_names[id] or id)..' - overrides global appearance') or 'Equip a weapon to edit its appearance'
+                        elseif c.id:sub(1,7)=='weapon_' then mod.values[c.id]=panel_value(c.id:sub(8)) end
+                    end
+                end
+            end
             font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
                 description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
                     {id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
@@ -151,7 +195,7 @@ function M.new(hud)
                         on_change=function(v)save('font',HUD.config.fonts[v])end},
                     {id='style',type='choice',label='HUD style',choices=styles,default=selected_style,
                         on_change=function(v)save('style_3d',HUD.config.styles[v])end},
-                    {id='decoration',type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame'},default=decoration_index(),
+                    {id='decoration',type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index(),
                         on_change=function(v)save('decoration',HUD.config.decorations[v])end},
                     {id='panel_color',type='color',label='Panel color',default=hud.config.background_color,
                         on_change=function(v)save('background_color',v)end},
@@ -165,6 +209,8 @@ function M.new(hud)
                     {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
                     {id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
                         on_change=function(v)save('effect_scanlines',v)end},
+                    {id='mg43_easter_egg',type='toggle',label='MG-43: Get some! Easter egg',default=hud.config.mg43_easter_egg,
+                        on_change=function(v)save('mg43_easter_egg',v)end},
                     {id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
                         on_change=function(v)save('effect_flicker',v)end},
                     {id='effect_sweep',type='toggle',label='HUD effect: Scanning sweep',default=hud.config.effect_sweep,
@@ -173,7 +219,7 @@ function M.new(hud)
                         on_change=function(v)save('text_opacity',v)end},
                     {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
                         on_change=function(v)save('panel_opacity',v)end}
-                }},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
+                }},{id='weapon_appearance',name='Weapon Appearance',controls=panel_controls},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset'},
                     {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
                     {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=save_preset},
@@ -187,8 +233,9 @@ function M.new(hud)
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=reset_defaults}
                 }}}})
-            font_host=host;self.status='MCM > DBF-HUD'
+            font_host=host;self.status='MCM > DBF-HUD';panel_refresh(true)
         end
+        if panel_refresh then panel_refresh(true)end
         if attempted then return end
         api=rawget(_G,'ModOptionsMenu')
         if not api or api.api~=1 then return end
@@ -247,14 +294,14 @@ function M.new(hud)
                     hud.configure({[k]=v});hud.save_tuning()
                 end)
             end
-            add('decoration',{type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame'},default=decoration_index()},function(v)
+            add('decoration',{type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index()},function(v)
                 hud.configure({decoration=assert(HUD.config.decorations[v])});hud.save_tuning()
             end)
             -- ModOptionsMenu accepts at most sixteen names per choice.
             for page=1,math.ceil(#font_choices/16) do
                 local first=(page-1)*16+1
                 local choices={}
-                for i=first,math.min(first+15,#font_choices) do choices[#choices+1]=font_choices[i] end
+                for i=first,math.min(first+15,#font_choices) do choices[#choices+1]=font_choices[i]:sub(1,48) end
                 local key=page==1 and 'font' or ('font_page_'..page)
                 local selected=font_index()
                 add(key,{type='choice',label='HUD font '..page,choices=choices,

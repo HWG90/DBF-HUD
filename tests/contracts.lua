@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'native_font_data','native_font_uv','native_font','config','font','motion','ammo_types','model','fire_icons','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','depth_marker','offscreen_test','world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'native_font_data','native_font_uv','native_font','config','font','motion','ammo_types','model','fire_icons','munition_art','mg_easter','df_shell_state','recoilless_state','senator_state','senator_panel','doom_easter','melta_panel','speargun_panel','recoilless_panel','catalog_housing','shared_suite','weapon_styles','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','depth_marker','offscreen_test','world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -175,6 +175,26 @@ test('Spear reserves follow the owned matching pack rather than adjacent entity 
     put(weapon,original);put(row,oldrow)
 end)
 
+test('Recoilless reserves follow matching pack, including empty and wrong-pack cases',function()
+    local original=read(weapon,8)
+    local resource=u(0x12a7e40f)..u(0x9f80d67a)
+    local home=((0x9f80d67a%spec[2])*(2^32%spec[2])+0x12a7e40f%spec[2])%spec[2]
+    local row=tablebase+home*16;local oldrow=read(row,16)
+    put(weapon,resource);put(row,resource..u(0)..u(0))
+    local pack=weapon+24;put(pack,u(0x2aa22980)..u(0x96dfc654));U(pack+8,50)
+    map(owner+L.entity_map,{[10]=0,[20]=1,[50]=2});U(inventory+12,50)
+    local deposit=alloc(512)
+    P(base+L.deposit[1],deposit);bind(deposit,0x20,0x38,50,pack)
+    local counts=alloc(8);P(deposit+0x50,counts);U(counts,4)
+    U(flags,0x81);U(state,1);U(state+8,1);U(runtime,0);U(config+0x88,1)
+    local value=assert(reader.poll(),reader.status)
+    assert(value.reserve==4 and value.reserve_kind=='PACK')
+    U(counts,0);value=assert(reader.poll(),reader.status);assert(value.reserve==0)
+    put(pack,u(123)..u(0));value=assert(reader.poll(),reader.status);assert(value.reserve_kind~='PACK')
+    U(inventory+12,0);map(owner+L.entity_map,{[10]=0,[20]=1})
+    put(weapon,original);put(row,oldrow)
+end)
+
 test('machine gun uses verified magazine path and rejects stale component identity',function()
     local original=read(weapon,8)
     local resource=string.char(0x56,0x89,0xb3,0xab,0x3b,0x7d,0xc2,0x11)
@@ -196,7 +216,7 @@ test('magazine adds chamber once and preserves tactical reload',function()
     U(flags,0xc0);U(state,44);U(state+8,1);U(runtime,6)
     local m=assert(reader.poll(),reader.status);assert(m.rounds==45 and m.capacity==45 and m.reserve==6)
     U(state,45);m=assert(reader.poll());assert(m.rounds==46 and m.capacity==45 and m.chamber_rounds==1)
-    local shown=HUD.model.normalize(m);assert(shown.value==45 and shown.chamber_bonus==1)
+    local shown=HUD.model.normalize(m);assert(shown.value==46 and shown.chamber_bonus==1)
     U(state,44);U(state+8,0);bytes[runtime+8]=1
     m=assert(reader.poll());assert(m.rounds==45 and m.chamber_rounds==0 and m.pending_chamber_round==1)
     assert(not HUD.model.normalize(m).chamber_bonus)
@@ -427,7 +447,7 @@ test('configuration validates atomically and roundtrips as Lua',function()
     local f=assert(loadstring(HUD.config.serialize(c)));setfenv(f,{})
     local loaded=f();assert(loaded.archived_mesh and loaded.research and loaded.saturation==nil)
     local restored=HUD.config.new();HUD.config.apply(restored,loaded);for k,v in pairs(c) do
-        if k~='show_3d' and k~='always_show_3d' and k~='occlusion_mode' and k~='hud_occlusion' and k~='placement_mode' and not k:match('^left_mount_') and not k:match('^fp_mount_') and not k:match('^mount_') then assert(restored[k]==v) end
+        if k~='weapon_panels' and k~='show_3d' and k~='always_show_3d' and k~='occlusion_mode' and k~='hud_occlusion' and k~='placement_mode' and not k:match('^left_mount_') and not k:match('^fp_mount_') and not k:match('^mount_') then assert(restored[k]==v) end
     end
     assert(not pcall(HUD.config.apply,c,{scale=1.5,archived_mesh={unknown=1}}) and c.scale==1)
     assert(not pcall(HUD.config.apply,c,{saturation=1,archived_mesh={saturation=2}}))
@@ -1111,7 +1131,7 @@ test('Airburst live controls select flak and cluster labels and icons',function(
         assert(raw.label==mode and raw.ammo_icon==(mode=='CLUSTER' and 'AIRBURST_CLUSTER' or 'AIRBURST'))
         local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.new(),0)
         local icon=false
-        for _,command in ipairs(commands) do icon=icon or command.mode_icon==true end
+        for _,command in ipairs(commands) do icon=icon or command.mode_icon==true or command.catalog_heading==true end
         assert(icon)
     end
     assert(HUD.ammo_types.airburst_mode(0x51)==nil)
@@ -1251,7 +1271,7 @@ test('De-escalator keeps its grenade icon with selectable fire modes',function()
         assert(raw.ammo_icon=='DEESCALATOR' and raw.fire_mode==mode and raw.reserve_kind=='GRNDS')
         local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.defaults,0)
         local icon=false
-        for _,v in ipairs(commands) do if v.mode_icon then icon=true end end
+        for _,v in ipairs(commands) do if v.mode_icon or v.catalog_heading then icon=true end end
         assert(icon)
     end
 end)
@@ -1262,17 +1282,17 @@ test('Melta uses larger upright thermal oval with shots and canister reserves',f
     assert(HUD.fire_icons.MELTA and #HUD.fire_icons.MELTA.runs>0)
 end)
 
-test('chamber bonus is magazine-only and appears beside the ammo label',function()
-    local raw={kind='magazine',rounds=31,capacity=30,chamber_supported=true,chamber_rounds=1,label='ROUNDS'}
-    local m=HUD.model.normalize(raw);assert(m.value==30 and m.chamber_bonus==1)
-    local found=false
-    for _,v in ipairs(HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)) do
-        if v.type=='text' and v.text=='ROUNDS +1' then found=true end
-    end
-    assert(found)
-    raw.rounds=30;m=HUD.model.normalize(raw);assert(m.value==30 and not m.chamber_bonus)
-    raw.kind='rounds';raw.rounds=9;raw.capacity=8;m=HUD.model.normalize(raw)
-    assert(m.value==9 and not m.chamber_bonus)
+test('extra chamber count uses native total and colors only above capacity',function()
+ local raw={kind='magazine',rounds=31,capacity=30,chamber_supported=true,chamber_rounds=1,label='ROUNDS'}
+ local m=HUD.model.normalize(raw);assert(m.value==31 and m.chamber_bonus==1)
+ local found=false
+ for _,v in ipairs(HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)) do
+  assert(v.text~='ROUNDS +1');if v.text=='031' then assert(v.last_digit_color);found=true end
+ end
+ assert(found)
+ raw.rounds=30;m=HUD.model.normalize(raw);assert(m.value==30 and not m.chamber_bonus)
+ raw.kind='rounds';raw.rounds=9;raw.capacity=8;m=HUD.model.normalize(raw);assert(m.value==9 and m.chamber_bonus==1)
+ raw.capacity=nil;assert(not HUD.model.normalize(raw).chamber_bonus)
 end)
 test('autocannon mode is explicit and its indicator fits beside the count',function()
     assert(HUD.ammo_types.autocannon_mode(0x50)=='APHET')
@@ -1489,18 +1509,144 @@ test('verified Purifier charge readiness pulses only the ammo number cyan',funct
     end
     assert(count==1)
 end)
+test('craftsmanship profiles retain mechanical detail and distinguish named ammunition',function()
+ local names={'BR-14 Adjudicator','R-63 Diligence','AR-23P Liberator Penetrator','P-113 Verdict','P-4 Senator','M-105 Stalwart','PLAS-45 Epoch','LAS-99 Quasar Cannon','FAF-14 Spear','MLS-4X Commando','GL-21 Grenade Launcher','S-11 Speargun'}
+ local families={'precision','precision','precision','sidearm','sidearm','belt','plasma','laser','rocket','rocket','explosive','dart'}
+ local signatures={}
+ for i,name in ipairs(names) do
+  local style={name=name,family=families[i]};local mode={fire_mode='SEMI'}
+  local icon=assert(HUD.munition_art.icon(style,mode,HUD.fire_icons.BULLET))
+  assert(icon==HUD.munition_art.icon(style,mode,HUD.fire_icons.BULLET),'cached artwork')
+  assert(#icon.runs>=15,name)
+  local signature={};local colors={}
+  for _,r in ipairs(icon.runs) do
+   assert(r[3]>0 and r[4]>0,name)
+   signature[#signature+1]=table.concat({r[1],r[2],r[3],r[4]},',')
+   colors[table.concat(r[5],',')]=true
+  end
+  local count=0;for _ in pairs(colors)do count=count+1 end;assert(count>=4,name)
+  local key=table.concat(signature,';');assert(not signatures[key],name..' duplicates '..tostring(signatures[key]));signatures[key]=name
+ end
+end)
+test('accepted custom panels bypass subsequent catalog redesigns',function()
+ for _,id in ipairs({'e6d932be83729076','89c5493e08ca4207','52e4334e6a128caf','2e9d0bdc48b09e60'}) do
+  local raw=HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=7,capacity=10,reserve=8,reserve_kind='MAGS',safety_mode=id=='2e9d0bdc48b09e60' and 'UNSAFE' or nil})
+  local out=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.defaults,0)
+  local expected=false
+  for _,v in ipairs(out)do
+   assert(not v.catalog_heading and not v.catalog_detail and not v.catalog_caption,id)
+   expected=expected or (id=='e6d932be83729076' and v.text=='R-6 DEADEYE') or (id=='89c5493e08ca4207' and v.amr_heading) or (id=='52e4334e6a128caf' and v.grenade_heading) or (id=='2e9d0bdc48b09e60' and v.railgun_heading)
+  end
+  assert(expected,id)
+ end
+end)
+test('regular Machine Gun alone keeps linked cartridges right of the measured count',function()
+ local id='11c27d3babb38956'
+ for _,scale in ipairs({.05,.65,2})do
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=175,capacity=175,reserve=3,reserve_kind='BELTS',rpm_selectable=true,rpm=900}))
+  assert(m.label=='MG-43')
+  local commands=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0,function(t,size)return HUD.font.measure(t,size,HUD.config.defaults.font)end)
+  local designation=false;for _,v in ipairs(commands)do designation=designation or v.text=='MG-43';assert(v.text~='ROUNDS')end;assert(designation)
+  for _,list in ipairs({commands,HUD.world_style.prepare(commands,{first_person=true},HUD.config.defaults)})do
+   local number,low,high=nil,math.huge,-math.huge
+   for _,v in ipairs(list)do
+    if v.mode_count then number=v end
+    if v.catalog_side_icon then low=math.min(low,v.x);high=math.max(high,v.x+v.w);assert(v.mode_icon and not v.catalog_heading) end
+   end
+   assert(number and low<math.huge)
+   local a,b,e=HUD.font.measure(number.text,number.size,number.font,true)
+   assert(low>number.x+e and high<list[1].x+list[1].w,'side row padding')
+  end
+ end
+ local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='a6a735accb4a327f',kind='magazine',rounds=250,capacity=250,reserve=3,reserve_kind='BELTS'}))
+ for _,v in ipairs(HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0))do assert(not v.catalog_side_icon)end
+end)
+test('catalog themes cover all known names and preserve bounded geometry and live values',function()
+    local total=0
+    for id in pairs(HUD.weapon_names) do assert(HUD.weapon_styles.catalog[id],id) end
+    for id,style in pairs(HUD.weapon_styles.catalog) do
+        total=total+1
+        for _,scale in ipairs({.05,.65,2}) do
+            for _,mode in ipairs({'SEMI','AUTO','BURST'}) do
+                local raw=HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=7,capacity=10,reserve=8,reserve_kind='MAGS',fire_mode=mode})
+                local m=assert(HUD.model.normalize(raw));local original=m.value
+                local commands=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0)
+                assert(m.value==original and m.reserve==8 and m.fire_mode==mode,id)
+                assert((m.label=='FUEL' or m.label=='GAS') and commands[1].weapon_theme==nil or commands[1].weapon_theme==style.family,id)
+                local frame=commands[1];local minx,maxx=math.huge,-math.huge
+                for _,v in ipairs(commands) do
+                    assert(v.x==v.x and v.y==v.y,id)
+                    if v.type~='text' then assert(v.w>0 and v.h>0,id) end
+                    if v.catalog_heading or v.catalog_detail then
+                        assert(v.x>=frame.x-.0001 and v.y>=frame.y-.0001 and v.x+v.w<=frame.x+frame.w+.0001 and v.y+v.h<=frame.y+frame.h+.0001,id)
+                    end
+                    if v.catalog_heading then minx=math.min(minx,v.x);maxx=math.max(maxx,v.x+v.w) end
+                end
+                local measured=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0,function(t,size)return HUD.font.measure(t,size,HUD.config.defaults.font) end)
+                local world=HUD.world_style.prepare(measured,{first_person=true},HUD.config.defaults)
+                local wf=world[1]
+                for _,v in ipairs(world) do if v.catalog_heading then
+                    assert(v.x>=wf.x-.001 and v.x+v.w<=wf.x+wf.w+.001 and v.y>=wf.y-.001 and v.y+v.h<=wf.y+wf.h+.001,id..' world heading')
+                end end
+                if minx<math.huge then
+                    assert(math.abs((minx+maxx)/2-frame.x-frame.w/2)<.001,id)
+                    for _,v in ipairs(commands) do assert(not v.mode_icon,id) end
+                end
+            end
+        end
+    end
+    assert(total==148)
+    local unknown=HUD.layout.compose({resource_hex='unknown',kind='magazine',value=7,label='ROUNDS',state='READY'},0,0,1,1,HUD.config.defaults,0)
+    assert(not unknown[1].weapon_theme)
+end)
+
+test('AMR cartridge is centered inside the heading without a duplicate side icon',function()
+    local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='89c5493e08ca4207',rounds=7,capacity=7,reserve=6,reserve_kind='MAGS'})
+    local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.defaults,0)
+    local frame=commands[1];local low,high=math.huge,-math.huge;local count=0
+    for _,v in ipairs(commands) do
+        assert(not v.mode_icon)
+        if v.amr_heading then
+            count=count+1;low=math.min(low,v.x);high=math.max(high,v.x+v.w)
+            assert(v.y>=frame.y and v.y+v.h<=frame.y+frame.h)
+        end
+    end
+    assert(count>0 and low>frame.x and high<frame.x+frame.w)
+    assert(math.abs((low+high)/2-frame.x-frame.w/2)<.001)
+end)
+
 test('railgun safety child retains projectile and parent width',function()
     for _,mode in ipairs({'SAFE','UNSAFE'}) do
-        local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='2e9d0bdc48b09e60',rounds=1,capacity=1,reserve=19,reserve_kind='MAGS',safety_mode=mode})
+        local raw=HUD.ammo_types.apply({kind='magazine',resource_hex='2e9d0bdc48b09e60',rounds=1,capacity=1,reserve=19,reserve_kind='MAGS',safety_mode=mode,charge_fraction=.5})
         local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,1,1,HUD.config.defaults,0)
         local label,child,icon
         for _,v in ipairs(commands) do
             if v.child and v.type=='text' and v.text==mode then label=v end
             if v.child and v.type=='panel' then child=v end
-            if v.mode_icon then icon=true end
+            if v.railgun_heading then icon=true end
         end
         assert(label and child and icon)
+        local arcs=0
+        local frame=commands[1]
+        for _,v in ipairs(commands) do if v.railgun_arc then
+            arcs=arcs+1
+            assert(v.x>=frame.x and v.y>=frame.y and v.x+v.w<=frame.x+frame.w and v.y+v.h<=frame.y+frame.h)
+        end end
+        assert((mode=='UNSAFE' and arcs>0) or (mode=='SAFE' and arcs==0))
+        local meter
+        for _,v in ipairs(commands) do if v.charge_meter and v.type=='panel' then meter=v end end
+        assert(meter and math.abs(meter.y-child.y)<.001)
+        assert(math.abs(meter.y+meter.h-frame.y-frame.h)<.001)
         assert(math.abs(child.w-commands[1].w)<.001)
+        local world=HUD.world_style.prepare(commands,{first_person=true},HUD.config.defaults)
+        local wf,wm,wc=world[1]
+        for _,v in ipairs(world) do
+            if v.charge_meter and v.type=='panel' then wm=v end
+            if v.child and v.type=='panel' then wc=v end
+        end
+        assert(wm and wc and math.abs(wm.y-wc.y)<.001)
+        assert(math.abs(wm.y+wm.h-wf.y-wf.h)<.001,'world charge height')
+
     end
 end)
 test('laser aiming HUD honors independent first-person profiles at every scale',function()
@@ -1728,9 +1874,55 @@ test('screen scene preserves saved mounts and shader font colors with dimmed dig
     local oriented_renderer=HUD.screen_scene.new(sr,function()end)
     local previous_text_count=#text_draws
     assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05))
-    assert(#oriented==2 and #text_draws==previous_text_count and oriented[1].color[1]==51 and oriented[2].color[1]==153)
-    assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and oriented_removed==2)
+    assert(#oriented==3 and #text_draws==previous_text_count and oriented[1].text=='0' and oriented[2].text=='0' and oriented[3].text=='1')
+    assert(oriented[1].color[1]==51 and oriented[2].color[1]==51 and oriented[3].color[1]==153)
+    assert(oriented[1].transform.at[1]<oriented[2].transform.at[1] and oriented[2].transform.at[1]<oriented[3].transform.at[1])
+    assert(oriented_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and oriented_removed==3)
     oriented_renderer.release();assert(oriented_removed>=2)
+    local strips={};local strips_removed=0
+    sr.Gui.bitmap_3d_uv=function(gui,material,uv0,uv1,transform,pos,layer,size,color)
+        assert(layer==51 and size[1]==1 and size[2]==1)
+        assert(uv0[1]<uv1[1] and uv0[2]<uv1[2])
+        strips[#strips+1]={uv0=uv0,uv1=uv1,transform=transform,color=color};return #strips
+    end
+    sr.Gui.destroy_bitmap_3d=function()strips_removed=strips_removed+1 end
+    local tilted={};for i=1,16 do tilted[i]=camera[i] end;tilted[10]=.5
+    p.matrix=tilted
+    local strip_renderer=HUD.screen_scene.new(sr,function()end)
+    local native_count=#oriented
+    assert(strip_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    assert(#strips==6 and #oriented==native_count)
+    assert(strips[1].color[1]==51 and strips[5].color[1]==153)
+    assert(strips[1].transform.right[1]~=strips[2].transform.right[1])
+    assert(math.abs(strips[1].uv0[2]-strips[2].uv1[2])<1e-9)
+    assert(strip_renderer.draw(p,cfg,commands,camera,1,1920,1080,.05) and strips_removed==6)
+    strip_renderer.release();assert(strips_removed==6) -- GUI destruction releases remaining strips.
+    local created,destroyed,released,live,allocated,reused=strip_renderer.resource_stats()
+    assert(created==destroyed+released+live and live==0,'native draw resources must balance across redraw and release')
+    assert(reused>0 and allocated<created,'redraw bookkeeping must reuse bounded entries')
+    local updates=0
+    sr.Gui.update_bitmap_3d_uv=function(g,id,name,u0,u1,tm,pos,layer,size,ink)
+        assert(layer==51 and name:find('_scene',1,true) and u0[2]<u1[2] and tm.right[1]~=0)
+        updates=updates+1
+    end
+    local retained=HUD.screen_scene.new(sr,function()end)
+    local before=#strips
+    assert(retained.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    assert(retained.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    assert(#strips==before+6 and updates==6,'glyphs reuse native bitmap objects')
+    cfg.profile_skip_text=true
+    assert(retained.draw(p,cfg,commands,camera,1,1920,1080,.05));cfg.profile_skip_text=nil
+    retained.release()
+    local a,b,c,d,_,_,u=retained.resource_stats()
+    assert(a==b+c+d and d==0 and u==6,'glyph reuse trims and releases resources')
+    local fallback=HUD.screen_scene.new(sr,function()end)
+    assert(fallback.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    sr.Gui.update_bitmap_3d_uv=function()error('simulated unsupported update')end
+    assert(fallback.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    assert(fallback.draw(p,cfg,commands,camera,1,1920,1080,.05))
+    fallback.release()
+    local a,b,c,d=fallback.resource_stats();assert(a==b+c+d and d==0,'failed update falls back without leaking or disabling HUD')
+    sr.Gui.update_bitmap_3d_uv=nil
     HUD.world_style.prepare=original
 end)
 test('generated native glyph UVs stay within existing atlas bounds',function()
@@ -1788,7 +1980,7 @@ test('Bushwhacker selector uses shell symbols in semi and volley',function()
         local label=false;local blue=false
         for _,c in ipairs(commands) do
             label=label or c.text==mode
-            blue=blue or (c.mode_icon and c.c[1]==65 and c.c[2]==145 and c.c[3]==235)
+            blue=blue or ((c.mode_icon or c.catalog_heading) and c.c[1]==65 and c.c[2]==145 and c.c[3]==235)
         end
         assert(label and blue)
     end
@@ -1808,5 +2000,782 @@ end)
     assert(e.move('x',1));x,y,z=e.values();assert(math.abs(x-1)<1e-9)
     h.editor_camera_matrix=nil;assert(not e.move('x',1));assert(e.values()==x)
  end)
+
+test('settings reload hotkey requires Ctrl and fires once per press',function()
+    local keys,calls={},0
+    local h={clock=0,config={},reload_settings=function()calls=calls+1;return true,'Reloaded' end}
+    local e=HUD.layout_editor.new(h,{editor_key=function(k)return keys[k] or false end},function()end)
+    keys[116]=true;e.tick(.01);assert(calls==0)
+    keys[116]=false;e.tick(.01);keys[17]=true;keys[116]=true
+    e.tick(.01);e.tick(.01);assert(calls==1 and e.status=='Reloaded')
+    keys[116]=false;e.tick(.01);h.reload_settings=function()return false,'invalid file' end
+    keys[116]=true;e.tick(.01);assert(e.status=='Reload failed: invalid file')
+end)
+
+test('first-person clipping accepts surfaces inside the world near plane',function()
+    local camera={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    assert(not HUD.projection.project(camera,0,.045,0,1,1,.05))
+    assert(HUD.projection.project(camera,0,.045,0,1,1,.005))
+    local corners={{x=-.001,y=.045,z=-.001},{x=.001,y=.045,z=-.001},{x=.001,y=.045,z=.001},{x=-.001,y=.045,z=.001}}
+    assert(#HUD.projection.clip_polygon(camera,corners,1,1,.05)==0)
+    assert(#HUD.projection.clip_polygon(camera,corners,1,1,.005)==4)
+    assert(not HUD.projection.project(camera,0,-.01,0,1,1,.005))
+end)
+
+test('frustum clips crossing polygons without dropping visible portions',function()
+    local camera={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    local function point(x,y,z,s,v)return {x=x,y=y,z=z,s=s,v=v} end
+    local quad={point(-2,1,-.5,0,1),point(.5,1,-.5,1,1),point(.5,1,.5,1,0),point(-2,1,.5,0,0)}
+    local clipped=HUD.projection.clip_polygon(camera,quad,math.pi/2,1,.05)
+    assert(#clipped==4)
+    local edge=false
+    for _,p in ipairs(clipped) do
+        assert(p.x>=0 and p.x<=1 and p.y>=0 and p.y<=1)
+        if p.x==0 then assert(math.abs(p.s-.4)<1e-6);edge=true end
+    end
+    assert(edge)
+    local near={point(-.02,.01,-.02),point(.02,.1,-.02),point(.02,.1,.02),point(-.02,.01,.02)}
+    local visible=HUD.projection.clip_polygon(camera,near,math.pi/2,1,.05)
+    assert(#visible>=3);for _,p in ipairs(visible) do assert(p.depth>=.05-1e-9) end
+    assert(#HUD.projection.clip_polygon(camera,{point(2,1,0),point(3,1,0),point(3,1,.1)},math.pi/2,1,.05)==0)
+    local enclosing={point(-2,1,-2),point(2,1,-2),point(2,1,2),point(-2,1,2)}
+    assert(#HUD.projection.clip_polygon(camera,enclosing,math.pi/2,1,.05)==4)
+end)
+test('MG Easter egg requires ammo cadence and resets with cooldown',function()
+ local s=HUD.mg_easter.new();local m={resource_hex='11c27d3babb38956',id='mg',value=200}
+ local rolls=0;local function lucky() rolls=rolls+1;return 0 end
+ for i=0,60 do assert(not HUD.mg_easter.step(s,m,i*.1,true,lucky)) end
+ for i=1,45 do m.value=200-i;HUD.mg_easter.step(s,m,6+i*.1,true,lucky) end
+ assert(rolls==1 and s.until_at and s.cooldown>50)
+ assert(not HUD.mg_easter.step(s,m,11,true,lucky));assert(s.start==nil)
+ m.value=200;HUD.mg_easter.step(s,m,11.1,true,lucky)
+ for i=1,45 do m.value=200-i;assert(not HUD.mg_easter.step(s,m,11.1+i*.1,true,lucky)) end
+ assert(rolls==1)
+ HUD.mg_easter.step(s,nil,16,true,lucky);assert(s.id==nil and s.until_at==nil)
+ assert(not HUD.mg_easter.step(s,m,17,false,lucky))
+ local other={resource_hex='a6a735accb4a327f',value=100};assert(not HUD.mg_easter.step(s,other,18,true,lucky))
+end)
+test('MG flash replaces content without changing telemetry or other styles',function()
+ local c=HUD.config.new();local m=HUD.model.normalize({id='mg',resource_hex='11c27d3babb38956',kind='magazine',rounds=175,capacity=200,reserve=1})
+ m.mg43_flash=true
+ local out=HUD.layout.compose(m,0,0,1,1,c,10)
+ local seen=false;for _,v in ipairs(out) do if v.type=='text' then assert(v.text=='GET SOME!!!');seen=true end end
+ assert(seen and m.value==175 and m.reserve==1)
+ m.mg43_flash=false;out=HUD.layout.compose(m,0,0,1,1,c,11)
+ local caption=false;for _,v in ipairs(out) do if v.text=='MG-43' then assert(v.size==12);caption=true end;assert(v.text~='GET SOME!!!') end
+ assert(caption)
+end)
+test('MG chamber bonus has one model caption with real plus one',function()
+ local c=HUD.config.new();local m=HUD.model.normalize({id='mg',resource_hex='11c27d3babb38956',kind='magazine',rounds=201,capacity=200,chamber_supported=true,chamber_rounds=1})
+ assert(m.chamber_bonus==1 and m.value==201)
+ local out=HUD.layout.compose(m,0,0,1,1,c,0);local n=0
+ for _,v in ipairs(out) do if v.type=='text' and v.text:find('MG-43',1,true) then n=n+1;assert(v.text=='MG-43' and v.catalog_caption and v.size==12) end end
+ assert(n==1)
+end)
+test('MG quote uses three readable color stages and fits measured panel',function()
+ local c=HUD.config.new();local m=HUD.model.normalize({id='mg',resource_hex='11c27d3babb38956',kind='magazine',rounds=175,capacity=200,reserve=1})
+ m.mg43_flash=true;m.mg43_flash_start=10
+ local expected={{255,221,0},{255,255,255},{255,174,48}}
+ for i,elapsed in ipairs({0,.13,.25}) do
+  local out=HUD.layout.compose(m,0,0,1,1,c,10+elapsed)
+  local frame=out[1];local found=false
+  for _,v in ipairs(out) do if v.mg43_easter then
+   assert(v.text=='GET SOME!!!');for k=1,3 do assert(v.c[k]==expected[i][k]) end
+   assert(v.x>=frame.x and v.x+11*v.size*.6<=frame.x+frame.w+.001);found=true
+  end end
+  assert(found and m.value==175)
+ end
+end)
+test('MG punch accents and shadow stay in frame throughout animation',function()
+ local cfg=HUD.config.new();local m=HUD.model.normalize({id='mg',resource_hex='11c27d3babb38956',kind='magazine',rounds=175,capacity=200})
+ m.mg43_flash=true;m.mg43_flash_start=0
+ for _,scale in ipairs({.05,1,2}) do for i=0,110 do
+  local out=HUD.layout.compose(m,0,0,scale,1,cfg,i*.01);local f=out[1];local accents=0;local shadow=false
+  for _,v in ipairs(out) do
+   if v.mg43_accent then
+    assert(v.x>=f.x and v.y>=f.y and v.x+v.w<=f.x+f.w+.001 and v.y+v.h<=f.y+f.h+.001);accents=accents+1
+   elseif v.mg43_shadow then
+    assert(v.x>=f.x and v.x+11*v.size*.6<=f.x+f.w+.001);shadow=true
+   end
+  end
+  assert(accents>=6 and shadow)
+ end end
+end)
+test('MG chamber total and gold final digit follow native chamber without double count',function()
+ local cfg=HUD.config.new()
+ for _,sample in ipairs({{176,1},{175,1},{175,0},{174,1},{0,0}}) do
+  local m=HUD.model.normalize({id='mg',resource_hex='11c27d3babb38956',kind='magazine',rounds=sample[1],capacity=175,chamber_supported=true,chamber_rounds=sample[2]})
+  assert(m.value==sample[1])
+  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);local seen=false
+  for _,v in ipairs(out) do if v.mode_count then
+   assert(v.text==string.format('%03d',sample[1]))
+   local parts=HUD.font.numeric_parts(v);for i,part in ipairs(parts) do assert((part.c~=nil)==(sample[1]==176 and i==#parts)) end
+   local grouped=HUD.screen_scene.text_parts(v,HUD.native_font_data.faces[v.font]);assert((grouped[#grouped].c~=nil)==(sample[1]==176));seen=true
+  end;assert(not (v.text and v.text:find('+1',1,true))) end
+  assert(seen)
+ end
+ local other=HUD.model.normalize({kind='magazine',rounds=31,capacity=30,chamber_supported=true,chamber_rounds=1});assert(other.value==31 and other.chamber_bonus==1)
+end)
+test('verified chamber treatment covers catalog counts and excludes unsupported telemetry',function()
+ local cfg=HUD.config.new();local checked=0
+ local function measure(text,size) return HUD.font.measure(text,size,'bigblue',true) end
+ for id in pairs(HUD.weapon_styles.catalog) do
+  for _,state in ipairs({{31,1},{30,0},{1,1},{0,0}}) do
+   local m=HUD.model.normalize({id=id,resource_hex=id,kind='magazine',rounds=state[1],capacity=30,chamber_supported=true,chamber_rounds=state[2],label='ROUNDS',fire_mode='SEMI'})
+   assert(m.value==state[1] and (m.chamber_bonus==1)==(state[1]==31))
+   local out=HUD.layout.compose(m,0,0,1,1,cfg,0,measure)
+   for _,v in ipairs(out) do
+    assert(not (v.type=='text' and v.text:find('+1',1,true)))
+    if v.last_digit_color then
+     assert(tonumber(v.text)==state[1] and state[1]==31)
+     local parts=HUD.font.numeric_parts(v);assert(parts[#parts].c==v.last_digit_color)
+     for i=1,#parts-1 do assert(not parts[i].c) end
+     local a,b,e,f=measure(v.text,v.size);assert(e>a and f>b);checked=checked+1
+    end
+   end
+  end
+ end
+ assert(checked>100)
+ for _,raw in ipairs({{kind='magazine',rounds=31,capacity=30,chamber_rounds=1},
+  {kind='magazine',rounds=31,capacity=30,chamber_supported=false,chamber_rounds=1},
+  {kind='heat',heat=.5,chamber_supported=true,chamber_rounds=1},
+  {kind='infinite',chamber_supported=true,chamber_rounds=1}}) do assert(not HUD.model.normalize(raw).chamber_bonus) end
+ local tube=HUD.model.normalize({kind='rounds',rounds=6,capacity=5,chamber_supported=true,chamber_rounds=1});assert(tube.value==6 and tube.chamber_bonus==1)
+end)
+test('first shot removes extra-round gold and restores original themed ink',function()
+ local cfg=HUD.config.new();cfg.text_color='#53ACD8'
+ for _,id in ipairs({'11c27d3babb38956','e6d932be83729076','89c5493e08ca4207','52e4334e6a128caf'}) do
+  local ink
+  for _,total in ipairs({31,30,29,31}) do
+   local m=HUD.model.normalize({id=id,resource_hex=id,kind='magazine',rounds=total,capacity=30,chamber_supported=true,chamber_rounds=1,label='ROUNDS'})
+   local found=false
+   for _,v in ipairs(HUD.layout.compose(m,0,0,1,1,cfg,0)) do if v.text==string.format('%03d',total) and v.size>=20 then
+    assert((v.last_digit_color~=nil)==(total==31))
+    if not ink then ink=v.c end;for k=1,3 do assert(v.c[k]==ink[k]) end
+    local parts=HUD.font.numeric_parts(v);assert((parts[#parts].c~=nil)==(total==31));found=true
+   end end
+   assert(found)
+  end
+ end
+end)
+test('Autocannon FLAK recolors only shell projectile and restores normal mode',function()
+ local function legacy_icon(m,icon)return HUD.munition_art.autocannon_icon(m,icon,false) end
+ local source=HUD.fire_icons.GRENADE_PISTOL_SHELL
+ local normal={resource_hex='a8cffb316f0b5c5f',ammo_mode=HUD.ammo_types.autocannon_mode(0x50)}
+ local flak={resource_hex=normal.resource_hex,ammo_mode=HUD.ammo_types.autocannon_mode(0x1054)}
+ assert(legacy_icon(normal,source)==source)
+ local art=legacy_icon(flak,source);assert(art~=source and art.w==source.w and art.h==source.h)
+ assert(legacy_icon(flak,source)==art)
+ local changed=0
+ for i,r in ipairs(art.runs) do local s=source.runs[i]
+  for k=1,4 do assert(r[k]==s[k]) end
+  if s[1]<14 then assert(r[5]==s[5]) else assert(r[5]~=s[5]);changed=changed+1 end
+ end
+ assert(changed>5)
+ assert(legacy_icon(normal,source)==source)
+ assert(legacy_icon({resource_hex='26e40437ea275296',ammo_mode='FLAK'},source)==source)
+ assert(legacy_icon({resource_hex=normal.resource_hex},source)==source)
+ local cfg=HUD.config.new();local first
+ for _,mode in ipairs({'APHET','FLAK','APHET'}) do
+  local m=HUD.model.normalize({resource_hex=normal.resource_hex,kind='rounds',rounds=11,capacity=10,chamber_supported=true,chamber_rounds=1,ammo_mode=mode,label='AMMO'})
+  local commands=HUD.layout.compose(m,0,0,1,1,cfg,0);local colors={};local gold=false
+  for _,v in ipairs(commands) do if v.catalog_heading then colors[#colors+1]=table.concat(v.c,',') end;if v.text=='011' then assert(v.last_digit_color);gold=true end end
+  assert(gold and #colors>0);local signature=table.concat(colors,'/')
+  if not first then first=signature elseif mode=='FLAK' then assert(signature~=first) else assert(signature==first) end
+ end
+end)
+test('Melta thermal housing uses real counts and preserves per-digit chamber rendering',function()
+ local cfg=HUD.config.new();local measure=function(t,size)return HUD.font.measure(t,size,cfg.font,true)end
+ for _,scale in ipairs({.05,1,2}) do
+  local m=HUD.model.normalize({resource_hex='6cfcc7f8801a0266',kind='magazine',rounds=11,capacity=10,reserve=3,chamber_supported=true,chamber_rounds=1,label='SHOTS',ammo_icon='MELTA'})
+  local out=HUD.layout.compose(m,0,0,scale,1,cfg,0,measure);local f=out[1];assert(f.melta_panel)
+  local detail,count,reserve=0,false,false
+  for _,v in ipairs(out) do
+   if v.melta_detail then assert(v.x>=f.x and v.y>=f.y and v.x+v.w<=f.x+f.w+.001 and v.y+v.h<=f.y+f.h+.001);detail=detail+1 end
+   if v.melta_text then local a,b,e,h=measure(v.text,v.size);assert(v.x+a>=f.x and v.x+e<=f.x+f.w+.001 and v.y+b>=f.y and v.y+h<=f.y+f.h+.001) end
+   if v.text=='011' then assert(v.last_digit_color);count=true end
+   if v.text=='003 CNSTRS' then reserve=true end
+  end
+  assert(detail>65 and count and reserve)
+ end
+end)
+test('Melta research candidate cannot silently become verified charge telemetry',function()
+ local raw={resource_hex='6cfcc7f8801a0266',kind='magazine',rounds=3,capacity=5,binding={melta_charge_candidate=.53}}
+ local m=HUD.model.normalize(raw);assert(m.charge_fraction==nil and m.value==3)
+ local cfg=HUD.config.new();local out=HUD.layout.compose(m,0,0,1,1,cfg,0)
+ assert(out[1].melta_panel);for _,v in ipairs(out) do assert(not (v.text and v.text:find('HEAT',1,true))) end
+end)
+test('native Melta glow follows ramp, cancel, discharge and switch cleanup',function()
+ local s={};local function sample(n,charge,time)
+  local m=HUD.model.normalize({id='melta',resource_hex='6cfcc7f8801a0266',kind='magazine',rounds=n,capacity=5,melta_charge_level=charge})
+  HUD.melta_panel.step(s,m,time);return m
+ end
+ local idle=sample(3,0,0);assert(HUD.melta_panel.glow(idle)==0)
+ local charging=sample(3,.5,.4);assert(HUD.melta_panel.glow(charging)>.7)
+ local cancel=sample(3,0,.5);assert(HUD.melta_panel.glow(cancel)==0)
+ local shot=sample(2,0,1);assert(HUD.melta_panel.glow(shot)==1)
+ local settled=sample(2,0,1.2);assert(HUD.melta_panel.glow(settled)==0)
+ HUD.melta_panel.step(s,nil,1.3);assert(not s.id and not s.pulse)
+ local swapped=sample(1,0,1.4);assert(HUD.melta_panel.glow(swapped)==0)
+ local other=HUD.model.normalize({resource_hex='other',kind='magazine',rounds=3,melta_charge_level=.9});assert(not other.melta_charge_level)
+end)
+test('S-11 single-shot spear presence preserves reserves and bounds',function()
+ local cfg=HUD.config.new()
+ for _,scale in ipairs({.05,1,2}) do for _,n in ipairs({0,1}) do
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='3828e2051aa9e897',kind='rounds',rounds=n,capacity=1,reserve=8}))
+  local out=HUD.layout.compose(m,0,0,scale,1,cfg,0);assert(out[1].speargun_panel)
+  local projectile=false;local reserve=false;local state=false
+  for _,d in ipairs(out) do
+   if d.spear_projectile then projectile=true end
+   if d.type=='rect' then assert(d.x>=out[1].x-.001 and d.y>=out[1].y-.001 and d.x+d.w<=out[1].x+out[1].w+.001 and d.y+d.h<=out[1].y+out[1].h+.001) end
+   if d.text=='008 SPEARS' then reserve=true end
+   if d.text==(n==1 and 'SPEAR READY' or 'EMPTY') then state=true end
+   assert(d.text~='0' and d.text~='1' and d.text~='001')
+  end
+  assert(projectile==(n==1) and reserve and state)
+ end end
+ local m=HUD.model.normalize({resource_hex='3828e2051aa9e897',kind='rounds',rounds=2,capacity=2})
+ assert(not HUD.layout.compose(m,0,0,1,1,cfg,0)[1].speargun_panel)
+ local other=HUD.model.normalize({resource_hex='25aa2fd4643cf4ee',kind='rounds',rounds=1,capacity=1})
+ assert(not HUD.layout.compose(other,0,0,1,1,cfg,0)[1].speargun_panel)
+end)
+test('GR-8 ammunition cradle follows loaded state, reserves and verified modes',function()
+ local cfg=HUD.config.new()
+ for _,scale in ipairs({.05,1,2}) do for _,mode in ipairs({'HEAT','HE','UNKNOWN'}) do for _,n in ipairs({0,1}) do
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='9f80d67a12a7e40f',kind='rounds',rounds=n,capacity=1,reserve=5,ammo_mode=mode}))
+  local out=HUD.layout.compose(m,0,0,scale,1,cfg,0);assert(out[1].recoilless_panel)
+  local art,reserve,label,state=false,false,false,false
+  for _,d in ipairs(out) do
+   if d.recoilless_round then art=true end
+   if d.type=='rect' then assert(d.x>=out[1].x-.001 and d.y>=out[1].y-.001 and d.x+d.w<=out[1].x+out[1].w+.001 and d.y+d.h<=out[1].y+out[1].h+.001) end
+   if d.text=='005 RCKTS' then reserve=true end
+   if d.text==(mode=='UNKNOWN' and 'AMMO' or mode) then label=true end
+   if d.text==(n==1 and 'LOADED' or 'EMPTY') then state=true end
+   assert(d.text~='001' and d.text~='000')
+  end
+  assert(art==(n==1) and reserve and label and state)
+ end end end
+ local m=HUD.model.normalize({resource_hex='9f80d67a12a7e40f',kind='rounds',rounds=1,capacity=1})
+ local found=false;for _,d in ipairs(HUD.layout.compose(m,0,0,1,1,cfg,0)) do if d.text=='-- RCKTS' then found=true end end;assert(found)
+end)
+test('accepted panel rendering stays byte-for-byte identical across catalog upgrade',function()
+local function serial(v)
+ if type(v)~='table' then return type(v)..':'..tostring(v) end
+ local keys={};for k in pairs(v) do keys[#keys+1]=k end;table.sort(keys,function(a,b)return tostring(a)<tostring(b) end)
+ local out={};for _,k in ipairs(keys) do out[#out+1]=serial(k)..'='..serial(v[k]) end;return '{'..table.concat(out,';')..'}'
+end
+local file=assert(io.open(assert(DBF_APPROVED_SNAPSHOT,'run tests/run.py to unpack accepted fixture'),'r'));local index=0
+for _,id in ipairs({'e6d932be83729076','89c5493e08ca4207','52e4334e6a128caf','2e9d0bdc48b09e60','11c27d3babb38956','a8cffb316f0b5c5f','6cfcc7f8801a0266','3828e2051aa9e897','9f80d67a12a7e40f','84354339522c932d','5fecab819f96a3e8','0f83639ab8c86165','a6a735accb4a327f','72170a55a1f37ff1','14d5d4506056c7a4','5f3ec9bda2bd8553','4dbd74f49c8ffc13','0b882808c6f498e8','e5796355a8fd67e0','416d053372c4e433','b2b5e0d185605f9e','26e40437ea275296','2b28e17ffed05f7c'}) do for _,scale in ipairs({.05,1,2}) do for _,mode in ipairs({'SEMI','AUTO','BURST'}) do for _,cap in ipairs({1,10}) do for _,n in ipairs({0,1}) do
+local raw=HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=n,capacity=cap,reserve=8,reserve_kind='MAGS',fire_mode=mode,ammo_mode=id=='a8cffb316f0b5c5f' and 'FLAK' or nil,safety_mode=id=='2e9d0bdc48b09e60' and 'UNSAFE' or nil})
+local commands=HUD.layout.compose(HUD.model.normalize(raw),0,0,scale,1,HUD.config.defaults,.3)
+index=index+1;local expected=file:read('*l');if id~='72170a55a1f37ff1' and id~='a8cffb316f0b5c5f' and id~='9f80d67a12a7e40f' then assert(serial(commands)==expected,'accepted panel changed '..id..' sample '..index) end
+end end end end end
+assert(file:read('*l')==nil);file:close()
+end)
+test('machined catalog covers unapproved families without changing telemetry or gauges',function()
+ local eligible,total=0,0
+ for id,style in pairs(HUD.weapon_styles.catalog) do
+  total=total+1
+  if HUD.catalog_housing.eligible(id) then
+   eligible=eligible+1
+   for _,scale in ipairs({.05,1,2}) do for _,mode in ipairs({'SEMI','AUTO','BURST'}) do
+    local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=7,capacity=10,reserve=8,reserve_kind='MAGS',fire_mode=mode}))
+    local before=m.value;local out=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0)
+    local fuel=m.label=='FUEL' or m.label=='GAS'
+    assert(fuel and not out[1].machined_catalog or id=='72170a55a1f37ff1' and out[1].type=='panel' or out[1].machined_catalog or out[1].shared_suite,id);assert(m.value==before and m.reserve==8 and m.fire_mode==mode,id)
+    local hardware=0
+    for _,d in ipairs(out) do if d.machined_detail then
+     hardware=hardware+1;local f=out[1]
+     assert(d.x>=f.x-.001 and d.y>=f.y-.001 and d.x+d.w<=f.x+f.w+.001 and d.y+d.h<=f.y+f.h+.001,id)
+    end end
+    if fuel or out[1].shared_suite or id=='72170a55a1f37ff1' then assert(hardware==0,id) else assert(hardware>20,id) end
+   end end
+  end
+ end
+ assert(total==148 and eligible==126)
+ for _,kind in ipairs({'heat','rounds'}) do
+  local raw={resource_hex='27ee1ed8f6fb6356',kind=kind,rounds=30,capacity=100,heat=.7,reserve=3}
+  local m=HUD.model.normalize(raw);local out=HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)
+  if kind=='heat' then local meter=false;for _,d in ipairs(out) do meter=meter or d.heat_fill end;assert(meter and m.fraction==.7) end
+ end
+end)
+test('Double Freedom precision panel preserves loaded states, mode and reserves',function()
+ for _,mode in ipairs({'SEMI','VOLLEY'}) do for n=0,2 do
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',kind='rounds',rounds=n,capacity=2,reserve=30,reserve_kind='SHELLS',fire_mode=mode}))
+  local out=HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0)
+  local child,label,reserves,art=false,false,false,false
+  for _,d in ipairs(out) do
+   child=child or d.type=='panel' and d.child
+   label=label or d.text==mode
+   reserves=reserves or d.text=='030 SHELLS'
+   if d.text=='DBS-2' or d.text=='DOUBLE FREEDOM' then assert(d.weapon_label and d.c[1]==218 and d.c[2]==172 and d.c[3]==78,'weapon label stays gold across ammo states') end
+   if d.type=='rect' and not d.decoration then local f=out[1];assert(d.x>f.x and d.x+d.w<f.x+f.w and (d.child or d.y>f.y and d.y+d.h<f.y+f.h),'decorations own outer borders') end
+   art=art or d.barrel_indicator~=nil
+   assert(d.text~=string.format('%03d',n),'shells replace numeric loaded-ammo count')
+  end
+  assert(child and label and reserves and art and m.value==n and m.reserve==30)
+  assert(#out<120,'compact shared receiver display budget')
+  local shells=0;for _,d in ipairs(out) do if d.shotgun_shell_art then
+   shells=shells+1
+   local side=d.x<60 and 1 or 2
+   local loaded=mode=='VOLLEY' and n==2 or mode=='SEMI' and n>=(3-side)
+   assert(d.y>=32 and d.y+d.h<=77 and d.x>=24.499 and d.x+d.w<=95.501,'side-by-side shell bounds and two-pixel extra title clearance')
+   local brass=d.y<32+6*1.5
+   assert(loaded and (brass and d.c[1]>d.c[2] and d.c[2]>d.c[3] or not brass and d.c[3]>d.c[2] and d.c[2]>d.c[1]) and d.a==.9 or not loaded and d.c[1]==198 and d.a==.18,'blue hulls, brass bases; dim empty shells')
+  end end
+  assert(shells==#HUD.fire_icons.DOUBLE_FREEDOM_SHELL.runs*2,'two subordinate shell symbols')
+  local states={}
+  for _,d in ipairs(out) do if d.shell_loaded~=nil then states[d.barrel_indicator]=d.shell_loaded end end
+  for side=1,2 do assert(states[side]==(mode=='VOLLEY' and n==2 or mode=='SEMI' and n>=(3-side))) end
+ end end
+end)
+
+test('Double Freedom breech bases empty in native semi and volley order',function()
+ local style=HUD.weapon_styles.catalog['72170a55a1f37ff1']
+ for _,mode in ipairs({'SEMI','VOLLEY'}) do for n=0,2 do
+  local icon=HUD.munition_art.icon(style,{resource_hex='72170a55a1f37ff1',value=n,fire_mode=mode},nil)
+  for side=1,2 do local loaded=mode=='VOLLEY' and n==2 or (mode=='SEMI' and n>=(side==1 and 2 or 1));assert(icon.loaded[side]==loaded) end
+  assert(icon.w==150 and icon.h==110 and #icon.runs<=448 and #icon.runs>=40)
+  for _,r in ipairs(icon.runs) do assert(r[1]>=0 and r[2]>=0 and r[1]+r[3]<=150 and r[2]+r[4]<=110) end
+  assert(HUD.munition_art.icon(style,{resource_hex='72170a55a1f37ff1',value=n,fire_mode=mode},nil)==icon,'art is cached by ammo state')
+ end end
+end)
+test('Doom reload event rolls once on reserve-backed completed reload and clears on switch',function()
+ local s=HUD.doom_easter.new();local rolls=0;local function rng()rolls=rolls+1;return 0 end
+ local m={resource_hex='72170a55a1f37ff1',capacity=2,value=0,reserve=30}
+ assert(not HUD.doom_easter.step(s,m,0,rng));m.value=2;m.reserve=28
+ assert(HUD.doom_easter.step(s,m,1,rng)==1)
+ for i=1,10 do HUD.doom_easter.step(s,m,1+i*.01,rng) end;assert(rolls==1)
+ assert(not HUD.doom_easter.step(s,m,1+HUD.doom_easter.duration,rng));HUD.doom_easter.step(s,nil,5,rng)
+ assert(not HUD.doom_easter.step(s,m,6,rng) and rolls==1)
+ m.value=0;HUD.doom_easter.step(s,m,7,rng);m.value=2;HUD.doom_easter.step(s,m,8,rng);assert(rolls==1)
+end)
+
+test('authoritative Doom GIF preserves timed sequence and aspect-fit bounds',function()
+ local e=HUD.doom_easter;assert(e.width==107 and e.height==128 and #e.frames==70 and #e.sequence==76 and math.abs(e.duration-7.6)<.00001)
+ for _,t in ipairs({0,.1,.9,2.4,7.5}) do
+  local out=e.apply({{type='panel',x=0,y=0,w=90,h=90}},{resource_hex='72170a55a1f37ff1',doom_start=0},1,1,t)
+  for i=2,#out do local d=out[i];assert(d.x>=0 and d.y>=0 and d.x+d.w<=90.001 and d.y+d.h<=90.001 and d.a>0 and d.a<=1) end
+ end
+end)
+
+test('catalog single-shot bay removes loaded number and empties its projectile cradle',function()
+ local cfg=HUD.config.new()
+ for _,value in ipairs({0,1}) do
+  local m=HUD.model.normalize({resource_hex='692eb345969d368e',kind='magazine',rounds=value,capacity=1,reserve=3})
+  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);local art=false;local state=false
+  for _,d in ipairs(out) do art=art or d.catalog_heading;state=state or d.text==(value==0 and 'EMPTY' or 'LOADED');assert(d.text~='001' and d.text~='000') end
+  assert((not not art)==(value==1) and state and m.value==value and m.reserve==3)
+ end
+end)
+
+
+
+-- Snapshot projector must preserve bounds and near-plane decisions exactly.
+test('snapshot projector matches guarded projection and rejects invalid cameras',function()
+    local m={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    local project=HUD.projection.projector(m,1,16/9,.005)
+    for i=1,1200 do
+        local x=(i%31-15)*.1;local y=(i%47)*.03;local z=(i%19-9)*.1
+        local a,why=HUD.projection.project(m,x,y,z,1,16/9,.005)
+        local b,other=project(x,y,z)
+        assert(why==other and (a==nil)==(b==nil))
+        if a then assert(a.x==b.x and a.y==b.y and a.depth==b.depth) end
+    end
+    m[1]=2;assert(not pcall(HUD.projection.projector,m,1,16/9,.005))
+end)
+test('reusable clipping scratch preserves visible and clipped polygon results',function()
+    local m={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+    local scratch={camera={},result={}}
+    for i=1,300 do
+        local x=(i%21-10)*.12;local depth=.003+(i%13)*.09
+        local vertices={{x=x,y=depth,z=-.1,s=0,v=1},{x=x+.2,y=depth,z=-.1,s=1,v=1},{x=x+.2,y=depth+.04,z=.1,s=1,v=0},{x=x,y=depth+.04,z=.1,s=0,v=0}}
+        local expected=HUD.projection.clip_polygon(m,vertices,1,16/9,.005)
+        local actual=HUD.projection.clip_polygon(m,vertices,1,16/9,.005,scratch)
+        assert(#actual==#expected)
+        for j,p in ipairs(expected) do for k,v in pairs(p) do assert(actual[j][k]==v) end end
+    end
+end)
+test('Double Freedom preserves selected shared edge decoration within final custom bounds',function()
+ local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',kind='rounds',rounds=2,capacity=2,reserve=30,reserve_kind='SHELLS',fire_mode='SEMI'}))
+ for _,style in ipairs({'none','outline','brackets','helldivers','double'}) do
+  local cfg={};for k,v in pairs(HUD.config.defaults) do cfg[k]=v end
+  cfg.decoration=style;cfg.decoration_color='#FFFFFF'
+  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);local frame=out[1];local n=0
+  for _,d in ipairs(out) do if d.decoration and not d.child then
+   n=n+1;assert(d.x>=frame.x and d.y>=frame.y and d.x+d.w<=frame.x+frame.w+.001 and d.y+d.h<=frame.y+frame.h+.001)
+   assert(d.c[1]==255 and d.c[2]==255 and d.c[3]==255)
+  end end
+  assert(style=='none' and n==0 or style~='none' and n>0,style)
+ end
+end)
+test('complete font catalog registers through the real legacy menu validator without saving tuning',function()
+ local old,host=ModOptionsMenu,DBFMCM;DBFMCM=nil
+ local compat=assert(loadfile('tests/fixtures/mcm_compat.lua'))()
+ local api,state=compat.new(nil);ModOptionsMenu=api
+ local writes=0;local h={config=HUD.config.new()}
+ h.configure=function(v)HUD.config.apply(h.config,v)end
+ h.save_tuning=function()writes=writes+1 end
+ local menu=HUD.menu.new(h);menu.poll()
+ assert(menu.status=='Options > Mods > DBF-HUD',menu.status)
+ for _,o in pairs(state.options) do for _,label in ipairs(o.choices or {}) do assert(#label<=48)end end
+ assert(writes==0);menu.retire();ModOptionsMenu=old;DBFMCM=host
+end)
+test('Double Freedom scanlines and sweeps follow final BigBlue parent and child bounds',function()
+ local cfg=HUD.config.new();cfg.font='bigblue';cfg.effect_scanlines=true;cfg.effect_sweep=true
+ local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',kind='rounds',rounds=2,capacity=2,reserve=30,fire_mode='SEMI'}))
+ local out=HUD.world_style.prepare(HUD.layout.compose(m,0,0,1,1,cfg,.4),{first_person=true},cfg)
+ local parent,child=out[1];for _,v in ipairs(out)do if v.type=='panel' and v.child then child=v end end
+ local n=0;for _,v in ipairs(out)do if v.df_effect_frame then
+  local frame=v.df_effect_frame=='child' and child or parent
+  assert(v.x==frame.x and v.w==frame.w and v.y>=frame.y and v.y+v.h<=frame.y+frame.h+.001);n=n+1
+ end end
+ assert(n>48)
+ local pitch,parent_y,child_y;for _,v in ipairs(out)do if v.scanline_layer then
+  local previous;if v.df_effect_frame=='child' then previous=child_y else previous=parent_y end
+  if previous then local gap=v.y-previous;if pitch then assert(math.abs(gap-pitch)<.001)else pitch=gap end end
+  if v.df_effect_frame=='child' then child_y=v.y else parent_y=v.y end
+ end end
+ assert(pitch and parent.y+parent.h-parent_y<=pitch*2 and child.y+child.h-child_y<=pitch*2)
+end)
+test('weapon panel overrides isolate Double Freedom and Autocannon and persist through reload',function()
+ local cfg=HUD.config.new();local df,ac='72170a55a1f37ff1','a8cffb316f0b5c5f'
+ local global=HUD.config.serialize(cfg)
+ HUD.config.set_panel(cfg,df,{panel_opacity=.9,background_color='#17191B',effect_scanlines=true,effect_scanline_count=31,decoration='none'})
+ assert(HUD.config.effective(cfg,df).panel_opacity==.9 and HUD.config.effective(cfg,ac).panel_opacity==cfg.panel_opacity)
+ assert(HUD.config.effective(cfg,ac).effect_scanline_count==21)
+ local restored=HUD.config.new();HUD.config.apply(restored,assert(loadstring(HUD.config.serialize(cfg)))())
+ assert(HUD.config.effective(restored,df).effect_scanline_count==31 and HUD.config.effective(restored,ac).background_color==cfg.background_color)
+ local before=HUD.config.serialize(restored)
+ assert(not pcall(HUD.config.set_panel,restored,df,{effect_scanline_count=100}));assert(HUD.config.serialize(restored)==before)
+ assert(not pcall(HUD.config.set_panel,restored,df,{mount_x=1}))
+ HUD.config.set_panel(restored,df,false);assert(HUD.config.serialize(restored)==global)
+ local other=HUD.config.new();assert(next(other.weapon_panels)==nil)
+end)
+test('weapon appearance menu follows equipped identity without saving while switching',function()
+ local core=assert(loadfile('../ModConfigurationMenu/src/core.lua'))();local host=core.new(nil,function()end)
+ local previous,legacy=DBFMCM,ModOptionsMenu;DBFMCM=host;ModOptionsMenu=nil
+ local df,ac='72170a55a1f37ff1','a8cffb316f0b5c5f';local equipped=df;local writes=0
+ local h={config=HUD.config.new()}
+ h.appearance_weapon=function()return equipped end
+ h.panel_settings=function()return HUD.config.effective(h.config,equipped)end
+ h.configure_panel=function(v,id)HUD.config.set_panel(h.config,id or equipped,v)end
+ h.configure=function(v)HUD.config.apply(h.config,v)end;h.save_tuning=function()writes=writes+1;return true end
+ local menu=HUD.menu.new(h);menu.poll();local mod=host.mods.dbf_hud_fonts;assert(mod.controls.weapon_panel_opacity)
+ assert(mod.handle.set('weapon_panel_opacity',.9));assert(writes==1)
+ assert(h.config.panel_opacity~=.9 and h.config.weapon_panels[df].panel_opacity==.9)
+ equipped=ac;menu.poll();assert(mod.handle.get('weapon_panel_opacity')==h.config.panel_opacity and writes==1)
+ assert(mod.handle.set('weapon_panel_opacity',.7));equipped=df;menu.poll();assert(mod.handle.get('weapon_panel_opacity')==.9 and writes==2)
+ assert(math.abs(h.config.weapon_panels[ac].panel_opacity-.7)<1e-9)
+ equipped=nil;menu.poll();assert(mod.controls.weapon_panel_opacity.disabled)
+ menu.retire();DBFMCM=previous;ModOptionsMenu=legacy
+end)
+
+
+
+test('fuel rollback reproduces the gauge before catalog styling and leaves Stoker bullets themed',function()
+ local apply=HUD.weapon_styles.apply
+ local function same(a,b)
+  if type(a)~=type(b) then return false end
+  if type(a)~='table' then return a==b end
+  for k,v in pairs(a) do if not same(v,b[k]) then return false end end
+  for k in pairs(b) do if a[k]==nil then return false end end
+  return true
+ end
+ for _,id in ipairs({'39ab99895147a3bf','3f92ba65ef65cca9','4fb0f8c02f55c82b','78a8185f63a70795','88f61afff48ac8a4','8a307bd1811a5fe9'}) do
+  for _,scale in ipairs({.05,1,2}) do for _,n in ipairs({0,5,20,50,100}) do
+   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=n,capacity=100,reserve=3,reserve_kind='MAGS',alternate_fire=id=='8a307bd1811a5fe9'}))
+   local actual=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0)
+   HUD.weapon_styles.apply=function(out)return out end
+   local previous=HUD.layout.compose(m,0,0,scale,1,HUD.config.defaults,0)
+   HUD.weapon_styles.apply=apply
+   assert(same(actual,previous),id)
+  end end
+ end
+ local bullets=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='8a307bd1811a5fe9',kind='magazine',rounds=7,capacity=10,reserve=3,reserve_kind='MAGS'}))
+ assert(bullets.label=='ROUNDS' and HUD.layout.compose(bullets,0,0,1,1,HUD.config.defaults,0)[1].machined_catalog)
+end)
+
+test('Double Freedom open crimps follow observed firing and clear on reload or ownership loss',function()
+ local track=HUD.df_shell_state.new()
+ local function step(n,mode,id)
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',id=id or 1,unit_ref=id or 1,kind='rounds',rounds=n,capacity=2,reserve=14,reserve_kind='SHELLS',fire_mode=mode}))
+  HUD.df_shell_state.step(track,m)
+  local art=HUD.layout.compose(m,0,0,1,1,HUD.config.defaults,0);local spent={false,false};local count=0
+  for _,v in ipairs(art) do if v.shotgun_shell_art then
+   count=count+1
+   local side=v.shotgun_shell_barrel
+   spent[side]=spent[side] or v.shell_spent
+   if v.shell_spent then assert(v.a==.55) end
+  end end
+  assert(count==2*#HUD.fire_icons.DOUBLE_FREEDOM_SHELL.runs+(spent[1] and 5 or 0)+(spent[2] and 5 or 0))
+  assert(#art<140)
+  return spent
+ end
+ local s=step(0,'SEMI');assert(not s[1] and not s[2],'unknown empty has no invented shot')
+ s=step(2,'SEMI');assert(not s[1] and not s[2])
+ s=step(1,'SEMI');assert(s[1] and not s[2],'left fires first')
+ s=step(0,'SEMI');assert(s[1] and s[2])
+ s=step(1,'SEMI');assert(not s[1] and not s[2],'reload clears observed-shot status')
+ s=step(2,'VOLLEY');assert(not s[1] and not s[2])
+ s=step(0,'VOLLEY');assert(s[1] and s[2],'volley opens both crimps')
+ s=step(0,'VOLLEY',2);assert(not s[1] and not s[2],'replacement weapon clears status')
+ step(2,'SEMI',2);s=step(1,'SEMI',2);assert(s[1]);HUD.df_shell_state.step(track,nil)
+ s=step(1,'SEMI',2);assert(not s[1] and not s[2],'loss of ownership clears status')
+ s=step(1,'VOLLEY',2);assert(not s[1] and not s[2],'mode change alone never invents firing')
+end)
+
+test('shared-suite proposal scope protects accepted panels and aliases and preserves live values',function()
+ local function same(a,b)
+  if type(a)~=type(b) then return false end
+  if type(a)~='table' then return a==b end
+  for k,v in pairs(a) do if not same(v,b[k]) then return false end end
+  for k in pairs(b) do if a[k]==nil then return false end end
+  return true
+ end
+ local total=0
+ for id,style in pairs(HUD.weapon_styles.catalog) do
+  local eligible=HUD.shared_suite.eligible(id)
+  if eligible then total=total+1 end
+  for _,scale in ipairs({.05,1,2}) do for _,mode in ipairs({'SEMI','AUTO','BURST'}) do for _,n in ipairs({0,1,7}) do
+   local cfg=HUD.config.new();local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=id,kind='magazine',rounds=n,capacity=10,reserve=8,reserve_kind='MAGS',fire_mode=mode}))
+   local old=HUD.layout.compose(m,0,0,scale,1,cfg,0);cfg.shared_suite_preview=true
+   local out=HUD.layout.compose(m,0,0,scale,1,cfg,0)
+   assert(m.value==n and m.reserve==8 and m.fire_mode==mode)
+   if not eligible then assert(same(old,out),'protected panel or deferred alias changed '..id)
+   else
+    assert(out[1].shared_suite and out[1].weapon_theme==style.family,id)
+    local title=false;local count=false;local reserve=false;local label=false
+    for _,v in ipairs(out) do
+     if v.weapon_label then title=true;assert(v.c[1]==218 and v.c[2]==172 and v.c[3]==78) end
+     count=count or v.text==string.format('%03d',n)
+     reserve=reserve or v.type=='text' and v.text:find('008',1,true)~=nil
+     label=label or v.text==mode
+     if v.type=='rect' and not v.decoration and not v.child then local f=out[1];assert(v.x>f.x and v.x+v.w<f.x+f.w and v.y>f.y and v.y+v.h<f.y+f.h,id) end
+    end
+    assert(title and count and reserve and label,id);assert(#out<120,id)
+   end
+  end end end
+ end
+ assert(total==79)
+ for _,kind in ipairs({'heat','infinite'}) do
+  local cfg=HUD.config.new();cfg.shared_suite_preview=true
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='27ee1ed8f6fb6356',kind=kind,heat=.9,reserve=3,locked=false}))
+  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);assert(out[1].shared_suite)
+  if kind=='heat' then local fill=false;for _,v in ipairs(out) do fill=fill or v.heat_fill end;assert(fill and m.fraction==.9 and m.warning) else assert(m.value=='--') end
+ end
+end)
+
+test('Autocannon long-case preview preserves mode colors, telemetry and compact panel',function()
+ local source=HUD.fire_icons.GRENADE_PISTOL_SHELL
+ for _,mode in ipairs({'APHET','FLAK'}) do
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='a8cffb316f0b5c5f',kind='rounds',rounds=8,capacity=10,reserve=7,reserve_kind='PACK',ammo_mode=mode,fire_mode='SEMI'}))
+  local old=HUD.munition_art.autocannon_icon(m,source,false);local icon=HUD.munition_art.autocannon_icon(m,source,true)
+  assert(icon.w==52 and icon.h==12 and #icon.runs==#old.runs and source.w==32)
+  for i,r in ipairs(icon.runs) do assert(r[2]==old.runs[i][2] and r[4]==old.runs[i][4] and r[5]==old.runs[i][5]) end
+  local cfg=HUD.config.new();local before=HUD.layout.compose(m,0,0,1,1,cfg,0);cfg.autocannon_long_preview=true
+  local out=HUD.layout.compose(m,0,0,1,1,cfg,0);assert(out[1].w==before[1].w and out[1].h==before[1].h and #out==#before)
+  local label,count,reserve,fire=false,false,false,false
+  for _,v in ipairs(out) do
+   label=label or v.text==mode;count=count or v.text=='008';reserve=reserve or v.text=='007 PACK';fire=fire or v.text=='SEMI'
+   if v.catalog_heading then local f=out[1];assert(v.x>=f.x and v.x+v.w<=f.x+f.w) end
+  end
+  assert(label and count and reserve and fire and m.value==8 and m.reserve==7)
+ end
+ assert(HUD.munition_art.autocannon_icon({resource_hex='52e4334e6a128caf'},source,true)==source)
+end)
+
+test('Autocannon APHET and FLAK transitions preserve parent child and content anchors',function()
+ for font in pairs(HUD.native_font_data.faces) do for _,scale in ipairs({.05,.65,2}) do for _,n in ipairs({0,1,8,11}) do
+  local cfg=HUD.config.new();cfg.font=font;cfg.decoration='helldivers';local expected
+  for _,mode in ipairs({'APHET','FLAK','APHET','FLAK'}) do
+   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='a8cffb316f0b5c5f',kind='rounds',rounds=n,capacity=10,reserve=7,reserve_kind='PACK',fire_mode='SEMI',ammo_mode=mode,chamber_supported=true,chamber_rounds=n==11 and 1 or 0}))
+   local out=HUD.layout.compose(m,42,17,scale,1,cfg,0);local signature={}
+   for _,v in ipairs(out) do
+    if v.type=='panel' then signature[#signature+1]=string.format('P:%.9f,%.9f,%.9f,%.9f',v.x,v.y,v.w,v.h)
+    elseif v.text==string.format('%03d',n) or v.text=='SEMI' or v.text=='007 PACK' or v.catalog_caption then signature[#signature+1]=string.format('T:%s:%.9f,%.9f,%.9f',v.text,v.x,v.y,v.size)
+    elseif v.catalog_heading then signature[#signature+1]=string.format('I:%.9f,%.9f,%.9f,%.9f',v.x,v.y,v.w,v.h) end
+   end
+   signature=table.concat(signature,';')
+   if not expected then expected=signature else assert(signature==expected,font..' mode-switch layout shifted') end
+  end
+ end end end
+end)
+
+test('Recoilless reference detail preview preserves panel and native ammunition state',function()
+ for _,scale in ipairs({.05,1,2}) do for _,mode in ipairs({'HEAT','HE'}) do for _,n in ipairs({0,1}) do
+  local cfg=HUD.config.new();cfg.recoilless_topthird_preview=false;local m={value=n,ammo_mode=mode,reserve=6}
+  local frame={x=0,y=0};cfg.recoilless_detail_preview=false;local old=HUD.recoilless_panel.compose(frame,m,scale,cfg,1)
+  cfg.recoilless_detail_preview=nil;local out=HUD.recoilless_panel.compose(frame,m,scale,cfg,1)
+  assert(out[1].w==old[1].w and out[1].h==old[1].h)
+  local rounds=0;local labels={}
+  for _,v in ipairs(out) do
+   if v.recoilless_round then rounds=rounds+1;assert(v.x>=59.8*scale and v.x+v.w<=72.2*scale and v.y>=33*scale and v.y+v.h<=90*scale) end
+   if v.type=='text' then labels[v.text]=true end
+  end
+  assert(labels[mode] and labels['006 RCKTS'] and labels[n==1 and 'LOADED' or 'EMPTY'])
+  assert(n==0 and rounds==0 or n==1 and rounds>40)
+  local texts={};for _,v in ipairs(old) do if v.type=='text' then texts[v.text]=v end end
+  for _,v in ipairs(out) do if v.type=='text' then local before=texts[v.text];assert(before and v.x==before.x and v.y==before.y and v.size==before.size) end end
+ end end end
+end)
+
+test('Recoilless close-up clips uniformly and retains casing only after observed firing',function()
+ local s=HUD.recoilless_state.new()
+ local function step(n,unit)
+  local m={resource_hex='9f80d67a12a7e40f',value=n,id=1,unit_ref=unit or 9,ammo_mode='HEAT',reserve=5}
+  HUD.recoilless_state.step(s,m);return m
+ end
+ assert(not step(0).recoilless_spent,'initial empty is not an observed shot')
+ local full=step(1);assert(not full.recoilless_spent)
+ local spent=step(0);assert(spent.recoilless_spent and step(0).recoilless_spent)
+ local cfg=HUD.config.new();cfg.recoilless_topthird_preview=true
+ for _,scale in ipairs({.05,1,2}) do
+  local high={}
+  for i,m in ipairs({full,spent}) do
+   high[i]=0;local count=0
+   for _,v in ipairs(HUD.recoilless_panel.compose({x=0,y=0},m,scale,cfg,1)) do
+    if v.recoilless_round then
+     count=count+1;if i==2 then assert(v.recoilless_part=='case' and not (v.c[1]==226 and v.c[2]==200 and v.c[3]==102),'spent case must not retain projectile or colored band') end;assert(v.x>=24*scale and v.x+v.w<=108*scale and v.y>=33*scale and v.y+v.h<=90*scale)
+     high[i]=math.max(high[i],(v.y+v.h)/scale)
+    end
+   end
+   assert(count>0,'retained casing is visible')
+  end
+  assert(high[1]>89 and high[2]>57 and high[2]<58,'projectile removed; original case shoulder retained')
+ end
+ assert(not step(1).recoilless_spent,'reload clears shot state')
+ step(0);assert(not step(0,10).recoilless_spent,'ownership change clears shot state')
+ step(1);step(0);HUD.recoilless_state.step(s,nil);assert(not step(0).recoilless_spent)
+end)
+
+test('Double Freedom reference proportions preview preserves anchors and observed states',function()
+ local cfg=HUD.config.new();cfg.double_freedom_proportions_preview=true;cfg.double_freedom_compact_preview=false
+ local tracker=HUD.df_shell_state.new()
+ for _,scale in ipairs({.05,1,2}) do
+  for _,n in ipairs({2,1,0,2}) do
+   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',kind='rounds',rounds=n,capacity=2,reserve=14,reserve_kind='SHELLS',fire_mode='SEMI'}))
+   HUD.df_shell_state.step(tracker,m)
+   local out=HUD.layout.compose(m,0,0,scale,1,cfg,0);local art=0
+   for _,v in ipairs(out) do
+    if v.shotgun_shell_art then
+     art=art+1;assert(v.y>=32*scale and v.y+v.h<=77*scale+.000001)
+     local left=out[1].w/scale/2+(v.shotgun_shell_barrel==1 and -25 or 25)-10.5
+     assert(v.x>=left*scale and v.x+v.w<=(left+21)*scale+.000001)
+     if v.c[1]>v.c[2] and v.c[2]>v.c[3] then assert(v.y+v.h<=41*scale+.000001,'brass occupies bottom 20 percent') end
+    elseif v.weapon_label then assert(v.y==84*scale or v.y==99*scale)
+    elseif v.barrel_indicator then assert(v.y==26*scale) end
+   end
+   assert(art>0 and m.value==n and m.reserve==14)
+  end
+ end
+end)
+
+test('Deadeye decoration preset reproduces original geometry and persists without changing selection',function()
+ local cfg=HUD.config.new();assert(cfg.decoration=='none')
+ HUD.config.apply(cfg,{decoration='deadeye'})
+ local saved=HUD.config.serialize(cfg);local restored=HUD.config.new()
+ HUD.config.apply(restored,assert(loadstring(saved))());assert(restored.decoration=='deadeye')
+ assert(HUD.config.decorations[5]=='double' and HUD.config.decorations[6]=='deadeye')
+ local out={};HUD.layout.decorate(out,{x=0,y=0,w=126,h=100},1,cfg,1)
+ assert(#out==8 and out[1].w==126 and out[1].h==1 and out[1].c[1]==198 and out[1].a==.55)
+ assert(out[5].x==4 and out[5].y==4 and out[5].w==3 and out[5].c[1]==218 and out[5].a==.75)
+ assert(out[8].x==119 and out[8].y==93)
+ for _,id in ipairs({'e6d932be83729076','72170a55a1f37ff1','a8cffb316f0b5c5f','9f80d67a12a7e40f','39ab99895147a3bf'}) do
+  for _,scale in ipairs({.05,1,2}) do
+   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=id,kind='rounds',rounds=1,capacity=id=='9f80d67a12a7e40f' and 1 or 10,reserve=5,ammo_mode=id=='a8cffb316f0b5c5f' and 'FLAK' or nil,fire_mode='SEMI'}))
+   local commands=HUD.layout.compose(m,13,27,scale,1,cfg,0);local panels={};local decorations=0
+   for _,v in ipairs(commands) do if v.type=='panel' then panels[#panels+1]=v end end
+   for _,v in ipairs(commands) do if v.decoration then
+    decorations=decorations+1;local inside=false
+    for _,f in ipairs(panels) do inside=inside or (v.x>=f.x-.000001 and v.y>=f.y-.000001 and v.x+v.w<=f.x+f.w+.000001 and v.y+v.h<=f.y+f.h+.000001) end
+    assert(inside)
+   end end
+   assert(decorations==8*#panels)
+  end
+ end
+end)
+
+test('Double Freedom tighter box keeps full size shells and all content inside bounds',function()
+ for font in pairs(HUD.native_font_data.faces) do for _,scale in ipairs({.05,1,2}) do
+  local cfg=HUD.config.new();cfg.font=font;cfg.double_freedom_compact_preview=true
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',kind='rounds',rounds=2,capacity=2,reserve=14,reserve_kind='SHELLS',fire_mode='SEMI'}))
+  local out=HUD.layout.compose(m,0,0,scale,1,cfg,0);local f=out[1];assert(f.w>=120*scale and f.h>=112*scale)
+  for _,v in ipairs(out) do if not v.child then
+   if v.type=='rect' then assert(v.x>=f.x and v.y>=f.y and v.x+v.w<=f.x+f.w+.000001 and v.y+v.h<=f.y+f.h+.000001)
+   elseif v.type=='text' then local a,b,e,t=HUD.font.measure(v.text,v.size,font);assert(v.x+a>=0 and v.x+e<=f.w and v.y+b>=0 and v.y+t<=f.h,font..' text fits compact box') end
+  end end
+ end end
+end)
+
+test('Double Freedom stacked titles reserves and modes center in native and final world frames',function()
+ for font in pairs(HUD.native_font_data.faces) do for _,scale in ipairs({.05,1,2}) do for _,reserve in ipairs({0,30,999,1234}) do
+  local cfg=HUD.config.new();cfg.font=font;cfg.style_3d='standard'
+  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',kind='rounds',rounds=2,capacity=2,reserve=reserve,reserve_kind='SHELLS',fire_mode='VOLLEY'}))
+  local native=HUD.layout.compose(m,13,27,scale,1,cfg,0)
+  assert(native[1].world_reference_width and native[1].w>=120*scale)
+  for _,commands in ipairs({native,HUD.world_style.prepare(native,{first_person=false},cfg)}) do
+   local frame=commands[1];local seen=0
+   for _,v in ipairs(commands) do
+    if v.text=='DBS-2' or v.text=='DOUBLE FREEDOM' or v.text==string.format('%03d SHELLS',reserve) or v.text=='VOLLEY' then
+     local a,b,e=HUD.font.measure(v.text,v.size,font,true)
+     assert(math.abs(v.x+(a+e)/2-frame.x-frame.w/2)<.000001,font..' measured text centered')
+     if v.weapon_label then assert(v.c[1]==218 and v.c[2]==172 and v.c[3]==78) end
+     seen=seen+1
+    end
+   end
+   assert(seen==4)
+  end
+  if font=='bigblue' and scale==2 and reserve==30 then
+   local world=HUD.world_style.prepare(native,{first_person=false},cfg)
+   assert(world[1].w<215 and world[1].w>195,'actual world panel narrows instead of normalizing back to240: '..world[1].w)
+  end
+ end end end
+end)
+
+test('Double Freedom half-width shells stay centered over unchanged closer capacity lines',function()
+ for _,scale in ipairs({.05,1,2}) do for _,mode in ipairs({'SEMI','VOLLEY'}) do
+  local cfg=HUD.config.new();local tracker=HUD.df_shell_state.new()
+  for _,n in ipairs({2,1,0,2}) do
+   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='72170a55a1f37ff1',kind='rounds',rounds=n,capacity=2,reserve=30,reserve_kind='SHELLS',fire_mode=mode}))
+   HUD.df_shell_state.step(tracker,m);local native=HUD.layout.compose(m,0,0,scale,1,cfg,0)
+   for _,out in ipairs({native,HUD.world_style.prepare(native,{first_person=true},cfg)}) do
+    local bars,spans={},{{math.huge,-math.huge},{math.huge,-math.huge}}
+    for _,v in ipairs(out) do
+     if v.barrel_indicator then bars[v.barrel_indicator]=v end
+     if v.shotgun_shell_art then local span=spans[v.shotgun_shell_barrel];span[1]=math.min(span[1],v.x);span[2]=math.max(span[2],v.x+v.w) end
+    end
+    for i=1,2 do assert(math.abs(spans[i][2]-spans[i][1]-bars[i].w/2)<.000001 and math.abs((spans[i][1]+spans[i][2])/2-bars[i].x-bars[i].w/2)<.000001,'shell span is half the line and remains centered') end
+    assert(math.abs((bars[2].x-bars[1].x-bars[1].w)/bars[1].w-8/42)<.000001,'central gap is eight layout units')
+    local f=out[1];assert(math.abs((bars[1].x+bars[2].x+bars[2].w)/2-f.x-f.w/2)<.000001,'pair is symmetric about final frame')
+   end
+  end
+ end end
+end)
+
+test('Senator approved six-round layout follows observed firing refills and ownership reset',function()
+ for _,scale in ipairs({.05,1,2}) do
+  local cfg=HUD.config.new();local tracker=HUD.senator_state.new()
+  local function step(n,unit)
+   local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='8d3d52a3b2f19402',id=1,unit_ref=unit or 9,kind='rounds',rounds=n,capacity=6,reserve=30,reserve_kind='ROUNDS',fire_mode='SEMI'}))
+   HUD.senator_state.step(tracker,m);return m
+  end
+  local initial=step(0);for _,v in ipairs(initial.senator_slots) do assert(not v.case) end
+  for _,n in ipairs({6,5,3,0,1,6}) do
+   local m=step(n);local out=HUD.layout.compose(m,0,0,scale,1,cfg,0);local seen={};local cases={};local footer,mode,title=false,false,false
+   for _,v in ipairs(out) do
+    if v.senator_part=='projectile' then seen[v.senator_slot]=true end
+    if v.senator_part=='case' then cases[v.senator_slot]=true end
+    footer=footer or v.text=='030 ROUNDS';mode=mode or v.text=='SEMI';title=title or v.text=='P-4 SENATOR'
+    assert(v.text~=string.format('%03d',n),'six tips replace the loaded counter')
+   end
+   local count=0;for i=1,6 do if seen[i] then count=count+1 end;assert(cases[i]) end
+   assert(count==n and footer and mode and title and m.reserve==30)
+  end
+  step(0);local other=step(0,10);for _,v in ipairs(other.senator_slots) do assert(not v.case) end
+  step(6);step(0);HUD.senator_state.step(tracker,nil);local reset=step(0);for _,v in ipairs(reset.senator_slots) do assert(not v.case) end
+  assert(not HUD.senator_state.supports_speedloader and not HUD.senator_state.supports_ejection)
+ end
+end)
 
 print(string.format('%d contract tests passed',tests))

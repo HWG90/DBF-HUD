@@ -43,7 +43,7 @@ local weapons={
     ['0807aea5217e4767']='ROUNDS', -- personal_defense_weapon
     ['0c197bbd8d2c725b']='ROUNDS', -- assault_rifle_penetrator
     ['0f83639ab8c86165']='ROUNDS', -- battle_rifle_ceremonial
-    ['11c27d3babb38956']='ROUNDS', -- machinegun
+    ['11c27d3babb38956']='MG-43', -- regular Machine Gun model designation
     ['11ec8e2296a3d662']='SHELLS', -- pump_shotgun_02
     ['16051937941bb709']='ROUNDS', -- smg_rhino
     ['186ea95de7306b1a']='ROUNDS', -- smg_solvent
@@ -264,6 +264,7 @@ function M.apply(raw)
     if raw.resource_hex=='88f61afff48ac8a4' then raw.label='GAS';raw.reserve_kind='TANKS';raw.ammo_icon='GAS' end
     if raw.resource_hex=='72170a55a1f37ff1' then raw.ammo_icon='DOUBLE_SHELL' end
     if raw.resource_hex=='2b28e17ffed05f7c' then raw.ammo_icon=raw.fire_mode=='VOLLEY' and 'TRIPLE_SHELL' or 'SHELL' end
+    if raw.resource_hex=='e6d932be83729076' then raw.label='R-6 DEADEYE';raw.ammo_icon='DEADEYE_CARTRIDGE' end
     if raw.resource_hex=='0f83639ab8c86165' then raw.ammo_icon=raw.fire_mode=='BURST' and 'AMENDMENT_BURST' or 'AMENDMENT_CARTRIDGE' end
     if raw.resource_hex=='5fecab819f96a3e8' and (raw.fire_mode=='SEMI' or raw.fire_mode=='AUTO') then raw.ammo_icon='RIFLE_'..raw.fire_mode end
     if raw.resource_hex=='a6a735accb4a327f' or raw.resource_hex=='11c27d3babb38956' then raw.ammo_icon='LINKED_BELT' end
@@ -273,7 +274,7 @@ function M.apply(raw)
         if raw.fire_mode=='AUTO' or raw.fire_mode=='SEMI' then raw.ammo_icon='FIRE_'..raw.fire_mode end
     end
     if raw.resource_hex=='52e4334e6a128caf' or raw.resource_hex=='02cd7321cd8445f5' then
-        raw.label='GRNDS';raw.ammo_icon='GL_GRENADE'
+        raw.label='GRNDS';raw.ammo_icon=raw.resource_hex=='52e4334e6a128caf' and 'GRENADE_PISTOL_SHELL' or 'GL_GRENADE'
     end
     return raw
 end

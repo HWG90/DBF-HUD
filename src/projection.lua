@@ -2,7 +2,7 @@
 -- Initial scope: perspective camera with identity local camera offset.
 local M={}
 local function unhex(s)return (s:gsub('..',function(h)return string.char(tonumber(h,16))end))end
-function M.project(m,x,y,z,fov,aspect,near)
+local function validate(m,fov,aspect)
     assert(fov>.05 and fov<3.1 and aspect>.1 and aspect<10,'projection dimensions')
     for i=1,16 do assert(type(m[i])=='number' and m[i]==m[i] and math.abs(m[i])<1e7,'camera matrix finite') end
     for _,k in ipairs({1,5,9}) do
@@ -12,15 +12,73 @@ function M.project(m,x,y,z,fov,aspect,near)
         local a,b=p[1],p[2];assert(math.abs(m[a]*m[b]+m[a+1]*m[b+1]+m[a+2]*m[b+2])<.01,'camera axes')
     end
     assert(math.abs(m[4])+math.abs(m[8])+math.abs(m[12])+math.abs(m[16]-1)<1e-5,'camera affine')
+end
+local function project_validated(m,x,y,z,fov,aspect,near)
     local dx,dy,dz=x-m[13],y-m[14],z-m[15]
     local right=dx*m[1]+dy*m[2]+dz*m[3]
     local depth=dx*m[5]+dy*m[6]+dz*m[7]
     local up=dx*m[9]+dy*m[10]+dz*m[11]
-    if depth<=math.max(near,.05) then return nil,'behind camera or near plane' end
+    if depth<=math.max(near,.0001) then return nil,'behind camera or near plane' end
     local t=math.tan(fov*.5)
     local nx,ny=.5+.5*right/(depth*t*aspect),.5+.5*up/(depth*t)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
+end
+-- Validate this immutable frame snapshot once, rather than once per glyph corner.
+function M.project(m,x,y,z,fov,aspect,near)
+    validate(m,fov,aspect)
+    return project_validated(m,x,y,z,fov,aspect,near)
+end
+function M.projector(m,fov,aspect,near)
+    validate(m,fov,aspect)
+    return function(x,y,z)return project_validated(m,x,y,z,fov,aspect,near) end
+end
+-- Clip a convex world-space polygon against this snapshot's perspective frustum.
+-- UVs are interpolated at intersections before the perspective divide.
+function M.clip_polygon(m,vertices,fov,aspect,near,scratch)
+    assert(fov>.05 and fov<3.1 and aspect>.1 and aspect<10,'projection dimensions')
+    local t=math.tan(fov*.5);local n=math.max(near,.0001)
+    local polygon=scratch and scratch.camera or {}
+    for i,v in ipairs(vertices) do
+        local dx,dy,dz=v.x-m[13],v.y-m[14],v.z-m[15]
+        local point=polygon[i] or {};polygon[i]=point
+        point.r=dx*m[1]+dy*m[2]+dz*m[3];point.d=dx*m[5]+dy*m[6]+dz*m[7]
+        point.u=dx*m[9]+dy*m[10]+dz*m[11];point.s=v.s or 0;point.v=v.v or 0
+    end
+    for i=#polygon,#vertices+1,-1 do polygon[i]=nil end
+    -- Most HUD pieces are fully inside the snapshot frustum. Keep their
+    -- vertices unchanged instead of allocating five clipping work lists.
+    local fully_inside=true
+    for _,p in ipairs(polygon) do
+        if p.d<n or p.d*t*aspect+p.r<0 or p.d*t*aspect-p.r<0 or p.d*t+p.u<0 or p.d*t-p.u<0 then fully_inside=false;break end
+    end
+    if not fully_inside then
+    local planes={function(p)return p.d-n end,function(p)return p.d*t*aspect+p.r end,
+        function(p)return p.d*t*aspect-p.r end,function(p)return p.d*t+p.u end,function(p)return p.d*t-p.u end}
+    for _,distance in ipairs(planes) do
+        if #polygon==0 then break end
+        local clipped={};local previous=polygon[#polygon];local pd=distance(previous)
+        for _,current in ipairs(polygon) do
+            local cd=distance(current)
+            if (pd>=0)~=(cd>=0) then
+                local ratio=pd/(pd-cd);local intersection={}
+                for _,key in ipairs({'r','d','u','s','v'}) do intersection[key]=previous[key]+(current[key]-previous[key])*ratio end
+                clipped[#clipped+1]=intersection
+            end
+            if cd>=0 then clipped[#clipped+1]=current end
+            previous,pd=current,cd
+        end
+        polygon=clipped
+    end
+    end
+    local result=scratch and fully_inside and scratch.result or {}
+    for i,p in ipairs(polygon) do
+        local point=result[i] or {};result[i]=point
+        point.x=math.max(0,math.min(1,.5+.5*p.r/(p.d*t*aspect)))
+        point.y=math.max(0,math.min(1,.5+.5*p.u/(p.d*t)));point.depth=p.d;point.s=p.s;point.v=p.v
+    end
+    for i=#result,#polygon+1,-1 do result[i]=nil end
+    return result
 end
 -- Screen-relative seed only; this does not establish model clearance.
 function M.auto_mount(camera,p,fov,aspect,near)

@@ -1,11 +1,13 @@
 -- Pure WorldGUI geometry scaling, frame fitting and visual presets.
 local M={}
 function M.prepare(commands,p,c)
-                    local f=commands[1];local scale=240*(c.scale or 1)/f.w
+                    local f=commands[1];local scale=240*(c.scale or 1)/(f.world_reference_width or f.w)
+                    if f.double_breech then scale=scale*(f.breech_scale or 1) end
                     if c.placement_mode=='auto' and p.first_person then scale=scale*.5 end;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
+                        if v.quad then local q={};for i,p in ipairs(v.quad) do q[i]={(p[1]-f.x-f.w/2)*scale,(p[2]-f.y-f.h/2)*scale} end;v.quad=q end
                         if v.w then v.w=v.w*scale end
                         if v.h then v.h=v.h*scale end
                         if v.size then v.size=v.size*scale end
@@ -24,7 +26,7 @@ function M.prepare(commands,p,c)
                             end
                         end
                         for _,v in ipairs(centered) do
-                            if v.decoration and not v.child then
+                            if v.decoration and not v.child and not v.charge_meter then
                                 v.x=left+(v.x-panel.x)*(right-left)/panel.w
                                 v.y=bottom+(v.y-panel.y)*(top-bottom)/panel.h
                                 v.w=v.w*(right-left)/panel.w
@@ -114,12 +116,49 @@ function M.prepare(commands,p,c)
                             end
                         end
                     end
+                    -- The charge instrument spans the final font-fitted window, including mode footer.
+                    local meter
+                    for _,v in ipairs(centered) do if v.charge_meter and v.type=='panel' then meter=v end end
+                    if meter then
+                        local old_y,old_h,old_x=meter.y,meter.h,meter.x
+                        local low=child_panel and math.min(panel.y,child_panel.y) or panel.y
+                        local height=panel.y+panel.h-low
+                        local new_x=panel.x+panel.w+2*2*(c.scale or 1)*scale
+                        for _,v in ipairs(centered) do if v.charge_meter then
+                            v.y=low+(v.y-old_y)*height/old_h
+                            v.h=v.h*height/old_h
+                            v.x=v.x+new_x-old_x
+                        end end
+                    end
                     for _,v in ipairs(centered) do
                         if v.heat_overlay then
                             local inset=2*(c.scale or 1)*scale
                             v.x,v.y=panel.x+inset,panel.y+inset
                             v.w=math.max(0,panel.w-2*inset)*v.heat_fraction
                             v.h=math.max(0,panel.h-2*inset)
+                        end
+                    end
+                    -- Equal apparent pitch across the final fitted parent and child.
+                    local template;local kept={}
+                    for _,v in ipairs(centered)do
+                        if v.df_effect_frame and not v.df_effect_sweep then template=template or v
+                        else
+                            if v.df_effect_frame then
+                                local target=v.df_effect_frame=='child' and child_panel or panel
+                                if target then v.x=target.x;v.w=target.w;v.y=target.y+(target.h-v.h)*v.df_effect_fraction end
+                            end
+                            kept[#kept+1]=v
+                        end
+                    end
+                    if template then
+                        centered=kept
+                        local density=c.effect_scanline_count or 21
+                        local pitch=math.max((child_panel and child_panel.h or 44)/(density+1),panel.h/161)
+                        for _,target in ipairs({panel,child_panel})do
+                            local count=math.min(160,math.max(1,math.floor(target.h/pitch)-1))
+                            for k=1,count do
+                                centered[#centered+1]={type='rect',x=target.x,y=target.y+k*pitch,w=target.w,h=math.min(template.h,pitch*.4),c=template.c,a=template.a,df_effect_frame=target==child_panel and 'child' or 'main',df_effect_fraction=k*pitch/target.h,scanline_layer=true}
+                            end
                         end
                     end
                     if c.style_3d=='hologram' then
