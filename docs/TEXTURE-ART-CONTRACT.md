@@ -42,3 +42,11 @@ Choose resolution from the largest intended projected artwork size, smallest-sca
 ## Validation boundary
 
 `tests/texture_art.lua` tests static replacement, dynamic retention, bounds, opacity, scale, missing resources, malformed grouping and state-command rejection. Existing renderer tests cover 800 planar inverse cases and accepted panels. The registry is empty, so no Liberator texture, in-game artwork, performance gain, filtering quality or native depth proof is supplied yet.
+
+## Realistic artwork and lighting checkpoint
+
+Keep `hyperreal-material-source.png` intact as the approved realistic source. Do not clip its stronger skull or bevels to the faithful vector masks. The faithful three-layer baseline remains separate. Fit the realistic artwork to the same 124x110 logical canvas and live readout anchors; baked recess shading needs an explicit opacity decision before native integration. The faithful source groups contain 50 underlay, 2 recess and 53 detail commands.
+
+The candidate pixel shader is lighting-independent: its output is sampled artwork RGBA multiplied by vertex tint/visibility. It reads no world light, surface normal, shadow or PBR material inputs. Weapon-relative placement and camera projection still position the triangles; scene depth still controls optional occlusion. This is screen-projected GUI geometry, not a scene-lit weapon mesh. Exposure, tone mapping, color-space conversion and actual native material blend/filter behavior remain unverified until the material is imported and tested in game.
+
+This change replaces tagged static artwork only. Geometry clipping, the camera snapshot, saved weapon placement, dynamic counters/meters, font rendering and animated panel/effect shaders retain their existing paths. Their offline regression checks do not establish a live texture integration result. The historical world-mesh experiment and its lighting compensations have not been recovered from source evidence in this checkpoint, so this document does not claim its precise implementation or disposition.
