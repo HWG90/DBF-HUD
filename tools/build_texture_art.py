@@ -67,6 +67,10 @@ def build(art,output,base):
     # Extend the installed library group, not an older template that omits animations.
     installed=base.read_bytes();_,types,entries=struct.unpack_from('<III',installed)
     rows=list(struct.iter_unpack('<7Q6I',installed[72+types*32:72+types*32+entries*80]))
+    assert entries>=732,'Base must include the accepted fonts and animated shaders, not the isolated trial'
+    installed_graphics=Path(str(base)+'.gpu_resources').read_bytes()
+    # Arsenal replaces conflicting archive files wholesale. Preserve ALL base rows.
+    resources.extend((r[0],r[1],installed[r[2]:r[2]+r[7]],installed_graphics[r[4]:r[4]+r[9]]) for r in rows if r[1]!=hash64('shader_library_group'))
     group_row=next(r for r in rows if r[0]==hash64('core/stingray_renderer/shader_libraries/default_shaders') and r[1]==hash64('shader_library_group'))
     group=bytearray(installed[group_row[2]:group_row[2]+group_row[7]])
     count=struct.unpack_from('<I',group,16)[0]
@@ -75,7 +79,7 @@ def build(art,output,base):
     resources.append((hash64('core/stingray_renderer/shader_libraries/default_shaders'),hash64('shader_library_group'),bytes(group),b''))
     material_base=(ROOT/'assets/native-font-depth/source.bin').read_bytes()
     assert len(material_base)==160 and struct.unpack_from('<I',material_base,136)[0]==hash64('diffuse_map')>>32
-    report={'metadata_replacements':metadata,'native_live_verified':False,'mip_count':1,'base_archive_sha256':hashlib.sha256(installed).hexdigest(),'preserved_shader_group_entries':count,'assets':[]}
+    report={'metadata_replacements':metadata,'native_live_verified':False,'mip_count':1,'base_archive_sha256':hashlib.sha256(installed).hexdigest(),'preserved_base_resources':entries,'preserved_shader_group_entries':count,'assets':[]}
     for variant in ('faithful','realistic'):
         for layer in ('underlay','recesses','details'):
             if variant=='faithful':
