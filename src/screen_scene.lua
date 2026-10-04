@@ -255,7 +255,7 @@ function M.new(sr,log)
                     local id=G.triangle(primitive_gui,vertex(a),vertex(b),vertex(d),layer,color,name,
                         uv and sr.Vector2(a.s,a.v) or nil,uv and sr.Vector2(b.s,b.v) or nil,uv and sr.Vector2(d.s,d.v) or nil)
                     track(primitive_gui,id)
-                    if id and (name:find('/lab_',1,true) or name:find('/local_',1,true) or name:find('/mapped_',1,true)) and not shader_submitted[name] then shader_submitted[name]=true;log('HUD_SHADER_SUBMITTED material='..name..' weapon='..tostring(p.resource_hex)..' triangle='..tostring(id)) end
+                    if id and (name:find('/lab_',1,true) or name:find('/local_',1,true) or name:find('/mapped_',1,true) or name:find('/texture_liberator_',1,true)) and not shader_submitted[name] then shader_submitted[name]=true;log('HUD_SHADER_SUBMITTED material='..name..' weapon='..tostring(p.resource_hex)..' triangle='..tostring(id)) end
                     if effect and id then scan_emitted=scan_emitted+1 end
                 end
             end

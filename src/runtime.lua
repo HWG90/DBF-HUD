@@ -1,4 +1,14 @@
 local M={draw_budget_ms=2.5}
+function M.rebase_commands(commands,left,bottom)
+    for _,v in ipairs(commands) do
+        v.x=v.x-left;v.y=v.y-bottom
+        if v.texture_art_box then
+            local b=v.texture_art_box
+            v.texture_art_box={x=b.x-left,y=b.y-bottom,w=b.w,h=b.h}
+        end
+    end
+    return commands
+end
 function M.timing_ink(draw_ms,clock)
     if draw_ms and draw_ms>M.draw_budget_ms and math.floor((clock or 0)*4)%2==0 then return {255,55,65}end
     return {190,235,210}
@@ -735,7 +745,7 @@ function M.start(sr,backend,options)
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
             local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
             local f=world_commands[1];local left,bottom=f.x,f.y
-            for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
+            M.rebase_commands(world_commands,left,bottom)
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
                 projection.camera_matrix,projection.camera_fov,w,h,projection.camera_near) then
                 world_display.release();view.draw(screen_overlay(w,h));self.anchor_status='screen-projected scene-depth HUD';return

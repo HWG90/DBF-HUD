@@ -170,10 +170,10 @@ function M.new(hud)
                 {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background (2D)','toggle'},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
-            if panel_weapon=='968211c0033dce64' then
-                panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
-                panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
-            end
+            -- Fetch selects a weapon after registration; keep these controls
+            -- registered and gate their availability against the fetched weapon.
+            panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
+            panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings() or hud.config
                 local v=cfg[key]
@@ -229,6 +229,8 @@ function M.new(hud)
                     if registered then
                         if c.id=='fetch_weapon_appearance' then registered.disabled=id==nil
                         elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Press Fetch to select the equipped weapon'
+                        elseif c.id=='weapon_texture_art_trial' or c.id=='weapon_texture_art_variant' then
+                            registered.disabled=not ready or panel_weapon~='968211c0033dce64'
                         else registered.disabled=not ready end
                     end
                 end

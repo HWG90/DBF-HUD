@@ -47,6 +47,7 @@ for _,scale in ipairs({.05,.5,1,3})do
  local cfg=HUD.config.new();cfg.font='bigblue'
  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='968211c0033dce64',kind='magazine',rounds=30,capacity=45,reserve=4,fire_mode='AUTO'}))
  local out=HUD.layout.compose(m,0,0,scale,1,cfg,0,function(t,z)return 0,0,#t*z*.5,z end)
+ HUD.runtime.rebase_commands(out,out[1].x,out[1].y)
  out=HUD.world_style.prepare(out,{first_person=false},cfg)
  for _,variant in ipairs({'faithful','realistic'})do
   local replaced=HUD.texture_art.prepare(out,m.resource_hex,function()return true end,HUD.texture_art_assets,variant)
