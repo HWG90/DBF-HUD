@@ -132,6 +132,7 @@ function M.new(sr,log)
             for _,v in ipairs(commands) do if v.type=='panel' then v.a=math.min(1,v.a/.18) end end
         end
         local m,at=M.panel_pose(p,c,commands)
+        if c.texture_art_trial then commands=HUD.texture_art.prepare(commands,p.resource_hex,A.can_get,HUD.texture_art_assets,c.texture_art_variant) end
         -- Temporary zoom demo: retain the widest observed first-person FOV per weapon.
         if c.first_person_zoom_demo and fov then
             self.zoom_reference=self.zoom_reference or {}
@@ -194,15 +195,19 @@ function M.new(sr,log)
                 effect_guis[draw_gui]=effect_guis[draw_gui] or assert(W.create_screen_gui(world,'scale',1,1),'screen effect GUI missing')
                 return effect_guis[draw_gui]
             end
-            local function material(name,texture,role)
+            local function material(name,texture,role,art_rows)
                 local cache_key=(role or 'panel')..':'..name
                 if not materials[cache_key] then
                     assert(A.can_get('material',name),'screen scene font material missing: '..name)
                     local handle=assert(G.material(role_gui(role),name),'screen scene material unavailable')
-                    if texture then sr.Material.set_texture(handle,'diffuse_map',texture) end
+                    if texture then sr.Material.set_texture(handle,art_rows and 'artwork_texture' or 'diffuse_map',texture) end
                     sr.Material.set_scalar(handle,'threshold_fade',depth)
                     sr.Material.set_scalar(handle,'scissor_mode',enabled)
-                    if name:find('/mapped_',1,true) then
+                    if art_rows then
+                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(art_rows[1],art_rows[2],art_rows[3],0))
+                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(art_rows[4],art_rows[5],art_rows[6],0))
+                        sr.Material.set_vector4(handle,'clip_box',sr.Vector4(art_rows[7],art_rows[8],art_rows[9],0))
+                    elseif name:find('/mapped_',1,true) then
                         local rows=assert(panel_mapping(),'panel shader mapping unavailable')
                         local scale=tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
                         if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
@@ -224,7 +229,7 @@ function M.new(sr,log)
             local corners={{},{},{},{}}
             local clipping_scratch={camera={{},{},{},{}},result={{},{},{},{}}}
             local function vertex(p)return sr.Vector3(p.x*width,0,p.y*height) end
-            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role)
+            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role,art_rows)
                 if w<=0 or h<=0 then return end
                 for i=1,4 do
                     local right=i==2 or i==3;local upper=i>=3
@@ -243,7 +248,7 @@ function M.new(sr,log)
                     local thickness=length>0 and math.abs(dx*(d.y-a.y)*height-dy*(d.x-a.x)*width)/length or 0
                     log(string.format('SCANLINE_PIXEL_PROBE projected_length_px=%.3f projected_thickness_px=%.4f',length,thickness));self.scanline_probe=true
                 end
-                name=material(name,texture,role)
+                name=material(name,texture,role,art_rows)
                 local primitive_gui=role_gui(role)
                 for i=2,#polygon-1 do
                     local a,b,d=polygon[1],polygon[i],polygon[i+1]
@@ -256,6 +261,13 @@ function M.new(sr,log)
             end
             for _,v in ipairs(list) do
                 local function color(alpha,ink)ink=ink or v.c;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
+                if v.type=='texture' then
+                    local x,y,z=M.point(axes,origin,v.x,v.y+v.h)
+                    local rx,ry,rz=M.point(axes,origin,v.x+v.w,v.y+v.h)
+                    local bx,by,bz=M.point(axes,origin,v.x,v.y)
+                    local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
+                    if rows[1] then quad(v.x,v.y,v.w,v.h,v.texture_material,color(1),v.texture_layer or 49,nil,v.texture_resource,nil,nil,nil,rows) end
+                end
                 if (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
                     local selected_material=panel_material(v,p.resource_hex,c)
                     local panel_uv

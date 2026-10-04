@@ -170,9 +170,14 @@ function M.new(hud)
                 {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background (2D)','toggle'},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
+            if panel_weapon=='968211c0033dce64' then
+                panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
+                panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
+            end
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings() or hud.config
                 local v=cfg[key]
+                if key=='texture_art_variant' then return v=='realistic' and 2 or 1 end
                 if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
                 if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
                 if key=='decoration' then for i,n in ipairs(HUD.config.decorations)do if n==v then return i end end end
@@ -188,6 +193,7 @@ function M.new(hud)
                 if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
+                    if key=='texture_art_variant' then v=v==2 and 'realistic' or 'faithful' end
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
                     if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end

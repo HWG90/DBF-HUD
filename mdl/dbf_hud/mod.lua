@@ -7942,7 +7942,7 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={texture_art_variant='faithful',texture_art_trial=false,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.8,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -8000,7 +8000,7 @@ HUD.shader_catalog={
 {id='prismatic',title="Prismatic facets",material='mods/dbf_hud/materials/lab_prismatic',frozen=false},
 }
 HUD.shader_ids={auto=true,none=true};for _,entry in ipairs(HUD.shader_catalog)do HUD.shader_ids[entry.id]=true end
-M.panel_keys={theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
+M.panel_keys={texture_art_variant=true,texture_art_trial=true,theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
 function M.effective(config,resource)
  local out={};for k,v in pairs(config)do out[k]=v end
  local overrides=(config.weapon_panels or {})[resource or '']
@@ -8061,8 +8061,9 @@ function M.apply(config,values)
             end
             v=validated
         elseif limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='theme_shader_animate' or k=='effect_shader_animate' or k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='texture_art_trial' or k=='theme_shader_animate' or k=='effect_shader_animate' or k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='theme_shader' or k=='effect_shader' then assert(type(v)=='string' and HUD.shader_ids[v],'Unknown HUD shader')
+        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic','invalid texture artwork variant')
         elseif k=='senator_style' then assert(v=='cylinder' or v=='upright','invalid Senator appearance')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
@@ -15633,6 +15634,72 @@ function M.fullbright(sr,log)return HUD.archived_mesh.fullbright(sr,log)end
 return M
 
 end)()
+HUD.texture_art=(function()
+-- Optional static artwork replacement. Invalid/unavailable groups retain primitives.
+local M={}
+local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
+function M.prepare(commands,resource,available,registry,variant)
+    local spec=registry and registry[resource]
+    if not spec or spec.version~=1 or type(spec.layers)~='table' then return commands end
+    local selected=spec.variants and spec.variants[variant or 'faithful']
+    if spec.variants and not selected then return commands end
+    local groups={};local materials={}
+    for index,base in ipairs(spec.layers)do
+        local layer={};for k,v in pairs(base)do layer[k]=v end
+        if selected then
+            local assets=selected[layer.id];if not assets then return commands end
+            layer.material,layer.texture=assets.material,assets.texture
+        end
+        if type(layer.id)~='string' or type(layer.material)~='string' or type(layer.texture)~='string' or groups[layer.id] or materials[layer.material] then return commands end
+        materials[layer.material]=true
+        if not available('material',layer.material) or not available('texture',layer.texture) then return commands end
+        groups[layer.id]={spec=layer,index=index,members={},minx=math.huge,miny=math.huge,maxx=-math.huge,maxy=-math.huge}
+    end
+    for i,v in ipairs(commands)do
+        local g=groups[v.texture_art_layer]
+        if g then
+            -- Text, panels, meters, effects and state-driven art must never be tagged.
+            if v.type~='rect' or v.texture_art_static~=true or v.fold_child or v.child or v.quad or v.heat_fill or v.charge_meter or v.effect_shader_band or v.scanline_layer or v.fuel_marker_piece then return commands end
+            if not finite(v.x) or not finite(v.y) or not finite(v.w) or not finite(v.h) or v.w<=0 or v.h<=0 then return commands end
+            if not finite(v.texture_art_opacity) or v.texture_art_opacity<0 or v.texture_art_opacity>1 then return commands end
+            if g.opacity and g.opacity~=v.texture_art_opacity then return commands end
+            g.opacity=v.texture_art_opacity;g.members[#g.members+1]=i
+            if v.texture_art_box then
+                local b=v.texture_art_box
+                if not finite(b.x) or not finite(b.y) or not finite(b.w) or not finite(b.h) or b.w<=0 or b.h<=0 then return commands end
+                if g.box and (g.box.x~=b.x or g.box.y~=b.y or g.box.w~=b.w or g.box.h~=b.h) then return commands end
+                g.box=b
+            end
+            g.minx=math.min(g.minx,v.x);g.miny=math.min(g.miny,v.y);g.maxx=math.max(g.maxx,v.x+v.w);g.maxy=math.max(g.maxy,v.y+v.h)
+        end
+    end
+    local replacements,removed={},{}
+    for _,g in pairs(groups)do
+        if #g.members==0 or #g.members~=g.spec.command_count then return commands end
+        if g.box then
+            local b=g.box
+            if g.minx<b.x-1e-6 or g.miny<b.y-1e-6 or g.maxx>b.x+b.w+1e-6 or g.maxy>b.y+b.h+1e-6 then return commands end
+            g.minx,g.miny,g.maxx,g.maxy=b.x,b.y,b.x+b.w,b.y+b.h
+        end
+        local bounds=g.spec.aspect
+        if not finite(bounds) or bounds<=0 or math.abs((g.maxx-g.minx)/(g.maxy-g.miny)-bounds)>1e-5 then return commands end
+        replacements[g.members[1]]={type='texture',x=g.minx,y=g.miny,w=g.maxx-g.minx,h=g.maxy-g.miny,c={255,255,255},a=g.opacity,
+            texture_material=g.spec.material,texture_resource=g.spec.texture,texture_art_layer=g.spec.id,texture_layer=49+g.index*.01}
+        for _,i in ipairs(g.members)do removed[i]=true end
+    end
+    local out={}
+    for i,v in ipairs(commands)do if replacements[i] then out[#out+1]=replacements[i] elseif not removed[i] then out[#out+1]=v end end
+    return out
+end
+return M
+
+end)()
+HUD.texture_art_assets=(function()
+-- Version-1 texture artwork registry. Empty until a reviewed asset adapter is supplied.
+-- Keys are verified 16-character weapon resource IDs. See docs/TEXTURE-ART-CONTRACT.md.
+return {}
+
+end)()
 HUD.screen_scene=(function()
 -- Project saved world layouts into the UI world; compare scene depth in shaders.
 -- Native atlas glyphs become textured quads, not replacement bitmap lettering.
@@ -15768,6 +15835,7 @@ function M.new(sr,log)
             for _,v in ipairs(commands) do if v.type=='panel' then v.a=math.min(1,v.a/.18) end end
         end
         local m,at=M.panel_pose(p,c,commands)
+        if c.texture_art_trial then commands=HUD.texture_art.prepare(commands,p.resource_hex,A.can_get,HUD.texture_art_assets,c.texture_art_variant) end
         -- Temporary zoom demo: retain the widest observed first-person FOV per weapon.
         if c.first_person_zoom_demo and fov then
             self.zoom_reference=self.zoom_reference or {}
@@ -15830,15 +15898,19 @@ function M.new(sr,log)
                 effect_guis[draw_gui]=effect_guis[draw_gui] or assert(W.create_screen_gui(world,'scale',1,1),'screen effect GUI missing')
                 return effect_guis[draw_gui]
             end
-            local function material(name,texture,role)
+            local function material(name,texture,role,art_rows)
                 local cache_key=(role or 'panel')..':'..name
                 if not materials[cache_key] then
                     assert(A.can_get('material',name),'screen scene font material missing: '..name)
                     local handle=assert(G.material(role_gui(role),name),'screen scene material unavailable')
-                    if texture then sr.Material.set_texture(handle,'diffuse_map',texture) end
+                    if texture then sr.Material.set_texture(handle,art_rows and 'artwork_texture' or 'diffuse_map',texture) end
                     sr.Material.set_scalar(handle,'threshold_fade',depth)
                     sr.Material.set_scalar(handle,'scissor_mode',enabled)
-                    if name:find('/mapped_',1,true) then
+                    if art_rows then
+                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(art_rows[1],art_rows[2],art_rows[3],0))
+                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(art_rows[4],art_rows[5],art_rows[6],0))
+                        sr.Material.set_vector4(handle,'clip_box',sr.Vector4(art_rows[7],art_rows[8],art_rows[9],0))
+                    elseif name:find('/mapped_',1,true) then
                         local rows=assert(panel_mapping(),'panel shader mapping unavailable')
                         local scale=tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
                         if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
@@ -15860,7 +15932,7 @@ function M.new(sr,log)
             local corners={{},{},{},{}}
             local clipping_scratch={camera={{},{},{},{}},result={{},{},{},{}}}
             local function vertex(p)return sr.Vector3(p.x*width,0,p.y*height) end
-            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role)
+            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role,art_rows)
                 if w<=0 or h<=0 then return end
                 for i=1,4 do
                     local right=i==2 or i==3;local upper=i>=3
@@ -15879,7 +15951,7 @@ function M.new(sr,log)
                     local thickness=length>0 and math.abs(dx*(d.y-a.y)*height-dy*(d.x-a.x)*width)/length or 0
                     log(string.format('SCANLINE_PIXEL_PROBE projected_length_px=%.3f projected_thickness_px=%.4f',length,thickness));self.scanline_probe=true
                 end
-                name=material(name,texture,role)
+                name=material(name,texture,role,art_rows)
                 local primitive_gui=role_gui(role)
                 for i=2,#polygon-1 do
                     local a,b,d=polygon[1],polygon[i],polygon[i+1]
@@ -15892,6 +15964,13 @@ function M.new(sr,log)
             end
             for _,v in ipairs(list) do
                 local function color(alpha,ink)ink=ink or v.c;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
+                if v.type=='texture' then
+                    local x,y,z=M.point(axes,origin,v.x,v.y+v.h)
+                    local rx,ry,rz=M.point(axes,origin,v.x+v.w,v.y+v.h)
+                    local bx,by,bz=M.point(axes,origin,v.x,v.y)
+                    local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
+                    if rows[1] then quad(v.x,v.y,v.w,v.h,v.texture_material,color(1),v.texture_layer or 49,nil,v.texture_resource,nil,nil,nil,rows) end
+                end
                 if (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
                     local selected_material=panel_material(v,p.resource_hex,c)
                     local panel_uv
@@ -16764,9 +16843,14 @@ function M.new(hud)
                 {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background (2D)','toggle'},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
+            if panel_weapon=='968211c0033dce64' then
+                panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
+                panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
+            end
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings() or hud.config
                 local v=cfg[key]
+                if key=='texture_art_variant' then return v=='realistic' and 2 or 1 end
                 if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
                 if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
                 if key=='decoration' then for i,n in ipairs(HUD.config.decorations)do if n==v then return i end end end
@@ -16782,6 +16866,7 @@ function M.new(hud)
                 if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
+                    if key=='texture_art_variant' then v=v==2 and 'realistic' or 'faithful' end
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
                     if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
