@@ -1,22 +1,29 @@
-local M={}
+local M={draw_budget_ms=2.5}
+function M.timing_ink(draw_ms,clock)
+    if draw_ms and draw_ms>M.draw_budget_ms and math.floor((clock or 0)*4)%2==0 then return {255,55,65}end
+    return {190,235,210}
+end
 function M.start(sr,backend,options)
     local managed=options and options.managed==true
     -- Compatibility: retire a previous-brand instance during live upgrade.
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
-    local self={version='0.3.41',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local self={version='0.3.42',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
     local frame_trial
     local profile={elapsed=0,frames=0,total=0,max=0,buckets={}}
     local function timed(name,fn)
         return function(...)
             local active=(frame_trial and frame_trial.collecting) and frame_trial or profile
-            if not active then return fn(...) end
+            if not active and not self.timing_active then return fn(...) end
             local started=os.clock()
             local function finish(...)
-                if name=='depth_draw' and select(1,...)==true then active.drew=true end
-                local bucket=active.buckets[name] or {total=0,calls=0,max=0};active.buckets[name]=bucket
                 local cost=os.clock()-started
-                bucket.total=bucket.total+cost;bucket.calls=bucket.calls+1;bucket.max=math.max(bucket.max,cost)
+                if self.timing_active and (name=='depth_draw' or name=='world_draw' or name=='screen_draw') then self.timing_draw=(self.timing_draw or 0)+cost end
+                if active then
+                    if name=='depth_draw' and select(1,...)==true then active.drew=true end
+                    local bucket=active.buckets[name] or {total=0,calls=0,max=0};active.buckets[name]=bucket
+                    bucket.total=bucket.total+cost;bucket.calls=bucket.calls+1;bucket.max=math.max(bucket.max,cost)
+                end
                 return ...
             end
             return finish(fn(...))
@@ -26,6 +33,7 @@ function M.start(sr,backend,options)
         local out=HUD.layout.compose(m,x,y,scale,opacity,cfg,clock,measure)
         local override=cfg.weapon_panel_overrides
         if override then for _,v in ipairs(out)do
+            if v.type=='text' and override.font then v.font=override.font end
             if v.type=='panel' and override.background_color then v.c=HUD.config.rgb(override.background_color)end
             if v.type=='text' and override.text_color and not v.weapon_label and not m.warning and v.text~='UNSAFE' then v.c=HUD.config.rgb(override.text_color)end
         end end
@@ -36,6 +44,7 @@ function M.start(sr,backend,options)
     local recoilless_state=HUD.recoilless_state.new()
     local senator_state=HUD.senator_state.new()
     local melta_effect={}
+    local scorcher_effect={}
     self.config=HUD.config.new()
     local attached=HUD.motion.new();local attachment_active=false
     local motion=HUD.motion.new();local reader=HUD.reader.new(backend);local view=HUD.view.new(sr)
@@ -72,12 +81,41 @@ function M.start(sr,backend,options)
         local factor=math.min(bounds.w/(maxx-minx),bounds.h/(maxy-miny),bounds.scale*1.5)
         local x=bounds.x+(bounds.w-(maxx-minx)*factor)/2
         local y=bounds.y+(bounds.h-(maxy-miny)*factor)/2
+        local preview_frames={}
+        for _,entry in ipairs(commands)do if entry.type=='panel' then
+            local key=(entry.child or entry.fold_child) and 'child' or 'main'
+            preview_frames[key]=preview_frames[key] or entry
+        end end
+        local viewport_width,viewport_height=sr.Gui.resolution()
         local result={}
         for _,c in ipairs(commands)do
             local v={};for k,value in pairs(c)do v[k]=value end
             v.x=x+(c.x-minx)*factor;v.y=y+(c.y-miny)*factor
             if v.w then v.w=v.w*factor end;if v.h then v.h=v.h*factor end
             if v.size then v.size=v.size*factor end
+            if self.config.anchor_mode=='world' then
+                local selected=v.type=='panel' and cfg.theme_shader or ((v.df_effect_sweep or v.scanline_layer or v.effect_shader_band) and cfg.effect_shader)
+                local material
+                if selected=='auto' then material=({['11c27d3babb38956']='mods/dbf_hud/materials/lab_brushed_steel',['a6a735accb4a327f']='mods/dbf_hud/materials/lab_brushed_steel',['2152d5147b0ac418']='mods/dbf_hud/materials/lab_gunmetal',['89c5493e08ca4207']='mods/dbf_hud/materials/lab_brushed_steel',['4d58c77087b774c5']='mods/dbf_hud/materials/lab_ceramic',['cdf28be026bb7d84']='mods/dbf_hud/materials/lab_crt_scan',['e8d5f49ad7780e54']='mods/dbf_hud/materials/lab_glass_sheen'})[preview_model.resource_hex]
+                elseif selected and selected~='none' then for _,entry in ipairs(HUD.shader_catalog)do if entry.id==selected then material=entry.material;break end end end
+                if material then
+                    local child=c.child or c.fold_child
+                    local effect=c.type~='panel'
+                    local mapped=material:gsub('/lab_','/mapped_')
+                    local frame=preview_frames[child and 'child' or 'main'] or preview_frames.main
+                    if frame and sr.Application.can_get('material',mapped) then
+                        material=mapped
+                        local scale=tonumber(cfg[effect and 'effect_shader_scale' or 'theme_shader_scale']) or 1
+                        if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
+                        local fx,fy=x+(frame.x-minx)*factor,y+(frame.y-miny)*factor
+                        local fw,fh=math.max(.001,frame.w*factor),math.max(.001,frame.h*factor)
+                        v.preview_mapping={viewport_width/fw/scale,0,-fx/fw/scale,0,viewport_height/fh/scale,(fy+fh-viewport_height)/fh/scale,0,0,1}
+                        v.preview_role=(child and 'child_' or 'main_')..(effect and 'effect' or 'panel')
+                    end
+                    local ok,available=pcall(sr.Application.can_get,'material',material)
+                    if ok and available then v.preview_material=material;if v.type=='panel' and selected~='auto' and math.max(v.c[1],v.c[2],v.c[3])<16 then v.c={48,48,48} end end
+                end
+            end
             if v.type=='panel' then v.type='rect';v.a=cfg.panel_opacity end
             if v.type=='text' then
                 v.font_resource,v.font_material=HUD.native_font.resolve(sr,v.font,false)
@@ -93,12 +131,32 @@ function M.start(sr,backend,options)
     local manual_until=-1;local anchor_source;local next_log=0;local last_log_status
     local last_binding
     local function log(line) if backend.log then pcall(backend.log,string.format('[%.3f] %s',self.clock,line)) end end
+    do
+        local caps={}
+        for _,namespace in ipairs({'Profiler','Window','Application'})do
+            local object=sr[namespace];local entries={}
+            if type(object)=='table' then for name,value in pairs(object)do
+                if namespace=='Profiler' or namespace=='Window' or tostring(name):lower():find('console',1,true) or tostring(name):lower():find('profil',1,true) or tostring(name):lower():find('render',1,true) then entries[#entries+1]=tostring(name)..':'..type(value)end
+            end end
+            table.sort(entries);caps[#caps+1]=namespace..'='..type(object)..'['..table.concat(entries,',')..']'
+        end
+        log('NATIVE_PROFILER_CAPABILITY '..table.concat(caps,' '))
+    end
     local function research_log(line)
         if self.config.debug_logging or line:find('failure',1,true) or line:find('missing',1,true) or line:find('stopped',1,true) then log(line) end
     end
     local world_probe=HUD.world_probe.new(sr,research_log)
     local world_display=HUD.scene_test.new(sr,research_log)
     local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log)
+    do
+        local available,total=0,0
+        for _,entry in ipairs(HUD.shader_catalog) do
+            local name=entry.material:gsub('/lab_','/local_')
+            local ok,value=pcall(sr.Application.can_get,'material',name)
+            total=total+1;if ok and value then available=available+1 end
+        end
+        log('PANEL_LOCAL_MATERIALS available='..available..' total='..total)
+    end
     world_display.draw=timed('world_draw',world_display.draw)
     if screen_scene then screen_scene.draw=timed('depth_draw',screen_scene.draw) end
     self.screen_scene_hud=true -- Auto-migrate only when the new shader package is available.
@@ -217,7 +275,43 @@ function M.start(sr,backend,options)
         if menu then menu.sync() end
     end
     function self.appearance_weapon()return model and model.resource_hex end
-    function self.panel_settings()return HUD.config.effective(self.config,self.appearance_weapon())end
+    function self.equipped_resource()return latest_raw and latest_raw.resource_hex end
+    function self.shader_status()
+        local cfg=HUD.config.effective(self.config,self.appearance_weapon())
+        local function state(key)
+            local selected=cfg[key] or (key=='theme_shader' and 'auto' or 'none')
+            if selected=='auto' then return 'automatic weapon theme (may use plain fill)' end
+            if selected=='none' then return 'normal fill' end
+            for _,entry in ipairs(HUD.shader_catalog)do if entry.id==selected then
+                local ok,available=pcall(sr.Application.can_get,'material',entry.material)
+                return entry.title..(ok and available and ' [material available]' or ' [UNAVAILABLE: normal fill fallback]')..(entry.frozen and ' [frozen sample]' or '')
+            end end
+            return 'unknown selection'
+        end
+        return 'Theme: '..state('theme_shader')..'; Effects: '..state('effect_shader')..(not cfg.effect_scanlines and not cfg.effect_sweep and ' [inactive: enable Scanlines or Sweep]' or '')..(self.config.anchor_mode~='world' and ' [3D renderer only; 2D preview uses normal fill]' or '')
+    end
+    function self.panel_settings()
+        local cfg=HUD.config.effective(self.config,self.appearance_weapon())
+        if not model then return cfg end
+        -- Read the actual themed commands; fetching is presentation-only, never a save.
+        local commands=compose(model,0,0,2,1,cfg,self.clock)
+        commands=HUD.world_style.prepare(commands,{first_person=self.first_person},cfg)
+        local frame,ink,border
+        for _,v in ipairs(commands) do
+            if v.type=='panel' and not v.child and not v.charge_meter and not frame then frame=v end
+            if v.type=='text' and not v.weapon_label and (not ink or (v.size or 0)>(ink.size or 0)) then ink=v end
+            if v.decoration and not v.charge_meter and not border then border=v end
+        end
+        local function color(v,fallback)
+            if not v or not v.c then return fallback end
+            return string.format('#%02X%02X%02X',math.max(0,math.min(255,math.floor(v.c[1]+.5))),math.max(0,math.min(255,math.floor(v.c[2]+.5))),math.max(0,math.min(255,math.floor(v.c[3]+.5))))
+        end
+        cfg.background_color=color(frame,cfg.background_color)
+        cfg.text_color=color(ink,cfg.text_color)
+        cfg.decoration_color=color(border,cfg.decoration_color)
+        if frame then cfg.panel_opacity=frame.a or cfg.panel_opacity;cfg.frosted=frame.frosted==true end
+        return cfg
+    end
     function self.configure_panel(values,resource)
         HUD.config.set_panel(self.config,resource or self.appearance_weapon(),values);self.appearance_revision=(self.appearance_revision or 0)+1
     end
@@ -342,6 +436,12 @@ function M.start(sr,backend,options)
                 end
             end
         end
+        if self.config.debug_hud_timing then
+            local s=h/1080;local t=self.hud_timing
+            local label=t and string.format('HUD CPU %.2f ms | draw avg %.2f / %.1f ms | peak %.2f ms%s',t.cpu_ms,t.draw_ms,M.draw_budget_ms,t.peak_ms,t.draw_ms>M.draw_budget_ms and ' OVER BUDGET' or '') or 'HUD CPU timing: sampling...'
+            local size=13*s;local a,b,e=HUD.font.measure(label,size,self.config.font)
+            commands[#commands+1]={type='text',text=label,font=self.config.font,x=math.max(12*s,w-20*s-(e-a))-a,y=20*s,size=size,c=M.timing_ink(t and t.draw_ms,self.clock),a=1}
+        end
         return commands
     end
     local next_weapon_screen_lookup=0;local last_weapon_screen_available
@@ -349,6 +449,7 @@ function M.start(sr,backend,options)
         if retired then return end
         if type(dt)~='number' or dt~=dt or dt<0 or dt==math.huge then dt=1/60 end
         self.clock=self.clock+dt
+        self.railgun_frame_delay=math.max(1/120,math.min(.25,dt), (self.railgun_frame_delay or 1/60)*.995)
         if self.config.debug_logging and self.clock>=next_weapon_screen_lookup then
             next_weapon_screen_lookup=self.clock+5
             local ok,available=pcall(function()
@@ -359,6 +460,17 @@ function M.start(sr,backend,options)
                 log('WEAPON_SCREEN_AVAILABILITY '..state);last_weapon_screen_available=state
             end
         end
+        if not self.native_stats_sampled and self.clock>=2 then
+            self.native_stats_sampled=true
+            local ok,stats=pcall(function()return sr.Profiler.render_stats(sr.Window.get_main_window())end)
+            local fields={}
+            local function scan(value,path,depth)
+                if #fields>=200 then return end
+                if type(value)=='table' and depth<4 then for k,v in pairs(value)do scan(v,path..'.'..tostring(k),depth+1)end
+                elseif type(value)=='number' or type(value)=='boolean' or type(value)=='string' then fields[#fields+1]=path..'='..tostring(value):sub(1,180)end
+            end
+            if ok then scan(stats,'stats',0);table.sort(fields);log('NATIVE_RENDER_STATS '..table.concat(fields,' '))else log('NATIVE_RENDER_STATS unavailable: '..tostring(stats))end
+        end
         menu.poll();if self.menu_status~=menu.status then log('MENU '..menu.status) end;self.menu_status=menu.status
         if provider then
             local ok,x,y,visible=pcall(provider)
@@ -367,11 +479,25 @@ function M.start(sr,backend,options)
         if self.clock>=next_sample then
             next_sample=self.clock+1/30
             local raw=reader.poll()
+
+
             if raw and raw.resource_hex=='ccfae6d4a601c741' then
                 if self.snowball_unit~=raw.unit_ref then self.snowball_unit=raw.unit_ref;self.snowball_pickups=(self.snowball_pickups or 0)+1 end
             end -- Returning to the gun between throws is not another pickup.
             self.sample_weapon=raw and raw.resource_hex
-            latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);if model then model.snow_party=raw.resource_hex=='ccfae6d4a601c741' and (self.snowball_pickups or 0)>=3;if raw.resource_hex=='ccfae6d4a601c741' and not model.snow_party then model=nil end end;self.status=reader.status
+            latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);if model then model.charge_sample_clock=self.clock;model.charge_frame_delay=self.railgun_frame_delay;model.snow_party=raw.resource_hex=='ccfae6d4a601c741' and (self.snowball_pickups or 0)>=3;if raw.resource_hex=='ccfae6d4a601c741' and not model.snow_party then model=nil end end;self.status=reader.status
+            if raw and raw.resource_hex=='e8d5f49ad7780e54' and raw.binding then
+                self.epoch_probe_start=self.epoch_probe_start or self.clock
+                if self.clock-self.epoch_probe_start<300 and (self.epoch_probe_count or 0)<200 and self.clock>=(self.epoch_probe_next or 0) then
+                    local value,timer=raw.binding.epoch_charge_candidate,raw.binding.epoch_charge_timer
+                    local sig=string.format('%s/%s/%s',tostring(raw.rounds),type(value)=='number' and string.format('%.5f',value) or 'missing',type(timer)=='number' and string.format('%.5f',timer) or 'missing')
+                    if sig~=self.epoch_probe_signature then
+                        self.epoch_probe_signature=sig;self.epoch_probe_count=(self.epoch_probe_count or 0)+1
+                        log('EPOCH_CHARGE_RESEARCH count/raw/timer='..sig..' native normalized charge; safety unverified')
+                    end
+                    self.epoch_probe_next=self.clock+.2
+                end
+            end
             if self.clock<60 and raw and raw.resource_hex=='6cfcc7f8801a0266' and raw.binding then
                 local signature=tostring(raw.rounds)..'/'..tostring(raw.binding.melta_charge_candidate)
                 if signature~=self.melta_candidate and self.clock>=(self.next_melta_candidate or 0) then
@@ -389,7 +515,7 @@ function M.start(sr,backend,options)
             end
             HUD.df_shell_state.step(df_shell_state,model)
             HUD.recoilless_state.step(recoilless_state,model)
-            HUD.senator_state.step(senator_state,model)
+            HUD.senator_state.step(senator_state,model,self.clock)
             HUD.melta_panel.step(melta_effect,model,self.clock)
             local mg_flash=HUD.mg_easter.step(mg_easter,model,self.clock,self.config.mg43_easter_egg)
             if model then model.mg43_flash=mg_flash;model.mg43_flash_start=mg_flash and (mg_easter.until_at-1.1) or nil end
@@ -448,6 +574,7 @@ function M.start(sr,backend,options)
                 if anchor_source=='native crosshair' then anchor=nil end
             end
         end
+        HUD.layout.scorcher_step(scorcher_effect,model,self.clock)
         -- Pose follows the render/update cadence; ammo discovery remains at 30 Hz.
         -- Holding pose samples caused stepped targets and lag-limit corrections.
         local native_first,mode_status=HUD.camera_mode.read(backend,latest_raw)
@@ -460,8 +587,23 @@ function M.start(sr,backend,options)
         if not attach_point then attach_point='root' end
         local anchor_hash=attach_point and attach_point:match('^node:(%x+)$')
         if attach_point=='sight' then anchor_hash='527c9c73' end
-        self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active) or nil
+        local melta_probe=latest_raw and latest_raw.resource_hex=='6cfcc7f8801a0266' and self.clock<30 and self.clock>=(self.melta_probe_at or 0)
+        if melta_probe then self.melta_probe_at=self.clock+.1 end
+        self.weapon_pose=latest_raw and pose.poll(latest_raw,anchor_hash and tonumber(anchor_hash,16),self.layout_editor.active or melta_probe) or nil
+        if melta_probe and self.clock>=(self.melta_report_at or 0) then
+            self.melta_report_at=self.clock+2
+            local entries={};for hash,delta in pairs(pose.melta_changes or {}) do entries[#entries+1]=string.format('%08x:%.5f',hash,delta) end
+            table.sort(entries);log('MELTA_BONE_RELATIVE max_axis_change_from_initial='..table.concat(entries,','))
+        end
         if self.weapon_pose then self.weapon_pose.attach_point=attach_point end
+        -- Bounded transition-only attachment diagnostics; no rendering changes.
+        if self.clock<60 then
+            local sig=tostring(self.weapon_pose~=nil)..':'..tostring(pose.status)..':'..tostring(self.anchor_status)
+            if self.attachment_probe_sig~=sig then
+                self.attachment_probe_sig=sig
+                log('ATTACHMENT_SYNC pose='..tostring(self.weapon_pose~=nil)..' pose_status='..tostring(pose.status)..' previous_renderer='..tostring(self.anchor_status))
+            end
+        end
         draw_bone_marker(dt)
         self.pose_status=latest_raw and pose.status or 'no weapon'
         local w,h=sr.Gui.resolution()
@@ -623,7 +765,9 @@ function M.start(sr,backend,options)
             scale=scale*math.max(.25,math.min(4,(self.hybrid_scale_depth or point.depth)/point.depth))
         end
         if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
-        local commands=compose(model,x,y,scale,alpha*aim_opacity,HUD.config.effective(self.config,model.resource_hex),self.clock)
+        local screen_config=HUD.config.effective(self.config,model.resource_hex)
+        screen_config.senator_style='upright' -- Also covers a failed WorldGUI falling back to screen.
+        local commands=compose(model,x,y,scale,alpha*aim_opacity,screen_config,self.clock)
         local frame=commands[1]
         local frame_bottom=frame.y
         for _,command in ipairs(commands) do if command.type=='panel' then frame_bottom=math.min(frame_bottom,command.y) end end
@@ -680,14 +824,24 @@ function M.start(sr,backend,options)
             self.frame_stage=frame_trial and frame_trial.phase or nil
         end
         if not retired then
+            if not profile and not self.senator_profile_done and self.sample_weapon=='8d3d52a3b2f19402' then profile={elapsed=0,frames=0,total=0,max=0,buckets={}} end
             if profile and profile.weapon and (profile.weapon~=self.sample_weapon or profile.view~=self.first_person) then
                 profile={elapsed=0,frames=0,total=0,max=0,buckets={}}
             end
             if profile then profile.drew=false end
-            local started=(profile or frame_trial) and os.clock()
+            self.timing_active=self.config.debug_hud_timing==true
+            self.timing_draw=0
+            if not self.timing_active then self.timing_window=nil;self.hud_timing=nil end
+            local started=(profile or frame_trial or self.timing_active) and os.clock()
             HUD.native_font.begin_frame()
             local ok,err=pcall(self.frame,dt)
             HUD.native_font.end_frame()
+            if self.timing_active and ok then
+                local cost=os.clock()-started
+                local t=self.timing_window or {elapsed=0,frames=0,cpu=0,draw=0,peak=0};self.timing_window=t
+                t.elapsed=t.elapsed+math.max(0,dt or 0);t.frames=t.frames+1;t.cpu=t.cpu+cost;t.draw=t.draw+(self.timing_draw or 0);t.peak=math.max(t.peak,cost)
+                if t.elapsed>=.25 then self.hud_timing={cpu_ms=1000*t.cpu/t.frames,draw_ms=1000*t.draw/t.frames,peak_ms=1000*t.peak};self.timing_window=nil end
+            end
             if frame_trial and frame_trial.collecting then frame_trial.cpu_max=math.max(frame_trial.cpu_max,os.clock()-started) end
             if profile and profile.drew then
                 profile.dt_total=(profile.dt_total or 0)+math.max(0,dt or 0);profile.dt_max=math.max(profile.dt_max or 0,dt or 0)
@@ -715,6 +869,7 @@ function M.start(sr,backend,options)
                         log(string.format('VISIBLE_RESOURCES created=%d destroyed=%d released=%d live=%d allocated=%d reused=%d bitmap_updates=%d',a,b,c,d,e,f,g or 0))
                     end
                     log('VISIBLE_INTERVALS second:max_frame_ms/max_hud_cpu_ms/shared_heap_kb '..table.concat(profile.intervals,' '))
+                    if profile.weapon=='8d3d52a3b2f19402' then self.senator_profile_done=true end
                     profile=nil
                 end
             end
@@ -755,4 +910,3 @@ function M.start(sr,backend,options)
     return self
 end
 return M
-

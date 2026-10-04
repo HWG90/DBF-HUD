@@ -142,11 +142,13 @@ function M.native()
         void* FindFirstFileA(const char*, DBF_PRESET_FIND_DATA*); int FindNextFileA(void*,DBF_PRESET_FIND_DATA*); int FindClose(void*);]])
         local win=ffi.load('kernel32');local data=ffi.new('DBF_PRESET_FIND_DATA[1]')
         local mask=preset_folder()..'/DBF-HUD-preset-*.*'
-        local handle=win.FindFirstFileA(mask,data);local names={}
+        local find_first=ffi.cast('void *(*)(const char *, void *)',win.FindFirstFileA)
+        local find_next=ffi.cast('int (*)(void *, void *)',win.FindNextFileA)
+        local handle=find_first(mask,data);local names={}
         if handle==ffi.cast('void*',-1) then return names end
         repeat local filename=ffi.string(data[0].name);local name=filename:match('^DBF%-HUD%-preset%-(.+)%.layout$') or filename:match('^DBF%-HUD%-preset%-(.+)%.lua$')
             if name and #name<=48 and name:match('^[%w _-]+$') then local exists=false;for _,v in ipairs(names)do if v==name then exists=true end end;if not exists then names[#names+1]=name end end
-        until win.FindNextFileA(handle,data)==0
+        until find_next(handle,data)==0
         win.FindClose(handle);table.sort(names);return names
     end
     function backend.read_preset(name)

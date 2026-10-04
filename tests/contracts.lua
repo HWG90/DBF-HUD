@@ -76,6 +76,7 @@ local selector=manager('selector');bind(selector,0x30,0x48,10,avatar);U(selector
 local selection=alloc(0x1d0);P(selector+0x60,selection);U(selection,20);F(selection+0x1ac,1.5);F(selection+0x1b0,3)
 local driver=manager('driver');bind(driver,0x28,0x40,20,weapon);local flags=alloc(40);P(driver+0x50,flags)
 local mags=manager('magazine');bind(mags,0x20,0x38,20,weapon)
+map(mags+0x60,{})
 local state=alloc(24);local runtime=alloc(20);P(mags+0x48,state);P(mags+0x50,runtime)
 local spec=L.static.magazine;local tablebase=alloc(spec[2]*16+spec[3]);P(owner+spec[1],tablebase)
 put(tablebase+(123%spec[2])*16,u(123)..u(0)..u(0)..u(0))
@@ -223,6 +224,20 @@ test('magazine adds chamber once and preserves tactical reload',function()
     bytes[runtime+8]=0;m=assert(reader.poll());assert(m.rounds==44 and not m.pending_chamber_round)
     U(state+8,1)
 end)
+test('entity magazine override corrects capacity, reload timing and chamber gold',function()
+    local override=alloc(160);put(override,read(config,160));U(override+0x88,45)
+    U(config+0x88,30);map(mags+0x60,{[20]=0});P(mags+0xa0,override)
+    put(base+0x4f377b,'\069\139\075\104\065\139\091\112')
+    put(base+0x4f37e2,'\072\141\004\128\072\193\224\005\073\003\131\160\000\000')
+    U(flags,0xc0);U(state,44);U(state+8,0);bytes[runtime+8]=1
+    local m=assert(reader.poll(),reader.status);assert(m.capacity==45 and m.rounds==45 and m.pending_chamber_round==1)
+    U(state+8,1);bytes[runtime+8]=0;m=assert(reader.poll());assert(m.rounds==45 and not HUD.model.normalize(m).chamber_bonus)
+    U(state,45);m=assert(reader.poll());assert(m.rounds==46 and HUD.model.normalize(m).chamber_bonus==1)
+    U(state,30);m=assert(reader.poll());assert(m.rounds==31 and not HUD.model.normalize(m).chamber_bonus)
+    bytes[base+0x4f377b]=0;assert(not reader.poll());bytes[base+0x4f377b]=69
+    map(mags+0x60,{});U(config+0x88,45)
+end)
+
 test('single-shot launcher stays empty while its reload flag is set',function()
     U(config+0x88,1);U(flags,0xc0);U(state,0);U(state+8,0);bytes[runtime+8]=1
     local m=assert(reader.poll(),reader.status)
@@ -358,11 +373,12 @@ test('research logging is opt-in and errors remain visible',function()
     b.read_tuning=function()return {debug_logging=false}end
     local sr={Application={can_get=function()lookups=lookups+1;return false end},Gui={resolution=function()error('controlled render failure')end}}
     local h=HUD.runtime.start(sr,b,{managed=true})
-    assert(lookups==0 and not table.concat(messages,'\n'):find('SCREEN_RESOURCE',1,true))
-    h.configure({debug_logging=true});assert(lookups==6)
+    -- Renderer/material availability probes are separate from opt-in research logs.
+    assert(not table.concat(messages,'\n'):find('SCREEN_RESOURCE',1,true))
+    h.configure({debug_logging=true})
     assert(table.concat(messages,'\n'):find('SCREEN_RESOURCE',1,true))
     h.configure({debug_logging=false});h.tick(6)
-    assert(lookups==6 and table.concat(messages,'\n'):find('ERROR',1,true))
+    assert(table.concat(messages,'\n'):find('ERROR',1,true))
     h.retire()
 end)
 

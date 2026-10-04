@@ -3,7 +3,7 @@ local M={}
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
     local font_host,font_handle
-    local panel_weapon,panel_refresh,panel_revision
+    local panel_weapon,panel_refresh,panel_revision,panel_guard
     local binding_host,binding_down
     local binding_id='dbf_hud_debug.force_occlusion'
     local notice,notice_until
@@ -17,7 +17,7 @@ function M.new(hud)
         local host=rawget(_G,'ModBindingsMenu')
         if not host or type(host.register_binding)~='function' or type(host.is_down)~='function' then return end
         if binding_host~=host then
-            local ok,registered=pcall(host.register_binding,binding_id,'Force occlusion',nil,{category='Debug tools - DBF HUD'})
+            local ok,registered=pcall(host.register_binding,binding_id,'Force occlusion',nil,{category='Developer - DBF HUD'})
             if not ok or not registered then return end
             binding_host=host;binding_down=false
         end
@@ -89,16 +89,12 @@ function M.new(hud)
             local preset_choices=hud.list_presets and hud.list_presets() or {}
             if #preset_choices==0 then preset_choices={'No saved presets'} end
             local placement_controls={
-                {id='hide_weapon_hud',type='button',label='Hide equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(true);assert(ok,message);return message end},
-                {id='show_weapon_hud',type='button',label='Show equipped weapon HUD',on_activate=function()local ok,message=hud.blacklist_equipped(false);assert(ok,message);return message end},
-                {id='zoom_compensation',type='toggle',label='Debug: Zoom compensation',default=hud.config.zoom_compensation,on_change=function(v)save('zoom_compensation',v)end},
-                {id='debug_occlusion',type='toggle',label='Debug: force occlusion',default=hud.config.force_occlusion,on_change=function(v)save('force_occlusion',v)end},
-                {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
-                {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end}}
+                {id='equipped_weapon_hud',type='toggle',label='Show equipped weapon HUD',require_confirmation=false,default=true,on_change=function(v)local ok,message=hud.blacklist_equipped(not v);assert(ok,message)end}}
+            local developer_motion_controls={}
             for _,row in ipairs(sliders)do
                 if placement[row[1]] then
                     local key=row[1]
-                    placement_controls[#placement_controls+1]={id=key,type='slider',label=row[2],min=row[3],max=row[4],step=row[5],default=hud.config[key],on_change=function(v)save(key,v)end}
+                    developer_motion_controls[#developer_motion_controls+1]={id=key,type='slider',label=row[2],min=row[3],max=row[4],step=row[5],default=hud.config[key],on_change=function(v)save(key,v)end}
                 end
             end
             local function refresh_presets()
@@ -141,33 +137,62 @@ function M.new(hud)
                 local ok,err=hud.reset_defaults()
                 assert(ok,err)
             end
-            local panel_controls={{type='text',label='Equipped weapon appearance',id='weapon_heading'},
+            local panel_controls={{type='text',label='Press Fetch to select the equipped weapon',id='weapon_heading'},
+                {id='fetch_weapon_appearance',type='button',label='Fetch current weapon appearance',description='Reload the equipped weapon settings, including inherited global options.',on_activate=function()
+                    assert(hud.appearance_weapon and hud.appearance_weapon(),'Equip a weapon first')
+                    if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
+                    local fetched=hud.appearance_weapon()
+                    local state=host.mods and host.mods.dbf_hud_fonts
+                    assert(state,'Appearance registration unavailable; reload HUD')
+                    local settings=hud.panel_settings()
+                    return 'Fetched '..(HUD.weapon_names[fetched] or fetched)..' appearance. '..hud.shader_status()
+                end},
                 {id='panel_inherit',type='button',label='Use global appearance',on_activate=function()
-                    hud.configure_panel(false);hud.save_tuning();if panel_refresh then panel_refresh(true)end
+                    assert(hud.appearance_weapon and hud.appearance_weapon()==panel_weapon,'Press Fetch for the equipped weapon first');hud.configure_panel(false,panel_weapon);hud.save_tuning()
                 end}}
+            local weapon_fonts={'Use global font'};for _,name in ipairs(font_choices)do weapon_fonts[#weapon_fonts+1]=name end
+            local shader_choices={'Automatic weapon theme','None'};local shader_ids={'auto','none'}
+            for _,entry in ipairs(HUD.shader_catalog)do shader_choices[#shader_choices+1]=entry.title..(entry.frozen and ' (frozen sample)' or '');shader_ids[#shader_ids+1]=entry.id end
             local panel_definitions={
+                {'theme_shader','Theme shader (3D)','choice',shader_choices},
+                {'theme_shader_scale','Panel pattern size','slider',.25,4,.05},
+                {'effect_shader','Effect shader (3D)','choice',shader_choices},
+                {'effect_shader_scale','Effect pattern size','slider',.25,4,.05},
+                {'font','Weapon font','choice',weapon_fonts},
                 {'background_color','Panel color','color'},{'text_color','Text color','color'},{'decoration_color','Decoration color','color'},
                 {'panel_opacity','Panel opacity','slider',0,1,.01},{'text_opacity','Text opacity','slider',0,1,.01},
                 {'effect_scanline_count','Scanline count','slider',1,80,1},
-                {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background','toggle'},
+                {'effect_sweep_speed','Sweep speed','slider',.05,2,.05},{'effect_sweep_density','Sweep density','slider',1,12,1},
+                {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background (2D)','toggle'},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
             local function panel_value(key)
-                local cfg=hud.panel_settings and hud.panel_settings() or hud.config
+                local cfg=panel_weapon and hud.panel_settings and hud.panel_settings() or hud.config
                 local v=cfg[key]
+                if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
+                if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
                 if key=='decoration' then for i,n in ipairs(HUD.config.decorations)do if n==v then return i end end end
                 if key=='style_3d' then for i,n in ipairs(HUD.config.styles)do if n==v then return i end end end
+                if v==nil then v=HUD.config.defaults[key] end
                 return v
             end
             for _,def in ipairs(panel_definitions)do
                 local key=def[1];local c={id='weapon_'..key,type=def[3],label=def[2],default=panel_value(key)}
+                if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Frozen samples do not animate.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Frozen samples do not animate; preview uses native materials in 3D mode.' end
+                if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
+                    if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
+                    if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
-                    assert(hud.appearance_weapon and hud.appearance_weapon()==panel_weapon,'Equipped weapon changed; reopen this control')
+                    assert(hud.appearance_weapon and hud.appearance_weapon()==panel_weapon,'Equipped weapon changed; press Fetch again')
                     hud.configure_panel({[key]=v},panel_weapon);hud.save_tuning()
                 end
                 panel_controls[#panel_controls+1]=c
+            end
+            local function panel_control(mod,id)
+                if mod.controls and mod.controls[id] then return mod.controls[id]end
+                for _,page in ipairs(mod.pages or {})do if page.id=='weapon_appearance' then for _,c in ipairs(page.controls)do if c.id==id then return c end end end end
             end
             panel_refresh=function(force)
                 local id=hud.appearance_weapon and hud.appearance_weapon()
@@ -176,66 +201,126 @@ function M.new(hud)
                 local mod=host.mods and host.mods.dbf_hud_fonts
                 if not mod then return end
                 for _,c in ipairs(panel_controls)do
-                    local registered=mod.controls and mod.controls[c.id]
+                    local registered=panel_control(mod,c.id)
                     if registered then
                         registered.disabled=id==nil
-                        if c.id=='weapon_heading' then registered.label=id and ((HUD.weapon_names[id] or id)..' - overrides global appearance') or 'Equip a weapon to edit its appearance'
+                        if c.id=='weapon_heading' then registered.label=id and ('Editing: '..(HUD.weapon_names[id] or id)) or 'Equip a weapon to edit its appearance'
                         elseif c.id:sub(1,7)=='weapon_' then mod.values[c.id]=panel_value(c.id:sub(8)) end
                     end
                 end
             end
+            panel_guard=function()
+                local id=hud.appearance_weapon and hud.appearance_weapon()
+                local mod=host.mods and host.mods.dbf_hud_fonts;if not mod then return end
+                local ready=id~=nil and id==panel_weapon
+                for _,c in ipairs(panel_controls)do local registered=panel_control(mod,c.id)
+                    if registered then
+                        if c.id=='fetch_weapon_appearance' then registered.disabled=id==nil
+                        elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Press Fetch to select the equipped weapon'
+                        else registered.disabled=not ready end
+                    end
+                end
+            end
             font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
-                description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Appearance',render_preview=hud.appearance_preview,controls={
-                    {id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
-                        default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2),
-                        on_change=function(v)save('anchor_mode',v==1 and 'weapon' or v==3 and 'world' or 'crosshair')end},
-                    {id='hud_scale',type='slider',label='HUD scale',min=.5,max=2,step=.05,default=hud.config.scale,
-                        on_change=function(v)save('scale',v)end},
-                    {id='family',type='choice',label='HUD font',choices=font_choices,default=font_index(),
-                        on_change=function(v)save('font',HUD.config.fonts[v])end},
-                    {id='style',type='choice',label='HUD style',choices=styles,default=selected_style,
-                        on_change=function(v)save('style_3d',HUD.config.styles[v])end},
-                    {id='decoration',type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index(),
-                        on_change=function(v)save('decoration',HUD.config.decorations[v])end},
-                    {id='panel_color',type='color',label='Panel color',default=hud.config.background_color,
-                        on_change=function(v)save('background_color',v)end},
-                    {id='text_color',type='color',label='Text color',default=hud.config.text_color,
-                        on_change=function(v)save('text_color',v)end},
-                    {id='decoration_color',type='color',label='Decoration color',default=hud.config.decoration_color,
-                        on_change=function(v)save('decoration_color',v)end},
+                description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Global Options',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls={
                     {id='fade_when_not_aiming',type='toggle',label='Fade when not aiming',default=hud.config.fade_3d_unless_aiming,
                         on_change=function(v)save('fade_3d_unless_aiming',v)end},
-                    {id='frosted',type='toggle',label='Frosted background (2D)',default=hud.config.frosted,on_change=function(v)save('frosted',v)end},
-                    {id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
-                    {id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
+
+
+                    {id='family',type='choice',presentation='dropdown',label='Global HUD font',choices=font_choices,default=font_index(),
+                        on_change=function(v)save('font',HUD.config.fonts[v])end},
+                    {id='style',type='choice',label='Global HUD style',choices=styles,default=selected_style,
+                        on_change=function(v)save('style_3d',HUD.config.styles[v])end},
+                    {id='decoration',type='choice',presentation='dropdown',label='Global decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index(),
+                        on_change=function(v)save('decoration',HUD.config.decorations[v])end},
+                    {id='panel_color',type='color',label='Global panel color',default=hud.config.background_color,
+                        on_change=function(v)save('background_color',v)end},
+                    {id='text_color',type='color',label='Global text color',default=hud.config.text_color,
+                        on_change=function(v)save('text_color',v)end},
+                    {id='decoration_color',type='color',label='Global decoration color',default=hud.config.decoration_color,
+                        on_change=function(v)save('decoration_color',v)end},
+}},{id='weapon_appearance',name='Weapon Appearance',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls=(function()
+                local controls,theme,effects={},{},{}
+                local effect_keys={weapon_effect_shader_scale=true,weapon_effect_shader=true,weapon_effect_scanlines=true,weapon_effect_flicker=true,weapon_effect_sweep=true,weapon_effect_scanline_count=true,weapon_effect_sweep_speed=true,weapon_effect_sweep_density=true,weapon_frosted=true}
+                for _,c in ipairs(panel_controls)do
+                    if c.id and c.id:sub(1,7)=='weapon_' and c.id~='weapon_heading' then
+                        local group=effect_keys[c.id] and effects or theme;group[#group+1]=c
+                    else controls[#controls+1]=c end
+                end
+                controls[#controls+1]={id='weapon_theme',type='section',label='Theme',collapsed=false,children=theme}
+                controls[#controls+1]={id='weapon_effects',type='section',label='Effects',collapsed=false,children=effects}
+                return controls
+            end)()},{id='developer',name='Developer',controls=(function()local controls={
+{id='render_sync_trial',type='toggle',label='Render-synchronized HUD',require_confirmation=false,description='Sample weapon pose and camera before the existing render callback. Defaults on; can be disabled here. No smoothing or offset changes. Falls back to update when the render bridge is unavailable.',default=hud.config.render_sync_trial,on_change=function(v)save('render_sync_trial',v)end},
+{id='senator_style',type='choice',require_confirmation=false,label='Senator appearance (3D)',choices={'Cylinder','Upright bullets'},description='2D always uses upright bullets.',default=hud.config.senator_style=='upright' and 2 or 1,
+                        on_change=function(v)save('senator_style',v==2 and 'upright' or 'cylinder')end},
+
+{id='display_mode',type='choice',label='Display mode',choices={'2D, Anchor to Weapon (Hybrid)','2D, Anchor to HUD/Crosshair','3D, WorldGUI'},
+                        default=hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2),
+                        on_change=function(v)save('anchor_mode',v==1 and 'weapon' or v==3 and 'world' or 'crosshair')end},
+{id='hud_scale',type='slider',label='HUD scale',min=.5,max=2,step=.05,default=hud.config.scale,
+                        on_change=function(v)save('scale',v)end},
+{id='keep_upright',type='toggle',label='Keep HUD upright',default=hud.config.keep_hud_upright,on_change=function(v)save('keep_hud_upright',v)end},
+
+
+{id='debug_hud_timing',type='toggle',label='Show HUD timing',description='Bottom-right CPU timing for HUD updates and draw calls. Includes this debug display; not GPU timing.',default=hud.config.debug_hud_timing,on_change=function(v)save('debug_hud_timing',v)end},
+{id='zoom_compensation',type='toggle',label='Debug: Zoom compensation',default=hud.config.zoom_compensation,on_change=function(v)save('zoom_compensation',v)end},
+{id='debug_occlusion',type='toggle',label='Debug: force occlusion',default=hud.config.force_occlusion,on_change=function(v)save('force_occlusion',v)end},
+{id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
+{id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end},
+
+{id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
                         on_change=function(v)save('effect_scanlines',v)end},
-                    {id='mg43_easter_egg',type='toggle',label='MG-43: Get some! Easter egg',default=hud.config.mg43_easter_egg,
+{id='mg43_easter_egg',type='toggle',label='MG-43: Get some! Easter egg',default=hud.config.mg43_easter_egg,
                         on_change=function(v)save('mg43_easter_egg',v)end},
-                    {id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
+{id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
                         on_change=function(v)save('effect_flicker',v)end},
-                    {id='effect_sweep',type='toggle',label='HUD effect: Scanning sweep',default=hud.config.effect_sweep,
+{id='effect_sweep',type='toggle',label='HUD effect: Scanning sweep',default=hud.config.effect_sweep,
                         on_change=function(v)save('effect_sweep',v)end},
-                    {id='text_opacity',type='slider',label='Text opacity',min=0,max=1,step=.01,default=hud.config.text_opacity,
-                        on_change=function(v)save('text_opacity',v)end},
-                    {id='panel_opacity',type='slider',label='Panel opacity',min=0,max=1,step=.01,default=hud.config.panel_opacity,
-                        on_change=function(v)save('panel_opacity',v)end}
-                }},{id='weapon_appearance',name='Weapon Appearance',controls=panel_controls},{id='placement',name='Placement',controls=placement_controls},{id='presets',name='Presets',require_confirmation=true,controls={
+{id='effect_sweep_speed',type='slider',label='Sweep speed',min=.05,max=2,step=.05,default=hud.config.effect_sweep_speed,on_change=function(v)save('effect_sweep_speed',v)end},
+{id='effect_sweep_density',type='slider',label='Sweep density',min=1,max=12,step=1,default=hud.config.effect_sweep_density,on_change=function(v)save('effect_sweep_density',v)end}
+};for _,c in ipairs(developer_motion_controls)do controls[#controls+1]=c end;for _,c in ipairs(placement_controls)do controls[#controls+1]=c end;return controls end)()},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset'},
-                    {id='saved_preset',type='choice',label='Saved presets',choices=preset_choices,default=1},
-                    {id='save_preset',type='button',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=save_preset},
-                    {id='load_preset',type='button',label='Load selected preset',on_activate=load_preset},
-                    {id='delete_preset',type='button',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=delete_preset},
+                    {id='saved_preset',type='choice',presentation='dropdown',label='Saved presets',choices=preset_choices,default=1},
+                    {id='save_preset',type='button',button_label='Save preset',label='Save named preset',description='Save settings and layouts. An existing name is overwritten after Apply; its previous file is backed up.',on_activate=save_preset},
+                    {id='load_preset',type='button',button_label='Load preset',label='Load selected preset',on_activate=load_preset},
+                    {id='delete_preset',type='button',button_label='Delete preset',label='Delete selected preset',description='Delete the selected saved file after applying confirmation. Current HUD settings stay unchanged.',on_activate=delete_preset},
                     {type='text',label=''},
                     {type='text',label=''},
                     {type='text',label=''},
                     {type='text',label='Reset all settings and weapon layouts'},
-                    {id='default_setup',type='button',label='Reset to Default setup',
+                    {id='default_setup',type='button',button_label='Reset defaults',label='Reset to Default setup',
                         description='Restore bundled settings and weapon layouts. Previous files are backed up.',
                         on_activate=reset_defaults}
                 }}}})
-            font_host=host;self.status='MCM > DBF-HUD';panel_refresh(true)
+            font_host=host;self.status='MCM > DBF-HUD'
         end
-        if panel_refresh then panel_refresh(true)end
+        if panel_guard then panel_guard()end
+        local visibility_mod=host and host.mods and host.mods.dbf_hud_fonts
+        local visibility_control=visibility_mod and visibility_mod.controls and visibility_mod.controls.equipped_weapon_hud
+        if visibility_control then
+            local resource=hud.equipped_resource()
+            visibility_control.disabled=resource==nil
+            visibility_mod.values.equipped_weapon_hud=resource~=nil and not HUD.config.is_blacklisted(hud.config,resource)
+        end
+        -- Native MCM owns HUD settings; do not also publish Bingus rows.
+        if font_handle then
+            if not self.scale_controls_reported then
+                self.scale_controls_reported=true
+                local mod=font_host and font_host.mods and font_host.mods.dbf_hud_fonts
+                local found={};local seen={}
+                local function inspect(node)
+                    if type(node)~='table' or seen[node] then return end;seen[node]=true
+                    if node.id=='weapon_theme_shader_scale' or node.id=='weapon_effect_shader_scale' then found[node.id]=node.label end
+                    for _,v in pairs(node)do if type(v)=='table' then inspect(v)end end
+                end
+                inspect(mod)
+                local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/Pattern-scale-registration.log'),'w')
+                if f then f:write('panel='..tostring(found.weapon_theme_shader_scale)..' effect='..tostring(found.weapon_effect_shader_scale)..' native_dependency=existing_mapped_programs\n');f:close() end
+            end
+            if routes then for _,route in pairs(routes) do if route.owner==self then route.callback=nil;route.owner=nil end end end
+            return
+        end
         if attempted then return end
         api=rawget(_G,'ModOptionsMenu')
         if not api or api.api~=1 then return end
@@ -250,7 +335,7 @@ function M.new(hud)
         if routes['dbf_hud_v4.show_3d'] then routes['dbf_hud_v4.show_3d'].callback=nil end
         if routes['dbf_hud_v4.always_show_3d'] then routes['dbf_hud_v4.always_show_3d'].callback=nil end
         local function add(k,spec,callback)
-            spec.mod=k:match('^editor_') and 'DBF-HUD Layout Editor' or (placement[k] and 'DBF-HUD Placement' or 'DBF-HUD')
+            spec.mod=(k:match('^debug_') or k=='zoom_compensation' or k=='force_occlusion' or (placement[k] and k~='keep_hud_upright')) and 'DBF-HUD Developer' or k:match('^editor_') and 'DBF-HUD Layout Editor' or (placement[k] and 'DBF-HUD Placement' or 'DBF-HUD')
             local id=option_id(k)
             local exists=routes[id] or (type(api.get)=='function' and api.get(id)~=nil)
             if not exists then local ok,err=api.register_option(id,spec);assert(ok,err) end
@@ -294,7 +379,7 @@ function M.new(hud)
                     hud.configure({[k]=v});hud.save_tuning()
                 end)
             end
-            add('decoration',{type='choice',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index()},function(v)
+            add('decoration',{type='choice',presentation='dropdown',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index()},function(v)
                 hud.configure({decoration=assert(HUD.config.decorations[v])});hud.save_tuning()
             end)
             -- ModOptionsMenu accepts at most sixteen names per choice.

@@ -6,6 +6,8 @@ function M.prepare(commands,p,c)
                     if c.placement_mode=='auto' and p.first_person then scale=scale*.5 end;local centered={}
                     for _,command in ipairs(commands) do
                         local v={};for k,value in pairs(command) do v[k]=value end
+                        if command.type=='panel' then v.source_panel=command end
+                        if v.effect_band then v.effect_band=v.effect_band*scale end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
                         if v.quad then local q={};for i,p in ipairs(v.quad) do q[i]={(p[1]-f.x-f.w/2)*scale,(p[2]-f.y-f.h/2)*scale} end;v.quad=q end
                         if v.w then v.w=v.w*scale end
@@ -198,6 +200,48 @@ function M.prepare(commands,p,c)
         end
     end
     HUD.layout.fuel_marker(centered,function(t,size,font)return HUD.font.measure(t,size,font,true)end)
+    -- Shared physical spacing and travel rate, measured on the fitted main box.
+    local sweep_panels,templates,kept={},{},{}
+    for _,v in ipairs(centered)do if v.type=='panel' and v.source_panel then sweep_panels[v.source_panel]=v end end
+    -- Scanline materials follow the final fitted box, including resized child footers.
+    for _,v in ipairs(centered)do
+        if v.effect_shader_band and v.effect_owner then
+            local frame=sweep_panels[v.effect_owner]
+            if frame then
+                v.x=frame.x;v.w=frame.w
+                v.y=frame.y+frame.h*math.max(0,math.min(1,v.df_effect_fraction or 0))
+                v.h=math.max(0,math.min(v.h,frame.y+frame.h-v.y))
+                v.child=frame.child;v.fold_child=frame.fold_child
+                v.panel_uv={0,1-(v.y-frame.y+v.h)/math.max(.001,frame.h),1,1-(v.y-frame.y)/math.max(.001,frame.h)}
+            end
+        end
+    end
+    for _,v in ipairs(centered)do
+        if v.df_effect_sweep and v.effect_owner then templates[v.effect_owner]=templates[v.effect_owner] or v
+        else kept[#kept+1]=v end
+    end
+    local reference=centered[1]
+    local spacing=math.max(.001,reference.h/math.max(1,math.min(12,c.effect_sweep_density or 3)))
+    local speed=(c.effect_sweep_speed or .35)*reference.h
+    for owner,template in pairs(templates)do
+        local frame=sweep_panels[owner]
+        if frame then
+            local band=math.max(0,math.min(template.effect_band or template.h or 0,frame.h))
+            local offset=((template.effect_clock or 0)*speed)%spacing
+            for k=-1,math.ceil(frame.h/spacing)do
+                local low=offset+k*spacing
+                local bottom=math.max(0,low);local top=math.min(frame.h,low+band)
+                if top>bottom then
+                    local v={};for key,value in pairs(template)do v[key]=value end
+                    v.x=frame.x;v.w=math.max(0,frame.w);v.y=frame.y+bottom;v.h=top-bottom
+                    v.child=frame.child;v.fold_child=frame.fold_child
+                    v.panel_uv={0,1-top/math.max(.001,frame.h),1,1-bottom/math.max(.001,frame.h)}
+                    kept[#kept+1]=v
+                end
+            end
+        end
+    end
+    centered=kept
     return centered
 end
 return M

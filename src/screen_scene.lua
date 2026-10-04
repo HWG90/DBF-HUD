@@ -62,6 +62,22 @@ end
 function M.new(sr,log)
     local A,W,G=sr.Application,sr.World,sr.Gui
     local fill='mods/dbf_hud/materials/screen_hud_fill'
+    local dither='mods/dbf_hud/materials/scythe_dither_fill';local dither_available
+    local panel_effects={['11c27d3babb38956']='mods/dbf_hud/materials/lab_brushed_steel',['a6a735accb4a327f']='mods/dbf_hud/materials/lab_brushed_steel',['2152d5147b0ac418']='mods/dbf_hud/materials/lab_gunmetal',['89c5493e08ca4207']='mods/dbf_hud/materials/lab_brushed_steel',['4d58c77087b774c5']='mods/dbf_hud/materials/lab_ceramic',['cdf28be026bb7d84']='mods/dbf_hud/materials/lab_crt_scan',['e8d5f49ad7780e54']='mods/dbf_hud/materials/lab_glass_sheen'};local effect_availability={};local shader_submitted={}
+    local shader_materials={};for _,entry in ipairs(HUD.shader_catalog)do shader_materials[entry.id]=entry.material end
+    local function panel_material(v,weapon,c)
+        local selected,name
+        if v.type=='panel' and (not v.frosted or (c.theme_shader and c.theme_shader~='auto' and c.theme_shader~='none')) then
+            selected=c.theme_shader or 'auto';name=selected=='auto' and panel_effects[weapon] or shader_materials[selected]
+        elseif v.df_effect_sweep or v.scanline_layer or v.effect_shader_band then
+            selected=c.effect_shader or 'none';name=selected=='auto' and panel_effects[weapon] or shader_materials[selected]
+        end
+        if not name then return nil end
+        if effect_availability[name]==nil then effect_availability[name]=A.can_get('material',name)==true;log('HUD_SHADER material='..name..' available='..tostring(effect_availability[name])) end
+        return effect_availability[name] and name or nil
+    end
+
+    local effect_guis={}
     local gui,child_gui,world,atlas_gui;local ids={};local glyphs={};local bitmap_updates=0;local reuse_glyphs=type(G.update_bitmap_3d_uv)=='function';local recycled={};local allocated,reused=0,0;local failed=false;local first=true
     local self={status='screen scene assets not loaded'}
     local function live(w)
@@ -91,6 +107,7 @@ function M.new(sr,log)
     end
     function self.release()
         if gui and live(world) then
+            for _,effect_gui in pairs(effect_guis) do W.destroy_gui(world,effect_gui) end;effect_guis={}
             if child_gui then W.destroy_gui(world,child_gui) end
             if atlas_gui then W.destroy_gui(world,atlas_gui) end
             W.destroy_gui(world,gui)
@@ -102,6 +119,7 @@ function M.new(sr,log)
         if not p or not camera or not A.can_get or not A.can_get('material',fill) then self.release();return false end
         assert(type(G.triangle)=='function' and type(G.destroy_triangle)=='function','screen triangle API unavailable')
         assert(type(G.material)=='function' and sr.Material and type(sr.Material.set_scalar)=='function','material parameters unavailable')
+        if dither_available==nil then dither_available=A.can_get('material',dither)==true;log('SCYTHE_DITHER material_available='..tostring(dither_available)) end
         local target;local main=A.main_world()
         for _,v in pairs(A.worlds() or {}) do if v~=main then target=v;break end end
         if not target then self.release();return false end
@@ -154,15 +172,45 @@ function M.new(sr,log)
                 end
                 log(string.format('SCREEN_CLIP near=%.6f enabled=%d corners=%.6f,%.6f,%.6f,%.6f',hud_near,enabled,unpack(depths)))
             end
+            -- One panel coordinate system per GUI/pose, shared by its shader materials.
+            -- Child folds already use a separate GUI and render pose.
+            local mapping_rows,mapping_checked
+            local function panel_mapping()
+                if mapping_checked then return mapping_rows end
+                mapping_checked=true
+                local frame
+                for _,entry in ipairs(list) do if entry.type=='panel' then frame=entry;break end end
+                if not frame or frame.w<=0 or frame.h<=0 then return nil end
+                local x,y,z=M.point(axes,origin,frame.x,frame.y+frame.h)
+                local rx,ry,rz=M.point(axes,origin,frame.x+frame.w,frame.y+frame.h)
+                local bx,by,bz=M.point(axes,origin,frame.x,frame.y)
+                local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
+                if rows[1] then mapping_rows=rows end
+                return mapping_rows
+            end
             local materials={}
-            local function material(name,texture)
-                if not materials[name] then
+            local function role_gui(role)
+                if role~='effect' then return draw_gui end
+                effect_guis[draw_gui]=effect_guis[draw_gui] or assert(W.create_screen_gui(world,'scale',1,1),'screen effect GUI missing')
+                return effect_guis[draw_gui]
+            end
+            local function material(name,texture,role)
+                local cache_key=(role or 'panel')..':'..name
+                if not materials[cache_key] then
                     assert(A.can_get('material',name),'screen scene font material missing: '..name)
-                    local handle=assert(G.material(draw_gui,name),'screen scene material unavailable')
+                    local handle=assert(G.material(role_gui(role),name),'screen scene material unavailable')
                     if texture then sr.Material.set_texture(handle,'diffuse_map',texture) end
                     sr.Material.set_scalar(handle,'threshold_fade',depth)
                     sr.Material.set_scalar(handle,'scissor_mode',enabled)
-                    materials[name]=true
+                    if name:find('/mapped_',1,true) then
+                        local rows=assert(panel_mapping(),'panel shader mapping unavailable')
+                        local scale=tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
+                        if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
+                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,0))
+                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,0))
+                        sr.Material.set_vector4(handle,'clip_box',sr.Vector4(rows[7],rows[8],rows[9],0))
+                    end
+                    materials[cache_key]=true
                 end
                 return name
             end
@@ -175,7 +223,7 @@ function M.new(sr,log)
             local corners={{},{},{},{}}
             local clipping_scratch={camera={{},{},{},{}},result={{},{},{},{}}}
             local function vertex(p)return sr.Vector3(p.x*width,0,p.y*height) end
-            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect)
+            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role)
                 if w<=0 or h<=0 then return end
                 for i=1,4 do
                     local right=i==2 or i==3;local upper=i>=3
@@ -194,19 +242,32 @@ function M.new(sr,log)
                     local thickness=length>0 and math.abs(dx*(d.y-a.y)*height-dy*(d.x-a.x)*width)/length or 0
                     log(string.format('SCANLINE_PIXEL_PROBE projected_length_px=%.3f projected_thickness_px=%.4f',length,thickness));self.scanline_probe=true
                 end
-                name=material(name,texture)
+                name=material(name,texture,role)
+                local primitive_gui=role_gui(role)
                 for i=2,#polygon-1 do
                     local a,b,d=polygon[1],polygon[i],polygon[i+1]
-                    local id=G.triangle(draw_gui,vertex(a),vertex(b),vertex(d),layer,color,name,
+                    local id=G.triangle(primitive_gui,vertex(a),vertex(b),vertex(d),layer,color,name,
                         uv and sr.Vector2(a.s,a.v) or nil,uv and sr.Vector2(b.s,b.v) or nil,uv and sr.Vector2(d.s,d.v) or nil)
-                    track(draw_gui,id)
+                    track(primitive_gui,id)
+                    if id and (name:find('/lab_',1,true) or name:find('/local_',1,true) or name:find('/mapped_',1,true)) and not shader_submitted[name] then shader_submitted[name]=true;log('HUD_SHADER_SUBMITTED material='..name..' weapon='..tostring(p.resource_hex)..' triangle='..tostring(id)) end
                     if effect and id then scan_emitted=scan_emitted+1 end
                 end
             end
             for _,v in ipairs(list) do
                 local function color(alpha,ink)ink=ink or v.c;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
                 if (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
-                    quad(v.x,v.y,v.w,v.h,fill,color(1),v.type=='panel' and 48 or (v.scanline_layer and 50.5 or (v.fuel_marker_piece and 51 or 50)),nil,nil,v.quad,v.df_effect_frame)
+                    local selected_material=panel_material(v,p.resource_hex,c)
+                    local panel_uv
+                    if selected_material and selected_material:find("/lab_",1,true) then
+                        local mapped_material=selected_material:gsub('/lab_','/mapped_')
+                        if effect_availability[mapped_material]==nil then effect_availability[mapped_material]=A.can_get('material',mapped_material)==true end
+                        if effect_availability[mapped_material] and panel_mapping() then selected_material=mapped_material end
+                    end
+                    local shader_ink=v.c
+                    -- Multiplicative textures cannot produce detail from pure black.
+                    -- Keep the saved palette intact; only explicit textured backdrops use a dim carrier.
+                    if v.type=='panel' and selected_material and c.theme_shader~='auto' and math.max(v.c[1],v.c[2],v.c[3])<16 then shader_ink={48,48,48} end
+                    quad(v.x,v.y,v.w,v.h,(p.resource_hex=='27ee1ed8f6fb6356' and v.heat_fill and dither_available) and dither or selected_material or fill,color(1,shader_ink),v.type=='panel' and 48 or (v.scanline_layer and 50.5 or (v.fuel_marker_piece and 51 or 50)),panel_uv,nil,v.quad,v.df_effect_frame,(v.type~='panel' and selected_material and selected_material:find('/mapped_',1,true)) and 'effect' or nil)
                 elseif v.type=='text' and not v.fuel_endpoint and not c.profile_skip_text then
                     local key=v.font or 'bigblue';local face=HUD.native_font_data.faces[key]
                     local uv=HUD.native_font_uv[key]
@@ -321,6 +382,7 @@ function M.new(sr,log)
                 {x=at.x+m[9]*hinge/1000,y=at.y+m[10]*hinge/1000,z=at.z+m[11]*hinge/1000},child_gui)
         elseif child_gui then
             if glyphs[child_gui] then released=released+#glyphs[child_gui].ids;glyphs[child_gui]=nil end
+            if effect_guis[child_gui] then W.destroy_gui(world,effect_guis[child_gui]);effect_guis[child_gui]=nil end
             W.destroy_gui(world,child_gui);child_gui=nil
         end
         for draw_gui,pool in pairs(glyphs) do

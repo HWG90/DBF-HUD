@@ -170,7 +170,9 @@ function M.new(hud,backend,log)
         e.set_view(hud.first_person)
         e.set('x',0);e.set('y',0);e.set('z',0)
         e.set_scale(1)
-        e.status='Position zeroed and scale reset to 1 for current weapon/view; F7 saves'
+        local offset=hud.weapon_clearance[e.resource][e.view]
+        offset.rotation=0;offset.pitch=0;offset.yaw=0
+        e.status='Transform reset: position and rotation 0, scale 1; F7 saves, F8 restores'
         log('LAYOUT_EDITOR '..e.status)
         return true
     end
@@ -220,7 +222,15 @@ function M.new(hud,backend,log)
         end
         if pressed(118) and e.active then e.save();notice_until=now+4 end -- F7
         if pressed(119) and e.active then e.reset();notice_until=now+4 end -- F8
-        if pressed(120) and e.active then e.zero_position();notice_until=now+4 end -- F9
+        local reset_menu=rawget(_G,'DBFMCM')
+        local reset_menu_open=false
+        if reset_menu and type(reset_menu.is_open)=='function' then
+            local ok,opened=pcall(reset_menu.is_open);reset_menu_open=not ok or opened==true
+        end
+        if pressed(192) and e.active and not reset_menu_open and not backend.editor_key(17) and not backend.editor_key(18) then
+            e.zero_position();notice_until=now+4
+        end -- Grave/tilde physical key: editor only; suppress during MCM text entry and Ctrl/Alt shortcuts
+        if pressed(48) and e.active then e.ultra_fine=not e.ultra_fine;e.status=e.ultra_fine and 'Ultra-fine enabled: hold Shift to move' or 'Fine movement restored';notice_until=now+4 end -- 0
         if pressed(219) and e.active then e.cycle(-1) end -- [
         if pressed(221) and e.active then e.cycle(1) end -- ]
         if pressed(188) and e.active then e.rotate(-(backend.editor_key(16) and 5 or 45),backend.editor_key(17) and 'pitch' or (backend.editor_key(18) and 'yaw' or 'rotation')) end -- comma
@@ -234,7 +244,9 @@ function M.new(hud,backend,log)
             local views=hud.weapon_clearance[e.resource] or {}
             e.shared=false
             e.set_view(hud.first_person)
+            local ultra_fine=e.ultra_fine and backend.editor_key(16)
             local step=screen() and (backend.editor_key(16) and .25 or (backend.editor_key(17) and 20 or 5)) or (backend.editor_key(16) and .03125 or (backend.editor_key(17) and 2 or .5))
+            if ultra_fine then step=step*.1 end
             for _,binding in ipairs({{37,'x',-1},{39,'x',1},{38,'z',1},{40,'z',-1},{33,'y',1},{34,'y',-1}}) do
                 local key,axis,sign=binding[1],binding[2],binding[3];local down=backend.editor_key(key)
                 if down and (not repeats[key] or now>=repeats[key]) then
@@ -253,12 +265,13 @@ function M.new(hud,backend,log)
         local offset=(hud.weapon_clearance[e.resource] or {})[e.view] or {}
         local point=offset.attach_point or 'root';local point_label=point
         for _,item in ipairs(e.points()) do if item.value==point then point_label=item.label;break end end
-        local label=e.active and string.format('EDIT %s | %s | %s | X %.2f Y %.2f Z %.2f in | SCALE %.0f%%',e.name,e.view=='right' and (e.shared and 'SHARED' or 'THIRD') or 'FIRST',point_label,x,y,z,e.scale()*100) or e.status
+        local label=e.active and string.format('EDIT %s | %s | %s | X %.4f Y %.4f Z %.4f in | SCALE %.0f%%',e.name,e.view=='right' and (e.shared and 'SHARED' or 'THIRD') or 'FIRST',point_label,x,y,z,e.scale()*100) or e.status
         if e.active and not screen() then label=label..string.format(' | ROLL %.0f PITCH %.0f YAW %.0f deg',e.rotation(),e.rotation('pitch'),e.rotation('yaw')) end
-        if e.active and screen() then label=string.format('EDIT %s | %s | X %.0f Y %.0f px | SCALE %.0f%%',e.name,e.view,x,z,e.scale()*100) end
+        if e.active and screen() then label=string.format('EDIT %s | %s | X %.3f Y %.3f px | SCALE %.0f%%',e.name,e.view,x,z,e.scale()*100) end
+        if e.active then label=label..(e.ultra_fine and ' | SHIFT: ULTRA-FINE' or ' | SHIFT: FINE')end
         return {{type='text',text=label,font=font,x=32*s,y=h-160*s,size=18*s,c={255,255,255},a=1},
             {type='text',text=e.status,font=font,x=32*s,y=h-135*s,size=16*s,c=e.status:match('^Saved:') and {100,255,160} or {255,255,255},a=1},
-            {type='text',text='Ctrl+F5 reload settings | F6 edit  F7 save  F8 restore  F9 zero position | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | , / . roll | Ctrl+,/. pitch | Alt+,/. yaw | Shift fine',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
+            {type='text',text='Ctrl+F5 reload settings | F6 edit  F7 save  F8 restore  ~ Reset transforms | Arrows move  PgUp/PgDn depth | [ / ] bone | - / + scale | , / . roll | Ctrl+,/. pitch | Alt+,/. yaw | Shift fine  0 toggle ultra-fine',font=font,x=32*s,y=h-185*s,size=13*s,c={255,255,255},a=1}}
     end
     return e
 end

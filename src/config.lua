@@ -12,10 +12,10 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={weapon_panels={},effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
-    panel_opacity=0.55,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
+M.defaults={theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+    panel_opacity=0.8,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -27,7 +27,50 @@ function M.rgb(v)
     v=M.hex(v);return {tonumber(v:sub(2,3),16),tonumber(v:sub(4,5),16),tonumber(v:sub(6,7),16)}
 end
 function M.new() local t={};for k,v in pairs(M.defaults) do t[k]=type(v)=='table' and {} or v end;return t end
-M.panel_keys={background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_scanline_count=true,style_3d=true,font=true}
+HUD.shader_catalog={
+{id='checker_fine',title="Fine checker dither",material='mods/dbf_hud/materials/lab_checker_fine',frozen=false},
+{id='checker_coarse',title="Coarse VGA checker",material='mods/dbf_hud/materials/lab_checker_coarse',frozen=false},
+{id='bayer',title="Ordered 4-level dither",material='mods/dbf_hud/materials/lab_bayer',frozen=false},
+{id='diagonal_weave',title="Diagonal weave",material='mods/dbf_hud/materials/lab_diagonal_weave',frozen=false},
+{id='dot_matrix',title="Dot matrix",material='mods/dbf_hud/materials/lab_dot_matrix',frozen=false},
+{id='crt_scan',title="CRT scanlines",material='mods/dbf_hud/materials/lab_crt_scan',frozen=false},
+{id='crt_phosphor',title="RGB phosphor mask",material='mods/dbf_hud/materials/lab_crt_phosphor',frozen=false},
+{id='glass_sheen',title="Glass sheen",material='mods/dbf_hud/materials/lab_glass_sheen',frozen=false},
+{id='brushed_steel',title="Brushed steel",material='mods/dbf_hud/materials/lab_brushed_steel',frozen=false},
+{id='hammered_metal',title="Hammered metal",material='mods/dbf_hud/materials/lab_hammered_metal',frozen=false},
+{id='ceramic',title="Ceramic enamel",material='mods/dbf_hud/materials/lab_ceramic',frozen=false},
+{id='thermal',title="Thermal glow",material='mods/dbf_hud/materials/lab_thermal',frozen=false},
+{id='warning_hatch',title="Warning hatch",material='mods/dbf_hud/materials/lab_warning_hatch',frozen=false},
+{id='sweep',title="Scanner sweep",material='mods/dbf_hud/materials/lab_sweep',frozen=true},
+{id='pulse',title="Warning pulse",material='mods/dbf_hud/materials/lab_pulse',frozen=true},
+{id='circuit',title="Circuit traces",material='mods/dbf_hud/materials/lab_circuit',frozen=false},
+{id='hex_cells',title="Hex-like cell lattice",material='mods/dbf_hud/materials/lab_hex_cells',frozen=false},
+{id='ion_noise',title="Ion interference",material='mods/dbf_hud/materials/lab_ion_noise',frozen=true},
+{id='heat_shimmer',title="Heat shimmer tint",material='mods/dbf_hud/materials/lab_heat_shimmer',frozen=true},
+{id='blueprint',title="Blueprint cross grid",material='mods/dbf_hud/materials/lab_blueprint',frozen=false},
+{id='carbon',title="Carbon weave",material='mods/dbf_hud/materials/lab_carbon',frozen=false},
+{id='ribbed_alloy',title="Ribbed alloy",material='mods/dbf_hud/materials/lab_ribbed_alloy',frozen=false},
+{id='oxidized_copper',title="Oxidized copper",material='mods/dbf_hud/materials/lab_oxidized_copper',frozen=false},
+{id='etched_scale',title="Etched calibration",material='mods/dbf_hud/materials/lab_etched_scale',frozen=false},
+{id='micro_mesh',title="Micro mesh",material='mods/dbf_hud/materials/lab_micro_mesh',frozen=false},
+{id='triangular_grille',title="Triangular grille",material='mods/dbf_hud/materials/lab_triangular_grille',frozen=false},
+{id='caution_dots',title="Caution dot tape",material='mods/dbf_hud/materials/lab_caution_dots',frozen=false},
+{id='ceramic_cracks',title="Cracked ceramic",material='mods/dbf_hud/materials/lab_ceramic_cracks',frozen=false},
+{id='iridescent',title="Iridescent coating",material='mods/dbf_hud/materials/lab_iridescent',frozen=false},
+{id='amber_glass',title="Amber instrument glass",material='mods/dbf_hud/materials/lab_amber_glass',frozen=false},
+{id='cobalt_glass',title="Cobalt instrument glass",material='mods/dbf_hud/materials/lab_cobalt_glass',frozen=false},
+{id='frosted',title="Frosted diffusion",material='mods/dbf_hud/materials/lab_frosted',frozen=false},
+{id='gunmetal',title="Gunmetal stipple",material='mods/dbf_hud/materials/lab_gunmetal',frozen=false},
+{id='leather',title="Grip leather",material='mods/dbf_hud/materials/lab_leather',frozen=false},
+{id='hazard_red',title="Red emergency hatch",material='mods/dbf_hud/materials/lab_hazard_red',frozen=false},
+{id='rail_glints',title="Rail glints",material='mods/dbf_hud/materials/lab_rail_glints',frozen=false},
+{id='energy_threads',title="Energy threads",material='mods/dbf_hud/materials/lab_energy_threads',frozen=false},
+{id='grid_nodes',title="PCB nodes",material='mods/dbf_hud/materials/lab_grid_nodes',frozen=false},
+{id='stipple_gradient',title="Stipple shading",material='mods/dbf_hud/materials/lab_stipple_gradient',frozen=false},
+{id='prismatic',title="Prismatic facets",material='mods/dbf_hud/materials/lab_prismatic',frozen=false},
+}
+HUD.shader_ids={auto=true,none=true};for _,entry in ipairs(HUD.shader_catalog)do HUD.shader_ids[entry.id]=true end
+M.panel_keys={theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
 function M.effective(config,resource)
  local out={};for k,v in pairs(config)do out[k]=v end
  local overrides=(config.weapon_panels or {})[resource or '']
@@ -39,7 +82,7 @@ function M.set_panel(config,resource,values)
  local panels={};for id,profile in pairs(config.weapon_panels or {})do panels[id]=profile end
  if values==false then panels[resource]=nil else
   local profile={};for k,v in pairs(panels[resource] or {})do profile[k]=v end
-  for k,v in pairs(values)do assert(M.panel_keys[k],'Not a panel appearance setting: '..tostring(k));profile[k]=v end
+  for k,v in pairs(values)do assert(M.panel_keys[k],'Not a panel appearance setting: '..tostring(k));if k=='font' and v==false then profile[k]=nil else profile[k]=v end end
   panels[resource]=profile
  end
  M.apply(config,{weapon_panels=panels})
@@ -88,7 +131,9 @@ function M.apply(config,values)
             end
             v=validated
         elseif limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif k=='theme_shader' or k=='effect_shader' then assert(type(v)=='string' and HUD.shader_ids[v],'Unknown HUD shader')
+        elseif k=='senator_style' then assert(v=='cylinder' or v=='upright','invalid Senator appearance')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
         elseif k=='occlusion_mode' then assert(v=='mesh' or v=='gui' or v=='gui_depth','invalid occlusion mode')

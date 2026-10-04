@@ -27,7 +27,7 @@ return {
     offset_x = 62,
     offset_y = -5,
     opacity = 1,
-    panel_opacity = 0.55000000000000004,
+    panel_opacity = 0.8,
     scale = 1,
     settle = 0.22,
     style_3d = "retro",

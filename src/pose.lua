@@ -50,6 +50,18 @@ function M.new(backend)
             for n=0,nodes-1 do
                 local hash=r.u(data,n*4)
                 if enumerate then anchors[#anchors+1]={index=n,hash=string.format('%08x',hash)} end
+                if raw.resource_hex=='6cfcc7f8801a0266' and enumerate then
+                    local nb=r.read(address+n*64,64);local rel={}
+                    for aa=0,2 do for bb=0,2 do
+                        local dot=0;for kk=0,2 do dot=dot+matrix[aa*4+kk+1]*r.f(nb,(bb*4+kk)*4) end
+                        rel[#rel+1]=dot
+                    end end
+                    self.melta_relative=self.melta_relative or {};local prev=self.melta_relative[hash]
+                    if prev then
+                        local delta=0;for ii=1,9 do delta=math.max(delta,math.abs(rel[ii]-prev[ii])) end
+                        self.melta_changes=self.melta_changes or {};self.melta_changes[hash]=math.max(self.melta_changes[hash] or 0,delta)
+                    else self.melta_relative[hash]=rel end
+                end
                 if hash==(anchor_hash or 0x4d25685a) or (not anchor_hash and hash==0x527c9c73 and selected_hash~=0x4d25685a) then
                     local pose=r.read(address+n*64,64);local delta={}
                     for j=1,3 do delta[j]=r.f(pose,(11+j)*4)-matrix[12+j];assert(math.abs(delta[j])<5,'sight bounds') end

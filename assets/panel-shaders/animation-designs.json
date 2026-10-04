@@ -1,0 +1,807 @@
+{
+  "count": 40,
+  "live_animation_verified": false,
+  "uniform_binding_metadata_preserved": true,
+  "variants": [
+    {
+      "id": "amber_glass",
+      "motion": "Amber lens reflection",
+      "compiled_bytes": 2508,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_amber_glass"
+      }
+    },
+    {
+      "id": "bayer",
+      "motion": "Ordered dither illumination",
+      "compiled_bytes": 2456,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_bayer"
+      }
+    },
+    {
+      "id": "blueprint",
+      "motion": "Grid inspection sweep",
+      "compiled_bytes": 2580,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_blueprint"
+      }
+    },
+    {
+      "id": "brushed_steel",
+      "motion": "Brushed highlight along grain",
+      "compiled_bytes": 2432,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_brushed_steel"
+      }
+    },
+    {
+      "id": "carbon",
+      "motion": "Weave reflection",
+      "compiled_bytes": 2552,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_carbon"
+      }
+    },
+    {
+      "id": "caution_dots",
+      "motion": "Alternating dot warning",
+      "compiled_bytes": 2492,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_caution_dots"
+      }
+    },
+    {
+      "id": "ceramic",
+      "motion": "Ceramic gloss reflection",
+      "compiled_bytes": 2460,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_ceramic"
+      }
+    },
+    {
+      "id": "ceramic_cracks",
+      "motion": "Light along fracture lines",
+      "compiled_bytes": 2480,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_ceramic_cracks"
+      }
+    },
+    {
+      "id": "checker_coarse",
+      "motion": "Alternating coarse cells",
+      "compiled_bytes": 2496,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_checker_coarse"
+      }
+    },
+    {
+      "id": "checker_fine",
+      "motion": "Alternating fine cells",
+      "compiled_bytes": 2384,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_checker_fine"
+      }
+    },
+    {
+      "id": "circuit",
+      "motion": "Trace signal packets",
+      "compiled_bytes": 2740,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_circuit"
+      }
+    },
+    {
+      "id": "cobalt_glass",
+      "motion": "Cool lens reflection",
+      "compiled_bytes": 2328,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_cobalt_glass"
+      }
+    },
+    {
+      "id": "crt_phosphor",
+      "motion": "Phosphor refresh scan",
+      "compiled_bytes": 2568,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_crt_phosphor"
+      }
+    },
+    {
+      "id": "crt_scan",
+      "motion": "Rolling CRT refresh",
+      "compiled_bytes": 2380,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_crt_scan"
+      }
+    },
+    {
+      "id": "diagonal_weave",
+      "motion": "Diagonal fiber sheen",
+      "compiled_bytes": 2436,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_diagonal_weave"
+      }
+    },
+    {
+      "id": "dot_matrix",
+      "motion": "Dot row refresh",
+      "compiled_bytes": 2600,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_dot_matrix"
+      }
+    },
+    {
+      "id": "energy_threads",
+      "motion": "Flowing energy threads",
+      "compiled_bytes": 2240,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_energy_threads"
+      }
+    },
+    {
+      "id": "etched_scale",
+      "motion": "Calibration inspection light",
+      "compiled_bytes": 2464,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_etched_scale"
+      }
+    },
+    {
+      "id": "frosted",
+      "motion": "Fine diffusion shimmer",
+      "compiled_bytes": 2728,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_frosted"
+      }
+    },
+    {
+      "id": "glass_sheen",
+      "motion": "Moving glass reflection",
+      "compiled_bytes": 2360,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_glass_sheen"
+      }
+    },
+    {
+      "id": "grid_nodes",
+      "motion": "Staggered node pulses",
+      "compiled_bytes": 2552,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_grid_nodes"
+      }
+    },
+    {
+      "id": "gunmetal",
+      "motion": "Restrained grain reflection",
+      "compiled_bytes": 2496,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_gunmetal"
+      }
+    },
+    {
+      "id": "hammered_metal",
+      "motion": "Faceted hammered highlights",
+      "compiled_bytes": 2416,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_hammered_metal"
+      }
+    },
+    {
+      "id": "hazard_red",
+      "motion": "Red warning conveyor",
+      "compiled_bytes": 2348,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_hazard_red"
+      }
+    },
+    {
+      "id": "heat_shimmer",
+      "motion": "Thermal wave",
+      "compiled_bytes": 2188,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_heat_shimmer"
+      }
+    },
+    {
+      "id": "hex_cells",
+      "motion": "Cell illumination wave",
+      "compiled_bytes": 2928,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_hex_cells"
+      }
+    },
+    {
+      "id": "ion_noise",
+      "motion": "Temporal ion interference",
+      "compiled_bytes": 2360,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_ion_noise"
+      }
+    },
+    {
+      "id": "iridescent",
+      "motion": "Changing interference color",
+      "compiled_bytes": 2188,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_iridescent"
+      }
+    },
+    {
+      "id": "leather",
+      "motion": "Subtle grain highlight",
+      "compiled_bytes": 2572,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_leather"
+      }
+    },
+    {
+      "id": "micro_mesh",
+      "motion": "Mesh inspection reflection",
+      "compiled_bytes": 2576,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_micro_mesh"
+      }
+    },
+    {
+      "id": "oxidized_copper",
+      "motion": "Patina reflection",
+      "compiled_bytes": 2456,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_oxidized_copper"
+      }
+    },
+    {
+      "id": "prismatic",
+      "motion": "Facet highlights",
+      "compiled_bytes": 2448,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_prismatic"
+      }
+    },
+    {
+      "id": "pulse",
+      "motion": "Warning pulse",
+      "compiled_bytes": 2036,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_pulse"
+      }
+    },
+    {
+      "id": "rail_glints",
+      "motion": "Moving rail reflection",
+      "compiled_bytes": 2156,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_rail_glints"
+      }
+    },
+    {
+      "id": "ribbed_alloy",
+      "motion": "Highlight across fixed ribs",
+      "compiled_bytes": 2328,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_ribbed_alloy"
+      }
+    },
+    {
+      "id": "stipple_gradient",
+      "motion": "Moving illumination gradient",
+      "compiled_bytes": 2432,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_stipple_gradient"
+      }
+    },
+    {
+      "id": "sweep",
+      "motion": "Scanner sweep",
+      "compiled_bytes": 2220,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_sweep"
+      }
+    },
+    {
+      "id": "thermal",
+      "motion": "Thermal color flow",
+      "compiled_bytes": 2156,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_thermal"
+      }
+    },
+    {
+      "id": "triangular_grille",
+      "motion": "Grille inspection reflection",
+      "compiled_bytes": 2636,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_triangular_grille"
+      }
+    },
+    {
+      "id": "warning_hatch",
+      "motion": "Warning conveyor",
+      "compiled_bytes": 2316,
+      "static_default_preserved": true,
+      "binding": {
+        "seconds": "scissor_rect.w",
+        "enabled": "atlas_scissor.w"
+      },
+      "library": {
+        "source_sha256": "8e117cd2839dfc19769ec9e965fb753b851a37019193cb666cc79b81bb3d2c42",
+        "metadata_changes": {
+          "3217197187": 2,
+          "1207432720": 1,
+          "1592272711": 2,
+          "4041377078": 4
+        },
+        "shader": "mods/dbf_hud/shaders/mapped_warning_hatch"
+      }
+    }
+  ]
+}

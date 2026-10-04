@@ -58,3 +58,5 @@ Game binaries, private captures and private testing-tool packages are not projec
 ## Getting started
 
 [Installation, downloads and first setup](docs/GETTING_STARTED.md).
+
+[Renderer 0.3.42 source checkpoint and validation limits](RENDERER-CHECKPOINT.md) covers panel-local shaders, independent pattern sizing, the menu preview repair, and static-art texture tradeoffs.

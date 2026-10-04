@@ -17,7 +17,7 @@ function M.compose(frame,m,s,cfg,opacity,measure)
  end
  -- Bolted instrument surround and recessed launch-cell housing.
  r(0,0,w,1,rim,.8);r(0,h-1,w,1,rim,.8);r(0,0,1,h,rim,.8);r(w-1,0,1,h,rim,.8)
- r(8,28,116,66,dark);r(10,29,2,64,rim,.4);r(120,29,2,64,rim,.4)
+ r(10,29,2,64,rim,.4);r(120,29,2,64,rim,.4)
  for _,dx in ipairs({4,125}) do for _,dy in ipairs({4,117}) do r(dx,dy,3,3,dark);r(dx+.5,dy+1,2,.5,silver,.6) end end
  for _,dx in ipairs({14,109}) do
   r(dx,35,9,50,{47,61,68});r(dx,35,9,1,rim)

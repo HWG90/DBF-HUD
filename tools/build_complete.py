@@ -45,8 +45,8 @@ def main():
  group=bytearray(groups[-1][2][:24]);struct.pack_into('<I',group,16,len(hashes));group+=struct.pack('<'+str(len(hashes))+'Q',*hashes)
  resources[groups[-1][:2]]=(groups[-1][0],group_kind,bytes(group),b'')
  asset_body,asset_gpu=archive_rows(list(resources.values()))
- manifest={'Version':1,'Guid':'eb9de2f7-5733-46a0-96d8-8750becccd53','Name':'DBF-HUD Complete 0.3.41','Description':'HUD, render bridge, all native fonts and current screen-depth renderer assets. Requires Bingus Shared Loader. Choose one installation mode.','Options':[{'Name':'Complete HUD - startup','Include':['Startup','Assets']},{'Name':'MDL live reload - bridge and all assets','Include':['LiveBridge','Assets']}]}
- output=ROOT.parent/'DBF-HUD-Complete-0.3.41.zip'
+ manifest={'Version':1,'Guid':'eb9de2f7-5733-46a0-96d8-8750becccd53','Name':'DBF-HUD Complete 0.3.42','Description':'HUD, render bridge, all native fonts and current screen-depth renderer assets. Requires Bingus Shared Loader. Choose one installation mode.','Options':[{'Name':'Complete HUD - startup','Include':['Startup','Assets']},{'Name':'MDL live reload - bridge and all assets','Include':['LiveBridge','Assets']}]}
+ output=ROOT.parent/'DBF-HUD-Complete-0.3.42.zip'
  with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as out:
   out.writestr('manifest.json',json.dumps(manifest,indent=2)+'\n')
   for component,prefix in [(temp,'Startup'),(live,'LiveBridge')]:

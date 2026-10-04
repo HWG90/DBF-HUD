@@ -33,6 +33,30 @@ function M.projector(m,fov,aspect,near)
     validate(m,fov,aspect)
     return function(x,y,z)return project_validated(m,x,y,z,fov,aspect,near) end
 end
+-- Invert the camera projection of a planar panel without clipping its corners.
+-- u runs right and v runs down. This also handles partially offscreen panels.
+function M.panel_inverse(camera,fov,aspect,x,y,z,ux,uy,uz,vx,vy,vz)
+    local t=math.tan(fov*.5)
+    local function terms(px,py,pz)
+        local r=px*camera[1]+py*camera[2]+pz*camera[3]
+        local d=px*camera[5]+py*camera[6]+pz*camera[7]
+        local up=px*camera[9]+py*camera[10]+pz*camera[11]
+        return .5*d+r/(2*t*aspect),.5*d-up/(2*t),d
+    end
+    local a,d,g=terms(ux,uy,uz)
+    local b,e,h=terms(vx,vy,vz)
+    local c,f,i=terms(x-camera[13],y-camera[14],z-camera[15])
+    local aa,ab,ac=e*i-f*h,c*h-b*i,b*f-c*e
+    local ba,bb,bc=f*g-d*i,a*i-c*g,c*d-a*f
+    local ca,cb,cc=d*h-e*g,b*g-a*h,a*e-b*d
+    local determinant=a*aa+b*ba+c*ca
+    local extent=math.max(math.abs(a),math.abs(b),math.abs(c),math.abs(d),math.abs(e),math.abs(f),math.abs(g),math.abs(h),math.abs(i))
+    if extent==0 or math.abs(determinant)<1e-12*extent^3 then return nil end
+    local norm=math.max(math.abs(ca),math.abs(cb),math.abs(cc))
+    if norm==0 then return nil end
+    return aa/norm,ab/norm,ac/norm,ba/norm,bb/norm,bc/norm,ca/norm,cb/norm,cc/norm
+end
+
 -- Clip a convex world-space polygon against this snapshot's perspective frustum.
 -- UVs are interpolated at intersections before the perspective divide.
 function M.clip_polygon(m,vertices,fov,aspect,near,scratch)

@@ -17,8 +17,6 @@ function M.compose(frame,m,s,cfg,opacity,measure)
  for _,dx in ipairs({4,125}) do for _,dy in ipairs({4,101}) do r(dx,dy,3,3,dark);r(dx+.5,dy+1,2,.5,rim) end end
  t('S-11',94,10,rim)
  -- Recessed launcher socket, restrained chemical haze and piping.
- r(12,45,108,32,dark);r(15,49,102,24,green,.05)
- r(19,51,94,20,green,.06);r(25,54,80,14,green,.06)
  r(14,42,2,32,rim,.45);r(16,42,10,2,rim,.45);r(116,43,2,31,rim,.45)
  r(108,41,10,2,rim,.45);r(106,29,2,14,rim,.6)
  -- Chemical vessel, steel straps, valve spindle and vent louvres.

@@ -23,10 +23,17 @@ function M.new(backend)
         assert(r.u(rec,8)==id,'entity identity');return rec,owner+Layout.records+index*24
     end
     local function config(kind,m,id,rec,owner)
-        local spec=Layout.static[kind]
-        if kind~='magazine' then
-            local i=r.map(m+(spec[4] or 0x68),id,65536)
-            if i then assert(i<4096,'override index');return r.read(r.p(m+(spec[5] or 0xa8))+i*spec[3],spec[3]) end
+        local spec=kind=='loyalist_charge' and {0xf12ad8,20,0xd8,0x50,0x90} or Layout.static[kind]
+        local i=r.map(m+(spec[4] or 0x68),id,65536)
+        if i then
+            assert(i<4096,'override index')
+            if kind=='magazine' then
+                -- Live-verified native getter uses the entity-keyed override first,
+                -- then falls back to the resource definition. Never infer capacity.
+                assert(r.read(base+0x4f377b,8)=='\069\139\075\104\065\139\091\112','magazine override map binding')
+                assert(r.read(base+0x4f37e2,14)=='\072\141\004\128\072\193\224\005\073\003\131\160\000\000','magazine override data binding')
+            end
+            return r.read(r.p(m+(spec[5] or 0xa8))+i*spec[3],spec[3])
         end
         local p=r.p(owner+spec[1]);local n=spec[2];local key=rec:sub(1,8)
         local home=((r.u(rec,4)%n)*(2^32%n)+r.u(rec,0)%n)%n
@@ -167,6 +174,31 @@ function M.new(backend)
                 local limit=r.f(cfg,0x60);local heat=r.f(rt,4)
                 assert(limit>0 and limit<1e7 and heat>=-1 and heat<1e7,'heat range')
                 result.heat=math.max(0,math.min(1,heat/limit));result.locked=rt:byte(9)==1
+                if result.resource_hex=='35a61296619cc47e' then
+                    local ok,q,threshold,rise,fall=pcall(function()
+                        if not self.quasar_charge_contract then
+                            assert(r.read(base+0x7643de,23)==string.char(0xf3,0x45,0x0f,0x59,0x85,0x98,0,0,0,0xf3,0x44,0x0f,0x58,0xc6,0xf3,0x45,0x0f,0x5d,0x85,0x94,0,0,0),'Quasar charge writer binding')
+                            assert(r.read(base+0x7648f9,9)==string.char(0xf3,0x41,0x0f,0x10,0x8d,0x94,0,0,0),'Quasar charge threshold binding')
+                            self.quasar_charge_contract=true
+                        end
+                        assert(wid==main_wid and inventory_weapon==main_wid,'Quasar equipped identity')
+                        local count=r.u(r.read(m+0x14,4),0);assert(count<=4096 and i<count,'Quasar state bounds')
+                        local st=r.read(r.p(m+0x50)+i*72,72)
+                        local q,t,up,down=r.f(st,0x0c),r.f(cfg,0x94),r.f(cfg,0x98),r.f(cfg,0x9c)
+                        assert(t==t and t>0 and t<1e7 and q==q and q>=0 and q<=t*1.001,'Quasar charge calibration')
+                        assert(up==up and up>0 and up<1e7 and down==down and down>=0 and down<1e7,'Quasar charge rates')
+                        assert(r.read(main_address,24)==main_rec,'Quasar charge entity changed')
+                        return q,t,up,down
+                    end)
+                    if ok then
+                        result.quasar_charge_fraction=math.max(0,math.min(1,q/threshold))
+                        if not self.quasar_charge_calibration_logged then
+                            self.quasar_charge_calibration_logged=true
+                            local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/Quasar-charge-calibration.log'),'a')
+                            if f then f:write(os.date('!%Y-%m-%dT%H:%M:%SZ')..' VERIFIED id='..main_wid..' inventory='..inventory_weapon..' threshold='..threshold..' rise='..rise..' fall='..fall..' value='..q..'\n');f:close() end
+                        end
+                    end
+                end
                 local sinks=r.i(rt,0)
                 if valid(sinks,1000) and r.u(cfg,0x5c)>0 then result.reserve=sinks;result.reserve_kind='SINKS' end
             else
@@ -301,8 +333,8 @@ function M.new(backend)
             end)
             if ok and rpm then result.rpm=rpm;result.rpm_selectable=true end
         end
-        if result.resource_hex=='2e9d0bdc48b09e60' or result.resource_hex=='6cfcc7f8801a0266' then
-            local ok,charge=pcall(function()
+        if result.resource_hex=='2e9d0bdc48b09e60' or result.resource_hex=='6cfcc7f8801a0266' or result.resource_hex=='e8d5f49ad7780e54' or result.resource_hex=='aa69a60d74a3ec54' or result.resource_hex=='fb3a19078694708a' then
+            local ok,charge,charge_seconds=pcall(function()
                 -- Verified native getter: manager +0x40, 40-byte records, first float.
                 assert(r.read(base+0x745b85,14)==string.char(0x8b,0xc8,0x49,0x8b,0x43,0x40,0x48,0x8d,0x14,0x89,0xf3,0x0f,0x10,0x04),'charge getter binding')
                 local manager=r.p(base+0x3326c20)
@@ -314,14 +346,68 @@ function M.new(backend)
                 local value=r.f(data,0)
                 assert(value>=0 and value<=10,'charge value range')
                 assert(r.read(main_address,24)==main_rec,'charge weapon changed')
-                return value
+                return value,r.f(data,4)
             end)
-            if ok and charge and result.resource_hex=='6cfcc7f8801a0266' then
+            if result.resource_hex=='aa69a60d74a3ec54' then
+                if ok and type(charge_seconds)=='number' then
+                    local calibrated,duration=pcall(function()
+                        assert(r.read(base+0x73cb04,6)==string.char(0xf3,0x45,0x0f,0x10,0x55,0x18),'Loyalist native duration binding')
+                        assert(r.read(base+0x73cbec,10)==string.char(0xf3,0x41,0x0f,0x58,0xc6,0xf3,0x41,0x0f,0x5d,0xc2),'Loyalist timer clamp binding')
+                        assert(r.read(base+0x504d8f,7)==string.char(0x4c,0x8b,0x90,0xd8,0x2a,0xf1,0),'charge definition table binding')
+                        assert(inventory_weapon==main_wid and wid==main_wid,'Loyalist equipped identity')
+                        local cfg=config('loyalist_charge',r.p(base+0x3326c20),main_wid,main_rec,owner)
+                        assert(cfg,'Loyalist charge definition absent')
+                        local duration=r.f(cfg,0x18)
+                        assert(duration==duration and duration>0 and duration<=60 and charge_seconds==charge_seconds and charge_seconds>=0 and charge_seconds<=duration*1.01,'Loyalist duration calibration')
+                        assert(r.read(main_address,24)==main_rec,'Loyalist calibration identity changed')
+                        return duration
+                    end)
+                    if calibrated then
+                        result.loyalist_charge_fraction=math.max(0,math.min(1,charge_seconds/duration))
+                        if not self.loyalist_calibration_logged then
+                            self.loyalist_calibration_logged=true
+                            local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/Loyalist-charge-calibration.log'),'a')
+                            if f then f:write(os.date('!%Y-%m-%dT%H:%M:%SZ')..' VERIFIED id='..main_wid..' duration='..duration..' timer='..charge_seconds..' raw_value='..tostring(charge)..'\n');f:close() end
+                        end
+                    end
+                end
+            elseif result.resource_hex=='fb3a19078694708a' then
+                if ok and type(charge_seconds)=='number' then
+                    local calibrated,duration=pcall(function()
+                        assert(r.read(base+0x73cb04,6)==string.char(0xf3,0x45,0x0f,0x10,0x55,0x18),'Purifier native duration binding')
+                        assert(r.read(base+0x73cbec,10)==string.char(0xf3,0x41,0x0f,0x58,0xc6,0xf3,0x41,0x0f,0x5d,0xc2),'Purifier timer clamp binding')
+                        assert(r.read(base+0x504d8f,7)==string.char(0x4c,0x8b,0x90,0xd8,0x2a,0xf1,0),'Purifier definition table binding')
+                        assert(inventory_weapon==main_wid and wid==main_wid,'Purifier equipped identity')
+                        local definition=config('loyalist_charge',r.p(base+0x3326c20),main_wid,main_rec,owner)
+                        assert(definition,'Purifier definition absent')
+                        local duration=r.f(definition,0x18)
+                        assert(duration==duration and duration>0 and duration<=60 and charge_seconds==charge_seconds and charge_seconds>=0 and charge_seconds<=duration*1.01,'Purifier duration calibration')
+                        assert(r.read(main_address,24)==main_rec,'Purifier calibration identity changed')
+                        return duration
+                    end)
+                    if calibrated then
+                        result.purifier_charge_fraction=math.max(0,math.min(1,charge_seconds/duration))
+                        result.charge_ready=result.purifier_charge_fraction>=1-1e-6
+                        if not self.purifier_calibration_logged then
+                            self.purifier_calibration_logged=true
+                            local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/Purifier-charge-calibration.log'),'a')
+                            if f then f:write(os.date('!%Y-%m-%dT%H:%M:%SZ')..' VERIFIED id='..main_wid..' duration='..duration..' timer='..charge_seconds..' raw_value='..tostring(charge)..'\n');f:close() end
+                        end
+                    end
+                end
+            elseif result.resource_hex=='e8d5f49ad7780e54' then
+                -- Live-verified normalized full-charge plateau; no inferred cancel/danger threshold.
+                if ok and charge then
+                    result.binding.epoch_charge_candidate=charge;result.binding.epoch_charge_timer=charge_seconds
+                    if charge>=0 and charge<=1 then result.epoch_charge_fraction=charge end
+                end
+            elseif ok and charge and result.resource_hex=='6cfcc7f8801a0266' then
                 -- Melta live: ramp resets on canceled charges without ammo loss, and on discharge with ammo loss.
                 result.binding.melta_charge_candidate=charge
                 result.melta_charge_level=charge
             elseif ok and charge then
                 result.charge_fraction=math.min(1,charge)
+                result.charge_seconds=charge_seconds
                 -- Provisional visual-test threshold, not a verified firing deadline.
                 result.charge_warning=charge>=.95
             end

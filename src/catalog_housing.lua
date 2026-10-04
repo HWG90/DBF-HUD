@@ -59,7 +59,6 @@ function M.apply(out,m,s,cfg,opacity,style,fallback,measure)
  end end
  if lo<math.huge then
   local bay_y=lo-3*s;local bay_h=hi-lo+6*s
-  r(x+10*s,bay_y,w-20*s,bay_h,shade,.88)
   r(x+11*s,bay_y,s,bay_h,pale,.35);r(x+w-12*s,bay_y,s,bay_h,pale,.35)
   r(x+11*s,bay_y,w-22*s,.6*s,pale,.35);r(x+11*s,bay_y+bay_h-.6*s,w-22*s,.6*s,pale,.35)
   -- Different machined hardware for projectile racks, energy coils, fuel valves and tool clamps.

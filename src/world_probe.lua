@@ -146,4 +146,3 @@ function M.new(sr,log,direct)
     return self
 end
 return M
-

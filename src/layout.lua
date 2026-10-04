@@ -1,5 +1,35 @@
 -- Renderer-independent HUD; geometry uses bottom-left coordinates.
 local M={}
+-- SAFE cap verified in live charge capture 20261003-215227. This is not an UNSAFE deadline.
+-- Epoch live cycles 20261003: normalized value reaches 1, holds, and resets on firing.
+function M.epoch_charge(raw)
+    if type(raw)~='number' or raw~=raw or raw<0 or raw>1 then return nil end
+    return {fraction=raw,ready=raw>=1-1e-6}
+end
+function M.railgun_charge(mode,raw,timer,reaction_ms,age,frame_delay)
+    if type(raw)~='number' or raw~=raw or raw<0 or raw>1 then return nil end
+    if mode=='SAFE' then
+        return {fraction=math.min(1,raw/.7),ready=raw>=.7-1e-6}
+    elseif mode=='UNSAFE' then
+        local result={fraction=raw,ready=false}
+        -- Native verified formula and 3s branch; timer validity is checked independently.
+        if type(timer)=='number' and timer==timer and timer>=0 and timer<=3 and
+            type(age)=='number' and age>=0 and age<=.15 then
+            local expected=.7*math.min(1,timer/.5)+.3*math.max(0,math.min(1,(timer-.5)/2.5))
+            if math.abs(expected-raw)<=.0001 and timer>0 then
+                local reaction=tonumber(reaction_ms) or 200
+                if reaction~=reaction then reaction=200 end
+                reaction=math.max(50,math.min(1000,reaction))/1000
+                local frame=math.max(1/120,math.min(.25,tonumber(frame_delay) or 1/60))
+                result.remaining=math.max(0,3-timer-age)
+                result.margin=reaction+1/30+2*frame+.005
+                result.release=result.remaining<=result.margin
+                result.limit=result.remaining<=0
+            end
+        end
+        return result
+    end
+end
 function M.fuel_marker(commands,measure)
     local edge=-math.huge;local marker
     for i=#commands,1,-1 do
@@ -72,6 +102,536 @@ function M.decorate(out,frame,scale,cfg,opacity)
         end
     end
 end
+function M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    local frames={};for _,v in ipairs(out)do if v.type=='panel' then frames[#frames+1]=v end end
+    if cfg.decoration and cfg.decoration~='none' then
+        -- Replace only the built-in outer perimeter; retain interior approved art.
+        local kept={}
+        for _,v in ipairs(out)do
+            local perimeter=false
+            if v.type=='rect' then for _,f in ipairs(frames)do
+                local eps=scale*.00001
+                local horizontal=math.abs(v.x-f.x+scale)<eps and math.abs(v.w-f.w-2*scale)<eps and (math.abs(v.y-f.y+scale)<eps or math.abs(v.y+v.h-f.y-f.h-scale)<eps)
+                local vertical=math.abs(v.y-f.y+scale)<eps and math.abs(v.h-f.h-2*scale)<eps and (math.abs(v.x-f.x+scale)<eps or math.abs(v.x+v.w-f.x-f.w-scale)<eps)
+                perimeter=perimeter or horizontal or vertical
+            end end
+            if not perimeter then kept[#kept+1]=v end
+        end
+        out=kept
+        for _,frame in ipairs(frames)do
+            local group={};M.decorate(group,frame,scale,cfg,opacity)
+            for _,v in ipairs(group)do v.child=frame.child;out[#out+1]=v end
+        end
+    end
+    -- Optional effects share the composed panel and its visibility fade in every mode.
+    if cfg.effect_flicker then
+        local strength=.94+.04*math.sin((clock or 0)*17)+.02*math.sin((clock or 0)*31)
+        for _,v in ipairs(out) do v.a=v.a*strength;if v.frost_a then v.frost_a=v.frost_a*strength end end
+    end
+    if cfg.effect_scanlines or cfg.effect_sweep then
+        local frames={};for _,v in ipairs(out)do if v.type=='panel' then frames[#frames+1]=v end end
+        local ink=HUD.config.rgb(cfg.text_color)
+        for _,frame in ipairs(frames)do
+            local thickness=math.max(.3,scale*.35)
+            if cfg.effect_scanlines then
+                local count=cfg.effect_scanline_count or 21
+                for k=1,count do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/(count+1),w=frame.w,h=thickness,c=ink,a=.12*opacity,effect_shader_band=true,effect_owner=frame,child=frame.child,fold_child=frame.fold_child,df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,df_effect_fraction=k/(count+1)} end
+            end
+            if cfg.effect_sweep then
+                local band=math.min(frame.h,thickness*2)
+                local sweep_count=math.max(1,math.min(12,math.floor(cfg.effect_sweep_density or 3)))
+                local spacing=math.max(.001,out[1].h/sweep_count)
+                local speed=(cfg.effect_sweep_speed or .35)*out[1].h
+                local offset=((clock or 0)*speed)%spacing
+                for k=-1,math.ceil(frame.h/spacing)do
+                    local low=offset+k*spacing;local bottom=math.max(0,low);local top=math.min(frame.h,low+band)
+                    if top>bottom then
+                        out[#out+1]={type='rect',x=frame.x,y=frame.y+bottom,w=frame.w,h=top-bottom,c=ink,a=.2*opacity,
+                            df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,
+                            df_effect_fraction=bottom/math.max(.001,frame.h-band),df_effect_sweep=true,effect_band=band,effect_clock=clock or 0,effect_owner=frame,child=frame.child,fold_child=frame.fold_child}
+                    end
+                end
+            end
+        end
+    end
+    return out
+end
+function M.scorcher_step(state,m,now)
+    if not m or m.resource_hex~='eea5e3cef1e12c14' or type(m.value)~='number' then
+        state.id=nil;state.value=nil;state.until_time=nil;return
+    end
+    if state.id~=m.id then state.id=m.id;state.value=m.value;state.until_time=nil end
+    if state.value and state.value-m.value==1 then state.until_time=now+.10 end
+    state.value=m.value
+    m.scorcher_flash=math.max(0,math.min(1,((state.until_time or now)-now)/.10))
+end
+M.ultimatum_panel=(function()
+-- Offline GP-20 Ultimatum proposal; no installed runtime or settings changes.
+return function(m,x,y,s,opacity,cfg,measure)
+ local out={};local w,h=144,118
+ local steel,olive,brass,ice,shadow,red={116,132,119},{26,34,27},{235,190,65},{230,237,222},{9,14,11},{239,97,69}
+ local function r(dx,dy,rw,rh,c,a,tag)
+  out[#out+1]={type=tag=='panel' and 'panel' or 'rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=(a or 1)*opacity,frosted=tag=='panel' and cfg.frosted or nil,ultimatum_detail=tag}
+ end
+ local function t(text,dx,dy,size,c,center)
+  local a,b,e,f=measure(text,size*s);local xx=x+dx*s
+  if center then xx=xx-(a+e)/2 end
+  out[#out+1]={type='text',text=text,x=xx,y=y+dy*s,size=size*s,font=cfg.font,c=c,a=opacity,numeric_display=text:match('^%d+$')~=nil}
+ end
+ r(1,1,w-2,h-2,olive,cfg.panel_opacity,'panel')
+ for _,v in ipairs({{0,0,w,1},{0,h-1,w,1},{0,0,1,h},{w-1,0,1,h}})do r(v[1],v[2],v[3],v[4],steel,.65,'perimeter')end
+ t('GP-20',8,105,9,ice);t('ULTIMATUM',86,105,9,brass,true)
+ r(7,100,w-14,1,brass,.6)
+ -- Reference-matched wide dark casing, yellow collar, white nose and yellow tip.
+ r(9,35,1,59,steel,.3);r(50,35,1,59,steel,.3)
+ for _,dy in ipairs({39,89})do
+  r(10,dy,8,2,{59,68,67},.9);r(42,dy,8,2,{59,68,67},.9)
+ end
+ -- Neck and attachment flange under a broad, gently curved payload body.
+ r(22,36,16,8,{74,82,85},1);r(23,37,3,7,{135,146,148},.8)
+ r(18,42,24,3,{91,102,105},1);r(19,44,22,.7,{185,195,193},.8)
+ for i=0,27 do
+  local half=17.5-math.max(0,4-i)*.75-math.max(0,i-23)*.3
+  r(30-half,45+i,half*2,1,{63,71,77},1,'cartridge')
+  r(30-half+1,45+i,2,1,{106,119,124},.8)
+  r(30+half-3,45+i,2,1,{34,41,47},1)
+ end
+ r(13,50,34,.7,{160,173,174},.65);r(13,52,34,.5,{26,33,38},1)
+ r(13,69,34,.8,{155,170,173},.6);r(13,71,34,.6,{25,33,39},1)
+ -- Yellow collar has its own shaded rim, as on the reference.
+ r(13,73,34,6,{234,193,19},1);r(14,73,3,6,{250,216,56},1)
+ r(43,73,3,6,{163,133,13},1);r(14,78,32,.6,{255,231,106},.9)
+ -- White curved nose reduces toward a rounded yellow center cap.
+ for i=0,8 do
+  local half=17-i*.9
+  r(30-half,79+i,half*2,1,{225-i*3,230-i*3,225-i*2},1,'nose-cap')
+  r(30-half+1,79+i,2,1,{247,248,235},.8)
+  r(30+half-2,79+i,1,1,{158,168,164},.9)
+ end
+ for i=0,4 do
+  local half=math.sqrt(math.max(0,1-(i/5)^2))*7
+  r(30-half,86+i,half*2,1,{232-i*8,193-i*7,20},1,'yellow-tip')
+ end
+ -- Upright equilateral explosion-hazard triangle, fixed identification artwork.
+ for i=0,10 do
+  local half=(10.5-i)/math.sqrt(3)
+  r(30-half,56+i,half*2,1,{230,184,27},.95)
+ end
+ local mark={44,51,55}
+ for _,v in ipairs({{28.5,58,3,2},{27,59,2,1},{31,59,2,1},{29,60,1,2},{27,61,1,1},{31,61,1,1},{26,57,1,1},{33,57,1,1},{29,63,1,1}})do r(v[1],v[2],v[3],v[4],mark,1)end
+ -- Recessed count bezel and fine fasteners frame the instrument, not its digits.
+ r(56,45,77,37,{8,15,11},.6)
+ r(57,80,75,.6,steel,.4);r(57,46,75,.6,steel,.3)
+ for _,dx in ipairs({5,137})do for _,dy in ipairs({5,112})do
+  r(dx,dy,2,2,{42,54,43},1);r(dx+.4,dy+.8,1.2,.4,steel,.7)
+ end end
+ local valid=type(m.value)=='number' and m.value>=0 and m.value%1==0
+ local loaded=valid and m.value>0
+ t(valid and string.format('%02d',m.value) or '--',94,53,34,loaded and ice or red,true)
+ t('PAYLOAD',94,86,7,steel,true)
+ t(m.capacity and ('/ '..tostring(m.capacity)) or '/ --',125,51,8,steel,true)
+ r(58,44,74,1,steel,.3)
+ t(valid and (loaded and 'LOADED' or 'EMPTY') or 'UNKNOWN',94,31,8,loaded and brass or red,true)
+ r(7,25,w-14,1,steel,.35)
+ local reserve=type(m.reserve)=='number' and string.format('%03d',m.reserve) or '---'
+ local label=reserve..' WARHEAD'
+ local size=8;local a,b,e,f=measure(label,size*s)
+ if e-a>124*s then size=size*124*s/(e-a) end
+ t(label,w/2,11,size,ice,true)
+ -- Sparse static corner safety markings; no extra animated geometry.
+ for _,dx in ipairs({5,134})do for i=0,2 do r(dx,87+i*3,5,1,brass,.6)end end
+ return out
+end
+
+end)()
+M.leveller_panel=(function()
+-- Offline EAT-411 Leveller proposal; no installed runtime or settings changes.
+return function(m,x,y,s,opacity,cfg,measure)
+ local out={};local w,h=144,118
+ local steel,olive,brass,ice,shadow,red={116,132,119},{26,34,27},{235,190,65},{230,237,222},{9,14,11},{239,97,69}
+ local function r(dx,dy,rw,rh,c,a,tag)
+  out[#out+1]={type=tag=='panel' and 'panel' or 'rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=(a or 1)*opacity,frosted=tag=='panel' and cfg.frosted or nil,ultimatum_detail=tag}
+ end
+ local function t(text,dx,dy,size,c,center)
+  local a,b,e,f=measure(text,size*s);local xx=x+dx*s
+  if center then xx=xx-(a+e)/2 end
+  out[#out+1]={type='text',text=text,x=xx,y=y+dy*s,size=size*s,font=cfg.font,c=c,a=opacity,numeric_display=text:match('^%d+$')~=nil}
+ end
+ r(1,1,w-2,h-2,olive,cfg.panel_opacity,'panel')
+ for _,v in ipairs({{0,0,w,1},{0,h-1,w,1},{0,0,1,h},{w-1,0,1,h}})do r(v[1],v[2],v[3],v[4],steel,.65,'perimeter')end
+ t('EAT-411',8,105,8,ice);t('LEVELLER',96,105,9,brass,true)
+ r(7,100,w-14,1,brass,.6)
+ -- Reference-shaped detachable warhead: silver casing, yellow band, rear fins.
+ r(9,34,1,60,steel,.3);r(50,34,1,60,steel,.3)
+ r(24,35,12,8,{73,83,89},1,'coupling')
+ r(23,36,14,2,{155,166,169},1);r(24,42,12,1,ice,.65)
+ -- Four rear stabilizers surround the reduced rear shroud.
+ for _,v in ipairs({{14,43,5,15},{41,43,5,15},{19,40,5,7},{36,40,5,7}})do
+  r(v[1],v[2],v[3],v[4],{120,131,136},1,'rear-fin')
+  r(v[1],v[2]+v[4]-1,v[3],.7,{208,216,215},.8)
+ end
+ r(18,44,24,15,{105,119,127},1);r(19,45,3,13,{171,185,190},.8)
+ r(38,45,3,13,{58,72,82},1)
+ for _,dx in ipairs({23,35})do r(dx,45,2,13,{49,62,72},1);r(dx+1,45,.6,13,{190,204,207},.7)end
+ -- Broad cylindrical silver body with shaded curvature and seam rings.
+ for i=0,16 do
+  local half=16-math.max(0,i-13)*.5
+  r(30-half,59+i,half*2,1,{137,150,156},1,'warhead-body')
+  r(30-half+1,59+i,3,1,{208,219,220},.85)
+  r(30+half-4,59+i,3,1,{79,96,107},1)
+ end
+ for _,dy in ipairs({58,60,73,75})do r(15,dy,30,.6,{39,54,66},.9)end
+ r(15,76,30,5,{238,190,29},1,'yellow-band')
+ r(16,76,3,5,{255,222,86},.9);r(40,76,4,5,{173,126,15},1)
+ -- Short rounded nose with a yellow center cap.
+ for i=0,8 do
+  local half=15-i*1.05
+  r(30-half,81+i,half*2,1,{197-i*3,209-i*3,210-i*3},1,'silver-nose')
+  r(30-half+1,81+i,2,1,{239,243,234},.8)
+ end
+ for i=0,3 do
+  local half=math.sqrt(math.max(0,1-(i/4)^2))*5
+  r(30-half,88+i,half*2,1,{221-i*9,179-i*9,25},1,'yellow-tip')
+ end
+ for _,dy in ipairs({39,89})do r(10,dy,6,1,steel,.4);r(44,dy,6,1,steel,.4)end
+ -- Accepted Ultimatum equilateral explosion-hazard marking.
+ for i=0,8 do
+  local half=(8.5-i)/math.sqrt(3)
+  r(30-half,62+i,half*2,1,{230,184,27},.95)
+ end
+ local mark={44,51,55}
+ for _,v in ipairs({{29,64,2,2},{27.5,65,1.5,1},{31,65,1.5,1},{29.5,66,1,2},{27.5,67,1,1},{31.5,67,1,1},{26.5,63,1,1},{33,63,1,1}})do r(v[1],v[2],v[3],v[4],mark,1)end
+ -- Recessed count bezel and fine fasteners frame the instrument, not its digits.
+ r(56,45,77,37,{8,15,11},.6)
+ r(57,80,75,.6,steel,.4);r(57,46,75,.6,steel,.3)
+ for _,dx in ipairs({5,137})do for _,dy in ipairs({5,112})do
+  r(dx,dy,2,2,{42,54,43},1);r(dx+.4,dy+.8,1.2,.4,steel,.7)
+ end end
+ local valid=type(m.value)=='number' and m.value>=0 and m.value%1==0
+ local loaded=valid and m.value>0
+ t(valid and string.format('%02d',m.value) or '--',94,53,34,loaded and ice or red,true)
+ t('WARHEAD',94,86,7,steel,true)
+ t(m.capacity and ('/ '..tostring(m.capacity)) or '/ --',125,51,8,steel,true)
+ r(58,44,74,1,steel,.3)
+ t(valid and (loaded and 'LOADED' or 'EMPTY') or 'UNKNOWN',94,31,8,loaded and brass or red,true)
+ r(7,25,w-14,1,steel,.35)
+ local reserve=type(m.reserve)=='number' and string.format('%03d',m.reserve) or '---'
+ local label=type(m.reserve)=='number' and (reserve..' WARHEAD') or 'SINGLE USE'
+ local size=8;local a,b,e,f=measure(label,size*s)
+ if e-a>124*s then size=size*124*s/(e-a) end
+ t(label,w/2,11,size,ice,true)
+ -- Sparse static corner safety markings; no extra animated geometry.
+ for _,dx in ipairs({5,134})do for i=0,2 do r(dx,87+i*3,5,1,brass,.6)end end
+ return out
+end
+
+end)()
+M.breacher_panel=(function()
+-- P-34 Breacher reference-led break-open receiver proposal; offline only.
+return function(m,x,y,s,opacity,cfg,measure)
+ local out={};local w,h=158,112
+ local dark,steel,edge,ice,yellow={27,31,34},{86,95,100},{145,155,160},{226,233,235},{240,193,28}
+ local function r(dx,dy,rw,rh,c,a,tag)
+  out[#out+1]={type=tag=='panel' and 'panel' or 'rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=(a or 1)*opacity,frosted=tag=='panel' and cfg.frosted or nil}
+ end
+ local function t(text,dx,dy,size,c,center)
+  local a,b,e,f=measure(text,size*s);local xx=x+dx*s
+  if center then xx=xx-(a+e)/2 end
+  out[#out+1]={type='text',text=text,x=xx,y=y+dy*s,size=size*s,font=cfg.font,c=c,a=opacity,numeric_display=text:match('^%d+$')~=nil}
+ end
+ r(1,1,w-2,h-2,dark,cfg.panel_opacity,'panel')
+ -- Asymmetric receiver perimeter, with a wide top designation plate.
+ r(0,0,w,1,edge,.5);r(0,h-1,w,1,edge,.55);r(0,0,1,h,edge,.4);r(w-1,0,1,h,edge,.4)
+ r(5,95,w-10,12,{50,57,61},.8);r(6,95,w-12,1,yellow,.85)
+ t('P-34',10,98,8,ice);t('BREACHER',100,98,10,yellow,true)
+ -- Long yellow nose and grooved gray casing from the supplied ammunition reference.
+ local projectile_start=#out+1
+ r(17,67,16,19,steel,1);r(18,68,2,17,edge,.9)
+ for _,dx in ipairs({21,25,29})do r(dx,69,.8,15,{41,49,55},1);r(dx+.8,69,.5,15,edge,.5)end
+ r(15,85,20,3,{170,181,184},1);r(17,82,16,2,yellow,.95)
+ r(16,63,18,4,{177,135,16},1);r(17,66,16,.7,{255,221,75},.8)
+ r(17,54,16,9,{135,146,149},1);r(18,55,2,7,{199,207,204},.8)
+ r(17,51,16,3,{177,135,16},1)
+ r(17,34,16,17,yellow,1);r(18,35,2,15,{255,221,67},.85);r(30,35,2,15,{158,115,8},1)
+ for i=0,8 do local half=1.2+i*.8;r(25-half,26+i,half*2,1,{225-i*3,175-i*2,18},1)end
+ r(22,25,6,1,{178,131,14},1)
+ for i=projectile_start,#out do local v=out[i];v.x=x+50*s-(v.x-x)-v.w;v.y=y+113*s-(v.y-y)-v.h end
+ -- Open breech rails and steel receiver housing; count is the receiver instrument.
+ r(45,27,103,58,{16,22,26},.8)
+ r(45,79,103,6,{113,125,133},.9);r(46,84,101,.7,ice,.6)
+ r(45,27,103,6,{83,95,104},.9);r(46,32,101,.7,edge,.6)
+ r(143,34,5,44,{113,125,133},.9);r(146,35,1,42,ice,.4)
+ for i=0,3 do r(49+i*5,37,2,8,steel,.6)end
+ r(43,28,8,8,steel,1);r(45,30,4,4,edge,.9);r(46,31,2,2,dark,1)
+ local valid=type(m.value)=='number' and m.value>=0 and m.value%1==0
+ t(valid and string.format('%02d',m.value) or '--',100,45,35,valid and m.value==0 and {238,105,72} or ice,true)
+ t('AMMO',100,74,6,edge,true)
+ t(m.capacity and ('/ '..tostring(m.capacity)) or '/ --',133,43,8,edge,true)
+ -- Three recessed inspection ports echo the angled breech block in the reference.
+ for _,dx in ipairs({68,97,126})do r(dx,86,6,5,steel,.9);r(dx+1,87,4,3,{18,25,29},1);r(dx+2,87,2,.6,edge,.6)end
+ r(7,18,w-14,.7,edge,.35)
+ local reserve=type(m.reserve)=='number' and string.format('%03d',m.reserve) or '---'
+ local label=reserve..' SHELLS'
+ local size=8;local a,b,e,f=measure(label,size*s);if e-a>138*s then size=size*138*s/(e-a)end
+ t(label,w/2,7,size,ice,true)
+ return out
+end
+
+end)()
+M.hotshot_panel=(function()
+-- R/40-K Hot-Shot / accepted Warhammer family proposal; preview only.
+return function(m,x,y,s,opacity,cfg,measure)
+ local out={};local w,h=144,116
+ local steel,rim,ice={24,29,33},{148,159,165},{225,234,235}
+ local copper,gold,bone,red,shadow={205,124,59},{185,143,63},{222,211,169},{130,37,29},{9,15,18}
+ local flash=math.max(0,math.min(1,m.bolt_shot_flash or 0))
+ local orange={247,151,54}
+ local function r(dx,dy,rw,rh,c,a,tag)out[#out+1]={type=tag=='panel'and'panel'or'rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=(a or 1)*opacity,frosted=tag=='panel'and cfg.frosted or nil}end
+ local function text(t,dy,size,c)local a,b,e,f=measure(t,size*s);out[#out+1]={type='text',text=t,font=cfg.font,x=x+(w*s-a-e)/2,y=y+dy*s,size=size*s,c=c,a=opacity,numeric_display=t:match('^%d+$')~=nil}end
+ r(0,0,w,h,steel,cfg.panel_opacity,'panel')
+ r(0,0,w,1,rim,.65);r(0,h-1,w,1,rim,.65);r(0,0,1,h,rim,.65);r(w-1,0,1,h,rim,.65)
+ for _,dx in ipairs({4,w-7})do for _,dy in ipairs({4,h-7})do r(dx,dy,3,3,shadow);r(dx+.5,dy+1.2,2,.5,rim)end end
+ text('R/40-K HOT-SHOT',101,9,copper)
+ for _,dx in ipairs({18,112})do r(dx,109,14,3,{63,58,44},.95);r(dx,112,14,1,gold,.8)end
+ r(8,94,128,1,copper,.65)
+ -- The accepted Melta winged skull: brass feathers, bone face, dark sockets.
+ r(68,91,8,6,bone);r(69,97,6,1,gold)
+ r(69,94,2,1,shadow);r(73,94,2,1,shadow);r(71,91,2,2,shadow)
+ for k=0,3 do r(53+k*3,95-k,13-k*3,1,gold,.85);r(78,95-k,13-k*3,1,gold,.85)end
+ -- Detailed Imperialis: central skull and paired stepped feathered wings.
+ -- Static merged rectangles; transparent gaps remain between the feather rows.
+ local wing_dark,wing_light={101,78,36},{230,200,122}
+ local function feather(side,dx,dy,width,height)
+  local px=side<0 and dx or 144-dx-width
+  r(px,dy,width,height,gold,.95)
+  r(px,dy,width,.65,wing_dark,.9)
+  r(px,dy+height-.65,width,.65,wing_light,.9)
+ end
+ for _,side in ipairs({-1,1})do
+  feather(side,23,82,39,3)
+  feather(side,28,78,34,3)
+  feather(side,33,74,29,3)
+  feather(side,38,70,24,3)
+  feather(side,43,66,19,3)
+  for k=0,4 do
+   local dx=23+k*5;local dy=82-k*4
+   local px=side<0 and dx or 144-dx-2
+   r(px,dy,2,3,{162,123,55},1)
+  end
+  local px=side<0 and 59 or 82
+  r(px,69,3,13,{137,103,48},.9)
+ end
+ -- Sculpted bone cranium, recessed orbital sockets, nasal notch and individual teeth.
+ r(65,83,14,3,bone,1);r(63,78,18,6,bone,1);r(64,73,16,5,bone,1)
+ r(66,69,12,5,{192,176,132},1);r(67,66,10,4,bone,1)
+ r(65,81,14,1,{247,234,193},.9);r(64,78,1,4,{247,234,193},.8)
+ r(79,75,1,7,{130,114,76},.85)
+ r(65,75,5,4,shadow,1);r(74,75,5,4,shadow,1)
+ r(66,78,4,1,{93,79,52},1);r(74,78,4,1,{93,79,52},1)
+ r(70,71,4,3,shadow,1);r(71,74,2,2,shadow,1)
+ r(65,72,3,1,{128,111,75},.9);r(76,72,3,1,{128,111,75},.9)
+ for dx=68,76,2 do r(dx,66,1,3,shadow,.9);r(dx+1,66,1,.5,{255,237,188},.7)end
+ r(69,64,6,1,gold,.8)
+ -- The same paired parchment tabs and red wax seals as Melta.
+ for _,dx in ipairs({5,135})do
+  r(dx,42,4,13,bone,.9);r(dx+1,44,1,8,{111,99,72},.7)
+  r(dx-1,54,6,5,red);r(dx,55,4,3,{192,61,40},.8)
+ end
+ text(m.kind=='heat' and (m.state=='VENT' and 'COOLDOWN' or 'HEAT') or 'ENERGY',53,8,rim)
+ local n=tonumber(m.value);text(n and string.format('%03d',n)or'---',24,32,m.warning and {245,111,63}or ice)
+ local cap=m.kind~='heat' and tonumber(m.capacity) or nil
+ if cap and cap>=1 and cap<=24 and cap%1==0 then local gap=3;local pw=(120-(cap-1)*gap)/cap
+  for k=0,cap-1 do r(12+k*(pw+gap),19,pw,2,k<(n or 0)and orange or rim,k<(n or 0)and 1 or .18)end
+ end
+ r(9,15,126,.5,rim,.25)
+ local reserve=type(m.reserve)=='number'and string.format('%03d',m.reserve)or'---'
+ text(reserve..' POWER PACKS',5,8,rim)
+ return out
+end
+
+end)()
+M.sg8_panel=(function()
+-- SG-8 Punisher tube-fed receiver proposal; offline only.
+return function(m,x,y,s,opacity,cfg,measure)
+ local out={};local w,h=158,112
+ local dark,steel,edge,ice,yellow={27,31,34},{86,95,100},{145,155,160},{226,233,235},{240,193,28}
+ local function r(dx,dy,rw,rh,c,a,tag)
+  out[#out+1]={type=tag=='panel' and 'panel' or 'rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=(a or 1)*opacity,frosted=tag=='panel' and cfg.frosted or nil}
+ end
+ local function t(text,dx,dy,size,c,center)
+  local a,b,e,f=measure(text,size*s);local xx=x+dx*s
+  if center then xx=xx-(a+e)/2 end
+  out[#out+1]={type='text',text=text,x=xx,y=y+dy*s,size=size*s,font=cfg.font,c=c,a=opacity,numeric_display=text:match('^%d+$')~=nil}
+ end
+ r(1,1,w-2,h-2,dark,cfg.panel_opacity,'panel')
+ -- Asymmetric receiver perimeter, with a wide top designation plate.
+ r(0,0,w,1,edge,.5);r(0,h-1,w,1,edge,.55);r(0,0,1,h,edge,.4);r(w-1,0,1,h,edge,.4)
+ r(5,95,w-10,12,{50,57,61},.8);r(6,95,w-12,1,yellow,.85)
+ t('SG-8',10,98,8,ice);t('PUNISHER',100,98,10,yellow,true)
+ -- High-detail shell: folded crimp, molded hull, shallow ribs and brass head.
+ r(17,39,16,42,{147,51,40},1,'shell-hull')
+ r(18,40,2,40,{219,96,66},.85);r(30,40,2,40,{93,31,27},1)
+ for _,dx in ipairs({21,24,27})do r(dx,42,.65,37,{106,34,29},.9);r(dx+.7,43,.4,36,{209,83,58},.45)end
+ r(18,81,14,2,{126,46,37},1);r(19,82,12,.7,{223,111,84},.7)
+ r(21,81,8,1,{62,30,27},.8);r(23,79,4,2,{86,29,26},.8)
+ for _,dx in ipairs({19,23,27,31})do r(dx,80,1,2,{193,83,58},.75)end
+ r(17,32,16,7,{179,136,49},1);r(18,33,2,5,{242,205,112},.85)
+ r(30,33,2,5,{112,82,28},1)
+ r(15,30,20,2,{201,157,63},1);r(16,31,18,.5,{255,222,142},.9)
+ r(17,33,16,.7,{101,75,31},.85);r(17,38,16,.6,{248,208,104},.8)
+ -- Two slim retaining brackets frame the shell without a filled backing.
+ r(12,31,1,52,edge,.35);r(37,31,1,52,edge,.35)
+ r(12,31,4,.6,edge,.6);r(34,31,4,.6,edge,.6)
+ r(12,82,4,.6,edge,.6);r(34,82,4,.6,edge,.6)
+ -- Receiver window and tubular magazine seam, with native count as primary readout.
+ r(45,27,103,58,{16,22,26},.8)
+ r(45,79,103,6,{113,125,133},.9);r(46,84,101,.7,ice,.6)
+ r(45,27,103,6,{83,95,104},.9);r(46,32,101,.7,edge,.6)
+ r(143,34,5,44,{113,125,133},.9);r(146,35,1,42,ice,.4)
+ for i=0,3 do r(49+i*5,37,2,8,steel,.6)end
+ r(43,28,8,8,steel,1);r(45,30,4,4,edge,.9);r(46,31,2,2,dark,1)
+ local valid=type(m.value)=='number' and m.value>=0 and m.value%1==0
+ t(valid and string.format('%02d',m.value) or '--',100,45,35,valid and m.value==0 and {238,105,72} or ice,true)
+ t('SHELLS',100,74,6,edge,true)
+ t(m.capacity and ('/ '..tostring(m.capacity)) or '/ --',133,43,8,edge,true)
+ -- Tubular magazine and six fine receiver ribs echo the pump-action housing.
+ r(46,86,101,5,{79,91,98},.9);r(47,90,99,.6,ice,.45)
+ for i=0,5 do r(52+i*15,86,2,5,{36,46,54},.8)end
+ local cap=tonumber(m.capacity)
+ if cap and cap>=1 and cap<=32 and cap%1==0 then
+  local cols=math.min(cap,16);local pitch=90/cols
+  for i=0,cap-1 do r(53+(i%cols)*pitch,35-math.floor(i/cols)*3,pitch-1.4,1.3,i<(tonumber(m.value) or 0) and yellow or edge,i<(tonumber(m.value) or 0) and .85 or .2)end
+ end
+ r(7,18,w-14,.7,edge,.35)
+ local reserve=type(m.reserve)=='number' and string.format('%03d',m.reserve) or '---'
+ local label=reserve..' SHELLS'
+ local size=8;local a,b,e,f=measure(label,size*s);if e-a>138*s then size=size*138*s/(e-a)end
+ t(label,w/2,7,size,ice,true)
+ return out
+end
+
+end)()
+M.loyalist_panel=(function()
+-- PLAS-15 Loyalist redesign proposal; isolated preview, not installed.
+return function(m,x,y,s,opacity,cfg,measure,clock)
+ local d={};local w,h=144,118
+ local loyalist=m.resource_hex=='aa69a60d74a3ec54';local purifier=m.resource_hex=='fb3a19078694708a'
+ local epoch=m.resource_hex=='e8d5f49ad7780e54'
+ local q=loyalist and m.loyalist_charge_fraction or epoch and m.epoch_charge_fraction or purifier and m.purifier_charge_fraction or nil
+ local valid=type(q)=='number' and q==q and q>=0 and q<=1
+ local glow=valid and q or (m.resource_hex=='eea5e3cef1e12c14' and (m.scorcher_flash or 0) or 0)
+ local epoch_state=epoch and M.epoch_charge(q) or nil
+ local full_warning=epoch_state and epoch_state.ready
+ local charge_ink=full_warning and {255,32,32} or {74,210,238}
+ local charge_alpha=full_warning and (.35+.65*(.5+.5*math.cos((clock or 0)*math.pi*8))) or .95
+ local designation=loyalist and 'PLAS-15' or purifier and 'PLAS-101' or epoch and 'PLAS-45' or 'PLAS-1'
+ local name=loyalist and 'LOYALIST' or purifier and 'PURIFIER' or epoch and 'EPOCH' or 'SCORCHER'
+ local cyan,ice,steel,dark,yellow={74,210,238},{214,247,252},{120,143,154},{24,53,66},{246,205,96}
+ local function rect(dx,dy,rw,rh,c,a,tag)
+  d[#d+1]={type=tag=='panel' and 'panel' or 'rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=(a or 1)*opacity,frosted=tag=='panel' and cfg.frosted or nil,capacitor_glow=tag=='capacitor_glow'}
+ end
+ local function text(t,dx,dy,size,c,center)
+  local a,b,e,f=measure(t,size*s);local xx=x+dx*s
+  if center then xx=xx-(a+e)/2 end
+  d[#d+1]={type='text',text=t,font=cfg.font,x=xx,y=y+dy*s,size=size*s,c=c,a=opacity}
+ end
+ rect(1,1,w-2,h-2,{13,23,30},cfg.panel_opacity,'panel')
+ rect(0,0,w,1,steel,.55);rect(0,h-1,w,1,steel,.65);rect(0,0,1,h,steel,.45);rect(w-1,0,1,h,steel,.45)
+ rect(6,108,3,4,cyan,1);text(designation,15,106,9,ice,false);text(name,w-6,107,7,steel,false)
+ -- Right-align the name using the native font extent.
+ local v=d[#d];local a,b,e,f=measure(v.text,v.size);v.x=x+(w-6)*s-e
+ rect(7,101,w-14,1,cyan,.55)
+ -- Selected ammunition remains the largest instrument; eight slots are exact rounds.
+ text(string.format('%02d',tonumber(m.value) or 0),88,52,34,m.warning and yellow or ice,true)
+ if purifier and valid and q>=1-1e-6 and m.charge_ready then local v=d[#d];v.c={0,255,255};v.a=v.a*(.35+.65*(.5+.5*math.cos((clock or 0)*math.pi*2*(cfg.flash_hz or 2)))) end
+ text('/ '..tostring(m.capacity or '--'),123,51,8,steel,true)
+ text('AMMO',88,87,7,steel,true)
+ local cap=tonumber(m.capacity)
+ if cap and cap>=1 and cap<=32 and cap%1==0 then
+  local gap=cap==8 and 3 or 1.5;local pw=cap==8 and 7 or (83-(cap-1)*gap)/cap
+  for i=0,cap-1 do rect(48+i*(pw+gap),82,pw,2,i<(tonumber(m.value) or 0) and cyan or steel,i<(tonumber(m.value) or 0) and .9 or .2) end
+ end
+ -- Native charge progressively illuminates the existing capacitor. Three inexpensive halo rectangles.
+ rect(9,42,28,50,dark,.7)
+ rect(9,42,2,50,steel,.55);rect(35,42,2,50,steel,.55)
+ rect(14,46,18,42,{10,19,25},.9)
+ rect(15,48,16,38,cyan,.09*glow,'capacitor_glow')
+ rect(17,49,12,36,cyan,.16*glow,'capacitor_glow')
+ rect(18,50,10,34,cyan,.23*glow,'capacitor_glow')
+ rect(19,51,8,32,cyan,.12+.70*glow,'capacitor_glow')
+ local core={math.floor(74+(214-74)*glow),math.floor(210+(247-210)*glow),math.floor(238+(252-238)*glow)}
+ rect(21,51,4,32,core,.27+.73*glow,'capacitor_glow')
+ for _,dy in ipairs({54,65,76}) do rect(13,dy,20,2,steel,.65) end
+ rect(16,85,14,2,ice,.85);rect(16,46,14,2,ice,.85)
+ text('PLASMA',23,32,6,steel,true)
+ rect(45,42,86,1,steel,.3)
+ local reserve=type(m.reserve)=='number' and tostring(m.reserve) or '--'
+ text(reserve..' BATTERIES',88,29,7,steel,true)
+ -- Existing native-calibrated charge is integrated into the bottom instrument strip.
+ rect(7,25,w-14,1,steel,.35)
+ text((loyalist or purifier or epoch) and 'CHARGE' or 'PLASMA',8,14,7,charge_ink,false)
+ local label=valid and string.format('%03d%%',math.floor(q*100+.5)) or ((loyalist or epoch) and '--' or purifier and '--' or ((tonumber(m.value) or 0)>0 and 'READY' or 'EMPTY'))
+ local a,b,e,f=measure(label,7*s);text(label,w-8-(e-a)/s,14,7,full_warning and charge_ink or valid and q>=.999 and ice or cyan,false)
+ if loyalist or purifier or epoch then
+  rect(8,6,w-16,4,dark,.85)
+  if valid and q>0 then rect(8,6,(w-16)*q,4,charge_ink,charge_alpha);d[#d].epoch_full_warning=full_warning==true;d[#d].charge_meter=true end
+ end
+ if m.resource_hex=='eea5e3cef1e12c14' and (m.fire_mode=='AUTO' or m.fire_mode=='SEMI') then
+  local cw,ch=48,16;local cx=(w-cw)/2
+  rect(cx,-ch-2,cw,ch,{13,23,30},cfg.panel_opacity,'panel');d[#d].child=true
+  text(m.fire_mode,w/2,-ch+2,8,ice,true);d[#d].child=true
+ end
+ return d
+end
+
+end)()
+M.bolt_pistol_panel=(function()
+-- P/40-K Bolt Pistol / Melta reliquary-family proposal; preview only.
+return function(m,x,y,s,opacity,cfg,measure)
+ local out={};local w,h=144,116
+ local steel,rim,ice={24,29,33},{148,159,165},{225,234,235}
+ local copper,gold,bone,red,shadow={205,124,59},{185,143,63},{222,211,169},{130,37,29},{9,15,18}
+ local flash=math.max(0,math.min(1,m.bolt_shot_flash or 0))
+ local orange={247,151,54}
+ local function r(dx,dy,rw,rh,c,a,tag)out[#out+1]={type=tag=='panel'and'panel'or'rect',x=x+dx*s,y=y+dy*s,w=rw*s,h=rh*s,c=c,a=(a or 1)*opacity,frosted=tag=='panel'and cfg.frosted or nil}end
+ local function text(t,dy,size,c)local a,b,e,f=measure(t,size*s);out[#out+1]={type='text',text=t,font=cfg.font,x=x+(w*s-a-e)/2,y=y+dy*s,size=size*s,c=c,a=opacity,numeric_display=t:match('^%d+$')~=nil}end
+ r(0,0,w,h,steel,cfg.panel_opacity,'panel')
+ r(0,0,w,1,rim,.65);r(0,h-1,w,1,rim,.65);r(0,0,1,h,rim,.65);r(w-1,0,1,h,rim,.65)
+ for _,dx in ipairs({4,w-7})do for _,dy in ipairs({4,h-7})do r(dx,dy,3,3,shadow);r(dx+.5,dy+1.2,2,.5,rim)end end
+ text('P/40-K BOLT',101,10,copper)
+ for _,dx in ipairs({18,112})do r(dx,109,14,3,{63,58,44},.95);r(dx,112,14,1,gold,.8)end
+ r(8,94,128,1,copper,.65)
+ -- The accepted Melta winged skull: brass feathers, bone face, dark sockets.
+ r(68,91,8,6,bone);r(69,97,6,1,gold)
+ r(69,94,2,1,shadow);r(73,94,2,1,shadow);r(71,91,2,2,shadow)
+ for k=0,3 do r(53+k*3,95-k,13-k*3,1,gold,.85);r(78,95-k,13-k*3,1,gold,.85)end
+ -- Heavy bolt cartridge in a recessed armor cradle; not a heat/charge instrument.
+ r(28,65,7,20,{72,78,80});r(30,68,2,14,rim,.7)
+ r(38,66,46,18,{92,64,35});r(40,68,42,14,copper,.8)
+ r(41,79,41,2,bone,.7);r(41,68,41,2,gold,.8)
+ r(48,68,3,13,{61,42,26},.65);r(72,68,3,13,{61,42,26},.65)
+ r(84,67,7,16,red);r(86,68,2,14,{192,61,40},.8)
+ r(92,68,8,14,rim);r(100,70,5,10,ice,.85);r(105,73,5,4,ice,.75)
+ r(39,64,43,1,gold,.5)
+ if flash>0 then r(38,66,53,18,orange,flash*.17);r(93,72,17,6,{255,225,157},flash*.7)end
+ -- The same paired parchment tabs and red wax seals as Melta.
+ for _,dx in ipairs({5,135})do
+  r(dx,42,4,13,bone,.9);r(dx+1,44,1,8,{111,99,72},.7)
+  r(dx-1,54,6,5,red);r(dx,55,4,3,{192,61,40},.8)
+ end
+ text('BOLTS',53,8,rim)
+ local n=tonumber(m.value);text(n and string.format('%03d',n)or'---',24,32,m.warning and {245,111,63}or ice)
+ local cap=tonumber(m.capacity)
+ if cap and cap>=1 and cap<=24 and cap%1==0 then local gap=3;local pw=(120-(cap-1)*gap)/cap
+  for k=0,cap-1 do r(12+k*(pw+gap),19,pw,2,k<(n or 0)and orange or rim,k<(n or 0)and 1 or .18)end
+ end
+ r(9,15,126,.5,rim,.25)
+ local reserve=type(m.reserve)=='number'and string.format('%03d',m.reserve)or'---'
+ text(reserve..' MAGS',5,9,rim)
+ return out
+end
+
+end)()
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     if m.snow_party then
         local function rainbow(phase)
@@ -93,6 +653,98 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     cfg=cfg or HUD.config.defaults
     local pixel=HUD.font.supported(cfg.font)
     if pixel and not measure then measure=function(text,size)return HUD.font.measure(text,size,cfg.font)end end
+    if m.resource_hex=='9eb160830321bfd6' then
+        local extent=measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end
+        local out=M.ultimatum_panel(m,x,y,scale,opacity,cfg,extent)
+        for _,v in ipairs(out)do if v.type=='text' then
+            v.a=v.a*(cfg.text_opacity or 1)
+            if v.numeric_display and m.chamber_bonus==1 then v.last_digit_color={255,221,0} end
+        end end
+        return M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    end
+    if m.resource_hex=='7617642765ac38c7' then
+        local extent=measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end
+        if not M.leveller_draw_verified then
+            M.leveller_draw_verified=true
+            local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/Leveller-layout-checkpoint.log'),'a')
+            if f then f:write(os.date('!%Y-%m-%dT%H:%M:%SZ')..' APPROVED_LEVELLER_LAYOUT selected='..tostring(m.resource_hex)..'\n');f:close() end
+        end
+        local out=M.leveller_panel(m,x,y,scale,opacity,cfg,extent)
+        for _,v in ipairs(out)do if v.type=='text' then
+            v.a=v.a*(cfg.text_opacity or 1)
+            if v.numeric_display and m.chamber_bonus==1 then v.last_digit_color={255,221,0} end
+        end end
+        return M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    end
+    if m.resource_hex=='e91f569c2ad8af01' then
+        local extent=measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end
+        if not M.breacher_draw_verified then
+            M.breacher_draw_verified=true
+            local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/Breacher-layout-checkpoint.log'),'a')
+            if f then f:write(os.date('!%Y-%m-%dT%H:%M:%SZ')..' APPROVED_BREACHER_LAYOUT selected='..tostring(m.resource_hex)..'\n');f:close() end
+        end
+        local out=M.breacher_panel(m,x,y,scale,opacity,cfg,extent)
+        for _,v in ipairs(out)do if v.type=='text' then
+            v.a=v.a*(cfg.text_opacity or 1)
+            if v.numeric_display and m.chamber_bonus==1 then v.last_digit_color={255,221,0} end
+        end end
+        return M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    end
+    if m.resource_hex=='1abbff60d26ba391' then
+        local extent=measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end
+        if not M.hotshot_draw_verified then
+            M.hotshot_draw_verified=true
+            local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/HotShot-layout-checkpoint.log'),'a')
+            if f then f:write(os.date('!%Y-%m-%dT%H:%M:%SZ')..' APPROVED_HOTSHOT_LAYOUT selected='..tostring(m.resource_hex)..'\n');f:close() end
+        end
+        local out=M.hotshot_panel(m,x,y,scale,opacity,cfg,extent)
+        for _,v in ipairs(out)do if v.type=='text' then
+            v.a=v.a*(cfg.text_opacity or 1)
+            if v.numeric_display and m.chamber_bonus==1 then v.last_digit_color={255,221,0} end
+        end end
+        return M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    end
+    if m.resource_hex=='41eac4a03987faa0' then
+        local extent=measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end
+        if not M.sg8_draw_verified then
+            M.sg8_draw_verified=true
+            local f=io.open(((os.getenv('LOCALAPPDATA') or '.')..'/LLL/Helldivers2/Logs/SG8-layout-checkpoint.log'),'a')
+            if f then f:write(os.date('!%Y-%m-%dT%H:%M:%SZ')..' APPROVED_SG8_LAYOUT selected='..tostring(m.resource_hex)..'\n');f:close() end
+        end
+        local out=M.sg8_panel(m,x,y,scale,opacity,cfg,extent)
+        for _,v in ipairs(out)do if v.type=='text' then
+            v.a=v.a*(cfg.text_opacity or 1)
+            if v.numeric_display and m.chamber_bonus==1 then v.last_digit_color={255,221,0} end
+        end end
+        return M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    end
+    if m.resource_hex=='dbb6c961c59fadc1' then
+        local extent=measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end
+        local out=M.bolt_pistol_panel(m,x,y,scale,opacity,cfg,extent)
+        -- Bespoke panels also honor the selected shared decoration.
+        local frames={};for _,v in ipairs(out) do if v.type=='panel' then frames[#frames+1]=v end end
+        for _,frame in ipairs(frames) do
+            local group={};M.decorate(group,frame,scale,cfg,opacity)
+            for _,v in ipairs(group) do v.child=frame.child;out[#out+1]=v end
+        end
+        for _,v in ipairs(out)do if v.type=='text' then
+            v.a=v.a*(cfg.text_opacity or 1)
+            if v.numeric_display and m.chamber_bonus==1 then v.last_digit_color={255,221,0} end
+        end end
+        return M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    end
+    if m.resource_hex=='aa69a60d74a3ec54' or m.resource_hex=='eea5e3cef1e12c14' or m.resource_hex=='fb3a19078694708a' or m.resource_hex=='e8d5f49ad7780e54' then
+        local extent=measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end
+        local out=M.loyalist_panel(m,x,y,scale,opacity,cfg,extent,clock)
+        -- Bespoke panels also honor the selected shared decoration.
+        local frames={};for _,v in ipairs(out) do if v.type=='panel' then frames[#frames+1]=v end end
+        for _,frame in ipairs(frames) do
+            local group={};M.decorate(group,frame,scale,cfg,opacity)
+            for _,v in ipairs(group) do v.child=frame.child;out[#out+1]=v end
+        end
+        for _,v in ipairs(out)do if v.type=='text' then v.a=v.a*(cfg.text_opacity or 1) end end
+        return M.finish_custom_panel(out,m,scale,opacity,cfg,clock)
+    end
     local d={};local heat=m.kind=='heat';local fuel=m.label=='FUEL' or m.label=='GAS'
     local vent=heat and m.state=='VENT'
     if vent then opacity=opacity*(0.25+0.75*(0.5+0.5*math.cos((clock or 0)*math.pi*4))) end
@@ -128,7 +780,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     end
     if heat or fuel then
         local percent=fuel and tostring(number) or string.format('%03d%%',m.value)
-        local label=(fuel and (m.label..': ') or vent and 'VENT: ' or 'HEAT: ')..percent
+        local label=(fuel and (m.label..': ') or m.resource_hex=='35a61296619cc47e' and (m.quasar_charge_verified and (vent and 'COOLDOWN: ' or 'CHARGE: ') or 'THERMAL: ') or vent and 'VENT: ' or 'HEAT: ')..percent
         local reserve=fuel and (m.reserve and string.format('%03d TANKS',m.reserve) or '-- TANKS') or (m.reserve and string.format('%03d:HTSNKS',m.reserve) or '--:HTSNKS')
         local size=16*scale
         local function width(t)
@@ -137,7 +789,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
         local digit_width=0
         for digit=0,9 do digit_width=math.max(digit_width,width(tostring(digit))) end
-        local label_width=heat and (width('HEAT: ')+3*digit_width+width('%')) or width(label)
+        local label_width=heat and (width(m.resource_hex=='35a61296619cc47e' and (m.quasar_charge_verified and (vent and 'COOLDOWN: ' or 'CHARGE: ') or 'THERMAL: ') or 'HEAT: ')+3*digit_width+width('%')) or width(label)
         local bar_width=math.max(160,label_width+width(reserve)+20)
         local fraction=math.max(0,math.min(1,m.fraction or 0))
         local zones=fuel and {{0,.15,cfg.heat_red},{.15,.35,cfg.heat_yellow},{.35,1,cfg.heat_white}} or {{0,.65,cfg.heat_white},{.65,.85,cfg.heat_yellow},{.85,1,cfg.heat_red}}
@@ -159,12 +811,19 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 d[#d].heat_danger=true
             end
             -- Fine staggered marks avoid stretching low-resolution asset pixels.
+            if (heat and HUD.ammo_types.laser_weapons[m.resource_hex]==true) then
+                for row=0,7 do
+                    rect(0,3+row*4.5,bar_width,.35,{0,0,0},.08)
+                    d[#d].heat_texture=true
+                end
+            else
             for row=0,7 do
                 for column=0,23 do
                     local dx=(column+.25+(row%2)*.5)*bar_width/24
                     rect(dx,3+row*4.5,bar_width/96,.55,{0,0,0},.16)
                     d[#d].heat_texture=true
                 end
+            end
             end
         end
         if not vent then
@@ -187,7 +846,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 gauge_detail(position*bar_width-1,1,2,13,{0,0,0},.65)
                 gauge_detail(position*bar_width-1,24,2,13,{0,0,0},.65)
             end
-            for i=1,99 do
+            for i=((heat and HUD.ammo_types.laser_weapons[m.resource_hex]==true) and 5 or 1),99,((heat and HUD.ammo_types.laser_weapons[m.resource_hex]==true) and 5 or 1) do
                 if i%10~=0 and i~=75 then
                     gauge_detail(i*bar_width/100,1,.6,3,{0,0,0},.4)
                     gauge_detail(i*bar_width/100,34,.6,3,{0,0,0},.4)
@@ -197,7 +856,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
                 gauge_detail(boundary*bar_width-.5,1,1,36,{0,0,0},.5)
             end
         end
-        local prefix=fuel and (m.label..': ') or vent and 'VENT: ' or 'HEAT: '
+        local prefix=fuel and (m.label..': ') or m.resource_hex=='35a61296619cc47e' and (m.quasar_charge_verified and (vent and 'COOLDOWN: ' or 'CHARGE: ') or 'THERMAL: ') or vent and 'VENT: ' or 'HEAT: '
         local white={255,255,255}
         text(prefix,0,44,8,white,.9);d[#d].size=size;d[#d].heat_label='left'
         if heat then
@@ -211,7 +870,9 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         else
             text(percent,width(prefix),44,8,ink,.9);d[#d].size=size;d[#d].heat_label='percent';d[#d].heat_prefix=prefix
         end
+        if m.resource_hex~='35a61296619cc47e' then
         text(reserve,bar_width-width(reserve),-18,8,white,.9);d[#d].size=size;d[#d].heat_label='right'
+        end
         if fuel then
             local icon=HUD.fire_icons[m.label] or HUD.fire_icons.FUEL;local factor=14/math.max(icon.w,icon.h)
             for _,run in ipairs(icon.runs) do
@@ -482,9 +1143,31 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         for _,v in ipairs(group) do v.child=true;v.fold_child=true;out[#out+1]=v end
     end
 
+    if m.resource_hex=='aa69a60d74a3ec54' then
+        local q=m.loyalist_charge_fraction
+        local valid=type(q)=='number' and q==q and q>=0 and q<=1
+        local cw,ch=right-left,22*scale
+        local child={type='panel',child=true,loyalist_charge_meter=true,x=left,y=bottom-2*scale-ch,w=cw,h=ch,c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity,frost_a=opacity,frosted=cfg.frosted}
+        local label=valid and string.format('CHARGE %03d%%',math.floor(q*100+.5)) or 'CHARGE --'
+        local size=7*scale;local a,b,ee,f=0,-size*.2,#label*size*.6,size*.8
+        if measure then a,b,ee,f=measure(label,size) end
+        local cyan={74,210,238};local group={child,
+            {type='text',child=true,loyalist_charge_meter=true,text=label,font=cfg.font,x=child.x+(cw-a-ee)/2,y=child.y+3*scale-b,size=size,c=cyan,a=opacity*ink_alpha},
+            {type='rect',child=true,loyalist_charge_meter=true,x=child.x+7*scale,y=child.y+14*scale,w=cw-14*scale,h=4*scale,c={24,64,86},a=.7*opacity}}
+        if valid and q>0 then group[#group+1]={type='rect',child=true,loyalist_charge_meter=true,x=child.x+7*scale,y=child.y+14*scale,w=(cw-14*scale)*q,h=4*scale,c=cyan,a=opacity} end
+        for _,command in ipairs(group) do out[#out+1]=command end
+    end
+    local epoch_charge=m.resource_hex=='e8d5f49ad7780e54' and M.epoch_charge(m.epoch_charge_fraction) or nil
+    local railgun_charge=M.railgun_charge(m.safety_mode,m.charge_fraction,m.charge_seconds,
+        cfg.railgun_release_margin_ms,m.charge_sample_clock and math.max(0,(clock or 0)-m.charge_sample_clock),m.charge_frame_delay)
     local child_label=m.safety_mode or m.fire_mode
-    if m.rpm then child_label=(child_label and (child_label..'  ') or '')..tostring(m.rpm)..' RPM' end
-    if m.rpm or child_label=='SAFE' or child_label=='UNSAFE' or child_label=='AUTO' or child_label=='SEMI' or child_label=='BURST' or child_label=='ALT' or child_label=='VOLLEY' then
+    if railgun_charge and railgun_charge.ready then child_label='SAFE READY'
+    elseif railgun_charge and railgun_charge.limit then child_label='LIMIT'
+    elseif railgun_charge and railgun_charge.release then child_label='RELEASE'
+    elseif railgun_charge and railgun_charge.remaining then child_label=string.format('UNSAFE %.2fs',railgun_charge.remaining) end
+    local display_rpm=m.resource_hex~='35a61296619cc47e' and m.rpm or nil
+    if display_rpm then child_label=(child_label and (child_label..'  ') or '')..tostring(display_rpm)..' RPM' end
+    if display_rpm or m.safety_mode or child_label=='SAFE READY' or child_label=='SAFE' or child_label=='UNSAFE' or child_label=='AUTO' or child_label=='SEMI' or child_label=='BURST' or child_label=='ALT' or child_label=='VOLLEY' then
         local size=(pixel and 12 or 8)*scale
         local a,b,e,f
         if measure then a,b,e,f=measure(child_label,size) end
@@ -555,7 +1238,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             if not command.charge_meter then
                 if command.type=='panel' then command.c=charcoal;frames[#frames+1]=command
                 elseif command.type=='text' then
-                    command.c=command.text=='UNSAFE' and {255,104,64} or ice
+                    command.c=(command.text=='RELEASE' or command.text=='LIMIT') and {255,104,64} or (command.text=='SAFE READY' and {0,255,0} or ice)
                 elseif command.type=='rect' and not command.railgun_heading then command.c=cyan end
             end
         end
@@ -571,20 +1254,23 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
     end
     out=HUD.weapon_styles.apply(out,m,scale,cfg,opacity,measure,M.decorate,clock)
-    if m.resource_hex=='8d3d52a3b2f19402' and m.senator_slots then
-        out=HUD.senator_panel.compose(m,x,y,scale,opacity,cfg,measure)
+    if m.resource_hex=='8d3d52a3b2f19402' and m.cylinder_slots then
+        local panel=cfg.anchor_mode=='world' and cfg.senator_style~='upright' and HUD.senator_panel or HUD.senator_panel.upright
+        out=panel.compose(m,x,y,scale,opacity,cfg,measure)
     end
     -- Charge metadata is supplied only after the native signal is verified.
-    if m.safety_mode and type(m.charge_fraction)=='number' then
-        local fraction=math.max(0,math.min(1,m.charge_fraction))
+    if railgun_charge or epoch_charge then
+        local fraction=(railgun_charge or epoch_charge).fraction
         local parent=out[1];local low=parent.y
         for _,c in ipairs(out) do if c.child and c.type=='panel' then low=math.min(low,c.y) end end
         local x=parent.x+parent.w+2*scale;local height=parent.y+parent.h-low;local width=12*scale
-        local flash=m.charge_warning and math.floor((clock or 0)*8)%2==0
+        local flash=railgun_charge and m.safety_mode=='UNSAFE' and (railgun_charge.remaining and railgun_charge.release or not railgun_charge.remaining and m.charge_warning) and math.floor((clock or 0)*8)%2==0
         local yellow=HUD.config.rgb(cfg.heat_yellow);local red=HUD.config.rgb(cfg.heat_red)
         local panel={type='panel',charge_meter=true,x=x,y=low,w=width,h=height,c=HUD.config.rgb(cfg.background_color),a=cfg.panel_opacity*opacity}
         out[#out+1]=panel
-        local zones={{0,.65,{255,255,255}},{.65,.70,{0,255,0}},{.70,.85,yellow},{.85,1,red}}
+        local zones=epoch_charge and {{0,1,{112,219,255}}}
+            or m.safety_mode=='SAFE' and {{0,1,railgun_charge.ready and {0,255,0} or {255,255,255}}}
+            or {{0,.70,{255,255,255}},{.70,.85,yellow},{.85,1,red}}
         for _,zone in ipairs(zones) do
             local color=flash and yellow or zone[3]
             out[#out+1]={type='rect',charge_meter=true,x=x,y=low+height*zone[1],w=width,h=height*(zone[2]-zone[1]),c=color,a=opacity*.25}
@@ -636,7 +1322,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
     end
     -- Anti-Materiel Rifle: restrained precision instrument with a centered heavy cartridge.
-    if m.resource_hex=='89c5493e08ca4207' then
+    if m.resource_hex=='89c5493e08ca4207' and not (out[1] and out[1].amr_candidate) then
         local slate,silver,brass={22,29,34},{185,203,213},{209,165,82}
         local kept,heading={},nil
         for _,command in ipairs(out) do
@@ -739,10 +1425,10 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             for _,run in ipairs(symbol.runs) do
                 local xs,origin,ry,rh=1.85,36.9,run[2],run[4]
                 if cfg.double_freedom_proportions_preview~=false then
-                    -- Side-view references suggest ~20% brass; keep total height and anchors.
+                    -- Rear-base emphasis: 80% brass, 20% blue; preserve total height and anchors.
                     xs,origin=1.75,37.5
-                    if ry>=11 then ry,rh=6+(ry-11)*24/19,rh*24/19
-                    else ry,rh=ry*6/11,rh*6/11 end
+                    if ry>=11 then ry,rh=24+(ry-11)*6/19,rh*6/19
+                    else ry,rh=ry*24/11,rh*24/11 end
                 end
                 line(origin+(barrel-1)*50+run[1]*xs,32+ry*1.5,run[3]*xs,rh*1.5,
                     ((loaded or spent) and run[5] or silver),(loaded and .9 or spent and .55 or .18))
@@ -765,7 +1451,7 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
     end
     if vent then
         local red=HUD.config.rgb(cfg.heat_red)
-        for _,command in ipairs(out) do command.c=red end
+        for _,command in ipairs(out) do if not command.scythe_heatsink then command.c=red end end
     end
     if fuel then M.fuel_marker(out,measure or function(t,size)return 0,-size*.2,#t*size*.6,size*.8 end) end
     -- Optional effects share the composed panel and its visibility fade in every mode.
@@ -780,12 +1466,21 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             local thickness=math.max(.3,scale*.35)
             if cfg.effect_scanlines then
                 local count=cfg.effect_scanline_count or 21
-                for k=1,count do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/(count+1),w=frame.w,h=thickness,c=ink,a=.12*opacity,df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,df_effect_fraction=k/(count+1)} end
+                for k=1,count do out[#out+1]={type='rect',x=frame.x,y=frame.y+frame.h*k/(count+1),w=frame.w,h=thickness,c=ink,a=.12*opacity,effect_shader_band=true,effect_owner=frame,child=frame.child,fold_child=frame.fold_child,df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,df_effect_fraction=k/(count+1)} end
             end
             if cfg.effect_sweep then
                 local band=math.min(frame.h,thickness*2)
-                for k=0,2 do
-                    out[#out+1]={type='rect',x=frame.x,y=frame.y+(((clock or 0)*.35+k/3)%1)*(frame.h-band),w=frame.w,h=band,c=ink,a=.2*opacity,df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,df_effect_fraction=(((clock or 0)*.35+k/3)%1),df_effect_sweep=true}
+                local sweep_count=math.max(1,math.min(12,math.floor(cfg.effect_sweep_density or 3)))
+                local spacing=math.max(.001,out[1].h/sweep_count)
+                local speed=(cfg.effect_sweep_speed or .35)*out[1].h
+                local offset=((clock or 0)*speed)%spacing
+                for k=-1,math.ceil(frame.h/spacing)do
+                    local low=offset+k*spacing;local bottom=math.max(0,low);local top=math.min(frame.h,low+band)
+                    if top>bottom then
+                        out[#out+1]={type='rect',x=frame.x,y=frame.y+bottom,w=frame.w,h=top-bottom,c=ink,a=.2*opacity,
+                            df_effect_frame=m.resource_hex=='72170a55a1f37ff1' and (frame.child and 'child' or 'main') or nil,
+                            df_effect_fraction=bottom/math.max(.001,frame.h-band),df_effect_sweep=true,effect_band=band,effect_clock=clock or 0,effect_owner=frame,child=frame.child,fold_child=frame.fold_child}
+                    end
                 end
             end
         end

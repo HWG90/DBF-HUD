@@ -190,7 +190,9 @@ local lasers={['416d053372c4e433']=true,['27ee1ed8f6fb6356']=true,['295beb26dc4f
 M.laser_weapons=lasers
 local plasma={['05d8d8c073b9d502']=true,['e8d5f49ad7780e54']=true,
     ['eea5e3cef1e12c14']=true,['efdcef306cea63fe']=true,['fb3a19078694708a']=true}
+local plasma_batteries={['05d8d8c073b9d502']=true,['30061f91af477f5e']=true,['6cfcc7f8801a0266']=true,['aa69a60d74a3ec54']=true,['e8d5f49ad7780e54']=true,['eea5e3cef1e12c14']=true,['efdcef306cea63fe']=true,['fb3a19078694708a']=true}
 function M.apply(raw)
+    if raw and (plasma_batteries[raw.resource_hex] or plasma_batteries[raw.ammo_resource_hex]) and (raw.reserve_kind=='MAGS' or raw.reserve_kind=='BATTS') then raw.reserve_kind='BATTERIES' end
     if raw then raw.energy_icon=lasers[raw.ammo_resource_hex or raw.resource_hex] and 'LASER' or nil end
     if not raw or raw.kind=='heat' or raw.kind=='infinite' then return raw end
     local category=weapons[raw.ammo_resource_hex or raw.resource_hex] or 'ROUNDS'
