@@ -1,5 +1,5 @@
 HUD={}
-for _,name in ipairs({'native_font_data','native_font_uv','native_font','config','font','motion','ammo_types','model','fire_icons','munition_art','mg_easter','df_shell_state','recoilless_state','senator_state','senator_panel','doom_easter','melta_panel','speargun_panel','recoilless_panel','catalog_housing','shared_suite','weapon_styles','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','depth_marker','offscreen_test','world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor','menu','runtime'})do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+for _,name in ipairs({'native_font_data','native_font_uv','native_font','config','font','motion','ammo_types','model','fire_icons','munition_art','mg_easter','df_shell_state','recoilless_state','senator_state','senator_panel','doom_easter','melta_panel','speargun_panel','recoilless_panel','catalog_housing','shared_suite','sta11_panel','weapon_styles','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','depth_marker','offscreen_test','world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor','menu','runtime'})do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local c=HUD.config.new();assert(c.theme_shader_scale==1 and c.effect_shader_scale==1 and c.panel_opacity==.8)
 HUD.config.apply(c,{theme_shader_scale=.25,effect_shader_scale=4})
 assert(c.theme_shader_scale==.25 and c.effect_shader_scale==4)
@@ -30,6 +30,19 @@ for _,fov in ipairs({.3,.7,1.2,1.57})do for _,aspect in ipairs({1,1.777,2.4,3})d
 end end end
 assert(not HUD.projection.panel_inverse(camera,1.2,1.777,0,1,0,0,0,0,0,0,0))
 print('PASS independent pattern scales, bounds, inheritance, opacity and '..samples..' planar projection cases')
+for _,rounds in ipairs({0,32,48})do for _,scale in ipairs({.5,1,2})do
+ local cfg=HUD.config.new();cfg.font='bigblue'
+ local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='4ba41b6f9f405cc2',kind='rounds',rounds=rounds,capacity=48,reserve=3,reserve_kind='MAGS',reloadable=true}))
+ local measure=function(t,z)return HUD.font.measure(t,z,cfg.font)end
+ local out=HUD.layout.compose(m,0,0,scale,1,cfg,0,measure);local count,reserve=false,false
+ for _,v in ipairs(out)do
+  assert(v.x==v.x and v.y==v.y and v.a>=0 and v.a<=1)
+  if v.type=='text' then count=count or v.text==string.format('%03d',rounds);reserve=reserve or v.text=='03 MAGS'
+  else assert(v.w>0 and v.h>0)end
+ end
+ assert(count and reserve,'STA-11 live model readouts missing')
+end end
+print('PASS STA-11 normal, empty, full readouts at three scales through composed layout')
 -- Count composed commands, not GPU draw calls or measured performance.
 for _,spec in ipairs({{'Leveller','7617642765ac38c7'},{'Breacher','e91f569c2ad8af01'},{'Punisher','41eac4a03987faa0'},{'Hot Shot','1abbff60d26ba391'},{'Ultimatum','9eb160830321bfd6'}})do
  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=spec[2],kind='magazine',rounds=8,capacity=16,reserve=4,fire_mode='AUTO'}))

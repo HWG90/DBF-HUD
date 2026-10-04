@@ -633,6 +633,9 @@ end
 
 end)()
 function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
+    if m.resource_hex=='4ba41b6f9f405cc2' then
+        return M.finish_custom_panel(HUD.sta11_panel(m,x,y,scale,opacity,cfg,measure),m,scale,opacity,cfg,clock)
+    end
     if m.snow_party then
         local function rainbow(phase)
             local t=(clock or 0)*3+phase
