@@ -7973,10 +7973,10 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.8,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -8031,7 +8031,7 @@ HUD.shader_catalog={
 {id='prismatic',title="Prismatic facets",material='mods/dbf_hud/materials/lab_prismatic',frozen=false},
 }
 HUD.shader_ids={auto=true,none=true};for _,entry in ipairs(HUD.shader_catalog)do HUD.shader_ids[entry.id]=true end
-M.panel_keys={theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
+M.panel_keys={theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
 function M.effective(config,resource)
  local out={};for k,v in pairs(config)do out[k]=v end
  local overrides=(config.weapon_panels or {})[resource or '']
@@ -8092,7 +8092,7 @@ function M.apply(config,values)
             end
             v=validated
         elseif limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
-        elseif (k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
+        elseif (k=='theme_shader_animate' or k=='effect_shader_animate' or k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='theme_shader' or k=='effect_shader' then assert(type(v)=='string' and HUD.shader_ids[v],'Unknown HUD shader')
         elseif k=='senator_style' then assert(v=='cylinder' or v=='upright','invalid Senator appearance')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
@@ -8152,6 +8152,14 @@ end
 if HUD.bundled_defaults then
     M.apply(M.defaults,HUD.bundled_defaults.settings)
     M.weapon_clearance=HUD.bundled_defaults.layouts
+end
+function M.shader_animation_values(c,role,clock)
+    local key=role=='effect' and 'effect_shader' or 'theme_shader'
+    local speed=tonumber(c[key..'_speed']) or 1
+    if speed~=speed then speed=1 end;speed=math.max(.1,math.min(3,speed))
+    local time=tonumber(clock) or 0
+    if time~=time or time==math.huge or time==-math.huge then time=0 end
+    return math.max(0,time)*speed,c[key..'_animate']==true and 1 or 0
 end
 return M
 
@@ -15785,8 +15793,9 @@ function M.new(sr,log)
                         local rows=assert(panel_mapping(),'panel shader mapping unavailable')
                         local scale=tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
                         if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
-                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,0))
-                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,0))
+                        local seconds,animated=HUD.config.shader_animation_values(c,role,c.style_clock)
+                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,seconds))
+                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,animated))
                         sr.Material.set_vector4(handle,'clip_box',sr.Vector4(rows[7],rows[8],rows[9],0))
                     end
                     materials[cache_key]=true
@@ -16692,8 +16701,12 @@ function M.new(hud)
             local panel_definitions={
                 {'theme_shader','Theme shader (3D)','choice',shader_choices},
                 {'theme_shader_scale','Panel pattern size','slider',.25,4,.05},
+                {'theme_shader_animate','Animate panel shader','toggle'},
+                {'theme_shader_speed','Panel animation speed','slider',.1,3,.1},
                 {'effect_shader','Effect shader (3D)','choice',shader_choices},
                 {'effect_shader_scale','Effect pattern size','slider',.25,4,.05},
+                {'effect_shader_animate','Animate effect shader','toggle'},
+                {'effect_shader_speed','Effect animation speed','slider',.1,3,.1},
                 {'font','Weapon font','choice',weapon_fonts},
                 {'background_color','Panel color','color'},{'text_color','Text color','color'},{'decoration_color','Decoration color','color'},
                 {'panel_opacity','Panel opacity','slider',0,1,.01},{'text_opacity','Text opacity','slider',0,1,.01},
@@ -16714,8 +16727,10 @@ function M.new(hud)
             end
             for _,def in ipairs(panel_definitions)do
                 local key=def[1];local c={id='weapon_'..key,type=def[3],label=def[2],default=panel_value(key)}
-                if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Frozen samples do not animate.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Frozen samples do not animate; preview uses native materials in 3D mode.' end
+                if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Animation is controlled by Animate panel shader.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Animation is controlled by Animate effect shader; preview uses native materials in 3D mode.' end
                 if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
+                if key=='theme_shader_animate' or key=='effect_shader_animate' then c.description='Animate the selected shader. Off keeps the static sample. Requires animated native assets; no new panel geometry.' end
+                if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
@@ -16777,7 +16792,7 @@ function M.new(hud)
                         on_change=function(v)save('decoration_color',v)end},
 }},{id='weapon_appearance',name='Weapon Appearance',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls=(function()
                 local controls,theme,effects={},{},{}
-                local effect_keys={weapon_effect_shader_scale=true,weapon_effect_shader=true,weapon_effect_scanlines=true,weapon_effect_flicker=true,weapon_effect_sweep=true,weapon_effect_scanline_count=true,weapon_effect_sweep_speed=true,weapon_effect_sweep_density=true,weapon_frosted=true}
+                local effect_keys={weapon_effect_shader_animate=true,weapon_effect_shader_speed=true,weapon_effect_shader_scale=true,weapon_effect_shader=true,weapon_effect_scanlines=true,weapon_effect_flicker=true,weapon_effect_sweep=true,weapon_effect_scanline_count=true,weapon_effect_sweep_speed=true,weapon_effect_sweep_density=true,weapon_frosted=true}
                 for _,c in ipairs(panel_controls)do
                     if c.id and c.id:sub(1,7)=='weapon_' and c.id~='weapon_heading' then
                         local group=effect_keys[c.id] and effects or theme;group[#group+1]=c
@@ -17080,6 +17095,7 @@ function M.start(sr,backend,options)
                         local fw,fh=math.max(.001,frame.w*factor),math.max(.001,frame.h*factor)
                         v.preview_mapping={viewport_width/fw/scale,0,-fx/fw/scale,0,viewport_height/fh/scale,(fy+fh-viewport_height)/fh/scale,0,0,1}
                         v.preview_role=(child and 'child_' or 'main_')..(effect and 'effect' or 'panel')
+                        v.preview_time,v.preview_animation=HUD.config.shader_animation_values(cfg,effect and 'effect' or 'panel',self.clock)
                     end
                     local ok,available=pcall(sr.Application.can_get,'material',material)
                     if ok and available then v.preview_material=material;if v.type=='panel' and selected~='auto' and math.max(v.c[1],v.c[2],v.c[3])<16 then v.c={48,48,48} end end

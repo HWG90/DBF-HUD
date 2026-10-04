@@ -7,6 +7,15 @@ assert(not pcall(HUD.config.apply,c,{theme_shader_scale=0}))
 assert(not pcall(HUD.config.apply,c,{effect_shader_scale=0/0}))
 HUD.config.apply(c,{weapon_panels={['a6a735accb4a327f']={theme_shader_scale=.5,effect_shader_scale=2,panel_opacity=.8}}})
 local w=HUD.config.effective(c,'a6a735accb4a327f');assert(w.theme_shader_scale==.5 and w.effect_shader_scale==2 and c.theme_shader_scale==.25)
+assert(c.theme_shader_animate==false and c.effect_shader_animate==false)
+HUD.config.apply(c,{weapon_panels={['a6a735accb4a327f']={theme_shader_animate=true,theme_shader_speed=2,effect_shader_animate=false,effect_shader_speed=.5}}})
+local animated=HUD.config.effective(c,'a6a735accb4a327f')
+local time,enabled=HUD.config.shader_animation_values(animated,'panel',4);assert(time==8 and enabled==1)
+time,enabled=HUD.config.shader_animation_values(animated,'effect',4);assert(time==2 and enabled==0)
+assert(c.theme_shader_animate==false)
+assert(not pcall(HUD.config.apply,c,{theme_shader_animate='yes'}))
+assert(not pcall(HUD.config.apply,c,{theme_shader_speed=0}))
+assert(not pcall(HUD.config.apply,c,{effect_shader_speed=0/0}))
 local camera={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};local samples=0
 for _,fov in ipairs({.3,.7,1.2,1.57})do for _,aspect in ipairs({1,1.777,2.4,3})do for j=1,50 do
  local x,y,z=-.2+j*.008,.25+j*.03,.3

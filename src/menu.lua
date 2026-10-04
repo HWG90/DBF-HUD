@@ -156,8 +156,12 @@ function M.new(hud)
             local panel_definitions={
                 {'theme_shader','Theme shader (3D)','choice',shader_choices},
                 {'theme_shader_scale','Panel pattern size','slider',.25,4,.05},
+                {'theme_shader_animate','Animate panel shader','toggle'},
+                {'theme_shader_speed','Panel animation speed','slider',.1,3,.1},
                 {'effect_shader','Effect shader (3D)','choice',shader_choices},
                 {'effect_shader_scale','Effect pattern size','slider',.25,4,.05},
+                {'effect_shader_animate','Animate effect shader','toggle'},
+                {'effect_shader_speed','Effect animation speed','slider',.1,3,.1},
                 {'font','Weapon font','choice',weapon_fonts},
                 {'background_color','Panel color','color'},{'text_color','Text color','color'},{'decoration_color','Decoration color','color'},
                 {'panel_opacity','Panel opacity','slider',0,1,.01},{'text_opacity','Text opacity','slider',0,1,.01},
@@ -178,8 +182,10 @@ function M.new(hud)
             end
             for _,def in ipairs(panel_definitions)do
                 local key=def[1];local c={id='weapon_'..key,type=def[3],label=def[2],default=panel_value(key)}
-                if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Frozen samples do not animate.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Frozen samples do not animate; preview uses native materials in 3D mode.' end
+                if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Animation is controlled by Animate panel shader.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Animation is controlled by Animate effect shader; preview uses native materials in 3D mode.' end
                 if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
+                if key=='theme_shader_animate' or key=='effect_shader_animate' then c.description='Animate the selected shader. Off keeps the static sample. Requires animated native assets; no new panel geometry.' end
+                if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
@@ -241,7 +247,7 @@ function M.new(hud)
                         on_change=function(v)save('decoration_color',v)end},
 }},{id='weapon_appearance',name='Weapon Appearance',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls=(function()
                 local controls,theme,effects={},{},{}
-                local effect_keys={weapon_effect_shader_scale=true,weapon_effect_shader=true,weapon_effect_scanlines=true,weapon_effect_flicker=true,weapon_effect_sweep=true,weapon_effect_scanline_count=true,weapon_effect_sweep_speed=true,weapon_effect_sweep_density=true,weapon_frosted=true}
+                local effect_keys={weapon_effect_shader_animate=true,weapon_effect_shader_speed=true,weapon_effect_shader_scale=true,weapon_effect_shader=true,weapon_effect_scanlines=true,weapon_effect_flicker=true,weapon_effect_sweep=true,weapon_effect_scanline_count=true,weapon_effect_sweep_speed=true,weapon_effect_sweep_density=true,weapon_frosted=true}
                 for _,c in ipairs(panel_controls)do
                     if c.id and c.id:sub(1,7)=='weapon_' and c.id~='weapon_heading' then
                         local group=effect_keys[c.id] and effects or theme;group[#group+1]=c

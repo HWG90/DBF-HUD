@@ -111,6 +111,7 @@ function M.start(sr,backend,options)
                         local fw,fh=math.max(.001,frame.w*factor),math.max(.001,frame.h*factor)
                         v.preview_mapping={viewport_width/fw/scale,0,-fx/fw/scale,0,viewport_height/fh/scale,(fy+fh-viewport_height)/fh/scale,0,0,1}
                         v.preview_role=(child and 'child_' or 'main_')..(effect and 'effect' or 'panel')
+                        v.preview_time,v.preview_animation=HUD.config.shader_animation_values(cfg,effect and 'effect' or 'panel',self.clock)
                     end
                     local ok,available=pcall(sr.Application.can_get,'material',material)
                     if ok and available then v.preview_material=material;if v.type=='panel' and selected~='auto' and math.max(v.c[1],v.c[2],v.c[3])<16 then v.c={48,48,48} end end

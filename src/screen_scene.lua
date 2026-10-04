@@ -206,8 +206,9 @@ function M.new(sr,log)
                         local rows=assert(panel_mapping(),'panel shader mapping unavailable')
                         local scale=tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
                         if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
-                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,0))
-                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,0))
+                        local seconds,animated=HUD.config.shader_animation_values(c,role,c.style_clock)
+                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,seconds))
+                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,animated))
                         sr.Material.set_vector4(handle,'clip_box',sr.Vector4(rows[7],rows[8],rows[9],0))
                     end
                     materials[cache_key]=true
