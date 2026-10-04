@@ -186,6 +186,12 @@ function M.start(sr,backend,options)
         bone_marker.release();return
     end
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
+    local art_materials,art_textures=0,0
+    for _,variant in ipairs({'faithful','realistic'})do for _,layer in ipairs({'underlay','recesses','details'})do
+        if sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
+        if sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
+    end end
+    log('TEXTURE_LIBERATOR_BUILD 20261004-native-v1 materials='..art_materials..'/6 textures='..art_textures..'/6')
     local function research_snapshot()
     if not self.config.debug_logging then return end
     -- Availability check only: never invokes unverified world GUI functions.

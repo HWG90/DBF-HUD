@@ -43,6 +43,19 @@ for _,rounds in ipairs({0,32,48})do for _,scale in ipairs({.5,1,2})do
  assert(count and reserve,'STA-11 live model readouts missing')
 end end
 print('PASS STA-11 normal, empty, full readouts at three scales through composed layout')
+for _,scale in ipairs({.05,.5,1,3})do
+ local cfg=HUD.config.new();cfg.font='bigblue'
+ local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex='968211c0033dce64',kind='magazine',rounds=30,capacity=45,reserve=4,fire_mode='AUTO'}))
+ local out=HUD.layout.compose(m,0,0,scale,1,cfg,0,function(t,z)return 0,0,#t*z*.5,z end)
+ out=HUD.world_style.prepare(out,{first_person=false},cfg)
+ for _,variant in ipairs({'faithful','realistic'})do
+  local replaced=HUD.texture_art.prepare(out,m.resource_hex,function()return true end,HUD.texture_art_assets,variant)
+  local textures=0;for _,v in ipairs(replaced)do if v.type=='texture' then textures=textures+1 end end
+  assert(textures==3,'actual Liberator composition failed texture grouping: '..variant)
+  assert(#out-#replaced==102,'only the 105 static art commands should be replaced')
+ end
+end
+print('PASS actual Liberator composed/scaled commands map to three textures in both variants')
 -- Count composed commands, not GPU draw calls or measured performance.
 for _,spec in ipairs({{'Leveller','7617642765ac38c7'},{'Breacher','e91f569c2ad8af01'},{'Punisher','41eac4a03987faa0'},{'Hot Shot','1abbff60d26ba391'},{'Ultimatum','9eb160830321bfd6'}})do
  local m=HUD.model.normalize(HUD.ammo_types.apply({resource_hex=spec[2],kind='magazine',rounds=8,capacity=16,reserve=4,fire_mode='AUTO'}))

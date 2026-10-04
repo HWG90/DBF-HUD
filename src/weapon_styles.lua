@@ -301,6 +301,15 @@ local function liberator_panel(previous,m,scale,cfg,opacity,measure,decorate)
  local out={frame}
  local function part(dx,dy,pw,ph,c,a,tag)
   out[#out+1]={type='rect',x=x+dx*scale,y=y+dy*scale,w=pw*scale,h=ph*scale,c=c,a=(a or 1)*opacity,liberator_issue=true,liberator_detail=tag}
+  if m.resource_hex=='968211c0033dce64' and w==124 then
+   local layer=tag=='skull-watermark' and 'underlay' or (tag=='designation-plate' or tag=='count-recess') and 'recesses'
+   if not layer and (tag=='designation-stripe' or tag=='receiver-rib' or tag=='rifle-round-pixel' or tag=='count-seam' or tag=='magazine-sill' or tag=='fastener' or tag=='fastener-slot') then layer='details' end
+   if layer then
+    local v=out[#out];v.texture_art_layer='liberator.'..layer;v.texture_art_static=true
+    v.texture_art_opacity=opacity*(layer=='recesses' and cfg.panel_opacity or 1)
+    v.texture_art_box={x=x,y=y,w=w*scale,h=h*scale}
+   end
+  end
  end
  local function label(t,dy,size,c,numeric)
   local a,b,e,f=extent(t,size)

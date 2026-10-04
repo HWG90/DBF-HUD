@@ -1,8 +1,9 @@
 // Contract candidate: retain untextured triangle VS; reconstruct perspective UV per pixel.
-Texture2D<float> scene_depth : register(t0);
-SamplerState depth_sampler : register(s0);
-Texture2D<float4> artwork : register(t1);
-SamplerState artwork_sampler : register(s1);
+// Match the existing native diffuse+depth library slots instead of adding bindings.
+Texture2D<float> scene_depth : register(t1);
+SamplerState depth_sampler : register(s1);
+Texture2D<float4> artwork : register(t0);
+SamplerState artwork_sampler : register(s0);
 cbuffer global_viewport : register(b0) { float4 screen_viewport : packoffset(c48); };
 cbuffer c0 : register(b2) {
  float4 scissor_rect : packoffset(c0);

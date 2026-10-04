@@ -10288,6 +10288,15 @@ local function liberator_panel(previous,m,scale,cfg,opacity,measure,decorate)
  local out={frame}
  local function part(dx,dy,pw,ph,c,a,tag)
   out[#out+1]={type='rect',x=x+dx*scale,y=y+dy*scale,w=pw*scale,h=ph*scale,c=c,a=(a or 1)*opacity,liberator_issue=true,liberator_detail=tag}
+  if m.resource_hex=='968211c0033dce64' and w==124 then
+   local layer=tag=='skull-watermark' and 'underlay' or (tag=='designation-plate' or tag=='count-recess') and 'recesses'
+   if not layer and (tag=='designation-stripe' or tag=='receiver-rib' or tag=='rifle-round-pixel' or tag=='count-seam' or tag=='magazine-sill' or tag=='fastener' or tag=='fastener-slot') then layer='details' end
+   if layer then
+    local v=out[#out];v.texture_art_layer='liberator.'..layer;v.texture_art_static=true
+    v.texture_art_opacity=opacity*(layer=='recesses' and cfg.panel_opacity or 1)
+    v.texture_art_box={x=x,y=y,w=w*scale,h=h*scale}
+   end
+  end
  end
  local function label(t,dy,size,c,numeric)
   local a,b,e,f=extent(t,size)
@@ -15195,6 +15204,7 @@ function M.prepare(commands,p,c)
                         if command.type=='panel' then v.source_panel=command end
                         if v.effect_band then v.effect_band=v.effect_band*scale end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
+                        if v.texture_art_box then local b=v.texture_art_box;v.texture_art_box={x=(b.x-f.x-f.w/2)*scale,y=(b.y-f.y-f.h/2)*scale,w=b.w*scale,h=b.h*scale} end
                         if v.quad then local q={};for i,p in ipairs(v.quad) do q[i]={(p[1]-f.x-f.w/2)*scale,(p[2]-f.y-f.h/2)*scale} end;v.quad=q end
                         if v.w then v.w=v.w*scale end
                         if v.h then v.h=v.h*scale end
@@ -15695,9 +15705,16 @@ return M
 
 end)()
 HUD.texture_art_assets=(function()
--- Version-1 texture artwork registry. Empty until a reviewed asset adapter is supplied.
--- Keys are verified 16-character weapon resource IDs. See docs/TEXTURE-ART-CONTRACT.md.
-return {}
+-- Optional isolated native trial assets. Missing resources preserve primitive art.
+local layers={};local variants={faithful={},realistic={}}
+for i,name in ipairs({'underlay','recesses','details'})do
+ local id='liberator.'..name
+ layers[i]={id=id,command_count=({50,2,53})[i],aspect=124/110}
+ for _,variant in ipairs({'faithful','realistic'})do
+  variants[variant][id]={material='mods/dbf_hud/materials/texture_liberator_'..variant..'_'..name,texture='mods/dbf_hud/textures/liberator_'..variant..'_'..name}
+ end
+end
+return {['968211c0033dce64']={version=1,layers=layers,variants=variants}}
 
 end)()
 HUD.screen_scene=(function()
@@ -17304,6 +17321,12 @@ function M.start(sr,backend,options)
         bone_marker.release();return
     end
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
+    local art_materials,art_textures=0,0
+    for _,variant in ipairs({'faithful','realistic'})do for _,layer in ipairs({'underlay','recesses','details'})do
+        if sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
+        if sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
+    end end
+    log('TEXTURE_LIBERATOR_BUILD 20261004-native-v1 materials='..art_materials..'/6 textures='..art_textures..'/6')
     local function research_snapshot()
     if not self.config.debug_logging then return end
     -- Availability check only: never invokes unverified world GUI functions.
