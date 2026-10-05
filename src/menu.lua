@@ -1,5 +1,17 @@
 -- ModOptionsMenu API 1; only main settings and placement are exposed.
 local M={}
+function M.texture_choices(resource)
+    local labels,ids={},{}
+    local art=HUD.texture_art_assets and HUD.texture_art_assets[resource]
+    local study=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[resource]
+    if art and art.variants then
+        if art.variants.faithful then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
+        if art.variants.realistic then labels[#labels+1]='Hyper-realistic treatment';ids[#ids+1]='realistic' end
+    elseif study and study.faithful then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
+    if study then labels[#labels+1]='Designer texture study (manual)';ids[#ids+1]='study' end
+    labels[#labels+1]='Original primitives';ids[#ids+1]='original'
+    return labels,ids,#ids>1
+end
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
     local font_host,font_handle
@@ -177,7 +189,7 @@ function M.new(hud)
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings() or hud.config
                 local v=cfg[key]
-                if key=='texture_art_variant' then return v=='realistic' and 2 or 1 end
+                if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);for i,id in ipairs(ids)do if id==v then return i end end;return #ids end
                 if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
                 if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
                 if key=='decoration' then for i,n in ipairs(HUD.config.decorations)do if n==v then return i end end end
@@ -193,7 +205,7 @@ function M.new(hud)
                 if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
-                    if key=='texture_art_variant' then v=v==2 and 'realistic' or 'faithful' end
+                    if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);v=assert(ids[v],'Texture alternative unavailable') end
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
                     if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
@@ -230,7 +242,11 @@ function M.new(hud)
                         if c.id=='fetch_weapon_appearance' then registered.disabled=id==nil
                         elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Press Fetch to select the equipped weapon'
                         elseif c.id=='weapon_texture_art_trial' or c.id=='weapon_texture_art_variant' then
-                            registered.disabled=not ready or panel_weapon~='968211c0033dce64'
+                            local art=HUD.texture_art_assets and HUD.texture_art_assets[panel_weapon]
+                            local bespoke=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[panel_weapon]
+                            local choices,_,has_alternative=M.texture_choices(panel_weapon)
+                            registered.disabled=not ready or not has_alternative
+                            if c.id=='weapon_texture_art_variant' then registered.choices=choices;mod.values[c.id]=panel_value('texture_art_variant') end
                         else registered.disabled=not ready end
                     end
                 end

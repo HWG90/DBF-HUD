@@ -7942,7 +7942,7 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={texture_art_variant='faithful',texture_art_trial=false,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={texture_art_variant='faithful',texture_art_trial=true,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.8,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
 M.limits={theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -8063,7 +8063,7 @@ function M.apply(config,values)
         elseif limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
         elseif (k=='texture_art_trial' or k=='theme_shader_animate' or k=='effect_shader_animate' or k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='theme_shader' or k=='effect_shader' then assert(type(v)=='string' and HUD.shader_ids[v],'Unknown HUD shader')
-        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic','invalid texture artwork variant')
+        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic' or v=='study' or v=='original','invalid texture artwork variant')
         elseif k=='senator_style' then assert(v=='cylinder' or v=='upright','invalid Senator appearance')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
@@ -15205,6 +15205,7 @@ function M.prepare(commands,p,c)
                         if v.effect_band then v.effect_band=v.effect_band*scale end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
                         if v.texture_art_box then local b=v.texture_art_box;v.texture_art_box={x=(b.x-f.x-f.w/2)*scale,y=(b.y-f.y-f.h/2)*scale,w=b.w*scale,h=b.h*scale} end
+                        if v.readout_zone then local z=v.readout_zone;v.readout_zone={cx=(z.cx-f.x-f.w/2)*scale,cy=(z.cy-f.y-f.h/2)*scale,w=z.w*scale,h=z.h*scale} end
                         if v.quad then local q={};for i,p in ipairs(v.quad) do q[i]={(p[1]-f.x-f.w/2)*scale,(p[2]-f.y-f.h/2)*scale} end;v.quad=q end
                         if v.w then v.w=v.w*scale end
                         if v.h then v.h=v.h*scale end
@@ -15217,7 +15218,7 @@ function M.prepare(commands,p,c)
                         local left,bottom,right,top=panel.x,panel.y,panel.x+panel.w,panel.y+panel.h
                         local padding=math.max(1,8*2*(c.scale or 1)*scale)
                         for _,v in ipairs(centered) do
-                            if v.type=='text' and not v.child then
+                            if v.type=='text' and not v.child and not v.texture_readout then
                                 local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
                                 left=math.min(left,v.x+a-padding);bottom=math.min(bottom,v.y+b-padding)
                                 right=math.max(right,v.x+e+padding);top=math.max(top,v.y+f+padding)
@@ -15438,6 +15439,11 @@ function M.prepare(commands,p,c)
         end
     end
     centered=kept
+    if HUD.bespoke_texture_panel then
+        for _,v in ipairs(centered) do if v.texture_readout then
+            HUD.bespoke_texture_panel.fit(v,function(t,size,font)return HUD.font.measure(t,size,font,true) end)
+        end end
+    end
     return centered
 end
 return M
@@ -15717,6 +15723,86 @@ end
 return {['968211c0033dce64']={version=1,layers=layers,variants=variants}}
 
 end)()
+HUD.bespoke_texture_specs=(function()
+-- Approved local texture studies; authoritative empty readout regions from creator layouts.
+return {["90ddc374f4e3d756"]={["key"]="m90a",["label"]="M90A",["reserve_label"]="SHELLS",["w"]=148,["h"]=110,["zones"]={["title"]={["cx"]=101.084,["cy"]=65.24475,["w"]=56.24,["h"]=6.38625},["count"]={["cx"]=100.936,["cy"]=43.62975,["w"]=64.38,["h"]=21.615},["reserve"]={["cx"]=77.552,["cy"]=13.958249999999992,["w"]=84.36,["h"]=6.38625}},["material"]="mods/dbf_hud/materials/texture_bespoke_m90a",["texture"]="mods/dbf_hud/textures/bespoke_m90a"},["4dbd74f49c8ffc13"]={["key"]="ma5c",["label"]="MA5C",["reserve_label"]="MAGS",["w"]=144,["h"]=84,["zones"]={["title"]={["cx"]=72.0,["cy"]=71.378,["w"]=38.160000000000004,["h"]=4.4399999999999995},["count"]={["cx"]=72.0,["cy"]=53.322,["w"]=59.04,["h"]=16.650000000000002},["compass"]={["cx"]=72.0,["cy"]=30.53,["w"]=69.12,["h"]=5.55},["reserve"]={["cx"]=120.672,["cy"]=11.807999999999993,["w"]=23.76,["h"]=4.4399999999999995}},["material"]="mods/dbf_hud/materials/texture_bespoke_ma5c",["texture"]="mods/dbf_hud/textures/bespoke_ma5c"},["25aa2fd4643cf4ee"]={["key"]="spear",["label"]="FAF-14",["reserve_label"]="RCKTS",["w"]=160,["h"]=92,["zones"]={["title"]={["cx"]=83.52000000000001,["cy"]=79.10725,["w"]=46.4,["h"]=5.34625},["count"]={["cx"]=83.36,["cy"]=56.324,["w"]=47.199999999999996,["h"]=18.095},["reserve"]={["cx"]=135.51999999999998,["cy"]=43.6575,["w"]=25.6,["h"]=4.935}},["material"]="mods/dbf_hud/materials/texture_bespoke_spear",["texture"]="mods/dbf_hud/textures/bespoke_spear"},["b6aff2195568767f"]={["key"]="eruptor",["label"]="R-36",["reserve_label"]="MAGS",["w"]=156,["h"]=100,["zones"]={["title"]={["cx"]=40.872,["cy"]=88.016,["w"]=26.520000000000003,["h"]=4.4},["count"]={["cx"]=76.44,["cy"]=28.176000000000002,["w"]=70.2,["h"]=16.72},["capacity"]={["cx"]=117.0,["cy"]=24.92,["w"]=15.600000000000001,["h"]=5.720000000000001},["reserve"]={["cx"]=121.68,["cy"]=11.983999999999995,["w"]=28.86,["h"]=5.279999999999999}},["material"]="mods/dbf_hud/materials/texture_bespoke_eruptor",["texture"]="mods/dbf_hud/textures/bespoke_eruptor"},["30061f91af477f5e"]={["key"]="plas39",["label"]="PLAS-39",["reserve_label"]="BATTERIES",["w"]=144,["h"]=120,["zones"]={["title"]={["cx"]=72.0,["cy"]=110.813,["w"]=60.48,["h"]=6.545},["count"]={["cx"]=72.0,["cy"]=25.251999999999995,["w"]=73.44,["h"]=13.685},["reserve"]={["cx"]=72.0,["cy"]=6.0930000000000035,["w"]=58.32000000000001,["h"]=4.76}},["material"]="mods/dbf_hud/materials/texture_bespoke_plas39",["texture"]="mods/dbf_hud/textures/bespoke_plas39"},["be70ee0d8d44028e"]={["key"]="m7s",["label"]="M7S",["reserve_label"]="MAGS",["w"]=136,["h"]=70,["zones"]={["title"]={["cx"]=68.0,["cy"]=60.536,["w"]=87.04,["h"]=6.65},["count"]={["cx"]=68.0,["cy"]=34.1355,["w"]=100.64,["h"]=20.9475},["reserve"]={["cx"]=88.4,["cy"]=9.863,["w"]=45.56,["h"]=6.65}},["material"]="mods/dbf_hud/materials/texture_bespoke_m7s",["texture"]="mods/dbf_hud/textures/bespoke_m7s"}}
+
+end)()
+HUD.bespoke_texture_panel=(function()
+-- Native art is presentation only. All numbers and warnings come from the model.
+local M={}
+local function count(n)
+    return type(n)=='number' and n==n and n>=0 and n<=100000 and n%1==0 and n or nil
+end
+function M.fit(v,measure)
+    local z=v.readout_zone
+    for _=1,8 do
+        local a,b,e,f=measure(v.text,v.size,v.font)
+        local factor=math.min(1,z.w/math.max(.001,e-a),z.h/math.max(.001,f-b))
+        if factor>=.99999 then v.x=z.cx-(a+e)/2;v.y=z.cy-(b+f)/2;return true end
+        v.size=v.size*factor*.96
+    end
+    local a,b,e,f=measure(v.text,v.size,v.font)
+    v.x=z.cx-(a+e)/2;v.y=z.cy-(b+f)/2
+    return e-a<=z.w+1e-6 and f-b<=z.h+1e-6
+end
+function M.compose(fallback,m,x,y,s,opacity,cfg,clock,measure,available)
+    local spec=HUD.bespoke_texture_specs[m.resource_hex]
+    if not measure and HUD.font.supported(cfg.font) then measure=function(t,size)return HUD.font.measure(t,size,cfg.font) end end
+    -- Faithful conversions auto-enable; redesigned studies require an explicit selection.
+    if not spec or (spec.faithful~=true and cfg.texture_art_variant~='study') or cfg.texture_art_variant=='original' or cfg.texture_art_trial==false or cfg.anchor_mode~='world' or not measure or
+        not available('material',spec.material) or not available('texture',spec.texture) then return fallback end
+    local frame={type='panel',x=x,y=y,w=spec.w*s,h=spec.h*s,
+        c=HUD.config.rgb(cfg.background_color),a=(cfg.panel_opacity or .8)*opacity,
+        frosted=cfg.frosted,bespoke_texture_frame=true}
+    local out={frame,{type='texture',x=x,y=y,w=frame.w,h=frame.h,c={255,255,255},a=opacity,
+        texture_material=spec.material,texture_resource=spec.texture,texture_layer=49.03}}
+    local loaded,capacity,reserve=count(m.value),count(m.capacity),count(m.reserve)
+    local warn=m.warning==true or loaded==0
+    local pulse=warn and (.65+.35*(.5+.5*math.sin((clock or 0)*(cfg.flash_hz or 4)*math.pi*2))) or 1
+    local function text(str,key,size,ink,numeric)
+        local region=spec.zones[key];if not region then return end
+        local v={type='text',text=str,size=size*s,font=cfg.font,c=ink,a=opacity*(cfg.text_opacity or 1),
+            numeric_display=numeric,texture_readout=true,readout_key=key,
+            readout_zone={cx=x+region.cx*s,cy=y+region.cy*s,w=region.w*s,h=region.h*s}}
+        if key=='count' then
+            v.a=v.a*pulse
+            if m.chamber_bonus==1 then v.last_digit_color={255,221,0} end
+        end
+        if not M.fit(v,measure) then return false end
+        out[#out+1]=v;return true
+    end
+    local digits=spec.key=='m7s' and '%03d' or '%02d'
+    if not text(loaded and string.format(digits,loaded) or '---','count',32,
+        warn and HUD.config.rgb(cfg.heat_red) or {226,237,235},true) then return fallback end
+    text(spec.label..(spec.zones.capacity and '' or (' / '..(capacity and tostring(capacity) or '--'))),'title',9,{183,211,210})
+    text(capacity and '/ '..tostring(capacity) or '/ --','capacity',8,{183,211,210})
+    -- Reserve source/unit stays reader-owned. Translate only known equivalent units.
+    local unit=m.reserve_kind
+    if unit==nil or (spec.key=='spear' and unit=='PACK') or (spec.key=='m90a' and unit=='ROUNDS') or
+        (spec.key=='plas39' and unit=='MAGS') then unit=spec.reserve_label end
+    text((reserve and string.format('%02d',reserve) or '--')..' '..unit,'reserve',8,{211,223,219},true)
+    if spec.zones.compass then
+        local heading=m.compass_heading
+        local valid=type(heading)=='number' and heading==heading and math.abs(heading)<math.huge
+        text(valid and string.format('BRG %03d',math.floor(heading%360+.5)%360) or 'BRG ---','compass',7,{105,211,207})
+    end
+    -- Keep existing mode/attachment child panels, positioned below this new parent.
+    -- Spear's old reserve child is represented by its native readout zone instead.
+    if spec.key~='spear' then
+        local old=fallback[1];local dx=frame.x+frame.w/2-old.x-old.w/2;local dy=frame.y-old.y
+        for _,v in ipairs(fallback) do if v.child then
+            local copy={};for k,val in pairs(v) do copy[k]=val end
+            copy.x=copy.x+dx;copy.y=copy.y+dy;out[#out+1]=copy
+        end end
+    end
+    -- Shared shader/effect controls remain active; artwork owns its perimeter.
+    local effects={};for k,v in pairs(cfg) do effects[k]=v end;effects.decoration='none'
+    return HUD.layout.finish_custom_panel(out,m,s,opacity,effects,clock)
+end
+return M
+
+end)()
 HUD.screen_scene=(function()
 -- Project saved world layouts into the UI world; compare scene depth in shaders.
 -- Native atlas glyphs become textured quads, not replacement bitmap lettering.
@@ -15975,7 +16061,7 @@ function M.new(sr,log)
                     local id=G.triangle(primitive_gui,vertex(a),vertex(b),vertex(d),layer,color,name,
                         uv and sr.Vector2(a.s,a.v) or nil,uv and sr.Vector2(b.s,b.v) or nil,uv and sr.Vector2(d.s,d.v) or nil)
                     track(primitive_gui,id)
-                    if id and (name:find('/lab_',1,true) or name:find('/local_',1,true) or name:find('/mapped_',1,true)) and not shader_submitted[name] then shader_submitted[name]=true;log('HUD_SHADER_SUBMITTED material='..name..' weapon='..tostring(p.resource_hex)..' triangle='..tostring(id)) end
+                    if id and (name:find('/lab_',1,true) or name:find('/local_',1,true) or name:find('/mapped_',1,true) or name:find('/texture_liberator_',1,true) or name:find('/texture_bespoke_',1,true)) and not shader_submitted[name] then shader_submitted[name]=true;log('HUD_SHADER_SUBMITTED material='..name..' weapon='..tostring(p.resource_hex)..' triangle='..tostring(id)) end
                     if effect and id then scan_emitted=scan_emitted+1 end
                 end
             end
@@ -16690,6 +16776,18 @@ end)()
 HUD.menu=(function()
 -- ModOptionsMenu API 1; only main settings and placement are exposed.
 local M={}
+function M.texture_choices(resource)
+    local labels,ids={},{}
+    local art=HUD.texture_art_assets and HUD.texture_art_assets[resource]
+    local study=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[resource]
+    if art and art.variants then
+        if art.variants.faithful then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
+        if art.variants.realistic then labels[#labels+1]='Hyper-realistic treatment';ids[#ids+1]='realistic' end
+    elseif study and study.faithful then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
+    if study then labels[#labels+1]='Designer texture study (manual)';ids[#ids+1]='study' end
+    labels[#labels+1]='Original primitives';ids[#ids+1]='original'
+    return labels,ids,#ids>1
+end
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
     local font_host,font_handle
@@ -16860,14 +16958,14 @@ function M.new(hud)
                 {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background (2D)','toggle'},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
-            if panel_weapon=='968211c0033dce64' then
-                panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
-                panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
-            end
+            -- Fetch selects a weapon after registration; keep these controls
+            -- registered and gate their availability against the fetched weapon.
+            panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
+            panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings() or hud.config
                 local v=cfg[key]
-                if key=='texture_art_variant' then return v=='realistic' and 2 or 1 end
+                if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);for i,id in ipairs(ids)do if id==v then return i end end;return #ids end
                 if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
                 if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
                 if key=='decoration' then for i,n in ipairs(HUD.config.decorations)do if n==v then return i end end end
@@ -16883,7 +16981,7 @@ function M.new(hud)
                 if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
-                    if key=='texture_art_variant' then v=v==2 and 'realistic' or 'faithful' end
+                    if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);v=assert(ids[v],'Texture alternative unavailable') end
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
                     if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
@@ -16919,6 +17017,12 @@ function M.new(hud)
                     if registered then
                         if c.id=='fetch_weapon_appearance' then registered.disabled=id==nil
                         elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Press Fetch to select the equipped weapon'
+                        elseif c.id=='weapon_texture_art_trial' or c.id=='weapon_texture_art_variant' then
+                            local art=HUD.texture_art_assets and HUD.texture_art_assets[panel_weapon]
+                            local bespoke=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[panel_weapon]
+                            local choices,_,has_alternative=M.texture_choices(panel_weapon)
+                            registered.disabled=not ready or not has_alternative
+                            if c.id=='weapon_texture_art_variant' then registered.choices=choices;mod.values[c.id]=panel_value('texture_art_variant') end
                         else registered.disabled=not ready end
                     end
                 end
@@ -17134,6 +17238,19 @@ return M
 end)()
 HUD.runtime=(function()
 local M={draw_budget_ms=2.5}
+function M.rebase_commands(commands,left,bottom)
+    for _,v in ipairs(commands) do
+        v.x=v.x-left;v.y=v.y-bottom
+        if v.texture_art_box then
+            local b=v.texture_art_box
+            v.texture_art_box={x=b.x-left,y=b.y-bottom,w=b.w,h=b.h}
+        end
+        if v.readout_zone then
+            local z=v.readout_zone;v.readout_zone={cx=z.cx-left,cy=z.cy-bottom,w=z.w,h=z.h}
+        end
+    end
+    return commands
+end
 function M.timing_ink(draw_ms,clock)
     if draw_ms and draw_ms>M.draw_budget_ms and math.floor((clock or 0)*4)%2==0 then return {255,55,65}end
     return {190,235,210}
@@ -17164,8 +17281,11 @@ function M.start(sr,backend,options)
             return finish(fn(...))
         end
     end
-    local compose=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure)
+    local compose=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure,native_art)
         local out=HUD.layout.compose(m,x,y,scale,opacity,cfg,clock,measure)
+        if native_art and HUD.bespoke_texture_panel and type(sr.Application.can_get)=='function' then
+            out=HUD.bespoke_texture_panel.compose(out,m,x,y,scale,opacity,cfg,clock,measure,sr.Application.can_get)
+        end
         local override=cfg.weapon_panel_overrides
         if override then for _,v in ipairs(out)do
             if v.type=='text' and override.font then v.font=override.font end
@@ -17323,10 +17443,17 @@ function M.start(sr,backend,options)
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     local art_materials,art_textures=0,0
     for _,variant in ipairs({'faithful','realistic'})do for _,layer in ipairs({'underlay','recesses','details'})do
-        if sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
-        if sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
+        if sr.Application.can_get and sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
+        if sr.Application.can_get and sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
     end end
     log('TEXTURE_LIBERATOR_BUILD 20261004-native-v1 materials='..art_materials..'/6 textures='..art_textures..'/6')
+    if HUD.bespoke_texture_specs and sr.Application.can_get then
+        local available=0
+        for _,spec in pairs(HUD.bespoke_texture_specs) do
+            if sr.Application.can_get('material',spec.material) and sr.Application.can_get('texture',spec.texture) then available=available+1 end
+        end
+        log('TEXTURE_BESPOKE_BUILD six-studies available='..available..'/6; unavailable retains accepted primitives')
+    end
     local function research_snapshot()
     if not self.config.debug_logging then return end
     -- Availability check only: never invokes unverified world GUI functions.
@@ -17868,9 +17995,9 @@ function M.start(sr,backend,options)
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
-            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
+            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock,nil,true)
             local f=world_commands[1];local left,bottom=f.x,f.y
-            for _,v in ipairs(world_commands) do v.x=v.x-left;v.y=v.y-bottom end
+            M.rebase_commands(world_commands,left,bottom)
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
                 projection.camera_matrix,projection.camera_fov,w,h,projection.camera_near) then
                 world_display.release();view.draw(screen_overlay(w,h));self.anchor_status='screen-projected scene-depth HUD';return

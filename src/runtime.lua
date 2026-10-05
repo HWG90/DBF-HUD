@@ -6,6 +6,9 @@ function M.rebase_commands(commands,left,bottom)
             local b=v.texture_art_box
             v.texture_art_box={x=b.x-left,y=b.y-bottom,w=b.w,h=b.h}
         end
+        if v.readout_zone then
+            local z=v.readout_zone;v.readout_zone={cx=z.cx-left,cy=z.cy-bottom,w=z.w,h=z.h}
+        end
     end
     return commands
 end
@@ -39,8 +42,11 @@ function M.start(sr,backend,options)
             return finish(fn(...))
         end
     end
-    local compose=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure)
+    local compose=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure,native_art)
         local out=HUD.layout.compose(m,x,y,scale,opacity,cfg,clock,measure)
+        if native_art and HUD.bespoke_texture_panel and type(sr.Application.can_get)=='function' then
+            out=HUD.bespoke_texture_panel.compose(out,m,x,y,scale,opacity,cfg,clock,measure,sr.Application.can_get)
+        end
         local override=cfg.weapon_panel_overrides
         if override then for _,v in ipairs(out)do
             if v.type=='text' and override.font then v.font=override.font end
@@ -198,10 +204,17 @@ function M.start(sr,backend,options)
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     local art_materials,art_textures=0,0
     for _,variant in ipairs({'faithful','realistic'})do for _,layer in ipairs({'underlay','recesses','details'})do
-        if sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
-        if sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
+        if sr.Application.can_get and sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
+        if sr.Application.can_get and sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
     end end
     log('TEXTURE_LIBERATOR_BUILD 20261004-native-v1 materials='..art_materials..'/6 textures='..art_textures..'/6')
+    if HUD.bespoke_texture_specs and sr.Application.can_get then
+        local available=0
+        for _,spec in pairs(HUD.bespoke_texture_specs) do
+            if sr.Application.can_get('material',spec.material) and sr.Application.can_get('texture',spec.texture) then available=available+1 end
+        end
+        log('TEXTURE_BESPOKE_BUILD six-studies available='..available..'/6; unavailable retains accepted primitives')
+    end
     local function research_snapshot()
     if not self.config.debug_logging then return end
     -- Availability check only: never invokes unverified world GUI functions.
@@ -743,7 +756,7 @@ function M.start(sr,backend,options)
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
-            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
+            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock,nil,true)
             local f=world_commands[1];local left,bottom=f.x,f.y
             M.rebase_commands(world_commands,left,bottom)
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,

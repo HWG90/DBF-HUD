@@ -10,6 +10,7 @@ function M.prepare(commands,p,c)
                         if v.effect_band then v.effect_band=v.effect_band*scale end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
                         if v.texture_art_box then local b=v.texture_art_box;v.texture_art_box={x=(b.x-f.x-f.w/2)*scale,y=(b.y-f.y-f.h/2)*scale,w=b.w*scale,h=b.h*scale} end
+                        if v.readout_zone then local z=v.readout_zone;v.readout_zone={cx=(z.cx-f.x-f.w/2)*scale,cy=(z.cy-f.y-f.h/2)*scale,w=z.w*scale,h=z.h*scale} end
                         if v.quad then local q={};for i,p in ipairs(v.quad) do q[i]={(p[1]-f.x-f.w/2)*scale,(p[2]-f.y-f.h/2)*scale} end;v.quad=q end
                         if v.w then v.w=v.w*scale end
                         if v.h then v.h=v.h*scale end
@@ -22,7 +23,7 @@ function M.prepare(commands,p,c)
                         local left,bottom,right,top=panel.x,panel.y,panel.x+panel.w,panel.y+panel.h
                         local padding=math.max(1,8*2*(c.scale or 1)*scale)
                         for _,v in ipairs(centered) do
-                            if v.type=='text' and not v.child then
+                            if v.type=='text' and not v.child and not v.texture_readout then
                                 local a,b,e,f=HUD.font.measure(v.text,v.size,v.font,true)
                                 left=math.min(left,v.x+a-padding);bottom=math.min(bottom,v.y+b-padding)
                                 right=math.max(right,v.x+e+padding);top=math.max(top,v.y+f+padding)
@@ -243,6 +244,11 @@ function M.prepare(commands,p,c)
         end
     end
     centered=kept
+    if HUD.bespoke_texture_panel then
+        for _,v in ipairs(centered) do if v.texture_readout then
+            HUD.bespoke_texture_panel.fit(v,function(t,size,font)return HUD.font.measure(t,size,font,true) end)
+        end end
+    end
     return centered
 end
 return M

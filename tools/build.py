@@ -6,7 +6,7 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-ORDER = ['bundled_defaults', 'native_font_data', 'native_font_uv', 'native_font', 'config', 'font', 'motion', 'ammo_types', 'model', 'fire_icons', 'munition_art', 'mg_easter', 'df_shell_state', 'recoilless_state', 'senator_state', 'senator_panel', 'melta_panel', 'speargun_panel', 'recoilless_panel', 'catalog_housing', 'sta11_panel','weapon_styles', 'layout', 'memory', 'layouts', 'reader', 'pose', 'camera_mode', 'projection', 'anchor', 'view', 'pose_motion', 'world_probe', 'depth_marker', 'offscreen_test', 'world_style', 'archived_mesh', 'scene_test', 'texture_art','texture_art_assets','screen_scene', 'placement', 'weapon_names', 'weapon_offsets', 'layout_editor', 'menu', 'runtime']
+ORDER = ['bundled_defaults', 'native_font_data', 'native_font_uv', 'native_font', 'config', 'font', 'motion', 'ammo_types', 'model', 'fire_icons', 'munition_art', 'mg_easter', 'df_shell_state', 'recoilless_state', 'senator_state', 'senator_panel', 'melta_panel', 'speargun_panel', 'recoilless_panel', 'catalog_housing', 'sta11_panel','weapon_styles', 'layout', 'memory', 'layouts', 'reader', 'pose', 'camera_mode', 'projection', 'anchor', 'view', 'pose_motion', 'world_probe', 'depth_marker', 'offscreen_test', 'world_style', 'archived_mesh', 'scene_test', 'texture_art','texture_art_assets','bespoke_texture_specs','bespoke_texture_panel','screen_scene', 'placement', 'weapon_names', 'weapon_offsets', 'layout_editor', 'menu', 'runtime']
 
 def bundle():
     parts = ['-- HD2-Addon: mods/dbf_hud/hud\nlocal HUD={}\n']

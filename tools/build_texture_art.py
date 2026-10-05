@@ -51,7 +51,8 @@ def texture(image):
     image=image.convert('RGBA');w,h=image.size
     template=bytearray((ROOT/'assets/native-hack/texture-template.bin').read_bytes())
     # One mip deliberately: preserve source pixels for the initial filtering test.
-    # DDS_HEADER stores height before width; row pitch still uses width.
+    # DDS_HEADER stores height before width. Square font atlases conceal a swap,
+    # but rectangular artwork then has the wrong dimensions for its row pitch.
     struct.pack_into('<II',template,204,h,w)
     struct.pack_into('<I',template,212,w*4)
     struct.pack_into('<I',template,220,1)
@@ -100,17 +101,24 @@ def build(art,output,base):
             resources.extend([(hash64(resource),hash64('texture'),data,pixels),(hash64(name),hash64('material'),bytes(material),b'')])
             report['assets'].append({'variant':variant,'layer':layer,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'pixel_sha256':hashlib.sha256(pixels).hexdigest(),'bytes':len(pixels),'material':name,'texture':resource})
     body,graphics=archive_rows(resources)
-    # Arsenal must deploy this as another patch of the existing native HUD archive.
-    # An invented archive identity was not discovered by the live game.
-    stem='TextureLiberator/'+base.name
-    target=output/'DBF-HUD-Liberator-Texture-Trial.zip'
-    manifest={'Version':1,'Guid':'bcc9d6ae-47c5-4d78-8c35-c77c10bf9d51','Name':'DBF-HUD Liberator texture trial','Description':'Bounded experimental faithful/realistic artwork assets; existing HUD assets still required.','Options':[{'Name':'Liberator artwork','Include':['TextureLiberator']}]}
+    # Never share a deployed filename with Complete or Shader Lab. Discovery of
+    # this independent archive is unresolved; this package MUST NOT be deployed.
+    independent=format(hash64('dbf_hud_texture_liberator_v2_isolated'),'016x')+'.patch_0'
+    assert independent!=base.name
+    stem='TextureLiberatorIsolated/'+independent
+    target=output/'DBF-HUD-Liberator-Texture-OFFLINE-ONLY.zip'
+    manifest={'Version':1,'Guid':'4c7cef55-364a-4180-b622-b10de7d19e2c','Name':'OFFLINE ONLY - Liberator texture candidate','Description':'Do not enable or deploy. Independent native archive discovery remains unverified.','Options':[{'Name':'Offline candidate','Include':['TextureLiberatorIsolated']}]}
     with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED) as z:
         z.writestr('manifest.json',json.dumps(manifest,indent=2))
         z.writestr(stem,body);z.writestr(stem+'.gpu_resources',graphics);z.writestr(stem+'.stream',b'')
         z.writestr('build-report.json',json.dumps(report,indent=2))
     with zipfile.ZipFile(target) as z:
         assert z.testzip() is None and z.read(stem)==body and z.read(stem+'.gpu_resources')==graphics
+        assert not any(Path(n).name.startswith('ee6b1ba7e22d71ed.') for n in z.namelist())
+        rebuilt={r[:2]:r for r in resources}
+        for r in rows:
+            if r[1]==hash64('shader_library_group'):continue
+            assert rebuilt[r[:2]]==(r[0],r[1],installed[r[2]:r[2]+r[7]],installed_graphics[r[4]:r[4]+r[9]])
     (output/'build-report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(target)
     print('PASS 6 RGBA textures, 6 unique materials, shader and archive bounds; live loading unverified')
