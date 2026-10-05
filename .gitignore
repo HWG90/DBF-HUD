@@ -23,3 +23,7 @@ assets/*.material
 !/preview/senator_cylinder_preview.py
 /preview/suite-family/
 /preview/suite-family-scope.json
+
+# Chat-generated visual review gallery stays outside Git.
+/preview/
+/tests/preview.cjs
