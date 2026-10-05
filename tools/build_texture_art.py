@@ -51,7 +51,8 @@ def texture(image):
     image=image.convert('RGBA');w,h=image.size
     template=bytearray((ROOT/'assets/native-hack/texture-template.bin').read_bytes())
     # One mip deliberately: preserve source pixels for the initial filtering test.
-    struct.pack_into('<II',template,204,w,h)
+    # DDS_HEADER stores height before width; row pitch still uses width.
+    struct.pack_into('<II',template,204,h,w)
     struct.pack_into('<I',template,212,w*4)
     struct.pack_into('<I',template,220,1)
     return bytes(template),image.tobytes()
