@@ -1,0 +1,1 @@
+Accepted pre-Neo-Geo recovery checkpoint, captured before the ongoing redesign. Source modules and exact runtime are preserved separately; no game asset dumps or local evidence included. This is a recovery artifact, not a claim of new live validation.

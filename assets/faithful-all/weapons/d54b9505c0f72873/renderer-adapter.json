@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "weapon_resource": "d54b9505c0f72873",
+  "canvas": [
+    -8,
+    -26,
+    250,
+    90
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        0.0,
+        0.0,
+        151.75,
+        38.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.1,
+          "c": [
+            229,
+            231,
+            226
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 38,
+          "heat_background": true,
+          "type": "rect",
+          "w": 151.666666667,
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "command_count": 1,
+      "sha256": "7e1cba77355dc14b6588025474d10a89be84ff2948a937111e101ddea021d1ce"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        0.0,
+        0.0,
+        233.5,
+        38.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.25,
+          "c": [
+            231,
+            200,
+            92
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 38,
+          "heat_background": true,
+          "type": "rect",
+          "w": 46.666666667,
+          "x": 151.666666667,
+          "y": 0
+        },
+        {
+          "a": 0.25,
+          "c": [
+            225,
+            109,
+            101
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 38,
+          "heat_background": true,
+          "type": "rect",
+          "w": 35,
+          "x": 198.333333333,
+          "y": 0
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 3
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 7.5
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 12
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 16.5
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 21
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 25.5
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 30
+        },
+        {
+          "a": 0.08,
+          "c": [
+            0,
+            0,
+            0
+          ],
+          "center_bar": true,
+          "frosted": true,
+          "h": 0.35,
+          "heat_texture": true,
+          "type": "rect",
+          "w": 233.333333333,
+          "x": 0,
+          "y": 34.5
+        }
+      ],
+      "command_count": 10,
+      "sha256": "8cf6bf654c9fce9191c328d70a9d22d7422400c7b161308056f399620982cbee"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 11,
+  "static_quads": 2
+}

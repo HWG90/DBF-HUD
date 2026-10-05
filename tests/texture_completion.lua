@@ -1,0 +1,12 @@
+local M=dofile('src/texture_completion.lua')
+local base=0x10000000;local mem={};local function put(a,v,n)local b={}for i=1,n do b[i]=string.char(v%256);v=math.floor(v/256)end mem[a]=table.concat(b)end
+mem[base+0x4184ca]=string.char(0x48,0x8b,0x0d)
+put(base+0x2362468,0x20000000,8);put(0x20000338,0x21000000,8);put(0x21001168,0x22000000,8)
+put(0x22000658,0x23000000,8);put(0x23000000,0x24000000,8);put(0x24000040,0x25000000,8)
+mem[0x25000000]=('83b9f000000001760948c7c0ffffffffc3cc488b81e8000000f0830c2400488b00c3'):gsub('..',function(x)return string.char(tonumber(x,16))end)
+put(0x22000668,99,8);put(0x230000f0,0,4);put(0x230000e8,0x26000000,8);put(0x26000000,98,8)
+local q=M.new({read=function(a,n)return mem[a]end},base);local t=q.capture()
+assert(not q.done(t));put(0x26000000,99,8);assert(not q.done(t));put(0x26000000,100,8);assert(q.done(t))
+put(0x230000f0,2,4);assert(not pcall(q.done,t));put(0x230000f0,0,4)
+put(0x22000658,0x23001000,8);assert(not pcall(q.done,t))
+print('PASS completion serial before/equal/after, device removal, owner change; no native APIs called')

@@ -1,0 +1,368 @@
+{
+  "version": 1,
+  "weapon_resource": "52e4334e6a128caf",
+  "canvas": [
+    -16,
+    -32,
+    130,
+    91
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        -13.0,
+        -32.0,
+        78.0,
+        89.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 1,
+          "c": [
+            205,
+            154,
+            57
+          ],
+          "grenade_heading": true,
+          "h": 12,
+          "type": "rect",
+          "w": 3,
+          "x": 33,
+          "y": 42
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            221,
+            133
+          ],
+          "grenade_heading": true,
+          "h": 8,
+          "type": "rect",
+          "w": 1,
+          "x": 33,
+          "y": 44
+        },
+        {
+          "a": 1,
+          "c": [
+            179,
+            130,
+            43
+          ],
+          "grenade_heading": true,
+          "h": 10,
+          "type": "rect",
+          "w": 11,
+          "x": 36,
+          "y": 43
+        },
+        {
+          "a": 1,
+          "c": [
+            239,
+            196,
+            102
+          ],
+          "grenade_heading": true,
+          "h": 2,
+          "type": "rect",
+          "w": 11,
+          "x": 36,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            107,
+            78,
+            35
+          ],
+          "grenade_heading": true,
+          "h": 2,
+          "type": "rect",
+          "w": 11,
+          "x": 36,
+          "y": 43
+        },
+        {
+          "a": 1,
+          "c": [
+            241,
+            190,
+            77
+          ],
+          "grenade_heading": true,
+          "h": 10,
+          "type": "rect",
+          "w": 2,
+          "x": 45,
+          "y": 43
+        },
+        {
+          "a": 1,
+          "c": [
+            108,
+            128,
+            70
+          ],
+          "grenade_heading": true,
+          "h": 8,
+          "type": "rect",
+          "w": 11,
+          "x": 47,
+          "y": 44
+        },
+        {
+          "a": 1,
+          "c": [
+            108,
+            128,
+            70
+          ],
+          "grenade_heading": true,
+          "h": 6,
+          "type": "rect",
+          "w": 3,
+          "x": 58,
+          "y": 45
+        },
+        {
+          "a": 1,
+          "c": [
+            108,
+            128,
+            70
+          ],
+          "grenade_heading": true,
+          "h": 4,
+          "type": "rect",
+          "w": 3,
+          "x": 61,
+          "y": 46
+        },
+        {
+          "a": 1,
+          "c": [
+            108,
+            128,
+            70
+          ],
+          "grenade_heading": true,
+          "h": 2,
+          "type": "rect",
+          "w": 1,
+          "x": 64,
+          "y": 47
+        },
+        {
+          "a": 1,
+          "c": [
+            193,
+            207,
+            137
+          ],
+          "grenade_heading": true,
+          "h": 1,
+          "type": "rect",
+          "w": 9,
+          "x": 48,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            193,
+            207,
+            137
+          ],
+          "grenade_heading": true,
+          "h": 1,
+          "type": "rect",
+          "w": 3,
+          "x": 58,
+          "y": 49
+        },
+        {
+          "a": 1,
+          "c": [
+            57,
+            72,
+            39
+          ],
+          "grenade_heading": true,
+          "h": 1,
+          "type": "rect",
+          "w": 10,
+          "x": 48,
+          "y": 44
+        },
+        {
+          "a": 1,
+          "c": [
+            57,
+            72,
+            39
+          ],
+          "grenade_heading": true,
+          "h": 1,
+          "type": "rect",
+          "w": 3,
+          "x": 58,
+          "y": 45
+        },
+        {
+          "a": 1,
+          "c": [
+            235,
+            180,
+            48
+          ],
+          "grenade_heading": true,
+          "h": 8,
+          "type": "rect",
+          "w": 2,
+          "x": 49,
+          "y": 44
+        },
+        {
+          "a": 1,
+          "c": [
+            72,
+            85,
+            45
+          ],
+          "grenade_heading": true,
+          "h": 6,
+          "type": "rect",
+          "w": 1,
+          "x": 51,
+          "y": 45
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -13,
+          "y": 56
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -9,
+          "y": 56
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -5,
+          "y": 56
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -1,
+          "y": 56
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -13,
+          "y": -32
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -9,
+          "y": -32
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -5,
+          "y": -32
+        },
+        {
+          "a": 0.8,
+          "c": [
+            242,
+            183,
+            54
+          ],
+          "h": 1,
+          "type": "rect",
+          "w": 2,
+          "x": -1,
+          "y": -32
+        }
+      ],
+      "command_count": 24,
+      "sha256": "5b6d6770ea7df7f285e5ec7146bb1237fa1c60454f5f323853c779ac58e99cfb"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 24,
+  "static_quads": 1
+}

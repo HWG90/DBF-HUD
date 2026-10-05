@@ -1,0 +1,1011 @@
+{
+  "version": 1,
+  "weapon_resource": "3828e2051aa9e897",
+  "canvas": [
+    -16,
+    -27,
+    132,
+    108
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        -16.0,
+        -27.0,
+        132.0,
+        108.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.7,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 132,
+          "x": -16,
+          "y": -27
+        },
+        {
+          "a": 0.7,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 132,
+          "x": -16,
+          "y": 80
+        },
+        {
+          "a": 0.7,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 108,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": -16,
+          "y": -27
+        },
+        {
+          "a": 0.7,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 108,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 115,
+          "y": -27
+        },
+        {
+          "a": 1,
+          "c": [
+            10,
+            19,
+            15
+          ],
+          "h": 3,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": -12,
+          "y": -23
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 0.5,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -11.5,
+          "y": -22
+        },
+        {
+          "a": 1,
+          "c": [
+            10,
+            19,
+            15
+          ],
+          "h": 3,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": -12,
+          "y": 74
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 0.5,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -11.5,
+          "y": 75
+        },
+        {
+          "a": 1,
+          "c": [
+            10,
+            19,
+            15
+          ],
+          "h": 3,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 109,
+          "y": -23
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 0.5,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 109.5,
+          "y": -22
+        },
+        {
+          "a": 1,
+          "c": [
+            10,
+            19,
+            15
+          ],
+          "h": 3,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 109,
+          "y": 74
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 0.5,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 109.5,
+          "y": 75
+        }
+      ],
+      "command_count": 12,
+      "sha256": "d003702bf5fd7f4bcecc28d3c11b2bef3321d86eb3c28df375b601af3b9b3613"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        -4.0,
+        -8.0,
+        108.0,
+        55.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 32,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -2,
+          "y": 15
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": 0,
+          "y": 15
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 31,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 100,
+          "y": 16
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": 92,
+          "y": 14
+        },
+        {
+          "a": 0.6,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 14,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 90,
+          "y": 2
+        },
+        {
+          "a": 1,
+          "c": [
+            10,
+            19,
+            15
+          ],
+          "h": 14,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 72,
+          "x": 12,
+          "y": -3
+        },
+        {
+          "a": 1,
+          "c": [
+            67,
+            91,
+            56
+          ],
+          "h": 12,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 68,
+          "x": 14,
+          "y": -2
+        },
+        {
+          "a": 1,
+          "c": [
+            115,
+            147,
+            65
+          ],
+          "h": 7,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 60,
+          "x": 18,
+          "y": 0
+        },
+        {
+          "a": 0.8,
+          "c": [
+            188,
+            208,
+            123
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 56,
+          "x": 20,
+          "y": 7
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 14,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 6,
+          "x": 16,
+          "y": -3
+        },
+        {
+          "a": 0.7,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 12,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 17,
+          "y": -2
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 14,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 6,
+          "x": 72,
+          "y": -3
+        },
+        {
+          "a": 0.7,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 12,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 73,
+          "y": -2
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 5,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 82,
+          "y": 1
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 7,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 89,
+          "y": 0
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 88,
+          "y": 6
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": -4,
+          "y": -1
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 8,
+          "x": 96,
+          "y": -1
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": -4,
+          "y": 2
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 8,
+          "x": 96,
+          "y": 2
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": -4,
+          "y": 5
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 8,
+          "x": 96,
+          "y": 5
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": -4,
+          "y": 8
+        },
+        {
+          "a": 0.45,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 1,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 8,
+          "x": 96,
+          "y": 8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 12,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 70,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 16,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 74,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 20,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 78,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 24,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 82,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 28,
+          "y": -8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 2,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 86,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 5,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 71,
+          "x": 8,
+          "y": 31
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            255,
+            233
+          ],
+          "h": 1,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 64,
+          "x": 12,
+          "y": 32
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 7,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 14,
+          "y": 30
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 7,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 31,
+          "y": 30
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 7,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 55,
+          "y": 30
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 7,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 73,
+          "y": 30
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 3,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 4,
+          "y": 28
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 3,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 4,
+          "y": 36
+        },
+        {
+          "a": 1,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 15,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 7,
+          "y": 26
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 11,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 78,
+          "y": 28
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 9.7,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 80,
+          "y": 28.65
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 8.4,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 82,
+          "y": 29.3
+        },
+        {
+          "a": 1,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 7.1,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 84,
+          "y": 29.95
+        },
+        {
+          "a": 1,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 5.8,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 86,
+          "y": 30.6
+        },
+        {
+          "a": 1,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 4.5,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 88,
+          "y": 31.25
+        },
+        {
+          "a": 1,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 3.2,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 90,
+          "y": 31.9
+        },
+        {
+          "a": 1,
+          "c": [
+            223,
+            235,
+            228
+          ],
+          "h": 1.9,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 92,
+          "y": 32.55
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 4,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 78,
+          "y": 26
+        },
+        {
+          "a": 1,
+          "c": [
+            172,
+            220,
+            70
+          ],
+          "h": 4,
+          "spear_projectile": true,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 78,
+          "y": 37
+        }
+      ],
+      "command_count": 53,
+      "sha256": "a1acb8fcb95345d074f3bfc08e72b3cec4c703aa7b4591406822ed06b7100f33"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        -6.0,
+        -11.0,
+        112.0,
+        0.5
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.3,
+          "c": [
+            150,
+            175,
+            162
+          ],
+          "h": 0.5,
+          "speargun_detail": true,
+          "type": "rect",
+          "w": 112,
+          "x": -6,
+          "y": -11
+        }
+      ],
+      "command_count": 1,
+      "sha256": "0651cbc4057b6ffd8e01b93a4c63884284f9a51c64100a01e5f5067700fc2662"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 66,
+  "static_quads": 3
+}

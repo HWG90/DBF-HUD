@@ -1,0 +1,2067 @@
+{
+  "version": 1,
+  "weapon_resource": "968211c0033dce64",
+  "canvas": [
+    -12,
+    -27,
+    125,
+    110
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        15.5,
+        -4.0,
+        70.0,
+        72.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 48.909090909,
+          "y": 66.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 12.727272727,
+          "x": 44.136363636,
+          "y": 64.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": 63.304347826
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 31.818181818,
+          "x": 34.590909091,
+          "y": 61.739130435
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 41.363636364,
+          "x": 29.818181818,
+          "y": 60.173913043
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 50.909090909,
+          "x": 25.045454545,
+          "y": 58.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 3.130434783,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 57.272727273,
+          "x": 21.863636364,
+          "y": 55.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 21.913043478,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 54.090909091,
+          "x": 23.454545455,
+          "y": 33.565217391
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 23.454545455,
+          "y": 32
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": 32
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 69.590909091,
+          "y": 32
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 25.045454545,
+          "y": 30.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 3.130434783,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 19.090909091,
+          "x": 40.954545455,
+          "y": 28.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 71.181818182,
+          "y": 30.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 23.454545455,
+          "y": 28.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 72.772727273,
+          "y": 28.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 6.363636364,
+          "x": 21.863636364,
+          "y": 27.304347826
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 6.260869565,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 15.909090909,
+          "x": 42.545454545,
+          "y": 22.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 6.363636364,
+          "x": 72.772727273,
+          "y": 27.304347826
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 20.272727273,
+          "y": 25.739130435
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 72.772727273,
+          "y": 25.739130435
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 9.545454545,
+          "x": 18.681818182,
+          "y": 24.173913043
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 9.545454545,
+          "x": 72.772727273,
+          "y": 24.173913043
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 11.136363636,
+          "x": 17.090909091,
+          "y": 22.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 11.136363636,
+          "x": 72.772727273,
+          "y": 22.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 15.5,
+          "y": 21.043478261
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 19.090909091,
+          "x": 40.954545455,
+          "y": 21.043478261
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 71.181818182,
+          "y": 21.043478261
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 17.090909091,
+          "y": 19.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": 19.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 69.590909091,
+          "y": 19.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 63.636363636,
+          "x": 18.681818182,
+          "y": 17.913043478
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 30.227272727,
+          "x": 18.681818182,
+          "y": 16.347826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 30.227272727,
+          "x": 52.090909091,
+          "y": 16.347826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 27.045454545,
+          "x": 20.272727273,
+          "y": 14.782608696
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 27.045454545,
+          "x": 53.681818182,
+          "y": 14.782608696
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 25.454545455,
+          "x": 21.863636364,
+          "y": 13.217391304
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 25.454545455,
+          "x": 53.681818182,
+          "y": 13.217391304
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 23.454545455,
+          "y": 11.652173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 55.272727273,
+          "y": 11.652173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 25.045454545,
+          "y": 10.086956522
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 48.909090909,
+          "y": 10.086956522
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 53.681818182,
+          "y": 10.086956522
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 26.636363636,
+          "y": 8.52173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 6.260869565,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 28.636363636,
+          "x": 36.181818182,
+          "y": 3.826086957
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 71.181818182,
+          "y": 8.52173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 3.130434783,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 25.454545455,
+          "x": 37.772727273,
+          "y": 0.695652174
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": -0.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 15.909090909,
+          "x": 42.545454545,
+          "y": -2.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.underlay",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 48.909090909,
+          "y": -4
+        }
+      ],
+      "command_count": 50,
+      "sha256": "cf44b6eb560521aa2eeddd78b739ab54fe3017e31a0e63b6014f0f1bf08e0d94"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        -3.5,
+        76.0,
+        108.0,
+        1.75
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.9,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.6,
+          "liberator_detail": "designation-stripe",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 108,
+          "x": -3.5,
+          "y": 76
+        }
+      ],
+      "command_count": 1,
+      "sha256": "77b3de9c291221b5024248093dbab9a90626874a0a474495c17e6a6890b56e97"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        -4.5,
+        49.0,
+        108.5,
+        10.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": -4.5,
+          "y": 50
+        },
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": -2.1,
+          "y": 50
+        },
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": 0.3,
+          "y": 50
+        },
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": 2.7,
+          "y": 50
+        },
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": 95.5,
+          "y": 50
+        },
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": 97.9,
+          "y": 50
+        },
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": 100.3,
+          "y": 50
+        },
+        {
+          "a": 0.48,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 8,
+          "liberator_detail": "receiver-rib",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1.2,
+          "x": 102.7,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            48,
+            34,
+            18
+          ],
+          "h": 10,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 17.5,
+          "y": 49
+        },
+        {
+          "a": 1,
+          "c": [
+            225,
+            163,
+            38
+          ],
+          "h": 8,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 18.5,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 2,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 18.5,
+          "y": 56
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 2,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 18.5,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 6,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 20.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            48,
+            34,
+            18
+          ],
+          "h": 4,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1,
+          "x": 20.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            48,
+            34,
+            18
+          ],
+          "h": 10,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 38,
+          "x": 21.5,
+          "y": 49
+        },
+        {
+          "a": 1,
+          "c": [
+            225,
+            163,
+            38
+          ],
+          "h": 8,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 38,
+          "x": 21.5,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 2,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 37,
+          "x": 22.5,
+          "y": 56
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 2,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 37,
+          "x": 22.5,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 5,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 23.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 5,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 25.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 5,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 28.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            225,
+            163,
+            38
+          ],
+          "h": 8,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 59.5,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 2,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 59.5,
+          "y": 56
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 2,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 59.5,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            225,
+            163,
+            38
+          ],
+          "h": 6,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 61.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 61.5,
+          "y": 56
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 61.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            225,
+            163,
+            38
+          ],
+          "h": 4,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 6,
+          "x": 63.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 6,
+          "x": 63.5,
+          "y": 55
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 6,
+          "x": 63.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            184,
+            201,
+            215
+          ],
+          "h": 4,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 5,
+          "x": 69.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            237,
+            247,
+            255
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 5,
+          "x": 69.5,
+          "y": 55
+        },
+        {
+          "a": 1,
+          "c": [
+            90,
+            114,
+            139
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 5,
+          "x": 69.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            184,
+            201,
+            215
+          ],
+          "h": 3,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 74.5,
+          "y": 52.5
+        },
+        {
+          "a": 1,
+          "c": [
+            237,
+            247,
+            255
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 74.5,
+          "y": 54.5
+        },
+        {
+          "a": 1,
+          "c": [
+            90,
+            114,
+            139
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 74.5,
+          "y": 52.5
+        },
+        {
+          "a": 1,
+          "c": [
+            184,
+            201,
+            215
+          ],
+          "h": 2,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 77.5,
+          "y": 53
+        },
+        {
+          "a": 1,
+          "c": [
+            237,
+            247,
+            255
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 77.5,
+          "y": 54
+        },
+        {
+          "a": 1,
+          "c": [
+            237,
+            247,
+            255
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 80.5,
+          "y": 53.5
+        },
+        {
+          "a": 1,
+          "c": [
+            225,
+            163,
+            38
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 33.5,
+          "y": 55
+        },
+        {
+          "a": 1,
+          "c": [
+            132,
+            79,
+            21
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 1,
+          "x": 64.5,
+          "y": 53
+        },
+        {
+          "a": 1,
+          "c": [
+            237,
+            247,
+            255
+          ],
+          "h": 1,
+          "liberator_detail": "rifle-round-pixel",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 70.5,
+          "y": 53.5
+        }
+      ],
+      "command_count": 42,
+      "sha256": "00774731f28bfa0ec32c452b21b46a2e021113f6117e381efdff243523196f35"
+    },
+    {
+      "asset": "fragment-003.png",
+      "origin": [
+        -4.5,
+        46.0,
+        110.0,
+        0.75
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.5,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.7,
+          "liberator_detail": "count-seam",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 110,
+          "x": -4.5,
+          "y": 46
+        }
+      ],
+      "command_count": 1,
+      "sha256": "b4c812c69d2fecea5576a82bd6ec7c4c5589f906bfdbb3479dcd4e8242bb58c5"
+    },
+    {
+      "asset": "fragment-004.png",
+      "origin": [
+        9.5,
+        -10.0,
+        82.0,
+        0.5
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.3,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "magazine-sill",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 82,
+          "x": 9.5,
+          "y": -10
+        }
+      ],
+      "command_count": 1,
+      "sha256": "347902c806511b6c4d18d2fd5a213ea98df132db4bdd2a80b38442a0f1806248"
+    },
+    {
+      "asset": "fragment-005.png",
+      "origin": [
+        -8.5,
+        -24.0,
+        118.0,
+        104.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": -8.5,
+          "y": -24
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": -8,
+          "y": -22.8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": -8.5,
+          "y": 77
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": -8,
+          "y": 78.2
+        },
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 106.5,
+          "y": -24
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 107,
+          "y": -22.8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 3,
+          "x": 106.5,
+          "y": 77
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "texture_art_box_reference": true,
+          "texture_art_layer": "liberator.details",
+          "texture_art_opacity": 1,
+          "texture_art_static": true,
+          "type": "rect",
+          "w": 2,
+          "x": 107,
+          "y": 78.2
+        }
+      ],
+      "command_count": 8,
+      "sha256": "af5c73481851e4c641e41f71051dc573bbe1adb8f444528771f01839db8a5ad5"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 103,
+  "static_quads": 6
+}

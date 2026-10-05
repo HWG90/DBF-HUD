@@ -1,0 +1,44 @@
+{
+  "status": "Offline first same-art comparison handoff; do not deploy all panels",
+  "first_choices": [
+    {
+      "resource": "4ba41b6f9f405cc2",
+      "name": "StA-11 SMG",
+      "folder": "weapons/4ba41b6f9f405cc2",
+      "static_commands": 349,
+      "texture_quads": 4,
+      "comparison": "weapons/4ba41b6f9f405cc2/comparison.json",
+      "assets": "weapons/4ba41b6f9f405cc2/creator-assets.zip"
+    },
+    {
+      "resource": "968211c0033dce64",
+      "name": "AR-23 Liberator",
+      "folder": "weapons/968211c0033dce64",
+      "static_commands": 103,
+      "texture_quads": 6,
+      "comparison": "weapons/968211c0033dce64/comparison.json",
+      "assets": "weapons/968211c0033dce64/creator-assets.zip"
+    }
+  ],
+  "source_snapshot": {
+    "source": "C:/Users/david/AppData/Local/LLL/Helldivers2/Mods/dbf_hud/mod.lua",
+    "snapshot_sha256": "ae64fc2793ba6e884abf33b9e98cd1f78a84497b815e58ab35ccbd796e92ceed",
+    "inventory_sources": [
+      "HUD/batch-design-audit.json",
+      "HUD/reconciled-pending-scope.json",
+      "Current approved STA11 and MA5C",
+      "Accepted offline Slugger"
+    ],
+    "capture_only": true,
+    "suppressed_side_effect": "draw-checkpoint logging only; no art logic changed"
+  },
+  "reference_adapter": "faithful_adapter.lua",
+  "preserve": "All original live command objects, source feature scope, optional primitive and texture choices; no automatic default texture switch",
+  "live_checks_needed": [
+    "Same weapon/readouts/settings/camera scale in primitive and texture modes",
+    "Glyph/art alignment under perspective, clipping, occlusion and zoom",
+    "Loaded/empty/full/chamber/compass/selector behavior",
+    "Opacity/fade/animation controls; unbaked opacity must retain originals or receive a verified rebake",
+    "CPU draw cost and GPU/material allocation separately"
+  ]
+}

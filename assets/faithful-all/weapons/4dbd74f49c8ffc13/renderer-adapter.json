@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "weapon_resource": "4dbd74f49c8ffc13",
+  "canvas": [
+    -16,
+    -27,
+    133,
+    93
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        -13.0,
+        -24.0,
+        127.0,
+        87.5
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.7,
+          "c": [
+            213,
+            183,
+            109
+          ],
+          "catalog_detail": true,
+          "h": 0.7,
+          "type": "rect",
+          "w": 4,
+          "x": -13,
+          "y": 62
+        },
+        {
+          "a": 0.7,
+          "c": [
+            213,
+            183,
+            109
+          ],
+          "catalog_detail": true,
+          "h": 0.7,
+          "type": "rect",
+          "w": 4,
+          "x": 110,
+          "y": 62
+        },
+        {
+          "a": 0.7,
+          "c": [
+            213,
+            183,
+            109
+          ],
+          "catalog_detail": true,
+          "h": 2,
+          "type": "rect",
+          "w": 0.7,
+          "x": -13,
+          "y": 59
+        },
+        {
+          "a": 0.7,
+          "c": [
+            213,
+            183,
+            109
+          ],
+          "catalog_detail": true,
+          "h": 2,
+          "type": "rect",
+          "w": 0.7,
+          "x": 113,
+          "y": 59
+        },
+        {
+          "a": 0.7,
+          "c": [
+            49,
+            60,
+            65
+          ],
+          "catalog_detail": true,
+          "h": 2,
+          "type": "rect",
+          "w": 2,
+          "x": -13,
+          "y": -24
+        },
+        {
+          "a": 0.7,
+          "c": [
+            174,
+            193,
+            201
+          ],
+          "catalog_detail": true,
+          "h": 0.4,
+          "type": "rect",
+          "w": 1,
+          "x": -12.5,
+          "y": -23.2
+        },
+        {
+          "a": 0.7,
+          "c": [
+            49,
+            60,
+            65
+          ],
+          "catalog_detail": true,
+          "h": 2,
+          "type": "rect",
+          "w": 2,
+          "x": 112,
+          "y": -24
+        },
+        {
+          "a": 0.7,
+          "c": [
+            174,
+            193,
+            201
+          ],
+          "catalog_detail": true,
+          "h": 0.4,
+          "type": "rect",
+          "w": 1,
+          "x": 112.5,
+          "y": -23.2
+        },
+        {
+          "a": 0.7,
+          "c": [
+            171,
+            190,
+            170
+          ],
+          "catalog_detail": true,
+          "h": 0.4,
+          "type": "rect",
+          "w": 6,
+          "x": -10,
+          "y": 63
+        },
+        {
+          "a": 0.7,
+          "c": [
+            171,
+            190,
+            170
+          ],
+          "catalog_detail": true,
+          "h": 0.4,
+          "type": "rect",
+          "w": 6,
+          "x": 105,
+          "y": 63
+        }
+      ],
+      "command_count": 10,
+      "sha256": "219f1abd86b14ebe9dc57d3c628513e3298a93c45dbf31078440dc3ec709de7e"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 10,
+  "static_quads": 1
+}

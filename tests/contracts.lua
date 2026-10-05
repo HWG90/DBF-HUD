@@ -1,5 +1,10 @@
 HUD={}
-for _,name in ipairs({'native_font_data','native_font_uv','native_font','config','font','motion','ammo_types','model','fire_icons','munition_art','mg_easter','df_shell_state','recoilless_state','senator_state','senator_panel','doom_easter','melta_panel','speargun_panel','recoilless_panel','catalog_housing','shared_suite','weapon_styles','layout','memory','layouts','reader','pose','camera_mode','projection','camera_state','anchor','view','pose_motion','world_probe','depth_marker','offscreen_test','world_style','archived_mesh','scene_test','screen_scene','placement','weapon_names','weapon_offsets','layout_editor','menu','runtime'}) do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+-- Exercise the production module graph instead of a stale duplicate list.
+-- Core contracts use stock defaults; release presets are user-authored data.
+for _,name in ipairs(assert(DBF_BUNDLE_MODULES,'run through tests/run.py'))do
+ if name~='bundled_defaults'then HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
+end
+for _,name in ipairs({'doom_easter','shared_suite','camera_state'})do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
 local function test(name,f) f();tests=tests+1;print('PASS '..name) end
 local cfg={follow=1,travel=55,settle=0.22}
@@ -535,8 +540,9 @@ test('native menu keeps colors config-only and persists placement',function()
     callbacks['dbf_hud_v4.debug_logging'](true);assert(h.config.debug_logging and writes==4)
     callbacks['dbf_hud_v4.decoration'](4);assert(h.config.decoration=='helldivers' and writes==5)
     callbacks['dbf_hud_v4.decoration'](1);assert(h.config.decoration=='none' and writes==6)
-    local groups={};for _,spec in pairs(options) do groups[spec.mod]=(groups[spec.mod] or 0)+1 end
-    assert(groups['DBF-HUD']==16 and groups['DBF-HUD Placement']==9)
+    -- Placement/debug controls now live in Developer; upright remains Appearance.
+    assert(options['dbf_hud_placement.travel'].mod=='DBF-HUD Developer')
+    assert(options['dbf_hud_v4.debug_sight_root_orientation'].mod=='DBF-HUD Developer')
     assert(not options['dbf_hud_v4.emissive_intensity'] and not options['dbf_hud_v4.pose_marker'])
     callbacks['dbf_hud_v4.display_mode'](1);assert(h.config.anchor_mode=='weapon')
     callbacks['dbf_hud_v4.display_mode'](2);assert(h.config.anchor_mode=='crosshair')
@@ -1015,7 +1021,9 @@ test('bundle compiles and excludes crashing diagnostic paths',function()
     assert(type(live.on_enable)=='function' and type(live.on_update)=='function' and type(live.on_disable)=='function')
     local f=assert(io.open('dist/dbf_hud.lua','r'));local source=f:read('*a');f:close()
     assert(not source:find('BINDING2',1,true) and not source:find('HUD.probe',1,true))
-    assert(not source:find('G.text_extents',1,true) and not source:find('World.units',1,true))
+    assert(not source:find('G.text_extents',1,true))
+    -- World.units is also used by the supported runtime texture target lookup.
+    -- Ban the old diagnostic module, not an API shared with production.
 end)
 test('sight placement updates without cache and profiles affect only their weapon/view',function()
     local p={id=1,candidate=2,resource_hex='0123456789abcdef',sight={x=0,y=-.1,z=.2}}

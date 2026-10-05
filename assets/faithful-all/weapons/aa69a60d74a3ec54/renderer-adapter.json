@@ -1,0 +1,656 @@
+{
+  "version": 1,
+  "weapon_resource": "aa69a60d74a3ec54",
+  "canvas": [
+    0,
+    0,
+    144,
+    118
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        0.0,
+        0.0,
+        144.0,
+        118.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.55,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 1,
+          "type": "rect",
+          "w": 144,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "a": 0.65,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 1,
+          "type": "rect",
+          "w": 144,
+          "x": 0,
+          "y": 117
+        },
+        {
+          "a": 0.45,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 118,
+          "type": "rect",
+          "w": 1,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "a": 0.45,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 118,
+          "type": "rect",
+          "w": 1,
+          "x": 143,
+          "y": 0
+        },
+        {
+          "a": 1,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 4,
+          "type": "rect",
+          "w": 3,
+          "x": 6,
+          "y": 108
+        }
+      ],
+      "command_count": 5,
+      "sha256": "df7579bd44819b01149e918c8fb91dfb62ce59e51b551b26b99a141dd1d4193f"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        7.0,
+        101.0,
+        130.0,
+        1.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.55,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 1,
+          "type": "rect",
+          "w": 130,
+          "x": 7,
+          "y": 101
+        }
+      ],
+      "command_count": 1,
+      "sha256": "619247aa3edcf687ccf8fb60a1188b39d498e0f3b0e1abba80db047c233d1d79"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        9.0,
+        42.0,
+        122.0,
+        50.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 48,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 53.28125,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 58.5625,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 63.84375,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 69.125,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 74.40625,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 79.6875,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 84.96875,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 90.25,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 95.53125,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 100.8125,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 106.09375,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 111.375,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 116.65625,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 121.9375,
+          "y": 82
+        },
+        {
+          "a": 0.2,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 3.78125,
+          "x": 127.21875,
+          "y": 82
+        },
+        {
+          "a": 0.7,
+          "c": [
+            24,
+            53,
+            66
+          ],
+          "capacitor_glow": false,
+          "h": 50,
+          "type": "rect",
+          "w": 28,
+          "x": 9,
+          "y": 42
+        },
+        {
+          "a": 0.55,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 50,
+          "type": "rect",
+          "w": 2,
+          "x": 9,
+          "y": 42
+        },
+        {
+          "a": 0.55,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 50,
+          "type": "rect",
+          "w": 2,
+          "x": 35,
+          "y": 42
+        },
+        {
+          "a": 0.9,
+          "c": [
+            10,
+            19,
+            25
+          ],
+          "capacitor_glow": false,
+          "h": 42,
+          "type": "rect",
+          "w": 18,
+          "x": 14,
+          "y": 46
+        },
+        {
+          "a": 0,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": true,
+          "h": 38,
+          "type": "rect",
+          "w": 16,
+          "x": 15,
+          "y": 48
+        },
+        {
+          "a": 0,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": true,
+          "h": 36,
+          "type": "rect",
+          "w": 12,
+          "x": 17,
+          "y": 49
+        },
+        {
+          "a": 0,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": true,
+          "h": 34,
+          "type": "rect",
+          "w": 10,
+          "x": 18,
+          "y": 50
+        },
+        {
+          "a": 0.12,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": true,
+          "h": 32,
+          "type": "rect",
+          "w": 8,
+          "x": 19,
+          "y": 51
+        },
+        {
+          "a": 0.27,
+          "c": [
+            74,
+            210,
+            238
+          ],
+          "capacitor_glow": true,
+          "h": 32,
+          "type": "rect",
+          "w": 4,
+          "x": 21,
+          "y": 51
+        },
+        {
+          "a": 0.65,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 20,
+          "x": 13,
+          "y": 54
+        },
+        {
+          "a": 0.65,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 20,
+          "x": 13,
+          "y": 65
+        },
+        {
+          "a": 0.65,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 20,
+          "x": 13,
+          "y": 76
+        },
+        {
+          "a": 0.85,
+          "c": [
+            214,
+            247,
+            252
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 14,
+          "x": 16,
+          "y": 85
+        },
+        {
+          "a": 0.85,
+          "c": [
+            214,
+            247,
+            252
+          ],
+          "capacitor_glow": false,
+          "h": 2,
+          "type": "rect",
+          "w": 14,
+          "x": 16,
+          "y": 46
+        }
+      ],
+      "command_count": 30,
+      "sha256": "d0e115ba3ef3fb31362986d5c46aa09ee42afe326d323cc9c40efd2188e9b357"
+    },
+    {
+      "asset": "fragment-003.png",
+      "origin": [
+        45.0,
+        42.0,
+        86.0,
+        1.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.3,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 1,
+          "type": "rect",
+          "w": 86,
+          "x": 45,
+          "y": 42
+        }
+      ],
+      "command_count": 1,
+      "sha256": "c3e407a867b5abda39607be745d8634a088ce728104f399817b70e5e8547bdf7"
+    },
+    {
+      "asset": "fragment-004.png",
+      "origin": [
+        7.0,
+        25.0,
+        130.0,
+        1.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.35,
+          "c": [
+            120,
+            143,
+            154
+          ],
+          "capacitor_glow": false,
+          "h": 1,
+          "type": "rect",
+          "w": 130,
+          "x": 7,
+          "y": 25
+        }
+      ],
+      "command_count": 1,
+      "sha256": "734488d09d1e90e53bc57b8ad88cb23b821fde22bd9e589a35c1cf29f780b895"
+    },
+    {
+      "asset": "fragment-005.png",
+      "origin": [
+        8.0,
+        6.0,
+        128.0,
+        4.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.85,
+          "c": [
+            24,
+            53,
+            66
+          ],
+          "capacitor_glow": false,
+          "h": 4,
+          "type": "rect",
+          "w": 128,
+          "x": 8,
+          "y": 6
+        }
+      ],
+      "command_count": 1,
+      "sha256": "52452f92b4d3f86a799e27c41c06c176d99af7904a5941e4c02859a09ffb4e7d"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 39,
+  "static_quads": 6
+}

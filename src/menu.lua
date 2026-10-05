@@ -1,5 +1,24 @@
 -- ModOptionsMenu API 1; only main settings and placement are exposed.
 local M={}
+function M.texture_choices(resource)
+    local labels,ids={},{}
+    local art=HUD.texture_art_assets and HUD.texture_art_assets[resource]
+    local study=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[resource]
+    local fragments=HUD.faithful_fragment_assets and HUD.faithful_fragment_assets[resource]
+    if art and art.variants then
+        if art.variants.faithful then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
+        if art.variants.realistic then labels[#labels+1]='Hyper-realistic treatment';ids[#ids+1]='realistic' end
+    elseif fragments or (study and study.faithful) then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
+    if study then labels[#labels+1]='Designer texture study (manual)';ids[#ids+1]='study' end
+    labels[#labels+1]='Original primitives';ids[#ids+1]='original'
+    return labels,ids,#ids>1
+end
+function M.weapon_choices()
+    local rows={};for id,name in pairs(HUD.weapon_names or {})do rows[#rows+1]={id=id,name=name}end
+    table.sort(rows,function(a,b)if a.name==b.name then return a.id<b.id end;return a.name:lower()<b.name:lower()end)
+    local labels,ids={},{};for i,row in ipairs(rows)do labels[i]=row.name;ids[i]=row.id end
+    return labels,ids
+end
 function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
     local font_host,font_handle
@@ -137,16 +156,20 @@ function M.new(hud)
                 local ok,err=hud.reset_defaults()
                 assert(ok,err)
             end
-            local panel_controls={{type='text',label='Press Fetch to select the equipped weapon',id='weapon_heading'},
+            local weapon_labels,weapon_ids=M.weapon_choices()
+            local panel_controls={{id='appearance_weapon_select',type='choice',presentation='dropdown',label='Weapon',choices=weapon_labels,default=1,on_change=function(v)
+                hud.select_appearance_weapon(assert(weapon_ids[v],'Unknown weapon'));if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
+            end},{type='text',label='Select any weapon or Fetch the equipped weapon',id='weapon_heading'},
                 {id='fetch_weapon_appearance',type='button',label='Fetch current weapon appearance',description='Reload the equipped weapon settings, including inherited global options.',on_activate=function()
-                    assert(hud.appearance_weapon and hud.appearance_weapon(),'Equip a weapon first')
-                    if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
+                    assert(hud.equipped_resource(),'Equip a weapon first')
+                    hud.select_appearance_weapon(hud.equipped_resource());if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
                     local fetched=hud.appearance_weapon()
                     local state=host.mods and host.mods.dbf_hud_fonts
                     assert(state,'Appearance registration unavailable; reload HUD')
-                    local settings=hud.panel_settings()
+                    local settings=hud.panel_settings(panel_weapon)
                     return 'Fetched '..(HUD.weapon_names[fetched] or fetched)..' appearance. '..hud.shader_status()
                 end},
+                {id='faithful_render_status',type='text',label='Rendering status pending'},
                 {id='panel_inherit',type='button',label='Use global appearance',on_activate=function()
                     assert(hud.appearance_weapon and hud.appearance_weapon()==panel_weapon,'Press Fetch for the equipped weapon first');hud.configure_panel(false,panel_weapon);hud.save_tuning()
                 end}}
@@ -175,9 +198,9 @@ function M.new(hud)
             panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
             panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
             local function panel_value(key)
-                local cfg=panel_weapon and hud.panel_settings and hud.panel_settings() or hud.config
+                local cfg=panel_weapon and hud.panel_settings and hud.panel_settings(panel_weapon) or hud.config
                 local v=cfg[key]
-                if key=='texture_art_variant' then return v=='realistic' and 2 or 1 end
+                if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);for i,id in ipairs(ids)do if id==v then return i end end;return #ids end
                 if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
                 if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
                 if key=='decoration' then for i,n in ipairs(HUD.config.decorations)do if n==v then return i end end end
@@ -193,7 +216,7 @@ function M.new(hud)
                 if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
                 if c.type=='choice' then c.choices=def[4]elseif c.type=='slider' then c.min,c.max,c.step=def[4],def[5],def[6]end
                 c.on_change=function(v)
-                    if key=='texture_art_variant' then v=v==2 and 'realistic' or 'faithful' end
+                    if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);v=assert(ids[v],'Texture alternative unavailable') end
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
                     if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
@@ -224,19 +247,27 @@ function M.new(hud)
             panel_guard=function()
                 local id=hud.appearance_weapon and hud.appearance_weapon()
                 local mod=host.mods and host.mods.dbf_hud_fonts;if not mod then return end
-                local ready=id~=nil and id==panel_weapon
+                local ready=panel_weapon~=nil
                 for _,c in ipairs(panel_controls)do local registered=panel_control(mod,c.id)
                     if registered then
-                        if c.id=='fetch_weapon_appearance' then registered.disabled=id==nil
-                        elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Press Fetch to select the equipped weapon'
+                        if c.id=='appearance_weapon_select' then registered.disabled=false;for i,resource in ipairs(weapon_ids)do if resource==panel_weapon then mod.values[c.id]=i end end
+                        elseif c.id=='faithful_render_status' then registered.disabled=false;registered.label=hud.faithful_status(panel_weapon)
+                        elseif c.id=='fetch_weapon_appearance' then registered.disabled=hud.equipped_resource()==nil
+                        elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Select any weapon or Fetch the equipped weapon'
                         elseif c.id=='weapon_texture_art_trial' or c.id=='weapon_texture_art_variant' then
-                            registered.disabled=not ready or panel_weapon~='968211c0033dce64'
+                            local art=HUD.texture_art_assets and HUD.texture_art_assets[panel_weapon]
+                            local bespoke=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[panel_weapon]
+                            local choices,_,has_alternative=M.texture_choices(panel_weapon)
+                            registered.disabled=not ready or not has_alternative
+                            if c.id=='weapon_texture_art_variant' then registered.choices=choices;mod.values[c.id]=panel_value('texture_art_variant') end
                         else registered.disabled=not ready end
                     end
                 end
             end
             font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
                 description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Global Options',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls={
+                    {id='reload_hot_panel_art',type='button',label='Reload texture files',description='Reload prepared HUD artwork from Local AppData/DBF/HotTextures. Upload stages run on separate render frames; Restore cancels pending work.',on_activate=function()local ok,result=hud.reload_panel_art();assert(ok,result);return result end},
+                    {id='restore_hot_panel_art',type='button',label='Restore packaged artwork',on_activate=function()return hud.restore_panel_art()end},
                     {id='fade_when_not_aiming',type='toggle',label='Fade when not aiming',default=hud.config.fade_3d_unless_aiming,
                         on_change=function(v)save('fade_3d_unless_aiming',v)end},
 
