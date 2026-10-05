@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-05",
+  "scope": "deployed HUD hot_panel_art lifecycle",
+  "game_build_timestamp": "0x6ab382e4",
+  "live": {
+    "historical_payload_bytes_reclaimed": 13851280,
+    "full_size_cycles": 32,
+    "bytes_per_fresh_resource": 6291456,
+    "distinct_pixel_probe_cycles": 32,
+    "baseline_payload_bytes": 21500656,
+    "baseline_resources": 6,
+    "final_payload_bytes": 21500656,
+    "final_resources": 6,
+    "subsequent_reload_reused_active_assets": true,
+    "game_restart_required": false
+  },
+  "offline": {
+    "actual_uploader_unique_swaps": 1000,
+    "covered": [
+      "atomic publication",
+      "shared aliases",
+      "before/equal/after completion serial",
+      "cancellation at each upload stage",
+      "restore and reload",
+      "owner replacement",
+      "deferred backend closure",
+      "uncertain native failure quarantine"
+    ]
+  },
+  "limits": {
+    "max_dimension": 2048,
+    "max_image_bytes": 16777216,
+    "concurrent_payload_budget_bytes": 67108864
+  },
+  "accounting_note": "Payload accounting is not total process RAM or a GPU profiler reading. Live proof does not validate unrelated artwork color or rendering changes."
+}
