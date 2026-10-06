@@ -1,0 +1,1706 @@
+{
+  "version": 1,
+  "weapon_resource": "6cfcc7f8801a0266",
+  "canvas": [
+    -16,
+    -27,
+    144,
+    116
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        -16.0,
+        -27.0,
+        144.0,
+        116.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.65,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 144,
+          "x": -16,
+          "y": -27
+        },
+        {
+          "a": 0.65,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 144,
+          "x": -16,
+          "y": 88
+        },
+        {
+          "a": 0.65,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 116,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": -16,
+          "y": -27
+        },
+        {
+          "a": 0.65,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 116,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 127,
+          "y": -27
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": -12,
+          "y": -23
+        },
+        {
+          "a": 1,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 0.5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -11.5,
+          "y": -21.8
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": -12,
+          "y": 82
+        },
+        {
+          "a": 1,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 0.5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -11.5,
+          "y": 83.2
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 121,
+          "y": -23
+        },
+        {
+          "a": 1,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 0.5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 121.5,
+          "y": -21.8
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 121,
+          "y": 82
+        },
+        {
+          "a": 1,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 0.5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 121.5,
+          "y": 83.2
+        },
+        {
+          "a": 0.6,
+          "c": [
+            205,
+            124,
+            59
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 14,
+          "x": 49,
+          "y": 64
+        },
+        {
+          "a": 0.5,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 8,
+          "x": 52,
+          "y": 66
+        },
+        {
+          "a": 0.65,
+          "c": [
+            205,
+            124,
+            59
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 55,
+          "y": 68
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 16,
+          "x": -8,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -8,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -4,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 0,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 4,
+          "y": 69
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 16,
+          "x": 104,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 104,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 108,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 112,
+          "y": 69
+        },
+        {
+          "a": 0.7,
+          "c": [
+            220,
+            160,
+            62
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 116,
+          "y": 69
+        },
+        {
+          "a": 0.65,
+          "c": [
+            205,
+            124,
+            59
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 128,
+          "x": -8,
+          "y": 67
+        }
+      ],
+      "command_count": 26,
+      "sha256": "d46872890370c5fa4d1593e3f7b19b0ace0f58223b8d046e52f4fd0678306480"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        2.0,
+        35.0,
+        106.0,
+        28.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.8,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 27,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 106,
+          "x": 2,
+          "y": 36
+        },
+        {
+          "a": 1,
+          "c": [
+            43,
+            49,
+            50
+          ],
+          "h": 16,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 16,
+          "x": 5,
+          "y": 41
+        },
+        {
+          "a": 0.7,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 12,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 6,
+          "y": 43
+        },
+        {
+          "a": 1,
+          "c": [
+            71,
+            64,
+            53
+          ],
+          "h": 10,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 11,
+          "y": 44
+        },
+        {
+          "a": 0.75,
+          "c": [
+            205,
+            124,
+            59
+          ],
+          "h": 6,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 13,
+          "y": 46
+        },
+        {
+          "a": 1,
+          "c": [
+            84,
+            47,
+            31
+          ],
+          "h": 18,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 20,
+          "y": 40
+        },
+        {
+          "a": 1,
+          "c": [
+            104,
+            35,
+            25
+          ],
+          "h": 24,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 25,
+          "y": 37
+        },
+        {
+          "a": 1,
+          "c": [
+            104,
+            35,
+            25
+          ],
+          "h": 28,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 26,
+          "x": 34,
+          "y": 35
+        },
+        {
+          "a": 1,
+          "c": [
+            104,
+            35,
+            25
+          ],
+          "h": 24,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 60,
+          "y": 37
+        },
+        {
+          "a": 1,
+          "c": [
+            104,
+            35,
+            25
+          ],
+          "h": 18,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 69,
+          "y": 40
+        },
+        {
+          "a": 0.9,
+          "c": [
+            193,
+            82,
+            37
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 35,
+          "x": 26,
+          "y": 38
+        },
+        {
+          "a": 0.85,
+          "c": [
+            228,
+            108,
+            46
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 25,
+          "x": 34,
+          "y": 36
+        },
+        {
+          "a": 0.85,
+          "c": [
+            75,
+            32,
+            22
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 35,
+          "x": 28,
+          "y": 58
+        },
+        {
+          "a": 0.8,
+          "c": [
+            62,
+            29,
+            22
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 25,
+          "x": 34,
+          "y": 61
+        },
+        {
+          "a": 0.75,
+          "c": [
+            235,
+            112,
+            54
+          ],
+          "h": 15,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 26,
+          "y": 41
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 32,
+          "y": 42
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 33,
+          "y": 43
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 32,
+          "y": 53
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 33,
+          "y": 54
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 41,
+          "y": 42
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 42,
+          "y": 43
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 41,
+          "y": 53
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 42,
+          "y": 54
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 50,
+          "y": 42
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 51,
+          "y": 43
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 50,
+          "y": 53
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 51,
+          "y": 54
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 59,
+          "y": 42
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 60,
+          "y": 43
+        },
+        {
+          "a": 0.95,
+          "c": [
+            65,
+            29,
+            23
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 59,
+          "y": 53
+        },
+        {
+          "a": 0.85,
+          "c": [
+            219,
+            158,
+            80
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 60,
+          "y": 54
+        },
+        {
+          "a": 0.85,
+          "c": [
+            211,
+            82,
+            36
+          ],
+          "h": 18,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 63,
+          "y": 40
+        },
+        {
+          "a": 1,
+          "c": [
+            64,
+            28,
+            21
+          ],
+          "h": 14,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 68,
+          "y": 42
+        },
+        {
+          "a": 1,
+          "c": [
+            210,
+            103,
+            48
+          ],
+          "h": 10,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 70,
+          "y": 44
+        },
+        {
+          "a": 1,
+          "c": [
+            135,
+            177,
+            198
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 72,
+          "y": 48
+        },
+        {
+          "a": 0.55,
+          "c": [
+            53,
+            47,
+            36
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 24,
+          "x": 79,
+          "y": 48
+        }
+      ],
+      "command_count": 36,
+      "sha256": "381c43bb0e2406831235c46758bc3f750a9e9502dffefc7e66cfc00574431c45"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        -7.0,
+        -12.0,
+        126.0,
+        6.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": -4,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 2,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 8,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 14,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 20,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 26,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 32,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 38,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 44,
+          "y": -8
+        },
+        {
+          "a": 1,
+          "c": [
+            247,
+            151,
+            54
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 50,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 56,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 62,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 68,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 74,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 80,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 86,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 92,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 98,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 104,
+          "y": -8
+        },
+        {
+          "a": 0.18,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 110,
+          "y": -8
+        },
+        {
+          "a": 0.25,
+          "c": [
+            148,
+            159,
+            165
+          ],
+          "h": 0.5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 126,
+          "x": -7,
+          "y": -12
+        }
+      ],
+      "command_count": 21,
+      "sha256": "2ff4ca4dc07be7e14ca28c3bbc78391433e434a10d43beedb521a6a1c7ba0f9d"
+    },
+    {
+      "asset": "fragment-003.png",
+      "origin": [
+        -12.0,
+        15.0,
+        136.0,
+        70.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 1,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 8,
+          "x": 52,
+          "y": 65
+        },
+        {
+          "a": 1,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 6,
+          "x": 53,
+          "y": 70
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 53,
+          "y": 67
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 57,
+          "y": 67
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            15,
+            18
+          ],
+          "h": 2,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 55,
+          "y": 65
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 13,
+          "x": 37,
+          "y": 68
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 13,
+          "x": 62,
+          "y": 68
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": 40,
+          "y": 67
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 10,
+          "x": 62,
+          "y": 67
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 7,
+          "x": 43,
+          "y": 66
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 7,
+          "x": 62,
+          "y": 66
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 46,
+          "y": 65
+        },
+        {
+          "a": 0.85,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 62,
+          "y": 65
+        },
+        {
+          "a": 0.95,
+          "c": [
+            63,
+            58,
+            44
+          ],
+          "h": 4,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 14,
+          "x": 3,
+          "y": 81
+        },
+        {
+          "a": 0.8,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 14,
+          "x": 3,
+          "y": 84
+        },
+        {
+          "a": 0.7,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 5,
+          "y": 82
+        },
+        {
+          "a": 0.7,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 9,
+          "y": 82
+        },
+        {
+          "a": 0.7,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 13,
+          "y": 82
+        },
+        {
+          "a": 0.95,
+          "c": [
+            63,
+            58,
+            44
+          ],
+          "h": 4,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 14,
+          "x": 95,
+          "y": 81
+        },
+        {
+          "a": 0.8,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 14,
+          "x": 95,
+          "y": 84
+        },
+        {
+          "a": 0.7,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 97,
+          "y": 82
+        },
+        {
+          "a": 0.7,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 101,
+          "y": 82
+        },
+        {
+          "a": 0.7,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 105,
+          "y": 82
+        },
+        {
+          "a": 0.9,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 13,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": -11,
+          "y": 15
+        },
+        {
+          "a": 0.7,
+          "c": [
+            111,
+            99,
+            72
+          ],
+          "h": 8,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": -10,
+          "y": 17
+        },
+        {
+          "a": 1,
+          "c": [
+            130,
+            37,
+            29
+          ],
+          "h": 5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 6,
+          "x": -12,
+          "y": 27
+        },
+        {
+          "a": 0.8,
+          "c": [
+            192,
+            61,
+            40
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": -11,
+          "y": 28
+        },
+        {
+          "a": 0.7,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -10,
+          "y": 29
+        },
+        {
+          "a": 0.9,
+          "c": [
+            222,
+            211,
+            169
+          ],
+          "h": 13,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 119,
+          "y": 15
+        },
+        {
+          "a": 0.7,
+          "c": [
+            111,
+            99,
+            72
+          ],
+          "h": 8,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 120,
+          "y": 17
+        },
+        {
+          "a": 1,
+          "c": [
+            130,
+            37,
+            29
+          ],
+          "h": 5,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 6,
+          "x": 118,
+          "y": 27
+        },
+        {
+          "a": 0.8,
+          "c": [
+            192,
+            61,
+            40
+          ],
+          "h": 3,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 4,
+          "x": 119,
+          "y": 28
+        },
+        {
+          "a": 0.7,
+          "c": [
+            185,
+            143,
+            63
+          ],
+          "h": 1,
+          "melta_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 120,
+          "y": 29
+        }
+      ],
+      "command_count": 33,
+      "sha256": "ed7155530e5cd610b90462685efb2b141d4283492fbb3de12b66f97fab7eb703"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 116,
+  "static_quads": 4
+}

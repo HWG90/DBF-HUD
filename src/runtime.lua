@@ -6,6 +6,9 @@ function M.rebase_commands(commands,left,bottom)
             local b=v.texture_art_box
             v.texture_art_box={x=b.x-left,y=b.y-bottom,w=b.w,h=b.h}
         end
+        if v.readout_zone then
+            local z=v.readout_zone;v.readout_zone={cx=z.cx-left,cy=z.cy-bottom,w=z.w,h=z.h}
+        end
     end
     return commands
 end
@@ -19,6 +22,24 @@ function M.start(sr,backend,options)
     local legacy=rawget(_G,'AstraAmmo');if legacy and legacy.retire then legacy.retire() end
     local old=rawget(_G,'DBFHUD');if old and old.retire then old.retire() end
     local self={version='0.3.42',status='starting',anchor_status='starting native anchor',clock=0,hidden=false}
+    local texture_swaps
+    function self.runtime_texture_swaps()
+        if not texture_swaps then texture_swaps=HUD.runtime_texture_bridge.new(sr,backend)end
+        return texture_swaps
+    end
+    function self.reload_runtime_textures()
+        if not texture_swaps then return true,'No runtime artwork registered' end
+        local ok,err=pcall(texture_swaps.reload_files)
+        return ok,ok and 'Runtime artwork queued for render bridge' or tostring(err)
+    end
+    local hot_panel_art=HUD.hot_panel_art.new(sr,backend,assert(os.getenv('LOCALAPPDATA'))..'/DBF/HotTextures')
+    function self.reload_panel_art()local ok,result=pcall(hot_panel_art.reload);return ok,tostring(result)end
+    function self.restore_panel_art()return hot_panel_art.restore()end
+    function self.panel_art_progress()return hot_panel_art.progress()end
+    function self.panel_art_stats()return hot_panel_art.stats()end
+    local appearance_selection
+    local faithful_states={}
+    local faithful_full_states={}
     local frame_trial
     local profile={elapsed=0,frames=0,total=0,max=0,buckets={}}
     local function timed(name,fn)
@@ -39,18 +60,64 @@ function M.start(sr,backend,options)
             return finish(fn(...))
         end
     end
-    local compose=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure)
+    local compose_raw=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure,native_art)
+        if cfg.weapon_panel_overrides then
+            local resolved={};for k,v in pairs(cfg)do resolved[k]=v end;for k,v in pairs(cfg.weapon_panel_overrides)do resolved[k]=v end;cfg=resolved
+        end
+        cfg=HUD.config.texture_policy(cfg)
+        if cfg.presentation_view=='third' then return HUD.view_presentation.compose(m,x,y,scale,opacity,cfg)end
+        if cfg.shader_layers~=nil then cfg.effect_scanlines=false;cfg.effect_flicker=false;cfg.effect_sweep=false;cfg.theme_shader='none';cfg.effect_shader='none' end
+        local family=HUD.ballistic_family.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource)
+        if family then return family end
+        if m.resource_hex=='72170a55a1f37ff1' then
+            local retro=HUD.df_retro_panel.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource)
+            if retro then return HUD.layout.decorate_textures(retro,scale,cfg,opacity)end
+            if cfg.texture_art_trial==false or cfg.texture_art_variant=='original' then return HUD.df_retro_panel.primitive(m,x,y,scale,opacity,cfg)end
+        end
+        if m.resource_hex=='72170a55a1f37ff1' and cfg.texture_art_trial~=false and cfg.texture_art_variant~='original' and HUD.df_designer_texture.ready(hot_panel_art.resource) then return HUD.layout.decorate_textures(HUD.df_designer_texture.compose(m,x,y,scale,opacity,cfg,measure or HUD.font.measure),scale,cfg,opacity)end
         local out=HUD.layout.compose(m,x,y,scale,opacity,cfg,clock,measure)
+        local mechanical=false
+        if m.resource_hex=='72170a55a1f37ff1' and cfg.texture_art_trial~=false and cfg.mechanical_art_enabled~=false and cfg.texture_art_variant=='faithful' then
+            -- Readiness is checked against the atlas's distinct hot resource, never the legacy image.
+            if hot_panel_art.resource('mods/dbf_hud/textures/df_neogeo_shell_states_v2') and hot_panel_art.resource('mods/dbf_hud/textures/df_neogeo_backing_preview_v2') and hot_panel_art.resource('mods/dbf_hud/textures/df_neogeo_rim_neutral') then
+                local ok,art=pcall(HUD.df_neogeo_atlas.compose,m,x-20*scale,y-19*scale,scale,opacity,cfg,measure or HUD.font.measure)
+                if ok then out=art elseif not self.neo_geo_error then self.neo_geo_error=true;log('NEOGEO_PANEL_FALLBACK '..tostring(art))end
+            end
+            mechanical=true -- Pending/failed artwork retains the known-working original layout.
+        end
+        if not mechanical and native_art and HUD.mechanical_art and type(sr.Application.can_get)=='function' then
+            out,mechanical=HUD.mechanical_art.compose(out,m,x,y,scale,opacity,cfg,clock,measure,sr.Application.can_get,hot_panel_art.resource)
+            if mechanical and not self.mechanical_seen then self.mechanical_seen={} end
+            if mechanical and not self.mechanical_seen[m.resource_hex] then
+                self.mechanical_seen[m.resource_hex]=true
+                if backend.log then pcall(backend.log,'MECHANICAL_TEXTURE_ACTIVE weapon='..tostring(m.resource_hex)..' live_readouts=true')end
+            end
+        end
+        local faithful=HUD.faithful_fragment_assets and HUD.faithful_fragment_assets[m.resource_hex]
+        if not mechanical and native_art and faithful and HUD.faithful_fragments and cfg.texture_art_trial and cfg.texture_art_variant=='faithful' and type(sr.Application.can_get)=='function' then
+            local original=out
+            out=HUD.faithful_fragments.prepare(out,faithful.spec,faithful.assets,x,y,scale,opacity,cfg,sr.Application.can_get)
+            local count=0;for _,v in ipairs(out)do if v.faithful_fragment then count=count+1 end end
+            faithful_states[m.resource_hex]={count=count,opacity=opacity,panel=cfg.panel_opacity,fallback=out==original}
+            faithful_states[m.resource_hex].revision=self.appearance_revision
+            if math.abs(opacity-1)<=1e-6 then faithful_full_states[m.resource_hex]=faithful_states[m.resource_hex] end
+        end
+        if not mechanical and native_art and HUD.bespoke_texture_panel and type(sr.Application.can_get)=='function' then
+            out=HUD.bespoke_texture_panel.compose(out,m,x,y,scale,opacity,cfg,clock,measure,sr.Application.can_get)
+        end
         local override=cfg.weapon_panel_overrides
         if override then for _,v in ipairs(out)do
             if v.type=='text' and override.font then v.font=override.font end
             if v.type=='panel' and override.background_color then v.c=HUD.config.rgb(override.background_color)end
             if v.type=='text' and override.text_color and not v.weapon_label and not m.warning and v.text~='UNSAFE' then v.c=HUD.config.rgb(override.text_color)end
         end end
-        return out
+        return HUD.layout.decorate_textures(out,scale,cfg,opacity)
     end)
+    local function compose(m,x,y,scale,opacity,cfg,clock,measure,native_art)
+        return HUD.font_scale.apply(compose_raw(m,x,y,scale,opacity,cfg,clock,measure,native_art),cfg,measure or HUD.font.measure)
+    end
     local mg_easter=HUD.mg_easter.new()
-    local df_shell_state=HUD.df_shell_state.new()
+    local df_reload_state=HUD.df_reload_state.new();local df_shell_state=HUD.df_shell_state.new()
     local recoilless_state=HUD.recoilless_state.new()
     local senator_state=HUD.senator_state.new()
     local melta_effect={}
@@ -76,8 +143,11 @@ function M.start(sr,backend,options)
     end
     function self.appearance_preview(bounds)
         -- A presentation-only example keeps Appearance useful on the ship.
-        local preview_model=model or HUD.model.normalize({id='appearance_sample',kind='magazine',rounds=24,capacity=30,reserve=4,reserve_kind='mags',label='ROUNDS',fire_mode='AUTO'})
+        local preview_model=self.appearance_model(self.appearance_weapon())
         local cfg=HUD.config.effective(self.config,preview_model.resource_hex)
+        cfg.presentation_view=cfg.hud_presentation=='practical' and 'third' or (cfg.hud_presentation=='weapon_specific' and 'first' or self.presentation_view or 'first')
+        if cfg.presentation_view=='third' then cfg.style_3d='standard';cfg.shader_layers={};cfg.theme_shader='none';cfg.effect_shader='none' end
+        if cfg.anchor_mode~='world' then cfg.style_3d='standard' end
         cfg.frosted=false;cfg.placement_mode='manual'
         local commands=compose(preview_model,0,0,2,1,cfg,self.clock)
         commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
@@ -158,7 +228,7 @@ function M.start(sr,backend,options)
     end
     local world_probe=HUD.world_probe.new(sr,research_log)
     local world_display=HUD.scene_test.new(sr,research_log)
-    local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log)
+    local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log,hot_panel_art)
     do
         local available,total=0,0
         for _,entry in ipairs(HUD.shader_catalog) do
@@ -198,10 +268,17 @@ function M.start(sr,backend,options)
     log('START DBFHUD '..self.version..' native crosshair enabled; movement visibility filter removed')
     local art_materials,art_textures=0,0
     for _,variant in ipairs({'faithful','realistic'})do for _,layer in ipairs({'underlay','recesses','details'})do
-        if sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
-        if sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
+        if sr.Application.can_get and sr.Application.can_get('material','mods/dbf_hud/materials/texture_liberator_'..variant..'_'..layer) then art_materials=art_materials+1 end
+        if sr.Application.can_get and sr.Application.can_get('texture','mods/dbf_hud/textures/liberator_'..variant..'_'..layer) then art_textures=art_textures+1 end
     end end
     log('TEXTURE_LIBERATOR_BUILD 20261004-native-v1 materials='..art_materials..'/6 textures='..art_textures..'/6')
+    if HUD.bespoke_texture_specs and sr.Application.can_get then
+        local available=0
+        for _,spec in pairs(HUD.bespoke_texture_specs) do
+            if sr.Application.can_get('material',spec.material) and sr.Application.can_get('texture',spec.texture) then available=available+1 end
+        end
+        log('TEXTURE_BESPOKE_BUILD six-studies available='..available..'/6; unavailable retains accepted primitives')
+    end
     local function research_snapshot()
     if not self.config.debug_logging then return end
     -- Availability check only: never invokes unverified world GUI functions.
@@ -287,14 +364,52 @@ function M.start(sr,backend,options)
     local menu
     function self.configure(values)
         local was_debug=self.config.debug_logging
-        HUD.config.apply(self.config,values);self.appearance_revision=(self.appearance_revision or 0)+1;self.config.placement_mode='auto';self.config.show_3d='aiming'
+        if HUD.config.apply(self.config,values)then self.texture_styles_dirty=true end;self.appearance_revision=(self.appearance_revision or 0)+1;self.config.placement_mode='auto';self.config.show_3d='aiming'
         if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
     end
-    function self.appearance_weapon()return model and model.resource_hex end
+    function self.appearance_weapon()if self.config.appearance_follow_equipped~=false then return model and model.resource_hex end;return appearance_selection or (model and model.resource_hex)end
+    function self.select_appearance_weapon(resource)
+        self.config.appearance_follow_equipped=false
+        assert(resource and HUD.weapon_names[resource],'Unknown weapon');appearance_selection=resource
+        self.appearance_revision=(self.appearance_revision or 0)+1
+    end
+    function self.appearance_model(resource)
+        if model and model.resource_hex==resource then return model end
+        local sample=HUD.model.normalize({id='appearance_sample',kind='magazine',rounds=24,capacity=30,reserve=4,reserve_kind='mags',label='ROUNDS',fire_mode='AUTO'})
+        sample.resource_hex=resource;return sample
+    end
+    function self.faithful_status(resource)
+        local selected=HUD.config.effective(self.config,resource)
+        if selected.texture_art_trial~=false and selected.texture_art_variant=='faithful' and selected.mechanical_art_enabled~=false and HUD.mechanical_art.enabled and HUD.mechanical_art.layouts[resource] then return 'HUD Texture: '..(HUD.mechanical_art.status[resource] or 'awaiting visible weapon sample') end
+        local cfg=HUD.config.effective(self.config,resource);local art=HUD.faithful_fragment_assets and HUD.faithful_fragment_assets[resource]
+        if not cfg.texture_art_trial or cfg.texture_art_variant~='faithful' then return 'Faithful inactive: selected alternative / artwork disabled' end
+        if not art then return 'No fragment adapter: existing native art / original rendering' end
+        local available,total=0,0
+        for _,asset in pairs(art.assets)do for _,kind in ipairs({'material','texture'})do total=total+1;local ok,value=pcall(sr.Application.can_get,kind,asset[kind]);if ok and value then available=available+1 end end end
+        local prefix='Native resources '..available..'/'..total..'. '
+        if math.abs((cfg.panel_opacity or 1)-1)>1e-6 then return prefix..'Original shapes: panel opacity must be 100% for baked art' end
+        if available<total then return prefix..'Original shapes: native resources unavailable' end
+        local state=faithful_states[resource]
+        local full=faithful_full_states[resource]
+        if full and full.revision~=self.appearance_revision then full=nil end
+        if resource~=self.equipped_resource()then return prefix..'Not equipped; preview uses original shapes' end
+        if not state then return prefix..'Waiting for an in-world draw; preview uses original shapes' end
+        if state.count>0 then return prefix..'Faithful active: '..state.count..' fragments in last composition' end
+        if math.abs(state.opacity-1)>1e-6 then
+            local previous=full and (full.count>0 and ('last fully visible composition: '..full.count..' faithful fragments') or 'last fully visible composition: original shapes') or 'no fully visible sample for current settings'
+            return prefix..string.format('Current visibility %.1f%% (menu/aim fade), panel %.0f%%; ',state.opacity*100,(cfg.panel_opacity or 1)*100)..previous
+        end
+        return prefix..'Original shapes: runtime artwork differs from baked reference'
+    end
     function self.equipped_resource()return latest_raw and latest_raw.resource_hex end
     function self.shader_status()
         local cfg=HUD.config.effective(self.config,self.appearance_weapon())
+        if cfg.shader_layers~=nil then
+            local status=HUD.shader_layers.status(cfg,sr.Application.can_get)
+            local note=HUD.screen_scene.shader_layer_status and HUD.screen_scene.shader_layer_status[self.appearance_weapon()]
+            return status..(note and ('; '..note)or '')
+        end
         local function state(key)
             local selected=cfg[key] or (key=='theme_shader' and 'auto' or 'none')
             if selected=='auto' then return 'automatic weapon theme (may use plain fill)' end
@@ -307,11 +422,15 @@ function M.start(sr,backend,options)
         end
         return 'Theme: '..state('theme_shader')..'; Effects: '..state('effect_shader')..(not cfg.effect_scanlines and not cfg.effect_sweep and ' [inactive: enable Scanlines or Sweep]' or '')..(self.config.anchor_mode~='world' and ' [3D renderer only; 2D preview uses normal fill]' or '')
     end
-    function self.panel_settings()
-        local cfg=HUD.config.effective(self.config,self.appearance_weapon())
-        if not model then return cfg end
+    function self.follow_equipped_appearance(enabled)
+        self.config.appearance_follow_equipped=enabled~=false;if enabled then appearance_selection=nil end;self.appearance_revision=(self.appearance_revision or 0)+1
+    end
+    function self.panel_settings(resource)
+        resource=resource or self.appearance_weapon()
+        local cfg=HUD.config.effective(self.config,resource)
+        local selected_model=self.appearance_model(resource)
         -- Read the actual themed commands; fetching is presentation-only, never a save.
-        local commands=compose(model,0,0,2,1,cfg,self.clock)
+        local commands=compose(selected_model,0,0,2,1,cfg,self.clock)
         commands=HUD.world_style.prepare(commands,{first_person=self.first_person},cfg)
         local frame,ink,border
         for _,v in ipairs(commands) do
@@ -323,10 +442,14 @@ function M.start(sr,backend,options)
             if not v or not v.c then return fallback end
             return string.format('#%02X%02X%02X',math.max(0,math.min(255,math.floor(v.c[1]+.5))),math.max(0,math.min(255,math.floor(v.c[2]+.5))),math.max(0,math.min(255,math.floor(v.c[3]+.5))))
         end
-        cfg.background_color=color(frame,cfg.background_color)
-        cfg.text_color=color(ink,cfg.text_color)
-        cfg.decoration_color=color(border,cfg.decoration_color)
-        if frame then cfg.panel_opacity=frame.a or cfg.panel_opacity;cfg.frosted=frame.frosted==true end
+        -- Explicit saved colors are authoritative. Texture bounds often use an
+        -- invisible black frame, which is geometry metadata rather than a palette.
+        local own=cfg.weapon_panel_overrides or {}
+        if own.background_color==nil and frame and (frame.a or 0)>0 then cfg.background_color=color(frame,cfg.background_color)end
+        if own.text_color==nil then cfg.text_color=color(ink,cfg.text_color)end
+        if own.decoration_color==nil then cfg.decoration_color=color(border,cfg.decoration_color)end
+        -- Opacity is authoritative configuration, not a themed frame alpha.
+        if frame then cfg.frosted=frame.frosted==true end
         return cfg
     end
     function self.configure_panel(values,resource)
@@ -337,14 +460,16 @@ function M.start(sr,backend,options)
         if not backend.write_tuning then self.tuning_status='file writer unavailable';return false end
         local ok,result=pcall(backend.write_tuning,self.export_tuning())
         self.tuning_status=ok and ('saved '..result) or tostring(result)
-        if not ok then log('TUNING '..self.tuning_status) end
+        if not ok then log('TUNING '..self.tuning_status)else self.texture_styles_dirty=false end
         return ok,result
     end
     function self.reload_tuning()
         if not backend.read_tuning then return false end
         local ok,result=pcall(function()local values=backend.read_tuning();if values then self.configure(values) end;return values~=nil end)
         self.tuning_status=ok and (result and 'loaded tuning file' or 'defaults; no tuning file') or tostring(result)
-        log('TUNING '..self.tuning_status);return ok and result
+        log('TUNING '..self.tuning_status)
+        if ok and result and self.texture_styles_dirty then local saved,why=self.save_tuning();if not saved then self.tuning_status=tostring(why);return false end end
+        return ok and result
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
@@ -359,6 +484,8 @@ function M.start(sr,backend,options)
         self.auto_mounts={}
         if self.layout_editor and self.layout_editor.active then self.layout_editor.bind() end
         log('SETTINGS_RELOAD settings and weapon layouts loaded from disk')
+        local art_ok,art_status=self.reload_runtime_textures()
+        if not art_ok then log('TEXTURE_RELOAD '..art_status)end
         return true,'Settings and layouts reloaded from disk'
     end
     function self.blacklist_equipped(hidden)
@@ -530,6 +657,7 @@ function M.start(sr,backend,options)
                 local sig=tostring(raw.rounds)..'/'..tostring(raw.capacity)..'/'..tostring(raw.reserve)..'/'..tostring(raw.ammo_mode)
                 if sig~=self.recoilless_sample then self.recoilless_sample=sig;log('RECOILLESS_NATIVE rounds/capacity/reserve/mode='..sig) end
             end
+            HUD.df_reload_state.step(df_reload_state,model,raw and raw.weapon_reload_event)
             HUD.df_shell_state.step(df_shell_state,model)
             HUD.recoilless_state.step(recoilless_state,model)
             HUD.senator_state.step(senator_state,model,self.clock)
@@ -712,11 +840,15 @@ function M.start(sr,backend,options)
         if self.frame_stage==4 then return end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
-        if model.resource_hex=='4dbd74f49c8ffc13' then
+        if model.resource_hex=='72170a55a1f37ff1' or HUD.ballistic_family.specs[model.resource_hex] then
+            model.compass_heading=HUD.compass.heading(projection.camera_matrix)
+        elseif model.resource_hex=='4dbd74f49c8ffc13' or (HUD.mechanical_art.layouts[model.resource_hex] and HUD.mechanical_art.layouts[model.resource_hex].zones.compass) then
             local matrix=self.weapon_pose and self.weapon_pose.matrix
             model.compass_heading=matrix and (math.deg(math.atan2(matrix[5],matrix[6]))%360) or nil
         end
+        model.chamber_rounds=(latest_raw or {}).chamber_rounds
         local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
+        self.presentation_view,self.presentation_status=HUD.view_presentation.select(native_first,aiming,self.config.hud_presentation)
         local aim_opacity=1
         if self.config.fade_3d_unless_aiming then
             local wanted=aiming==true and 1 or 0
@@ -724,9 +856,27 @@ function M.start(sr,backend,options)
             aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
         end
         self.aim_opacity=aim_opacity
+        if self.presentation_view=='third' then
+            world_display.release();if screen_scene then screen_scene.release()end
+            local cfg=HUD.config.effective(self.config,model.resource_hex);cfg.presentation_view='third'
+            local unit=h/1080;local scale=unit*self.config.scale*self.config.third_person_scale
+            local px=w/2+(self.config.offset_x+(self.motion_x or 0))*unit
+            local py=h/2+(self.config.offset_y+(self.motion_y or 0))*unit
+            px=math.max(4*unit,math.min(w-64*scale-4*unit,px));py=math.max(4*unit,math.min(h-86*scale-4*unit,py))
+            local commands=compose(model,px,py,scale,alpha*aim_opacity,cfg,self.clock)
+            for _,v in ipairs(screen_overlay(w,h))do commands[#commands+1]=v end
+            view.draw(commands);self.anchor_status='floating Simple HUD';return
+        end
         if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
             local world_config=HUD.config.effective(self.config,model.resource_hex)
+            world_config.presentation_view=self.presentation_view
             world_config.scale=self.config.scale*(self.profile_scale or 1)
+            if self.presentation_view=='third' then
+                world_config.scale=world_config.scale*self.config.third_person_scale
+                world_config.style_3d='standard';world_config.shader_layers={}
+                world_config.theme_shader='none';world_config.effect_shader='none'
+                world_config.effect_scanlines=false;world_config.effect_sweep=false;world_config.effect_flicker=false
+            end
             local appearance_id=(model.resource_hex or '')..'/'..tostring(self.appearance_revision or 0)
             if appearance_id~=self.logged_appearance then
                 self.logged_appearance=appearance_id
@@ -743,7 +893,7 @@ function M.start(sr,backend,options)
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
-            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock)
+            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock,nil,true)
             local f=world_commands[1];local left,bottom=f.x,f.y
             M.rebase_commands(world_commands,left,bottom)
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
@@ -783,6 +933,13 @@ function M.start(sr,backend,options)
         end
         if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
         local screen_config=HUD.config.effective(self.config,model.resource_hex)
+        screen_config.presentation_view=self.presentation_view
+        if self.presentation_view=='third' then
+            scale=scale*self.config.third_person_scale
+            screen_config.style_3d='standard';screen_config.shader_layers={}
+            screen_config.theme_shader='none';screen_config.effect_shader='none'
+            screen_config.effect_scanlines=false;screen_config.effect_sweep=false;screen_config.effect_flicker=false
+        end
         screen_config.senator_style='upright' -- Also covers a failed WorldGUI falling back to screen.
         local commands=compose(model,x,y,scale,alpha*aim_opacity,screen_config,self.clock)
         local frame=commands[1]
@@ -814,7 +971,9 @@ function M.start(sr,backend,options)
 
     frame_trial=options and options.frame_trial and {elapsed=0,phase=1,frames=0,max=0,over33=0,over50=0,total=0,cpu_max=0,buckets={}} or nil
     if frame_trial then profile=nil end
+    local control_requests=HUD.control_requests.new(self,assert(os.getenv('LOCALAPPDATA'))..'/DBF')
     function self.tick(dt)
+        if not retired then control_requests.poll()end
         if frame_trial and not retired then
             local t=frame_trial;local delta=math.max(0,dt or 0)
             local eligible=self.first_person and (self.opacity or 0)>.9 and self.sample_weapon
@@ -914,8 +1073,11 @@ function M.start(sr,backend,options)
     function self.retire()
         if cleaned then return end
         cleaned=true
+        if texture_swaps then texture_swaps.close()end
+        if backend.close and hot_panel_art.after_close then hot_panel_art.after_close(function()pcall(backend.close)end)end
+        hot_panel_art.close()
         retired=true;menu.retire();if depth_marker then pcall(depth_marker.release) end;if screen_scene then pcall(screen_scene.release) end;pcall(bone_marker.release);pcall(world_display.release);pcall(world_probe.release);pcall(view.release)
-        if backend.close then pcall(backend.close) end
+        if backend.close and not hot_panel_art.after_close then pcall(backend.close) end
         if not managed then
             if rawget(_G,'update')==wrapper then rawset(_G,'update',original) end
             if rawget(_G,'shutdown')==shutdown_wrapper then rawset(_G,'shutdown',shutdown) end

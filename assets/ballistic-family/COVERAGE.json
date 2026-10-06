@@ -1,0 +1,1145 @@
+{
+  "source": "maintained src/weapon_styles.lua + weapon_names.lua",
+  "source_sha256": "c5cbaf70ce1b8b116c78909eb27e086c6ca2f009a08540f915ede7160b6f831e",
+  "catalog_count": 148,
+  "included": [
+    {
+      "id": "03e67a19b07c6523",
+      "name": "R-63 Diligence",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "05e4e5c2db6e44a2",
+      "name": "P-2 Peacemaker",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "0807aea5217e4767",
+      "name": "SMG-72 Pummeler",
+      "named": true,
+      "family": "compact",
+      "detail": "concussive",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "0c197bbd8d2c725b",
+      "name": "assault_rifle_penetrator",
+      "named": false,
+      "family": "rifle",
+      "detail": "penetrator",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "0f83639ab8c86165",
+      "name": "R-2 Amendment",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "11c27d3babb38956",
+      "name": "MG-43 Machine Gun",
+      "named": true,
+      "family": "belt",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "11ec8e2296a3d662",
+      "name": "pump_shotgun_02",
+      "named": false,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "16051937941bb709",
+      "name": "smg_rhino",
+      "named": false,
+      "family": "compact",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "186ea95de7306b1a",
+      "name": "SMG-203 Gallant",
+      "named": true,
+      "family": "compact",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "1a437158e1b8d2a1",
+      "name": "P-113 Verdict",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "1abbff60d26ba391",
+      "name": "R/40-K Hot-Shot Marksman Rifle",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "2152d5147b0ac418",
+      "name": "heavy_mg",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "2383b0439f0bc465",
+      "name": "assault_rifle_rico",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "2b28e17ffed05f7c",
+      "name": "SG-22 Bushwhacker",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "2df1cfb9ed77e06c",
+      "name": "marksman_rifle",
+      "named": false,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "3575aabc5f1f9326",
+      "name": "P-19 Redeemer",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "41eac4a03987faa0",
+      "name": "SG-8 Punisher",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "43a58cb89cfa197c",
+      "name": "M-1000 Maxigun",
+      "named": true,
+      "family": "belt",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "43cb1033961a2276",
+      "name": "AR-23P Liberator Penetrator",
+      "named": true,
+      "family": "precision",
+      "detail": "penetrator",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "46183b50961d1328",
+      "name": "SG-225 Breaker",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "4ba41b6f9f405cc2",
+      "name": "StA-11 SMG",
+      "named": true,
+      "family": "compact",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "4c786785c79d44e7",
+      "name": "R-63CS Diligence Counter Sniper",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "4d58c77087b774c5",
+      "name": "M6C/SOCOM Pistol",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "4dbd74f49c8ffc13",
+      "name": "MA5C Assault Rifle",
+      "named": true,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "4e310b1fe4c52b52",
+      "name": "SG-20 Halt",
+      "named": true,
+      "family": "shotgun",
+      "detail": "concussive",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "4e4a613eb9bf5c24",
+      "name": "personal_defense_weapon",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "4f749e2ee26f532d",
+      "name": "SG-8S Slugger",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "52071f49263415e4",
+      "name": "SG-88 Break-Action Shotgun",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "53eebe75cd6e26df",
+      "name": "pump_shotgun_slug",
+      "named": false,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "5ebaea70c0d060b9",
+      "name": "SG-225SP Breaker Spray&Pray",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "5fecab819f96a3e8",
+      "name": "BR-14 Adjudicator",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "6228d0242bde56b6",
+      "name": "assault_shotgun_sprayandpray",
+      "named": false,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "6e68194b95d60145",
+      "name": "marksman_rifle_vigilance_counter_sniper",
+      "named": false,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "708ea298c82093d0",
+      "name": "AR-59 Suppressor",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family; special explosive bullet label, semantics remain reader-owned"
+    },
+    {
+      "id": "72170a55a1f37ff1",
+      "name": "DBS-2 Double Freedom",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "7b75e5132ffd4ca6",
+      "name": "R-2124 Constitution",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "8039834a4b7489b9",
+      "name": "assault_rifle_penetrator",
+      "named": false,
+      "family": "rifle",
+      "detail": "penetrator",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "80f1a156d9fa1e36",
+      "name": "JAR-5 Dominator",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family; special explosive bullet label, semantics remain reader-owned"
+    },
+    {
+      "id": "84354339522c932d",
+      "name": "AR-2 Coyote",
+      "named": true,
+      "family": "precision",
+      "detail": "incendiary",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "89c5493e08ca4207",
+      "name": "APW-1 Anti-Materiel Rifle",
+      "named": true,
+      "family": "laser",
+      "detail": "standard",
+      "classification_note": "Named ballistic rifle override; catalog incorrectly grouped laser"
+    },
+    {
+      "id": "8a35c1dc19f41870",
+      "name": "bolt_action_rifle",
+      "named": false,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "8d3d52a3b2f19402",
+      "name": "P-4 Senator",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "90ddc374f4e3d756",
+      "name": "M90A Shotgun",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "94bd931b5fb4ee95",
+      "name": "SMG-32 Reprimand",
+      "named": true,
+      "family": "compact",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "9571ca51f0daf35b",
+      "name": "MP-98 Knight",
+      "named": true,
+      "family": "compact",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "968211c0033dce64",
+      "name": "AR-23 Liberator",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "a6a735accb4a327f",
+      "name": "M-105 Stalwart",
+      "named": true,
+      "family": "belt",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "a7ee1ebf58fcdf1f",
+      "name": "AR-23A Liberator Carbine",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "a8a91eb54892b6b2",
+      "name": "AR-11 Arbitrator",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "b16c9d490aa59b77",
+      "name": "MGX-42 Bullet Storm",
+      "named": true,
+      "family": "belt",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "b6aff2195568767f",
+      "name": "R-36 Eruptor",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family; special explosive bullet label, semantics remain reader-owned"
+    },
+    {
+      "id": "bc29613666df696b",
+      "name": "AR-32 Pacifier",
+      "named": true,
+      "family": "precision",
+      "detail": "concussive",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "bcc2177439d231be",
+      "name": "pump_shotgun",
+      "named": false,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "be70ee0d8d44028e",
+      "name": "M7S SMG",
+      "named": true,
+      "family": "compact",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "bf9504e95c0103a1",
+      "name": "battle_rifle_ceremonial",
+      "named": false,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "bfe35746f5084222",
+      "name": "assault_rifle_karbin",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "c12a34f375bd5a87",
+      "name": "SG-225IE Breaker Incendiary",
+      "named": true,
+      "family": "shotgun",
+      "detail": "incendiary",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "c780bcd79547da0f",
+      "name": "P-69 Veto",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "cdf28be026bb7d84",
+      "name": "StA-52 Assault Rifle",
+      "named": true,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "cdf733b0106a23c3",
+      "name": "assault_shotgun_incendiary",
+      "named": false,
+      "family": "shotgun",
+      "detail": "incendiary",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "ce063aa33d95a812",
+      "name": "AR-61 Tenderizer",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "cf5f176e0e322be1",
+      "name": "AR-23C Liberator Concussive",
+      "named": true,
+      "family": "precision",
+      "detail": "concussive",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "cf8934ff6567a42d",
+      "name": "P-92 Warrant",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "d323de60855898ac",
+      "name": "SG-451 Cookout",
+      "named": true,
+      "family": "shotgun",
+      "detail": "incendiary",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "dbb6c961c59fadc1",
+      "name": "P/40-K Bolt Pistol",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family; special explosive bullet label, semantics remain reader-owned"
+    },
+    {
+      "id": "dcd1c835407ef7ba",
+      "name": "SG-97 Sweeper",
+      "named": true,
+      "family": "shotgun",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "e5796355a8fd67e0",
+      "name": "R-4 Hyena",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "e6d932be83729076",
+      "name": "R-6 Deadeye",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "f0338468dcdb6a6c",
+      "name": "R-72 Censor",
+      "named": true,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    },
+    {
+      "id": "ffc18b2ce10ca381",
+      "name": "battle_rifle",
+      "named": false,
+      "family": "precision",
+      "detail": "standard",
+      "classification_note": "Catalog ballistic family"
+    }
+  ],
+  "conditional": [
+    {
+      "id": "8a307bd1811a5fe9",
+      "name": "SMG/FLAM-34 Stoker",
+      "named": true,
+      "family": "fuel",
+      "detail": "standard",
+      "classification_note": "Hybrid; bullet branch panel prepared conditionally; non-bullet branch excluded"
+    },
+    {
+      "id": "a955c4ea6f6d4203",
+      "name": "AR/GL-21 One-Two",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard",
+      "classification_note": "Hybrid; bullet branch panel prepared conditionally; non-bullet branch excluded"
+    }
+  ],
+  "pending": [
+    {
+      "id": "43b2d7766120203b",
+      "name": "chemgun",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Internal special ammunition; verify bullet branch before inclusion"
+    },
+    {
+      "id": "719f42b7d137789c",
+      "name": "jet_rifle_phoenix",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Internal special ammunition; verify bullet branch before inclusion"
+    },
+    {
+      "id": "8a307bd1811a5fe9",
+      "name": "SMG/FLAM-34 Stoker",
+      "named": true,
+      "family": "fuel",
+      "detail": "standard",
+      "classification_note": "Hybrid; bullet branch panel prepared conditionally; non-bullet branch excluded"
+    },
+    {
+      "id": "8dc91f277c6096ee",
+      "name": "jet_rifle_phoenix",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Internal special ammunition; verify bullet branch before inclusion"
+    },
+    {
+      "id": "a8cffb316f0b5c5f",
+      "name": "AC-8 Autocannon",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard",
+      "classification_note": "Variable/explosive special ammunition; inclusion unresolved"
+    },
+    {
+      "id": "a955c4ea6f6d4203",
+      "name": "AR/GL-21 One-Two",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard",
+      "classification_note": "Hybrid; bullet branch panel prepared conditionally; non-bullet branch excluded"
+    },
+    {
+      "id": "ab2a2b390c539f18",
+      "name": "assault_rifle_explosive",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Internal special ammunition; verify bullet branch before inclusion"
+    },
+    {
+      "id": "c4232a0e62166d91",
+      "name": "personal_defense_weapon_pepper",
+      "named": false,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Internal special ammunition; verify bullet branch before inclusion"
+    },
+    {
+      "id": "f992ce97577c8a7f",
+      "name": "VG-70 Variable",
+      "named": true,
+      "family": "rifle",
+      "detail": "standard",
+      "classification_note": "Variable/explosive special ammunition; inclusion unresolved"
+    }
+  ],
+  "excluded": [
+    {
+      "id": "006e44327bb953fe",
+      "name": "GL-15 Evictor",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard"
+    },
+    {
+      "id": "02cd7321cd8445f5",
+      "name": "Verified auxiliary grenade entity on the equipped rifle.",
+      "named": false,
+      "family": "explosive",
+      "detail": "standard"
+    },
+    {
+      "id": "02eecd0b1fa49630",
+      "name": "GL-21 Grenade Launcher",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard"
+    },
+    {
+      "id": "05d8d8c073b9d502",
+      "name": "SG-8P Punisher Plasma",
+      "named": true,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "07419ebc09a1a7c5",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "076dd5d4f4360204",
+      "name": "ARC-12 Blitzer",
+      "named": true,
+      "family": "arc",
+      "detail": "standard"
+    },
+    {
+      "id": "0b882808c6f498e8",
+      "name": "P-35 Re-Educator",
+      "named": true,
+      "family": "dart",
+      "detail": "standard"
+    },
+    {
+      "id": "14d5d4506056c7a4",
+      "name": "P-33 Missile Pistol",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "25aa2fd4643cf4ee",
+      "name": "FAF-14 Spear",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "26df5aa208ce216e",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "26e40437ea275296",
+      "name": "RL-77 Airburst Rocket Launcher",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "27ee1ed8f6fb6356",
+      "name": "LAS-5 Scythe",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "295beb26dc4f8ff1",
+      "name": "LAS-17 Double-Edge Sickle",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "2e9d0bdc48b09e60",
+      "name": "RS-422 Railgun",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "30061f91af477f5e",
+      "name": "PLAS-39 Accelerator Rifle",
+      "named": true,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "35a61296619cc47e",
+      "name": "LAS-99 Quasar Cannon",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "3828e2051aa9e897",
+      "name": "S-11 Speargun",
+      "named": true,
+      "family": "dart",
+      "detail": "standard"
+    },
+    {
+      "id": "39ab99895147a3bf",
+      "name": "FLAM-40 Flamethrower",
+      "named": true,
+      "family": "fuel",
+      "detail": "standard"
+    },
+    {
+      "id": "3c86e871923f3970",
+      "name": "LAS-13 Trident",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "3f92ba65ef65cca9",
+      "name": "P-72 Crisper",
+      "named": true,
+      "family": "fuel",
+      "detail": "standard"
+    },
+    {
+      "id": "416d053372c4e433",
+      "name": "LAS-58 Talon",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "46427f2630a80d88",
+      "name": "faf_missile_launcher_helghast",
+      "named": false,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "4fb0f8c02f55c82b",
+      "name": "FLAM-66 Torcher",
+      "named": true,
+      "family": "fuel",
+      "detail": "standard"
+    },
+    {
+      "id": "52cdbfbaca3cb397",
+      "name": "CQC-30 Stun Baton",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "52e4334e6a128caf",
+      "name": "Grenade Pistol",
+      "named": false,
+      "family": "explosive",
+      "detail": "standard"
+    },
+    {
+      "id": "5990123d142b16cb",
+      "name": "MLS-4X Commando",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "5f3ec9bda2bd8553",
+      "name": "CQC-20 Breaching Hammer",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "644d748f359de03e",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "692eb345969d368e",
+      "name": "lat_oneshot",
+      "named": false,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "6cfcc7f8801a0266",
+      "name": "40-K Meltagun",
+      "named": true,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "6dfa768b4e2401a7",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "75816077c139c850",
+      "name": "CQC-5 Combat Hatchet",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "7617642765ac38c7",
+      "name": "EAT-411 Leveller",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "78a8185f63a70795",
+      "name": "heavy_flamethrower",
+      "named": false,
+      "family": "fuel",
+      "detail": "standard"
+    },
+    {
+      "id": "7c47244d3b030884",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "7e3145a5baa4b948",
+      "name": "laser_rifle_charge",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "80932fa0ed6901d3",
+      "name": "lat_oneshot",
+      "named": false,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "8645f167b3c813a2",
+      "name": "LAS-16 Sickle",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "8666e5f49f440d44",
+      "name": "faf_missile_launcher",
+      "named": false,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "88c2d09ad85a7c9f",
+      "name": "GL-28 Belt-Fed Grenade Launcher",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard"
+    },
+    {
+      "id": "88f61afff48ac8a4",
+      "name": "TX-41 Sterilizer",
+      "named": true,
+      "family": "fuel",
+      "detail": "standard"
+    },
+    {
+      "id": "945f7e132049b514",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "96de9cd50f7306e6",
+      "name": "ARC-3 Arc Thrower",
+      "named": true,
+      "family": "arc",
+      "detail": "standard"
+    },
+    {
+      "id": "9b0a7b78126c2fec",
+      "name": "missile_launcher",
+      "named": false,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "9b75217d8312dd67",
+      "name": "B/MD C4 Pack",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "9eb160830321bfd6",
+      "name": "GP-20 Ultimatum",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard"
+    },
+    {
+      "id": "9f80d67a12a7e40f",
+      "name": "GR-8 Recoilless Rifle",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "a9e574cd953d3b3a",
+      "name": "faf_missile_helghast",
+      "named": false,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "aa69a60d74a3ec54",
+      "name": "PLAS-15 Loyalist",
+      "named": true,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "b0f1b354ba1d38d8",
+      "name": "CQC-1 One True Flag",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "b2b5e0d185605f9e",
+      "name": "EAT-700 Expendable Napalm",
+      "named": true,
+      "family": "rocket",
+      "detail": "incendiary"
+    },
+    {
+      "id": "bf4cfd2aeabfb5a4",
+      "name": "CQC-9 Defoliation Tool",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "c0a9ee8ce12f682a",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "c85f576d5e086147",
+      "name": "LAS-12 Sai",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "cc786f6491fe7e65",
+      "name": "StA-X3 W.A.S.P. Launcher",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "d54b9505c0f72873",
+      "name": "LAS-98 Laser Cannon",
+      "named": true,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "d6b1fb05b9109353",
+      "name": "P-11 Stim Pistol",
+      "named": true,
+      "family": "medical",
+      "detail": "standard"
+    },
+    {
+      "id": "de18775fa447a9bf",
+      "name": "MS-11 Solo Silo",
+      "named": true,
+      "family": "rocket",
+      "detail": "standard"
+    },
+    {
+      "id": "df8decb6b6538265",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "e3b6aedd07fcb464",
+      "name": "CQC-19 Stun Lance",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "e8d5f49ad7780e54",
+      "name": "PLAS-45 Epoch",
+      "named": true,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "e8ffad77b73c221c",
+      "name": "railgun",
+      "named": false,
+      "family": "laser",
+      "detail": "standard"
+    },
+    {
+      "id": "e91f569c2ad8af01",
+      "name": "P-34 Breacher",
+      "named": true,
+      "family": "sidearm",
+      "detail": "standard",
+      "classification_note": "Wiki: explosive thermite projectile, not a bullet gun"
+    },
+    {
+      "id": "eea5e3cef1e12c14",
+      "name": "PLAS-1 Scorcher",
+      "named": true,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "efdcef306cea63fe",
+      "name": "plasma_rifle_charge",
+      "named": false,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "f49227a0630a3f7f",
+      "name": "CB-9 Exploding Crossbow",
+      "named": true,
+      "family": "dart",
+      "detail": "standard"
+    },
+    {
+      "id": "fb3a19078694708a",
+      "name": "PLAS-101 Purifier",
+      "named": true,
+      "family": "plasma",
+      "detail": "standard"
+    },
+    {
+      "id": "fcd8a6e67eac635a",
+      "name": "CQC-2 Saber",
+      "named": true,
+      "family": "tool",
+      "detail": "standard"
+    },
+    {
+      "id": "fe3b29b2cfa63f9b",
+      "name": "GL-52 De-Escalator",
+      "named": true,
+      "family": "explosive",
+      "detail": "standard"
+    }
+  ]
+}

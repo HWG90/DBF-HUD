@@ -1,6 +1,102 @@
 -- Project saved world layouts into the UI world; compare scene depth in shaders.
 -- Native atlas glyphs become textured quads, not replacement bitmap lettering.
-local M={}
+local M={max_texture_images=24}
+-- Non-overlapping edge bands use the existing material mapping and triangle
+-- alpha. No new native shader library or per-band GUI/material is required.
+function M.feather_boxes(w,h,fx,fy)
+    fx=math.max(0,math.min(.2,fx or 0));fy=math.max(0,math.min(.2,fy or 0))
+    if fx==0 or fy==0 then return {{0,0,w,h,1}} end
+    local out={};local n=4;local dx,dy=w*fx/n,h*fy/n
+    for i=0,n-1 do
+        local x,y=i*dx,i*dy;local bw,bh=w-2*x,h-2*y
+        local t=(i+.5)/n;local a=t*t*(3-2*t)
+        out[#out+1]={x,y,dx,bh,a};out[#out+1]={w-x-dx,y,dx,bh,a}
+        out[#out+1]={x+dx,y,bw-2*dx,dy,a};out[#out+1]={x+dx,h-y-dy,bw-2*dx,dy,a}
+    end
+    out[#out+1]={w*fx,h*fy,w*(1-2*fx),h*(1-2*fy),1}
+    return out
+end
+function M.expand_shader_layers(commands,c,can_get,resource)
+ if c.shader_layers==nil then return commands end
+ local out={};for _,v in ipairs(commands)do out[#out+1]=v end
+ local frame;for _,v in ipairs(commands)do if v.type=='panel' and not v.fold_child then frame=v;break end end
+ if not frame then return out end
+ local carrier;local count=0
+ for _,v in ipairs(commands)do if v.type=='texture' then count=count+1;if not carrier then carrier=v end end end
+ local notes={}
+ for slot,r in ipairs(c.shader_layers)do if r.enabled~=false then
+  local opacity=r.opacity or (c.panel_opacity or 1)*HUD.shader_layers.strengths[r.strength or 1]
+  if carrier then
+   local variant=can_get and HUD.texture_theme.material(carrier.texture_material,r.shader,can_get)
+   if variant and variant~=carrier.texture_material and count<M.max_texture_images then
+    local q={};for k,v in pairs(carrier)do q[k]=v end
+    q.a=(c.visibility_alpha or 1)*opacity;q.c=carrier.coverage_mask and {96,106,101}or {255,255,255}
+    q.texture_layers=nil;q.texture_theme_shader=r.shader;q.texture_theme=false
+    q.shader_layer=r;q.texture_layer=50+slot*.08;q.shader_alpha_masked=true
+    out[#out+1]=q;count=count+1
+   else notes[#notes+1]='Layer '..slot..': texture-alpha material unavailable or image budget reached' end
+  else
+   local masks=frame.shader_mask or {{0,0,1,1}}
+   for _,box in ipairs(masks)do out[#out+1]={type='rect',x=frame.x+frame.w*box[1],y=frame.y+frame.h*(1-box[2]-box[4]),w=frame.w*box[3],h=frame.h*box[4],c={96,106,101},a=opacity,shader_layer=r,shader_slot=slot}end
+  end
+ end end
+ M.shader_layer_status=M.shader_layer_status or {};M.shader_layer_status[resource or 'preview']=#notes>0 and table.concat(notes,'; ')or nil
+ return out
+end
+
+function M.expand_texture_layers(commands)
+    local out,slots={},0
+    local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
+    local function emit(v)
+        if v.visible==false or (v.a or 1)<=0 then return end
+        slots=slots+1;assert(slots<=M.max_texture_images,'too many visible texture images per panel')
+        local q={};for k,value in pairs(v)do q[k]=value end
+        q.texture_layers=nil;q.texture_slot=slots;q.a=q.a or 1;q.c=q.c or {255,255,255}
+        if q.atlas_rect then local r=q.atlas_rect;for i=1,4 do assert(finite(r[i]),'invalid atlas coordinate')end;assert(r[1]>=0 and r[2]>=0 and r[3]>0 and r[4]>0 and r[1]+r[3]<=1+1e-9 and r[2]+r[4]<=1+1e-9,'atlas rectangle outside image')end
+        assert(type(q.texture_material)=='string' and type(q.texture_resource)=='string','texture layer requires material and resource')
+        assert(finite(q.x) and finite(q.y) and finite(q.w) and finite(q.h) and q.w>0 and q.h>0,'invalid texture layer rectangle')
+        assert(finite(q.a) and q.a<=1,'invalid texture layer alpha')
+        q.texture_layer=q.texture_layer or (49+(slots-1)*.1)
+        assert(finite(q.texture_layer) and math.abs(q.texture_layer)<=8192,'invalid texture layer order')
+        for i=1,3 do assert(finite(q.c[i]) and q.c[i]>=0 and q.c[i]<=255,'invalid texture layer tint')end
+        out[#out+1]=q
+    end
+    for _,v in ipairs(commands)do
+        if v.type~='texture' then out[#out+1]=v
+        else
+            emit(v)
+            assert(not v.texture_layers or #v.texture_layers<=8,'too many texture layers')
+            for _,layer in ipairs(v.texture_layers or {})do
+                if layer.visible~=false then
+                    local r=layer.rect or {0,0,1,1}
+                    for i=1,4 do assert(finite(r[i]),'invalid normalized texture rectangle')end
+                    local q={type='texture',x=v.x+r[1]*v.w,y=v.y+r[2]*v.h,w=r[3]*v.w,h=r[4]*v.h,
+                        texture_material=layer.material or v.texture_material,texture_resource=layer.texture or v.texture_resource,
+                        a=(v.a or 1)*(layer.alpha or 1),c=layer.tint or v.c,texture_layer=layer.order,
+                        fold_child=v.fold_child,texture_theme=layer.theme,atlas_rect=layer.atlas_rect}
+                    if layer.theme==nil then q.texture_theme=v.texture_theme end
+                    emit(q)
+                end
+            end
+        end
+    end
+    return out
+end
+-- Compose an atlas subrectangle with the existing perspective homography.
+-- Coordinates use top-left texture UVs: {u, v, width, height}.
+function M.atlas_rows(rows,rect)
+    if not rect then return rows end
+    assert(type(rect)=='table','atlas rectangle required')
+    for i=1,4 do local n=rect[i];assert(type(n)=='number' and n==n and math.abs(n)<math.huge,'invalid atlas coordinate')end
+    local u,v,w,h=rect[1],rect[2],rect[3],rect[4]
+    assert(u>=0 and v>=0 and w>0 and h>0 and u+w<=1+1e-9 and v+h<=1+1e-9,'atlas rectangle outside image')
+    local result={};for i=1,#rows do result[i]=rows[i]end
+    for i=1,3 do
+        result[i]=w*rows[i]+u*rows[i+6]
+        result[i+3]=h*rows[i+3]+v*rows[i+6]
+    end
+    return result
+end
 function M.panel_pose(p,c,commands)
     local m=p.matrix;local x,y,z=HUD.scene_test.mount(p,c)
     local at={x=p.x+m[1]*x+m[5]*y+m[9]*z,
@@ -59,7 +155,24 @@ function M.text_parts(command,face)
     end
     return out
 end
-function M.new(sr,log)
+-- Pure command preparation completes before touching native GUI ownership.
+function M.prepare_commands(commands,p,c,can_get)
+    assert(type(commands)=='table' and commands[1],'HUD commands missing frame')
+    c=HUD.config.texture_policy(c)
+    commands=HUD.world_style.prepare(commands,p,c)
+    if c.style_3d=='hologram' then
+        for _,v in ipairs(commands)do if v.type=='panel'then v.a=math.min(1,v.a/.18)end end
+    end
+    local m,at=M.panel_pose(p,c,commands)
+    if c.texture_art_trial and not (commands[1] and commands[1].atlas_frame) then commands=HUD.texture_art.prepare(commands,p.resource_hex,can_get,HUD.texture_art_assets,c.texture_art_variant)end
+    commands=M.expand_shader_layers(M.expand_texture_layers(commands),c,can_get,p.resource_hex)
+    for _,v in ipairs(commands)do
+        assert(type(v.x)=='number' and v.x==v.x and math.abs(v.x)<math.huge and type(v.y)=='number' and v.y==v.y and math.abs(v.y)<math.huge,'invalid HUD coordinates')
+        if v.type=='text' then assert(HUD.native_font_data.faces[v.font or 'bigblue'] and HUD.native_font_uv[v.font or 'bigblue'],'HUD font unavailable')end
+    end
+    return commands,m,at
+end
+function M.new(sr,log,hot_panel_art)
     local A,W,G=sr.Application,sr.World,sr.Gui
     local fill='mods/dbf_hud/materials/screen_hud_fill'
     local dither='mods/dbf_hud/materials/scythe_dither_fill';local dither_available
@@ -67,7 +180,8 @@ function M.new(sr,log)
     local shader_materials={};for _,entry in ipairs(HUD.shader_catalog)do shader_materials[entry.id]=entry.material end
     local function panel_material(v,weapon,c)
         local selected,name
-        if v.type=='panel' and (not v.frosted or (c.theme_shader and c.theme_shader~='auto' and c.theme_shader~='none')) then
+        if v.shader_layer then selected=v.shader_layer.shader;name=shader_materials[selected] and shader_materials[selected]:gsub('/lab_','/mapped_')
+        elseif v.type=='panel' and (not v.frosted or (c.theme_shader and c.theme_shader~='auto' and c.theme_shader~='none')) then
             selected=c.theme_shader or 'auto';name=selected=='auto' and panel_effects[weapon] or shader_materials[selected]
         elseif v.df_effect_sweep or v.scanline_layer or v.effect_shader_band then
             selected=c.effect_shader or 'none';name=selected=='auto' and panel_effects[weapon] or shader_materials[selected]
@@ -77,7 +191,7 @@ function M.new(sr,log)
         return effect_availability[name] and name or nil
     end
 
-    local effect_guis={}
+    local effect_guis={};local texture_guis={};local shader_guis={}
     local gui,child_gui,world,atlas_gui;local ids={};local glyphs={};local bitmap_updates=0;local reuse_glyphs=type(G.update_bitmap_3d_uv)=='function';local recycled={};local allocated,reused=0,0;local failed=false;local first=true
     local self={status='screen scene assets not loaded'}
     local function live(w)
@@ -107,15 +221,18 @@ function M.new(sr,log)
     end
     function self.release()
         if gui and live(world) then
+            for _,layers in pairs(texture_guis)do for _,layer_gui in pairs(layers)do W.destroy_gui(world,layer_gui)end end
+            for _,layers in pairs(shader_guis)do for _,layer_gui in pairs(layers)do W.destroy_gui(world,layer_gui)end end
             for _,effect_gui in pairs(effect_guis) do W.destroy_gui(world,effect_gui) end;effect_guis={}
             if child_gui then W.destroy_gui(world,child_gui) end
             if atlas_gui then W.destroy_gui(world,atlas_gui) end
             W.destroy_gui(world,gui)
         end
+        texture_guis={};shader_guis={}
         released=released+#ids;for _,pool in pairs(glyphs) do released=released+#pool.ids end;glyphs={};gui,child_gui,world,atlas_gui=nil,nil,nil,nil
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
-    local function draw(p,c,commands,camera,fov,width,height,near)
+    local function draw(p,c,commands,camera,fov,width,height,near,m,at)
         if not p or not camera or not A.can_get or not A.can_get('material',fill) then self.release();return false end
         assert(type(G.triangle)=='function' and type(G.destroy_triangle)=='function','screen triangle API unavailable')
         assert(type(G.material)=='function' and sr.Material and type(sr.Material.set_scalar)=='function','material parameters unavailable')
@@ -127,12 +244,6 @@ function M.new(sr,log)
         if not gui then world=target;gui=assert(W.create_screen_gui(world,'scale',1,1),'screen scene GUI missing') end
         clear()
         for _,pool in pairs(glyphs) do pool.used=0 end
-        commands=HUD.world_style.prepare(commands,p,c)
-        if c.style_3d=='hologram' then
-            for _,v in ipairs(commands) do if v.type=='panel' then v.a=math.min(1,v.a/.18) end end
-        end
-        local m,at=M.panel_pose(p,c,commands)
-        if c.texture_art_trial then commands=HUD.texture_art.prepare(commands,p.resource_hex,A.can_get,HUD.texture_art_assets,c.texture_art_variant) end
         -- Temporary zoom demo: retain the widest observed first-person FOV per weapon.
         if c.first_person_zoom_demo and fov then
             self.zoom_reference=self.zoom_reference or {}
@@ -191,27 +302,47 @@ function M.new(sr,log)
             end
             local materials={}
             local function role_gui(role)
+                if type(role)=='string' and role:match('^shader:%d+$')then
+                    local slot=tonumber(role:match('%d+'));assert(slot>=1 and slot<=4,'invalid shader slot');shader_guis[draw_gui]=shader_guis[draw_gui] or {};local layers=shader_guis[draw_gui];layers[slot]=layers[slot] or assert(W.create_screen_gui(world,'scale',1,1),'shader layer GUI missing');return layers[slot]
+                end
+                if type(role)=='string' and role:match('^texture:%d+$')then
+                    local slot=tonumber(role:match('%d+'));assert(slot>=1 and slot<=M.max_texture_images,'invalid texture slot')
+                    texture_guis[draw_gui]=texture_guis[draw_gui] or {}
+                    local layers=texture_guis[draw_gui]
+                    layers[slot]=layers[slot] or assert(W.create_screen_gui(world,'scale',1,1),'screen texture GUI missing')
+                    return layers[slot]
+                end
                 if role~='effect' then return draw_gui end
                 effect_guis[draw_gui]=effect_guis[draw_gui] or assert(W.create_screen_gui(world,'scale',1,1),'screen effect GUI missing')
                 return effect_guis[draw_gui]
             end
-            local function material(name,texture,role,art_rows)
+            local function material(name,texture,role,art_rows,art_params)
                 local cache_key=(role or 'panel')..':'..name
                 if not materials[cache_key] then
                     assert(A.can_get('material',name),'screen scene font material missing: '..name)
                     local handle=assert(G.material(role_gui(role),name),'screen scene material unavailable')
-                    if texture then sr.Material.set_texture(handle,art_rows and 'artwork_texture' or 'diffuse_map',texture) end
+                    local hot=art_rows and hot_panel_art and hot_panel_art.resource(texture)
+                    if hot then sr.Material.set_resource(handle,'artwork_texture',hot)
+                    elseif texture then sr.Material.set_texture(handle,art_rows and 'artwork_texture' or 'diffuse_map',texture) end
                     sr.Material.set_scalar(handle,'threshold_fade',depth)
                     sr.Material.set_scalar(handle,'scissor_mode',enabled)
                     if art_rows then
+                        if name:find('_texture_theme_',1,true)then
+                            local seconds,animated=HUD.config.shader_animation_values(c,nil,c.style_clock)
+                            local size=c.theme_shader_scale
+                            if art_params then size=art_params.pattern_size or HUD.shader_layers.scales[art_params.scale or 2];seconds=(c.style_clock or 0)*(art_params.speed or 1);animated=art_params.animate and 1 or 0 end
+                            sr.Material.set_scalar(handle,'scissor_mode',HUD.texture_theme.parameters(enabled,size,seconds,animated))
+                        end
                         sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(art_rows[1],art_rows[2],art_rows[3],0))
                         sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(art_rows[4],art_rows[5],art_rows[6],0))
                         sr.Material.set_vector4(handle,'clip_box',sr.Vector4(art_rows[7],art_rows[8],art_rows[9],0))
                     elseif name:find('/mapped_',1,true) then
                         local rows=assert(panel_mapping(),'panel shader mapping unavailable')
-                        local scale=tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
+                        local slot=type(role)=='string' and tonumber(role:match('^shader:(%d+)$'));local layer=slot and c.shader_layers and c.shader_layers[slot]
+                        local scale=layer and (layer.pattern_size or HUD.shader_layers.scales[layer.scale]) or tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
                         if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
                         local seconds,animated=HUD.config.shader_animation_values(c,role,c.style_clock)
+                        if layer then seconds=(c.style_clock or 0)*(layer.speed or 1);animated=layer.animate and 1 or 0 end
                         sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,seconds))
                         sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,animated))
                         sr.Material.set_vector4(handle,'clip_box',sr.Vector4(rows[7],rows[8],rows[9],0))
@@ -229,7 +360,7 @@ function M.new(sr,log)
             local corners={{},{},{},{}}
             local clipping_scratch={camera={{},{},{},{}},result={{},{},{},{}}}
             local function vertex(p)return sr.Vector3(p.x*width,0,p.y*height) end
-            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role,art_rows)
+            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role,art_rows,art_params)
                 if w<=0 or h<=0 then return end
                 for i=1,4 do
                     local right=i==2 or i==3;local upper=i>=3
@@ -248,28 +379,32 @@ function M.new(sr,log)
                     local thickness=length>0 and math.abs(dx*(d.y-a.y)*height-dy*(d.x-a.x)*width)/length or 0
                     log(string.format('SCANLINE_PIXEL_PROBE projected_length_px=%.3f projected_thickness_px=%.4f',length,thickness));self.scanline_probe=true
                 end
-                name=material(name,texture,role,art_rows)
+                name=material(name,texture,role,art_rows,art_params)
                 local primitive_gui=role_gui(role)
                 for i=2,#polygon-1 do
                     local a,b,d=polygon[1],polygon[i],polygon[i+1]
                     local id=G.triangle(primitive_gui,vertex(a),vertex(b),vertex(d),layer,color,name,
                         uv and sr.Vector2(a.s,a.v) or nil,uv and sr.Vector2(b.s,b.v) or nil,uv and sr.Vector2(d.s,d.v) or nil)
                     track(primitive_gui,id)
-                    if id and (name:find('/lab_',1,true) or name:find('/local_',1,true) or name:find('/mapped_',1,true) or name:find('/texture_liberator_',1,true)) and not shader_submitted[name] then shader_submitted[name]=true;log('HUD_SHADER_SUBMITTED material='..name..' weapon='..tostring(p.resource_hex)..' triangle='..tostring(id)) end
+                    if id and (name:find('/lab_',1,true) or name:find('/local_',1,true) or name:find('/mapped_',1,true) or name:find('/texture_liberator_',1,true) or name:find('/texture_bespoke_',1,true) or name:find('/faithful_',1,true)) and not shader_submitted[name] then shader_submitted[name]=true;log('HUD_SHADER_SUBMITTED material='..name..' weapon='..tostring(p.resource_hex)..' triangle='..tostring(id)) end
                     if effect and id then scan_emitted=scan_emitted+1 end
                 end
             end
             for _,v in ipairs(list) do
-                local function color(alpha,ink)ink=ink or v.c;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
+                local function color(alpha,ink)ink=ink or v.c;if v.texture_color_linear then ink=HUD.config.native_rgb(ink)end;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
                 if v.type=='texture' then
                     local x,y,z=M.point(axes,origin,v.x,v.y+v.h)
                     local rx,ry,rz=M.point(axes,origin,v.x+v.w,v.y+v.h)
                     local bx,by,bz=M.point(axes,origin,v.x,v.y)
                     local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
-                    if rows[1] then quad(v.x,v.y,v.w,v.h,v.texture_material,color(1),v.texture_layer or 49,nil,v.texture_resource,nil,nil,nil,rows) end
+                    if rows[1] then rows=M.atlas_rows(rows,v.atlas_rect) end
+                    local artwork_material=HUD.texture_theme.material(v.texture_material,v.texture_theme_shader or (v.texture_theme==false and 'none' or c.theme_shader),A.can_get)
+                    if rows[1] then for _,box in ipairs(M.feather_boxes(v.w,v.h,v.texture_feather_x,v.texture_feather_y))do
+                        quad(v.x+box[1],v.y+box[2],box[3],box[4],artwork_material,color(box[5]),v.texture_layer or 49,nil,v.texture_resource,nil,nil,'texture:'..v.texture_slot,rows,v.shader_layer)
+                    end end
                 end
                 if (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
-                    local selected_material=panel_material(v,p.resource_hex,c)
+                    local selected_material=not v.contrast_backing and panel_material(v,p.resource_hex,c)
                     local panel_uv
                     if selected_material and selected_material:find("/lab_",1,true) then
                         local mapped_material=selected_material:gsub('/lab_','/mapped_')
@@ -280,7 +415,9 @@ function M.new(sr,log)
                     -- Multiplicative textures cannot produce detail from pure black.
                     -- Keep the saved palette intact; only explicit textured backdrops use a dim carrier.
                     if v.type=='panel' and selected_material and c.theme_shader~='auto' and math.max(v.c[1],v.c[2],v.c[3])<16 then shader_ink={48,48,48} end
-                    quad(v.x,v.y,v.w,v.h,(p.resource_hex=='27ee1ed8f6fb6356' and v.heat_fill and dither_available) and dither or selected_material or fill,color(1,shader_ink),v.type=='panel' and 48 or (v.scanline_layer and 50.5 or (v.fuel_marker_piece and 51 or 50)),panel_uv,nil,v.quad,v.df_effect_frame,(v.type~='panel' and selected_material and selected_material:find('/mapped_',1,true)) and 'effect' or nil)
+                    if not v.shader_layer or selected_material then
+                    quad(v.x,v.y,v.w,v.h,(p.resource_hex=='27ee1ed8f6fb6356' and v.heat_fill and dither_available) and dither or selected_material or fill,color(1,shader_ink),v.shader_layer and (50.1+v.shader_slot*.1) or v.type=='panel' and 48 or (v.scanline_layer and 50.5 or (v.fuel_marker_piece and 51 or 50)),panel_uv,nil,v.quad,v.df_effect_frame,v.shader_layer and ('shader:'..v.shader_slot) or (v.type~='panel' and selected_material and selected_material:find('/mapped_',1,true)) and 'effect' or nil)
+                    end
                 elseif v.type=='text' and not v.fuel_endpoint and not c.profile_skip_text then
                     local key=v.font or 'bigblue';local face=HUD.native_font_data.faces[key]
                     local uv=HUD.native_font_uv[key]
@@ -394,6 +531,8 @@ function M.new(sr,log)
             render(child,HUD.pose_motion.forward_tilt(m,-math.pi/2),
                 {x=at.x+m[9]*hinge/1000,y=at.y+m[10]*hinge/1000,z=at.z+m[11]*hinge/1000},child_gui)
         elseif child_gui then
+            if shader_guis[child_gui]then for _,layer_gui in pairs(shader_guis[child_gui])do W.destroy_gui(world,layer_gui)end;shader_guis[child_gui]=nil end
+            if texture_guis[child_gui]then for _,layer_gui in pairs(texture_guis[child_gui])do W.destroy_gui(world,layer_gui)end;texture_guis[child_gui]=nil end
             if glyphs[child_gui] then released=released+#glyphs[child_gui].ids;glyphs[child_gui]=nil end
             if effect_guis[child_gui] then W.destroy_gui(world,effect_guis[child_gui]);effect_guis[child_gui]=nil end
             W.destroy_gui(world,child_gui);child_gui=nil
@@ -409,11 +548,22 @@ function M.new(sr,log)
         if first then log('SCREEN_SCENE HUD submitted; native atlas glyphs; saved mounts retained; live validation pending');first=false end
         return true
     end
-    function self.draw(...)
+    function self.draw(p,c,commands,camera,fov,width,height,near)
         if failed then return false end
-        local ok,result=pcall(draw,...)
+        if not p or not camera then return false end
+        local prepared,ready,m,at=pcall(M.prepare_commands,commands,p,c,A.can_get)
+        if not prepared then
+            self.status='Command preparation rejected: '..tostring(ready)
+            if self.command_error~=self.status then self.command_error=self.status;log('SCREEN_COMMAND_REJECTED '..self.status)end
+            return false -- No native calls; valid later frames remain usable.
+        end
+        self.command_error=nil
+        local ok,result=pcall(draw,p,c,ready,camera,fov,width,height,near,m,at)
         if not ok then failed=true;self.status=tostring(result);log('SCREEN_SCENE failure: '..self.status);pcall(self.release);return false end
         return result
+    end
+    if hot_panel_art and hot_panel_art.register_consumer then
+        hot_panel_art.register_consumer(self,function()self.release();return true end)
     end
     return self
 end

@@ -1,0 +1,5314 @@
+[
+  {
+    "id": "03e67a19b07c6523",
+    "name": "R-63 Diligence",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/03e67a19b07c6523.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "03e67a19b07c6523",
+      "name": "R-63 Diligence",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/R-63_Diligence",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "25",
+        "spare": "8",
+        "reload": "2.83s",
+        "tactical_reload": "2.35s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "05e4e5c2db6e44a2",
+    "name": "P-2 Peacemaker",
+    "palette": "sidearm",
+    "backing_color": [
+      32,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/05e4e5c2db6e44a2.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "05e4e5c2db6e44a2",
+      "name": "P-2 Peacemaker",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/P-2_Peacemaker",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "15",
+        "spare": "8",
+        "reload": "1.8s",
+        "tactical_reload": "1.45s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "0807aea5217e4767",
+    "name": "SMG-72 Pummeler",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/0807aea5217e4767.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "0807aea5217e4767",
+      "name": "SMG-72 Pummeler",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SMG-72_Pummeler",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "AutoÂ â€¢Â BurstÂ â€¢Â Semi",
+        "capacity": "45",
+        "spare": "7",
+        "reload": "2.8s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "0f83639ab8c86165",
+    "name": "R-2 Amendment",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/0f83639ab8c86165.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "0f83639ab8c86165",
+      "name": "R-2 Amendment",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/R-2_Amendment",
+      "wiki": {
+        "firing_modes": "Semi â€¢ Burst",
+        "capacity": "20",
+        "spare": "8 Magazines",
+        "reload": "3.5s",
+        "tactical_reload": "2.8s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "11c27d3babb38956",
+    "name": "MG-43 Machine Gun",
+    "palette": "support",
+    "backing_color": [
+      29,
+      34,
+      33
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/11c27d3babb38956.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "11c27d3babb38956",
+      "name": "MG-43 Machine Gun",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/MG-43_Machine_Gun",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto",
+        "capacity": "175",
+        "spare": "3 Magazines",
+        "reload": "4.55s",
+        "tactical_reload": "3.83s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "186ea95de7306b1a",
+    "name": "SMG-203 Gallant",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/186ea95de7306b1a.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "186ea95de7306b1a",
+      "name": "SMG-203 Gallant",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SMG-203_Gallant",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi Â â€¢Â  Burst",
+        "capacity": "50",
+        "spare": "7",
+        "reload": "2.5s",
+        "tactical_reload": null,
+        "ammo_notes": "shell references present; read full page before reserve-unit classification",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "1a437158e1b8d2a1",
+    "name": "P-113 Verdict",
+    "palette": "sidearm",
+    "backing_color": [
+      32,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/1a437158e1b8d2a1.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "1a437158e1b8d2a1",
+      "name": "P-113 Verdict",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/P-113_Verdict",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "10",
+        "spare": "10",
+        "reload": "2s",
+        "tactical_reload": "1.35s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "1abbff60d26ba391",
+    "name": "R/40-K Hot-Shot Marksman Rifle",
+    "palette": "imperial",
+    "backing_color": [
+      35,
+      30,
+      28
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/1abbff60d26ba391.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "1abbff60d26ba391",
+      "name": "R/40-K Hot-Shot Marksman Rifle",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Hot-Shot",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "12",
+        "spare": "7",
+        "reload": "2.9s",
+        "tactical_reload": "2.9s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "2b28e17ffed05f7c",
+    "name": "SG-22 Bushwhacker",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/2b28e17ffed05f7c.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_rounds",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "2b28e17ffed05f7c",
+      "name": "SG-22 Bushwhacker",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SG-22_Bushwhacker",
+      "wiki": {
+        "firing_modes": "Semi Â â€¢Â  All Barrel",
+        "capacity": "3",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": null,
+        "spare_rounds": "30",
+        "rounds_reload_full_time": "1.75s",
+        "single_round_reload": "1.1s"
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "3575aabc5f1f9326",
+    "name": "P-19 Redeemer",
+    "palette": "sidearm",
+    "backing_color": [
+      32,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/3575aabc5f1f9326.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "3575aabc5f1f9326",
+      "name": "P-19 Redeemer",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Redeemer",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "AutoÂ Â â€¢Â Â Semi",
+        "capacity": "31",
+        "spare": "6",
+        "reload": "2.15s",
+        "tactical_reload": "1.4s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "41eac4a03987faa0",
+    "name": "SG-8 Punisher",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/41eac4a03987faa0.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "41eac4a03987faa0",
+      "name": "SG-8 Punisher",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Punisher",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "16",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "60",
+        "spare_rounds": null,
+        "rounds_reload_full_time": "6.45s",
+        "single_round_reload": "1.25s (Empty)"
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "43a58cb89cfa197c",
+    "name": "M-1000 Maxigun",
+    "palette": "support",
+    "backing_color": [
+      29,
+      34,
+      33
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/43a58cb89cfa197c.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "backpack_rounds",
+      "total": "same feed pool; do not duplicate current+reserve",
+      "status": "backpack feed connection; no magazine reload",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "Wiki continuous backpack ammunition feed"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "43a58cb89cfa197c",
+      "name": "M-1000 Maxigun",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/M-1000_Maxigun",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto",
+        "capacity": "1,000 (Backpack)",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "43cb1033961a2276",
+    "name": "AR-23P Liberator Penetrator",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/43cb1033961a2276.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "43cb1033961a2276",
+      "name": "AR-23P Liberator Penetrator",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-23P_Liberator_Penetrator",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi Â â€¢Â  Burst Â â€¢Â  Full",
+        "capacity": "45",
+        "spare": "8",
+        "reload": "3s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "46183b50961d1328",
+    "name": "SG-225 Breaker",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/46183b50961d1328.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "46183b50961d1328",
+      "name": "SG-225 Breaker",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SG-225_Breaker",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi",
+        "capacity": "16",
+        "spare": "7",
+        "reload": "2.5s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "4ba41b6f9f405cc2",
+    "name": "StA-11 SMG",
+    "palette": "killzone",
+    "backing_color": [
+      30,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/4ba41b6f9f405cc2.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "4ba41b6f9f405cc2",
+      "name": "StA-11 SMG",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/StA-11_SMG",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto",
+        "capacity": "48",
+        "spare": "7",
+        "reload": "2.6s",
+        "tactical_reload": "1.7s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "4c786785c79d44e7",
+    "name": "R-63CS Diligence Counter Sniper",
+    "palette": "olive",
+    "backing_color": [
+      45,
+      56,
+      27
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/4c786785c79d44e7.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "4c786785c79d44e7",
+      "name": "R-63CS Diligence Counter Sniper",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/R-63CS_Diligence_Counter_Sniper",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "15",
+        "spare": "6",
+        "reload": "3s",
+        "tactical_reload": "1.9s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "4d58c77087b774c5",
+    "name": "M6C/SOCOM Pistol",
+    "palette": "halo",
+    "backing_color": [
+      24,
+      37,
+      43
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/4d58c77087b774c5.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "4d58c77087b774c5",
+      "name": "M6C/SOCOM Pistol",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/M6C/SOCOM",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "12",
+        "spare": "10",
+        "reload": "1.5s",
+        "tactical_reload": "1.2s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "4dbd74f49c8ffc13",
+    "name": "MA5C Assault Rifle",
+    "palette": "halo",
+    "backing_color": [
+      24,
+      37,
+      43
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/4dbd74f49c8ffc13.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "4dbd74f49c8ffc13",
+      "name": "MA5C Assault Rifle",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/MA5C",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi Â â€¢Â  Burst Â â€¢Â  Full",
+        "capacity": "32",
+        "spare": "8",
+        "reload": "3.15s",
+        "tactical_reload": "2s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "4e310b1fe4c52b52",
+    "name": "SG-20 Halt",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/4e310b1fe4c52b52.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ],
+      "alternate_ammo": [
+        0.16,
+        0.585,
+        0.5,
+        0.025
+      ]
+    },
+    "semantics": {
+      "reserve": "shared_loose_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "Two independent tubes; selected flechette/stun branch count and capacity"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "4e310b1fe4c52b52",
+      "name": "SG-20 Halt",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SG-20_Halt",
+      "wiki": {
+        "firing_modes": "â€¢Â Semi",
+        "capacity": "8 (x2)",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "60",
+        "spare_rounds": null,
+        "rounds_reload_full_time": "3.7s",
+        "single_round_reload": "1.25s (Empty)"
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "4f749e2ee26f532d",
+    "name": "SG-8S Slugger",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/4f749e2ee26f532d.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "4f749e2ee26f532d",
+      "name": "SG-8S Slugger",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SG-8S_Slugger",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "16",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "60",
+        "spare_rounds": null,
+        "rounds_reload_full_time": "6.45s",
+        "single_round_reload": "1.25s (Empty)"
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "52071f49263415e4",
+    "name": "SG-88 Break-Action Shotgun",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/52071f49263415e4.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "52071f49263415e4",
+      "name": "SG-88 Break-Action Shotgun",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Break-Action_Shotgun",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi Â â€¢Â  Volley",
+        "capacity": "2",
+        "spare": null,
+        "reload": "1.55s",
+        "tactical_reload": "1.55s",
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "40",
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "5ebaea70c0d060b9",
+    "name": "SG-225SP Breaker Spray&Pray",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/5ebaea70c0d060b9.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "5ebaea70c0d060b9",
+      "name": "SG-225SP Breaker Spray&Pray",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SG-225SP_Breaker_Spray_and_Pray",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi",
+        "capacity": "26",
+        "spare": "8",
+        "reload": "3s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "5fecab819f96a3e8",
+    "name": "BR-14 Adjudicator",
+    "palette": "olive",
+    "backing_color": [
+      45,
+      56,
+      27
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/5fecab819f96a3e8.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "5fecab819f96a3e8",
+      "name": "BR-14 Adjudicator",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Adjudicator",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi Â â€¢Â  Auto",
+        "capacity": "30",
+        "spare": "8",
+        "reload": "3s",
+        "tactical_reload": "1.85s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "708ea298c82093d0",
+    "name": "AR-59 Suppressor",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/708ea298c82093d0.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "708ea298c82093d0",
+      "name": "AR-59 Suppressor",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-59_Suppressor",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi Â â€¢Â  Auto",
+        "capacity": "45",
+        "spare": "8",
+        "reload": "3s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "7b75e5132ffd4ca6",
+    "name": "R-2124 Constitution",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/7b75e5132ffd4ca6.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_rounds",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "Bolt-action/internal load; reader owns chamber state"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "7b75e5132ffd4ca6",
+      "name": "R-2124 Constitution",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Constitution",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Bolt-Action",
+        "capacity": "5",
+        "spare": null,
+        "reload": "1.3s",
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": null,
+        "spare_rounds": "100",
+        "rounds_reload_full_time": null,
+        "single_round_reload": "0.95s"
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "80f1a156d9fa1e36",
+    "name": "JAR-5 Dominator",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/80f1a156d9fa1e36.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "80f1a156d9fa1e36",
+      "name": "JAR-5 Dominator",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/JAR-5_Dominator",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi Â â€¢Â  Burst",
+        "capacity": "15",
+        "spare": "6",
+        "reload": "3.8s",
+        "tactical_reload": "2.65s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "84354339522c932d",
+    "name": "AR-2 Coyote",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/84354339522c932d.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "84354339522c932d",
+      "name": "AR-2 Coyote",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-2_Coyote",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi",
+        "capacity": "45",
+        "spare": "8",
+        "reload": "3s",
+        "tactical_reload": "2s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "89c5493e08ca4207",
+    "name": "APW-1 Anti-Materiel Rifle",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/89c5493e08ca4207.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "89c5493e08ca4207",
+      "name": "APW-1 Anti-Materiel Rifle",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/APW-1_Anti-Materiel_Rifle",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "7",
+        "spare": "8 Magazines",
+        "reload": "3.05s",
+        "tactical_reload": "2.05s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "8d3d52a3b2f19402",
+    "name": "P-4 Senator",
+    "palette": "sidearm",
+    "backing_color": [
+      32,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/8d3d52a3b2f19402.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_rounds",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "Cylinder/individual rounds; no magazine reserve multiplication"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "8d3d52a3b2f19402",
+      "name": "P-4 Senator",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/P-4_Senator",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "6",
+        "spare": null,
+        "reload": "2.3s",
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": null,
+        "spare_rounds": "40",
+        "rounds_reload_full_time": null,
+        "single_round_reload": "1.45s"
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "90ddc374f4e3d756",
+    "name": "M90A Shotgun",
+    "palette": "halo",
+    "backing_color": [
+      24,
+      37,
+      43
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/90ddc374f4e3d756.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "90ddc374f4e3d756",
+      "name": "M90A Shotgun",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/M90A_Shotgun",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "6",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "44",
+        "spare_rounds": null,
+        "rounds_reload_full_time": "3.6s",
+        "single_round_reload": "1.5s (Empty)"
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "94bd931b5fb4ee95",
+    "name": "SMG-32 Reprimand",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/94bd931b5fb4ee95.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "94bd931b5fb4ee95",
+      "name": "SMG-32 Reprimand",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Reprimand",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "AutoÂ â€¢Â BurstÂ â€¢Â Semi",
+        "capacity": "25",
+        "spare": "9",
+        "reload": "3.55s",
+        "tactical_reload": "2.1s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "9571ca51f0daf35b",
+    "name": "MP-98 Knight",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/9571ca51f0daf35b.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "9571ca51f0daf35b",
+      "name": "MP-98 Knight",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/MP-98_Knight",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi Â â€¢Â  Burst",
+        "capacity": "50",
+        "spare": "7",
+        "reload": "2.5s",
+        "tactical_reload": null,
+        "ammo_notes": "shell references present; read full page before reserve-unit classification",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "968211c0033dce64",
+    "name": "AR-23 Liberator",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/968211c0033dce64.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "968211c0033dce64",
+      "name": "AR-23 Liberator",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-23_Liberator",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "AutoÂ â€¢Â SemiÂ â€¢Â Burst",
+        "capacity": "45",
+        "spare": "8",
+        "reload": "3s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "a6a735accb4a327f",
+    "name": "M-105 Stalwart",
+    "palette": "support",
+    "backing_color": [
+      29,
+      34,
+      33
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/a6a735accb4a327f.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "a6a735accb4a327f",
+      "name": "M-105 Stalwart",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/M-105_Stalwart",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto",
+        "capacity": "250",
+        "spare": "3 Magazines",
+        "reload": "5.9s",
+        "tactical_reload": "4.4s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "a7ee1ebf58fcdf1f",
+    "name": "AR-23A Liberator Carbine",
+    "palette": "olive",
+    "backing_color": [
+      45,
+      56,
+      27
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/a7ee1ebf58fcdf1f.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "a7ee1ebf58fcdf1f",
+      "name": "AR-23A Liberator Carbine",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Liberator_Carbine",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi Â â€¢Â  Burst",
+        "capacity": "45",
+        "spare": "8",
+        "reload": "2.5s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "a8a91eb54892b6b2",
+    "name": "AR-11 Arbitrator",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/a8a91eb54892b6b2.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ],
+      "alternate_ammo": [
+        0.16,
+        0.585,
+        0.5,
+        0.025
+      ]
+    },
+    "semantics": {
+      "reserve": "branch_specific_magazines_or_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "4mm rifle and10ga underbarrel shotgun; do not mix reserve units"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "a8a91eb54892b6b2",
+      "name": "AR-11 Arbitrator",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-11_Arbitrator",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Burst Â â€¢Â  10g",
+        "capacity": "45 (4mm)",
+        "spare": "7",
+        "reload": "3.75s",
+        "tactical_reload": "2.35s",
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "20",
+        "spare_rounds": null,
+        "rounds_reload_full_time": "2.5s",
+        "single_round_reload": "1.5s"
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "b16c9d490aa59b77",
+    "name": "MGX-42 Bullet Storm",
+    "palette": "support",
+    "backing_color": [
+      29,
+      34,
+      33
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/b16c9d490aa59b77.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "spare_weapon_units_if_reader_supports",
+      "total": "remaining load only",
+      "status": "expended/discard; no magazine reload",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "Wiki single-use stacked caseless rounds"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "b16c9d490aa59b77",
+      "name": "MGX-42 Bullet Storm",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/MGX-42_Bullet_Storm",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": null,
+        "capacity": "300",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "b6aff2195568767f",
+    "name": "R-36 Eruptor",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/b6aff2195568767f.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "b6aff2195568767f",
+      "name": "R-36 Eruptor",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Erupter",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Bolt-Action",
+        "capacity": "5",
+        "spare": "6",
+        "reload": "4.67s",
+        "tactical_reload": "2.75s",
+        "ammo_notes": "shell reference present; source-specific reserve handling",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "bc29613666df696b",
+    "name": "AR-32 Pacifier",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/bc29613666df696b.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "bc29613666df696b",
+      "name": "AR-32 Pacifier",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-32_Pacifier",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "â€¢Â  Auto",
+        "capacity": "40",
+        "spare": "8",
+        "reload": "3s",
+        "tactical_reload": "1.85s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "be70ee0d8d44028e",
+    "name": "M7S SMG",
+    "palette": "halo",
+    "backing_color": [
+      24,
+      37,
+      43
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/be70ee0d8d44028e.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "be70ee0d8d44028e",
+      "name": "M7S SMG",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/M7S",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Full Â â€¢Â  Semi Â â€¢Â  Burst",
+        "capacity": "48",
+        "spare": "7",
+        "reload": "3s",
+        "tactical_reload": "2s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "c12a34f375bd5a87",
+    "name": "SG-225IE Breaker Incendiary",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/c12a34f375bd5a87.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "c12a34f375bd5a87",
+      "name": "SG-225IE Breaker Incendiary",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SG-225IE_Breaker_Incendiary",
+      "wiki": {
+        "firing_modes": "Burst Â â€¢Â  Semi",
+        "capacity": "26",
+        "spare": "4",
+        "reload": "3s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "c780bcd79547da0f",
+    "name": "P-69 Veto",
+    "palette": "sidearm",
+    "backing_color": [
+      32,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/c780bcd79547da0f.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_rounds",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "12round internal magazine loaded with6round clips; reload availability comes from reader"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "c780bcd79547da0f",
+      "name": "P-69 Veto",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Veto",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "12",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": null,
+        "spare_rounds": "90",
+        "rounds_reload_full_time": "3.3s",
+        "single_round_reload": "1.45s (Empty)"
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "cdf28be026bb7d84",
+    "name": "StA-52 Assault Rifle",
+    "palette": "killzone",
+    "backing_color": [
+      30,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/cdf28be026bb7d84.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "cdf28be026bb7d84",
+      "name": "StA-52 Assault Rifle",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/StA-52_Assault_Rifle",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi",
+        "capacity": "56",
+        "spare": "6",
+        "reload": "4.2s",
+        "tactical_reload": "2.5s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "ce063aa33d95a812",
+    "name": "AR-61 Tenderizer",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/ce063aa33d95a812.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "ce063aa33d95a812",
+      "name": "AR-61 Tenderizer",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-61_Tenderizer",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "SemiÂ â€¢Â BurstÂ â€¢Â Auto",
+        "capacity": "35",
+        "spare": "7",
+        "reload": "3.33s",
+        "tactical_reload": "2.18s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "cf5f176e0e322be1",
+    "name": "AR-23C Liberator Concussive",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/cf5f176e0e322be1.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "cf5f176e0e322be1",
+      "name": "AR-23C Liberator Concussive",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/AR-23C_Liberator_Concussive",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto Â â€¢Â  Semi",
+        "capacity": "60",
+        "spare": "6",
+        "reload": "3.5s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "cf8934ff6567a42d",
+    "name": "P-92 Warrant",
+    "palette": "sidearm",
+    "backing_color": [
+      32,
+      34,
+      37
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/cf8934ff6567a42d.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "cf8934ff6567a42d",
+      "name": "P-92 Warrant",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Warrant",
+      "wiki": {
+        "firing_modes": "Guided Â â€¢Â  Non-Guided",
+        "capacity": "13",
+        "spare": "8",
+        "reload": "2s",
+        "tactical_reload": "1.4s",
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "d323de60855898ac",
+    "name": "SG-451 Cookout",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/d323de60855898ac.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "d323de60855898ac",
+      "name": "SG-451 Cookout",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/SG-451_Cookout",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "16",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "60",
+        "spare_rounds": null,
+        "rounds_reload_full_time": "6.45s",
+        "single_round_reload": "1.25s (Empty)"
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "dbb6c961c59fadc1",
+    "name": "P/40-K Bolt Pistol",
+    "palette": "imperial",
+    "backing_color": [
+      35,
+      30,
+      28
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/dbb6c961c59fadc1.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "dbb6c961c59fadc1",
+      "name": "P/40-K Bolt Pistol",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/P/40-K_Bolt_Pistol",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "6",
+        "spare": "4",
+        "reload": "2.45s",
+        "tactical_reload": "1.3s",
+        "ammo_notes": "shell reference present; source-specific reserve handling",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "dcd1c835407ef7ba",
+    "name": "SG-97 Sweeper",
+    "palette": "shotgun",
+    "backing_color": [
+      42,
+      35,
+      30
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/dcd1c835407ef7ba.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_shells",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "dcd1c835407ef7ba",
+      "name": "SG-97 Sweeper",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Sweeper",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Auto",
+        "capacity": "7",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": "70",
+        "spare_rounds": null,
+        "rounds_reload_full_time": "4s",
+        "single_round_reload": "1.5s (Empty)"
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "e5796355a8fd67e0",
+    "name": "R-4 Hyena",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/e5796355a8fd67e0.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "e5796355a8fd67e0",
+      "name": "R-4 Hyena",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Hyena",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "15",
+        "spare": "5",
+        "reload": "2.5s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "e6d932be83729076",
+    "name": "R-6 Deadeye",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/e6d932be83729076.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "loose_rounds",
+      "total": "current+loose_reserve_if_same_ammunition_pool",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO",
+      "note": "Lever-action; individual rounds reload"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "e6d932be83729076",
+      "name": "R-6 Deadeye",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/R-6_Deadeye",
+      "wiki": {
+        "firing_modes": "Lever-Action",
+        "capacity": "8",
+        "spare": null,
+        "reload": null,
+        "tactical_reload": null,
+        "ammo_notes": "individual rounds reload",
+        "spare_shells": null,
+        "spare_rounds": "60",
+        "rounds_reload_full_time": "6.4s",
+        "single_round_reload": "2.3s (Empty)"
+      },
+      "live_override": "Wiki values design context only; active runtime attachments and reader state authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  },
+  {
+    "id": "f0338468dcdb6a6c",
+    "name": "R-72 Censor",
+    "palette": "rifle",
+    "backing_color": [
+      29,
+      34,
+      36
+    ],
+    "backing_default_alpha": 0.3,
+    "texture": "panels/f0338468dcdb6a6c.png",
+    "size": [
+      520,
+      640
+    ],
+    "mask": "masks/coverage.png",
+    "zones": {
+      "compass": [
+        0.08,
+        0.035,
+        0.84,
+        0.09
+      ],
+      "count": [
+        0.16,
+        0.35,
+        0.53,
+        0.2
+      ],
+      "capacity": [
+        0.26,
+        0.535,
+        0.3,
+        0.05
+      ],
+      "gauge": [
+        0.095,
+        0.615,
+        0.81,
+        0.045
+      ],
+      "reserve": [
+        0.105,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "mode": [
+        0.375,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "total": [
+        0.68,
+        0.77,
+        0.25,
+        0.08
+      ],
+      "status": [
+        0.12,
+        0.9,
+        0.76,
+        0.05
+      ]
+    },
+    "semantics": {
+      "reserve": "magazine_units_from_wiki; confirmreaderunit",
+      "total": "estimate only if reader confirms reserve_magazines; prefix~",
+      "status": "reader chamber/reload event only; no inferred state",
+      "capacity": "reader-owned",
+      "mode": "reader-owned; no forced AUTO"
+    },
+    "conditional": false,
+    "wiki": {
+      "id": "f0338468dcdb6a6c",
+      "name": "R-72 Censor",
+      "status": "individual_page_retrieved",
+      "source": "https://helldivers.wiki.gg/wiki/Censor",
+      "notes": "Search attempted; individual page not returned. Do not finalize semantics.",
+      "wiki": {
+        "firing_modes": "Semi",
+        "capacity": "20",
+        "spare": "8",
+        "reload": "2.5s",
+        "tactical_reload": null,
+        "ammo_notes": "reader-owned reserve units",
+        "spare_shells": null,
+        "spare_rounds": null,
+        "rounds_reload_full_time": null,
+        "single_round_reload": null
+      },
+      "live_override": "Wiki design context only; runtime attachment/state reader authoritative"
+    },
+    "research_status": "individual_weapon_page_checked",
+    "shader_contract": {
+      "coverage_alpha": "outputalpha *= silhouetteMaskAlpha",
+      "backing": "theme andopacity only onbacking",
+      "foreground": "preserve intrinsicalpha andcolor",
+      "glyph_clear": "never clear backing under text"
+    }
+  }
+]

@@ -1,0 +1,838 @@
+{
+  "version": 1,
+  "weapon_resource": "5fecab819f96a3e8",
+  "canvas": [
+    -25,
+    -27,
+    148,
+    110
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        -25.0,
+        -27.0,
+        148.0,
+        110.0
+      ],
+      "opacity": "panel",
+      "commands": [
+        {
+          "a": 1,
+          "c": [
+            42,
+            49,
+            46
+          ],
+          "h": 110,
+          "liberator_detail": "parkerized-receiver",
+          "type": "rect",
+          "w": 124,
+          "x": -13,
+          "y": -27
+        },
+        {
+          "a": 1,
+          "c": [
+            89,
+            55,
+            32
+          ],
+          "h": 88,
+          "liberator_detail": "left-stock-cheek",
+          "type": "rect",
+          "w": 11,
+          "x": -25,
+          "y": -17
+        },
+        {
+          "a": 1,
+          "c": [
+            89,
+            55,
+            32
+          ],
+          "h": 88,
+          "liberator_detail": "right-stock-cheek",
+          "type": "rect",
+          "w": 11,
+          "x": 112,
+          "y": -17
+        }
+      ],
+      "command_count": 3,
+      "sha256": "50556dd4fd0802af0c51839a71b9ab75799a68fd10228ed3d75bf1793bf6ddb2"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        -23.0,
+        -26.0,
+        143.0,
+        108.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.5,
+          "c": [
+            152,
+            102,
+            57
+          ],
+          "h": 79,
+          "liberator_detail": "wood-edge",
+          "type": "rect",
+          "w": 1,
+          "x": -23,
+          "y": -13
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": -9
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": 0
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": 9
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": 18
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": 27
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": 36
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": 45
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": -20,
+          "y": 54
+        },
+        {
+          "a": 0.5,
+          "c": [
+            152,
+            102,
+            57
+          ],
+          "h": 79,
+          "liberator_detail": "wood-edge",
+          "type": "rect",
+          "w": 1,
+          "x": 114,
+          "y": -13
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": -9
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": 0
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": 9
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": 18
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": 27
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": 36
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": 45
+        },
+        {
+          "a": 0.45,
+          "c": [
+            35,
+            32,
+            24
+          ],
+          "h": 5,
+          "liberator_detail": "stock-grain",
+          "type": "rect",
+          "w": 3,
+          "x": 117,
+          "y": 54
+        },
+        {
+          "a": 0.8,
+          "c": [
+            150,
+            158,
+            143
+          ],
+          "h": 2,
+          "liberator_detail": "steel-top-bevel",
+          "type": "rect",
+          "w": 120,
+          "x": -11,
+          "y": 80
+        },
+        {
+          "a": 0.9,
+          "c": [
+            16,
+            25,
+            23
+          ],
+          "h": 2,
+          "liberator_detail": "steel-bottom-bevel",
+          "type": "rect",
+          "w": 120,
+          "x": -11,
+          "y": -26
+        }
+      ],
+      "command_count": 20,
+      "sha256": "5a117d96eb5b8a7aba7c915e1d2c76f22f9ec3722c069349aba7340fb7a66dd5"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        -7.0,
+        32.0,
+        112.0,
+        33.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.95,
+          "c": [
+            13,
+            22,
+            21
+          ],
+          "h": 33,
+          "liberator_detail": "round-counter-recess",
+          "type": "rect",
+          "w": 112,
+          "x": -7,
+          "y": 32
+        },
+        {
+          "a": 0.8,
+          "c": [
+            111,
+            124,
+            110
+          ],
+          "h": 1,
+          "liberator_detail": "recess-lip",
+          "type": "rect",
+          "w": 112,
+          "x": -7,
+          "y": 63
+        }
+      ],
+      "command_count": 2,
+      "sha256": "5895ca8003522aebbf7020c5593db425f6357fe37873fbd74b0a7badd477c39c"
+    },
+    {
+      "asset": "fragment-003.png",
+      "origin": [
+        -18.0,
+        -11.0,
+        134.0,
+        76.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.6,
+          "c": [
+            111,
+            124,
+            110
+          ],
+          "h": 21,
+          "liberator_detail": "specimen-retainer",
+          "type": "rect",
+          "w": 2,
+          "x": -7,
+          "y": -5
+        },
+        {
+          "a": 0.6,
+          "c": [
+            111,
+            124,
+            110
+          ],
+          "h": 21,
+          "liberator_detail": "specimen-retainer",
+          "type": "rect",
+          "w": 2,
+          "x": 103,
+          "y": -5
+        },
+        {
+          "a": 1,
+          "c": [
+            20,
+            25,
+            22
+          ],
+          "h": 3,
+          "liberator_detail": "stock-screw",
+          "type": "rect",
+          "w": 3,
+          "x": -18,
+          "y": -11
+        },
+        {
+          "a": 0.8,
+          "c": [
+            135,
+            136,
+            113
+          ],
+          "h": 0.5,
+          "liberator_detail": "slot",
+          "type": "rect",
+          "w": 2,
+          "x": -17.5,
+          "y": -10
+        },
+        {
+          "a": 1,
+          "c": [
+            20,
+            25,
+            22
+          ],
+          "h": 3,
+          "liberator_detail": "stock-screw",
+          "type": "rect",
+          "w": 3,
+          "x": -18,
+          "y": 62
+        },
+        {
+          "a": 0.8,
+          "c": [
+            135,
+            136,
+            113
+          ],
+          "h": 0.5,
+          "liberator_detail": "slot",
+          "type": "rect",
+          "w": 2,
+          "x": -17.5,
+          "y": 63
+        },
+        {
+          "a": 1,
+          "c": [
+            20,
+            25,
+            22
+          ],
+          "h": 3,
+          "liberator_detail": "stock-screw",
+          "type": "rect",
+          "w": 3,
+          "x": 113,
+          "y": -11
+        },
+        {
+          "a": 0.8,
+          "c": [
+            135,
+            136,
+            113
+          ],
+          "h": 0.5,
+          "liberator_detail": "slot",
+          "type": "rect",
+          "w": 2,
+          "x": 113.5,
+          "y": -10
+        },
+        {
+          "a": 1,
+          "c": [
+            20,
+            25,
+            22
+          ],
+          "h": 3,
+          "liberator_detail": "stock-screw",
+          "type": "rect",
+          "w": 3,
+          "x": 113,
+          "y": 62
+        },
+        {
+          "a": 0.8,
+          "c": [
+            135,
+            136,
+            113
+          ],
+          "h": 0.5,
+          "liberator_detail": "slot",
+          "type": "rect",
+          "w": 2,
+          "x": 113.5,
+          "y": 63
+        }
+      ],
+      "command_count": 10,
+      "sha256": "a3ddcc0b573980a0f38b78fb1bef85f2c05158e5df88a49604f647473a9f727f"
+    },
+    {
+      "asset": "fragment-004.png",
+      "origin": [
+        -1.0,
+        -3.0,
+        97.0,
+        15.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 1,
+          "c": [
+            163,
+            132,
+            76
+          ],
+          "h": 15,
+          "liberator_detail": "adjudicator-case",
+          "type": "rect",
+          "w": 57,
+          "x": -1,
+          "y": -3
+        },
+        {
+          "a": 1,
+          "c": [
+            128,
+            104,
+            63
+          ],
+          "h": 15,
+          "liberator_detail": "adjudicator-case-head",
+          "type": "rect",
+          "w": 2,
+          "x": 0,
+          "y": -3
+        },
+        {
+          "a": 1,
+          "c": [
+            88,
+            71,
+            44
+          ],
+          "h": 13,
+          "liberator_detail": "adjudicator-extractor-groove",
+          "type": "rect",
+          "w": 2,
+          "x": 3,
+          "y": -2
+        },
+        {
+          "a": 0.9,
+          "c": [
+            212,
+            180,
+            113
+          ],
+          "h": 2,
+          "liberator_detail": "adjudicator-case-highlight",
+          "type": "rect",
+          "w": 48,
+          "x": 6,
+          "y": 9
+        },
+        {
+          "a": 0.85,
+          "c": [
+            88,
+            71,
+            44
+          ],
+          "h": 2,
+          "liberator_detail": "adjudicator-case-shadow",
+          "type": "rect",
+          "w": 48,
+          "x": 6,
+          "y": -3
+        },
+        {
+          "a": 0.65,
+          "c": [
+            187,
+            154,
+            91
+          ],
+          "h": 1,
+          "liberator_detail": "adjudicator-brass-midline",
+          "type": "rect",
+          "w": 45,
+          "x": 7,
+          "y": 5
+        },
+        {
+          "a": 0.42,
+          "c": [
+            108,
+            103,
+            64
+          ],
+          "h": 1,
+          "liberator_detail": "adjudicator-aged-brass",
+          "type": "rect",
+          "w": 6,
+          "x": 15,
+          "y": 0
+        },
+        {
+          "a": 0.32,
+          "c": [
+            103,
+            96,
+            60
+          ],
+          "h": 1,
+          "liberator_detail": "adjudicator-aged-brass",
+          "type": "rect",
+          "w": 7,
+          "x": 38,
+          "y": 6
+        },
+        {
+          "a": 0.25,
+          "c": [
+            212,
+            180,
+            113
+          ],
+          "h": 6,
+          "liberator_detail": "adjudicator-drawn-case",
+          "type": "rect",
+          "w": 1,
+          "x": 9,
+          "y": 0
+        },
+        {
+          "a": 1,
+          "c": [
+            163,
+            132,
+            76
+          ],
+          "h": 11,
+          "liberator_detail": "adjudicator-shoulder",
+          "type": "rect",
+          "w": 5,
+          "x": 56,
+          "y": -1
+        },
+        {
+          "a": 1,
+          "c": [
+            163,
+            132,
+            76
+          ],
+          "h": 8,
+          "liberator_detail": "adjudicator-neck",
+          "type": "rect",
+          "w": 9,
+          "x": 61,
+          "y": 1
+        },
+        {
+          "a": 0.65,
+          "c": [
+            88,
+            71,
+            44
+          ],
+          "h": 8,
+          "liberator_detail": "adjudicator-crimp",
+          "type": "rect",
+          "w": 1,
+          "x": 65,
+          "y": 1
+        },
+        {
+          "a": 1,
+          "c": [
+            178,
+            183,
+            174
+          ],
+          "h": 8,
+          "liberator_detail": "adjudicator-projectile",
+          "type": "rect",
+          "w": 11,
+          "x": 70,
+          "y": 1
+        },
+        {
+          "a": 1,
+          "c": [
+            178,
+            183,
+            174
+          ],
+          "h": 6,
+          "liberator_detail": "adjudicator-ogive",
+          "type": "rect",
+          "w": 7,
+          "x": 81,
+          "y": 2
+        },
+        {
+          "a": 1,
+          "c": [
+            74,
+            124,
+            57
+          ],
+          "h": 4,
+          "liberator_detail": "adjudicator-ogive",
+          "type": "rect",
+          "w": 5,
+          "x": 88,
+          "y": 3
+        },
+        {
+          "a": 1,
+          "c": [
+            121,
+            170,
+            86
+          ],
+          "h": 2,
+          "liberator_detail": "adjudicator-tip",
+          "type": "rect",
+          "w": 3,
+          "x": 93,
+          "y": 4
+        },
+        {
+          "a": 0.9,
+          "c": [
+            225,
+            230,
+            212
+          ],
+          "h": 1,
+          "liberator_detail": "adjudicator-projectile-highlight",
+          "type": "rect",
+          "w": 10,
+          "x": 71,
+          "y": 7
+        },
+        {
+          "a": 0.65,
+          "c": [
+            104,
+            116,
+            109
+          ],
+          "h": 1,
+          "liberator_detail": "adjudicator-projectile-shadow",
+          "type": "rect",
+          "w": 9,
+          "x": 72,
+          "y": 1
+        }
+      ],
+      "command_count": 18,
+      "sha256": "23c7afe40fe3b6316dba5c2383a24a8e5dbad905bc494453e30ca45b35f9a872"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 53,
+  "static_quads": 5
+}

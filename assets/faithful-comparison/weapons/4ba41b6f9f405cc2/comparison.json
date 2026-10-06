@@ -1,0 +1,143 @@
+{
+  "id": "4ba41b6f9f405cc2",
+  "name": "StA-11 SMG",
+  "family": "compact",
+  "provenance": "Later accepted deployed helical panel",
+  "static_commands": 349,
+  "texture_quads": 4,
+  "native_commands_retained": 9,
+  "rgba8_bytes_no_mips": 2317728,
+  "comparisons": [
+    {
+      "state": "normal",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "empty",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "full",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "plus-one",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "unknown",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "charge-low",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "charge-mid",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "charge-high",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "hot",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "vent",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "compass-zero",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "compass-northwest",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "semi",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "burst",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "flak",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "alternate",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    },
+    {
+      "state": "opacity",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": false
+    },
+    {
+      "state": "easter",
+      "max_rgb_code_difference": 0,
+      "changed_pixels": 0,
+      "silhouette_equal": true,
+      "texture_used": true
+    }
+  ],
+  "original_fallback_states": [
+    "opacity"
+  ],
+  "dynamic_checks": 17,
+  "status": "faithful static conversion; live primitives retained"
+}

@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "weapon_resource": "4ba41b6f9f405cc2",
+  "logical_size": [
+    176,
+    123
+  ],
+  "texture_size": [
+    704,
+    492
+  ],
+  "origin_in_original_compose": [
+    2,
+    1
+  ],
+  "coordinates": "bottom-left logical; PNG top-left",
+  "alpha": "straight RGBA8",
+  "layers": [
+    {
+      "asset": "underlay.png",
+      "opacity": "hud_opacity"
+    },
+    {
+      "asset": "recesses.png",
+      "opacity": "panel_opacity * hud_opacity"
+    },
+    {
+      "asset": "details.png",
+      "opacity": "hud_opacity"
+    }
+  ],
+  "dynamic_zones": [
+    {
+      "text_sample": "StA-11",
+      "x": 27,
+      "y": 109,
+      "w": 48,
+      "h": 9,
+      "numeric": false
+    },
+    {
+      "text_sample": "STAHL",
+      "x": 130.33333333333334,
+      "y": 114,
+      "w": 23.333333333333336,
+      "h": 5.25,
+      "numeric": false
+    },
+    {
+      "text_sample": "008",
+      "x": 20,
+      "y": 70,
+      "w": 68,
+      "h": 25.5,
+      "numeric": true
+    },
+    {
+      "text_sample": "ROUNDS",
+      "x": 18,
+      "y": 53,
+      "w": 28,
+      "h": 5.25,
+      "numeric": false
+    },
+    {
+      "text_sample": "/ 16",
+      "x": 73.66666666666667,
+      "y": 53,
+      "w": 18.666666666666668,
+      "h": 5.25,
+      "numeric": false
+    },
+    {
+      "text_sample": "RESERVE",
+      "x": 19,
+      "y": 1,
+      "w": 28,
+      "h": 4.5,
+      "numeric": false
+    },
+    {
+      "text_sample": "03 MAGS",
+      "x": 113.66666666666666,
+      "y": 1,
+      "w": 32.66666666666667,
+      "h": 5.25,
+      "numeric": true
+    }
+  ],
+  "editing_layers_only": true,
+  "runtime_order": "Use renderer-adapter.json ordered fragments at original command positions, not flattened editing layers. Keep every other original command object.",
+  "readouts": "Unmodified frozen original Lua owns live counts, meters, compass, selectors, reserve, warnings, children and effects."
+}

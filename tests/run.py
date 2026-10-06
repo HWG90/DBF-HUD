@@ -1,5 +1,5 @@
 """Run offline contract tests with a local LuaJIT DLL; never starts the game."""
-import argparse, ctypes, os, gzip, tempfile
+import argparse, ctypes, os, gzip, tempfile, importlib.util, json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--suite',type=Path,default=Path('tests/contracts.lua'));p.add_argument('--lua-dll',type=Path,default=Path(r'C:\Program Files (x86)\Steam\steamapps\common\Helldivers 2\bin\lua51.dll'))
@@ -15,7 +15,10 @@ with tempfile.NamedTemporaryFile(suffix='.snapshot',delete=False) as fixture:
     fixture.write(gzip.decompress((ROOT/'tests/approved-panels.snapshot.gz').read_bytes()))
     fixture_path=Path(fixture.name)
 dll.luaL_loadstring.argtypes=[ctypes.c_void_p,ctypes.c_char_p]
-setup=('DBF_APPROVED_SNAPSHOT=[['+fixture_path.as_posix()+']]').encode()
+spec=importlib.util.spec_from_file_location('hud_build',ROOT/'tools/build.py')
+build=importlib.util.module_from_spec(spec);spec.loader.exec_module(build)
+modules=','.join(json.dumps(name) for name in build.ORDER)
+setup=('DBF_APPROVED_SNAPSHOT=[['+fixture_path.as_posix()+']]\nDBF_BUNDLE_MODULES={'+modules+'}').encode()
 try:
     status=dll.luaL_loadstring(state,setup) or dll.lua_pcall(state,0,0,0)
     if not status: status=dll.luaL_loadfile(state,str(args.suite).encode()) or dll.lua_pcall(state,0,0,0)

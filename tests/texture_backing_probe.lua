@@ -1,0 +1,13 @@
+-- Metadata decoding must not allocate string-initialized FFI arrays.
+local f=assert(io.open('src/runtime_texture_native.lua','rb'));local source=f:read('*a');f:close()
+local begin=assert(source:find('    local function uint(',1,true))
+local ending=assert(source:find('    local module=',begin,true))
+local decode=assert(loadstring(source:sub(begin,ending-1)..'\nreturn u32,ptr'))
+local u32,ptr=decode()
+assert(u32(string.char(0x78,0x56,0x34,0x12),0)==0x12345678)
+assert(ptr(string.char(0x78,0x56,0x34,0x12,1,0,0,0),0)==0x112345678)
+assert(not pcall(u32,'abc',0))
+assert(not pcall(ptr,string.rep('\255',8),0))
+assert(not pcall(u32,'abcd',-1))
+assert(not source:find("ffi.new('uint8_t[?]',#bytes,bytes)",1,true))
+print('metadata probe: exact decoding and bounded spans without FFI allocations')

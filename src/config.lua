@@ -12,10 +12,10 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={texture_art_variant='faithful',texture_art_trial=false,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={font_scale=1,hud_presentation='automatic',third_person_scale=.75,third_person_opacity=.22,force_all_hud_texture_off=false,appearance_follow_equipped=true,shader_layer_serial=0,texture_art_variant='faithful',texture_art_trial=true,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.8,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.limits={font_scale={.5,1.5},third_person_scale={.5,1.5},third_person_opacity={0,1},theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
@@ -25,6 +25,11 @@ function M.hex(v)
 end
 function M.rgb(v)
     v=M.hex(v);return {tonumber(v:sub(2,3),16),tonumber(v:sub(4,5),16),tonumber(v:sub(6,7),16)}
+end
+-- Explicit linear GUI tint for textures prepared by repair_retro_pixels.py.
+-- Saved palette values and ordinary primitive rendering remain sRGB byte values.
+function M.native_rgb(ink)
+ local out={};for i=1,3 do local v=ink[i]/255;out[i]=math.floor((v<=.04045 and v/12.92 or ((v+.055)/1.055)^2.4)*255+.5)end;return out
 end
 function M.new() local t={};for k,v in pairs(M.defaults) do t[k]=type(v)=='table' and {} or v end;return t end
 HUD.shader_catalog={
@@ -70,11 +75,23 @@ HUD.shader_catalog={
 {id='prismatic',title="Prismatic facets",material='mods/dbf_hud/materials/lab_prismatic',frozen=false},
 }
 HUD.shader_ids={auto=true,none=true};for _,entry in ipairs(HUD.shader_catalog)do HUD.shader_ids[entry.id]=true end
-M.panel_keys={texture_art_variant=true,texture_art_trial=true,theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
+M.panel_keys={font_scale=true,shader_layers=true,shader_layer_serial=true,texture_art_variant=true,texture_art_trial=true,theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
+-- Apply last, after every per-weapon merge. Never alter saved weapon choices.
+function M.texture_policy(config)
+ local force=config.force_all_hud_texture_off
+ local texture=config.texture_art_trial==true and config.texture_art_variant~='original'
+ if not force and not texture then return config end
+ local out={};for k,v in pairs(config)do out[k]=v end
+ if force then out.texture_art_trial=false;out.mechanical_art_enabled=false;out.texture_art_variant='original'
+ else out.decoration='none';out.style_3d='standard';out.theme_shader='none';out.effect_shader='none';out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.frosted=false end
+ return out
+end
 function M.effective(config,resource)
  local out={};for k,v in pairs(config)do out[k]=v end
  local overrides=(config.weapon_panels or {})[resource or '']
  if overrides then for k,v in pairs(overrides)do out[k]=v end;out.weapon_panel_overrides=overrides end
+ out=M.texture_policy(out)
+ if HUD.shader_layers then out.shader_layers=HUD.shader_layers.effective(out);out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.theme_shader='none';out.effect_shader='none' end
  return out
 end
 function M.set_panel(config,resource,values)
@@ -101,7 +118,22 @@ function M.blacklist_value(config,resource,hidden)
     if hidden then keys[#keys+1]=resource end
     table.sort(keys);return table.concat(keys,',')
 end
-function M.apply(config,values)
+-- Texture mode owns fixed artwork styling. Independent shader layers remain.
+function M.normalize_texture_mode(config)
+ local changed=false
+ local reset={decoration='none',style_3d='standard',theme_shader='none',effect_shader='none',effect_scanlines=false,effect_flicker=false,effect_sweep=false,frosted=false}
+ local global_on=config.texture_art_trial~=false and config.texture_art_variant~='original'
+ local before={};for k in pairs(reset)do before[k]=config[k]end
+ for _,profile in pairs(config.weapon_panels or {})do
+  local enabled=profile.texture_art_trial;if enabled==nil then enabled=config.texture_art_trial end
+  local variant=profile.texture_art_variant or config.texture_art_variant
+  if enabled~=false and variant~='original' then for k,v in pairs(reset)do if (profile[k]~=nil or not global_on)and profile[k]~=v then changed=true;profile[k]=v end end
+  elseif global_on then for k in pairs(reset)do if profile[k]==nil then profile[k]=before[k];changed=true end end end
+ end
+ if global_on then for k,v in pairs(reset)do if config[k]~=v then changed=true;config[k]=v end end end
+ return changed
+end
+function M.apply(config,values,validation_only)
     assert(type(values)=='table','configuration must be a table')
     local flattened={}
     for k,v in pairs(values) do
@@ -118,22 +150,26 @@ function M.apply(config,values)
     end
     local clean={}
     for k,v in pairs(flattened) do
-        assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
+        assert(M.defaults[k]~=nil or k=='shader_layers','unknown setting: '..tostring(k))
         local limits=M.limits[k]
-        if k=='weapon_panels' then
+        if k=='force_all_hud_texture_off' or k=='appearance_follow_equipped' then assert(type(v)=='boolean','setting must be boolean')
+        elseif k=='hud_presentation' then assert(v=='automatic' or v=='practical' or v=='weapon_specific','invalid HUD presentation')
+        elseif k=='shader_layers' then v=HUD.shader_layers.validate(v)
+        elseif k=='shader_layer_serial' then assert(type(v)=='number' and v%1==0 and v>=0 and v<1000000,'Invalid layer serial')
+        elseif k=='weapon_panels' then
             assert(type(v)=='table','Weapon panels must be a table');local validated={}
             for id,profile in pairs(v)do
                 assert(type(id)=='string' and #id==16 and id:match('^%x+$'),'Invalid weapon panel identity')
                 assert(type(profile)=='table','Invalid weapon panel settings')
                 for key in pairs(profile)do assert(M.panel_keys[key],'Invalid weapon panel setting: '..tostring(key))end
-                local scratch=M.new();M.apply(scratch,profile);local result={}
+                local scratch=M.new();M.apply(scratch,profile,true);local result={}
                 for key in pairs(profile)do result[key]=scratch[key]end;validated[id]=result
             end
             v=validated
         elseif limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
         elseif (k=='texture_art_trial' or k=='theme_shader_animate' or k=='effect_shader_animate' or k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='theme_shader' or k=='effect_shader' then assert(type(v)=='string' and HUD.shader_ids[v],'Unknown HUD shader')
-        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic','invalid texture artwork variant')
+        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic' or v=='study' or v=='original','invalid texture artwork variant')
         elseif k=='senator_style' then assert(v=='cylinder' or v=='upright','invalid Senator appearance')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
@@ -160,6 +196,7 @@ function M.apply(config,values)
     if clean.always_show_3d~=nil then clean.occlusion_mode=clean.always_show_3d and 'gui' or 'gui_depth' end
     if clean.occlusion_mode then clean.hud_occlusion=clean.occlusion_mode~='gui';clean.always_show_3d=clean.occlusion_mode=='gui' end
     for k,v in pairs(clean) do config[k]=v end
+    if not validation_only then return M.normalize_texture_mode(config)end
 end
 M.archived={archived_mesh={weapon_screen_test=true,saturation=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true},research={pose_marker=true,world_probe=true}}
 function M.serialize(config)
@@ -168,7 +205,14 @@ function M.serialize(config)
     for k in pairs(M.defaults) do if not archived[k] and k~='weapon_panels' and k~='occlusion_mode' and k~='hud_occlusion' and k~='show_3d' and k~='always_show_3d' and k~='placement_mode' and not k:match('^left_mount_') and not k:match('^fp_mount_') and not k:match('^mount_') then keys[#keys+1]=k end end
     table.sort(keys)
     local out={'-- DBF-HUD tuning. Active settings below; camera placement is unchanged.','return {','    -- Active display, palette, placement and diagnostics.'}
-    local function value(v)return type(v)=='string' and string.format('%q',v) or tostring(v)end
+    local function value(v)
+        if type(v)=='table' then
+            local out={'{'};for _,r in ipairs(v)do out[#out+1]=string.format('{id=%d,shader=%q,scale=%d,strength=%d,blend=%d,enabled=%s,animate=%s,speed=%s,opacity=%s,pattern_size=%s},',r.id,r.shader,r.scale,r.strength,r.blend,tostring(r.enabled~=false),tostring(r.animate==true),tostring(r.speed or 1),tostring(r.opacity),tostring(r.pattern_size))end
+            out[#out+1]='}';return table.concat(out)
+        end
+        return type(v)=='string' and string.format('%q',v) or tostring(v)
+    end
+    if config.shader_layers~=nil then keys[#keys+1]='shader_layers' end
     for _,k in ipairs(keys) do out[#out+1]='    '..k..' = '..value(config[k])..',' end
     out[#out+1]='    weapon_panels = {'
     local weapons={};for id in pairs(config.weapon_panels or {})do weapons[#weapons+1]=id end;table.sort(weapons)

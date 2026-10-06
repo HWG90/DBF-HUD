@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "authority": "../concept-board.png; existing df-media/frame.png derived from that board",
+  "format": "straight RGBA8; RGB and alpha preserved, no gamma/color conversion",
+  "files": {
+    "df_media_frame_v1": {
+      "width": 1448,
+      "height": 1086,
+      "rgba_bytes": 6290112,
+      "file": "df_media_frame_v1_f98db39401c5dfd3a32483d902b0211e1882edb4a53b979780d4187995223729.rgba",
+      "sha256": "f98db39401c5dfd3a32483d902b0211e1882edb4a53b979780d4187995223729",
+      "png": "frame.png"
+    },
+    "df_media_cores_v1": {
+      "width": 528,
+      "height": 1584,
+      "rgba_bytes": 3345408,
+      "file": "df_media_cores_v1_c29789ffcb7bdd3db8ee569406587974c798d1acabe08d2d8e70edcb0403f104.rgba",
+      "sha256": "c29789ffcb7bdd3db8ee569406587974c798d1acabe08d2d8e70edcb0403f104",
+      "png": "cores-atlas.png"
+    }
+  },
+  "frame": {
+    "resource": "mods/dbf_hud/textures/df_media_frame_v1",
+    "pixels": [
+      51,
+      46,
+      1373,
+      982
+    ],
+    "uv": [
+      0.03522099447513812,
+      0.0423572744014733,
+      0.9482044198895028,
+      0.9042357274401474
+    ],
+    "logical_size": [
+      128,
+      91.54843408594319
+    ]
+  },
+  "cores": {
+    "resource": "mods/dbf_hud/textures/df_media_cores_v1",
+    "regions": {
+      "loaded": {
+        "pixels": [
+          8,
+          8,
+          512,
+          512
+        ],
+        "uv": [
+          0.015151515151515152,
+          0.005050505050505051,
+          0.9696969696969697,
+          0.32323232323232326
+        ],
+        "source_crop": [
+          288,
+          107,
+          512,
+          512
+        ]
+      },
+      "unavailable": {
+        "pixels": [
+          8,
+          536,
+          512,
+          512
+        ],
+        "uv": [
+          0.015151515151515152,
+          0.3383838383838384,
+          0.9696969696969697,
+          0.32323232323232326
+        ],
+        "source_crop": [
+          828,
+          105,
+          512,
+          512
+        ]
+      },
+      "unknown": {
+        "pixels": [
+          8,
+          1064,
+          512,
+          512
+        ],
+        "uv": [
+          0.015151515151515152,
+          0.6717171717171717,
+          0.9696969696969697,
+          0.32323232323232326
+        ],
+        "source_crop": [
+          1374,
+          105,
+          512,
+          512
+        ]
+      }
+    },
+    "canonical_tile_size": [
+      512,
+      512
+    ],
+    "logical_draw_size": [
+      32,
+      32
+    ],
+    "centers_top_left_pixels": [
+      [
+        436,
+        492
+      ],
+      [
+        985,
+        492
+      ]
+    ],
+    "centers_top_left_logical": [
+      [
+        35.892206846321926,
+        41.579024034959936
+      ],
+      [
+        87.07356154406409,
+        41.579024034959936
+      ]
+    ]
+  },
+  "readouts": {
+    "model": {
+      "center_top_left_pixels": [
+        724,
+        203
+      ],
+      "zone_pixels": [
+        530,
+        178,
+        388,
+        50
+      ]
+    },
+    "mode": {
+      "center_top_left_pixels": [
+        488,
+        865
+      ],
+      "zone_pixels": [
+        295,
+        806,
+        386,
+        118
+      ]
+    },
+    "reserve": {
+      "center_top_left_pixels": [
+        967,
+        865
+      ],
+      "zone_pixels": [
+        762,
+        806,
+        410,
+        118
+      ]
+    }
+  },
+  "all_coordinates_top_left": true,
+  "baked_dynamic_text": false,
+  "native_compositor_included": false,
+  "installed": false
+}

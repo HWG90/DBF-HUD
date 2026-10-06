@@ -1,0 +1,1398 @@
+{
+  "version": 1,
+  "weapon_resource": "1a437158e1b8d2a1",
+  "canvas": [
+    -8,
+    -27,
+    117,
+    110
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        15.5,
+        -4.0,
+        70.0,
+        72.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 48.909090909,
+          "y": 66.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 12.727272727,
+          "x": 44.136363636,
+          "y": 64.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": 63.304347826
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 31.818181818,
+          "x": 34.590909091,
+          "y": 61.739130435
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 41.363636364,
+          "x": 29.818181818,
+          "y": 60.173913043
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 50.909090909,
+          "x": 25.045454545,
+          "y": 58.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 3.130434783,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 57.272727273,
+          "x": 21.863636364,
+          "y": 55.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 21.913043478,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 54.090909091,
+          "x": 23.454545455,
+          "y": 33.565217391
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 23.454545455,
+          "y": 32
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": 32
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 69.590909091,
+          "y": 32
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 25.045454545,
+          "y": 30.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 3.130434783,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 19.090909091,
+          "x": 40.954545455,
+          "y": 28.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 71.181818182,
+          "y": 30.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 23.454545455,
+          "y": 28.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4.772727273,
+          "x": 72.772727273,
+          "y": 28.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6.363636364,
+          "x": 21.863636364,
+          "y": 27.304347826
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 6.260869565,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 15.909090909,
+          "x": 42.545454545,
+          "y": 22.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6.363636364,
+          "x": 72.772727273,
+          "y": 27.304347826
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 20.272727273,
+          "y": 25.739130435
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7.954545455,
+          "x": 72.772727273,
+          "y": 25.739130435
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 9.545454545,
+          "x": 18.681818182,
+          "y": 24.173913043
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 9.545454545,
+          "x": 72.772727273,
+          "y": 24.173913043
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 11.136363636,
+          "x": 17.090909091,
+          "y": 22.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 11.136363636,
+          "x": 72.772727273,
+          "y": 22.608695652
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 15.5,
+          "y": 21.043478261
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 19.090909091,
+          "x": 40.954545455,
+          "y": 21.043478261
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 71.181818182,
+          "y": 21.043478261
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 17.090909091,
+          "y": 19.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": 19.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 14.318181818,
+          "x": 69.590909091,
+          "y": 19.47826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 63.636363636,
+          "x": 18.681818182,
+          "y": 17.913043478
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 30.227272727,
+          "x": 18.681818182,
+          "y": 16.347826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 30.227272727,
+          "x": 52.090909091,
+          "y": 16.347826087
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 27.045454545,
+          "x": 20.272727273,
+          "y": 14.782608696
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 27.045454545,
+          "x": 53.681818182,
+          "y": 14.782608696
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 25.454545455,
+          "x": 21.863636364,
+          "y": 13.217391304
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 25.454545455,
+          "x": 53.681818182,
+          "y": 13.217391304
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 23.454545455,
+          "y": 11.652173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 55.272727273,
+          "y": 11.652173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 25.045454545,
+          "y": 10.086956522
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 48.909090909,
+          "y": 10.086956522
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 53.681818182,
+          "y": 10.086956522
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 26.636363636,
+          "y": 8.52173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 6.260869565,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 28.636363636,
+          "x": 36.181818182,
+          "y": 3.826086957
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 71.181818182,
+          "y": 8.52173913
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 3.130434783,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 25.454545455,
+          "x": 37.772727273,
+          "y": 0.695652174
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 22.272727273,
+          "x": 39.363636364,
+          "y": -0.869565217
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 15.909090909,
+          "x": 42.545454545,
+          "y": -2.434782609
+        },
+        {
+          "a": 0.105,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.565217391,
+          "liberator_detail": "skull-watermark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3.181818182,
+          "x": 48.909090909,
+          "y": -4
+        }
+      ],
+      "command_count": 50,
+      "sha256": "cf44b6eb560521aa2eeddd78b739ab54fe3017e31a0e63b6014f0f1bf08e0d94"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        -0.5,
+        64.0,
+        102.0,
+        14.0
+      ],
+      "opacity": "panel",
+      "commands": [
+        {
+          "a": 0.65,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 14,
+          "liberator_detail": "designation-plate",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 102,
+          "x": -0.5,
+          "y": 64
+        }
+      ],
+      "command_count": 1,
+      "sha256": "4131a0ebf2912b93dc40ee9042a2c580e2e1ac2d2f8f585de92c963ea045244b"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        0.5,
+        76.0,
+        100.0,
+        1.75
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.9,
+          "c": [
+            244,
+            211,
+            31
+          ],
+          "h": 1.6,
+          "liberator_detail": "designation-stripe",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 100,
+          "x": 0.5,
+          "y": 76
+        }
+      ],
+      "command_count": 1,
+      "sha256": "fe83be54b31b02079e83be030cc81abfe1a45d4c2e97713bb3d9af4812005764"
+    },
+    {
+      "asset": "fragment-003.png",
+      "origin": [
+        -0.5,
+        46.0,
+        102.0,
+        15.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 0.5,
+          "y": 49
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 3.1,
+          "y": 49
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 5.7,
+          "y": 49
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 8.3,
+          "y": 49
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 89.5,
+          "y": 49
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 92.1,
+          "y": 49
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 94.7,
+          "y": 49
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 12,
+          "liberator_detail": "verdict-slide-serration",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1.3,
+          "x": 97.3,
+          "y": 49
+        },
+        {
+          "a": 1,
+          "c": [
+            105,
+            66,
+            24
+          ],
+          "h": 10,
+          "liberator_detail": "verdict-case",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 27,
+          "x": 29.5,
+          "y": 50
+        },
+        {
+          "a": 1,
+          "c": [
+            225,
+            163,
+            38
+          ],
+          "h": 7,
+          "liberator_detail": "verdict-case",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 25,
+          "x": 30.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 2,
+          "liberator_detail": "verdict-case",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 23,
+          "x": 31.5,
+          "y": 57
+        },
+        {
+          "a": 1,
+          "c": [
+            105,
+            66,
+            24
+          ],
+          "h": 7,
+          "liberator_detail": "verdict-extractor",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": 32.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            220,
+            104
+          ],
+          "h": 4,
+          "liberator_detail": "verdict-extractor",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1,
+          "x": 34.5,
+          "y": 53
+        },
+        {
+          "a": 1,
+          "c": [
+            194,
+            210,
+            222
+          ],
+          "h": 8,
+          "liberator_detail": "verdict-projectile",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7,
+          "x": 56.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            194,
+            210,
+            222
+          ],
+          "h": 6,
+          "liberator_detail": "verdict-projectile",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 63.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            194,
+            210,
+            222
+          ],
+          "h": 4,
+          "liberator_detail": "verdict-projectile",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 67.5,
+          "y": 53
+        },
+        {
+          "a": 1,
+          "c": [
+            238,
+            248,
+            255
+          ],
+          "h": 2,
+          "liberator_detail": "verdict-projectile-glint",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7,
+          "x": 56.5,
+          "y": 57
+        },
+        {
+          "a": 1,
+          "c": [
+            83,
+            111,
+            136
+          ],
+          "h": 2,
+          "liberator_detail": "verdict-projectile-shadow",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7,
+          "x": 56.5,
+          "y": 51
+        },
+        {
+          "a": 0.5,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.7,
+          "liberator_detail": "verdict-slide-rail",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 102,
+          "x": -0.5,
+          "y": 46
+        }
+      ],
+      "command_count": 19,
+      "sha256": "a7767356583e911d4321dfe38e0a321803613a51dec6107938dd755cf478d8ba"
+    },
+    {
+      "asset": "fragment-004.png",
+      "origin": [
+        -0.5,
+        7.0,
+        102.0,
+        39.0
+      ],
+      "opacity": "panel",
+      "commands": [
+        {
+          "a": 0.4,
+          "c": [
+            10,
+            16,
+            20
+          ],
+          "h": 39,
+          "liberator_detail": "count-recess",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 102,
+          "x": -0.5,
+          "y": 7
+        }
+      ],
+      "command_count": 1,
+      "sha256": "ce3226886efa897a5e0142f95c361117a3c3cd95a71df272231e924c3155ef5f"
+    },
+    {
+      "asset": "fragment-005.png",
+      "origin": [
+        -3.5,
+        9.0,
+        108.0,
+        37.75
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.35,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 34,
+          "liberator_detail": "verdict-slide-rail",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1,
+          "x": -3.5,
+          "y": 9
+        },
+        {
+          "a": 0.35,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 34,
+          "liberator_detail": "verdict-slide-rail",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1,
+          "x": 103.5,
+          "y": 9
+        },
+        {
+          "a": 0.5,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.7,
+          "liberator_detail": "count-seam",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 102,
+          "x": -0.5,
+          "y": 46
+        }
+      ],
+      "command_count": 3,
+      "sha256": "039701ab7c4b3d6a1ddf723c4f8b061ac97a9dc2c9988a1e9c508503d76b082d"
+    },
+    {
+      "asset": "fragment-006.png",
+      "origin": [
+        13.5,
+        -10.0,
+        74.0,
+        0.5
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.3,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "magazine-sill",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 74,
+          "x": 13.5,
+          "y": -10
+        }
+      ],
+      "command_count": 1,
+      "sha256": "372769bd50d5e6c345dc722c92c95b5c632fa09f91f542191cf893d1adbdac8f"
+    },
+    {
+      "asset": "fragment-007.png",
+      "origin": [
+        -4.5,
+        -24.0,
+        110.0,
+        104.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": -4.5,
+          "y": -24
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": -4,
+          "y": -22.8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": -4.5,
+          "y": 77
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": -4,
+          "y": 78.2
+        },
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 102.5,
+          "y": -24
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": 103,
+          "y": -22.8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            25,
+            32,
+            36
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 102.5,
+          "y": 77
+        },
+        {
+          "a": 0.65,
+          "c": [
+            141,
+            159,
+            169
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": 103,
+          "y": 78.2
+        }
+      ],
+      "command_count": 8,
+      "sha256": "79cb1fbdf18fb2a25b31e86755e1e145b8e9defe9b6a40c15564972cb4483fae"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 84,
+  "static_quads": 8
+}

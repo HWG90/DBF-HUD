@@ -1,0 +1,12 @@
+{
+  "source": "C:/Users/david/AppData/Local/LLL/Helldivers2/Mods/dbf_hud/mod.lua",
+  "snapshot_sha256": "ae64fc2793ba6e884abf33b9e98cd1f78a84497b815e58ab35ccbd796e92ceed",
+  "inventory_sources": [
+    "HUD/batch-design-audit.json",
+    "HUD/reconciled-pending-scope.json",
+    "Current approved STA11 and MA5C",
+    "Accepted offline Slugger"
+  ],
+  "capture_only": true,
+  "suppressed_side_effect": "draw-checkpoint logging only; no art logic changed"
+}

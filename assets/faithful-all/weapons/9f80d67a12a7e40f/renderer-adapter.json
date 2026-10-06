@@ -1,0 +1,1452 @@
+{
+  "version": 1,
+  "weapon_resource": "9f80d67a12a7e40f",
+  "canvas": [
+    -16,
+    -27,
+    132,
+    124
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        -16.0,
+        -27.0,
+        132.0,
+        124.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.8,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 1,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 132,
+          "x": -16,
+          "y": -27
+        },
+        {
+          "a": 0.8,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 1,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 132,
+          "x": -16,
+          "y": 96
+        },
+        {
+          "a": 0.8,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 124,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": -16,
+          "y": -27
+        },
+        {
+          "a": 0.8,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 124,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 1,
+          "x": 115,
+          "y": -27
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 64,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -6,
+          "y": 2
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 64,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 104,
+          "y": 2
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 3,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": -12,
+          "y": -23
+        },
+        {
+          "a": 0.6,
+          "c": [
+            212,
+            226,
+            230
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -11.5,
+          "y": -22
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 3,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": -12,
+          "y": 90
+        },
+        {
+          "a": 0.6,
+          "c": [
+            212,
+            226,
+            230
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -11.5,
+          "y": 91
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 3,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 109,
+          "y": -23
+        },
+        {
+          "a": 0.6,
+          "c": [
+            212,
+            226,
+            230
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 109.5,
+          "y": -22
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 3,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 3,
+          "x": 109,
+          "y": 90
+        },
+        {
+          "a": 0.6,
+          "c": [
+            212,
+            226,
+            230
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 109.5,
+          "y": 91
+        },
+        {
+          "a": 1,
+          "c": [
+            47,
+            61,
+            68
+          ],
+          "h": 50,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": -2,
+          "y": 8
+        },
+        {
+          "a": 1,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 1,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": -2,
+          "y": 8
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 12
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 13
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 19
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 20
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 26
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 27
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 33
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 34
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 40
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 41
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 47
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 0,
+          "y": 48
+        },
+        {
+          "a": 1,
+          "c": [
+            47,
+            61,
+            68
+          ],
+          "h": 50,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 93,
+          "y": 8
+        },
+        {
+          "a": 1,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 1,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 9,
+          "x": 93,
+          "y": 8
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 12
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 13
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 19
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 20
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 26
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 27
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 33
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 34
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 40
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 41
+        },
+        {
+          "a": 1,
+          "c": [
+            13,
+            18,
+            21
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 47
+        },
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95,
+          "y": 48
+        }
+      ],
+      "command_count": 42,
+      "sha256": "e541cf72a1f2f1eed80db9bd6b90ed62b6e153683ab1800f65ccb940f820d49a"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        39.25,
+        6.0,
+        21.5,
+        56.75
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 1,
+          "c": [
+            49,
+            35,
+            29
+          ],
+          "h": 23.18,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 21.28,
+          "x": 39.36,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            77,
+            53,
+            39
+          ],
+          "h": 21.052,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 17.024,
+          "x": 41.488,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            104,
+            72,
+            49
+          ],
+          "h": 21.052,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 10.64,
+          "x": 45.744,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            119,
+            84,
+            59
+          ],
+          "h": 19.988,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 4.256,
+          "x": 47.872,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            133,
+            99,
+            71
+          ],
+          "h": 18.924,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 1.064,
+          "x": 47.872,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            36,
+            28,
+            25
+          ],
+          "h": 21.052,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 1.064,
+          "x": 58.512,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            39,
+            30,
+            26
+          ],
+          "h": 21.052,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 1.064,
+          "x": 40.424,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            104,
+            72,
+            49
+          ],
+          "h": 3.192,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 19.152,
+          "x": 40.424,
+          "y": 27.052
+        },
+        {
+          "a": 1,
+          "c": [
+            131,
+            92,
+            63
+          ],
+          "h": 1.064,
+          "recoilless_detail": true,
+          "recoilless_part": "case",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 10.64,
+          "x": 44.68,
+          "y": 27.052
+        },
+        {
+          "a": 1,
+          "c": [
+            226,
+            200,
+            102
+          ],
+          "h": 3.192,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 19.152,
+          "x": 40.424,
+          "y": 30.244
+        },
+        {
+          "a": 1,
+          "c": [
+            243,
+            218,
+            153
+          ],
+          "h": 3.192,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 3.192,
+          "x": 47.872,
+          "y": 30.244
+        },
+        {
+          "a": 1,
+          "c": [
+            87,
+            61,
+            42
+          ],
+          "h": 2.128,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 17.024,
+          "x": 41.488,
+          "y": 33.436
+        },
+        {
+          "a": 1,
+          "c": [
+            168,
+            121,
+            78
+          ],
+          "h": 2.128,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 4.256,
+          "x": 47.872,
+          "y": 33.436
+        },
+        {
+          "a": 1,
+          "c": [
+            104,
+            70,
+            43
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 17.024,
+          "x": 41.488,
+          "y": 35.564
+        },
+        {
+          "a": 1,
+          "c": [
+            155,
+            111,
+            67
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 3.06432,
+          "x": 46.93568,
+          "y": 35.564
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 57.8736,
+          "y": 35.564
+        },
+        {
+          "a": 1,
+          "c": [
+            101,
+            68,
+            42
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 15.3216,
+          "x": 42.3392,
+          "y": 38.4368
+        },
+        {
+          "a": 1,
+          "c": [
+            150,
+            107,
+            65
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 2.757888,
+          "x": 47.242112,
+          "y": 38.4368
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 57.0224,
+          "y": 38.4368
+        },
+        {
+          "a": 1,
+          "c": [
+            98,
+            66,
+            41
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 13.6192,
+          "x": 43.1904,
+          "y": 41.3096
+        },
+        {
+          "a": 1,
+          "c": [
+            145,
+            103,
+            63
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 2.451456,
+          "x": 47.548544,
+          "y": 41.3096
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 56.1712,
+          "y": 41.3096
+        },
+        {
+          "a": 1,
+          "c": [
+            95,
+            64,
+            40
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 11.9168,
+          "x": 44.0416,
+          "y": 44.1824
+        },
+        {
+          "a": 1,
+          "c": [
+            140,
+            99,
+            61
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 2.145024,
+          "x": 47.854976,
+          "y": 44.1824
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 55.32,
+          "y": 44.1824
+        },
+        {
+          "a": 1,
+          "c": [
+            92,
+            62,
+            39
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 10.2144,
+          "x": 44.8928,
+          "y": 47.0552
+        },
+        {
+          "a": 1,
+          "c": [
+            135,
+            95,
+            59
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 1.838592,
+          "x": 48.161408,
+          "y": 47.0552
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 54.4688,
+          "y": 47.0552
+        },
+        {
+          "a": 1,
+          "c": [
+            89,
+            60,
+            38
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 8.512,
+          "x": 45.744,
+          "y": 49.928
+        },
+        {
+          "a": 1,
+          "c": [
+            130,
+            91,
+            57
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 1.53216,
+          "x": 48.46784,
+          "y": 49.928
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 53.6176,
+          "y": 49.928
+        },
+        {
+          "a": 1,
+          "c": [
+            86,
+            58,
+            37
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 6.8096,
+          "x": 46.5952,
+          "y": 52.8008
+        },
+        {
+          "a": 1,
+          "c": [
+            125,
+            87,
+            55
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 1.225728,
+          "x": 48.774272,
+          "y": 52.8008
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 52.7664,
+          "y": 52.8008
+        },
+        {
+          "a": 1,
+          "c": [
+            83,
+            56,
+            36
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 5.1072,
+          "x": 47.4464,
+          "y": 55.6736
+        },
+        {
+          "a": 1,
+          "c": [
+            120,
+            83,
+            53
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.919296,
+          "x": 49.080704,
+          "y": 55.6736
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 51.9152,
+          "y": 55.6736
+        },
+        {
+          "a": 1,
+          "c": [
+            80,
+            54,
+            35
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 3.4048,
+          "x": 48.2976,
+          "y": 58.5464
+        },
+        {
+          "a": 1,
+          "c": [
+            115,
+            79,
+            51
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.7448,
+          "x": 49.2552,
+          "y": 58.5464
+        },
+        {
+          "a": 1,
+          "c": [
+            53,
+            39,
+            29
+          ],
+          "h": 2.9792,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 0.6384,
+          "x": 51.064,
+          "y": 58.5464
+        },
+        {
+          "a": 1,
+          "c": [
+            156,
+            119,
+            76
+          ],
+          "h": 1.596,
+          "recoilless_detail": true,
+          "recoilless_part": "projectile",
+          "recoilless_round": true,
+          "type": "rect",
+          "w": 1.2768,
+          "x": 49.3616,
+          "y": 61.1
+        }
+      ],
+      "command_count": 41,
+      "sha256": "5d2c37ae8bd8d987c781ccd529a96d78e25e69bb7b0a32c10474856b2704b72b"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        -7.0,
+        -10.0,
+        114.0,
+        0.5
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.4,
+          "c": [
+            119,
+            143,
+            153
+          ],
+          "h": 0.5,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 114,
+          "x": -7,
+          "y": -10
+        }
+      ],
+      "command_count": 1,
+      "sha256": "0b33a46bf0ab779848bd05bc698376726d44d02ed20a944549060dbab8285ce1"
+    },
+    {
+      "asset": "fragment-003.png",
+      "origin": [
+        -3.0,
+        74.0,
+        106.0,
+        2.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": -3,
+          "y": 74
+        },
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 89,
+          "y": 74
+        },
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 1,
+          "y": 74
+        },
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 93,
+          "y": 74
+        },
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 5,
+          "y": 74
+        },
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 97,
+          "y": 74
+        },
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 9,
+          "y": 74
+        },
+        {
+          "a": 0.7,
+          "c": [
+            204,
+            159,
+            80
+          ],
+          "h": 2,
+          "recoilless_detail": true,
+          "type": "rect",
+          "w": 2,
+          "x": 101,
+          "y": 74
+        }
+      ],
+      "command_count": 8,
+      "sha256": "a28098fe97e923c2d2ee1938f4e771d29ec0d6dc5b015bac7a5bc25e7b51b1ab"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 92,
+  "static_quads": 4
+}

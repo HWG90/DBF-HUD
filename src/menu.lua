@@ -158,12 +158,16 @@ function M.new(hud)
                 assert(ok,err)
             end
             local weapon_labels,weapon_ids=M.weapon_choices()
-            local panel_controls={{id='appearance_weapon_select',type='choice',presentation='dropdown',label='Weapon',choices=weapon_labels,default=1,on_change=function(v)
+            local panel_controls={
+                {id='hud_presentation',type='choice',presentation='dropdown',label='HUD presentation',choices={'Automatic','Simple','Fancy'},default=({automatic=1,practical=2,weapon_specific=3})[hud.config.hud_presentation] or 1,description='Automatic switches with the camera. Simple uses the practical panel in both views; Fancy uses weapon-specific styling in both views. Your camera perspective is unchanged.',on_change=function(v)save('hud_presentation',assert(({'automatic','practical','weapon_specific'})[v],'Unknown HUD presentation'))end},
+                {id='third_person_scale',type='slider',label='Third-person HUD scale',min=.5,max=1.5,step=.05,default=hud.config.third_person_scale,description='Compact practical panel outside first person. First-person scale uses the existing HUD scale.',on_change=function(v)save('third_person_scale',v)end},
+                {id='third_person_opacity',type='slider',label='Third-person panel opacity',min=0,max=1,step=.05,default=hud.config.third_person_opacity,description='Practical panel background only; live text stays readable.',on_change=function(v)save('third_person_opacity',v)end},
+                {id='appearance_follow_equipped',type='toggle',label='Follow equipped weapon',default=hud.config.appearance_follow_equipped~=false,on_change=function(v)hud.follow_equipped_appearance(v);hud.save_tuning();if panel_refresh then panel_refresh(true)end end},{id='appearance_weapon_select',type='choice',presentation='dropdown',label='Weapon',choices=weapon_labels,default=1,on_change=function(v)
                 hud.select_appearance_weapon(assert(weapon_ids[v],'Unknown weapon'));if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
             end},{type='text',label='Select any weapon or Fetch the equipped weapon',id='weapon_heading'},
                 {id='fetch_weapon_appearance',type='button',label='Fetch current weapon appearance',description='Reload the equipped weapon settings, including inherited global options.',on_activate=function()
                     assert(hud.equipped_resource(),'Equip a weapon first')
-                    hud.select_appearance_weapon(hud.equipped_resource());if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
+                    hud.follow_equipped_appearance(true);if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
                     local fetched=hud.appearance_weapon()
                     local state=host.mods and host.mods.dbf_hud_fonts
                     assert(state,'Appearance registration unavailable; reload HUD')
@@ -178,20 +182,9 @@ function M.new(hud)
             local shader_choices={'Automatic weapon theme','None'};local shader_ids={'auto','none'}
             for _,entry in ipairs(HUD.shader_catalog)do shader_choices[#shader_choices+1]=entry.title..(entry.frozen and ' (frozen sample)' or '');shader_ids[#shader_ids+1]=entry.id end
             local panel_definitions={
-                {'theme_shader','Theme shader (3D)','choice',shader_choices},
-                {'theme_shader_scale','Panel pattern size','slider',.25,4,.05},
-                {'theme_shader_animate','Animate panel shader','toggle'},
-                {'theme_shader_speed','Panel animation speed','slider',.1,3,.1},
-                {'effect_shader','Effect shader (3D)','choice',shader_choices},
-                {'effect_shader_scale','Effect pattern size','slider',.25,4,.05},
-                {'effect_shader_animate','Animate effect shader','toggle'},
-                {'effect_shader_speed','Effect animation speed','slider',.1,3,.1},
                 {'font','Weapon font','choice',weapon_fonts},
                 {'background_color','Panel color','color'},{'text_color','Text color','color'},{'decoration_color','Decoration color','color'},
                 {'panel_opacity','Panel opacity','slider',0,1,.01},{'text_opacity','Text opacity','slider',0,1,.01},
-                {'effect_scanline_count','Scanline count','slider',1,80,1},
-                {'effect_sweep_speed','Sweep speed','slider',.05,2,.05},{'effect_sweep_density','Sweep density','slider',1,12,1},
-                {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background (2D)','toggle'},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
             -- Fetch selects a weapon after registration; keep these controls
@@ -209,10 +202,12 @@ function M.new(hud)
                 if v==nil then v=HUD.config.defaults[key] end
                 return v
             end
+            panel_definitions[#panel_definitions+1]={'font_scale','Font size','slider',.5,1.5,.05}
             for _,def in ipairs(panel_definitions)do
                 local key=def[1];local c={id='weapon_'..key,type=def[3],label=def[2],default=panel_value(key)}
                 if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Animation is controlled by Animate panel shader.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Animation is controlled by Animate effect shader; preview uses native materials in 3D mode.' end
                 if key=='theme_shader' then c.description='Native 3D shader on the live readout area. HUD Texture pixels stay unchanged. Automatic preserves HUD Texture; None removes this shader carrier.' end
+                if key=='font_scale' then c.description='Scale live weapon readouts. 1 is the original size. Lettering baked into texture artwork keeps its size.' end
                 if key=='background_color' then c.description='Live readout shader carrier color; HUD Texture colors are unchanged.' end
                 if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
                 if key=='theme_shader_animate' or key=='effect_shader_animate' then c.description='Animate the selected shader. Off keeps the static sample. Requires animated native assets; no new panel geometry.' end
@@ -227,6 +222,51 @@ function M.new(hud)
                     hud.configure_panel({[key]=v},panel_weapon);hud.save_tuning()
                 end
                 panel_controls[#panel_controls+1]=c
+            end
+            local layer_signature
+            local function refresh_layers(mod)
+                local page;for _,p in ipairs(mod.pages)do if p.id=='weapon_appearance'then page=p end end
+                if not page then return end
+                local cfg=panel_weapon and hud.panel_settings(panel_weapon) or hud.config
+                local rows=HUD.shader_layers.effective(cfg)
+                local signature=tostring(panel_weapon)..'/'..tostring(hud.appearance_revision)
+                if signature==layer_signature then return end;layer_signature=signature
+                for i=#page.controls,1,-1 do local c=page.controls[i];if c.shader_layer_row then
+                    if c.id then mod.controls[c.id]=nil;mod.values[c.id]=nil;page.pending[c.id]=nil;page.actions[c.id]=nil end
+                    table.remove(page.controls,i)
+                end end
+                local resource=panel_weapon
+                local function commit(action,id,value)
+                    assert(resource and resource==panel_weapon,'Weapon selection changed')
+                    local current=hud.panel_settings(resource)
+                    hud.configure_panel(HUD.shader_layers.edit(current,action,id,value),resource);hud.save_tuning()
+                    layer_signature=nil;refresh_layers(mod)
+                end
+                local function add(c,value)
+                    c.shader_layer_row=true;c.page=page;c.groups={'weapon_effects'};c.depth=1;c.description=c.description or '';c.disabled=resource==nil
+                    page.controls[#page.controls+1]=c
+                    if c.type~='text' and c.type~='section'then mod.controls[c.id]=c;mod.values[c.id]=value;c.default=value end
+                end
+                add({id='weapon_shader_add',type='button',label='Add Shader',on_activate=function()commit('add');return 'Shader layer added'end})
+                mod.controls.weapon_shader_add.disabled=not resource or #rows>=HUD.shader_layers.maximum
+                add({type='text',label='Up to four ordered alpha overlays using existing shader assets. 3D only. Shader support determines animation.'})
+                local choices,keys={},{};for _,e in ipairs(HUD.shader_catalog)do choices[#choices+1]=e.title;keys[#keys+1]=e.id end
+                for position,row in ipairs(rows)do
+                    local id=row.id;local prefix='weapon_shader_layer_'..id..'_'
+                    add({type='text',label='Layer '..position})
+                    add({id=prefix..'enabled',type='toggle',label='Enabled',on_change=function(v)commit('enabled',id,v)end},row.enabled~=false)
+                    local selected=1;for i,key in ipairs(keys)do if key==row.shader then selected=i end end
+                    add({id=prefix..'shader',type='choice',presentation='dropdown',label='Shader',choices=choices,on_change=function(v)commit('shader',id,keys[v])end},selected)
+                    add({id=prefix..'pattern_size',type='slider',label='Pattern size',min=.25,max=4,step=1/32,on_change=function(v)commit('pattern_size',id,v)end},row.pattern_size or HUD.shader_layers.scales[row.scale or 2])
+                    add({id=prefix..'opacity',type='slider',label='Opacity',min=.01,max=1,step=.01,description='This shader layer only, independent of the panel backing opacity.',on_change=function(v)commit('opacity',id,v)end},row.opacity or .25)
+                    add({id=prefix..'animate',type='toggle',label='Animate',on_change=function(v)commit('animate',id,v)end},row.animate==true)
+                    add({id=prefix..'speed',type='slider',label='Animation speed',min=.1,max=3,step=.1,on_change=function(v)commit('speed',id,v)end},row.speed or 1)
+                    for _,action in ipairs({'up','down','remove'})do local op=action
+                        add({id=prefix..op,type='button',label=op=='up' and 'Move up' or op=='down' and 'Move down' or 'Remove Shader',on_activate=function()commit(op,id);return 'Shader layers updated'end})
+                        if (op=='up' and position==1)or(op=='down' and position==#rows)then mod.controls[prefix..op].disabled=true end
+                    end
+                end
+                host.revision=(host.revision or 0)+1
             end
             local function panel_control(mod,id)
                 if mod.controls and mod.controls[id] then return mod.controls[id]end
@@ -250,6 +290,8 @@ function M.new(hud)
             panel_guard=function()
                 local id=hud.appearance_weapon and hud.appearance_weapon()
                 local mod=host.mods and host.mods.dbf_hud_fonts;if not mod then return end
+                refresh_layers(mod)
+                mod.values.appearance_follow_equipped=hud.config.appearance_follow_equipped~=false
                 local ready=panel_weapon~=nil
                 local settings=ready and hud.panel_settings(panel_weapon) or {}
                 local mechanical=ready and HUD.mechanical_art and HUD.mechanical_art.layouts[panel_weapon] and settings.texture_art_trial~=false and settings.texture_art_variant=='faithful'
@@ -259,7 +301,13 @@ function M.new(hud)
                         elseif c.id=='faithful_render_status' then registered.disabled=false;registered.label=hud.faithful_status(panel_weapon)
                         elseif c.id=='fetch_weapon_appearance' then registered.disabled=hud.equipped_resource()==nil
                         elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Select any weapon or Fetch the equipped weapon'
-                        elseif mechanical and (c.id=='weapon_decoration' or c.id=='weapon_style_3d' or c.id=='weapon_frosted') then
+                        elseif c.id=='weapon_decoration' or c.id=='weapon_style_3d' then
+                            local texture=settings.texture_art_trial~=false and settings.texture_art_variant~='original'
+                            local simple=hud.config.hud_presentation=='practical'
+                            local world_only=c.id=='weapon_style_3d' and hud.config.anchor_mode~='world'
+                            registered.disabled=not ready or texture or simple or world_only
+                            registered.description=texture and 'Texture mode keeps Decorations at None and Visual Style at Standard. Use the independent Shader layers for effects.' or simple and 'Simple presentation uses its plain practical panel; this saved effect is inactive. Choose Automatic or Fancy to use it.' or world_only and 'Visual Style applies in 3D WorldGUI mode; this saved effect is inactive in 2D.' or 'Applies to the weapon-specific presentation, including texture artwork. Automatic uses it in first person; Fancy uses it in both views.'
+                        elseif mechanical and c.id=='weapon_frosted' then
                             registered.disabled=true;registered.description='HUD Texture owns this styling. Turn HUD Texture off to edit primitive styling.'
                         elseif c.id=='weapon_texture_art_trial' or c.id=='weapon_texture_art_variant' then
                             local art=HUD.texture_art_assets and HUD.texture_art_assets[panel_weapon]
@@ -300,9 +348,10 @@ function M.new(hud)
                     else controls[#controls+1]=c end
                 end
                 controls[#controls+1]={id='weapon_theme',type='section',label='Theme',collapsed=false,children=theme}
-                controls[#controls+1]={id='weapon_effects',type='section',label='Effects',collapsed=false,children=effects}
+                controls[#controls+1]={id='weapon_effects',type='section',label='Shaders',collapsed=false,children=effects}
                 return controls
             end)()},{id='developer',name='Developer',controls=(function()local controls={
+{id='force_all_hud_texture_off',type='toggle',label='Force all HUD off',description='Global override for texture artwork. Live readouts and standard Lua primitives remain visible.',require_confirmation=false,default=hud.config.force_all_hud_texture_off,on_change=function(v)save('force_all_hud_texture_off',v)end},
 {id='render_sync_trial',type='toggle',label='Render-synchronized HUD',require_confirmation=false,description='Sample weapon pose and camera before the existing render callback. Defaults on; can be disabled here. No smoothing or offset changes. Falls back to update when the render bridge is unavailable.',default=hud.config.render_sync_trial,on_change=function(v)save('render_sync_trial',v)end},
 {id='senator_style',type='choice',require_confirmation=false,label='Senator appearance (3D)',choices={'Cylinder','Upright bullets'},description='2D always uses upright bullets.',default=hud.config.senator_style=='upright' and 2 or 1,
                         on_change=function(v)save('senator_style',v==2 and 'upright' or 'cylinder')end},
@@ -321,16 +370,8 @@ function M.new(hud)
 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end},
 
-{id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
-                        on_change=function(v)save('effect_scanlines',v)end},
 {id='mg43_easter_egg',type='toggle',label='MG-43: Get some! Easter egg',default=hud.config.mg43_easter_egg,
                         on_change=function(v)save('mg43_easter_egg',v)end},
-{id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
-                        on_change=function(v)save('effect_flicker',v)end},
-{id='effect_sweep',type='toggle',label='HUD effect: Scanning sweep',default=hud.config.effect_sweep,
-                        on_change=function(v)save('effect_sweep',v)end},
-{id='effect_sweep_speed',type='slider',label='Sweep speed',min=.05,max=2,step=.05,default=hud.config.effect_sweep_speed,on_change=function(v)save('effect_sweep_speed',v)end},
-{id='effect_sweep_density',type='slider',label='Sweep density',min=1,max=12,step=1,default=hud.config.effect_sweep_density,on_change=function(v)save('effect_sweep_density',v)end}
 };for _,c in ipairs(developer_motion_controls)do controls[#controls+1]=c end;for _,c in ipairs(placement_controls)do controls[#controls+1]=c end;return controls end)()},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset'},
                     {id='saved_preset',type='choice',presentation='dropdown',label='Saved presets',choices=preset_choices,default=1},
@@ -347,6 +388,7 @@ function M.new(hud)
                 }}}})
             font_host=host;self.status='MCM > DBF-HUD'
         end
+        if panel_refresh then panel_refresh(false)end
         if panel_guard then panel_guard()end
         local visibility_mod=host and host.mods and host.mods.dbf_hud_fonts
         local visibility_control=visibility_mod and visibility_mod.controls and visibility_mod.controls.equipped_weapon_hud

@@ -1428,10 +1428,10 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             for _,run in ipairs(symbol.runs) do
                 local xs,origin,ry,rh=1.85,36.9,run[2],run[4]
                 if cfg.double_freedom_proportions_preview~=false then
-                    -- Rear-base emphasis: 80% brass, 20% blue; preserve total height and anchors.
+                    -- Short brass head: 27% brass, 73% blue; preserve total height and anchors.
                     xs,origin=1.75,37.5
-                    if ry>=11 then ry,rh=24+(ry-11)*6/19,rh*6/19
-                    else ry,rh=ry*24/11,rh*24/11 end
+                    if ry>=11 then ry,rh=8+(ry-11)*22/19,rh*22/19
+                    else ry,rh=ry*8/11,rh*8/11 end
                 end
                 line(origin+(barrel-1)*50+run[1]*xs,32+ry*1.5,run[3]*xs,rh*1.5,
                     ((loaded or spent) and run[5] or silver),(loaded and .9 or spent and .55 or .18))
@@ -1515,6 +1515,24 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
     end
     for _,command in ipairs(out)do if command.type=='text' then command.a=command.a*(cfg.text_opacity or 1) end end
+    return out
+end
+-- Texture compositions replace primitive housing. Reapply the selected perimeter
+-- on their final live frame, without tinting or changing the artwork pixels.
+function M.decorate_textures(commands,scale,cfg,opacity)
+    cfg=HUD.config.texture_policy(cfg)
+    local textured=false
+    for _,v in ipairs(commands)do if v.type=='texture' then textured=true;break end end
+    if not textured then return commands end
+    local out,panels={},{}
+    for _,v in ipairs(commands)do
+        if not v.decoration then out[#out+1]=v end
+        if v.type=='panel' and not v.charge_meter then panels[#panels+1]=v end
+    end
+    for _,panel in ipairs(panels)do
+        local decoration={};M.decorate(decoration,panel,scale,cfg,opacity)
+        for _,v in ipairs(decoration)do v.child=panel.child;out[#out+1]=v end
+    end
     return out
 end
 return M

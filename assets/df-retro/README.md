@@ -1,0 +1,1 @@
+Lossless repack of approved retro sheet. Every sprite has32px fully transparent gutter. Sample content UV for unchanged bounds; sample padded UV only if renderer expands draw geometry proportionally. Loaded/fired remain224x672. No source pixels recolored. Intrinsic generated glow inside each crop is retained; shader owner handles edge feather.12MiB RGBA. No live writes.

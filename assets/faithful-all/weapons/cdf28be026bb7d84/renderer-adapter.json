@@ -1,0 +1,965 @@
+{
+  "version": 1,
+  "weapon_resource": "cdf28be026bb7d84",
+  "canvas": [
+    -12,
+    -27,
+    125,
+    110
+  ],
+  "layers": [
+    {
+      "asset": "fragment-000.png",
+      "origin": [
+        -8.5,
+        6.0,
+        118.0,
+        72.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.65,
+          "c": [
+            44,
+            47,
+            46
+          ],
+          "h": 41,
+          "liberator_detail": "armor-spine",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6,
+          "x": -8.5,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -7.5,
+          "y": 9
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -7.5,
+          "y": 15
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -7.5,
+          "y": 21
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -7.5,
+          "y": 27
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -7.5,
+          "y": 33
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -7.5,
+          "y": 39
+        },
+        {
+          "a": 0.65,
+          "c": [
+            44,
+            47,
+            46
+          ],
+          "h": 41,
+          "liberator_detail": "armor-spine",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6,
+          "x": 103.5,
+          "y": 6
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 104.5,
+          "y": 9
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 104.5,
+          "y": 15
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 104.5,
+          "y": 21
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 104.5,
+          "y": 27
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 104.5,
+          "y": 33
+        },
+        {
+          "a": 1,
+          "c": [
+            9,
+            12,
+            12
+          ],
+          "h": 2,
+          "liberator_detail": "cooling-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 104.5,
+          "y": 39
+        },
+        {
+          "a": 0.9,
+          "c": [
+            26,
+            29,
+            29
+          ],
+          "h": 13,
+          "liberator_detail": "designation-plate",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 110,
+          "x": -4.5,
+          "y": 65
+        },
+        {
+          "a": 0.95,
+          "c": [
+            230,
+            68,
+            36
+          ],
+          "h": 2,
+          "liberator_detail": "red-designation-tab",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 28,
+          "x": -3.5,
+          "y": 76
+        },
+        {
+          "a": 0.95,
+          "c": [
+            230,
+            68,
+            36
+          ],
+          "h": 2,
+          "liberator_detail": "red-designation-tab",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 28,
+          "x": 76.5,
+          "y": 76
+        }
+      ],
+      "command_count": 17,
+      "sha256": "6d00e3aafeee9dc3dbbcd7989a0cbfc66eb9e7a0e701378d7c7b7e9cc8230b09"
+    },
+    {
+      "asset": "fragment-001.png",
+      "origin": [
+        2.5,
+        51.0,
+        98.0,
+        12.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 1,
+          "c": [
+            49,
+            54,
+            53
+          ],
+          "h": 12,
+          "liberator_detail": "respirator-housing",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 29,
+          "x": 2.5,
+          "y": 51
+        },
+        {
+          "a": 1,
+          "c": [
+            11,
+            14,
+            14
+          ],
+          "h": 9,
+          "liberator_detail": "respirator-recess",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 25,
+          "x": 4.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            136,
+            35,
+            24
+          ],
+          "h": 4,
+          "liberator_detail": "helghast-lens-rim",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 9,
+          "x": 5.5,
+          "y": 56
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            87,
+            39
+          ],
+          "h": 2,
+          "liberator_detail": "helghast-lens",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7,
+          "x": 6.5,
+          "y": 57
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            190,
+            95
+          ],
+          "h": 1,
+          "liberator_detail": "helghast-lens-core",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 7.5,
+          "y": 58
+        },
+        {
+          "a": 1,
+          "c": [
+            136,
+            35,
+            24
+          ],
+          "h": 4,
+          "liberator_detail": "helghast-lens-rim",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 9,
+          "x": 19.5,
+          "y": 56
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            87,
+            39
+          ],
+          "h": 2,
+          "liberator_detail": "helghast-lens",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 7,
+          "x": 20.5,
+          "y": 57
+        },
+        {
+          "a": 1,
+          "c": [
+            255,
+            190,
+            95
+          ],
+          "h": 1,
+          "liberator_detail": "helghast-lens-core",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 21.5,
+          "y": 58
+        },
+        {
+          "a": 0.8,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 5,
+          "liberator_detail": "respirator-filter",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 5,
+          "x": 14.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            17,
+            20,
+            20
+          ],
+          "h": 0.6,
+          "liberator_detail": "respirator-grille",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 15.5,
+          "y": 52
+        },
+        {
+          "a": 1,
+          "c": [
+            17,
+            20,
+            20
+          ],
+          "h": 0.6,
+          "liberator_detail": "respirator-grille",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 15.5,
+          "y": 53.5
+        },
+        {
+          "a": 1,
+          "c": [
+            17,
+            20,
+            20
+          ],
+          "h": 0.6,
+          "liberator_detail": "respirator-grille",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 15.5,
+          "y": 55
+        },
+        {
+          "a": 1,
+          "c": [
+            168,
+            136,
+            77
+          ],
+          "h": 8,
+          "liberator_detail": "sta52-case",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 34,
+          "x": 41.5,
+          "y": 53
+        },
+        {
+          "a": 1,
+          "c": [
+            219,
+            192,
+            131
+          ],
+          "h": 1,
+          "liberator_detail": "sta52-case-highlight",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 29,
+          "x": 44.5,
+          "y": 59
+        },
+        {
+          "a": 1,
+          "c": [
+            81,
+            70,
+            44
+          ],
+          "h": 8,
+          "liberator_detail": "sta52-extractor",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1,
+          "x": 43.5,
+          "y": 53
+        },
+        {
+          "a": 1,
+          "c": [
+            168,
+            136,
+            77
+          ],
+          "h": 6,
+          "liberator_detail": "sta52-shoulder",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 75.5,
+          "y": 54
+        },
+        {
+          "a": 1,
+          "c": [
+            168,
+            136,
+            77
+          ],
+          "h": 4,
+          "liberator_detail": "sta52-neck",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6,
+          "x": 79.5,
+          "y": 55
+        },
+        {
+          "a": 1,
+          "c": [
+            204,
+            212,
+            210
+          ],
+          "h": 4,
+          "liberator_detail": "sta52-projectile",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 10,
+          "x": 85.5,
+          "y": 55
+        },
+        {
+          "a": 1,
+          "c": [
+            204,
+            212,
+            210
+          ],
+          "h": 2,
+          "liberator_detail": "sta52-projectile-tip",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 5,
+          "x": 95.5,
+          "y": 56
+        }
+      ],
+      "command_count": 19,
+      "sha256": "0935f6dd3a738fea4d88485247e6885b47f7301d2ebef33027c89372ab5d2301"
+    },
+    {
+      "asset": "fragment-002.png",
+      "origin": [
+        -0.5,
+        7.0,
+        102.0,
+        39.0
+      ],
+      "opacity": "panel",
+      "commands": [
+        {
+          "a": 0.4,
+          "c": [
+            8,
+            11,
+            11
+          ],
+          "h": 39,
+          "liberator_detail": "count-recess",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 102,
+          "x": -0.5,
+          "y": 7
+        }
+      ],
+      "command_count": 1,
+      "sha256": "ba1e7b3d54bed389ffe5179f4f0802fdac50426132885a020621b2e87c084afb"
+    },
+    {
+      "asset": "fragment-003.png",
+      "origin": [
+        -4.5,
+        9.0,
+        110.0,
+        37.75
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.35,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 34,
+          "liberator_detail": "count-rail",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1,
+          "x": -0.5,
+          "y": 9
+        },
+        {
+          "a": 0.35,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 34,
+          "liberator_detail": "count-rail",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 1,
+          "x": 100.5,
+          "y": 9
+        },
+        {
+          "a": 0.5,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 0.7,
+          "liberator_detail": "count-seam",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 110,
+          "x": -4.5,
+          "y": 46
+        }
+      ],
+      "command_count": 3,
+      "sha256": "e9e73f79d3d36fcd03ce2281ecfeaf5c61fcfcbbee68e56c3c422708b14e016c"
+    },
+    {
+      "asset": "fragment-004.png",
+      "origin": [
+        9.5,
+        -10.0,
+        82.0,
+        0.5
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.3,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 0.5,
+          "liberator_detail": "magazine-sill",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 82,
+          "x": 9.5,
+          "y": -10
+        }
+      ],
+      "command_count": 1,
+      "sha256": "20a12ececdb41c8b7800b0570ef9d7de7d8e5363891a2d7ffe8b4b784558b6ad"
+    },
+    {
+      "asset": "fragment-005.png",
+      "origin": [
+        -11.5,
+        -27.0,
+        124.0,
+        110.0
+      ],
+      "opacity": "hud",
+      "commands": [
+        {
+          "a": 0.8,
+          "c": [
+            32,
+            35,
+            35
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": -8.5,
+          "y": -24
+        },
+        {
+          "a": 0.65,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": -8,
+          "y": -22.8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            32,
+            35,
+            35
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": -8.5,
+          "y": 77
+        },
+        {
+          "a": 0.65,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": -8,
+          "y": 78.2
+        },
+        {
+          "a": 0.8,
+          "c": [
+            32,
+            35,
+            35
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 106.5,
+          "y": -24
+        },
+        {
+          "a": 0.65,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": 107,
+          "y": -22.8
+        },
+        {
+          "a": 0.8,
+          "c": [
+            32,
+            35,
+            35
+          ],
+          "h": 3,
+          "liberator_detail": "fastener",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 3,
+          "x": 106.5,
+          "y": 77
+        },
+        {
+          "a": 0.65,
+          "c": [
+            132,
+            145,
+            148
+          ],
+          "h": 0.5,
+          "liberator_detail": "fastener-slot",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 2,
+          "x": 107,
+          "y": 78.2
+        },
+        {
+          "a": 0.95,
+          "c": [
+            74,
+            80,
+            78
+          ],
+          "h": 6,
+          "liberator_detail": "armored-corner",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6,
+          "x": -11.5,
+          "y": -27
+        },
+        {
+          "a": 0.9,
+          "c": [
+            230,
+            68,
+            36
+          ],
+          "h": 1,
+          "liberator_detail": "corner-red-mark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -10.5,
+          "y": -25
+        },
+        {
+          "a": 0.95,
+          "c": [
+            74,
+            80,
+            78
+          ],
+          "h": 6,
+          "liberator_detail": "armored-corner",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6,
+          "x": -11.5,
+          "y": 77
+        },
+        {
+          "a": 0.9,
+          "c": [
+            230,
+            68,
+            36
+          ],
+          "h": 1,
+          "liberator_detail": "corner-red-mark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": -10.5,
+          "y": 79
+        },
+        {
+          "a": 0.95,
+          "c": [
+            74,
+            80,
+            78
+          ],
+          "h": 6,
+          "liberator_detail": "armored-corner",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6,
+          "x": 106.5,
+          "y": -27
+        },
+        {
+          "a": 0.9,
+          "c": [
+            230,
+            68,
+            36
+          ],
+          "h": 1,
+          "liberator_detail": "corner-red-mark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 107.5,
+          "y": -25
+        },
+        {
+          "a": 0.95,
+          "c": [
+            74,
+            80,
+            78
+          ],
+          "h": 6,
+          "liberator_detail": "armored-corner",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 6,
+          "x": 106.5,
+          "y": 77
+        },
+        {
+          "a": 0.9,
+          "c": [
+            230,
+            68,
+            36
+          ],
+          "h": 1,
+          "liberator_detail": "corner-red-mark",
+          "liberator_issue": true,
+          "type": "rect",
+          "w": 4,
+          "x": 107.5,
+          "y": 79
+        }
+      ],
+      "command_count": 16,
+      "sha256": "cb4e46469f5d713407f2cca453d1a4844c3b3ccc564582760df641bd0ff4507b"
+    }
+  ],
+  "runtime_factory": "faithful_adapter.lua",
+  "source_factory": "accepted-runtime.lua HUD.layout.compose; Slugger uses frozen accepted-slugger.lua",
+  "baked_opacity": {
+    "hud": 1,
+    "panel": 1
+  },
+  "fallback": "At other opacity settings retain native art or rebake once per settings change. Return original commands unchanged if material/texture absent or any geometry/color/alpha/metadata/order differs. No unsupported state or font flattened.",
+  "material_requirements": {
+    "binding": "artwork_texture t1/s1; scene depth t0/s0 unchanged",
+    "projection": "same panel inverse homography, clipping, depth and occlusion",
+    "sampler": "nearest reference, no independent layer stretch"
+  },
+  "static_commands": 57,
+  "static_quads": 6
+}

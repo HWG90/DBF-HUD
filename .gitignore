@@ -23,7 +23,14 @@ assets/*.material
 !/preview/senator_cylinder_preview.py
 /preview/suite-family/
 /preview/suite-family-scope.json
+assets/faithful-comparison/native-stage/
+assets/faithful-comparison/full-stage/
 
 # Chat-generated visual review gallery stays outside Git.
 /preview/
 /tests/preview.cjs
+
+# Local deployment/recovery artifacts and private native-code captures.
+/dist/*
+/destroy-*.txt
+/hot-panel-art-before-reclaim.lua

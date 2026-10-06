@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "weapon_resource": "be70ee0d8d44028e",
+  "canvas": {
+    "w": 136,
+    "h": 70
+  },
+  "layers": [
+    {
+      "id": "m7s.details",
+      "asset": "details.png",
+      "tags": [
+        "texture-art-proposal"
+      ],
+      "opacity": "hud_opacity",
+      "bounds": "full logical panel via texture_art_box",
+      "aspect": 1.9428571428571428
+    }
+  ],
+  "binding": "artwork_texture t1/s1; preserve scene depth t0/s0; unique material for nonempty art layer",
+  "note": "underlay/recesses intentionally transparent placeholders for creator compatibility; skip them at runtime. Decorative rectangles are not used. Compile/register through DBF-HUD owner pipeline; this is not an engine archive."
+}

@@ -1,0 +1,18 @@
+{
+  "resources": 56,
+  "rectangle_sources": 55,
+  "already_texture_native": 1,
+  "compositions_compared": 980,
+  "textured_compositions_passed": 723,
+  "failed": [],
+  "static_commands": 4394,
+  "ordered_texture_quads": 257,
+  "unknown_contracts_flagged": 10,
+  "deployed": false,
+  "live_verified": false,
+  "comparison_tolerance": "RGBA8 precompositing <=4 RGB code values; exact nonzero alpha silhouette; nearest base-size comparisons also checked",
+  "policy": "Complete ordered run fingerprint guard or full original fallback; no dynamic flattening",
+  "adapter_native_lua_checks": 265,
+  "adapter_cases_using_textures": 135,
+  "opacity_contract": "Baked full HUD/panel opacity only. Other opacity values retain original primitives; rebake once on settings change for an optimized implementation."
+}
