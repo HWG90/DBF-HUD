@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "study_polygon_match": true,
+  "normal_digit_cells": 12,
+  "quiet_digit_cells": 12,
+  "symbols": [
+    "MAGS",
+    "BELTS",
+    "SHELLS",
+    "SINKS",
+    "SHOTS",
+    "TANKS",
+    "PACK",
+    "ENERGY",
+    "HEAT",
+    "AUTO",
+    "RPM",
+    "SAFE",
+    "AMMO",
+    "SINGLE",
+    "UNKNOWN"
+  ],
+  "palette_tintable_white_rgb": true,
+  "open_space_coverage_verified": true,
+  "three_digit_supported": true,
+  "unknown_dash_supported": true,
+  "infinite_energy_symbol": true,
+  "independent_infinity_outline": true,
+  "physical_atlas_dimensions": [
+    2048,
+    1024
+  ],
+  "physical_atlas_bytes": 8388608,
+  "physical_glyph_and_symbol_pixels_verified": true,
+  "normalized_uvs_unchanged": true,
+  "full_uv_coverage": true,
+  "rgba_bytes_verified": true,
+  "no_game_or_native_calls": true
+}

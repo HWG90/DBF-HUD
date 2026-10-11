@@ -22,6 +22,7 @@ function M.recover(p,c,commands,camera,fov,aspect,settings,current_scale)
     end
     local function bounds(cfg)
         local left,bottom,right,top=math.huge,math.huge,-math.huge,-math.huge
+        local front=0
         for _,v in ipairs(HUD.world_style.prepare(commands,p,cfg))do
             local a,b,d,e=v.x,v.y,v.x+(v.w or 0),v.y+(v.h or 0)
             if v.type=='text'then
@@ -32,21 +33,28 @@ function M.recover(p,c,commands,camera,fov,aspect,settings,current_scale)
                 a,b,d,e=math.min(a,point[1]),math.min(b,point[2]),math.max(d,point[1]),math.max(e,point[2])
             end end
             left,bottom,right,top=math.min(left,a),math.min(bottom,b),math.max(right,d),math.max(top,e)
+            if v.spatial_depth~=nil then
+                assert(finite(v.spatial_depth),'HUD spatial depth is unavailable')
+                front=math.max(front,v.spatial_depth/1000)
+            end
         end
         assert(finite(left)and right>left and top>bottom,'HUD bounds are unavailable')
-        return left/1000,bottom/1000,right/1000,top/1000
+        return left/1000,bottom/1000,right/1000,top/1000,front
     end
-    local l,b,r,t=bounds(c);local tan=math.tan(fov*.5);local depth=.65
+    local l,b,r,t,front=bounds(c);local tan=math.tan(fov*.5);local depth=.65
     current_scale=current_scale or 1
     -- Keep the recovered face beside the crosshair with ample viewport margin.
     -- Reduce only this view's saved size if its current dimensions cannot fit.
-    local factor=math.min(1,.96*depth*tan*aspect/(r-l),1.28*depth*tan/(t-b))
+    -- Camera-facing recovery puts every pod on the same XY basis. Fit the
+    -- nearest actual depth conservatively, so floating settings cannot clip.
+    local usable_depth=math.max(.005,depth-front)
+    local factor=math.min(1,.96*usable_depth*tan*aspect/(r-l),1.28*usable_depth*tan/(t-b))
     local scale=clamp(current_scale*factor,.05,3)
     local fitted={};for k,v in pairs(c)do fitted[k]=v end
     fitted.scale=c.scale*scale/current_scale
-    l,b,r,t=bounds(fitted)
-    depth=math.max(depth,(r-l)/(.96*tan*aspect),(t-b)/(1.28*tan))
-    local right=.3*depth*tan*aspect-(l+r)/2
+    l,b,r,t,front=bounds(fitted)
+    depth=math.max(depth,front+(r-l)/(.96*tan*aspect),front+(t-b)/(1.28*tan))
+    local right=.3*(depth-front)*tan*aspect-(l+r)/2
     local up=-(b+t)/2
     local target={}
     for j=1,3 do target[j]=camera[12+j]+camera[j]*right+camera[4+j]*depth+camera[8+j]*up end
@@ -74,7 +82,7 @@ function M.recover(p,c,commands,camera,fov,aspect,settings,current_scale)
         roll=math.atan2(-dot(1,9),dot(9,9));yaw=math.atan2(dot(5,1),dot(5,5))
     else roll=math.atan2(dot(9,1),dot(1,1));yaw=0 end
     offset.rotation,offset.pitch,offset.yaw=math.deg(roll),math.deg(pitch),math.deg(yaw)
-    return offset,{depth=depth,target=target,margin=.08}
+    return offset,{depth=depth,target=target,margin=.08,nearest_depth=depth-front}
 end
 function M.apply_recovery(self,offset)
     local resource=self.weapon_pose and self.weapon_pose.resource_hex

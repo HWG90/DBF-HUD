@@ -64,10 +64,33 @@ function M.start(sr,backend,options)
         if cfg.weapon_panel_overrides then
             local resolved={};for k,v in pairs(cfg)do resolved[k]=v end;for k,v in pairs(cfg.weapon_panel_overrides)do resolved[k]=v end;cfg=resolved
         end
-        if cfg.presentation_view=='third' then return HUD.view_presentation.compose(m,x,y,scale,opacity,cfg)end
+        if cfg.presentation_view=='third' and not HUD.split_hud.selected(cfg)then return HUD.view_presentation.compose(m,x,y,scale,opacity,cfg)end
         cfg=HUD.config.texture_policy(cfg)
         if cfg.shader_layers~=nil then cfg.effect_scanlines=false;cfg.effect_flicker=false;cfg.effect_sweep=false;cfg.theme_shader='none';cfg.effect_shader='none' end
         cfg.style_clock=clock
+        if HUD.split_hud.selected(cfg)and HUD.split_hud.supported(m.resource_hex)then
+            if not HUD.split_hud.assets_ready(hot_panel_art.resource,sr.Application.can_get)then
+                if not self.split_texture_request and rawget(_G,'HUDRenderBridge')then
+                    local stats=hot_panel_art.stats()
+                    if not stats.pending and not stats.failed then
+                        local ok,why=pcall(hot_panel_art.reload);self.split_texture_request=ok
+                        if backend.log then pcall(backend.log,'SPLIT_TEXTURE_LOAD '..tostring(ok)..' '..tostring(why))end
+                    end
+                end
+            else
+                if rawget(_G,'HUDRenderBridge')then
+                    local edge=HUD.edge_mask.settings(cfg)
+                    local hard,face=hot_panel_art.image(HUD.split_hud_assets.hard_coverage),hot_panel_art.image(HUD.split_hud_assets.face)
+                    local ok,why=pcall(hot_panel_art.request_generated,'split:'..HUD.edge_mask.signature(edge),function()return HUD.edge_mask.split_images(edge,hard,face)end)
+                    if not ok and not self.split_edge_error then self.split_edge_error=true;if backend.log then pcall(backend.log,'SPLIT_MASK_LOAD_FAILED '..tostring(why))end end
+                end
+                local out=HUD.split_hud.compose(m,x,y,scale,opacity,cfg,clock,hot_panel_art.resource,sr.Application.can_get)
+                if out then
+                    if self.split_logged_resource~=m.resource_hex then self.split_logged_resource=m.resource_hex;if backend.log then pcall(backend.log,'SPLIT_HUD_ACTIVE weapon='..m.resource_hex..' settings='..tostring(#HUD.split_hud.readouts(m,cfg,clock).contexts))end end
+                    return out
+                end
+            end
+        end
         local family=HUD.ballistic_family.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource,sr.Application.can_get)
         local primary=HUD.segmented_primary_specs and HUD.segmented_primary_specs[m.resource_hex]and HUD.segmented_fancy
         local needs_texture=primary and not HUD.segmented_fancy.assets_ready(hot_panel_art.resource)
@@ -154,6 +177,7 @@ function M.start(sr,backend,options)
     projection.poll=timed('camera_projection',projection.poll)
     local latest_raw;local next_sample=0;local model;local anchor;local anchor_at=-10;local provider;local failures=0
     function self.texture_commands()
+        if self.photo_hidden then return nil end
         if not model then return nil end
         local cfg=HUD.config.effective(self.config,model.resource_hex)
         cfg.font='bigblue';cfg.frosted=false
@@ -166,7 +190,7 @@ function M.start(sr,backend,options)
         local cfg=HUD.config.effective(self.config,preview_model.resource_hex)
         cfg.presentation_view=cfg.hud_presentation=='practical' and 'third' or (cfg.hud_presentation=='weapon_specific' and 'first' or self.presentation_view or 'first')
         if cfg.presentation_view~='third'and HUD.config.segmented_eligible(cfg,preview_model.resource_hex)then cfg=HUD.config.segmented_appearance(cfg,preview_model.resource_hex)end
-        if cfg.presentation_view=='third' then cfg.style_3d='standard';cfg.shader_layers={};cfg.theme_shader='none';cfg.effect_shader='none' end
+        if cfg.presentation_view=='third'and not HUD.split_hud.selected(cfg)then cfg.style_3d='standard';cfg.shader_layers={};cfg.theme_shader='none';cfg.effect_shader='none' end
         if cfg.anchor_mode~='world' then cfg.style_3d='standard' end
         cfg.frosted=false;cfg.placement_mode='manual'
         local commands=compose(preview_model,0,0,2,1,cfg,self.clock)
@@ -448,6 +472,7 @@ function M.start(sr,backend,options)
     function self.panel_settings(resource)
         resource=resource or self.appearance_weapon()
         local cfg=HUD.config.effective(self.config,resource)
+        if HUD.split_hud.selected(cfg)then return cfg end
         if self.config.hud_presentation~='practical'and HUD.config.segmented_eligible(cfg,resource)then return HUD.config.segmented_appearance(cfg,resource)end
         local selected_model=self.appearance_model(resource)
         -- Read the actual themed commands; fetching is presentation-only, never a save.
@@ -482,6 +507,18 @@ function M.start(sr,backend,options)
         HUD.config.set_panel(self.config,resource or self.appearance_weapon(),values);self.appearance_revision=(self.appearance_revision or 0)+1
     end
     function self.export_tuning() return HUD.config.serialize(self.config) end
+    function self.use_split_defaults()
+        self.configure(HUD.config.split_defaults)
+        self.weapon_clearance={};self.auto_mounts={}
+        if self.layout_editor then self.layout_editor.active=false end
+        if backend.write_weapon_offsets then
+            local ok,why=pcall(backend.write_weapon_offsets,HUD.weapon_offsets.serialize(self.weapon_clearance))
+            if not ok then return false,tostring(why)end
+        end
+        local ok,message=self.save_tuning()
+        log('SPLIT_DEFAULTS applied='..tostring(ok)..' previous_appearance_choices_replaced=true')
+        return ok,message
+    end
     function self.save_tuning()
         if not backend.write_tuning then self.tuning_status='file writer unavailable';return false end
         local ok,result=pcall(backend.write_tuning,self.export_tuning())
@@ -607,7 +644,7 @@ function M.start(sr,backend,options)
         cfg.presentation_view=self.presentation_view or(self.first_person and'first'or'third')
         cfg.scale=self.config.scale*(current.scale or 1)
         cfg.keep_hud_upright=self.config.keep_hud_upright
-        if cfg.presentation_view=='third'then
+        if cfg.presentation_view=='third'and not HUD.split_hud.selected(cfg)then
             cfg.scale=cfg.scale*self.config.third_person_scale;cfg.style_3d='standard';cfg.shader_layers={}
             cfg.theme_shader='none';cfg.effect_shader='none';cfg.effect_scanlines=false;cfg.effect_sweep=false;cfg.effect_flicker=false
         end
@@ -940,7 +977,7 @@ function M.start(sr,backend,options)
         self.aim_opacity=aim_opacity
         -- Presentation selects artwork; the requested WorldGUI placement must
         -- reach the weapon renderer even when Automatic selects practical art.
-        if self.presentation_view=='third' and self.config.anchor_mode~='world' then
+        if self.presentation_view=='third' and self.config.anchor_mode~='world'and not HUD.split_hud.selected(HUD.config.effective(self.config,model.resource_hex))then
             world_display.release();if screen_scene then screen_scene.release()end
             local cfg=HUD.config.effective(self.config,model.resource_hex);cfg.presentation_view='third'
             local unit=h/1080;local scale=unit*self.config.scale*self.config.third_person_scale
@@ -955,7 +992,7 @@ function M.start(sr,backend,options)
             local world_config=HUD.config.effective(self.config,model.resource_hex)
             world_config.presentation_view=self.presentation_view
             world_config.scale=self.config.scale*(self.profile_scale or 1)
-            if self.presentation_view=='third' then
+            if self.presentation_view=='third'and not HUD.split_hud.selected(world_config)then
                 world_config.scale=world_config.scale*self.config.third_person_scale
                 world_config.style_3d='standard';world_config.shader_layers={}
                 world_config.theme_shader='none';world_config.effect_shader='none'
@@ -1079,7 +1116,7 @@ function M.start(sr,backend,options)
         local screen_config=HUD.config.effective(self.config,model.resource_hex)
         screen_config.presentation_view=self.presentation_view
         if self.presentation_view~='third'and HUD.config.segmented_eligible(screen_config,model.resource_hex)then screen_config=HUD.config.segmented_appearance(screen_config,model.resource_hex)end
-        if self.presentation_view=='third' then
+        if self.presentation_view=='third'and not HUD.split_hud.selected(screen_config)then
             scale=scale*self.config.third_person_scale
             screen_config.style_3d='standard';screen_config.shader_layers={}
             screen_config.theme_shader='none';screen_config.effect_shader='none'
@@ -1117,7 +1154,16 @@ function M.start(sr,backend,options)
     frame_trial=options and options.frame_trial and {elapsed=0,phase=1,frames=0,max=0,over33=0,over50=0,total=0,cpu_max=0,buckets={}} or nil
     if frame_trial then profile=nil end
     local control_requests=HUD.control_requests.new(self,assert(os.getenv('LOCALAPPDATA'))..'/DBF')
+    function self.set_photo_hidden(value)
+        if self.photo_hidden==(value and true or false)then return end
+        self.photo_hidden=value and true or false
+        if self.photo_hidden then
+            if screen_scene then screen_scene.release()end
+            world_display.release();world_probe.release();view.release()
+        end
+    end
     function self.tick(dt)
+        if self.photo_hidden then return end
         if not retired then control_requests.poll()end
         if frame_trial and not retired then
             local t=frame_trial;local delta=math.max(0,dt or 0)

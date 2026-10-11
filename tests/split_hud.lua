@@ -1,0 +1,189 @@
+-- Study 08 presentation contracts. Offline LuaJIT only; no game/native calls.
+HUD={weapon_names=dofile('src/weapon_names.lua'),segmented_primary_specs=dofile('src/segmented_primary_specs.lua'),native_font_data=dofile('src/native_font_data.lua')}
+HUD.config=dofile('src/config.lua');HUD.font=dofile('src/font.lua');HUD.model=dofile('src/model.lua');HUD.layout=dofile('src/layout.lua')
+HUD.edge_mask=dofile('src/edge_mask.lua');HUD.split_hud_assets=dofile('src/split_hud_assets.lua')
+HUD.split_hud=dofile('src/split_hud.lua')
+local S,A=HUD.split_hud,HUD.split_hud_assets
+local function finite(n)return type(n)=='number'and n==n and math.abs(n)<math.huge end
+local function near(a,b,message)assert(finite(a)and math.abs(a-b)<1e-8,message or 'geometry differs from Study 08')end
+local function copy(t)local q={};for k,v in pairs(t or {})do q[k]=v end;return q end
+local function equal(a,b)if type(a)~=type(b)then return false end;if type(a)~='table'then return a==b end;for k,v in pairs(a)do if not equal(v,b[k])then return false end end;for k in pairs(b)do if a[k]==nil then return false end end;return true end
+local function role(out,name)local q={};for _,v in ipairs(out)do if v.split_role==name then q[#q+1]=v end end;return q end
+local function text(out,str,name)for _,v in ipairs(out)do if v.type=='text'and v.text==str and(not name or v.split_role==name)then return v end end end
+local function chars(out)local q={};for _,v in ipairs(role(out,'loaded'))do if v.digit_character and not v.outline then q[#q+1]=v.digit_character end end;return table.concat(q)end
+local resources={};for _,name in ipairs({A.face,A.atlas,A.coverage,A.hard_coverage})do resources[name]=true end
+local function resource(name)return resources[name]end
+local function can_get(kind,name)return kind=='material'and name==A.material end
+local function config(extra)local c=HUD.config.new();c.texture_art_trial=true;c.texture_art_variant='split';c.hud_presentation='fancy';c.font='hack';c.font_scale=1;c.panel_opacity=.35;c.split_readout_view='combat';c.panel_spatial_depth=16;c.decoration='split';c.text_color='#F5F6F0';c.decoration_color='#E9C45D';c.background_color='#091B35';c.heat_red='#FF5750';c.heat_yellow='#E9C45D';for k,v in pairs(extra or {})do c[k]=v end;return c end
+local function model(extra)local m={resource_hex='968211c0033dce64',kind='magazine',value=27,capacity=45,reserve=6,reserve_kind='MAGS',fire_mode='AUTO',state='READY',fraction=.6};for k,v in pairs(extra or {})do m[k]=v end;return m end
+local function compose(m,cfg,clock,x,y,scale,opacity)return assert(S.compose(m,x or 0,y or 0,scale or 1,opacity or 1,cfg or config(),clock or 0,resource,can_get),'Split composer unexpectedly unavailable')end
+local function numeric(out)
+ local q={};for _,v in ipairs(role(out,'loaded'))do if v.type=='texture'and v.digit_character and not v.outline then q[#q+1]=v end end;return q
+end
+local function count_images(out)local n=0;for _,v in ipairs(out)do if v.type=='texture'then n=n+1 end end;return n end
+
+-- Assets retain the selected glyphs while fitting the established image budget.
+assert(A.width==320 and A.height==161 and A.gameplay_scale==.7)
+assert(A.atlas_width==1024 and A.atlas_height==512 and equal(A.atlas_pixel_dimensions,{2048,1024}),'Physical 2x raster changed logical UV coordinates')
+assert(equal(A.digit_uv(4,false),{328/1024,8/512,72/1024,118/512}))
+assert(equal(A.digit_uv(0,true),{8/1024,144/512,72/1024,118/512}))
+assert(equal(A.outline_uv(4),{328/1024,384/512,72/1024,118/512}))
+assert(equal(A.quiet_zero_outline_uv,{800/1024,264/512,72/1024,118/512}),'Quiet-zero outline must preserve .075 inactive strokes')
+assert(A.infinity and A.infinity_outline,'Infinite energy needs an authored sprite and independent outline')
+for _,kind in ipairs({'MAGS','BELTS','SHELLS','SINKS','SHOTS','TANKS','PACK','ENERGY','HEAT','AUTO','RPM','SAFE','AMMO','SINGLE'})do assert(A.icons[kind],'Typed symbol missing: '..kind)end
+for _,kind in ipairs({'AUTO','RPM','AMMO','SAFE','SINGLE'})do assert(A.context_nodes[kind]and A.inspect_context_nodes[kind],'Combined combat/inspect setting node missing: '..kind)end
+
+for _,settings in ipairs({{hud_presentation='practical'},{texture_art_trial=false},{force_all_hud_texture_off=true},{texture_art_variant='original'},{texture_art_variant='faithful'}})do
+ assert(not S.compose(model(),0,0,1,1,config(settings),0,resource,can_get),'Existing alternate/Simple selection was overridden')
+end
+assert(not S.compose(model(),0,0,1,1,config(),0,nil,can_get),'Missing resource callback must fall back')
+assert(not S.compose(model(),0,0,1,1,config(),0,resource,function()return false end),'Missing material must fall back')
+resources[A.atlas]=false;assert(not S.compose(model(),0,0,1,1,config(),0,resource,can_get),'False atlas handle treated as ready');resources[A.atlas]=true
+assert(not S.compose(model({resource_hex='ffffffffffffffff'}),0,0,1,1,config(),0,resource,can_get),'Unknown identity was silently adopted')
+
+local base=compose(model());assert(base[1].type=='panel'and base[1].a==0 and base[1].w==320 and base[1].h==161 and base[1].hud_texture_split)
+local digits=numeric(base);assert(#digits==2,'Combat number has an unnecessary leading register')
+for i,v in ipairs(digits)do near(v.x,88+(i-1)*76*48/118);near(v.y,60);near(v.w,72*48/118);near(v.h,48);assert(equal(v.atlas_rect,A.digit_uv(tonumber(v.digit_character),false)),'Selected glyph crop changed')end
+assert(chars(base)=='27'and text(base,'/ 45')and text(base,'6','reserve')and text(base,'MAGS')and text(base,'AUTO','context'))
+assert(text(base,'AR-23')and text(base,'ROUNDS'),'Study identity/resource hierarchy was lost')
+local scaled=compose(model(),nil,0,10,20,.7,.8);local dscaled=numeric(scaled)
+near(scaled[1].w,224);near(scaled[1].h,112.7);near(dscaled[1].x,10+88*.7);near(dscaled[1].y,20+60*.7);near(dscaled[1].h,33.6)
+local gauge=role(base,'gauge');assert(#gauge>=1,'Immediate resource proportion is missing')
+near(role(base,'gauge_inactive')[1].a,1,'Study gauge opacity is already encoded in its sprite and must not be applied twice')
+near(role(base,'reserve')[1].a,1,'Study reserve-connector opacity is already encoded in its sprite and must not be applied twice')
+local full=role(base,'backing')[1];assert(full and full.coverage_mask and equal(full.atlas_rect,{0,0,1,1}),'Existing shader carrier must retain full UVs')
+local transparent=compose(model(),config({panel_opacity=0}));assert(role(transparent,'backing')[1].a==0)
+for i,v in ipairs(base)do if v.split_role~='backing'then assert(equal(v,transparent[i]),'Panel opacity changed crisp foreground')end end
+for _,size in ipairs({.25,1,4})do local c=role(compose(model(),config({theme_shader_scale=size})),'backing')[1];assert(equal(c.atlas_rect,{0,0,1,1}),'Pattern scale changed shader UVs')end
+for _,v in ipairs(base)do assert(v.type~='rect','Authored Split artwork regressed to Lua rectangles');assert(type(v.spatial_plane)=='string','3D grouping is missing')end
+
+local families={
+ magazine=model(),
+ belt=model({resource_hex='11c27d3babb38956',value=146,capacity=175,reserve=2,reserve_kind='BELTS',fire_mode=false,rpm=760,rpm_selectable=true,fraction=146/175}),
+ shells=model({resource_hex='41eac4a03987faa0',kind='rounds',value=9,capacity=16,reserve=34,reserve_kind='SHELLS',fire_mode=false,fraction=9/16}),
+ heat=model({resource_hex='8645f167b3c813a2',kind='heat',value=38,capacity=false,reserve=3,reserve_kind='SINKS',fire_mode=false,fraction=.38}),
+ charge=model({resource_hex='2e9d0bdc48b09e60',kind='rounds',value=1,capacity=1,reserve=16,reserve_kind='SHOTS',fire_mode=false,safety_mode='SAFE',charge_fraction=.68*.7,fraction=1}),
+ ammo=model({resource_hex='9f80d67a12a7e40f',kind='rounds',value=1,capacity=1,reserve=5,reserve_kind='PACK',fire_mode=false,ammo_mode='HEAT',fraction=1}),
+ expendable=model({resource_hex='b2b5e0d185605f9e',kind='rounds',value=1,capacity=1,reserve=false,reserve_kind=false,fire_mode=false,reloadable=false,fraction=1}),
+ fuel=model({resource_hex='4fb0f8c02f55c82b',kind='resource',label='FUEL',value=65,capacity=80,reserve=3,reserve_kind='TANKS',fire_mode=false,fraction=65/80}),
+ infinite=model({resource_hex='076dd5d4f4360204',kind='infinite',value='--',capacity=false,reserve=false,reserve_kind=false,fire_mode=false,fraction=1})
+}
+local max_images,cases=0,0
+for name,m in pairs(families)do for _,view in ipairs({'combat','inspect'})do
+ local out=compose(m,config({split_readout_view=view}));local image_count=count_images(out);max_images=math.max(max_images,image_count);assert(image_count<=20,'Established four-shader image budget exceeded: '..name)
+ local expected_h=view=='inspect'and 178 or 161;assert(out[1].h==expected_h and out[1].w==(view=='inspect'and 410 or 320),'Study detail canvas changed')
+ if m.reserve~=false then assert(text(out,tostring(m.reserve),'reserve')and text(out,m.reserve_kind),'Native reserve count/unit was changed: '..name)else assert(#role(out,'reserve')==0,'Unsupported reserve was fabricated: '..name)end
+ if name=='shells'then assert(#role(out,'context')==0,'Fixed fire mode invented a selector row')end
+ if name=='fuel'then assert(text(out,'FUEL'),'Fuel renamed to generic ammunition')end
+ if name=='heat'then assert(text(out,'HEAT')and text(out,'%'),'Heat reading needs clear resource/percentage semantics')end
+ if name=='charge'then assert(chars(out)=='68'and text(out,'1 LOADED')and text(out,'SAFE','context'),'Charge priority/loaded shot/safety were conflated')end
+ if name=='expendable'then local supply=text(out,'SINGLE USE','context')or(text(out,'SINGLE','context')and text(out,'USE','context'));assert(supply and not text(out,'/ 1'),'Single use invented spare capacity')end
+ if name=='infinite'then local symbol,outline_index,symbol_index=false;for i,v in ipairs(role(out,'loaded'))do if equal(v.atlas_rect,A.infinity.uv)then symbol=true;symbol_index=i elseif v.outline then outline_index=i end end;assert(symbol and not text(out,'/ 0'),'Infinite supply must remain a symbol');assert(outline_index and outline_index<symbol_index,'The thick navy infinity outline covers the luminous energy symbol')end
+ cases=cases+1
+end end
+-- Exercise the actual provider-to-model boundary too; presentation samples alone
+-- cannot prove native units, selectable fields, and single-use state survive it.
+local provider_cases={
+ {'magazine',{resource_hex='968211c0033dce64',kind='magazine',rounds=27,capacity=45,reserve=6,reserve_kind='MAGS',fire_mode='AUTO'},27,'ROUNDS'},
+ {'belt',{resource_hex='11c27d3babb38956',kind='magazine',rounds=146,capacity=175,reserve=2,reserve_kind='BELTS',rpm=760,rpm_selectable=true},146,'ROUNDS'},
+ {'shells',{resource_hex='41eac4a03987faa0',kind='rounds',rounds=9,capacity=16,reserve=34,reserve_kind='SHELLS'},9,'SHELLS'},
+ {'heat',{resource_hex='8645f167b3c813a2',kind='heat',heat=.38,reserve=3,reserve_kind='SINKS'},38,'HEAT'},
+ {'charge',{resource_hex='2e9d0bdc48b09e60',kind='rounds',rounds=1,capacity=1,reserve=16,reserve_kind='SHOTS',safety_mode='SAFE',charge_fraction=.476},68,'CHARGE'},
+ {'ammo',{resource_hex='9f80d67a12a7e40f',kind='rounds',rounds=1,capacity=1,reserve=5,reserve_kind='PACK',ammo_mode='HEAT'},1,'LOADED'},
+ {'expendable',{resource_hex='b2b5e0d185605f9e',kind='rounds',rounds=1,capacity=1,reloadable=false},1,'LOADED'},
+ {'fuel',{resource_hex='4fb0f8c02f55c82b',kind='resource',rounds=65,capacity=80,label='FUEL',reserve=3,reserve_kind='TANKS'},65,'FUEL'},
+ {'infinite',{resource_hex='076dd5d4f4360204',kind='infinite'},false,'ENERGY'}
+}
+for _,case in ipairs(provider_cases)do
+ local name,raw,expected_value,label=unpack(case);local normalized=assert(HUD.model.normalize(raw));local r=S.readouts(normalized,config())
+ assert(r.value==(expected_value or nil)and r.label==label,'Provider-normalized readout changed: '..name)
+ assert(r.reserve==raw.reserve and r.unit==raw.reserve_kind,'Provider reserve unit/count changed: '..name)
+ if raw.reloadable==false then assert(normalized.reloadable==false and r.sub=='ONE SHOT','Single-use provider flag was discarded')end
+ if raw.rpm then assert(normalized.rpm==raw.rpm and r.contexts[1].kind=='RPM','Verified selectable RPM was discarded')end
+ compose(normalized)
+end
+local mixed=model({value=123,capacity=200,reserve=8,reserve_kind='BELTS',fire_mode='AUTO',rpm=900,rpm_selectable=true,ammo_mode='HE',safety_mode='UNSAFE',fraction=123/200})
+for _,view in ipairs({'combat','inspect'})do
+ local out=compose(mixed,config({split_readout_view=view}));assert(chars(out)=='123'and text(out,'AUTO','context')and text(out,'900 RPM','context')and text(out,'HE','context')and text(out,'UNSAFE','context'),'Four independent selected settings were collapsed')
+ if view=='inspect'then for _,s in ipairs({'FIRE SELECT','FIRE RATE','AMMUNITION','SAFETY'})do assert(text(out,s),'Inspect setting name missing: '..s)end end
+ assert(count_images(out)<=20,'Mixed capability specimen exhausted shader budget')
+end
+
+local chamber=model({value=46,chamber_bonus=1,fraction=1});local chamber_out=compose(chamber);assert(chars(chamber_out)=='46'and text(chamber_out,'CHAMBERED +1','status'),'Reader-owned chamber count/status changed')
+assert(not text(compose(model({value=46,fraction=1})),'CHAMBERED +1'),'Chamber bonus inferred without native flag')
+local verified=HUD.model.normalize({resource_hex='968211c0033dce64',kind='magazine',rounds=46,capacity=45,reserve=6,reserve_kind='MAGS',chamber_supported=true,chamber_rounds=1});assert(verified.chamber_bonus==1 and chars(compose(verified))=='46','Normalized native chamber value was altered')
+local empty=model({value=0,fraction=0,state='EMPTY'});local bright,dim=compose(empty,nil,0),compose(empty,nil,.25);assert(text(bright,'EMPTY','status')and chars(bright)=='00')
+local changed=0;for i,v in ipairs(bright)do if not equal(v,dim[i])then changed=changed+1;assert(v.split_role=='loaded','Empty flash affected a non-counter element');if not v.outline then assert(v.c[1]==255 and v.c[2]==87 and v.c[3]==80,'Empty counter is not red')end;near(dim[i].a,v.a*.22,'Empty pulse is not bounded')end end
+assert(changed>0 and equal(bright,compose(empty,nil,.5)),'Empty counter must flash at 2Hz')
+assert(equal(bright,compose(empty,config({reduced_motion=true}),.25)),'Reduced motion unexpectedly flashed')
+assert(equal(compose(model()),compose(model(),nil,.25)),'Refilled counter retained empty flash')
+local spent=copy(families.expendable);spent.value=0;spent.fraction=0;spent.state='SPENT';assert(text(compose(spent),'SPENT','status'),'Expendable empty state lost SPENT')
+local unknown=model({value=false,capacity=false,reserve=false,fraction=false,unknown=true});local out=compose(unknown);assert(chars(out)=='--'and text(out,'NO DATA','status'),'Unknown reading turned into zero')
+assert(equal(out,compose(unknown,nil,.25)),'Unknown data falsely flashed as empty')
+local hot=copy(families.heat);hot.value=100;hot.fraction=1;hot.state='VENT';hot.warning=true;assert(text(compose(hot),'VENTING','status')or text(compose(hot),'VENT','status'),'Native venting state disappeared')
+assert(equal(compose(hot,nil,0),compose(hot,nil,.25)),'Heat venting was treated as empty ammunition')
+local hot_gauge=role(compose(hot),'gauge')[1];assert(hot_gauge.c[1]==255 and hot_gauge.c[2]==87 and hot_gauge.c[3]==80,'Venting gauge lost the Study danger color')
+local quasar=model({resource_hex='35a61296619cc47e',kind='heat',value=68,capacity=false,reserve=3,reserve_kind='SINKS',fire_mode=false,fraction=.68,quasar_charge_verified=true});local qout=compose(quasar);assert(text(qout,'CHARGE')and not text(qout,'HEAT'),'Verified Quasar charge mislabeled as heat')
+assert(not S.readouts(quasar,config()).sub:find('LOADED',1,true),'Quasar charge percentage was fabricated into loaded ammunition')
+assert(#role(qout,'reserve')==0,'Quasar fabricated a replaceable heat-sink reserve')
+local arbitrary=model({resource_hex='30061f91af477f5e',charge_fraction=.5});assert(not text(compose(arbitrary),'CHARGING'),'Unverified generic charge field became a charge reading')
+local fixed=HUD.model.normalize({resource_hex='11c27d3babb38956',kind='magazine',rounds=146,capacity=175,rpm=760,rpm_selectable=false});assert(not fixed.rpm,'Fixed RPM became a selectable setting')
+local danger=assert(HUD.model.normalize({resource_hex='2e9d0bdc48b09e60',kind='rounds',rounds=1,capacity=1,reserve=16,reserve_kind='SHOTS',safety_mode='UNSAFE',charge_fraction=.976,charge_seconds=2.8}))
+danger.charge_sample_clock=5;danger.charge_frame_delay=1/60
+assert(text(compose(danger,nil,5.05),'RELEASE','status'),'Verified unsafe reaction margin was lost by the new readout')
+assert(not text(compose(danger,nil,5.3),'RELEASE','status'),'Stale unsafe timer fabricated a release warning')
+local loose=compose(model({reserve=250,reserve_kind='ROUNDS'}));assert(text(loose,'250','reserve')and text(loose,'ROUNDS'),'Large loose reserve got converted into magazines')
+local wide=compose(model({value=100000,capacity=100000,reserve=100000,reserve_kind='ROUNDS'}));assert(text(wide,'100000','loaded')and text(wide,'/ 100000','capacity')and text(wide,'100000','reserve'),'Large native counts were clipped or replaced by estimates')
+local no_decor=compose(model(),config({decoration='none'}));assert(#role(no_decor,'decoration')==0 and chars(no_decor)=='27','None decoration was overridden by baked artwork')
+local deep=compose(model(),config({panel_spatial_depth=32}));local flat=compose(model(),config({panel_spatial_depth=0}));local plane_depth={main=32,reserve=-16,context=57.6,status=0}
+for _,v in ipairs(deep)do near(v.spatial_depth,plane_depth[v.spatial_plane],'Study spatial separation changed')end
+for _,v in ipairs(flat)do near(v.spatial_depth,0,'Zero depth did not flatten the open cluster')end
+local no_mutation=config();local before=copy(no_mutation);compose(model(),no_mutation);assert(equal(before,no_mutation),'Composer mutated saved settings')
+print('PASS Split Study08: '..cases..' family/view compositions + '..#provider_cases..' native provider cases, exact two/three-digit geometry, native units/chamber/charge/unsafe timing, independent settings, full-UV shader carrier, unknown/empty states, decoration/depth controls and image budget (max '..max_images..')')
+
+-- Optional snapshot of actual production commands and retained native glyph UVs.
+-- This path only writes an explicitly requested offline review directory.
+local export=os.getenv('DBF_HUD_SPLIT_PREVIEW')
+if export then
+ HUD.native_font_uv=dofile('src/native_font_uv.lua')
+ local folder=export:match('^(.*)[/\\][^/\\]+$')or'.'
+ local function json(v)
+  if type(v)=='string'then return '"'..v:gsub('\\','\\\\'):gsub('"','\\"'):gsub('\n','\\n'):gsub('\r','\\r')..'"'end
+  if type(v)=='number'or type(v)=='boolean'then return tostring(v)end
+  assert(type(v)=='table','Unsupported snapshot field');local out={}
+  if #v>0 then for _,q in ipairs(v)do out[#out+1]=json(q)end;return '['..table.concat(out,',')..']'end
+  for k,q in pairs(v)do out[#out+1]=json(tostring(k))..':'..json(q)end;return '{'..table.concat(out,',')..'}'
+ end
+ local inputs={};local manifest=assert(io.open('assets/split-hud/manifest-additions.tsv','rb'))
+ for line in manifest:lines()do
+  local name,w,h,file=line:match('^(%S+)\t(%d+)\t(%d+)\t(%S+)')
+  if name then local f=assert(io.open('assets/split-hud/'..file,'rb'));inputs[name]={width=tonumber(w),height=tonumber(h),rgba=f:read('*a')};f:close()end
+ end;manifest:close()
+ local palette=config({panel_edge_softness=7,panel_edge_dither=40,panel_edge_grain=2,panel_edge_curve=1})
+ local generated=HUD.edge_mask.split_images(HUD.edge_mask.settings(palette),inputs.split_hud_hard_coverage_v1,inputs.split_hud_face_v1)
+ local generated_meta={};for name,p in pairs(generated.images)do
+  local file=name..'.rgba';local f=assert(io.open(folder..'/'..file,'wb'));f:write(p.rgba);f:close()
+  resources['mods/dbf_hud/textures/'..name]=true
+  generated_meta[name]={filename=file,width=p.width,height=p.height,bytes=#p.rgba}
+ end
+ local scenes={}
+ local function scene(key,m,cfg,clock)
+  local out=compose(m,cfg or palette,clock or 0)
+  for _,v in ipairs(out)do if v.type=='text'then
+   local face=HUD.native_font_data.faces[v.font];local uv=HUD.native_font_uv[v.font];local factor=v.size/face.em;local advance=0;v.preview_glyphs={}
+   for i=1,#v.text do
+    local code=v.text:byte(i);local g=face.glyphs[code]or face.glyphs[63];local coords=uv[code]or uv[63]
+    local w,h=(g[4]-g[2])*factor,(g[5]-g[3])*factor
+    if w>0 and h>0 then v.preview_glyphs[#v.preview_glyphs+1]={x=v.x+advance+g[2]*factor,y=v.y+g[3]*factor,w=w,h=h,atlas_rect={coords[1],coords[2],coords[3]-coords[1],coords[4]-coords[2]}}end
+    advance=advance+g[1]*factor
+   end
+  end end
+  scenes[key]={width=out[1].w,height=out[1].h,commands=out}
+ end
+ scene('ready',model());scene('chamber',chamber);scene('empty',empty);scene('empty-dim',empty,nil,.25);scene('unknown',unknown)
+ scene('mixed',mixed);scene('mixed-inspect',mixed,config({split_readout_view='inspect',panel_edge_softness=7,panel_edge_dither=40,panel_edge_grain=2,panel_edge_curve=1}))
+ for name,m in pairs(families)do scene('family-'..name,m)end
+ local output={scenes=scenes,generated=generated_meta,font='hack',palette=palette,flat_review=true,spatial_depths_preserved_in_commands=true}
+ local f=assert(io.open(export,'wb'));f:write(json(output));f:close()
+ print('Exported '..export..' from actual Split compositor/native Hack glyph metrics')
+end

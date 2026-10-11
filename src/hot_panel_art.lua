@@ -24,6 +24,37 @@ function M.new(sr,backend,root)
  local registered={}
  local native,off,busy,job,pool,restore_requested,after_close,desired;local frame=0;local serial=store.serial or 0
  local generated_name='primary_edge_mask_dynamic_v2'
+ local generated_allowed={primary_edge_mask_dynamic_v2=true,split_hud_dynamic_coverage_v1=true,split_hud_dynamic_face_v1=true,split_hud_dynamic_soft_v1=true}
+ -- Migrate a published mask from the earlier single-image implementation.
+ if not store.generated_names then
+  store.generated_names={};if store.active[generated_name]then store.generated_names[generated_name]=true end
+ end
+ local function generated_ready(signature)
+  if store.generated_signature~=signature or not next(store.generated_names)then return false end
+  for name in pairs(store.generated_names)do
+   local r=store.active[name]
+   if not(r and r.ready and r.uploaded and r.consumed and r.resource)then return false end
+  end
+  return true
+ end
+ local function generated_items(result)
+  local images=result and result.images
+  if images==nil then images={[generated_name]=result}end
+  assert(type(images)=='table','Generated images required')
+  local names={};for name in pairs(images)do assert(generated_allowed[name],'Generated image name not allowed');names[#names+1]=name end
+  assert(#names>0 and #names<=4,'Generated image batch must contain one to four images');table.sort(names)
+  local items,published,total,unique={},{},0,{}
+  for _,name in ipairs(names)do
+   local image=images[name];local bytes=HUD.runtime_textures.validate(image)
+   local size=image.width..'x'..image.height;unique[size]=unique[size]or {}
+   if not unique[size][image.rgba] and not cached(image)then total=total+bytes end
+   unique[size][image.rgba]=true
+   items[#items+1]={name=name,image={format='RGBA8',width=image.width,height=image.height,row_pitch=image.row_pitch,rgba=image.rgba}}
+   published[name]=true
+  end
+  assert(store.bytes+total<=HUD.runtime_textures.max_retained_bytes,'Hot artwork budget exhausted; restart required')
+  return items,published
+ end
  local function trace(v)
   local line='HOT_ART_STAGE staged_v3 job='..serial..' frame='..frame..' '..v
   local f=io.open(root..'/upload-stages.log','a')
@@ -67,7 +98,7 @@ function M.new(sr,backend,root)
     local before=store.bytes;pool.step()
     if store.bytes<before then trace('reclaimed bytes='..(before-store.bytes)..' retained='..store.bytes..' resources='..#store.resources)end
     if store.failure then error(store.failure)end
-    if restore_requested then pool.publish({});restore_requested=nil;pool.step()end
+    if restore_requested then pool.publish({});store.generated_names={};restore_requested=nil;pool.step()end
     if self.closing and #store.retirements==0 and #store.orphans==0 then store.consumers={};store.owner=nil;if off then local stop=off;off=nil;stop()end;if after_close then local done=after_close;after_close=nil;done()end;return end
    end
    if not job and validation_remaining~=nil and #store.retirements==0 and #store.orphans==0 then
@@ -88,15 +119,15 @@ function M.new(sr,backend,root)
     end
    end
    if not job and desired then
-    if store.generated_signature==desired.signature and store.active[generated_name]then desired=nil;return end
+    if generated_ready(desired.signature)then desired=nil;return end
     desired.quiet=desired.quiet+1
     if desired.quiet<12 then return end
     local request=desired;desired=nil
-    local image=request.factory();HUD.runtime_textures.validate(image)
-    local prepared={};for name,r in pairs(store.active)do prepared[name]=r end
+    local items,names=generated_items(request.factory())
+    local prepared={};for name,r in pairs(store.active)do if not store.generated_names[name]then prepared[name]=r end end
     serial=serial+1;store.serial=serial
-    job={items={{name=generated_name,image=image}},index=1,stage='select',prepared=prepared,generated_signature=request.signature}
-    trace('generated edge queued signature='..request.signature)
+    job={items=items,index=1,stage='select',prepared=prepared,generated_signature=request.signature,generated_names=names}
+    trace('generated images queued signature='..request.signature..' count='..#items)
    end
    if not job then return end
    local j=job;local item=j.items[j.index]
@@ -129,7 +160,7 @@ function M.new(sr,backend,root)
    elseif j.stage=='publish' then
     if pool then pool.publish(j.prepared) else store.active=j.prepared end
     for name,record in pairs(j.prepared)do store.images[name]=record;cache(record)end
-    if j.generated_signature then store.generated_signature=j.generated_signature end
+    if j.generated_signature then store.generated_signature=j.generated_signature;store.generated_names=j.generated_names end
     job=nil;self.status='Texture files loaded ('..#j.items..')'
     trace('published '..#j.items..' artwork files')
    end
@@ -191,7 +222,7 @@ function M.new(sr,backend,root)
   assert(#items>0,'Manifest has no artwork')
   assert(store.bytes+total<=HUD.runtime_textures.max_retained_bytes,'Hot artwork budget exhausted; restart required')
   initialize();serial=serial+1;store.serial=serial
-  local prepared={};if store.active[generated_name]then prepared[generated_name]=store.active[generated_name]end
+  local prepared={};for name in pairs(store.generated_names)do if store.active[name]then prepared[name]=store.active[name]end end
   job={items=items,index=1,stage='select',prepared=prepared}
   self.status='Loading '..#items..' texture files';trace('queued '..#items..' files')
   return self.status
@@ -200,7 +231,7 @@ function M.new(sr,backend,root)
   assert(not self.closing and store.owner==self,'Artwork manager retired')
   assert(not store.failure,'Texture uploads blocked after a stage failure; restart required: '..tostring(store.failure))
   assert(type(signature)=='string'and #signature<=128 and type(factory)=='function','Generated edge request invalid')
-  if not job and store.generated_signature==signature and store.active[generated_name]then desired=nil;return false end
+  if not job and generated_ready(signature)then desired=nil;return false end
   if job and job.generated_signature==signature then desired=nil;return false end
   if desired and desired.signature==signature then return false end
   local quarantine=io.open(root..'/UPLOADS-QUARANTINED.txt','rb')
@@ -219,10 +250,17 @@ function M.new(sr,backend,root)
   local name=texture and texture:match('^mods/dbf_hud/textures/([%w_%-]+)$')
   return name and store.active[name] and store.active[name].resource
  end
+ function self.image(texture)
+  if self.closing or store.owner~=self then return nil end
+  local name=type(texture)=='string'and texture:match('^mods/dbf_hud/textures/([%w_%-]+)$')
+  local r=name and store.active[name]
+  if not(r and r.ready and r.uploaded and r.consumed and r.resource and type(r.rgba)=='string')then return nil end
+  return {format='RGBA8',width=r.width,height=r.height,row_pitch=r.width*4,rgba=r.rgba}
+ end
  function self.restore()
   assert(not self.closing and store.owner==self,'Artwork manager retired')
   desired=nil;store.generated_signature=nil
-  cancel('Packaged artwork restored');if pool then restore_requested=true else store.active={} end;trace('restored packaged artwork');return self.status
+  cancel('Packaged artwork restored');if pool then restore_requested=true else store.active={};store.generated_names={} end;trace('restored packaged artwork');return self.status
  end
  function self.after_close(fn)assert(type(fn)=='function');after_close=fn end
  function self.close()

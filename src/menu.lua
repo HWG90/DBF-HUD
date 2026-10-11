@@ -16,6 +16,7 @@ function M.texture_choices(resource)
         if not found then table.insert(labels,1,'HUD Texture');table.insert(ids,1,'faithful')end
     end
     labels[#labels+1]='Original primitives';ids[#ids+1]='original'
+    if HUD.split_hud and HUD.split_hud.supported(resource)then table.insert(labels,1,'Split instrument');table.insert(ids,1,'split')end
     return labels,ids,#ids>1
 end
 function M.weapon_choices()
@@ -82,6 +83,23 @@ function M.new(hud)
         set('editor_save',false);set('editor_reset',false)
     end
     function self.sync()
+        local native=font_host and font_host.mods and font_host.mods.dbf_hud_fonts
+        if native and not retired then
+            -- HUD configuration is authoritative after a reset or preset load.
+            -- Match the existing per-weapon refresh without invoking callbacks.
+            local style_index=1;for i,name in ipairs(HUD.config.styles)do if name==hud.config.style_3d then style_index=i end end
+            local values={family=font_index(),style=style_index,decoration=decoration_index(),
+                panel_color=hud.config.background_color,text_color=hud.config.text_color,decoration_color=hud.config.decoration_color,
+                fade_when_not_aiming=hud.config.fade_3d_unless_aiming,hud_scale=hud.config.scale,
+                display_mode=hud.config.anchor_mode=='weapon'and 1 or(hud.config.anchor_mode=='world'and 3 or 2),
+                keep_upright=hud.config.keep_hud_upright,force_all_hud_texture_off=hud.config.force_all_hud_texture_off,
+                render_sync_trial=hud.config.render_sync_trial,debug_hud_timing=hud.config.debug_hud_timing,
+                zoom_compensation=hud.config.zoom_compensation,debug_occlusion=hud.config.force_occlusion,
+                debug_sight_root_orientation=hud.config.debug_sight_root_orientation,debug_logging=hud.config.debug_logging,
+                mg43_easter_egg=hud.config.mg43_easter_egg,senator_style=hud.config.senator_style=='upright'and 2 or 1}
+            for key,value in pairs(values)do if native.controls[key]then native.values[key]=value end end
+            return
+        end
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
@@ -172,6 +190,7 @@ function M.new(hud)
             end
             local weapon_labels,weapon_ids=M.weapon_choices()
             local panel_controls={
+                {id='split_defaults',type='button',label='Apply Split defaults',description='Start fresh with the Split instrument palette, artwork and layout controls for all weapons.',on_activate=function()local ok,message=hud.use_split_defaults();assert(ok,message);return message end},
                 {id='hud_presentation',type='choice',presentation='dropdown',label='HUD presentation',choices={'Automatic','Simple','Fancy'},default=({automatic=1,practical=2,weapon_specific=3})[hud.config.hud_presentation] or 1,description='Automatic switches with the camera. Simple uses the practical panel in both views; Fancy uses weapon-specific styling in both views. Your camera perspective is unchanged.',on_change=function(v)save('hud_presentation',assert(({'automatic','practical','weapon_specific'})[v],'Unknown HUD presentation'))end},
                 {id='third_person_scale',type='slider',label='Third-person HUD scale',min=.5,max=1.5,step=.05,default=hud.config.third_person_scale,description='Compact practical panel outside first person. First-person scale uses the existing HUD scale.',on_change=function(v)save('third_person_scale',v)end},
                 {id='third_person_opacity',type='slider',label='Third-person panel opacity',min=0,max=1,step=.05,default=hud.config.third_person_opacity,description='Practical panel background only; live text stays readable.',on_change=function(v)save('third_person_opacity',v)end},
@@ -202,7 +221,9 @@ function M.new(hud)
                 {'panel_edge_curve','Edge fade curve','slider',.5,3,.1},
                 {'panel_edge_dither','Edge dither (%)','slider',0,100,5},
                 {'panel_edge_grain','Edge grain size','slider',1,4,1},
-                {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
+                {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver','Split instrument'}},
+                {'split_readout_view','Readout detail','choice',{'Combat','Inspect settings'}},
+                {'panel_spatial_depth','Layer spacing','slider',0,32,1},
                 {'style_3d','Visual style','choice',styles}}
             -- Fetch selects a weapon after registration; keep these controls
             -- registered and gate their availability against the fetched weapon.
@@ -211,6 +232,7 @@ function M.new(hud)
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings(panel_weapon) or hud.config
                 local v=cfg[key]
+                if key=='split_readout_view'then return v=='inspect'and 2 or 1 end
                 if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);for i,id in ipairs(ids)do if id==v then return i end end;return #ids end
                 if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
                 if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
@@ -229,6 +251,8 @@ function M.new(hud)
                 if key=='panel_edge_curve' then c.description='Shape the fade: below 1 retains more of the edge; 1 is the original smooth fade; above 1 dissolves more quickly.' end
                 if key=='panel_edge_dither' then c.description='Break the fading edge into stable dots. 0 is smooth feathering; 100 is fully dithered. The solid center stays unchanged.' end
                 if key=='panel_edge_grain' then c.description='Size of the edge dots: 1 is fine; 4 is coarse. The pattern stays attached to the panel.' end
+                if key=='panel_spatial_depth'then c.description='Separate Split readout, reserve, settings and status into depth layers. 0 puts them on one plane; 16 matches the study.'end
+                if key=='split_readout_view'then c.description='Combat shows selected settings; Inspect adds field names. Available settings remain visible in either view.'end
                 if key=='background_color' then c.description='Live readout shader carrier color; HUD Texture colors are unchanged.' end
                 if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
                 if key=='theme_shader_animate' or key=='effect_shader_animate' then c.description='Animate the selected shader. Off keeps the static sample. Requires animated native assets; no new panel geometry.' end
@@ -239,6 +263,7 @@ function M.new(hud)
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
                     if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
+                    if key=='split_readout_view'then v=({'combat','inspect'})[v]end
                     assert(hud.appearance_weapon and hud.appearance_weapon()==panel_weapon,'Equipped weapon changed; press Fetch again')
                     hud.configure_panel({[key]=v},panel_weapon);hud.save_tuning()
                 end
@@ -352,7 +377,7 @@ function M.new(hud)
                         on_change=function(v)save('font',HUD.config.fonts[v])end},
                     {id='style',type='choice',label='Global HUD style',choices=styles,default=selected_style,
                         on_change=function(v)save('style_3d',HUD.config.styles[v])end},
-                    {id='decoration',type='choice',presentation='dropdown',label='Global decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index(),
+                    {id='decoration',type='choice',presentation='dropdown',label='Global decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver','Split instrument'},default=decoration_index(),
                         on_change=function(v)save('decoration',HUD.config.decorations[v])end},
                     {id='panel_color',type='color',label='Global panel color',default=hud.config.background_color,
                         on_change=function(v)save('background_color',v)end},
@@ -408,6 +433,7 @@ function M.new(hud)
                         on_activate=reset_defaults}
                 }}}})
             font_host=host;self.status='MCM > DBF-HUD'
+            self.sync()
         end
         if panel_refresh then panel_refresh(false)end
         if panel_guard then panel_guard()end
@@ -501,7 +527,7 @@ function M.new(hud)
                     hud.configure({[k]=v});hud.save_tuning()
                 end)
             end
-            add('decoration',{type='choice',presentation='dropdown',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index()},function(v)
+            add('decoration',{type='choice',presentation='dropdown',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver','Split instrument'},default=decoration_index()},function(v)
                 hud.configure({decoration=assert(HUD.config.decorations[v])});hud.save_tuning()
             end)
             -- ModOptionsMenu accepts at most sixteen names per choice.

@@ -3,7 +3,7 @@ M.fonts={'bigblue','hack','jetbrainsmono','firacode','iosevka'}
 local listed={bigblue=true,hack=true,jetbrainsmono=true,firacode=true,iosevka=true}
 for _,name in ipairs(HUD.native_font_data.order) do if name~='debug' and not listed[name] then M.fonts[#M.fonts+1]=name end end
 M.styles={'standard','hologram','instrument','blueprint','retro'}
-M.decorations={'none','outline','brackets','helldivers','double','deadeye'}
+M.decorations={'none','outline','brackets','helldivers','double','deadeye','split'}
 M.colors={'text_color','decoration_color','background_color','heat_white','heat_yellow','heat_red'}
 -- Auto clearance in weapon-local metres; independent entries for each view.
 -- Resource identity is stable across equip/respawn; never key by entity handle.
@@ -22,10 +22,20 @@ M.defaults.segmented_background_color='#091B35'
 M.defaults.segmented_empty_color='#FF5750'
 M.defaults.panel_edge_softness=4
 M.defaults.panel_edge_curve=1;M.defaults.panel_edge_dither=35;M.defaults.panel_edge_grain=1
+M.defaults.split_readout_view='combat';M.defaults.panel_spatial_depth=16
+M.split_defaults={texture_art_trial=true,texture_art_variant='split',force_all_hud_texture_off=false,
+    hud_presentation='weapon_specific',font='hack',font_scale=1,style_3d='standard',
+    text_color='#F5F6F0',decoration_color='#E9C45D',background_color='#091B35',heat_red='#FF5750',
+    panel_opacity=.35,text_opacity=1,text_color_alpha=255,decoration='split',
+    panel_edge_softness=7,panel_edge_curve=1,panel_edge_dither=40,panel_edge_grain=2,
+    panel_spatial_depth=16,split_readout_view='combat',weapon_panels={},scale=1,third_person_scale=1,
+    theme_shader='none',effect_shader='none',shader_layers={},effect_scanlines=false,effect_sweep=false,
+    effect_flicker=false,saturation=1,emissive_intensity=1}
 M.limits={font_scale={.5,1.5},third_person_scale={.5,1.5},third_person_opacity={0,1},theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 M.limits.panel_edge_softness={0,24}
 M.limits.panel_edge_curve={.5,3};M.limits.panel_edge_dither={0,100};M.limits.panel_edge_grain={1,4}
+M.limits.panel_spatial_depth={0,32}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
     local h=v:gsub('^#','')
@@ -90,6 +100,7 @@ M.panel_keys.segmented_text_color=true;M.panel_keys.segmented_ui_color=true
 M.panel_keys.segmented_background_color=true;M.panel_keys.segmented_empty_color=true
 M.panel_keys.panel_edge_softness=true
 M.panel_keys.panel_edge_curve=true;M.panel_keys.panel_edge_dither=true;M.panel_keys.panel_edge_grain=true
+M.panel_keys.split_readout_view=true;M.panel_keys.panel_spatial_depth=true
 function M.segmented_eligible(config,resource)
  return false -- Retired: HUD Texture owns artwork and shader rendering.
 end
@@ -196,7 +207,8 @@ function M.apply(config,values,validation_only)
         elseif limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
         elseif (k=='texture_art_trial' or k=='theme_shader_animate' or k=='effect_shader_animate' or k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='theme_shader' or k=='effect_shader' then assert(type(v)=='string' and HUD.shader_ids[v],'Unknown HUD shader')
-        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic' or v=='study' or v=='original','invalid texture artwork variant')
+        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic' or v=='study' or v=='original' or v=='split','invalid texture artwork variant')
+        elseif k=='split_readout_view' then assert(v=='combat'or v=='inspect','invalid readout detail')
         elseif k=='senator_style' then assert(v=='cylinder' or v=='upright','invalid Senator appearance')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
@@ -264,6 +276,9 @@ if HUD.bundled_defaults then
     M.apply(M.defaults,HUD.bundled_defaults.settings)
     M.weapon_clearance=HUD.bundled_defaults.layouts
 end
+-- Historical bundled palettes remain recovery data. Fresh setup uses Split.
+for key,value in pairs(M.split_defaults)do M.defaults[key]=value end
+M.weapon_clearance={}
 function M.shader_animation_values(c,role,clock)
     local key=role=='effect' and 'effect_shader' or 'theme_shader'
     local speed=tonumber(c[key..'_speed']) or 1

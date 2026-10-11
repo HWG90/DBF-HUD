@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DBF Â· Universal HUD study 07</title>
+  <title>DBF · Universal HUD study 07</title>
   <link rel="stylesheet" href="study.css">
 </head>
 <body>
 <header class="page-head">
-  <div><span class="eyebrow">DBF / UNIVERSAL INSTRUMENT / STUDY 07</span><h1>A little instrument. A lot of information.</h1><p>Three spatial compositions. One reading order: resource â†’ reserve â†’ status â†’ relevant settings.</p></div>
+  <div><span class="eyebrow">DBF / UNIVERSAL INSTRUMENT / STUDY 07</span><h1>A little instrument. A lot of information.</h1><p>Three spatial compositions. One reading order: resource → reserve → status → relevant settings.</p></div>
   <span class="review-tag">DESIGN STUDY</span>
 </header>
 <nav class="concepts" aria-label="Instrument design">
@@ -32,7 +32,7 @@
     <p class="hint">Backing and outer accents dissolve together. Numerals, unit labels and the status strip keep a crisp outline.</p>
   </div>
   <div class="control-section"><span class="section-label">SPATIAL READING</span>
-    <label class="stacked">View<select id="angle"><option value="0">Angle 1 Â· standing</option><option value="1">Angle 2 Â· shoulder</option><option value="2">Angle 3 Â· inclined</option><option value="3">Angle 4 Â· shoulder</option><option value="neutral">Neutral contrast field</option></select></label>
+    <label class="stacked">View<select id="angle"><option value="0">Angle 1 · standing</option><option value="1">Angle 2 · shoulder</option><option value="2">Angle 3 · inclined</option><option value="3">Angle 4 · shoulder</option><option value="neutral">Neutral contrast field</option></select></label>
     <label class="check"><input type="checkbox" id="perspective" checked>Use the angle of the weapon</label>
     <label class="slider">Depth separation <output id="depthOut">16 px</output><input id="depth" type="range" min="0" max="36" value="16" step="2"></label>
     <label class="slider">Instrument size <output id="scaleOut">70%</output><input id="scale" type="range" min="65" max="150" value="70" step="5"></label>
@@ -40,14 +40,14 @@
   </div>
 </aside>
 <section class="review-area">
-  <div class="stage-tools"><span><b id="conceptTitle">Orbit</b><small id="dimensions">330 Ã— 190 px at 1920 Ã— 1080</small></span><div><button class="view-mode active" data-view="fit">Fit scene</button><button class="view-mode" data-view="pixels">100% screen</button><button class="view-mode" data-view="inspect">Inspect Ã—3</button></div></div>
+  <div class="stage-tools"><span><b id="conceptTitle">Orbit</b><small id="dimensions">330 × 190 px at 1920 × 1080</small></span><div><button class="view-mode active" data-view="fit">Fit scene</button><button class="view-mode" data-view="pixels">100% screen</button><button class="view-mode" data-view="inspect">Inspect ×3</button></div></div>
   <div class="scene-viewport" id="sceneViewport"><div class="world" id="world"><img id="scenePhoto" alt="Provided third-person gameplay reference"><div class="neutral-grid"></div><div id="instrument" class="instrument" aria-label="Weapon instrument preview"></div></div><div class="stage-label" id="stageLabel">DRAG INSTRUMENT TO PLACE</div></div>
   <div class="reading-note"><strong id="familyTitle">Magazine / AR-23 Liberator</strong><p id="readingExplanation"></p><span id="capabilityLine"></span></div>
   <section class="family-section"><div class="section-heading"><h2>The geometry changes. The reading order stays.</h2><p>Same selected concept, different resources and settings.</p></div><div class="family-grid" id="familyGrid"></div></section>
   <details class="source-note"><summary>What this study knows about weapon settings</summary><p>Every reading here is illustrative. The current source exposes ammunition and typed reserves, heat, several charge systems, selectable fire modes, selectable RPM, safety, and known ammunition selectors. This study demonstrates how those fields could share one design language; it does not establish support for every weapon or selector.</p><p>Missing fields are omitted. Unknown counts use a dash and NO DATA, never a fabricated zero. Detailed variants such as zoom, flashlight state, fuse distance, or a complete list of all selector choices need additional reader contracts before a HUD can report them.</p><p>Scene positions and layered perspective are a spatial mockup. <a href="BRIEF.md">Design brief and source mapping</a></p></details>
 </section>
 </main>
-<footer>Review only Â· original gameplay references Â· 1920 Ã— 1080 scale reference Â· static data Â· no game, settings, or renderer changes. Edge treatment is an SVG preview.</footer>
+<footer>Review only · original gameplay references · 1920 × 1080 scale reference · static data · no game, settings, or renderer changes. Edge treatment is an SVG preview.</footer>
 <script src="study.js"></script>
 </body>
 </html>

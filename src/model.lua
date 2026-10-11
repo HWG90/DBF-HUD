@@ -7,6 +7,8 @@ function M.normalize(raw)
     if not raw then return nil end
     local m={id=raw.id,unit_ref=raw.unit_ref,avatar_unit_ref=raw.avatar_unit_ref,resource_hex=raw.resource_hex,kind=raw.kind,reserve=count(raw.reserve),reserve_kind=raw.reserve_kind,
         alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, safety_mode=raw.safety_mode, charge_fraction=raw.charge_fraction, epoch_charge_fraction=raw.epoch_charge_fraction, loyalist_charge_fraction=raw.loyalist_charge_fraction, purifier_charge_fraction=raw.purifier_charge_fraction, charge_seconds=raw.charge_seconds, charge_warning=raw.charge_warning==true, energy_icon=raw.energy_icon, ammo_icon=raw.ammo_icon, charge_ready=raw.charge_ready==true, lowered=raw.lowered, label=raw.label or 'AMMO'}
+    if type(raw.reloadable)=='boolean'then m.reloadable=raw.reloadable end
+    m.reloading=raw.reloading==true;m.locked=raw.locked==true
     if raw.resource_hex=='6cfcc7f8801a0266' and type(raw.melta_charge_level)=='number' and raw.melta_charge_level==raw.melta_charge_level and raw.melta_charge_level>=0 and raw.melta_charge_level<=10 then m.melta_charge_level=raw.melta_charge_level end
     if raw.rpm_selectable==true and type(raw.rpm)=='number' and raw.rpm==raw.rpm and raw.rpm>=1 and raw.rpm<=10000 then
         m.rpm=math.floor(raw.rpm+.5)

@@ -1530,7 +1530,13 @@ function M.decorate_textures(commands,scale,cfg,opacity)
         if v.type=='panel' and not v.charge_meter then panels[#panels+1]=v end
     end
     for _,panel in ipairs(panels)do
-        local decoration={};M.decorate(decoration,panel,scale,cfg,opacity)
+        local decoration={}
+        if panel.hud_texture_split and cfg.decoration=='split' then HUD.split_hud.decorate(decoration,panel,cfg,opacity)
+        elseif panel.hud_texture_split then
+            local s=panel.split_scale
+            M.decorate(decoration,{x=panel.x+77*s,y=panel.y+panel.h-133*s,w=151*s,h=108*s},s,cfg,opacity)
+            for _,v in ipairs(decoration)do v.spatial_plane='main';v.spatial_depth=panel.spatial_depth end
+        else M.decorate(decoration,panel,scale,cfg,opacity)end
         for _,v in ipairs(decoration)do v.child=panel.child;out[#out+1]=v end
     end
     return out

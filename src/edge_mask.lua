@@ -34,4 +34,32 @@ function M.image(s)
  end
  return {format='RGBA8',width=width,height=height,row_pitch=width*4,rgba=table.concat(rows)}
 end
+-- Split uses the study's soft bounds and ordered pattern in authored units.
+-- All three images publish together through the existing generated-image job.
+function M.split_images(s,hard,face)
+ assert(hard and face and hard.width==640 and hard.height==322 and face.width==640 and face.height==322,'Split mask sources unavailable')
+ local bayer={0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5}
+ local rows={coverage={},face={},soft={}};local fade=121*s.width/100;local mix=s.dither/100
+ for y=0,321 do
+  local a,b,c={},{},{}
+  for x=0,639 do
+   local lx,ly=(x+.5)/2-72,(y+.5)/2-19
+   local distance=math.min(lx,ly,163-lx,120-ly)
+   local t=fade>0 and math.max(0,math.min(1,distance/fade))or(distance>=0 and 1 or 0)
+   local alpha=(t*t*(3-2*t))^s.curve
+   if mix>0 and alpha>0 and alpha<1 then
+    local threshold=(bayer[(math.floor(ly/s.grain)%4)*4+math.floor(lx/s.grain)%4+1]+.5)/16
+    alpha=alpha*(1-mix)+(alpha>threshold and 1 or 0)*mix
+   end
+   local i=(y*640+x)*4+4
+   a[x+1]=string.char(255,255,255,math.floor(hard.rgba:byte(i)*alpha+.5))
+   b[x+1]=string.char(255,255,255,math.floor(face.rgba:byte(i)*alpha+.5))
+   c[x+1]=string.char(255,255,255,math.floor(255*alpha+.5))
+  end
+  rows.coverage[y+1]=table.concat(a);rows.face[y+1]=table.concat(b);rows.soft[y+1]=table.concat(c)
+ end
+ local names={coverage='split_hud_dynamic_coverage_v1',face='split_hud_dynamic_face_v1',soft='split_hud_dynamic_soft_v1'}
+ local images={};for key,name in pairs(names)do images[name]={format='RGBA8',width=640,height=322,row_pitch=2560,rgba=table.concat(rows[key])}end
+ return {images=images}
+end
 return M

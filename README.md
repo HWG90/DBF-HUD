@@ -4,7 +4,7 @@
 
 A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current development version: **0.3.42**. This is the source checkout; generated releases may lag behind it.
 
-Current design direction: [2026-10-10 design reset](docs/DESIGN-RESET-20261010.md). The approved primary instrument is artwork under the existing HUD Texture selection and shader renderer. The separate Fancy segmentation experiment is disabled and its replacement renderer is retired. Saved appearance and placement remain preserved. See [current handoff](docs/HANDOFF.md) for the current package and verification state. The [2026-10-03 session notes](docs/SESSION-20261003.md) preserve the earlier accepted checkpoint. Source publication does not create a new release.
+Current design direction: [Split instrument, Study 08](review/universal-hud-split-08/BRIEF.md), an open asymmetric cluster with a dominant resource, typed reserve, independent selected-setting nodes and compact status. The first runtime pass uses the existing HUD Texture renderer, shaders and decoration system. Apply Split defaults starts fresh with white/gold/navy, slanted digits and feathered/dithered edges. The representative primary was confirmed close to the study and readable in both views while shooting/diving. See [current handoff](docs/HANDOFF.md) for package, remaining catalog checks and verification state, and the [design reset](docs/DESIGN-RESET-20261010.md) for earlier decisions. Source publication does not create a new release.
 
 ## Installation
 

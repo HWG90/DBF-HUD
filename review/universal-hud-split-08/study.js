@@ -10,8 +10,8 @@ const samples={
  ammo:{title:'Ammunition selector',code:'GR-8',name:'RECOILLESS',kind:'rounds',value:1,capacity:1,reserve:5,reserve_kind:'PACK',label:'LOADED',ammo_mode:'HEAT',fraction:1,description:'Selected ammunition occupies one compact context node. The reserve unit is kept as PACK, matching the reader contract; it is not relabeled as magazines.'},
  expendable:{title:'Expendable',code:'EAT-17',name:'EXPENDABLE',kind:'rounds',value:1,capacity:1,label:'LOADED',reloadable:false,fraction:1,description:'One loaded shot and SINGLE USE. There is no invented reserve count or empty magazine capacity. After firing, the instrument clearly says SPENT.'},
  fuel:{title:'Fuel',code:'FLAM-66',name:'TORCHER',kind:'magazine',value:65,capacity:80,reserve:3,reserve_kind:'TANKS',label:'FUEL',fraction:65/80,description:'Fuel retains its own resource label and tank reserves. The gauge gives an immediate proportion while the numeric reading remains precise.'},
- infinite:{title:'Infinite energy',code:'ARC-12',name:'BLITZER',kind:'infinite',value:'âˆž',label:'ENERGY',fraction:1,description:'An infinite supply has no fabricated ammunition or reserve counts. The energy symbol expresses the resource concept; the runtime currently carries an infinite kind with a -- value.'},
- stress:{title:'Mixed settings Â· illustrative',code:'TEST',name:'CONTEXT STRESS',kind:'magazine',value:123,capacity:200,reserve:8,reserve_kind:'BELTS',fire_mode:'AUTO',rpm:900,ammo_mode:'HE',safety_mode:'UNSAFE',label:'ROUNDS',fraction:123/200,description:'A deliberate mixed-capability specimen, not an assertion about a real weapon. Fire mode, RPM, ammunition selection, and safety occupy four independent context slots. Orbit and Split stack the satellites vertically; Rail distributes them across the lower row.'}
+ infinite:{title:'Infinite energy',code:'ARC-12',name:'BLITZER',kind:'infinite',value:'∞',label:'ENERGY',fraction:1,description:'An infinite supply has no fabricated ammunition or reserve counts. The energy symbol expresses the resource concept; the runtime currently carries an infinite kind with a -- value.'},
+ stress:{title:'Mixed settings · illustrative',code:'TEST',name:'CONTEXT STRESS',kind:'magazine',value:123,capacity:200,reserve:8,reserve_kind:'BELTS',fire_mode:'AUTO',rpm:900,ammo_mode:'HE',safety_mode:'UNSAFE',label:'ROUNDS',fraction:123/200,description:'A deliberate mixed-capability specimen, not an assertion about a real weapon. Fire mode, RPM, ammunition selection, and safety occupy four independent context slots. Orbit and Split stack the satellites vertically; Rail distributes them across the lower row.'}
 };
 const photos=[
  '../universal-hud-study-07/reference/angle-1.png',
@@ -32,7 +32,7 @@ function digit(value,color,quiet){
  return Object.entries(led).map(([key,points])=>{const active=lit.includes(key),xy=points.map(([x,y])=>`${3+x+8*(1-y/118)},${y}`).join(' ');return `<polygon points="${xy}" fill="${active?color:'#aec1cb'}" opacity="${active?(quiet?.12:1):.075}" stroke="${C.navy}" stroke-width=".8" stroke-linejoin="round"/>`;}).join('');
 }
 function numeral(value,x,y,h,color=C.white,slots=2,flash=false){
- if(value==='âˆž')return text(x,y+h-8,'âˆž',h*.92,color,'start',500);
+ if(value==='∞')return text(x,y+h-8,'∞',h*.92,color,'start',500);
  const raw=value==null?'-'.repeat(slots):String(value),s=raw.padStart(slots,'0'),scale=h/118,leading=value==null?0:s.length-raw.length;
  return `<g class="${flash?'flash':''}" data-main-value="${esc(value??'unknown')}">`+[...s].map((v,i)=>`<g transform="translate(${x+i*76*scale} ${y}) scale(${scale})">${digit(v,color,i<leading)}</g>`).join('')+'</g>';
 }
@@ -77,7 +77,7 @@ function display(sample,state){
  return m;
 }
 function status(m,x,y,w){if(!m.status)return '';const c=m.ink===C.red?C.red:C.gold;return `<rect x="${x}" y="${y}" width="${w}" height="18" fill="${C.navy}" opacity=".58"/><path d="M${x} ${y}V${y+18}" stroke="${c}" stroke-width="3"/>`+text(x+10,y+12.5,m.status,11.5,c);}
-function reserve(m,x,y){if(m.reserve===undefined)return '';const value=m.unknown?'â€”':String(m.reserve);return icon(m.reserve_kind,x,y-26,.9)+text(x+19,y-3,value,29,C.white)+text(x,y+13,m.reserve_kind,11.5,C.white);}
+function reserve(m,x,y){if(m.reserve===undefined)return '';const value=m.unknown?'—':String(m.reserve);return icon(m.reserve_kind,x,y-26,.9)+text(x+19,y-3,value,29,C.white)+text(x,y+13,m.reserve_kind,11.5,C.white);}
 function gauge(m,x,y,w,opts){let s=`<path d="M${x} ${y}H${x+w}" stroke="${C.white}" stroke-opacity=".18" stroke-width="3"/>`;if(!m.unknown){s+=`<path d="M${x} ${y}H${x+w*Math.min(1,m.fraction||0)}" stroke="${m.ink===C.white?C.gold:m.ink}" stroke-width="3"/>`;}for(let i=0;i<=8;i++)s+=line(x+i*w/8,y+4,x+i*w/8,y+6,C.white,.23,.7);return s;}
 function contextRows(m,x,y,width,shown,vertical=false){
  const values=contexts(m,shown);if(!values.length)return '';let out='';values.forEach(([kind,label],i)=>{const xx=vertical?x:x+i*(width/values.length),yy=vertical?y+i*23:y;out+=icon(kind,xx,yy-11,.7);if(vertical&&label.length>9){const words=label.split(' ');out+=text(xx+15,yy,words[0],11.5,C.gold)+text(xx+15,yy+12,words.slice(1).join(' '),11.5,C.gold);}else out+=text(xx+15,yy,label,11.5,C.gold);});return out;
@@ -152,20 +152,20 @@ function updateView(){
  world.style.setProperty('--scene-scale',scale);
  if(view==='fit'){world.style.left=(w-1920*scale)/2+'px';world.style.top=(h-1080*scale)/2+'px';}
  else{const x=parseFloat($('instrument').style.left)||960,y=parseFloat($('instrument').style.top)||540;world.style.left=(w/2-x*scale)+'px';world.style.top=(h/2-y*scale)+'px';}
- $('stageLabel').textContent=missingReference&&$('angle').value!=='neutral'?'OPTIONAL GAMEPLAY REFERENCE NOT INCLUDED Â· NEUTRAL FIELD':view==='inspect'?'INSPECT Ã—3 Â· DRAG TO PLACE':view==='pixels'?'100% Â· 1920 Ã— 1080 REFERENCE Â· DRAG TO PLACE':'FIT SCENE Â· DRAG INSTRUMENT TO PLACE';
+ $('stageLabel').textContent=missingReference&&$('angle').value!=='neutral'?'OPTIONAL GAMEPLAY REFERENCE NOT INCLUDED · NEUTRAL FIELD':view==='inspect'?'INSPECT ×3 · DRAG TO PLACE':view==='pixels'?'100% · 1920 × 1080 REFERENCE · DRAG TO PLACE':'FIT SCENE · DRAG INSTRUMENT TO PLACE';
 }
 function draw(){
  const m=display(samples[$('family').value],$('state').value),opts=options(),[w,h]=layoutSize(selected,opts);
  $('instrument').style.width=w+'px';$('instrument').style.height=h+'px';$('instrument').innerHTML=render(selected,m,opts);
- $('conceptTitle').textContent='Split Â· '+(opts.readoutView==='inspect'?'Inspect settings':'Combat');const screenScale=+$('scale').value/100;$('dimensions').textContent=`${Math.round(w*screenScale)} Ã— ${Math.round(h*screenScale)} px Â· ${$('scale').value}% Â· 1920 Ã— 1080 reference`;
+ $('conceptTitle').textContent='Split · '+(opts.readoutView==='inspect'?'Inspect settings':'Combat');const screenScale=+$('scale').value/100;$('dimensions').textContent=`${Math.round(w*screenScale)} × ${Math.round(h*screenScale)} px · ${$('scale').value}% · 1920 × 1080 reference`;
  $('familyTitle').textContent=`${m.title} / ${m.code} ${m.name}`;$('readingExplanation').textContent=m.description;
  const fields=['value',...(m.capacity!=null?['capacity']:[]),...(m.reserve!==undefined?['reserve + reserve_kind']:[]),...contexts(m,true).map(([kind])=>({AUTO:'fire_mode',RPM:'rpm',AMMO:'ammo_mode',SAFE:'safety_mode',SINGLE:'reloadable / SPENT'}[kind])),...(m.charge_fraction!=null?['charge_fraction']:[])];
- $('capabilityLine').textContent='Illustrative data Â· source fields: '+fields.join(' / ');
+ $('capabilityLine').textContent='Illustrative data · source fields: '+fields.join(' / ');
  ['backing','feather','dither','scale'].forEach(id=>$(id+'Out').textContent=$(id).value+'%');$('grainOut').textContent=$('grain').value+' px';$('depthOut').textContent=$('depth').value+' px';
- $('familyGrid').innerHTML=Object.entries(samples).map(([key,s])=>{const example=display(s,key==='magazine'?'chamber':'ready');const modes=contexts(example,opts.settings).map(v=>v[1]).join(' Â· ')||'No selector row';return `<article class="family-card"><div class="mini-preview"><div class="mini-instrument" style="width:${w}px;height:${h}px">${render(selected,example,opts)}</div></div><footer><strong>${esc(s.title)} Â· ${esc(s.code)}</strong><span>${esc(modes)}</span></footer></article>`;}).join('');
+ $('familyGrid').innerHTML=Object.entries(samples).map(([key,s])=>{const example=display(s,key==='magazine'?'chamber':'ready');const modes=contexts(example,opts.settings).map(v=>v[1]).join(' · ')||'No selector row';return `<article class="family-card"><div class="mini-preview"><div class="mini-instrument" style="width:${w}px;height:${h}px">${render(selected,example,opts)}</div></div><footer><strong>${esc(s.title)} · ${esc(s.code)}</strong><span>${esc(modes)}</span></footer></article>`;}).join('');
  updatePose();updateView();
 }
-Object.entries(samples).forEach(([key,s])=>{const option=document.createElement('option');option.value=key;option.textContent=`${s.title} Â· ${s.code}`;$('family').appendChild(option);});
+Object.entries(samples).forEach(([key,s])=>{const option=document.createElement('option');option.value=key;option.textContent=`${s.title} · ${s.code}`;$('family').appendChild(option);});
 document.querySelectorAll('[data-concept]').forEach(button=>button.addEventListener('click',()=>{selected=button.dataset.concept;document.querySelectorAll('[data-concept]').forEach(b=>{const on=b===button;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});draw();}));
 document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{view=button.dataset.view;document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b===button));updateView();}));
 ['family','state','readoutView','backing','feather','dither','grain','perspective','depth','scale'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='family'){const sample=samples[$('family').value],allowed={chamber:sample.chamber_supported===true,low:sample.kind==='heat'||sample.charge_fraction!=null||sample.capacity>1,empty:sample.kind!=='infinite'};for(const [value,on]of Object.entries(allowed)){$('state').querySelector(`[value="${value}"]`).disabled=!on;if(!on&&$('state').value===value)$('state').value='ready';}}draw();}));

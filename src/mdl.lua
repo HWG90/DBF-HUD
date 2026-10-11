@@ -24,6 +24,14 @@ return {
         local started=false
         ctx.on_cleanup(function() disable();if not started and backend.close then backend.close() end end)
         hud=HUD.runtime.start(sr,backend,{managed=true,screen_bone_hud=false,frame_trial=false,disable_segmented_fancy=true})
+        -- Candidate activation uses LLL's native configuration reads, which are
+        -- independent of the game's cached external io.open requests.
+        local activation=ctx.config and ctx.config.split_activation
+        if activation and (not ctx.settings or ctx.settings.split_activation_applied~=activation)then
+            local applied,why=hud.use_split_defaults();assert(applied,why)
+            ctx.set('split_activation_applied',activation)
+            ctx.log('SPLIT_ACTIVATION applied='..activation..' existing_config_path=true')
+        end
         if settings_ok and previous_settings and previous_settings.segmented_fancy==true then
             local saved,why=hud.save_tuning()
             ctx.log('Fancy segmentation disabled; HUD Texture restored: '..tostring(saved)..(why and (' '..tostring(why))or ''))

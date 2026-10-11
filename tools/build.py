@@ -36,6 +36,8 @@ ORDER = (
     'segmented_primary_specs',
     'edge_mask',
     'segmented_fancy',
+    'split_hud_assets',
+    'split_hud',
     'simple_vertical',
     'view_presentation',
     'memory',

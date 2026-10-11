@@ -7933,7 +7933,7 @@ M.fonts={'bigblue','hack','jetbrainsmono','firacode','iosevka'}
 local listed={bigblue=true,hack=true,jetbrainsmono=true,firacode=true,iosevka=true}
 for _,name in ipairs(HUD.native_font_data.order) do if name~='debug' and not listed[name] then M.fonts[#M.fonts+1]=name end end
 M.styles={'standard','hologram','instrument','blueprint','retro'}
-M.decorations={'none','outline','brackets','helldivers','double','deadeye'}
+M.decorations={'none','outline','brackets','helldivers','double','deadeye','split'}
 M.colors={'text_color','decoration_color','background_color','heat_white','heat_yellow','heat_red'}
 -- Auto clearance in weapon-local metres; independent entries for each view.
 -- Resource identity is stable across equip/respawn; never key by entity handle.
@@ -7952,10 +7952,20 @@ M.defaults.segmented_background_color='#091B35'
 M.defaults.segmented_empty_color='#FF5750'
 M.defaults.panel_edge_softness=4
 M.defaults.panel_edge_curve=1;M.defaults.panel_edge_dither=35;M.defaults.panel_edge_grain=1
+M.defaults.split_readout_view='combat';M.defaults.panel_spatial_depth=16
+M.split_defaults={texture_art_trial=true,texture_art_variant='split',force_all_hud_texture_off=false,
+    hud_presentation='weapon_specific',font='hack',font_scale=1,style_3d='standard',
+    text_color='#F5F6F0',decoration_color='#E9C45D',background_color='#091B35',heat_red='#FF5750',
+    panel_opacity=.35,text_opacity=1,text_color_alpha=255,decoration='split',
+    panel_edge_softness=7,panel_edge_curve=1,panel_edge_dither=40,panel_edge_grain=2,
+    panel_spatial_depth=16,split_readout_view='combat',weapon_panels={},scale=1,third_person_scale=1,
+    theme_shader='none',effect_shader='none',shader_layers={},effect_scanlines=false,effect_sweep=false,
+    effect_flicker=false,saturation=1,emissive_intensity=1}
 M.limits={font_scale={.5,1.5},third_person_scale={.5,1.5},third_person_opacity={0,1},theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
 M.limits.panel_edge_softness={0,24}
 M.limits.panel_edge_curve={.5,3};M.limits.panel_edge_dither={0,100};M.limits.panel_edge_grain={1,4}
+M.limits.panel_spatial_depth={0,32}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
     local h=v:gsub('^#','')
@@ -8020,6 +8030,7 @@ M.panel_keys.segmented_text_color=true;M.panel_keys.segmented_ui_color=true
 M.panel_keys.segmented_background_color=true;M.panel_keys.segmented_empty_color=true
 M.panel_keys.panel_edge_softness=true
 M.panel_keys.panel_edge_curve=true;M.panel_keys.panel_edge_dither=true;M.panel_keys.panel_edge_grain=true
+M.panel_keys.split_readout_view=true;M.panel_keys.panel_spatial_depth=true
 function M.segmented_eligible(config,resource)
  return false -- Retired: HUD Texture owns artwork and shader rendering.
 end
@@ -8126,7 +8137,8 @@ function M.apply(config,values,validation_only)
         elseif limits then assert(type(v)=='number' and v==v and v>=limits[1] and v<=limits[2],'invalid setting: '..k)
         elseif (k=='texture_art_trial' or k=='theme_shader_animate' or k=='effect_shader_animate' or k=='render_sync_trial' or k=='debug_hud_timing' or k=='mg43_easter_egg' or k=='zoom_compensation' or k=='debug_sight_root_orientation' or k=='effect_scanlines' or k=='effect_flicker' or k=='effect_sweep' or k=='force_occlusion' or k=='fade_3d_unless_aiming' or k=='keep_hud_upright' or k=='debug_logging' or k=='always_show_3d' or k=='weapon_screen_test' or k=='hud_occlusion' or k=='frosted' or k=='pose_marker' or k=='world_probe') then assert(type(v)=='boolean','setting must be boolean')
         elseif k=='theme_shader' or k=='effect_shader' then assert(type(v)=='string' and HUD.shader_ids[v],'Unknown HUD shader')
-        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic' or v=='study' or v=='original','invalid texture artwork variant')
+        elseif k=='texture_art_variant' then assert(v=='faithful' or v=='realistic' or v=='study' or v=='original' or v=='split','invalid texture artwork variant')
+        elseif k=='split_readout_view' then assert(v=='combat'or v=='inspect','invalid readout detail')
         elseif k=='senator_style' then assert(v=='cylinder' or v=='upright','invalid Senator appearance')
         elseif k=='style_3d' then assert(v=='standard' or v=='hologram' or v=='instrument' or v=='blueprint' or v=='retro','invalid 3D style')
         elseif k=='show_3d' then assert(v=='occluded' or v=='always' or v=='aiming','invalid 3D visibility')
@@ -8194,6 +8206,9 @@ if HUD.bundled_defaults then
     M.apply(M.defaults,HUD.bundled_defaults.settings)
     M.weapon_clearance=HUD.bundled_defaults.layouts
 end
+-- Historical bundled palettes remain recovery data. Fresh setup uses Split.
+for key,value in pairs(M.split_defaults)do M.defaults[key]=value end
+M.weapon_clearance={}
 function M.shader_animation_values(c,role,clock)
     local key=role=='effect' and 'effect_shader' or 'theme_shader'
     local speed=tonumber(c[key..'_speed']) or 1
@@ -8713,6 +8728,8 @@ function M.normalize(raw)
     if not raw then return nil end
     local m={id=raw.id,unit_ref=raw.unit_ref,avatar_unit_ref=raw.avatar_unit_ref,resource_hex=raw.resource_hex,kind=raw.kind,reserve=count(raw.reserve),reserve_kind=raw.reserve_kind,
         alternate=raw.alternate, ammo_slot=raw.ammo_slot, projectile_type=raw.projectile_type, ammo_mode=raw.ammo_mode, fire_mode=raw.fire_mode, safety_mode=raw.safety_mode, charge_fraction=raw.charge_fraction, epoch_charge_fraction=raw.epoch_charge_fraction, loyalist_charge_fraction=raw.loyalist_charge_fraction, purifier_charge_fraction=raw.purifier_charge_fraction, charge_seconds=raw.charge_seconds, charge_warning=raw.charge_warning==true, energy_icon=raw.energy_icon, ammo_icon=raw.ammo_icon, charge_ready=raw.charge_ready==true, lowered=raw.lowered, label=raw.label or 'AMMO'}
+    if type(raw.reloadable)=='boolean'then m.reloadable=raw.reloadable end
+    m.reloading=raw.reloading==true;m.locked=raw.locked==true
     if raw.resource_hex=='6cfcc7f8801a0266' and type(raw.melta_charge_level)=='number' and raw.melta_charge_level==raw.melta_charge_level and raw.melta_charge_level>=0 and raw.melta_charge_level<=10 then m.melta_charge_level=raw.melta_charge_level end
     if raw.rpm_selectable==true and type(raw.rpm)=='number' and raw.rpm==raw.rpm and raw.rpm>=1 and raw.rpm<=10000 then
         m.rpm=math.floor(raw.rpm+.5)
@@ -13572,7 +13589,13 @@ function M.decorate_textures(commands,scale,cfg,opacity)
         if v.type=='panel' and not v.charge_meter then panels[#panels+1]=v end
     end
     for _,panel in ipairs(panels)do
-        local decoration={};M.decorate(decoration,panel,scale,cfg,opacity)
+        local decoration={}
+        if panel.hud_texture_split and cfg.decoration=='split' then HUD.split_hud.decorate(decoration,panel,cfg,opacity)
+        elseif panel.hud_texture_split then
+            local s=panel.split_scale
+            M.decorate(decoration,{x=panel.x+77*s,y=panel.y+panel.h-133*s,w=151*s,h=108*s},s,cfg,opacity)
+            for _,v in ipairs(decoration)do v.spatial_plane='main';v.spatial_depth=panel.spatial_depth end
+        else M.decorate(decoration,panel,scale,cfg,opacity)end
         for _,v in ipairs(decoration)do v.child=panel.child;out[#out+1]=v end
     end
     return out
@@ -13678,6 +13701,34 @@ function M.image(s)
   rows[y+1]=table.concat(row)
  end
  return {format='RGBA8',width=width,height=height,row_pitch=width*4,rgba=table.concat(rows)}
+end
+-- Split uses the study's soft bounds and ordered pattern in authored units.
+-- All three images publish together through the existing generated-image job.
+function M.split_images(s,hard,face)
+ assert(hard and face and hard.width==640 and hard.height==322 and face.width==640 and face.height==322,'Split mask sources unavailable')
+ local bayer={0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5}
+ local rows={coverage={},face={},soft={}};local fade=121*s.width/100;local mix=s.dither/100
+ for y=0,321 do
+  local a,b,c={},{},{}
+  for x=0,639 do
+   local lx,ly=(x+.5)/2-72,(y+.5)/2-19
+   local distance=math.min(lx,ly,163-lx,120-ly)
+   local t=fade>0 and math.max(0,math.min(1,distance/fade))or(distance>=0 and 1 or 0)
+   local alpha=(t*t*(3-2*t))^s.curve
+   if mix>0 and alpha>0 and alpha<1 then
+    local threshold=(bayer[(math.floor(ly/s.grain)%4)*4+math.floor(lx/s.grain)%4+1]+.5)/16
+    alpha=alpha*(1-mix)+(alpha>threshold and 1 or 0)*mix
+   end
+   local i=(y*640+x)*4+4
+   a[x+1]=string.char(255,255,255,math.floor(hard.rgba:byte(i)*alpha+.5))
+   b[x+1]=string.char(255,255,255,math.floor(face.rgba:byte(i)*alpha+.5))
+   c[x+1]=string.char(255,255,255,math.floor(255*alpha+.5))
+  end
+  rows.coverage[y+1]=table.concat(a);rows.face[y+1]=table.concat(b);rows.soft[y+1]=table.concat(c)
+ end
+ local names={coverage='split_hud_dynamic_coverage_v1',face='split_hud_dynamic_face_v1',soft='split_hud_dynamic_soft_v1'}
+ local images={};for key,name in pairs(names)do images[name]={format='RGBA8',width=640,height=322,row_pitch=2560,rgba=table.concat(rows[key])}end
+ return {images=images}
 end
 return M
 
@@ -13821,6 +13872,234 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  -- A native mode outside the visual bank stays explicit; nothing is selected.
  if not selected then text(80,296,104,9,9,r.mode,gold,'mode','right');out[#out].mode_active=false end
  return out
+end
+return M
+
+end)()
+HUD.split_hud_assets=(function()
+-- Generated by tools/build_split_textures.cjs. Authored top-left Study 08 coordinates.
+local M={width=320,height=161,gameplay_scale=.7,face="mods/dbf_hud/textures/split_hud_face_v1",atlas="mods/dbf_hud/textures/split_hud_atlas_v1",coverage="mods/dbf_hud/textures/split_hud_coverage_v1",hard_coverage="mods/dbf_hud/textures/split_hud_hard_coverage_v1",material="mods/dbf_hud/materials/adjudicator_tall_v1",full_uv={0,0,1,1},digit_width=72,digit_height=118,digit_pitch=76,digit_y=8,digit_step=80,digit_x=8,atlas_width=1024,atlas_height=512}
+M.icons={
+ MAGS={uv={0.0078125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ BELTS={uv={0.0390625,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ SHELLS={uv={0.0703125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ SINKS={uv={0.1015625,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ SHOTS={uv={0.1328125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ TANKS={uv={0.1640625,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ PACK={uv={0.1953125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ ENERGY={uv={0.2265625,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ HEAT={uv={0.2578125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ AUTO={uv={0.2890625,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ RPM={uv={0.3203125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ SAFE={uv={0.3515625,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ AMMO={uv={0.3828125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ SINGLE={uv={0.4140625,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+ UNKNOWN={uv={0.4453125,0.5625,0.017578125,0.03515625},w=18,h=18,ink_x=2,ink_y=2},
+}
+M.sprites={
+ gauge={uv={0.0078125,0.6875,0.1328125,0.01953125},box={87,109.5,136,10}},
+ reserve_connector={uv={0.15625,0.6875,0.01171875,0.005859375},box={61,78.5,12,3}},
+ context_connector={uv={0.1875,0.68359375,0.013671875,0.041015625},box={232,46,14,21}},
+ context_shadow={uv={0.2265625,0.68359375,0.013671875,0.041015625},box={232,46,14,21}},
+ solid={uv={0.267578125,0.69140625,0.01171875,0.0234375}},
+}
+M.context_nodes={
+ AUTO={uv={0.0078125,0.609375,0.03125,0.0390625},box={232,48,32,20}},
+ RPM={uv={0.046875,0.609375,0.03125,0.0390625},box={232,48,32,20}},
+ AMMO={uv={0.0859375,0.609375,0.03125,0.0390625},box={232,48,32,20}},
+ SAFE={uv={0.125,0.609375,0.03125,0.0390625},box={232,48,32,20}},
+ SINGLE={uv={0.1640625,0.609375,0.03125,0.0390625},box={232,48,32,20}},
+}
+function M.digit_uv(column,quiet)return {(8+80*column)/1024,(quiet and 144 or 8)/512,72/1024,118/512}end
+function M.outline_uv(column)return {(8+80*column)/1024,384/512,72/1024,118/512}end
+M.inspect_context_nodes={
+ AUTO={uv={0.3125,0.6875,0.0546875,0.0390625},box={232,33,56,20}},
+ RPM={uv={0.37109375,0.6875,0.0546875,0.0390625},box={232,33,56,20}},
+ AMMO={uv={0.4296875,0.6875,0.0546875,0.0390625},box={232,33,56,20}},
+ SAFE={uv={0.48828125,0.6875,0.0546875,0.0390625},box={232,33,56,20}},
+ SINGLE={uv={0.546875,0.6875,0.0546875,0.0390625},box={232,33,56,20}},
+}
+M.infinity={uv={0.5,0.5625,0.09765625,0.09375},w=60,h=32,box={88,61,60,32}}
+M.infinity_outline={uv={0.609375,0.5625,0.09765625,0.09375},w=60,h=32,box={88,61,60,32}}
+M.quiet_zero_outline_uv={0.78125,0.515625,0.0703125,0.23046875}
+M.atlas_pixel_dimensions={2048,1024}
+return M
+
+end)()
+HUD.split_hud=(function()
+-- Split Study 08 in the existing HUD Texture compositor. Authored top-left units.
+local A=HUD.split_hud_assets
+local M={width=320,height=161,assets=A,empty_flash_hz=2,
+ dynamic_coverage='mods/dbf_hud/textures/split_hud_dynamic_coverage_v1',
+ dynamic_face='mods/dbf_hud/textures/split_hud_dynamic_face_v1',
+ dynamic_soft='mods/dbf_hud/textures/split_hud_dynamic_soft_v1'}
+local WHITE,GOLD,NAVY,RED={245,246,240},{233,196,93},{9,27,53},{255,87,80}
+local function finite(v)return type(v)=='number'and v==v and math.abs(v)<math.huge end
+local function count(v)return finite(v)and v>=0 and v<=100000 and math.floor(v)or nil end
+local function fraction(v)return finite(v)and v>=0 and v<=1 and v or nil end
+local function color(v,fallback)
+ if type(v)=='table'and finite(v[1])and finite(v[2])and finite(v[3])then return v end
+ if type(v)=='string'and v:match('^#?%x%x%x%x%x%x$')then return HUD.config.rgb(v)end
+ return fallback
+end
+function M.supported(id)return type(id)=='string'and HUD.weapon_names and HUD.weapon_names[id]~=nil end
+function M.selected(c)return c and c.texture_art_trial~=false and c.texture_art_variant=='split'and c.hud_presentation~='practical'and not c.force_all_hud_texture_off end
+function M.assets_ready(resource,can_get)
+ if type(resource)~='function'or(can_get and can_get('material',A.material)~=true)then return false end
+ for _,name in ipairs({A.face,A.atlas,A.coverage,A.hard_coverage})do local r=resource(name);if r==nil or r==false then return false end end
+ return true
+end
+function M.readouts(m,cfg,clock)
+ cfg=cfg or {};local loaded,capacity,reserve=count(m.value),count(m.capacity),count(m.reserve)
+ local heat,infinite=m.kind=='heat',m.kind=='infinite'
+ local fuel=m.label=='FUEL';local unknown=loaded==nil and not infinite
+ local charge,release
+ if m.safety_mode then
+  local now=clock or cfg.style_clock
+  local age=finite(now)and finite(m.charge_sample_clock)and now-m.charge_sample_clock or nil
+  local q=HUD.layout.railgun_charge(m.safety_mode,m.charge_fraction,m.charge_seconds,cfg.railgun_release_margin_ms,age,m.charge_frame_delay)
+  if q then charge,release=q.fraction,q.release or q.limit end
+ else charge=fraction(m.epoch_charge_fraction)or fraction(m.loyalist_charge_fraction)or fraction(m.purifier_charge_fraction)end
+ local quasar=m.quasar_charge_verified==true
+ local cooldown=quasar and(m.state=='VENT'or m.locked==true)
+ if quasar and not cooldown then charge=fraction(m.fraction)end
+ local active_charge=charge~=nil and(charge>0 or m.charge_ready==true or quasar)
+ local level=m.melta_charge_level
+ local active_level=finite(level)and level>=0 and level<=10 and level>0
+ local empty=not heat and not infinite and loaded==0
+ local low=not heat and not infinite and loaded and loaded>0 and capacity and capacity>0 and loaded/capacity<=.2
+ local label=heat and 'HEAT'or infinite and 'ENERGY'or fuel and 'FUEL'or
+  ((m.reserve_kind=='SHELLS'or m.ammo_icon=='SHELL'or m.ammo_icon=='DOUBLE_SHELL')and 'SHELLS'or'ROUNDS')
+ if not heat and not infinite and not fuel and capacity==1 then label='LOADED' end
+ local value,suffix,sub=loaded,heat and '%'or nil,capacity and('/ '..capacity)or''
+ local progress=fraction(m.fraction);local status='';local warning
+ if m.reloadable==false then sub='ONE SHOT' end
+ if infinite then value=nil;sub='CONTINUOUS';unknown=false;progress=1 end
+ if quasar then label=cooldown and 'COOLDOWN'or'CHARGE';reserve=nil end
+ if active_charge and not unknown then
+  value=math.floor(charge*100+.5);suffix='%';sub=quasar and ''or(tostring(loaded)..' LOADED');progress=charge;label='CHARGE'
+  status=release and 'RELEASE'or(m.charge_ready or charge>=1)and'CHARGED'or charge>0 and'CHARGING'or''
+ elseif active_level and not unknown then
+  value=math.floor(level);label='CHARGE LEVEL';suffix=nil;sub=tostring(loaded)..' LOADED';progress=nil;status='CHARGING'
+ end
+ if unknown then status='NO DATA';sub='';suffix=nil;progress=nil
+ elseif cooldown then status='COOLING';suffix='%'
+ elseif m.reloading==true or m.df_ejector_open==true then status='RELOADING'
+ elseif empty then status=(m.state=='SPENT'or m.reloadable==false)and'SPENT'or'EMPTY';warning='red'
+ elseif heat and not quasar then
+  if m.state=='VENT'or m.locked==true then status='VENTING';warning='red'
+  elseif m.state=='HOT'or(progress and progress>=.85)then status='HOT';warning='gold'end
+ elseif low and not active_charge and not active_level then status=fuel and'LOW FUEL'or'LOW AMMO';warning='gold'
+ elseif m.chamber_bonus==1 and loaded and capacity and loaded==capacity+1 then status='CHAMBERED +1' end
+ if release then warning='red' end
+ local contexts={}
+ local function context(kind,value)if type(value)=='string'and value~=''and value~='--'then contexts[#contexts+1]={kind=kind,value=value}end end
+ context('AUTO',m.fire_mode)
+ if finite(m.rpm)and m.rpm>=1 and m.rpm<=10000 and not quasar then context('RPM',math.floor(m.rpm+.5)..' RPM')end
+ context('AMMO',m.ammo_mode);context('SAFE',m.safety_mode)
+ if m.reloadable==false then context('SINGLE','SINGLE USE')end
+ local name=HUD.weapon_names[m.resource_hex]or'WEAPON';local spec=HUD.segmented_primary_specs and HUD.segmented_primary_specs[m.resource_hex]
+ local code=spec and spec.code or name:match('^%S+')or'WEAPON'
+ return {value=value,loaded=loaded,capacity=capacity,reserve=reserve,unit=m.reserve_kind,label=label,code=code,
+  suffix=suffix,sub=sub,status=status,progress=progress,empty=empty,infinite=infinite,unknown=unknown,
+  warning=warning,contexts=contexts,charge=active_charge and charge or nil}
+end
+function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
+ if not m or not M.selected(cfg)or not M.supported(m.resource_hex)or not M.assets_ready(resource,can_get)then return nil end
+ local r=M.readouts(m,cfg,clock);local inspect=cfg.split_readout_view=='inspect'
+ local width,height=inspect and 410 or 320,inspect and 178 or 161
+ if #r.contexts>4 then height=math.max(height,(inspect and 46 or 61)+(#r.contexts-1)*(inspect and 29 or 23)+25)end
+ local white,gold,navy,red=color(cfg.text_color,WHITE),color(cfg.decoration_color,GOLD),color(cfg.background_color,NAVY),color(cfg.heat_red,RED)
+ local ink=r.warning=='red'and red or r.warning=='gold'and gold or white
+ local fg=opacity*(cfg.text_opacity or 1)*(cfg.text_color_alpha or 255)/255
+ local depth=finite(cfg.panel_spatial_depth)and math.max(0,math.min(32,cfg.panel_spatial_depth))or 16
+ local depths={main=depth*s,reserve=-depth*.5*s,context=depth*1.8*s,status=0}
+ local dynamic=resource(M.dynamic_coverage);local soft=resource(M.dynamic_soft)
+ local coverage=dynamic and M.dynamic_coverage or(cfg.panel_edge_softness==0 and A.hard_coverage or A.coverage)
+ local frame={type='panel',x=x,y=y,w=width*s,h=height*s,a=0,c={0,0,0},frosted=false,atlas_frame=true,
+  split_hud=true,hud_texture_split=true,hud_texture_primary=true,world_reference_width=240*s/A.gameplay_scale,
+  edge_mask_resource=soft and M.dynamic_soft or nil,edge_mask_material=A.material,
+  edge_mask_box={x=x,y=y+(height-161)*s,w=320*s,h=161*s},spatial_plane='main',spatial_depth=depths.main}
+ local out={frame}
+ local function image(texture,uv,a,b,w,h,c,alpha,role,plane,layer)
+  local q={type='texture',x=x+a*s,y=y+(height-b-h)*s,w=w*s,h=h*s,c=c,a=alpha,
+   texture_material=A.material,texture_resource=texture,atlas_rect=uv,texture_theme=false,texture_layer=layer or 49.1,
+   split_role=role,spatial_plane=plane or'main',spatial_depth=depths[plane or'main']}
+  out[#out+1]=q;return q
+ end
+ local carrier=image(coverage,A.full_uv,0,0,320,161,navy,opacity*(cfg.panel_opacity or.35),'backing','main',49)
+ carrier.coverage_mask=true;carrier.texture_theme=nil;carrier.render_role='backing'
+ local font=cfg.font or'hack';local font_scale=cfg.font_scale or 1
+ local function text(a,b,str,size,c,role,plane,align,maxw)
+  str=tostring(str);size=size*s*font_scale
+  local l,bt,rr,tt=HUD.font.measure(str,size,font,true)
+  if maxw and rr-l>maxw*s then size=size*maxw*s/(rr-l);l,bt,rr,tt=HUD.font.measure(str,size,font,true)end
+  local tx=x+a*s;if align=='right'then tx=tx-rr elseif align=='center'then tx=tx-(l+rr)/2 end
+  local ty=y+(height-b)*s
+  out[#out+1]={type='text',x=tx,y=ty,text=str,size=size,font=font,c=c,a=fg,texture_readout=true,
+   font_scale_applied=true,render_role='readout',readout_key=role,split_role=role,
+   readout_zone={cx=tx+(l+rr)/2,cy=ty+(bt+tt)/2,w=math.max(.001,rr-l),h=math.max(.001,tt-bt)},
+   spatial_plane=plane or'main',spatial_depth=depths[plane or'main']}
+  return out[#out]
+ end
+ text(87,16,r.code,10,gold,'identity','main','left',140)
+ text(87,43,r.label,11.5,gold,'unit','main','left',134)
+ local pulse=r.empty and cfg.reduced_motion~=true and math.floor((clock or 0)*4)%2==1 and.22 or 1
+ if r.infinite then
+  local b=A.infinity_outline;local q=image(A.atlas,b.uv,88,61,b.w,b.h,NAVY,fg,'loaded');q.outline=true
+  local a=A.infinity;image(A.atlas,a.uv,88,61,a.w,a.h,white,fg,'loaded')
+ else
+  local raw=r.value and tostring(r.value)or'--';local str=r.value and string.rep('0',math.max(0,2-#raw))..raw or raw
+  if #str>3 then text(88,101,raw,48,ink,'loaded','main','left',134).a=fg*pulse
+  else for i=1,#str do
+   local ch=str:sub(i,i);local column=tonumber(ch)or 10;local quiet=r.value~=nil and i<=#str-#raw
+   local a=88+(i-1)*76*48/118
+   local q=image(A.atlas,A.digit_uv(column,quiet),a,53,72*48/118,48,ink,fg*pulse,'loaded');q.digit_character=ch;q.leading_zero=quiet
+   q=image(A.atlas,quiet and A.quiet_zero_outline_uv or A.outline_uv(column),a,53,72*48/118,48,NAVY,fg*pulse,'loaded');q.outline=true;q.digit_character=ch
+  end end
+ end
+ local digit_count=r.value and math.max(2,#tostring(r.value))or 2
+ if r.suffix then text(88+(digit_count*76-5)*48/118+5,97,r.suffix,14,ink,'suffix')end
+ text(222,122,r.sub,11,white,'capacity','main','right',134)
+ local gauge=A.sprites.gauge;image(A.atlas,gauge.uv,87,109.5,136,10,white,fg,'gauge_inactive')
+ if r.progress and r.progress>0 then image(A.atlas,A.sprites.solid.uv,88,109.5,134*r.progress,3,r.warning=='red'and red or gold,fg,'gauge')end
+ if r.reserve~=nil then
+  local sprite=A.sprites.reserve_connector;image(A.atlas,sprite.uv,61,78.5,12,3,gold,fg,'reserve','reserve')
+  local icon=A.icons[r.unit]or A.icons[r.unit=='ROUNDS'and'SHELLS'or r.unit=='CANISTERS'and'TANKS'or'UNKNOWN']
+  image(A.atlas,icon.uv,10-2*.9,48-2*.9,18*.9,18*.9,gold,fg,'reserve','reserve')
+  text(29,71,r.reserve,29,white,'reserve','reserve','left',45)
+  text(10,87,r.unit or'RES',11.5,white,'reserve','reserve','left',67)
+ end
+ local keys={AUTO='FIRE SELECT',RPM='FIRE RATE',AMMO='AMMUNITION',SAFE='SAFETY',SINGLE='SUPPLY'}
+ for i,c in ipairs(r.contexts)do
+  local baseline=(inspect and 46 or 61)+(i-1)*(inspect and 29 or 23)
+  local node=inspect and A.inspect_context_nodes[c.kind]or A.context_nodes[c.kind]
+  image(A.atlas,node.uv,node.box[1],baseline-(inspect and 13 or 13),node.box[3],node.box[4],gold,fg,'context','context').context_kind=c.kind
+  if inspect then text(286,baseline-10,keys[c.kind],8.5,{147,170,189},'context','context','left',120)end
+  if not inspect and #c.value>9 then
+   local a,b=c.value:match('^(%S+)%s+(.+)$')
+   text(264,baseline,a or c.value,11.5,gold,'context','context','left',55)
+   if b then text(264,baseline+12,b,11.5,gold,'context','context','left',55)end
+  else text(inspect and 286 or 264,baseline+(inspect and 3 or 0),c.value,11.5,gold,'context','context','left',inspect and 120 or 55)end
+  out[#out].context_kind=c.kind
+ end
+ if r.status~=''then
+  local c=r.warning=='red'and red or gold
+  image(A.atlas,A.sprites.solid.uv,87,141,166,18,navy,fg*.58,'status','status')
+  image(A.atlas,A.sprites.solid.uv,85.5,141,3,18,c,fg,'status','status')
+  text(97,153.5,r.status,11.5,c,'status','status','left',153)
+ end
+ frame.split_decor_resource=resource(M.dynamic_face)and M.dynamic_face or A.face
+ frame.split_scale=s
+ out=HUD.layout.decorate_textures(out,s,cfg,opacity)
+ return out
+end
+function M.decorate(out,frame,cfg,opacity)
+ local s=frame.split_scale;local h=frame.h
+ out[#out+1]={type='texture',x=frame.x,y=frame.y+h-161*s,w=320*s,h=161*s,c=color(cfg.decoration_color,GOLD),
+  a=opacity*(cfg.text_color_alpha or 255)/255,texture_material=A.material,texture_resource=frame.split_decor_resource,
+  atlas_rect=A.full_uv,texture_theme=false,texture_layer=49.2,decoration=true,split_role='decoration',
+  spatial_plane='main',spatial_depth=frame.spatial_depth}
 end
 return M
 
@@ -15883,11 +16162,13 @@ function M.prepare(commands,p,c)
                         if v.effect_band then v.effect_band=v.effect_band*scale end
                         v.x=(v.x-f.x-f.w/2)*scale;v.y=(v.y-f.y-f.h/2)*scale
                         if v.texture_art_box then local b=v.texture_art_box;v.texture_art_box={x=(b.x-f.x-f.w/2)*scale,y=(b.y-f.y-f.h/2)*scale,w=b.w*scale,h=b.h*scale} end
+                        if v.edge_mask_box then local b=v.edge_mask_box;v.edge_mask_box={x=(b.x-f.x-f.w/2)*scale,y=(b.y-f.y-f.h/2)*scale,w=b.w*scale,h=b.h*scale} end
                         if v.readout_zone then local z=v.readout_zone;v.readout_zone={cx=(z.cx-f.x-f.w/2)*scale,cy=(z.cy-f.y-f.h/2)*scale,w=z.w*scale,h=z.h*scale} end
                         if v.quad then local q={};for i,p in ipairs(v.quad) do q[i]={(p[1]-f.x-f.w/2)*scale,(p[2]-f.y-f.h/2)*scale} end;v.quad=q end
                         if v.w then v.w=v.w*scale end
                         if v.h then v.h=v.h*scale end
                         if v.size then v.size=v.size*scale end
+                        if v.spatial_depth then v.spatial_depth=v.spatial_depth*scale end
                         centered[#centered+1]=v
                     end
                     -- Pixel glyphs quantize after world scaling; fit their actual bounds.
@@ -16982,6 +17263,37 @@ function M.new(sr,backend,root)
  local registered={}
  local native,off,busy,job,pool,restore_requested,after_close,desired;local frame=0;local serial=store.serial or 0
  local generated_name='primary_edge_mask_dynamic_v2'
+ local generated_allowed={primary_edge_mask_dynamic_v2=true,split_hud_dynamic_coverage_v1=true,split_hud_dynamic_face_v1=true,split_hud_dynamic_soft_v1=true}
+ -- Migrate a published mask from the earlier single-image implementation.
+ if not store.generated_names then
+  store.generated_names={};if store.active[generated_name]then store.generated_names[generated_name]=true end
+ end
+ local function generated_ready(signature)
+  if store.generated_signature~=signature or not next(store.generated_names)then return false end
+  for name in pairs(store.generated_names)do
+   local r=store.active[name]
+   if not(r and r.ready and r.uploaded and r.consumed and r.resource)then return false end
+  end
+  return true
+ end
+ local function generated_items(result)
+  local images=result and result.images
+  if images==nil then images={[generated_name]=result}end
+  assert(type(images)=='table','Generated images required')
+  local names={};for name in pairs(images)do assert(generated_allowed[name],'Generated image name not allowed');names[#names+1]=name end
+  assert(#names>0 and #names<=4,'Generated image batch must contain one to four images');table.sort(names)
+  local items,published,total,unique={},{},0,{}
+  for _,name in ipairs(names)do
+   local image=images[name];local bytes=HUD.runtime_textures.validate(image)
+   local size=image.width..'x'..image.height;unique[size]=unique[size]or {}
+   if not unique[size][image.rgba] and not cached(image)then total=total+bytes end
+   unique[size][image.rgba]=true
+   items[#items+1]={name=name,image={format='RGBA8',width=image.width,height=image.height,row_pitch=image.row_pitch,rgba=image.rgba}}
+   published[name]=true
+  end
+  assert(store.bytes+total<=HUD.runtime_textures.max_retained_bytes,'Hot artwork budget exhausted; restart required')
+  return items,published
+ end
  local function trace(v)
   local line='HOT_ART_STAGE staged_v3 job='..serial..' frame='..frame..' '..v
   local f=io.open(root..'/upload-stages.log','a')
@@ -17025,7 +17337,7 @@ function M.new(sr,backend,root)
     local before=store.bytes;pool.step()
     if store.bytes<before then trace('reclaimed bytes='..(before-store.bytes)..' retained='..store.bytes..' resources='..#store.resources)end
     if store.failure then error(store.failure)end
-    if restore_requested then pool.publish({});restore_requested=nil;pool.step()end
+    if restore_requested then pool.publish({});store.generated_names={};restore_requested=nil;pool.step()end
     if self.closing and #store.retirements==0 and #store.orphans==0 then store.consumers={};store.owner=nil;if off then local stop=off;off=nil;stop()end;if after_close then local done=after_close;after_close=nil;done()end;return end
    end
    if not job and validation_remaining~=nil and #store.retirements==0 and #store.orphans==0 then
@@ -17046,15 +17358,15 @@ function M.new(sr,backend,root)
     end
    end
    if not job and desired then
-    if store.generated_signature==desired.signature and store.active[generated_name]then desired=nil;return end
+    if generated_ready(desired.signature)then desired=nil;return end
     desired.quiet=desired.quiet+1
     if desired.quiet<12 then return end
     local request=desired;desired=nil
-    local image=request.factory();HUD.runtime_textures.validate(image)
-    local prepared={};for name,r in pairs(store.active)do prepared[name]=r end
+    local items,names=generated_items(request.factory())
+    local prepared={};for name,r in pairs(store.active)do if not store.generated_names[name]then prepared[name]=r end end
     serial=serial+1;store.serial=serial
-    job={items={{name=generated_name,image=image}},index=1,stage='select',prepared=prepared,generated_signature=request.signature}
-    trace('generated edge queued signature='..request.signature)
+    job={items=items,index=1,stage='select',prepared=prepared,generated_signature=request.signature,generated_names=names}
+    trace('generated images queued signature='..request.signature..' count='..#items)
    end
    if not job then return end
    local j=job;local item=j.items[j.index]
@@ -17087,7 +17399,7 @@ function M.new(sr,backend,root)
    elseif j.stage=='publish' then
     if pool then pool.publish(j.prepared) else store.active=j.prepared end
     for name,record in pairs(j.prepared)do store.images[name]=record;cache(record)end
-    if j.generated_signature then store.generated_signature=j.generated_signature end
+    if j.generated_signature then store.generated_signature=j.generated_signature;store.generated_names=j.generated_names end
     job=nil;self.status='Texture files loaded ('..#j.items..')'
     trace('published '..#j.items..' artwork files')
    end
@@ -17149,7 +17461,7 @@ function M.new(sr,backend,root)
   assert(#items>0,'Manifest has no artwork')
   assert(store.bytes+total<=HUD.runtime_textures.max_retained_bytes,'Hot artwork budget exhausted; restart required')
   initialize();serial=serial+1;store.serial=serial
-  local prepared={};if store.active[generated_name]then prepared[generated_name]=store.active[generated_name]end
+  local prepared={};for name in pairs(store.generated_names)do if store.active[name]then prepared[name]=store.active[name]end end
   job={items=items,index=1,stage='select',prepared=prepared}
   self.status='Loading '..#items..' texture files';trace('queued '..#items..' files')
   return self.status
@@ -17158,7 +17470,7 @@ function M.new(sr,backend,root)
   assert(not self.closing and store.owner==self,'Artwork manager retired')
   assert(not store.failure,'Texture uploads blocked after a stage failure; restart required: '..tostring(store.failure))
   assert(type(signature)=='string'and #signature<=128 and type(factory)=='function','Generated edge request invalid')
-  if not job and store.generated_signature==signature and store.active[generated_name]then desired=nil;return false end
+  if not job and generated_ready(signature)then desired=nil;return false end
   if job and job.generated_signature==signature then desired=nil;return false end
   if desired and desired.signature==signature then return false end
   local quarantine=io.open(root..'/UPLOADS-QUARANTINED.txt','rb')
@@ -17177,10 +17489,17 @@ function M.new(sr,backend,root)
   local name=texture and texture:match('^mods/dbf_hud/textures/([%w_%-]+)$')
   return name and store.active[name] and store.active[name].resource
  end
+ function self.image(texture)
+  if self.closing or store.owner~=self then return nil end
+  local name=type(texture)=='string'and texture:match('^mods/dbf_hud/textures/([%w_%-]+)$')
+  local r=name and store.active[name]
+  if not(r and r.ready and r.uploaded and r.consumed and r.resource and type(r.rgba)=='string')then return nil end
+  return {format='RGBA8',width=r.width,height=r.height,row_pitch=r.width*4,rgba=r.rgba}
+ end
  function self.restore()
   assert(not self.closing and store.owner==self,'Artwork manager retired')
   desired=nil;store.generated_signature=nil
-  cancel('Packaged artwork restored');if pool then restore_requested=true else store.active={} end;trace('restored packaged artwork');return self.status
+  cancel('Packaged artwork restored');if pool then restore_requested=true else store.active={};store.generated_names={} end;trace('restored packaged artwork');return self.status
  end
  function self.after_close(fn)assert(type(fn)=='function');after_close=fn end
  function self.close()
@@ -17437,6 +17756,7 @@ function M.expand_texture_layers(commands)
                         texture_material=layer.material or v.texture_material,texture_resource=layer.texture or v.texture_resource,
                         a=(v.a or 1)*(layer.alpha or 1),c=layer.tint or v.c,texture_layer=layer.order,
                         fold_child=v.fold_child,texture_theme=layer.theme,atlas_rect=layer.atlas_rect}
+                    q.spatial_plane,q.spatial_depth=v.spatial_plane,v.spatial_depth
                     if layer.theme==nil then q.texture_theme=v.texture_theme end
                     emit(q)
                 end
@@ -17500,6 +17820,42 @@ function M.point(m,at,x,y)
     return at.x+(m[1]*x+m[9]*y)/1000,
         at.y+(m[2]*x+m[10]*y)/1000,at.z+(m[3]*x+m[11]*y)/1000
 end
+-- Split pods share one authored coordinate system and the existing planar
+-- projection machinery, while their origins sit at distinct weapon-local depths.
+function M.spatial_origin(m,at,depth)
+    assert(finite(depth),'invalid spatial HUD depth')
+    return {x=at.x-m[5]*depth/1000,y=at.y-m[6]*depth/1000,z=at.z-m[7]*depth/1000}
+end
+function M.spatial_groups(commands)
+    local frame=commands[1]
+    if not frame or not frame.split_hud then return nil end
+    local groups={};local names={'main','reserve','context','status'};local allowed={}
+    for _,name in ipairs(names)do allowed[name]=true end
+    for index,v in ipairs(commands)do
+        if index~=1 and not v.fold_child then
+            local name=v.spatial_plane or 'main';assert(allowed[name],'invalid spatial HUD plane')
+            local group=groups[name]
+            if not group then group={name=name,commands={},depth=nil};groups[name]=group end
+            if v.spatial_depth~=nil then
+                assert(finite(v.spatial_depth),'invalid spatial HUD depth')
+                assert(group.depth==nil or math.abs(group.depth-v.spatial_depth)<1e-7,'inconsistent spatial HUD depth')
+                group.depth=v.spatial_depth
+            end
+            group.commands[#group.commands+1]=v
+        end
+    end
+    local ordered={}
+    for _,name in ipairs(names)do
+        local group=groups[name]
+        if group then
+            group.depth=group.depth or 0
+            local metadata={};for k,v in pairs(frame)do metadata[k]=v end
+            metadata.a=0;metadata.spatial_plane=name;metadata.spatial_depth=group.depth;metadata.spatial_metadata=true
+            table.insert(group.commands,1,metadata);ordered[#ordered+1]=group
+        end
+    end
+    return ordered
+end
 function M.text_parts(command,face)
     local parts=HUD.font.numeric_parts(command)
     if not face then return parts end
@@ -17531,6 +17887,8 @@ function M.prepare_commands(commands,p,c,can_get)
     commands=M.expand_shader_layers(M.expand_texture_layers(commands),c,can_get,p.resource_hex)
     for _,v in ipairs(commands)do
         assert(type(v.x)=='number' and v.x==v.x and math.abs(v.x)<math.huge and type(v.y)=='number' and v.y==v.y and math.abs(v.y)<math.huge,'invalid HUD coordinates')
+        if v.spatial_depth~=nil then assert(finite(v.spatial_depth),'invalid spatial HUD depth')end
+        if v.spatial_plane~=nil then assert(v.spatial_plane=='main'or v.spatial_plane=='reserve'or v.spatial_plane=='context'or v.spatial_plane=='status','invalid spatial HUD plane')end
         if v.type=='text' then assert(HUD.native_font_data.faces[v.font or 'bigblue'] and HUD.native_font_uv[v.font or 'bigblue'],'HUD font unavailable')end
     end
     return commands,m,at
@@ -17554,7 +17912,7 @@ function M.new(sr,log,hot_panel_art)
         return effect_availability[name] and name or nil
     end
 
-    local effect_guis={};local texture_guis={};local shader_guis={}
+    local effect_guis={};local texture_guis={};local shader_guis={};local spatial_guis={}
     local gui,child_gui,world,atlas_gui;local ids={};local glyphs={};local bitmap_updates=0;local reuse_glyphs=type(G.update_bitmap_3d_uv)=='function';local recycled={};local allocated,reused=0,0;local failed=false;local first=true
     local self={status='screen scene assets not loaded'}
     local function live(w)
@@ -17589,9 +17947,10 @@ function M.new(sr,log,hot_panel_art)
             for _,effect_gui in pairs(effect_guis) do W.destroy_gui(world,effect_gui) end;effect_guis={}
             if child_gui then W.destroy_gui(world,child_gui) end
             if atlas_gui then W.destroy_gui(world,atlas_gui) end
+            for _,spatial_gui in pairs(spatial_guis)do W.destroy_gui(world,spatial_gui)end
             W.destroy_gui(world,gui)
         end
-        texture_guis={};shader_guis={}
+        texture_guis={};shader_guis={};spatial_guis={}
         released=released+#ids;for _,pool in pairs(glyphs) do released=released+#pool.ids end;glyphs={};gui,child_gui,world,atlas_gui=nil,nil,nil,nil
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
@@ -17649,11 +18008,10 @@ function M.new(sr,log,hot_panel_art)
                 return point -- Native callback returns normalized GUI-up coordinates.
             end
         else project_snapshot=HUD.projection.projector(camera,fov,width/height,hud_near) end
-        local function render(list,axes,origin,draw_gui)
-            local plane
+        local function render(list,axes,origin,draw_gui,spatial)
+            local plane;local frame
+            for _,entry in ipairs(list)do if entry.type=='panel'and entry.w>0 and entry.h>0 then frame=entry;break end end
             if native_projection then
-                local frame
-                for _,entry in ipairs(list)do if entry.type=='panel'and entry.w>0 and entry.h>0 then frame=entry;break end end
                 if frame then
                     local points={}
                     for i,corner in ipairs({{frame.x,frame.y+frame.h},{frame.x+frame.w,frame.y+frame.h},{frame.x+frame.w,frame.y},{frame.x,frame.y}})do
@@ -17671,6 +18029,10 @@ function M.new(sr,log,hot_panel_art)
             local depth,enabled
             if native_projection then
                 depth=finite(c.world_texture_depth) and c.world_texture_depth>0 and c.world_texture_depth or 0
+                if spatial and plane and frame then
+                    local center=plane.project(frame.x+frame.w/2,frame.y+frame.h/2)
+                    if center and finite(center.depth)and center.depth>hud_near then depth=center.depth end
+                end
                 enabled=c.occlusion_mode~='gui' and depth>0 and 1 or 0
             else
                 local dx,dy,dz=origin.x-camera[13],origin.y-camera[14],origin.z-camera[15]
@@ -17705,11 +18067,11 @@ function M.new(sr,log,hot_panel_art)
                 return rows[1] and rows or nil
             end
             local mapping_rows,mapping_checked
-            local edge_mask,edge_material
+            local edge_mask,edge_material,edge_box
             for _,entry in ipairs(list)do
-                if entry.type=='panel'and entry.hud_texture_primary and entry.edge_mask_resource and type(entry.edge_mask_material)=='string'and
+                if entry.type=='panel'and (entry.hud_texture_primary or entry.split_hud) and entry.edge_mask_resource and type(entry.edge_mask_material)=='string'and
                     hot_panel_art and hot_panel_art.resource(entry.edge_mask_resource)then
-                    edge_mask,edge_material=entry.edge_mask_resource,entry.edge_mask_material;break
+                    edge_mask,edge_material,edge_box=entry.edge_mask_resource,entry.edge_mask_material,entry.edge_mask_box;break
                 end
             end
             local function panel_mapping()
@@ -17720,6 +18082,16 @@ function M.new(sr,log,hot_panel_art)
                 if not frame or frame.w<=0 or frame.h<=0 then return nil end
                 mapping_rows=panel_rows(frame.x,frame.y,frame.w,frame.h)
                 return mapping_rows
+            end
+            local edge_rows,edge_checked
+            local function decoration_mapping()
+                if not edge_box then return panel_mapping()end
+                if edge_checked then return edge_rows end
+                edge_checked=true
+                if finite(edge_box.x)and finite(edge_box.y)and finite(edge_box.w)and finite(edge_box.h)and edge_box.w>0 and edge_box.h>0 then
+                    edge_rows=panel_rows(edge_box.x,edge_box.y,edge_box.w,edge_box.h)
+                end
+                return edge_rows
             end
             local materials={}
             local function role_gui(role)
@@ -17833,10 +18205,10 @@ function M.new(sr,log,hot_panel_art)
                 if v.type=='rect' and v.decoration and not v.charge_meter and edge_mask and not c.profile_skip_geometry then
                     -- The shared decoration rectangles use one panel-wide alpha
                     -- map on the existing root GUI; their geometry/color stay intact.
-                    local rows=panel_mapping()
+                    local rows=decoration_mapping()
                     if rows then quad(v.x,v.y,v.w,v.h,edge_material,color(1),50,nil,edge_mask,v.quad,nil,'decoration',rows)
                     else quad(v.x,v.y,v.w,v.h,fill,color(1),50,nil,nil,v.quad)end
-                elseif (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
+                elseif (v.type=='rect' or v.type=='panel') and not v.spatial_metadata and not c.profile_skip_geometry then
                     local selected_material=not v.contrast_backing and panel_material(v,p.resource_hex,c)
                     local panel_uv
                     if selected_material and selected_material:find("/lab_",1,true) then
@@ -17948,7 +18320,25 @@ function M.new(sr,log,hot_panel_art)
                 end
             end
         end
-        render(body,m,at,gui)
+        local spatial=M.spatial_groups(body);local used_spatial={}
+        if spatial then
+            for _,group in ipairs(spatial)do
+                local draw_gui=gui
+                if group.name~='main'then
+                    draw_gui=spatial_guis[group.name]
+                    if not draw_gui then draw_gui=assert(W.create_screen_gui(world,'scale',1,1),'spatial HUD GUI missing');spatial_guis[group.name]=draw_gui end
+                    used_spatial[group.name]=true
+                end
+                render(group.commands,m,M.spatial_origin(m,at,group.depth),draw_gui,true)
+            end
+        else render(body,m,at,gui)end
+        for name,spatial_gui in pairs(spatial_guis)do if not used_spatial[name]then
+            if shader_guis[spatial_gui]then for _,layer_gui in pairs(shader_guis[spatial_gui])do W.destroy_gui(world,layer_gui)end;shader_guis[spatial_gui]=nil end
+            if texture_guis[spatial_gui]then for _,layer_gui in pairs(texture_guis[spatial_gui])do W.destroy_gui(world,layer_gui)end;texture_guis[spatial_gui]=nil end
+            if glyphs[spatial_gui]then released=released+#glyphs[spatial_gui].ids;glyphs[spatial_gui]=nil end
+            if effect_guis[spatial_gui]then W.destroy_gui(world,effect_guis[spatial_gui]);effect_guis[spatial_gui]=nil end
+            W.destroy_gui(world,spatial_gui);spatial_guis[name]=nil
+        end end
         if #fold>0 then
             local child_panel=fold[1];local edge=child_panel.y+child_panel.h;local child={}
             for _,v in ipairs(fold) do
@@ -18032,6 +18422,7 @@ function M.recover(p,c,commands,camera,fov,aspect,settings,current_scale)
     end
     local function bounds(cfg)
         local left,bottom,right,top=math.huge,math.huge,-math.huge,-math.huge
+        local front=0
         for _,v in ipairs(HUD.world_style.prepare(commands,p,cfg))do
             local a,b,d,e=v.x,v.y,v.x+(v.w or 0),v.y+(v.h or 0)
             if v.type=='text'then
@@ -18042,21 +18433,28 @@ function M.recover(p,c,commands,camera,fov,aspect,settings,current_scale)
                 a,b,d,e=math.min(a,point[1]),math.min(b,point[2]),math.max(d,point[1]),math.max(e,point[2])
             end end
             left,bottom,right,top=math.min(left,a),math.min(bottom,b),math.max(right,d),math.max(top,e)
+            if v.spatial_depth~=nil then
+                assert(finite(v.spatial_depth),'HUD spatial depth is unavailable')
+                front=math.max(front,v.spatial_depth/1000)
+            end
         end
         assert(finite(left)and right>left and top>bottom,'HUD bounds are unavailable')
-        return left/1000,bottom/1000,right/1000,top/1000
+        return left/1000,bottom/1000,right/1000,top/1000,front
     end
-    local l,b,r,t=bounds(c);local tan=math.tan(fov*.5);local depth=.65
+    local l,b,r,t,front=bounds(c);local tan=math.tan(fov*.5);local depth=.65
     current_scale=current_scale or 1
     -- Keep the recovered face beside the crosshair with ample viewport margin.
     -- Reduce only this view's saved size if its current dimensions cannot fit.
-    local factor=math.min(1,.96*depth*tan*aspect/(r-l),1.28*depth*tan/(t-b))
+    -- Camera-facing recovery puts every pod on the same XY basis. Fit the
+    -- nearest actual depth conservatively, so floating settings cannot clip.
+    local usable_depth=math.max(.005,depth-front)
+    local factor=math.min(1,.96*usable_depth*tan*aspect/(r-l),1.28*usable_depth*tan/(t-b))
     local scale=clamp(current_scale*factor,.05,3)
     local fitted={};for k,v in pairs(c)do fitted[k]=v end
     fitted.scale=c.scale*scale/current_scale
-    l,b,r,t=bounds(fitted)
-    depth=math.max(depth,(r-l)/(.96*tan*aspect),(t-b)/(1.28*tan))
-    local right=.3*depth*tan*aspect-(l+r)/2
+    l,b,r,t,front=bounds(fitted)
+    depth=math.max(depth,front+(r-l)/(.96*tan*aspect),front+(t-b)/(1.28*tan))
+    local right=.3*(depth-front)*tan*aspect-(l+r)/2
     local up=-(b+t)/2
     local target={}
     for j=1,3 do target[j]=camera[12+j]+camera[j]*right+camera[4+j]*depth+camera[8+j]*up end
@@ -18084,7 +18482,7 @@ function M.recover(p,c,commands,camera,fov,aspect,settings,current_scale)
         roll=math.atan2(-dot(1,9),dot(9,9));yaw=math.atan2(dot(5,1),dot(5,5))
     else roll=math.atan2(dot(9,1),dot(1,1));yaw=0 end
     offset.rotation,offset.pitch,offset.yaw=math.deg(roll),math.deg(pitch),math.deg(yaw)
-    return offset,{depth=depth,target=target,margin=.08}
+    return offset,{depth=depth,target=target,margin=.08,nearest_depth=depth-front}
 end
 function M.apply_recovery(self,offset)
     local resource=self.weapon_pose and self.weapon_pose.resource_hex
@@ -18664,6 +19062,7 @@ function M.texture_choices(resource)
         if not found then table.insert(labels,1,'HUD Texture');table.insert(ids,1,'faithful')end
     end
     labels[#labels+1]='Original primitives';ids[#ids+1]='original'
+    if HUD.split_hud and HUD.split_hud.supported(resource)then table.insert(labels,1,'Split instrument');table.insert(ids,1,'split')end
     return labels,ids,#ids>1
 end
 function M.weapon_choices()
@@ -18730,6 +19129,23 @@ function M.new(hud)
         set('editor_save',false);set('editor_reset',false)
     end
     function self.sync()
+        local native=font_host and font_host.mods and font_host.mods.dbf_hud_fonts
+        if native and not retired then
+            -- HUD configuration is authoritative after a reset or preset load.
+            -- Match the existing per-weapon refresh without invoking callbacks.
+            local style_index=1;for i,name in ipairs(HUD.config.styles)do if name==hud.config.style_3d then style_index=i end end
+            local values={family=font_index(),style=style_index,decoration=decoration_index(),
+                panel_color=hud.config.background_color,text_color=hud.config.text_color,decoration_color=hud.config.decoration_color,
+                fade_when_not_aiming=hud.config.fade_3d_unless_aiming,hud_scale=hud.config.scale,
+                display_mode=hud.config.anchor_mode=='weapon'and 1 or(hud.config.anchor_mode=='world'and 3 or 2),
+                keep_upright=hud.config.keep_hud_upright,force_all_hud_texture_off=hud.config.force_all_hud_texture_off,
+                render_sync_trial=hud.config.render_sync_trial,debug_hud_timing=hud.config.debug_hud_timing,
+                zoom_compensation=hud.config.zoom_compensation,debug_occlusion=hud.config.force_occlusion,
+                debug_sight_root_orientation=hud.config.debug_sight_root_orientation,debug_logging=hud.config.debug_logging,
+                mg43_easter_egg=hud.config.mg43_easter_egg,senator_style=hud.config.senator_style=='upright'and 2 or 1}
+            for key,value in pairs(values)do if native.controls[key]then native.values[key]=value end end
+            return
+        end
         if not api or not attempted or retired then return end
         for _,s in ipairs(sliders) do set(s[1],hud.config[s[1]]) end
         set('display_mode',hud.config.anchor_mode=='weapon' and 1 or (hud.config.anchor_mode=='world' and 3 or 2))
@@ -18820,6 +19236,7 @@ function M.new(hud)
             end
             local weapon_labels,weapon_ids=M.weapon_choices()
             local panel_controls={
+                {id='split_defaults',type='button',label='Apply Split defaults',description='Start fresh with the Split instrument palette, artwork and layout controls for all weapons.',on_activate=function()local ok,message=hud.use_split_defaults();assert(ok,message);return message end},
                 {id='hud_presentation',type='choice',presentation='dropdown',label='HUD presentation',choices={'Automatic','Simple','Fancy'},default=({automatic=1,practical=2,weapon_specific=3})[hud.config.hud_presentation] or 1,description='Automatic switches with the camera. Simple uses the practical panel in both views; Fancy uses weapon-specific styling in both views. Your camera perspective is unchanged.',on_change=function(v)save('hud_presentation',assert(({'automatic','practical','weapon_specific'})[v],'Unknown HUD presentation'))end},
                 {id='third_person_scale',type='slider',label='Third-person HUD scale',min=.5,max=1.5,step=.05,default=hud.config.third_person_scale,description='Compact practical panel outside first person. First-person scale uses the existing HUD scale.',on_change=function(v)save('third_person_scale',v)end},
                 {id='third_person_opacity',type='slider',label='Third-person panel opacity',min=0,max=1,step=.05,default=hud.config.third_person_opacity,description='Practical panel background only; live text stays readable.',on_change=function(v)save('third_person_opacity',v)end},
@@ -18850,7 +19267,9 @@ function M.new(hud)
                 {'panel_edge_curve','Edge fade curve','slider',.5,3,.1},
                 {'panel_edge_dither','Edge dither (%)','slider',0,100,5},
                 {'panel_edge_grain','Edge grain size','slider',1,4,1},
-                {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
+                {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver','Split instrument'}},
+                {'split_readout_view','Readout detail','choice',{'Combat','Inspect settings'}},
+                {'panel_spatial_depth','Layer spacing','slider',0,32,1},
                 {'style_3d','Visual style','choice',styles}}
             -- Fetch selects a weapon after registration; keep these controls
             -- registered and gate their availability against the fetched weapon.
@@ -18859,6 +19278,7 @@ function M.new(hud)
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings(panel_weapon) or hud.config
                 local v=cfg[key]
+                if key=='split_readout_view'then return v=='inspect'and 2 or 1 end
                 if key=='texture_art_variant' then local _,ids=M.texture_choices(panel_weapon);for i,id in ipairs(ids)do if id==v then return i end end;return #ids end
                 if key=='theme_shader' or key=='effect_shader' then for i,id in ipairs(shader_ids)do if id==v then return i end end;return key=='theme_shader' and 1 or 2 end
                 if key=='font' then local own=(hud.config.weapon_panels or {})[panel_weapon or ''];if not own or not own.font then return 1 end;for i,name in ipairs(HUD.config.fonts)do if name==own.font then return i+1 end end;return 1 end
@@ -18877,6 +19297,8 @@ function M.new(hud)
                 if key=='panel_edge_curve' then c.description='Shape the fade: below 1 retains more of the edge; 1 is the original smooth fade; above 1 dissolves more quickly.' end
                 if key=='panel_edge_dither' then c.description='Break the fading edge into stable dots. 0 is smooth feathering; 100 is fully dithered. The solid center stays unchanged.' end
                 if key=='panel_edge_grain' then c.description='Size of the edge dots: 1 is fine; 4 is coarse. The pattern stays attached to the panel.' end
+                if key=='panel_spatial_depth'then c.description='Separate Split readout, reserve, settings and status into depth layers. 0 puts them on one plane; 16 matches the study.'end
+                if key=='split_readout_view'then c.description='Combat shows selected settings; Inspect adds field names. Available settings remain visible in either view.'end
                 if key=='background_color' then c.description='Live readout shader carrier color; HUD Texture colors are unchanged.' end
                 if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
                 if key=='theme_shader_animate' or key=='effect_shader_animate' then c.description='Animate the selected shader. Off keeps the static sample. Requires animated native assets; no new panel geometry.' end
@@ -18887,6 +19309,7 @@ function M.new(hud)
                     if key=='theme_shader' or key=='effect_shader' then v=shader_ids[v] end
                     if key=='font' then if v==1 then v=false else v=HUD.config.fonts[v-1] end end
                     if key=='decoration' then v=HUD.config.decorations[v]elseif key=='style_3d' then v=HUD.config.styles[v]end
+                    if key=='split_readout_view'then v=({'combat','inspect'})[v]end
                     assert(hud.appearance_weapon and hud.appearance_weapon()==panel_weapon,'Equipped weapon changed; press Fetch again')
                     hud.configure_panel({[key]=v},panel_weapon);hud.save_tuning()
                 end
@@ -19000,7 +19423,7 @@ function M.new(hud)
                         on_change=function(v)save('font',HUD.config.fonts[v])end},
                     {id='style',type='choice',label='Global HUD style',choices=styles,default=selected_style,
                         on_change=function(v)save('style_3d',HUD.config.styles[v])end},
-                    {id='decoration',type='choice',presentation='dropdown',label='Global decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index(),
+                    {id='decoration',type='choice',presentation='dropdown',label='Global decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver','Split instrument'},default=decoration_index(),
                         on_change=function(v)save('decoration',HUD.config.decorations[v])end},
                     {id='panel_color',type='color',label='Global panel color',default=hud.config.background_color,
                         on_change=function(v)save('background_color',v)end},
@@ -19056,6 +19479,7 @@ function M.new(hud)
                         on_activate=reset_defaults}
                 }}}})
             font_host=host;self.status='MCM > DBF-HUD'
+            self.sync()
         end
         if panel_refresh then panel_refresh(false)end
         if panel_guard then panel_guard()end
@@ -19149,7 +19573,7 @@ function M.new(hud)
                     hud.configure({[k]=v});hud.save_tuning()
                 end)
             end
-            add('decoration',{type='choice',presentation='dropdown',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'},default=decoration_index()},function(v)
+            add('decoration',{type='choice',presentation='dropdown',label='Decorations',choices={'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver','Split instrument'},default=decoration_index()},function(v)
                 hud.configure({decoration=assert(HUD.config.decorations[v])});hud.save_tuning()
             end)
             -- ModOptionsMenu accepts at most sixteen names per choice.
@@ -19921,7 +20345,7 @@ function M.new(hud,root)
   if (hud.clock or 0)<next_poll then return end;next_poll=(hud.clock or 0)+.25
   local f=io.open(root..'/HUD-control-request.tsv','rb');if not f then return end;local line=f:read(513);f:close();if #line>512 then return end
   local nonce,op=line:match('^([%w_%-]+)\t([a-z_]+)%s*$');if not nonce or nonce==last then return end
-  local method=({reload_settings=hud.reload_settings,reload_art=hud.reload_panel_art,restore_art=hud.restore_panel_art,art_status=function()
+  local method=({reload_settings=hud.reload_settings,reload_art=hud.reload_panel_art,restore_art=hud.restore_panel_art,split_defaults=hud.use_split_defaults,recover_hud=hud.bring_hud_into_view,art_status=function()
    local stats=hud.panel_art_stats();local keys={};for k in pairs(stats)do keys[#keys+1]=k end;table.sort(keys);local fields={};for _,k in ipairs(keys)do fields[#fields+1]=k..'='..tostring(stats[k])end;return true,table.concat(fields,',')
   end})[op];if not method then return end;last=nonce
   local ok,a,b=pcall(method);ok=ok and a~=false;local result=tostring(b or a);local ack=io.open(root..'/HUD-control-ack.tsv','w');if ack then ack:write(nonce..'\t'..op..'\t'..tostring(ok)..'\t'..result:gsub('[\r\n\t]',' ')..'\n');ack:close()end
@@ -19998,10 +20422,33 @@ function M.start(sr,backend,options)
         if cfg.weapon_panel_overrides then
             local resolved={};for k,v in pairs(cfg)do resolved[k]=v end;for k,v in pairs(cfg.weapon_panel_overrides)do resolved[k]=v end;cfg=resolved
         end
-        if cfg.presentation_view=='third' then return HUD.view_presentation.compose(m,x,y,scale,opacity,cfg)end
+        if cfg.presentation_view=='third' and not HUD.split_hud.selected(cfg)then return HUD.view_presentation.compose(m,x,y,scale,opacity,cfg)end
         cfg=HUD.config.texture_policy(cfg)
         if cfg.shader_layers~=nil then cfg.effect_scanlines=false;cfg.effect_flicker=false;cfg.effect_sweep=false;cfg.theme_shader='none';cfg.effect_shader='none' end
         cfg.style_clock=clock
+        if HUD.split_hud.selected(cfg)and HUD.split_hud.supported(m.resource_hex)then
+            if not HUD.split_hud.assets_ready(hot_panel_art.resource,sr.Application.can_get)then
+                if not self.split_texture_request and rawget(_G,'HUDRenderBridge')then
+                    local stats=hot_panel_art.stats()
+                    if not stats.pending and not stats.failed then
+                        local ok,why=pcall(hot_panel_art.reload);self.split_texture_request=ok
+                        if backend.log then pcall(backend.log,'SPLIT_TEXTURE_LOAD '..tostring(ok)..' '..tostring(why))end
+                    end
+                end
+            else
+                if rawget(_G,'HUDRenderBridge')then
+                    local edge=HUD.edge_mask.settings(cfg)
+                    local hard,face=hot_panel_art.image(HUD.split_hud_assets.hard_coverage),hot_panel_art.image(HUD.split_hud_assets.face)
+                    local ok,why=pcall(hot_panel_art.request_generated,'split:'..HUD.edge_mask.signature(edge),function()return HUD.edge_mask.split_images(edge,hard,face)end)
+                    if not ok and not self.split_edge_error then self.split_edge_error=true;if backend.log then pcall(backend.log,'SPLIT_MASK_LOAD_FAILED '..tostring(why))end end
+                end
+                local out=HUD.split_hud.compose(m,x,y,scale,opacity,cfg,clock,hot_panel_art.resource,sr.Application.can_get)
+                if out then
+                    if self.split_logged_resource~=m.resource_hex then self.split_logged_resource=m.resource_hex;if backend.log then pcall(backend.log,'SPLIT_HUD_ACTIVE weapon='..m.resource_hex..' settings='..tostring(#HUD.split_hud.readouts(m,cfg,clock).contexts))end end
+                    return out
+                end
+            end
+        end
         local family=HUD.ballistic_family.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource,sr.Application.can_get)
         local primary=HUD.segmented_primary_specs and HUD.segmented_primary_specs[m.resource_hex]and HUD.segmented_fancy
         local needs_texture=primary and not HUD.segmented_fancy.assets_ready(hot_panel_art.resource)
@@ -20088,6 +20535,7 @@ function M.start(sr,backend,options)
     projection.poll=timed('camera_projection',projection.poll)
     local latest_raw;local next_sample=0;local model;local anchor;local anchor_at=-10;local provider;local failures=0
     function self.texture_commands()
+        if self.photo_hidden then return nil end
         if not model then return nil end
         local cfg=HUD.config.effective(self.config,model.resource_hex)
         cfg.font='bigblue';cfg.frosted=false
@@ -20100,7 +20548,7 @@ function M.start(sr,backend,options)
         local cfg=HUD.config.effective(self.config,preview_model.resource_hex)
         cfg.presentation_view=cfg.hud_presentation=='practical' and 'third' or (cfg.hud_presentation=='weapon_specific' and 'first' or self.presentation_view or 'first')
         if cfg.presentation_view~='third'and HUD.config.segmented_eligible(cfg,preview_model.resource_hex)then cfg=HUD.config.segmented_appearance(cfg,preview_model.resource_hex)end
-        if cfg.presentation_view=='third' then cfg.style_3d='standard';cfg.shader_layers={};cfg.theme_shader='none';cfg.effect_shader='none' end
+        if cfg.presentation_view=='third'and not HUD.split_hud.selected(cfg)then cfg.style_3d='standard';cfg.shader_layers={};cfg.theme_shader='none';cfg.effect_shader='none' end
         if cfg.anchor_mode~='world' then cfg.style_3d='standard' end
         cfg.frosted=false;cfg.placement_mode='manual'
         local commands=compose(preview_model,0,0,2,1,cfg,self.clock)
@@ -20382,6 +20830,7 @@ function M.start(sr,backend,options)
     function self.panel_settings(resource)
         resource=resource or self.appearance_weapon()
         local cfg=HUD.config.effective(self.config,resource)
+        if HUD.split_hud.selected(cfg)then return cfg end
         if self.config.hud_presentation~='practical'and HUD.config.segmented_eligible(cfg,resource)then return HUD.config.segmented_appearance(cfg,resource)end
         local selected_model=self.appearance_model(resource)
         -- Read the actual themed commands; fetching is presentation-only, never a save.
@@ -20416,6 +20865,18 @@ function M.start(sr,backend,options)
         HUD.config.set_panel(self.config,resource or self.appearance_weapon(),values);self.appearance_revision=(self.appearance_revision or 0)+1
     end
     function self.export_tuning() return HUD.config.serialize(self.config) end
+    function self.use_split_defaults()
+        self.configure(HUD.config.split_defaults)
+        self.weapon_clearance={};self.auto_mounts={}
+        if self.layout_editor then self.layout_editor.active=false end
+        if backend.write_weapon_offsets then
+            local ok,why=pcall(backend.write_weapon_offsets,HUD.weapon_offsets.serialize(self.weapon_clearance))
+            if not ok then return false,tostring(why)end
+        end
+        local ok,message=self.save_tuning()
+        log('SPLIT_DEFAULTS applied='..tostring(ok)..' previous_appearance_choices_replaced=true')
+        return ok,message
+    end
     function self.save_tuning()
         if not backend.write_tuning then self.tuning_status='file writer unavailable';return false end
         local ok,result=pcall(backend.write_tuning,self.export_tuning())
@@ -20541,7 +21002,7 @@ function M.start(sr,backend,options)
         cfg.presentation_view=self.presentation_view or(self.first_person and'first'or'third')
         cfg.scale=self.config.scale*(current.scale or 1)
         cfg.keep_hud_upright=self.config.keep_hud_upright
-        if cfg.presentation_view=='third'then
+        if cfg.presentation_view=='third'and not HUD.split_hud.selected(cfg)then
             cfg.scale=cfg.scale*self.config.third_person_scale;cfg.style_3d='standard';cfg.shader_layers={}
             cfg.theme_shader='none';cfg.effect_shader='none';cfg.effect_scanlines=false;cfg.effect_sweep=false;cfg.effect_flicker=false
         end
@@ -20874,7 +21335,7 @@ function M.start(sr,backend,options)
         self.aim_opacity=aim_opacity
         -- Presentation selects artwork; the requested WorldGUI placement must
         -- reach the weapon renderer even when Automatic selects practical art.
-        if self.presentation_view=='third' and self.config.anchor_mode~='world' then
+        if self.presentation_view=='third' and self.config.anchor_mode~='world'and not HUD.split_hud.selected(HUD.config.effective(self.config,model.resource_hex))then
             world_display.release();if screen_scene then screen_scene.release()end
             local cfg=HUD.config.effective(self.config,model.resource_hex);cfg.presentation_view='third'
             local unit=h/1080;local scale=unit*self.config.scale*self.config.third_person_scale
@@ -20889,7 +21350,7 @@ function M.start(sr,backend,options)
             local world_config=HUD.config.effective(self.config,model.resource_hex)
             world_config.presentation_view=self.presentation_view
             world_config.scale=self.config.scale*(self.profile_scale or 1)
-            if self.presentation_view=='third' then
+            if self.presentation_view=='third'and not HUD.split_hud.selected(world_config)then
                 world_config.scale=world_config.scale*self.config.third_person_scale
                 world_config.style_3d='standard';world_config.shader_layers={}
                 world_config.theme_shader='none';world_config.effect_shader='none'
@@ -21013,7 +21474,7 @@ function M.start(sr,backend,options)
         local screen_config=HUD.config.effective(self.config,model.resource_hex)
         screen_config.presentation_view=self.presentation_view
         if self.presentation_view~='third'and HUD.config.segmented_eligible(screen_config,model.resource_hex)then screen_config=HUD.config.segmented_appearance(screen_config,model.resource_hex)end
-        if self.presentation_view=='third' then
+        if self.presentation_view=='third'and not HUD.split_hud.selected(screen_config)then
             scale=scale*self.config.third_person_scale
             screen_config.style_3d='standard';screen_config.shader_layers={}
             screen_config.theme_shader='none';screen_config.effect_shader='none'
@@ -21051,7 +21512,16 @@ function M.start(sr,backend,options)
     frame_trial=options and options.frame_trial and {elapsed=0,phase=1,frames=0,max=0,over33=0,over50=0,total=0,cpu_max=0,buckets={}} or nil
     if frame_trial then profile=nil end
     local control_requests=HUD.control_requests.new(self,assert(os.getenv('LOCALAPPDATA'))..'/DBF')
+    function self.set_photo_hidden(value)
+        if self.photo_hidden==(value and true or false)then return end
+        self.photo_hidden=value and true or false
+        if self.photo_hidden then
+            if screen_scene then screen_scene.release()end
+            world_display.release();world_probe.release();view.release()
+        end
+    end
     function self.tick(dt)
+        if self.photo_hidden then return end
         if not retired then control_requests.poll()end
         if frame_trial and not retired then
             local t=frame_trial;local delta=math.max(0,dt or 0)

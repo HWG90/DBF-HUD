@@ -167,11 +167,11 @@ for _,style in ipairs({'none','outline','brackets','helldivers','double','deadey
  cfg.panel_edge_softness=0;local restored=compose();assert(same(restored,hard));draw(restored)
 end
 -- Per-weapon appearance survives serialization without changing shader controls.
-local config=HUD.config.new();assert(config.panel_edge_softness==4)
+local config=HUD.config.new();assert(config.panel_edge_softness==7)
 HUD.config.set_panel(config,model.resource_hex,{panel_edge_softness=17,panel_edge_curve=2.3,panel_edge_dither=75,panel_edge_grain=3,shader_layers=cfg.shader_layers,panel_opacity=.3})
 local saved=HUD.config.serialize(config);local chunk=assert(loadstring(saved));setfenv(chunk,{})
 local reloaded=HUD.config.new();HUD.config.apply(reloaded,chunk(),true)
-assert(reloaded.panel_edge_softness==4 and reloaded.weapon_panels[model.resource_hex].panel_edge_softness==17)
+assert(reloaded.panel_edge_softness==7 and reloaded.weapon_panels[model.resource_hex].panel_edge_softness==17)
 local saved_layers=reloaded.weapon_panels[model.resource_hex].shader_layers
 local expected_layers=HUD.shader_layers.validate(cfg.shader_layers);assert(#saved_layers==#expected_layers)
 for i,r in ipairs(expected_layers)do for key,value in pairs(r)do

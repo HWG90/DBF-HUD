@@ -27,7 +27,11 @@ local function matrix(heading,elevation,roll,x,y,z)
 end
 local function model()return {resource_hex=key,kind='magazine',value=46,capacity=45,reserve=6,reserve_kind='MAGS',fire_mode='AUTO',fraction=1,state='READY',chamber_bonus=1}end
 local function commands(cfg)
- return assert(HUD.ballistic_family.compose(model(),0,0,2*cfg.scale,1,cfg,function()return true end,function()return true end))
+ -- This fixture validates the retained primary geometry, independently of the
+ -- default artwork/decor choice. Split's spatial geometry has its own suite.
+ local legacy=copy(cfg);legacy.texture_art_variant='faithful'
+ if legacy.decoration=='split'then legacy.decoration='none'end
+ return assert(HUD.ballistic_family.compose(model(),0,0,2*cfg.scale,1,legacy,function()return true end,function()return true end))
 end
 local function check_visible(p,settings,cfg,offset,camera,fov,aspect)
  local self={weapon_pose=copy(p),first_person=p.first_person,config=settings,clock=0,weapon_clearance={[key]={[p.first_person and'first_right'or'right']=offset}}}

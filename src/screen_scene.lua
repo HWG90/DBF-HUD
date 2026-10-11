@@ -78,6 +78,7 @@ function M.expand_texture_layers(commands)
                         texture_material=layer.material or v.texture_material,texture_resource=layer.texture or v.texture_resource,
                         a=(v.a or 1)*(layer.alpha or 1),c=layer.tint or v.c,texture_layer=layer.order,
                         fold_child=v.fold_child,texture_theme=layer.theme,atlas_rect=layer.atlas_rect}
+                    q.spatial_plane,q.spatial_depth=v.spatial_plane,v.spatial_depth
                     if layer.theme==nil then q.texture_theme=v.texture_theme end
                     emit(q)
                 end
@@ -141,6 +142,42 @@ function M.point(m,at,x,y)
     return at.x+(m[1]*x+m[9]*y)/1000,
         at.y+(m[2]*x+m[10]*y)/1000,at.z+(m[3]*x+m[11]*y)/1000
 end
+-- Split pods share one authored coordinate system and the existing planar
+-- projection machinery, while their origins sit at distinct weapon-local depths.
+function M.spatial_origin(m,at,depth)
+    assert(finite(depth),'invalid spatial HUD depth')
+    return {x=at.x-m[5]*depth/1000,y=at.y-m[6]*depth/1000,z=at.z-m[7]*depth/1000}
+end
+function M.spatial_groups(commands)
+    local frame=commands[1]
+    if not frame or not frame.split_hud then return nil end
+    local groups={};local names={'main','reserve','context','status'};local allowed={}
+    for _,name in ipairs(names)do allowed[name]=true end
+    for index,v in ipairs(commands)do
+        if index~=1 and not v.fold_child then
+            local name=v.spatial_plane or 'main';assert(allowed[name],'invalid spatial HUD plane')
+            local group=groups[name]
+            if not group then group={name=name,commands={},depth=nil};groups[name]=group end
+            if v.spatial_depth~=nil then
+                assert(finite(v.spatial_depth),'invalid spatial HUD depth')
+                assert(group.depth==nil or math.abs(group.depth-v.spatial_depth)<1e-7,'inconsistent spatial HUD depth')
+                group.depth=v.spatial_depth
+            end
+            group.commands[#group.commands+1]=v
+        end
+    end
+    local ordered={}
+    for _,name in ipairs(names)do
+        local group=groups[name]
+        if group then
+            group.depth=group.depth or 0
+            local metadata={};for k,v in pairs(frame)do metadata[k]=v end
+            metadata.a=0;metadata.spatial_plane=name;metadata.spatial_depth=group.depth;metadata.spatial_metadata=true
+            table.insert(group.commands,1,metadata);ordered[#ordered+1]=group
+        end
+    end
+    return ordered
+end
 function M.text_parts(command,face)
     local parts=HUD.font.numeric_parts(command)
     if not face then return parts end
@@ -172,6 +209,8 @@ function M.prepare_commands(commands,p,c,can_get)
     commands=M.expand_shader_layers(M.expand_texture_layers(commands),c,can_get,p.resource_hex)
     for _,v in ipairs(commands)do
         assert(type(v.x)=='number' and v.x==v.x and math.abs(v.x)<math.huge and type(v.y)=='number' and v.y==v.y and math.abs(v.y)<math.huge,'invalid HUD coordinates')
+        if v.spatial_depth~=nil then assert(finite(v.spatial_depth),'invalid spatial HUD depth')end
+        if v.spatial_plane~=nil then assert(v.spatial_plane=='main'or v.spatial_plane=='reserve'or v.spatial_plane=='context'or v.spatial_plane=='status','invalid spatial HUD plane')end
         if v.type=='text' then assert(HUD.native_font_data.faces[v.font or 'bigblue'] and HUD.native_font_uv[v.font or 'bigblue'],'HUD font unavailable')end
     end
     return commands,m,at
@@ -195,7 +234,7 @@ function M.new(sr,log,hot_panel_art)
         return effect_availability[name] and name or nil
     end
 
-    local effect_guis={};local texture_guis={};local shader_guis={}
+    local effect_guis={};local texture_guis={};local shader_guis={};local spatial_guis={}
     local gui,child_gui,world,atlas_gui;local ids={};local glyphs={};local bitmap_updates=0;local reuse_glyphs=type(G.update_bitmap_3d_uv)=='function';local recycled={};local allocated,reused=0,0;local failed=false;local first=true
     local self={status='screen scene assets not loaded'}
     local function live(w)
@@ -230,9 +269,10 @@ function M.new(sr,log,hot_panel_art)
             for _,effect_gui in pairs(effect_guis) do W.destroy_gui(world,effect_gui) end;effect_guis={}
             if child_gui then W.destroy_gui(world,child_gui) end
             if atlas_gui then W.destroy_gui(world,atlas_gui) end
+            for _,spatial_gui in pairs(spatial_guis)do W.destroy_gui(world,spatial_gui)end
             W.destroy_gui(world,gui)
         end
-        texture_guis={};shader_guis={}
+        texture_guis={};shader_guis={};spatial_guis={}
         released=released+#ids;for _,pool in pairs(glyphs) do released=released+#pool.ids end;glyphs={};gui,child_gui,world,atlas_gui=nil,nil,nil,nil
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
@@ -290,11 +330,10 @@ function M.new(sr,log,hot_panel_art)
                 return point -- Native callback returns normalized GUI-up coordinates.
             end
         else project_snapshot=HUD.projection.projector(camera,fov,width/height,hud_near) end
-        local function render(list,axes,origin,draw_gui)
-            local plane
+        local function render(list,axes,origin,draw_gui,spatial)
+            local plane;local frame
+            for _,entry in ipairs(list)do if entry.type=='panel'and entry.w>0 and entry.h>0 then frame=entry;break end end
             if native_projection then
-                local frame
-                for _,entry in ipairs(list)do if entry.type=='panel'and entry.w>0 and entry.h>0 then frame=entry;break end end
                 if frame then
                     local points={}
                     for i,corner in ipairs({{frame.x,frame.y+frame.h},{frame.x+frame.w,frame.y+frame.h},{frame.x+frame.w,frame.y},{frame.x,frame.y}})do
@@ -312,6 +351,10 @@ function M.new(sr,log,hot_panel_art)
             local depth,enabled
             if native_projection then
                 depth=finite(c.world_texture_depth) and c.world_texture_depth>0 and c.world_texture_depth or 0
+                if spatial and plane and frame then
+                    local center=plane.project(frame.x+frame.w/2,frame.y+frame.h/2)
+                    if center and finite(center.depth)and center.depth>hud_near then depth=center.depth end
+                end
                 enabled=c.occlusion_mode~='gui' and depth>0 and 1 or 0
             else
                 local dx,dy,dz=origin.x-camera[13],origin.y-camera[14],origin.z-camera[15]
@@ -346,11 +389,11 @@ function M.new(sr,log,hot_panel_art)
                 return rows[1] and rows or nil
             end
             local mapping_rows,mapping_checked
-            local edge_mask,edge_material
+            local edge_mask,edge_material,edge_box
             for _,entry in ipairs(list)do
-                if entry.type=='panel'and entry.hud_texture_primary and entry.edge_mask_resource and type(entry.edge_mask_material)=='string'and
+                if entry.type=='panel'and (entry.hud_texture_primary or entry.split_hud) and entry.edge_mask_resource and type(entry.edge_mask_material)=='string'and
                     hot_panel_art and hot_panel_art.resource(entry.edge_mask_resource)then
-                    edge_mask,edge_material=entry.edge_mask_resource,entry.edge_mask_material;break
+                    edge_mask,edge_material,edge_box=entry.edge_mask_resource,entry.edge_mask_material,entry.edge_mask_box;break
                 end
             end
             local function panel_mapping()
@@ -361,6 +404,16 @@ function M.new(sr,log,hot_panel_art)
                 if not frame or frame.w<=0 or frame.h<=0 then return nil end
                 mapping_rows=panel_rows(frame.x,frame.y,frame.w,frame.h)
                 return mapping_rows
+            end
+            local edge_rows,edge_checked
+            local function decoration_mapping()
+                if not edge_box then return panel_mapping()end
+                if edge_checked then return edge_rows end
+                edge_checked=true
+                if finite(edge_box.x)and finite(edge_box.y)and finite(edge_box.w)and finite(edge_box.h)and edge_box.w>0 and edge_box.h>0 then
+                    edge_rows=panel_rows(edge_box.x,edge_box.y,edge_box.w,edge_box.h)
+                end
+                return edge_rows
             end
             local materials={}
             local function role_gui(role)
@@ -474,10 +527,10 @@ function M.new(sr,log,hot_panel_art)
                 if v.type=='rect' and v.decoration and not v.charge_meter and edge_mask and not c.profile_skip_geometry then
                     -- The shared decoration rectangles use one panel-wide alpha
                     -- map on the existing root GUI; their geometry/color stay intact.
-                    local rows=panel_mapping()
+                    local rows=decoration_mapping()
                     if rows then quad(v.x,v.y,v.w,v.h,edge_material,color(1),50,nil,edge_mask,v.quad,nil,'decoration',rows)
                     else quad(v.x,v.y,v.w,v.h,fill,color(1),50,nil,nil,v.quad)end
-                elseif (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
+                elseif (v.type=='rect' or v.type=='panel') and not v.spatial_metadata and not c.profile_skip_geometry then
                     local selected_material=not v.contrast_backing and panel_material(v,p.resource_hex,c)
                     local panel_uv
                     if selected_material and selected_material:find("/lab_",1,true) then
@@ -589,7 +642,25 @@ function M.new(sr,log,hot_panel_art)
                 end
             end
         end
-        render(body,m,at,gui)
+        local spatial=M.spatial_groups(body);local used_spatial={}
+        if spatial then
+            for _,group in ipairs(spatial)do
+                local draw_gui=gui
+                if group.name~='main'then
+                    draw_gui=spatial_guis[group.name]
+                    if not draw_gui then draw_gui=assert(W.create_screen_gui(world,'scale',1,1),'spatial HUD GUI missing');spatial_guis[group.name]=draw_gui end
+                    used_spatial[group.name]=true
+                end
+                render(group.commands,m,M.spatial_origin(m,at,group.depth),draw_gui,true)
+            end
+        else render(body,m,at,gui)end
+        for name,spatial_gui in pairs(spatial_guis)do if not used_spatial[name]then
+            if shader_guis[spatial_gui]then for _,layer_gui in pairs(shader_guis[spatial_gui])do W.destroy_gui(world,layer_gui)end;shader_guis[spatial_gui]=nil end
+            if texture_guis[spatial_gui]then for _,layer_gui in pairs(texture_guis[spatial_gui])do W.destroy_gui(world,layer_gui)end;texture_guis[spatial_gui]=nil end
+            if glyphs[spatial_gui]then released=released+#glyphs[spatial_gui].ids;glyphs[spatial_gui]=nil end
+            if effect_guis[spatial_gui]then W.destroy_gui(world,effect_guis[spatial_gui]);effect_guis[spatial_gui]=nil end
+            W.destroy_gui(world,spatial_gui);spatial_guis[name]=nil
+        end end
         if #fold>0 then
             local child_panel=fold[1];local edge=child_panel.y+child_panel.h;local child={}
             for _,v in ipairs(fold) do
