@@ -594,6 +594,34 @@ function M.start(sr,backend,options)
         return true
     end
     self.layout_editor=HUD.layout_editor.new(self,backend,log)
+    function self.bring_hud_into_view()
+        local p=self.weapon_pose;local resource=self.equipped_resource()
+        if not model or not p or p.resource_hex~=resource then return false,'Equip a weapon and return to gameplay before recovering its HUD' end
+        if self.config.anchor_mode~='world'or self.config.placement_mode~='auto' then return false,'Bring HUD into view requires automatic WorldGUI placement' end
+        local camera=projection.camera_matrix or projection.depth_camera_matrix
+        local fov=projection.camera_fov or projection.native_fov
+        local w,h=sr.Gui.resolution()
+        local view_key=self.first_person and('first_'..self.config.fp_auto_side)or'right'
+        local current=((self.weapon_clearance[resource]or{})[view_key]or{})
+        local cfg=HUD.config.effective(self.config,resource)
+        cfg.presentation_view=self.presentation_view or(self.first_person and'first'or'third')
+        cfg.scale=self.config.scale*(current.scale or 1)
+        cfg.keep_hud_upright=self.config.keep_hud_upright
+        if cfg.presentation_view=='third'then
+            cfg.scale=cfg.scale*self.config.third_person_scale;cfg.style_3d='standard';cfg.shader_layers={}
+            cfg.theme_shader='none';cfg.effect_shader='none';cfg.effect_scanlines=false;cfg.effect_sweep=false;cfg.effect_flicker=false
+        end
+        local ok,offset=pcall(function()
+            local commands=compose(model,0,0,2*cfg.scale,1,cfg,self.clock,nil,true)
+            return HUD.placement.recover(p,cfg,commands,camera,fov,w/h,self.config,current.scale or 1)
+        end)
+        if not ok then return false,'HUD recovery unavailable: '..tostring(offset)end
+        -- Binding captures the existing layouts for F8 before modifying one view.
+        local applied,message=HUD.placement.apply_recovery(self,offset)
+        if not applied then return false,message end
+        log('HUD_RECOVERY weapon='..resource..' view='..view_key..' one_shot=true saved=false')
+        return true,message
+    end
     menu=HUD.menu.new(self)
     local function screen_overlay(w,h)
         local commands=self.layout_editor.overlay(w,h,self.config.font)

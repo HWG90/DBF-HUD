@@ -114,6 +114,15 @@ function M.new(hud)
             if #preset_choices==0 then preset_choices={'No saved presets'} end
             local placement_controls={
                 {id='equipped_weapon_hud',type='toggle',label='Show equipped weapon HUD',require_confirmation=false,default=true,on_change=function(v)local ok,message=hud.blacklist_equipped(not v);assert(ok,message)end}}
+            local recovery_controls={
+                {id='bring_hud_into_view',type='button',button_label='Bring HUD into view',label='Recover equipped weapon HUD',
+                    description='Move only the equipped weapon and current WorldGUI view into a visible position. Normal weapon following continues. No Fetch is needed. F7 saves the preview; F8 restores it.',
+                    on_activate=function()local ok,message=hud.bring_hud_into_view();assert(ok,message);return message end},
+                {id='save_recovered_layout',type='button',button_label='Save layout',label='Save current placement preview',
+                    on_activate=function()local e=hud.layout_editor;assert(e and e.save(),e and e.status or'Layout editor unavailable');return e.status end},
+                {id='restore_recovered_layout',type='button',button_label='Restore placement',label='Restore placement before editing',
+                    on_activate=function()local e=hud.layout_editor;assert(e and e.reset(),e and e.status or'Layout editor unavailable');return e.status end},
+                {type='text',label='Recovery fits the current camera snapshot. The HUD keeps following the weapon afterward; it is not locked to the screen.'}}
             local developer_motion_controls={}
             for _,row in ipairs(sliders)do
                 if placement[row[1]] then
@@ -351,7 +360,7 @@ function M.new(hud)
                         on_change=function(v)save('text_color',v)end},
                     {id='decoration_color',type='color',label='Global decoration color',default=hud.config.decoration_color,
                         on_change=function(v)save('decoration_color',v)end},
-}},{id='weapon_appearance',name='Weapon Appearance',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls=(function()
+}},{id='placement',name='Placement',require_confirmation=false,controls=recovery_controls},{id='weapon_appearance',name='Weapon Appearance',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls=(function()
                 local controls,theme,effects={},{},{}
                 local effect_keys={weapon_effect_shader_animate=true,weapon_effect_shader_speed=true,weapon_effect_shader_scale=true,weapon_effect_shader=true,weapon_effect_scanlines=true,weapon_effect_flicker=true,weapon_effect_sweep=true,weapon_effect_scanline_count=true,weapon_effect_sweep_speed=true,weapon_effect_sweep_density=true,weapon_frosted=true}
                 for _,c in ipairs(panel_controls)do
@@ -454,6 +463,13 @@ function M.new(hud)
         local ok,err=pcall(function()
             if hud.layout_editor then
                 local e=hud.layout_editor
+                if type(hud.bring_hud_into_view)=='function'then
+                    add('editor_recover',{type='toggle',label='Bring HUD into view',default=false,
+                        description='Turn on and APPLY to recover this weapon/view. F7 saves; F8 restores.'},function(v)
+                        if v then local ok,message=hud.bring_hud_into_view();assert(ok,message)end
+                        set('editor_recover',false);sync_editor()
+                    end)
+                end
                 add('editor_enabled',{type='toggle',label='Edit equipped weapon',default=false,
                     description='Equip and aim first. Enable and APPLY to lock this weapon for editing. Disable before selecting another weapon.'},function(v)
                     if v then e.bind() else e.active=false end;sync_editor()
