@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "format": "straight RGBA8",
+  "rgb_all_pixels": [
+    255,
+    255,
+    255
+  ],
+  "mask_size": [
+    128,
+    256
+  ],
+  "full_uv": [
+    0,
+    0,
+    1,
+    1
+  ],
+  "alpha": "smoothstep(min(x,127-x,y,255-y)/(128*softness_percent/100))",
+  "physical_mask_pixel_width": true,
+  "boundary_alpha": 0,
+  "center_alpha": 255,
+  "images": [
+    {
+      "name": "primary_edge_mask_v1_04",
+      "resource": "mods/dbf_hud/textures/primary_edge_mask_v1_04",
+      "width": 128,
+      "height": 256,
+      "softness_percent": 4,
+      "feather_mask_pixels": 5.12,
+      "filename": "primary_edge_mask_v1_04_37590e8ac9aa2933be9cb00eeb1eb8c9ab65265f1398eca4c4cf9678081ad3fb.rgba",
+      "sha256": "37590e8ac9aa2933be9cb00eeb1eb8c9ab65265f1398eca4c4cf9678081ad3fb",
+      "bytes": 131072,
+      "alpha_levels": 6
+    },
+    {
+      "name": "primary_edge_mask_v1_08",
+      "resource": "mods/dbf_hud/textures/primary_edge_mask_v1_08",
+      "width": 128,
+      "height": 256,
+      "softness_percent": 8,
+      "feather_mask_pixels": 10.24,
+      "filename": "primary_edge_mask_v1_08_3a8fb42f7cc9ace2902f265c3eabd107ac1d21f49d3f450fc68f599f747fc915.rgba",
+      "sha256": "3a8fb42f7cc9ace2902f265c3eabd107ac1d21f49d3f450fc68f599f747fc915",
+      "bytes": 131072,
+      "alpha_levels": 11
+    },
+    {
+      "name": "primary_edge_mask_v1_12",
+      "resource": "mods/dbf_hud/textures/primary_edge_mask_v1_12",
+      "width": 128,
+      "height": 256,
+      "softness_percent": 12,
+      "feather_mask_pixels": 15.36,
+      "filename": "primary_edge_mask_v1_12_ea64bdfdad1367575ec5d968db0ce2b3029e5b1b36ec2efc425cfb115711aaab.rgba",
+      "sha256": "ea64bdfdad1367575ec5d968db0ce2b3029e5b1b36ec2efc425cfb115711aaab",
+      "bytes": 131072,
+      "alpha_levels": 16
+    }
+  ],
+  "total_bytes": 393216,
+  "v4_files_preserved": 22,
+  "perimeterAlpha": [
+    {
+      "percent": 0,
+      "approx_one_pixel_stroke_center_alpha": 1
+    },
+    {
+      "percent": 4,
+      "approx_one_pixel_stroke_center_alpha": 0.014517332012670114
+    },
+    {
+      "percent": 8,
+      "approx_one_pixel_stroke_center_alpha": 0.0037198653037682173
+    },
+    {
+      "percent": 12,
+      "approx_one_pixel_stroke_center_alpha": 0.0016666856610230139
+    }
+  ]
+}

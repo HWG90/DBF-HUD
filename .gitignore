@@ -34,3 +34,9 @@ assets/faithful-comparison/full-stage/
 /dist/*
 /destroy-*.txt
 /hot-panel-art-before-reclaim.lua
+
+# Extracted font donors and oversized embedded-font review exports stay local.
+/assets/segmented-fancy/preview*native*.png
+/assets/segmented-fancy/preview*.svg
+/review/**/reference/
+/review/**/REFERENCE-HASHES.json

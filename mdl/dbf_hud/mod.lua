@@ -7942,11 +7942,20 @@ M.weapon_clearance={
         right={x=.12,y=-.08,z=.10},
     },
 }
-M.defaults={texture_art_variant='faithful',texture_art_trial=true,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
+M.defaults={font_scale=1,hud_presentation='automatic',third_person_scale=.75,third_person_opacity=.22,force_all_hud_texture_off=false,appearance_follow_equipped=true,shader_layer_serial=0,texture_art_variant='faithful',texture_art_trial=true,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.8,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
-M.limits={theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
+M.defaults.segmented_fancy=false
+M.defaults.segmented_text_color='#F5F6F0'
+M.defaults.segmented_ui_color='#E9C45D'
+M.defaults.segmented_background_color='#091B35'
+M.defaults.segmented_empty_color='#FF5750'
+M.defaults.panel_edge_softness=4
+M.defaults.panel_edge_curve=1;M.defaults.panel_edge_dither=35;M.defaults.panel_edge_grain=1
+M.limits={font_scale={.5,1.5},third_person_scale={.5,1.5},third_person_opacity={0,1},theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
+M.limits.panel_edge_softness={0,24}
+M.limits.panel_edge_curve={.5,3};M.limits.panel_edge_dither={0,100};M.limits.panel_edge_grain={1,4}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
     local h=v:gsub('^#','')
@@ -7955,6 +7964,11 @@ function M.hex(v)
 end
 function M.rgb(v)
     v=M.hex(v);return {tonumber(v:sub(2,3),16),tonumber(v:sub(4,5),16),tonumber(v:sub(6,7),16)}
+end
+-- Explicit linear GUI tint for textures prepared by repair_retro_pixels.py.
+-- Saved palette values and ordinary primitive rendering remain sRGB byte values.
+function M.native_rgb(ink)
+ local out={};for i=1,3 do local v=ink[i]/255;out[i]=math.floor((v<=.04045 and v/12.92 or ((v+.055)/1.055)^2.4)*255+.5)end;return out
 end
 function M.new() local t={};for k,v in pairs(M.defaults) do t[k]=type(v)=='table' and {} or v end;return t end
 HUD.shader_catalog={
@@ -8000,11 +8014,48 @@ HUD.shader_catalog={
 {id='prismatic',title="Prismatic facets",material='mods/dbf_hud/materials/lab_prismatic',frozen=false},
 }
 HUD.shader_ids={auto=true,none=true};for _,entry in ipairs(HUD.shader_catalog)do HUD.shader_ids[entry.id]=true end
-M.panel_keys={texture_art_variant=true,texture_art_trial=true,theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
+M.panel_keys={font_scale=true,shader_layers=true,shader_layer_serial=true,texture_art_variant=true,texture_art_trial=true,theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
+-- Apply last, after every per-weapon merge. Never alter saved weapon choices.
+M.panel_keys.segmented_text_color=true;M.panel_keys.segmented_ui_color=true
+M.panel_keys.segmented_background_color=true;M.panel_keys.segmented_empty_color=true
+M.panel_keys.panel_edge_softness=true
+M.panel_keys.panel_edge_curve=true;M.panel_keys.panel_edge_dither=true;M.panel_keys.panel_edge_grain=true
+function M.segmented_eligible(config,resource)
+ return false -- Retired: HUD Texture owns artwork and shader rendering.
+end
+function M.segmented_appearance(config,resource)
+ if not M.segmented_eligible(config,resource)or config.presentation_view=='third'then return config end
+ local out={};for k,v in pairs(config)do out[k]=v end
+ out.text_color=out.segmented_text_color or M.defaults.segmented_text_color
+ out.decoration_color=out.segmented_ui_color or M.defaults.segmented_ui_color
+ out.background_color=out.segmented_background_color or M.defaults.segmented_background_color
+ out.heat_red=out.segmented_empty_color or M.defaults.segmented_empty_color
+ out.heat_yellow=out.decoration_color
+ out.style_3d='standard';out.shader_layers={};out.theme_shader='none';out.effect_shader='none'
+ out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.frosted=false
+ out.keep_hud_upright=false;out.first_person_zoom_demo=false;out.saturation=1;out.emissive_intensity=1
+ out.texture_art_trial=false;out.texture_art_variant='original'
+ return out
+end
+function M.texture_policy(config,owned)
+ if config.segmented_primary then return config end
+ local force=config.force_all_hud_texture_off
+ local texture=config.texture_art_trial==true and config.texture_art_variant~='original'
+ if not force and not texture then return config end
+  local out=config
+  if not owned then out={};for k,v in pairs(config)do out[k]=v end end
+ if force then out.texture_art_trial=false;out.mechanical_art_enabled=false;out.texture_art_variant='original'
+ else out.frosted=false end
+ return out
+end
 function M.effective(config,resource)
  local out={};for k,v in pairs(config)do out[k]=v end
  local overrides=(config.weapon_panels or {})[resource or '']
  if overrides then for k,v in pairs(overrides)do out[k]=v end;out.weapon_panel_overrides=overrides end
+ out.segmented_primary=M.segmented_eligible(out,resource)or false
+ if out.segmented_primary then out.texture_art_trial=false;out.texture_art_variant='original' end
+ out=M.texture_policy(out)
+ if HUD.shader_layers then out.shader_layers=HUD.shader_layers.effective(out);out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.theme_shader='none';out.effect_shader='none' end
  return out
 end
 function M.set_panel(config,resource,values)
@@ -8031,7 +8082,14 @@ function M.blacklist_value(config,resource,hidden)
     if hidden then keys[#keys+1]=resource end
     table.sort(keys);return table.concat(keys,',')
 end
-function M.apply(config,values)
+-- Texture mode owns fixed artwork styling. Independent shader layers remain.
+function M.normalize_texture_mode(config)
+ -- Appearance choices belong to the user. Texture policy acts on a render copy;
+ -- loading or disabling artwork must not overwrite shader/decor/style settings.
+ return false
+end
+
+function M.apply(config,values,validation_only)
     assert(type(values)=='table','configuration must be a table')
     local flattened={}
     for k,v in pairs(values) do
@@ -8048,15 +8106,20 @@ function M.apply(config,values)
     end
     local clean={}
     for k,v in pairs(flattened) do
-        assert(M.defaults[k]~=nil,'unknown setting: '..tostring(k))
+        assert(M.defaults[k]~=nil or k=='shader_layers','unknown setting: '..tostring(k))
         local limits=M.limits[k]
-        if k=='weapon_panels' then
+        if k=='force_all_hud_texture_off' or k=='appearance_follow_equipped' or k=='segmented_fancy' then assert(type(v)=='boolean','setting must be boolean')
+        elseif k=='segmented_text_color' or k=='segmented_ui_color' or k=='segmented_background_color' or k=='segmented_empty_color' then v=M.hex(v)
+        elseif k=='hud_presentation' then assert(v=='automatic' or v=='practical' or v=='weapon_specific','invalid HUD presentation')
+        elseif k=='shader_layers' then v=HUD.shader_layers.validate(v)
+        elseif k=='shader_layer_serial' then assert(type(v)=='number' and v%1==0 and v>=0 and v<1000000,'Invalid layer serial')
+        elseif k=='weapon_panels' then
             assert(type(v)=='table','Weapon panels must be a table');local validated={}
             for id,profile in pairs(v)do
                 assert(type(id)=='string' and #id==16 and id:match('^%x+$'),'Invalid weapon panel identity')
                 assert(type(profile)=='table','Invalid weapon panel settings')
                 for key in pairs(profile)do assert(M.panel_keys[key],'Invalid weapon panel setting: '..tostring(key))end
-                local scratch=M.new();M.apply(scratch,profile);local result={}
+                local scratch=M.new();M.apply(scratch,profile,true);local result={}
                 for key in pairs(profile)do result[key]=scratch[key]end;validated[id]=result
             end
             v=validated
@@ -8090,6 +8153,7 @@ function M.apply(config,values)
     if clean.always_show_3d~=nil then clean.occlusion_mode=clean.always_show_3d and 'gui' or 'gui_depth' end
     if clean.occlusion_mode then clean.hud_occlusion=clean.occlusion_mode~='gui';clean.always_show_3d=clean.occlusion_mode=='gui' end
     for k,v in pairs(clean) do config[k]=v end
+    if not validation_only then return M.normalize_texture_mode(config)end
 end
 M.archived={archived_mesh={weapon_screen_test=true,saturation=true,scanline_strength=true,texture_refresh_hz=true,emissive_intensity=true},research={pose_marker=true,world_probe=true}}
 function M.serialize(config)
@@ -8098,7 +8162,14 @@ function M.serialize(config)
     for k in pairs(M.defaults) do if not archived[k] and k~='weapon_panels' and k~='occlusion_mode' and k~='hud_occlusion' and k~='show_3d' and k~='always_show_3d' and k~='placement_mode' and not k:match('^left_mount_') and not k:match('^fp_mount_') and not k:match('^mount_') then keys[#keys+1]=k end end
     table.sort(keys)
     local out={'-- DBF-HUD tuning. Active settings below; camera placement is unchanged.','return {','    -- Active display, palette, placement and diagnostics.'}
-    local function value(v)return type(v)=='string' and string.format('%q',v) or tostring(v)end
+    local function value(v)
+        if type(v)=='table' then
+            local out={'{'};for _,r in ipairs(v)do out[#out+1]=string.format('{id=%d,shader=%q,scale=%d,strength=%d,blend=%d,enabled=%s,animate=%s,speed=%s,opacity=%s,pattern_size=%s},',r.id,r.shader,r.scale,r.strength,r.blend,tostring(r.enabled~=false),tostring(r.animate==true),tostring(r.speed or 1),tostring(r.opacity),tostring(r.pattern_size))end
+            out[#out+1]='}';return table.concat(out)
+        end
+        return type(v)=='string' and string.format('%q',v) or tostring(v)
+    end
+    if config.shader_layers~=nil then keys[#keys+1]='shader_layers' end
     for _,k in ipairs(keys) do out[#out+1]='    '..k..' = '..value(config[k])..',' end
     out[#out+1]='    weapon_panels = {'
     local weapons={};for id in pairs(config.weapon_panels or {})do weapons[#weapons+1]=id end;table.sort(weapons)
@@ -8131,6 +8202,59 @@ function M.shader_animation_values(c,role,clock)
     if time~=time or time==math.huge or time==-math.huge then time=0 end
     return math.max(0,time)*speed,c[key..'_animate']==true and 1 or 0
 end
+return M
+
+end)()
+HUD.shader_layers=(function()
+-- Ordered alpha overlays using the existing mapped native shader materials.
+-- No new shader-library bytecode is generated or installed.
+local M={maximum=4,scales={.5,1,2,4},strengths={.25,.5,.75,1},blends={'replace','multiply','add'}}
+local available={}
+local ids={};for i,e in ipairs(HUD.shader_catalog)do ids[e.id]=i end
+function M.validate(rows)
+ assert(type(rows)=='table' and #rows<=M.maximum,'At most four shader layers')
+ local out,seen={},{}
+ for k in pairs(rows)do assert(type(k)=='number' and k%1==0 and k>=1 and k<=#rows,'Shader layers must be a dense list')end
+ for i,r in ipairs(rows)do
+  assert(type(r)=='table' and ids[r.shader],'Unknown layer shader')
+  assert(type(r.id)=='number' and r.id%1==0 and r.id>0 and r.id<1000000 and not seen[r.id],'Invalid layer identity');seen[r.id]=true
+  assert(r.enabled==nil or type(r.enabled)=='boolean','Invalid layer enabled')
+  local q={id=r.id,shader=r.shader,scale=r.scale or 2,strength=r.strength or 4,blend=r.blend or 1,enabled=r.enabled~=false,animate=r.animate==true,speed=r.speed or 1,opacity=r.opacity,pattern_size=r.pattern_size}
+  for _,k in ipairs({'scale','strength','blend'})do assert(type(q[k])=='number' and q[k]%1==0 and q[k]>=1 and q[k]<=(k=='blend' and 3 or 4),'Invalid layer '..k)end
+  assert(q.pattern_size==nil or(type(q.pattern_size)=='number'and q.pattern_size==q.pattern_size and q.pattern_size>=.25 and q.pattern_size<=4),'Invalid pattern size')
+  assert(q.opacity==nil or (type(q.opacity)=='number' and q.opacity==q.opacity and q.opacity>=.01 and q.opacity<=1),'Invalid layer opacity')
+  assert(r.animate==nil or type(r.animate)=='boolean','Invalid layer animation');assert(type(q.speed)=='number' and q.speed==q.speed and q.speed>=.1 and q.speed<=3,'Invalid layer speed')
+  out[i]=q
+ end
+ return out
+end
+function M.effective(c)
+ if c.shader_layers~=nil then local rows=M.validate(c.shader_layers);for _,r in ipairs(rows)do r.pattern_size=r.pattern_size or M.scales[r.scale];if r.opacity==nil then r.opacity=math.max(.01,math.min(1,M.strengths[r.strength]*(c.panel_opacity or 1)))end end;return rows end
+ -- Legacy material path remains exact until the list is edited.
+ local out={};for _,key in ipairs({'theme_shader','effect_shader'})do if ids[c[key]]then out[#out+1]={id=#out+1,shader=c[key],scale=2,strength=4,blend=1,opacity=math.max(.01,math.min(1,c.panel_opacity or 1))}end end
+ return out
+end
+function M.edit(c,action,id,value)
+ local rows=M.effective(c);local index
+ for i,r in ipairs(rows)do if r.id==id then index=i end end
+ if action=='add' then
+  assert(#rows<M.maximum,'Four shader layers maximum');local next_id=c.shader_layer_serial or 0
+  for _,r in ipairs(rows)do next_id=math.max(next_id,r.id)end
+  next_id=next_id+1;rows[#rows+1]={id=next_id,shader='crt_scan',scale=2,strength=1,blend=1,animate=false,speed=1,opacity=.25,pattern_size=1}
+  return {shader_layers=M.validate(rows),shader_layer_serial=next_id}
+ end
+ assert(index,'Shader layer was removed; refresh the menu')
+ if action=='remove'then table.remove(rows,index)
+ elseif action=='up' or action=='down'then local target=index+(action=='up' and -1 or 1);if target>=1 and target<=#rows then rows[index],rows[target]=rows[target],rows[index]end
+ else rows[index][action]=value end
+ return {shader_layers=M.validate(rows)}
+end
+function M.status(c,can_get)
+ local rows=M.effective(c);local active,ready=0,0
+ for _,r in ipairs(rows)do if r.enabled~=false then active=active+1;for _,e in ipairs(HUD.shader_catalog)do if e.id==r.shader and can_get('material',e.material:gsub('/lab_','/mapped_'))==true then ready=ready+1 end end end end
+ return #rows..' shader layers ('..active..' enabled, '..ready..' materials available); alpha overlays, 3D only'
+end
+
 return M
 
 end)()
@@ -8183,6 +8307,29 @@ function M.numeric_parts(command)
     for i=1,#digits do parts[#parts+1]={text=digits:sub(i,i),dx=(i-1)*advance,alpha=i<=dim and 1/3 or 1,c=i==#digits and command.last_digit_color or nil} end
     if #command.text>#digits then parts[#parts+1]={text=command.text:sub(#digits+1),dx=#digits*advance,alpha=1} end
     return parts
+end
+return M
+
+end)()
+HUD.font_scale=(function()
+-- Scale only live weapon text, retaining each measured visual center.
+local M={}
+function M.apply(commands,cfg,measure)
+    local factor=cfg.font_scale or 1
+    if factor==1 then return commands end
+    measure=measure or HUD.font.measure
+    local out={}
+    for _,v in ipairs(commands)do
+        if v.type=='text' and not v.font_scale_applied then
+            local q={};for k,value in pairs(v)do q[k]=value end
+            local l,b,r,t=measure(v.text,v.size,v.font,true)
+            local cx,cy=v.x+(l+r)/2,v.y+(b+t)/2
+            q.size=v.size*factor;l,b,r,t=measure(v.text,q.size,v.font,true)
+            q.x,q.y=cx-(l+r)/2,cy-(b+t)/2;q.font_scale_applied=true
+            out[#out+1]=q
+        else out[#out+1]=v end
+    end
+    return out
 end
 return M
 
@@ -13323,10 +13470,10 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
             for _,run in ipairs(symbol.runs) do
                 local xs,origin,ry,rh=1.85,36.9,run[2],run[4]
                 if cfg.double_freedom_proportions_preview~=false then
-                    -- Rear-base emphasis: 80% brass, 20% blue; preserve total height and anchors.
+                    -- Short brass head: 27% brass, 73% blue; preserve total height and anchors.
                     xs,origin=1.75,37.5
-                    if ry>=11 then ry,rh=24+(ry-11)*6/19,rh*6/19
-                    else ry,rh=ry*24/11,rh*24/11 end
+                    if ry>=11 then ry,rh=8+(ry-11)*22/19,rh*22/19
+                    else ry,rh=ry*8/11,rh*8/11 end
                 end
                 line(origin+(barrel-1)*50+run[1]*xs,32+ry*1.5,run[3]*xs,rh*1.5,
                     ((loaded or spent) and run[5] or silver),(loaded and .9 or spent and .55 or .18))
@@ -13410,6 +13557,379 @@ function M.compose(m,x,y,scale,opacity,cfg,clock,measure)
         end
     end
     for _,command in ipairs(out)do if command.type=='text' then command.a=command.a*(cfg.text_opacity or 1) end end
+    return out
+end
+-- Texture compositions replace primitive housing. Reapply the selected perimeter
+-- on their final live frame, without tinting or changing the artwork pixels.
+function M.decorate_textures(commands,scale,cfg,opacity)
+    cfg=HUD.config.texture_policy(cfg)
+    local textured=false
+    for _,v in ipairs(commands)do if v.type=='texture' then textured=true;break end end
+    if not textured then return commands end
+    local out,panels={},{}
+    for _,v in ipairs(commands)do
+        if not v.decoration then out[#out+1]=v end
+        if v.type=='panel' and not v.charge_meter then panels[#panels+1]=v end
+    end
+    for _,panel in ipairs(panels)do
+        local decoration={};M.decorate(decoration,panel,scale,cfg,opacity)
+        for _,v in ipairs(decoration)do v.child=panel.child;out[#out+1]=v end
+    end
+    return out
+end
+return M
+
+end)()
+HUD.segmented_primary_specs=(function()
+-- Verified named primary identities only. Presentation metadata is not live ammunition data.
+-- Retail slot audit: helldivers.wiki.gg/wiki/Category:Primary_Weapons, 2026-10-10.
+-- SMG-37 Defender and unnamed native aliases stay excluded until identity is verified.
+return {
+ ['968211c0033dce64']={code='AR-23',name='LIBERATOR'},
+ ['43cb1033961a2276']={code='AR-23P',name='PENETRATOR'},
+ ['a7ee1ebf58fcdf1f']={code='AR-23A',name='CARBINE'},
+ ['cf5f176e0e322be1']={code='AR-23C',name='CONCUSSIVE'},
+ ['5fecab819f96a3e8']={code='BR-14',name='ADJUDICATOR'},
+ ['ce063aa33d95a812']={code='AR-61',name='TENDERIZER'},
+ ['84354339522c932d']={code='AR-2',name='COYOTE'},
+ ['708ea298c82093d0']={code='AR-59',name='SUPPRESSOR'},
+ ['bc29613666df696b']={code='AR-32',name='PACIFIER'},
+ ['4dbd74f49c8ffc13']={code='MA5C',name='ASSAULT RIFLE'},
+ ['cdf28be026bb7d84']={code='StA-52',name='ASSAULT RIFLE'},
+ ['03e67a19b07c6523']={code='R-63',name='DILIGENCE'},
+ ['4c786785c79d44e7']={code='R-63CS',name='COUNTER SNIPER'},
+ ['0f83639ab8c86165']={code='R-2',name='AMENDMENT'},
+ ['e5796355a8fd67e0']={code='R-4',name='HYENA'},
+ ['f0338468dcdb6a6c']={code='R-72',name='CENSOR'},
+ ['0807aea5217e4767']={code='SMG-72',name='PUMMELER'},
+ ['186ea95de7306b1a']={code='SMG-203',name='GALLANT'},
+ ['94bd931b5fb4ee95']={code='SMG-32',name='REPRIMAND'},
+ ['9571ca51f0daf35b']={code='MP-98',name='KNIGHT'},
+ ['4ba41b6f9f405cc2']={code='StA-11',name='SMG'},
+ ['be70ee0d8d44028e']={code='M7S',name='SMG'},
+ ['80f1a156d9fa1e36']={code='JAR-5',name='DOMINATOR'},
+ ['b6aff2195568767f']={code='R-36',name='ERUPTOR'},
+ ['f49227a0630a3f7f']={code='CB-9',name='CROSSBOW'},
+ ['f992ce97577c8a7f']={code='VG-70',name='VARIABLE'},
+ ['7b75e5132ffd4ca6']={code='R-2124',name='CONSTITUTION'},
+ ['e6d932be83729076']={code='R-6',name='DEADEYE'},
+ ['41eac4a03987faa0']={code='SG-8',name='PUNISHER'},
+ ['4f749e2ee26f532d']={code='SG-8S',name='SLUGGER'},
+ ['4e310b1fe4c52b52']={code='SG-20',name='HALT'},
+ ['d323de60855898ac']={code='SG-451',name='COOKOUT'},
+ ['dcd1c835407ef7ba']={code='SG-97',name='SWEEPER'},
+ ['90ddc374f4e3d756']={code='M90A',name='SHOTGUN'},
+ ['72170a55a1f37ff1']={code='DBS-2',name='DOUBLE FREEDOM',shells=true},
+ ['46183b50961d1328']={code='SG-225',name='BREAKER'},
+ ['5ebaea70c0d060b9']={code='SG-225SP',name='SPRAY & PRAY'},
+ ['c12a34f375bd5a87']={code='SG-225IE',name='INCENDIARY'},
+ ['27ee1ed8f6fb6356']={code='LAS-5',name='SCYTHE'},
+ ['8645f167b3c813a2']={code='LAS-16',name='SICKLE'},
+ ['295beb26dc4f8ff1']={code='LAS-17',name='DOUBLE-EDGE'},
+ ['3c86e871923f3970']={code='LAS-13',name='TRIDENT'},
+ ['c85f576d5e086147']={code='LAS-12',name='SAI'},
+ ['eea5e3cef1e12c14']={code='PLAS-1',name='SCORCHER'},
+ ['05d8d8c073b9d502']={code='SG-8P',name='PUNISHER PLASMA'},
+ ['fb3a19078694708a']={code='PLAS-101',name='PURIFIER',charge_field='purifier_charge_fraction'},
+ ['30061f91af477f5e']={code='PLAS-39',name='ACCELERATOR'},
+ ['1abbff60d26ba391']={code='R/40-K',name='HOT-SHOT'},
+ ['4fb0f8c02f55c82b']={code='FLAM-66',name='TORCHER'},
+ ['076dd5d4f4360204']={code='ARC-12',name='BLITZER'},
+ ['a8a91eb54892b6b2']={code='AR-11',name='ARBITRATOR'},
+ ['a955c4ea6f6d4203']={code='AR/GL-21',name='ONE-TWO'},
+ ['8a307bd1811a5fe9']={code='SMG/FLAM-34',name='STOKER'},
+ ['006e44327bb953fe']={code='GL-15',name='EVICTOR'},
+}
+
+end)()
+HUD.edge_mask=(function()
+-- One cached full-UV alpha image, regenerated only after appearance edits.
+local M={width=128,height=256,resource='mods/dbf_hud/textures/primary_edge_mask_dynamic_v2'}
+local function number(v,default,low,high,step)
+ if type(v)~='number'or v~=v or math.abs(v)==math.huge then v=default end
+ return math.floor(math.max(low,math.min(high,v))/step+.5)*step
+end
+function M.settings(c)
+ c=c or {}
+ return {width=number(c.panel_edge_softness,4,0,24,1),curve=number(c.panel_edge_curve,1,.5,3,.1),
+  dither=number(c.panel_edge_dither,35,0,100,5),grain=number(c.panel_edge_grain,1,1,4,1)}
+end
+function M.signature(s)return string.format('%d:%.1f:%d:%d',s.width,s.curve,s.dither,s.grain)end
+-- Stratified thresholds avoid banding along each edge. Opposite edges mirror.
+local tile={}
+local order={0,9,4,13,2,11,6,15,8,1,12,5,10,3,14,7}
+for y=0,15 do for x=0,15 do
+ tile[y*16+x+1]=((order[y+1]+order[x+1])%16+.5)/16
+end end
+function M.image(s)
+ local width,height=M.width,M.height;local rows={};local cell=s.grain*2
+ local fade=width*s.width/100;local amount=s.dither/100
+ for y=0,height-1 do
+  local row={};local dy=math.min(y,height-1-y)
+  for x=0,width-1 do
+   local dx=math.min(x,width-1-x);local t=fade>0 and math.min(1,math.min(dx,dy)/fade)or 1
+   local alpha=(t*t*(3-2*t))^s.curve
+   if amount>0 and alpha>0 and alpha<1 then
+    local threshold=tile[(math.floor(dy/cell)%16)*16+math.floor(dx/cell)%16+1]
+    alpha=alpha*(1-amount)+(alpha>threshold and 1 or 0)*amount
+   end
+   row[x+1]=string.char(255,255,255,math.floor(alpha*255+.5))
+  end
+  rows[y+1]=table.concat(row)
+ end
+ return {format='RGBA8',width=width,height=height,row_pitch=width*4,rgba=table.concat(rows)}
+end
+return M
+
+end)()
+HUD.segmented_fancy=(function()
+-- Approved primary HUD Texture artwork. Cached face/digit textures, native labels.
+-- Bottom-left output coordinates; unavailable artwork returns nil for the owner.
+-- Composition has no intrinsic perimeter decoration or special renderer flags.
+local M={width=174,height=304,empty_flash_hz=2,specs=HUD.segmented_primary_specs,
+ face='mods/dbf_hud/textures/segmented_fancy_face_v4',atlas='mods/dbf_hud/textures/segmented_fancy_atlas_v4',
+ full_white='mods/dbf_hud/textures/primary_full_white_v1',
+ edge_masks={[4]='mods/dbf_hud/textures/primary_edge_mask_v1_04',[8]='mods/dbf_hud/textures/primary_edge_mask_v1_08',[12]='mods/dbf_hud/textures/primary_edge_mask_v1_12'},
+ material='mods/dbf_hud/materials/adjudicator_tall_v1'}
+local WHITE={245,246,240};local GOLD={233,196,93};local NAVY={9,27,53};local MUTED={40,69,104};local RED={255,87,80}
+local function finite(v)return type(v)=='number'and v==v and math.abs(v)<math.huge end
+function M.edge_softness(value)return HUD.edge_mask.settings({panel_edge_softness=value}).width end
+local function clamp(v,a,b)return math.max(a,math.min(b,v))end
+local function count(v)return finite(v)and v>=0 and v<=100000 and math.floor(v)or nil end
+local function fraction(v)return finite(v)and v>=0 and v<=1 and v or nil end
+local function color(v,fallback)
+ if type(v)=='table'and finite(v[1])and finite(v[2])and finite(v[3])then return {clamp(v[1],0,255),clamp(v[2],0,255),clamp(v[3],0,255)}end
+ if type(v)=='string'then local h=v:gsub('^#','');if #h==6 and h:match('^%x+$')then return {tonumber(h:sub(1,2),16),tonumber(h:sub(3,4),16),tonumber(h:sub(5,6),16)}end end
+ return fallback
+end
+local face_uv={32/256,32/512,174/256,304/512}
+local solid_uv={988/1024,16/512,16/1024,16/512}
+local gauge_uv={16/1024,192/512,160/1024,7/512}
+local loaded_ghost_uv={256/1024,256/512,154/1024,78/512}
+local mode_active_uv={448/1024,256/512,49/1024,22/512}
+local function digit_uv(column)return {(8+80*column)/1024,8/512,72/1024,118/512}end
+function M.ready(id,cfg)return M.specs[id]~=nil and(not cfg or(cfg.presentation_view~='third' and cfg.hud_presentation~='practical'))end
+function M.assets_ready(resource,can_get)
+ if type(resource)~='function'or(can_get~=nil and(type(can_get)~='function'or can_get('material',M.material)~=true))then return false end
+ local face,atlas=resource(M.face),resource(M.atlas)
+ return face~=nil and face~=false and atlas~=nil and atlas~=false
+end
+function M.readouts(m,spec)
+ local heat=m.kind=='heat';local infinite=m.kind=='infinite'
+ local loaded=not infinite and count(m.value)or nil;local capacity=count(m.capacity);local reserve=count(m.reserve)
+ local empty=not heat and not infinite and loaded==0
+ local q=spec.charge_field and fraction(m[spec.charge_field])or nil
+ local progress=not infinite and fraction(m.fraction)or nil
+ local low=not heat and not infinite and not empty and loaded~=nil and capacity~=nil and capacity>0 and loaded/capacity<=.2
+ local label=heat and 'HEAT'or infinite and 'ARC'or m.label=='FUEL'and 'FUEL'or 'LOAD'
+ local status=loaded==nil and not infinite and 'NO DATA'or empty and (m.state=='SPENT'and 'SPENT'or 'EMPTY')or low and 'LOW AMMO'or ''
+ if m.reloading==true or m.df_ejector_open==true then status='RELOADING'
+ elseif q and(q>0 or m.charge_ready)then status=(m.charge_ready or q>=1)and 'CHARGED'or('CHARGE '..math.floor(q*100+.5)..'%');progress=q
+ elseif heat and m.state and m.state~='READY'then status=m.state
+ elseif infinite and m.state and m.state~='READY'then status=m.state
+ elseif m.chamber_bonus==1 and loaded and capacity and loaded==capacity+1 then status='CHAMBERED +1' end
+ return {loaded=loaded,capacity=capacity,reserve=reserve,unit=type(m.reserve_kind)=='string'and m.reserve_kind or 'RES',heat=heat,infinite=infinite,empty=empty,low=low,label=label,status=status,progress=progress,charge=q,mode=m.ammo_mode or m.fire_mode or m.safety_mode or '--'}
+end
+function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
+ cfg=cfg or {};if not m or not M.ready(m.resource_hex,cfg)or not M.assets_ready(resource,can_get)then return nil end
+ x=x or 0;y=y or 0;s=s or 1;opacity=clamp(finite(opacity)and opacity or 1,0,1);clock=finite(clock)and clock or 0
+ assert(finite(x)and finite(y)and finite(s)and s>0,'invalid segmented geometry')
+ local spec=M.specs[m.resource_hex];local r=M.readouts(m,spec)
+ local white=color(cfg.text_color,WHITE);local gold=color(cfg.decoration_color,GOLD);local bg=color(cfg.background_color,NAVY)
+ local red=color(cfg.heat_red,RED);local low=color(cfg.heat_yellow,gold)
+ local fg=opacity*clamp(finite(cfg.text_opacity)and cfg.text_opacity or 1,0,1)*clamp(finite(cfg.text_color_alpha)and cfg.text_color_alpha/255 or 1,0,1)
+ local backing=clamp(finite(cfg.panel_opacity)and cfg.panel_opacity or .25,0,1)
+ local out={{type='panel',x=x,y=y,w=M.width*s,h=M.height*s,c=bg,a=0,frosted=false,atlas_frame=true,mechanical_art=true,hud_texture_primary=true,world_reference_width=M.width*s}}
+ local function image(texture,uv,a,b,w,h,c,alpha,role,layer,lit,leading,character,column)
+  out[#out+1]={type='texture',x=x+(a-18)*s,y=y+(M.height-(b-25)-h)*s,w=w*s,h=h*s,c=c,a=alpha,
+   texture_material=M.material,texture_resource=texture,atlas_rect=uv,texture_layer=layer,mechanical_art=true,
+   coverage_mask=role=='backing' or nil,render_role=role=='backing' and 'backing' or 'artwork',
+   segmented_role=role,segment_lit=lit,leading_zero=leading,digit_character=character,atlas_column=column}
+ end
+ local white_ready=resource(M.full_white)
+ local edge_resource=M.edge_softness(cfg.panel_edge_softness)>0 and HUD.edge_mask.resource
+ local edge_ready=edge_resource and resource(edge_resource)
+ if edge_ready~=nil and edge_ready~=false then out[1].edge_mask_resource=edge_resource;out[1].edge_mask_material=M.material end
+ image(edge_ready~=nil and edge_ready~=false and edge_resource or white_ready~=nil and white_ready~=false and M.full_white or M.atlas,
+  (edge_ready~=nil and edge_ready~=false or white_ready~=nil and white_ready~=false)and {0,0,1,1} or solid_uv,
+  18,25,M.width,M.height,bg,opacity*backing,'backing',49)
+ image(M.face,face_uv,18,25,M.width,M.height,gold,fg,'face',49.01)
+ local font=cfg.font or 'bigblue';local font_scale=clamp(finite(cfg.font_scale)and cfg.font_scale or 1,.5,1.5)
+ local function measure(str,size)
+  if HUD.font and HUD.font.measure then return HUD.font.measure(str,size,font,true)end
+  return 0,0,#str*size*.6,size
+ end
+ -- Labels use the approved SVG baselines; texture cells remain top-left boxes.
+ local function text(a,b,w,h,size,str,c,role,align,alpha,lit,top_aligned)
+  str=tostring(str);size=size*font_scale*s
+  local l,bottom,right,top=measure(str,size);size=size*math.min(1,w*s/math.max(.001,right-l),h*s/math.max(.001,top-bottom))
+  l,bottom,right,top=measure(str,size)
+  local tx=x+(a-18)*s-l;if align=='right'then tx=x+(a-18+w)*s-right
+  elseif align=='center'then tx=x+(a-18+w/2)*s-(l+right)/2 end
+  local ty=y+(M.height-(b-25))*s-(top_aligned and top or 0)
+  out[#out+1]={type='text',x=tx,y=ty,text=str,size=size,font=font,c=c,a=fg*(alpha or 1),
+   texture_readout=true,render_role='readout',readout_key=role,
+   readout_zone={cx=tx+(l+right)/2,cy=ty+(bottom+top)/2,w=math.max(.001,right-l),h=math.max(.001,top-bottom)},
+   segmented_role=role,font_scale_applied=true,segment_lit=lit}
+ end
+ local pulse=1
+ if r.empty and cfg.reduced_motion~=true and math.floor(clock*M.empty_flash_hz*2)%2==1 then pulse=.22 end
+ local ink=r.empty and red or r.low and low or r.heat and m.warning and red or white
+ local function digits(value,slots,a,b,w,h,c,role)
+  local raw=value~=nil and tostring(value)or string.rep('-',slots);local str=value~=nil and string.rep('0',math.max(0,slots-#raw))..raw or raw
+  -- Exceptional wide values remain exact without exceeding the renderer's 24 images.
+  if #str>slots then text(a,b+h,w,h,h*.8,raw,c,role,'right',role=='loaded'and pulse or 1,true);return end
+  local n=#str;local full=n*72+(n-1)*7;local scale=math.min(w/full,h/118);local start=a+(w-full*scale)/2;local leading=value~=nil and n-#raw or 0
+  if role=='loaded'then image(M.atlas,loaded_ghost_uv,a,b,w,h,MUTED,fg*.18,role..'_ghost',49.02,false,false,'888',11)end
+  for i=1,n do
+   local character=str:sub(i,i);local column=tonumber(character)or 10;local lead=i<=leading;local base=start+(i-1)*79*scale
+   if role~='loaded'then image(M.atlas,digit_uv(11),base,b,72*scale,118*scale,MUTED,fg*.18,role..'_ghost',49.02,false,lead,'8',11)end
+   local alpha=lead and .14 or 1;if role=='loaded'then alpha=alpha*pulse end
+   local cell=c
+   if role=='loaded'and i==n and m.chamber_bonus==1 and r.loaded and r.capacity and r.loaded==r.capacity+1 then cell=gold end
+   image(M.atlas,digit_uv(column),base,b,72*scale,118*scale,cell,fg*alpha,role,49.03,true,lead,character,column)
+  end
+ end
+ text(25,44,52,10,10,spec.code,gold,'identity')
+ text(80,44,104,10,9,spec.name,white,'name','right')
+ text(25,67,160,9,9,r.label,gold,'loaded_label')
+ digits(r.loaded,3,28,87,154,78,ink,'loaded')
+ image(M.atlas,solid_uv,25,184,3,14,gold,fg*(r.status~=''and 1 or .15),'status_indicator',49.03)
+ text(34,194,151,10,9,r.status,gold,'status')
+ text(25,218,100,11,10,r.heat and 'UNIT'or r.infinite and 'SUPPLY'or 'CAP',gold,'capacity_label')
+ if r.heat then text(136,228,49,22,16,'%',gold,'capacity','right')
+ elseif r.infinite then text(136,228,49,22,14,'--',gold,'capacity','right')
+ else digits(r.capacity,3,136,206,49,22,gold,'capacity')end
+ local progress=r.progress
+ image(M.atlas,gauge_uv,25,231,160,7,MUTED,fg*.35,'gauge_inactive',49.02)
+ if progress and progress>0 then image(M.atlas,{gauge_uv[1],gauge_uv[2],gauge_uv[3]*progress,gauge_uv[4]},25,231,160*progress,7,gold,fg,'gauge',49.03,true)end
+ text(25,260,105,10,9,'RESERVE',gold,'reserve_label')
+ text(25,278,100,12,10,r.unit,white,'reserve_unit')
+ digits(r.reserve,2,132,250,53,33,white,'reserve')
+ text(25,296,160,9,9,'MODE',gold,'mode_label')
+ local selected=false
+ for i,mode in ipairs({'AUTO','BURST','SEMI'})do
+  local on=r.mode==mode;selected=selected or on
+  text(25+(i-1)*55,313,48,12,9,mode,on and gold or MUTED,'mode','center',on and 1 or .55)
+  out[#out].mode_active=on
+  if on then
+   -- Outline at x25/y301 and underline at y321 share one cached image.
+   image(M.atlas,mode_active_uv,24.5+(i-1)*55,300.5,49,22,gold,fg,'mode_underline',49.03)
+   out[#out].mode_active=true
+  end
+ end
+ -- A native mode outside the visual bank stays explicit; nothing is selected.
+ if not selected then text(80,296,104,9,9,r.mode,gold,'mode','right');out[#out].mode_active=false end
+ return out
+end
+return M
+
+end)()
+HUD.simple_vertical=(function()
+-- Vertical Simple review candidate. Texture-free; top-left coordinates.
+local M={width=64,height=86}
+local function number(v)return type(v)=='number'and v==v and math.abs(v)<math.huge end
+function M.compose(m,x,y,w,h,alpha,cfg,measure)
+ m=m or {};cfg=cfg or {};x=x or 0;y=y or 0;w=w or 64;h=h or 86;alpha=alpha or 1
+ local q={};local fg=cfg.text_color or {224,225,208};local accent=cfg.accent_color or {206,191,130};local bg=cfg.backing_color or {27,34,36}
+ local function rect(a,b,c,d,color,opacity)q[#q+1]={type='rect',x=x+a*w/64,y=y+b*h/86,w=c*w/64,h=d*h/86,c=color,a=alpha*opacity}end
+ local fs=math.max(.5,math.min(1.5,tonumber(cfg.font_scale)or 1))
+ local function text(a,b,size,str,maxw,color)
+  str=tostring(str);size=size*fs;local tw=measure and measure(str,size)or #str*size*.6
+  if tw>maxw then size=size*maxw/tw end
+  q[#q+1]={type='text',x=x+a*w/64,y=y+b*h/86,size=size*h/86,text=str,c=color or fg,a=alpha,font=cfg.font or 'bigblue'}
+ end
+ local opacity=math.max(0,math.min(1,tonumber(cfg.backing_opacity)or .22))
+ if opacity>0 then rect(2,1,60,84,bg,opacity);rect(0,3,2,80,bg,opacity);rect(62,3,2,80,bg,opacity)end
+ rect(5,15,54,.35,accent,.65)
+ text(5,5,3.8,m.short_name or m.weapon_name or 'WEAPON',54,accent)
+ local count=type(m.value_readout)=='string'and m.value_readout or number(m.value)and tostring(math.max(0,m.value))or number(m.feed_rounds)and tostring(math.max(0,m.feed_rounds))or '--'
+ text(5,21,16,count,cfg.ammo_semantics=='double_freedom'and 34 or 54)
+ text(5,40,4.5,m.capacity_readout or cfg.ammo_semantics=='backpack_feed'and 'FEED' or number(m.capacity)and '/ '..m.capacity or '/ --',54)
+ if cfg.ammo_semantics=='double_freedom' then
+  for side=1,2 do
+   local state=m.shell_states and m.shell_states[side]or 'unknown'
+   local color=state=='spent'and {164,113,69}or accent
+   local op=state=='loaded'and 1 or state=='spent'and .42 or state=='unloaded'and .10 or .20
+   rect(46,23+(side-1)*8,10,4,color,op)
+  end
+ end
+ local reserve='RES --'
+ if type(m.reserve_readout)=='string'then reserve=m.reserve_readout
+ elseif number(m.reserve_magazines)then reserve=string.format('%d MAGS',m.reserve_magazines)
+ elseif number(m.reserve_shells)then reserve=string.format('%d SHELLS',m.reserve_shells)
+ elseif number(m.reserve_rounds)then reserve=string.format('%d RDS',m.reserve_rounds)
+ elseif cfg.ammo_semantics=='backpack_feed'then reserve='BACKPACK'
+ elseif cfg.ammo_semantics=='expendable'then reserve=number(m.spare_units)and string.format('%d SPARE UNITS',m.spare_units)or 'SPARE --'end
+ text(5,50,5.5,reserve,54)
+ text(5,62,5.8,cfg.ammo_semantics=='expendable'and 'SINGLE USE'or m.fire_mode or '--',54,accent)
+ local state=m.ammo_name or m.chamber_status or m.reload_status
+ if state then text(5,75,3.6,state,54)end
+ return q
+end
+return M
+end)()
+HUD.view_presentation=(function()
+-- Presentation only: both views consume the same normalized weapon model.
+local M={}
+function M.select(native_first,aiming,override)
+    if override=='practical' then return 'third','forced practical presentation' end
+    if override=='weapon_specific' then return 'first','forced weapon-specific presentation' end
+    if native_first==nil or aiming==nil then return 'third','camera state unavailable; practical fallback' end
+    if native_first==true and aiming==true then return 'first','game first-person toggle and active aiming' end
+    return 'third','game third-person/shoulder view'
+end
+local function number(v)
+    if type(v)=='number' and v==v and v>=0 and v<100001 then return math.floor(v) end
+end
+local function fraction(v)
+    return type(v)=='number' and v==v and v>=0 and v<=1 and v or nil
+end
+function M.readouts(m,cfg)
+    local loaded=number(m.value)
+    local label=m.kind=='heat' and (m.quasar_charge_verified and 'CHARGE' or 'HEAT') or (m.label=='FUEL' and 'FUEL' or 'LOADED')
+    local value=loaded and tostring(loaded) or (m.kind=='infinite' and '--' or '?')
+    if m.kind=='heat' then value=value..'%' end
+    local reserve=number(m.reserve)
+    local mode=m.safety_mode or m.fire_mode or m.ammo_mode or '--'
+    local state=m.state or '--';local progress=m.kind=='heat' and fraction(m.fraction) or nil
+    local charge=fraction(m.epoch_charge_fraction) or fraction(m.loyalist_charge_fraction) or fraction(m.purifier_charge_fraction)
+    if m.safety_mode then
+        local rail=HUD.layout.railgun_charge(m.safety_mode,m.charge_fraction,m.charge_seconds,cfg.railgun_release_margin_ms,m.charge_age,m.frame_delay)
+        if rail then charge=rail.fraction;if rail.release or rail.limit then state='RELEASE' end end
+    else charge=charge or fraction(m.charge_fraction) end
+    if m.df_ejector_open==true or m.reloading==true then state='RELOADING'
+    elseif charge and (charge>0 or m.charge_ready) then
+        progress=charge
+        if state~='RELEASE' then state=(m.charge_ready or charge>=1) and 'CHARGED' or ('CHARGE '..math.floor(charge*100+.5)..'%') end
+    end
+    return {loaded=value,label=label,reserve=reserve and tostring(reserve) or '?',reserve_unit=m.reserve_kind or 'RESERVE',mode=mode,state=state,progress=progress,warning=m.warning==true or state=='RELEASE'}
+end
+function M.compose(m,x,y,s,opacity,cfg)
+    local r=M.readouts(m,cfg);local model={};for k,v in pairs(m)do model[k]=v end
+    local name=(HUD.weapon_names or {})[m.resource_hex]or m.label or 'WEAPON'
+    model.short_name=name:match('^%S+')or 'WEAPON';model.value_readout=r.loaded
+    if m.kind=='heat' or m.kind=='infinite' then model.capacity_readout=r.label end
+    model.reserve_readout=r.reserve..' '..(m.reserve_kind or 'RES')
+    model.reload_status=r.state~='READY'and r.state or (m.chamber_rounds==1 and 'CHAMBERED'or nil)
+    model.ammo_name=m.ammo_mode
+    local semantics=m.reserve_kind=='PACK'and 'backpack_feed'or m.state=='SPENT'and 'expendable'or nil
+    if m.resource_hex=='72170a55a1f37ff1' then
+        semantics='double_freedom';model.shell_states={}
+        for side=1,2 do
+            local spent=m.df_shell_spent and m.df_shell_spent[side]
+            model.shell_states[side]=spent and 'spent'or type(m.value)=='number'and m.value>=3-side and 'loaded'or 'unknown'
+        end
+    end
+    local config={font=cfg.font,font_scale=cfg.font_scale or 1,text_color=HUD.config.rgb(cfg.text_color),accent_color=r.warning and HUD.config.rgb(cfg.heat_red)or HUD.config.rgb(cfg.decoration_color),backing_color=HUD.config.rgb(cfg.background_color),backing_opacity=cfg.third_person_opacity or .22,ammo_semantics=semantics}
+    local function measure(t,size)local l,b,right=HUD.font.measure(t,size,cfg.font,true);return right-l end
+    local w,h=64*s,86*s;local raw=HUD.simple_vertical.compose(model,0,0,w,h,opacity,config,measure)
+    local out={{type='panel',x=x,y=y,w=w,h=h,c={0,0,0},a=0,frosted=false,presentation='third',world_reference_width=128*s}}
+    for _,v in ipairs(raw)do
+        if v.type=='text'then local l,b,right,top=HUD.font.measure(v.text,v.size,v.font,true);v.y=y+h-v.y-top;v.font_scale_applied=true
+        else v.y=y+h-v.y-v.h end
+        v.x=x+v.x;v.presentation='third';out[#out+1]=v
+    end
     return out
 end
 return M
@@ -13616,11 +14136,27 @@ function M.native()
     -- Read-only projection call. The caller must validate the native wrapper and
     -- camera owner immediately before use. x64 disassembly confirms explicit
     -- result buffer, camera pointer and input-vector pointer (three arguments).
-    local project_in=ffi.new('float[4]');local project_out=ffi.new('float[4]')
+    -- Native SIMD vectors require 16-byte alignment. Keep the owning allocations
+    -- with this backend; derived FFI pointers alone do not retain their storage.
+    local project_in_storage=ffi.new('uint8_t[32]');local project_out_storage=ffi.new('uint8_t[32]')
+    backend.projection_buffers={project_in_storage,project_out_storage}
+    local function aligned_vector(storage)
+        local address=tonumber(ffi.cast('uintptr_t',storage))
+        assert(address>=65536 and address<2^47,'projection buffer address')
+        return ffi.cast('float*',math.floor((address+15)/16)*16)
+    end
+    local project_in=aligned_vector(project_in_storage);local project_out=aligned_vector(project_out_storage)
+    -- Anonymous function signatures create a new LuaJIT CType each time they
+    -- are parsed. Cache both the type and callable, rather than parsing per point.
+    -- Initialize lazily so an already exhausted VM can still draw its fallback.
+    local project_type,project_fn,project_call
     function backend.project_camera(fn,camera,x,y,z)
+        if project_fn~=fn then
+            project_type=project_type or ffi.typeof('float* (*)(float*, const void*, const float*)')
+            project_call=ffi.cast(project_type,fn);project_fn=fn
+        end
         project_in[0],project_in[1],project_in[2]=x,y,z
-        local call=ffi.cast('float* (*)(float*, const void*, const float*)',fn)
-        call(project_out,ffi.cast('const void*',camera),project_in)
+        project_call(project_out,ffi.cast('const void*',camera),project_in)
         return tonumber(project_out[0]),tonumber(project_out[1]),tonumber(project_out[2])
     end
     function backend.close() if file then file:close();file=nil end end
@@ -14480,16 +15016,26 @@ function M.new(backend)
         assert(r.u(b,0x30)==1 and r.u(b,0x50)==0,'unsupported camera projection mode')
         local near,fov=r.f(b,0x28),r.f(b,0x34)
         assert(near>0 and near<10,'camera near plane')
-        -- Nonidentity local offsets require a separately verified inverse transform.
+        -- CPU projection still requires identity local offsets. The engine's
+        -- validated wrapper handles recoil/dive offsets for native depth reads.
+        local local_supported=true
         for _,o in ipairs({0x80,0x84,0x88,0x90,0x94,0x98,0x48,0x4c}) do
-            assert(math.abs(r.f(b,o))<1e-6,'camera local offset unsupported')
+            local value=r.f(b,o);assert(value==value and math.abs(value)<1e4,'camera local offset invalid')
+            if math.abs(value)>=1e-6 then local_supported=false end
         end
-        assert(math.abs(math.abs(r.f(b,0x8c))-1)<1e-6,'camera local rotation unsupported')
+        local rotation_w=r.f(b,0x8c);assert(rotation_w==rotation_w and math.abs(rotation_w)<2,'camera local rotation invalid')
+        if math.abs(math.abs(rotation_w)-1)>=1e-6 then local_supported=false end
         local array=r.p(scene+0x28);local data=r.read(array+index*64,64);local matrix={}
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        validate(matrix,fov,aspect)
         self.native_camera=camera;self.native_getter=getter
+        self.native_near=near
+        self.native_fov=fov
+        self.native_owner={base=base,state=state,scene=scene,index=index,array=array}
+        self.depth_camera_matrix=matrix
+        if not local_supported then return nil,'camera local offset unsupported for CPU projection; native projection available'end
         self.camera_matrix=matrix;self.camera_near=near;self.camera_aspect=aspect
         self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
         self.camera_fov=fov
@@ -14497,14 +15043,28 @@ function M.new(backend)
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
     function self.native_point(x,y,z)
-        if not backend.project_camera or not self.native_camera or not self.native_getter then return nil end
-        local ok,a,b,d=pcall(backend.project_camera,self.native_getter,self.native_camera,x,y,z)
-        if not ok or type(a)~='number' or a~=a or b~=b or d~=d then return nil end
-        return {x=a,y=b,depth=d}
+        if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
+        local ok,a,b,d=pcall(function()
+            local owner=assert(self.native_owner);r.reset()
+            assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera and
+                r.p(self.native_camera+0x18)==owner.scene and r.u(r.read(self.native_camera+0x20,4),0)==owner.index and
+                r.p(owner.scene+0x28)==owner.array,'camera owner changed before native projection')
+            return backend.project_camera(self.native_getter,self.native_camera,x,y,z)
+        end)
+        if not ok then self.native_status=tostring(a);return nil end
+        for _,value in ipairs({a,b,d})do if type(value)~='number'or value~=value or math.abs(value)>=1e7 then self.native_status='nonfinite native projection';return nil end end
+        if type(a)~='number'or type(b)~='number'or type(d)~='number'then self.native_status='incomplete native projection';return nil end
+        -- Native perspective projection returns forward normalized device depth.
+        -- The scene-depth shader samples linear metres, so invert near/z first.
+        if not self.native_near or d>=1 then self.native_status='native depth outside perspective range';return nil end
+        local depth=self.native_near/(1-d)
+        if depth~=depth or depth<=0 or depth>=10000 then self.native_status='invalid native linear depth';return nil end
+        self.native_status='projected'
+        return {x=a,y=b,depth=depth,native_depth=d}
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
-        self.native_camera=nil;self.native_getter=nil
+        self.native_camera=nil;self.native_getter=nil;self.native_owner=nil;self.native_near=nil;self.native_fov=nil;self.depth_camera_matrix=nil
         self.camera_matrix=nil;self.camera_near=nil;self.camera_aspect=nil
         self.camera_distance=nil;self.camera_fov=nil;self.camera_lateral=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
@@ -14513,6 +15073,105 @@ function M.new(backend)
     end
     return self
 end
+-- Invert an ordered projected quad: TL, TR, BR, BL; screen UV -> unit panel UV.
+-- Rows match screen_scene.atlas_rows: u numerator, v numerator, denominator.
+local function valid(v)return type(v)=='number'and v==v and math.abs(v)<=1e7 end
+-- The guarded engine wrapper returns output pixels, which can differ from GUI
+-- pixels under upscaling. Normalize once; screen_scene scales to GUI pixels.
+function M.native_coordinate_map(output_width,output_height)
+ if not valid(output_width)or not valid(output_height)or output_width<=0 or output_height<=0 then return nil end
+ return {space='output_pixels',sx=1/output_width,sy=1/output_height,bx=0,by=0}
+end
+function M.normalize_native_point(point,map)
+ if not point or not map then return nil end
+ point.x=point.x*map.sx+map.bx;point.y=point.y*map.sy+map.by
+ return valid(point.x)and valid(point.y)and point or nil
+end
+function M.native_panel_inverse(points)
+ if type(points)~='table'or #points~=4 then return nil end
+ local x,y={},{ };local xmin,ymin,xmax,ymax=math.huge,math.huge,-math.huge,-math.huge
+ for i=1,4 do
+  local p=points[i];if type(p)~='table'then return nil end
+  x[i]=p.x~=nil and p.x or p[1];y[i]=p.y~=nil and p.y or p[2]
+  if not valid(x[i])or not valid(y[i])then return nil end
+  xmin=math.min(xmin,x[i]);xmax=math.max(xmax,x[i]);ymin=math.min(ymin,y[i]);ymax=math.max(ymax,y[i])
+ end
+ local span=math.max(xmax-xmin,ymax-ymin);if span<=0 then return nil end
+ -- A finite visible planar projection must be convex and have distinct corners.
+ local sign
+ for i=1,4 do
+  local j,k=i%4+1,(i+1)%4+1
+  local cross=(x[j]-x[i])*(y[k]-y[j])-(y[j]-y[i])*(x[k]-x[j])
+  if math.abs(cross)<=1e-12*span^2 or(sign and cross*sign<0)then return nil end
+  sign=cross
+ end
+ local dx1,dx2,dx3=x[2]-x[3],x[4]-x[3],x[1]-x[2]+x[3]-x[4]
+ local dy1,dy2,dy3=y[2]-y[3],y[4]-y[3],y[1]-y[2]+y[3]-y[4]
+ local g,h=0,0
+ if math.abs(dx3)>1e-12*span or math.abs(dy3)>1e-12*span then
+  local determinant=dx1*dy2-dx2*dy1;local extent=math.max(math.abs(dx1),math.abs(dx2),math.abs(dy1),math.abs(dy2))
+  if math.abs(determinant)<=1e-12*extent^2 then return nil end
+  g=(dx3*dy2-dx2*dy3)/determinant;h=(dx1*dy3-dx3*dy1)/determinant
+ end
+ local a,b,c=x[2]-x[1]+g*x[2],x[4]-x[1]+h*x[4],x[1]
+ local d,e,f=y[2]-y[1]+g*y[2],y[4]-y[1]+h*y[4],y[1]
+ local rows={e-f*h,c*h-b,b*f-c*e,f*g-d,a-c*g,c*d-a*f,d*h-e*g,b*g-a*h,a*e-b*d}
+ local determinant=a*rows[1]+b*rows[4]+c*rows[7]
+ local extent=math.max(math.abs(a),math.abs(b),math.abs(c),math.abs(d),math.abs(e),math.abs(f),math.abs(g),math.abs(h),1)
+ if not valid(determinant)or math.abs(determinant)<=1e-12*extent^3 then return nil end
+ local norm=math.max(math.abs(rows[7]),math.abs(rows[8]),math.abs(rows[9]));if norm<=0 then return nil end
+ for i=1,9 do rows[i]=rows[i]/norm;if not valid(rows[i])then return nil end end
+ -- Reject numerically unstable inverses instead of sending malformed shader UVs.
+ local expected={{0,0},{1,0},{1,1},{0,1}}
+ for i=1,4 do
+  local denominator=rows[7]*x[i]+rows[8]*y[i]+rows[9]
+  if not valid(denominator)or math.abs(denominator)<=1e-12 then return nil end
+  local u=(rows[1]*x[i]+rows[2]*y[i]+rows[3])/denominator
+  local v=(rows[4]*x[i]+rows[5]*y[i]+rows[6])/denominator
+  if not valid(u)or not valid(v)or math.abs(u-expected[i][1])>1e-7 or math.abs(v-expected[i][2])>1e-7 then return nil end
+ end
+ return rows
+end
+
+-- Reuse one guarded corner projection for a complete planar GUI surface.
+-- Input corners are TL/TR/BR/BL in D3D screen UVs, with native linear depth.
+-- Local geometry remains bottom-left/up; atlas mapping remains top-left/down.
+function M.native_panel_snapshot(frame,points,near)
+ if not frame or not valid(frame.x)or not valid(frame.y)or not valid(frame.w)or not valid(frame.h)or frame.w<=0 or frame.h<=0 then return nil end
+ local rows=M.native_panel_inverse(points);if not rows then return nil end
+ for i=1,4 do if not valid(points[i].depth)or points[i].depth<=0 then return nil end end
+ local a,b,c,d,e,f,g,h,i=unpack(rows)
+ local forward={e*i-f*h,c*h-b*i,b*f-c*e,f*g-d*i,a*i-c*g,c*d-a*f,d*h-e*g,b*g-a*h,a*e-b*d}
+ local norm=math.max(math.abs(forward[7]),math.abs(forward[8]),math.abs(forward[9]));if norm<=0 then return nil end
+ for k=1,9 do forward[k]=forward[k]/norm;if not valid(forward[k])then return nil end end
+ local d0,du,dv=points[1].depth,points[2].depth-points[1].depth,points[4].depth-points[1].depth
+ -- Native float projection can round; refuse a nonplanar depth snapshot.
+ if math.abs(d0+du+dv-points[3].depth)>.002+math.abs(points[3].depth)*.002 then return nil end
+ local threshold=math.max(near or .0001,.0001)
+ local snapshot={rows=rows}
+ function snapshot.project(x,y)
+  local u,v=(x-frame.x)/frame.w,1-(y-frame.y)/frame.h
+  local depth=d0+du*u+dv*v;local divisor=forward[7]*u+forward[8]*v+forward[9]
+  if not valid(depth)or depth<=threshold or not valid(divisor)or math.abs(divisor)<1e-12 then return nil end
+  local nx=(forward[1]*u+forward[2]*v+forward[3])/divisor
+  local ny=1-(forward[4]*u+forward[5]*v+forward[6])/divisor
+  if not valid(nx)or not valid(ny)then return nil end
+  return {x=nx,y=ny,depth=depth}
+ end
+ function snapshot.image_rows(x,y,w,h)
+  if not valid(w)or not valid(h)or w<=0 or h<=0 then return nil end
+  local ox,oy=frame.x-x,y+h-frame.y-frame.h
+  local cropped={}
+  for k=1,3 do
+   cropped[k]=(frame.w*rows[k]+ox*rows[k+6])/w
+   cropped[k+3]=(frame.h*rows[k+3]+oy*rows[k+6])/h
+   cropped[k+6]=rows[k+6]
+  end
+  return cropped
+ end
+ return snapshot
+end
+
 return M
 
 end)()
@@ -15744,7 +16403,7 @@ return {['968211c0033dce64']={version=1,layers=layers,variants=variants}}
 end)()
 HUD.runtime_textures=(function()
 -- Queued immutable uploads. The adapter owns native contracts and render phase.
-local M={max_image_bytes=16777216,max_retained_bytes=67108864}
+local M={max_image_bytes=16777216,max_retained_bytes=167772160}
 local function dimensions(image)
     assert(type(image)=='table' and image.format=='RGBA8','RGBA8 image required')
     for _,key in ipairs({'width','height'}) do
@@ -15982,6 +16641,63 @@ function M.new(adapter,store)
   end
   return #self.pending==0
  end
+ return self
+end
+return M
+
+end)()
+HUD.texture_pool=(function()
+-- Batch publication and reclamation. Native adapter owns completion/release.
+local M={}
+function M.new(adapter,store)
+ store.consumers=store.consumers or {};store.retirements=store.retirements or {};store.active=store.active or {}
+ local self={closing=false}
+ function self.register_consumer(id,detach)
+  assert(not store.consumers[id] and type(detach)=='function','unique material owner required')
+  store.consumers[id]=detach
+  return function()assert(detach()==true,'material owner did not detach');store.consumers[id]=nil end
+ end
+ local function evict(record)
+  for size,bucket in pairs(store.cache or {})do for pixels,r in pairs(bucket)do if r==record then bucket[pixels]=nil end end;if next(bucket)==nil then store.cache[size]=nil end end
+  for name,r in pairs(store.images or {})do if r==record then store.images[name]=nil end end
+ end
+ function self.discard(record)
+  assert(record.ready and record.consumed and record.resource,'unready unpublished resource')
+  for _,r in pairs(store.active)do assert(r~=record,'cannot discard active artwork')end
+  if not record.retiring then
+   record.retiring=true;record.retirement_token=adapter.retirement_token(record)
+   store.retirements[#store.retirements+1]=record;evict(record)
+  end
+ end
+ function self.publish(prepared)
+  assert(not self.closing,'texture pool retiring')
+  local keep={};for _,r in pairs(prepared)do assert(r.ready and r.consumed and r.resource,'batch contains unready resource');keep[r]=true end
+  -- Destroy GUI/material owners before exposing replacements. A failure leaves
+  -- old publication and resources retained; never frees through uncertain refs.
+  for _,detach in pairs(store.consumers)do assert(detach()==true,'material detachment not acknowledged')end
+  local retiring={}
+  for _,r in ipairs(store.resources)do if r.ready and r.consumed and r.resource and not keep[r] and not retiring[r] and not r.retiring then
+   retiring[r]=true;r.retiring=true;r.retirement_token=adapter.retirement_token(r)
+   store.retirements[#store.retirements+1]=r;evict(r)
+  end end
+  store.active=prepared
+ end
+ function self.step()
+  for i=#store.retirements,1,-1 do
+   local r=store.retirements[i]
+   if not r.release_failed and adapter.retirement_done(r.retirement_token)==true then
+    local ok,done=pcall(adapter.destroy_retired,r,r.retirement_token,true)
+    if not ok or done~=true then r.release_failed=true;store.failure=tostring(done)
+    else
+     store.bytes=store.bytes-r.bytes;r.destroyed=true;r.resource=nil;r.rgba=nil;r.source=nil;r.prefix=nil
+     for j=#store.resources,1,-1 do if store.resources[j]==r then table.remove(store.resources,j)end end
+     table.remove(store.retirements,i)
+    end
+   end
+  end
+  return #store.retirements==0
+ end
+ function self.close()if not self.closing then self.publish({});self.closing=true end end
  return self
 end
 return M
@@ -16246,7 +16962,7 @@ function M.new(sr,backend,root)
  local key='dbf_hud.hot_panel_art.lifetime.v1'
  local store=package.loaded[key] or {bytes=0,resources={}}
  package.loaded[key]=store;store.images=store.images or {};store.active=store.active or {}
- store.cache=store.cache or {}
+ store.cache=store.cache or {};store.orphans=store.orphans or {}
  local function cache(record)
   if not(record and record.ready and record.uploaded and record.consumed and record.source and type(record.rgba)=='string')then return end
   local size=record.width..'x'..record.height
@@ -16262,7 +16978,10 @@ function M.new(sr,backend,root)
  -- Retire callbacks from an older HUD before installing a replacement owner.
  if store.owner then store.owner.close()end
  local self={status='Packaged artwork',closing=false}
- local native,off,busy,job;local frame=0;local serial=store.serial or 0
+ local validation_remaining,validation_cycle,validation_baseline,validation_image
+ local registered={}
+ local native,off,busy,job,pool,restore_requested,after_close,desired;local frame=0;local serial=store.serial or 0
+ local generated_name='primary_edge_mask_dynamic_v2'
  local function trace(v)
   local line='HOT_ART_STAGE staged_v3 job='..serial..' frame='..frame..' '..v
   local f=io.open(root..'/upload-stages.log','a')
@@ -16270,15 +16989,77 @@ function M.new(sr,backend,root)
   if backend.log then pcall(backend.log,line)end
  end
  local function cancel(reason)
+  if validation_cycle and validation_cycle>0 then validation_remaining=nil end
+  if pool and job then
+   local function abandoned(r)
+    if not r or r.orphaned or r.retiring then return end
+    if not r.resource then
+     if not store.failure and job.stage=='create' then
+      store.bytes=store.bytes-r.bytes
+      for i=#store.resources,1,-1 do if store.resources[i]==r then table.remove(store.resources,i)end end
+      r.rgba=nil;r.orphaned=true
+     end
+     return
+    end
+    for _,active in pairs(store.active)do if active==r then return end end
+    r.orphaned=true;store.orphans[#store.orphans+1]=r
+   end
+   abandoned(job.record);for _,r in pairs(job.prepared)do abandoned(r)end
+  end
   job=nil;self.status=reason
  end
  local function step()
-  if self.closing or store.owner~=self or not job or busy then return end
+  if store.owner~=self then if off then local stop=off;off=nil;stop()end;if after_close then local done=after_close;after_close=nil;done()end;return end
+  if busy or (not job and not desired and not restore_requested and validation_remaining==nil and not (pool and (#store.retirements>0 or #store.orphans>0))) then return end
   busy=true;frame=frame+1;native.set_phase(true)
   local ok,err=pcall(function()
+   if pool then
+    if store.failure then error(store.failure)end
+    local orphan=store.orphans[1]
+    if orphan then
+     local image={format='RGBA8',width=orphan.width,height=orphan.height,row_pitch=orphan.width*4,rgba=orphan.rgba}
+     if not orphan.copied then native.copy(image,orphan)
+     elseif not orphan.uploaded then native.submit(orphan)
+     elseif native.ready(orphan)==true then orphan.ready=true;pool.discard(orphan);table.remove(store.orphans,1)end
+    end
+    local before=store.bytes;pool.step()
+    if store.bytes<before then trace('reclaimed bytes='..(before-store.bytes)..' retained='..store.bytes..' resources='..#store.resources)end
+    if store.failure then error(store.failure)end
+    if restore_requested then pool.publish({});restore_requested=nil;pool.step()end
+    if self.closing and #store.retirements==0 and #store.orphans==0 then store.consumers={};store.owner=nil;if off then local stop=off;off=nil;stop()end;if after_close then local done=after_close;after_close=nil;done()end;return end
+   end
+   if not job and validation_remaining~=nil and #store.retirements==0 and #store.orphans==0 then
+    local prepared={};for name,r in pairs(store.active)do if name~='__reclaim_validation' then prepared[name]=r end end
+    if validation_remaining>0 then
+     validation_cycle=validation_cycle+1;validation_remaining=validation_remaining-1
+     if not validation_image then
+      for _,r in pairs(prepared)do if not validation_image or #r.rgba>#validation_image.rgba then
+       validation_image={format='RGBA8',width=r.width,height=r.height,row_pitch=r.width*4,rgba=r.rgba}
+      end end
+     end
+     local image=assert(validation_image,'validation needs active artwork')
+     job={items={{name='__reclaim_validation',image=image}},index=1,stage='select',prepared=prepared}
+     trace('validation cycle='..validation_cycle..' image_bytes='..#image.rgba..' retained='..store.bytes..' resources='..#store.resources)
+    else
+     validation_remaining=nil;validation_image=nil;job={items={},index=1,stage='publish',prepared=prepared}
+     trace('validation final cleanup baseline='..tostring(validation_baseline))
+    end
+   end
+   if not job and desired then
+    if store.generated_signature==desired.signature and store.active[generated_name]then desired=nil;return end
+    desired.quiet=desired.quiet+1
+    if desired.quiet<12 then return end
+    local request=desired;desired=nil
+    local image=request.factory();HUD.runtime_textures.validate(image)
+    local prepared={};for name,r in pairs(store.active)do prepared[name]=r end
+    serial=serial+1;store.serial=serial
+    job={items={{name=generated_name,image=image}},index=1,stage='select',prepared=prepared,generated_signature=request.signature}
+    trace('generated edge queued signature='..request.signature)
+   end
+   if not job then return end
    local j=job;local item=j.items[j.index]
    if j.stage=='select' then
-    local record=cached(item.image)
+    local record=item.name~='__reclaim_validation' and cached(item.image) or nil
     -- Only fully submitted records are reusable. Never reuse a failed attempt.
     if not(record and record.uploaded and record.width==item.image.width and record.height==item.image.height and record.rgba==item.image.rgba)then record=nil end
     if record then j.record=record;j.stage='validate';trace('reuse '..item.name)
@@ -16304,8 +17085,10 @@ function M.new(sr,backend,root)
     j.prepared[item.name]=j.record;j.index=j.index+1
     if j.index>#j.items then j.stage='publish' else j.stage='select' end
    elseif j.stage=='publish' then
-    for name,record in pairs(j.prepared)do store.images[name]=record end
-    store.active=j.prepared;job=nil;self.status='Texture files loaded ('..#j.items..')'
+    if pool then pool.publish(j.prepared) else store.active=j.prepared end
+    for name,record in pairs(j.prepared)do store.images[name]=record;cache(record)end
+    if j.generated_signature then store.generated_signature=j.generated_signature end
+    job=nil;self.status='Texture files loaded ('..#j.items..')'
     trace('published '..#j.items..' artwork files')
    end
   end)
@@ -16315,6 +17098,7 @@ function M.new(sr,backend,root)
    -- session rather than repeatedly attempting another allocation/submission.
    store.failure=tostring(err)
    cancel('Texture reload failed; restart required: '..store.failure);trace(self.status)
+   if pool and off then local stop=off;off=nil;stop()end
   end
  end
  local function initialize()
@@ -16322,6 +17106,14 @@ function M.new(sr,backend,root)
   local bridge=assert(rawget(_G,'HUDRenderBridge'),'render bridge unavailable')
   assert(bridge.api==1,'verified render bridge required')
   native=HUD.runtime_texture_native.new(sr,backend)
+  if HUD.texture_pool and native.destroy_retired and native.retirement_token then pool=HUD.texture_pool.new(native,store) end
+  local test=io.open(root..'/RECLAIM-TEST.txt','rb')
+  if pool and test then
+   local count=tonumber(test:read(16));test:close()
+   assert(count and count%1==0 and count>=1 and count<=64,'invalid one-shot reclaim validation')
+   assert(os.remove(root..'/RECLAIM-TEST.txt'),'cannot consume validation request')
+   validation_remaining=count;validation_cycle=0;validation_baseline=store.bytes
+  elseif test then test:close()end
   off=bridge.subscribe('dbf_hud.hot_panel_art.staged.'..tostring(self),step)
  end
  function self.reload()
@@ -16357,10 +17149,29 @@ function M.new(sr,backend,root)
   assert(#items>0,'Manifest has no artwork')
   assert(store.bytes+total<=HUD.runtime_textures.max_retained_bytes,'Hot artwork budget exhausted; restart required')
   initialize();serial=serial+1;store.serial=serial
-  job={items=items,index=1,stage='select',prepared={}}
+  local prepared={};if store.active[generated_name]then prepared[generated_name]=store.active[generated_name]end
+  job={items=items,index=1,stage='select',prepared=prepared}
   self.status='Loading '..#items..' texture files';trace('queued '..#items..' files')
   return self.status
  end
+ function self.request_generated(signature,factory)
+  assert(not self.closing and store.owner==self,'Artwork manager retired')
+  assert(not store.failure,'Texture uploads blocked after a stage failure; restart required: '..tostring(store.failure))
+  assert(type(signature)=='string'and #signature<=128 and type(factory)=='function','Generated edge request invalid')
+  if not job and store.generated_signature==signature and store.active[generated_name]then desired=nil;return false end
+  if job and job.generated_signature==signature then desired=nil;return false end
+  if desired and desired.signature==signature then return false end
+  local quarantine=io.open(root..'/UPLOADS-QUARANTINED.txt','rb')
+  if quarantine then quarantine:close();error('Texture uploads quarantined',0)end
+  initialize();assert(pool,'Generated edge changes require fenced texture reclamation')
+  desired={signature=signature,factory=factory,quiet=0};return true
+ end
+ function self.register_consumer(id,detach)
+  store.consumers=store.consumers or {}
+  assert(not store.consumers[id] and type(detach)=='function','unique artwork material owner required')
+  store.consumers[id]=detach;registered[id]=true
+ end
+ function self.clear_generated_request()desired=nil end
  function self.resource(texture)
   if self.closing or store.owner~=self then return nil end
   local name=texture and texture:match('^mods/dbf_hud/textures/([%w_%-]+)$')
@@ -16368,22 +17179,27 @@ function M.new(sr,backend,root)
  end
  function self.restore()
   assert(not self.closing and store.owner==self,'Artwork manager retired')
-  cancel('Packaged artwork restored');store.active={};trace('restored packaged artwork');return self.status
+  desired=nil;store.generated_signature=nil
+  cancel('Packaged artwork restored');if pool then restore_requested=true else store.active={} end;trace('restored packaged artwork');return self.status
  end
+ function self.after_close(fn)assert(type(fn)=='function');after_close=fn end
  function self.close()
   if self.closing then return end
-  self.closing=true;cancel('Artwork manager retired')
-  if off then local stop=off;off=nil;stop()end
-  if store.owner==self then store.owner=nil end
+  self.closing=true;validation_remaining=nil;desired=nil;store.generated_signature=nil;cancel('Artwork manager retired')
+  -- This owner cannot draw again. Detach its GUI owners before forgetting them.
+  for id in pairs(registered)do local detach=store.consumers and store.consumers[id];if detach then assert(detach()==true,'retired material owner did not detach');store.consumers[id]=nil end end
+  if pool then restore_requested=true
+  else if off then local stop=off;off=nil;stop()end;if store.owner==self then store.owner=nil end;if after_close then local done=after_close;after_close=nil;done()end end
   -- No Material handles or input hooks are held here. Persistent resources and
   -- pixels remain retained even when interrupted after factory/submission.
  end
  store.owner=self
+ if (store.retirements and #store.retirements>0) or #store.orphans>0 then initialize()end
  function self.progress()return self.status end
  function self.stats()
   local count=0;for _ in pairs(store.active)do count=count+1 end
   return {retained_bytes=store.bytes,retained_resources=#store.resources,active_images=count,
-   pending=job~=nil,stage=job and job.stage or 'idle',failed=store.failure~=nil,job=serial}
+   pending=job~=nil or desired~=nil,stage=job and job.stage or desired and 'edge_debounce'or 'idle',failed=store.failure~=nil,job=serial,retiring=store.retirements and #store.retirements or 0,reclamation=pool~=nil,validation_cycles=validation_cycle or 0,generated_signature=store.generated_signature}
  end
  return self
 end
@@ -16543,15 +17359,60 @@ end)()
 HUD.screen_scene=(function()
 -- Project saved world layouts into the UI world; compare scene depth in shaders.
 -- Native atlas glyphs become textured quads, not replacement bitmap lettering.
-local M={}
--- A texture command may own additional normalized rectangles over its base image.
--- Each image gets its own native material instance, including repeated materials.
+local M={max_texture_images=24}
+local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
+-- Non-overlapping edge bands use the existing material mapping and triangle
+-- alpha. No new native shader library or per-band GUI/material is required.
+function M.feather_boxes(w,h,fx,fy)
+    fx=math.max(0,math.min(.2,fx or 0));fy=math.max(0,math.min(.2,fy or 0))
+    if fx==0 or fy==0 then return {{0,0,w,h,1}} end
+    local out={};local n=4;local dx,dy=w*fx/n,h*fy/n
+    for i=0,n-1 do
+        local x,y=i*dx,i*dy;local bw,bh=w-2*x,h-2*y
+        local t=(i+.5)/n;local a=t*t*(3-2*t)
+        out[#out+1]={x,y,dx,bh,a};out[#out+1]={w-x-dx,y,dx,bh,a}
+        out[#out+1]={x+dx,y,bw-2*dx,dy,a};out[#out+1]={x+dx,h-y-dy,bw-2*dx,dy,a}
+    end
+    out[#out+1]={w*fx,h*fy,w*(1-2*fx),h*(1-2*fy),1}
+    return out
+end
+function M.expand_shader_layers(commands,c,can_get,resource)
+ if c.shader_layers==nil then return commands end
+ local out={};for _,v in ipairs(commands)do out[#out+1]=v end
+ local frame;for _,v in ipairs(commands)do if v.type=='panel' and not v.fold_child then frame=v;break end end
+ if not frame then return out end
+ local carrier;local count=0
+ for _,v in ipairs(commands)do if v.type=='texture' then count=count+1;if not carrier then carrier=v end end end
+ local notes={}
+ for slot,r in ipairs(c.shader_layers)do if r.enabled~=false then
+  local opacity=r.opacity or (c.panel_opacity or 1)*HUD.shader_layers.strengths[r.strength or 1]
+  if carrier then
+   local variant=can_get and HUD.texture_theme.material(carrier.texture_material,r.shader,can_get)
+   if variant and variant~=carrier.texture_material and count<M.max_texture_images then
+    local q={};for k,v in pairs(carrier)do q[k]=v end
+    q.a=(c.visibility_alpha or 1)*opacity;q.c=carrier.coverage_mask and {96,106,101}or {255,255,255}
+    q.texture_layers=nil;q.texture_theme_shader=r.shader;q.texture_theme=false
+    q.shader_layer=r;q.texture_layer=50+slot*.08;q.shader_alpha_masked=true
+    q.texture_slot=count+1 -- Each layer owns independent scale/time uniforms.
+    out[#out+1]=q;count=count+1
+   else notes[#notes+1]='Layer '..slot..': texture-alpha material unavailable or image budget reached' end
+  else
+   local masks=frame.shader_mask or {{0,0,1,1}}
+   for _,box in ipairs(masks)do out[#out+1]={type='rect',x=frame.x+frame.w*box[1],y=frame.y+frame.h*(1-box[2]-box[4]),w=frame.w*box[3],h=frame.h*box[4],c={96,106,101},a=opacity,shader_layer=r,shader_slot=slot}end
+  end
+ end end
+ M.shader_layer_status=M.shader_layer_status or {};M.shader_layer_status[resource or 'preview']=#notes>0 and table.concat(notes,'; ')or nil
+ return out
+end
+
 function M.expand_texture_layers(commands)
     local out,slots={},0
     local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
     local function emit(v)
-        if v.visible==false or (v.a or 1)<=0 then return end
-        slots=slots+1;assert(slots<=8,'at most eight visible texture images per panel')
+        -- Keep an invisible backing as shader coverage metadata. Dropping it
+        -- at zero opacity would make independent layers adopt the face atlas.
+        if v.visible==false or ((v.a or 1)<=0 and not(v.coverage_mask and v.a==0)) then return end
+        slots=slots+1;assert(slots<=M.max_texture_images,'too many visible texture images per panel')
         local q={};for k,value in pairs(v)do q[k]=value end
         q.texture_layers=nil;q.texture_slot=slots;q.a=q.a or 1;q.c=q.c or {255,255,255}
         if q.atlas_rect then local r=q.atlas_rect;for i=1,4 do assert(finite(r[i]),'invalid atlas coordinate')end;assert(r[1]>=0 and r[2]>=0 and r[3]>0 and r[4]>0 and r[1]+r[3]<=1+1e-9 and r[2]+r[4]<=1+1e-9,'atlas rectangle outside image')end
@@ -16660,13 +17521,14 @@ end
 -- Pure command preparation completes before touching native GUI ownership.
 function M.prepare_commands(commands,p,c,can_get)
     assert(type(commands)=='table' and commands[1],'HUD commands missing frame')
+    c=HUD.config.texture_policy(c)
     commands=HUD.world_style.prepare(commands,p,c)
     if c.style_3d=='hologram' then
         for _,v in ipairs(commands)do if v.type=='panel'then v.a=math.min(1,v.a/.18)end end
     end
     local m,at=M.panel_pose(p,c,commands)
     if c.texture_art_trial and not (commands[1] and commands[1].atlas_frame) then commands=HUD.texture_art.prepare(commands,p.resource_hex,can_get,HUD.texture_art_assets,c.texture_art_variant)end
-    commands=M.expand_texture_layers(commands)
+    commands=M.expand_shader_layers(M.expand_texture_layers(commands),c,can_get,p.resource_hex)
     for _,v in ipairs(commands)do
         assert(type(v.x)=='number' and v.x==v.x and math.abs(v.x)<math.huge and type(v.y)=='number' and v.y==v.y and math.abs(v.y)<math.huge,'invalid HUD coordinates')
         if v.type=='text' then assert(HUD.native_font_data.faces[v.font or 'bigblue'] and HUD.native_font_uv[v.font or 'bigblue'],'HUD font unavailable')end
@@ -16681,7 +17543,8 @@ function M.new(sr,log,hot_panel_art)
     local shader_materials={};for _,entry in ipairs(HUD.shader_catalog)do shader_materials[entry.id]=entry.material end
     local function panel_material(v,weapon,c)
         local selected,name
-        if v.type=='panel' and (not v.frosted or (c.theme_shader and c.theme_shader~='auto' and c.theme_shader~='none')) then
+        if v.shader_layer then selected=v.shader_layer.shader;name=shader_materials[selected] and shader_materials[selected]:gsub('/lab_','/mapped_')
+        elseif v.type=='panel' and (not v.frosted or (c.theme_shader and c.theme_shader~='auto' and c.theme_shader~='none')) then
             selected=c.theme_shader or 'auto';name=selected=='auto' and panel_effects[weapon] or shader_materials[selected]
         elseif v.df_effect_sweep or v.scanline_layer or v.effect_shader_band then
             selected=c.effect_shader or 'none';name=selected=='auto' and panel_effects[weapon] or shader_materials[selected]
@@ -16691,7 +17554,7 @@ function M.new(sr,log,hot_panel_art)
         return effect_availability[name] and name or nil
     end
 
-    local effect_guis={};local texture_guis={}
+    local effect_guis={};local texture_guis={};local shader_guis={}
     local gui,child_gui,world,atlas_gui;local ids={};local glyphs={};local bitmap_updates=0;local reuse_glyphs=type(G.update_bitmap_3d_uv)=='function';local recycled={};local allocated,reused=0,0;local failed=false;local first=true
     local self={status='screen scene assets not loaded'}
     local function live(w)
@@ -16722,17 +17585,21 @@ function M.new(sr,log,hot_panel_art)
     function self.release()
         if gui and live(world) then
             for _,layers in pairs(texture_guis)do for _,layer_gui in pairs(layers)do W.destroy_gui(world,layer_gui)end end
+            for _,layers in pairs(shader_guis)do for _,layer_gui in pairs(layers)do W.destroy_gui(world,layer_gui)end end
             for _,effect_gui in pairs(effect_guis) do W.destroy_gui(world,effect_gui) end;effect_guis={}
             if child_gui then W.destroy_gui(world,child_gui) end
             if atlas_gui then W.destroy_gui(world,atlas_gui) end
             W.destroy_gui(world,gui)
         end
-        texture_guis={}
+        texture_guis={};shader_guis={}
         released=released+#ids;for _,pool in pairs(glyphs) do released=released+#pool.ids end;glyphs={};gui,child_gui,world,atlas_gui=nil,nil,nil,nil
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
     local function draw(p,c,commands,camera,fov,width,height,near,m,at)
-        if not p or not camera or not A.can_get or not A.can_get('material',fill) then self.release();return false end
+        local native_projection=type(c.native_panel_projector)=='function'
+        if not p or (not native_projection and not camera) or not A.can_get or not A.can_get('material',fill) then self.release();return false end
+        if native_projection and (not finite(width) or not finite(height) or width<=0 or height<=0 or
+            type(HUD.projection.native_panel_inverse)~='function') then return false end
         assert(type(G.triangle)=='function' and type(G.destroy_triangle)=='function','screen triangle API unavailable')
         assert(type(G.material)=='function' and sr.Material and type(sr.Material.set_scalar)=='function','material parameters unavailable')
         if dither_available==nil then dither_available=A.can_get('material',dither)==true;log('SCYTHE_DITHER material_available='..tostring(dither_available)) end
@@ -16744,7 +17611,7 @@ function M.new(sr,log,hot_panel_art)
         clear()
         for _,pool in pairs(glyphs) do pool.used=0 end
         -- Temporary zoom demo: retain the widest observed first-person FOV per weapon.
-        if c.first_person_zoom_demo and fov then
+        if not native_projection and c.first_person_zoom_demo and fov then
             self.zoom_reference=self.zoom_reference or {}
             local key=p.resource_hex or 'unknown'
             local reference=math.max(self.zoom_reference[key] or fov,fov)
@@ -16769,40 +17636,98 @@ function M.new(sr,log,hot_panel_art)
         -- First-person surfaces can sit closer than the world camera near plane.
         if first then log('SCREEN_FONT_API bitmap='..type(G.bitmap_3d_uv)..' destroy='..type(G.destroy_bitmap_3d)) end
         local hud_near=p.first_person and math.min(near or .05,.005) or (near or .05)
-        local project_snapshot=HUD.projection.projector(camera,fov,width/height,hud_near)
+        local project_snapshot;local native_points=0
+        if native_projection then
+            if not finite(hud_near) or hud_near<0 then return false end
+            project_snapshot=function(x,y,z)
+                if not finite(x) or not finite(y) or not finite(z) then return nil end
+                native_points=native_points+1
+                local ok,point=pcall(c.native_panel_projector,x,y,z)
+                if not ok or type(point)~='table' or not finite(point.x) or not finite(point.y) or
+                    math.abs(point.x)>1e7 or math.abs(point.y)>1e7 or not finite(point.depth) or
+                    point.depth<=math.max(hud_near,.0001) then return nil end
+                return point -- Native callback returns normalized GUI-up coordinates.
+            end
+        else project_snapshot=HUD.projection.projector(camera,fov,width/height,hud_near) end
         local function render(list,axes,origin,draw_gui)
-            local dx,dy,dz=origin.x-camera[13],origin.y-camera[14],origin.z-camera[15]
-            local depth=dx*camera[5]+dy*camera[6]+dz*camera[7]
-            depth=math.max(depth,hud_near)
-            local enabled=c.occlusion_mode~='gui' and 1 or 0
+            local plane
+            if native_projection then
+                local frame
+                for _,entry in ipairs(list)do if entry.type=='panel'and entry.w>0 and entry.h>0 then frame=entry;break end end
+                if frame then
+                    local points={}
+                    for i,corner in ipairs({{frame.x,frame.y+frame.h},{frame.x+frame.w,frame.y+frame.h},{frame.x+frame.w,frame.y},{frame.x,frame.y}})do
+                        local point=project_snapshot(M.point(axes,origin,corner[1],corner[2]))
+                        if not point then points=nil;break end
+                        points[i]={x=point.x,y=1-point.y,depth=point.depth}
+                    end
+                    if points then plane=HUD.projection.native_panel_snapshot(frame,points,hud_near)end
+                end
+            end
+            local function local_project(x,y)
+                if plane then return plane.project(x,y)end
+                return project_snapshot(M.point(axes,origin,x,y))
+            end
+            local depth,enabled
+            if native_projection then
+                depth=finite(c.world_texture_depth) and c.world_texture_depth>0 and c.world_texture_depth or 0
+                enabled=c.occlusion_mode~='gui' and depth>0 and 1 or 0
+            else
+                local dx,dy,dz=origin.x-camera[13],origin.y-camera[14],origin.z-camera[15]
+                depth=math.max(dx*camera[5]+dy*camera[6]+dz*camera[7],hud_near)
+                enabled=c.occlusion_mode~='gui' and 1 or 0
+            end
             if first and list[1] then
                 local panel=list[1];local depths={}
                 for _,corner in ipairs({{panel.x,panel.y},{panel.x+panel.w,panel.y},{panel.x+panel.w,panel.y+panel.h},{panel.x,panel.y+panel.h}}) do
-                    local wx,wy,wz=M.point(axes,origin,corner[1],corner[2])
-                    depths[#depths+1]=(wx-camera[13])*camera[5]+(wy-camera[14])*camera[6]+(wz-camera[15])*camera[7]
+                    if native_projection then local point=local_project(corner[1],corner[2]);depths[#depths+1]=point and point.depth or -1
+                    else local wx,wy,wz=M.point(axes,origin,corner[1],corner[2]);depths[#depths+1]=(wx-camera[13])*camera[5]+(wy-camera[14])*camera[6]+(wz-camera[15])*camera[7] end
                 end
                 log(string.format('SCREEN_CLIP near=%.6f enabled=%d corners=%.6f,%.6f,%.6f,%.6f',hud_near,enabled,unpack(depths)))
             end
             -- One panel coordinate system per GUI/pose, shared by its shader materials.
             -- Child folds already use a separate GUI and render pose.
+            local function panel_rows(x,y,w,h)
+                if native_projection then
+                    if plane then return plane.image_rows(x,y,w,h)end
+                    local points={}
+                    for i,corner in ipairs({{x,y+h},{x+w,y+h},{x+w,y},{x,y}}) do
+                        local point=project_snapshot(M.point(axes,origin,corner[1],corner[2]))
+                        if not point then return nil end
+                        points[i]={x=point.x,y=1-point.y} -- D3D screen UVs are downwards.
+                    end
+                    return HUD.projection.native_panel_inverse(points)
+                end
+                local wx,wy,wz=M.point(axes,origin,x,y+h)
+                local rx,ry,rz=M.point(axes,origin,x+w,y+h)
+                local bx,by,bz=M.point(axes,origin,x,y)
+                local rows={HUD.projection.panel_inverse(camera,fov,width/height,wx,wy,wz,rx-wx,ry-wy,rz-wz,bx-wx,by-wy,bz-wz)}
+                return rows[1] and rows or nil
+            end
             local mapping_rows,mapping_checked
+            local edge_mask,edge_material
+            for _,entry in ipairs(list)do
+                if entry.type=='panel'and entry.hud_texture_primary and entry.edge_mask_resource and type(entry.edge_mask_material)=='string'and
+                    hot_panel_art and hot_panel_art.resource(entry.edge_mask_resource)then
+                    edge_mask,edge_material=entry.edge_mask_resource,entry.edge_mask_material;break
+                end
+            end
             local function panel_mapping()
                 if mapping_checked then return mapping_rows end
                 mapping_checked=true
                 local frame
                 for _,entry in ipairs(list) do if entry.type=='panel' then frame=entry;break end end
                 if not frame or frame.w<=0 or frame.h<=0 then return nil end
-                local x,y,z=M.point(axes,origin,frame.x,frame.y+frame.h)
-                local rx,ry,rz=M.point(axes,origin,frame.x+frame.w,frame.y+frame.h)
-                local bx,by,bz=M.point(axes,origin,frame.x,frame.y)
-                local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
-                if rows[1] then mapping_rows=rows end
+                mapping_rows=panel_rows(frame.x,frame.y,frame.w,frame.h)
                 return mapping_rows
             end
             local materials={}
             local function role_gui(role)
+                if type(role)=='string' and role:match('^shader:%d+$')then
+                    local slot=tonumber(role:match('%d+'));assert(slot>=1 and slot<=4,'invalid shader slot');shader_guis[draw_gui]=shader_guis[draw_gui] or {};local layers=shader_guis[draw_gui];layers[slot]=layers[slot] or assert(W.create_screen_gui(world,'scale',1,1),'shader layer GUI missing');return layers[slot]
+                end
                 if type(role)=='string' and role:match('^texture:%d+$')then
-                    local slot=tonumber(role:match('%d+'));assert(slot>=1 and slot<=8,'invalid texture slot')
+                    local slot=tonumber(role:match('%d+'));assert(slot>=1 and slot<=M.max_texture_images,'invalid texture slot')
                     texture_guis[draw_gui]=texture_guis[draw_gui] or {}
                     local layers=texture_guis[draw_gui]
                     layers[slot]=layers[slot] or assert(W.create_screen_gui(world,'scale',1,1),'screen texture GUI missing')
@@ -16812,29 +17737,33 @@ function M.new(sr,log,hot_panel_art)
                 effect_guis[draw_gui]=effect_guis[draw_gui] or assert(W.create_screen_gui(world,'scale',1,1),'screen effect GUI missing')
                 return effect_guis[draw_gui]
             end
-            local function material(name,texture,role,art_rows)
+            local function material(name,texture,role,art_rows,art_params)
                 local cache_key=(role or 'panel')..':'..name
                 if not materials[cache_key] then
                     assert(A.can_get('material',name),'screen scene font material missing: '..name)
                     local handle=assert(G.material(role_gui(role),name),'screen scene material unavailable')
-                    if texture then sr.Material.set_texture(handle,art_rows and 'artwork_texture' or 'diffuse_map',texture) end
                     local hot=art_rows and hot_panel_art and hot_panel_art.resource(texture)
-                    if hot then sr.Material.set_resource(handle,'artwork_texture',hot)end
+                    if hot then sr.Material.set_resource(handle,'artwork_texture',hot)
+                    elseif texture then sr.Material.set_texture(handle,art_rows and 'artwork_texture' or 'diffuse_map',texture) end
                     sr.Material.set_scalar(handle,'threshold_fade',depth)
                     sr.Material.set_scalar(handle,'scissor_mode',enabled)
                     if art_rows then
                         if name:find('_texture_theme_',1,true)then
                             local seconds,animated=HUD.config.shader_animation_values(c,nil,c.style_clock)
-                            sr.Material.set_scalar(handle,'scissor_mode',HUD.texture_theme.parameters(enabled,c.theme_shader_scale,seconds,animated))
+                            local size=c.theme_shader_scale
+                            if art_params then size=art_params.pattern_size or HUD.shader_layers.scales[art_params.scale or 2];seconds=(c.style_clock or 0)*(art_params.speed or 1);animated=art_params.animate and 1 or 0 end
+                            sr.Material.set_scalar(handle,'scissor_mode',HUD.texture_theme.parameters(enabled,size,seconds,animated))
                         end
                         sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(art_rows[1],art_rows[2],art_rows[3],0))
                         sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(art_rows[4],art_rows[5],art_rows[6],0))
                         sr.Material.set_vector4(handle,'clip_box',sr.Vector4(art_rows[7],art_rows[8],art_rows[9],0))
                     elseif name:find('/mapped_',1,true) then
                         local rows=assert(panel_mapping(),'panel shader mapping unavailable')
-                        local scale=tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
+                        local slot=type(role)=='string' and tonumber(role:match('^shader:(%d+)$'));local layer=slot and c.shader_layers and c.shader_layers[slot]
+                        local scale=layer and (layer.pattern_size or HUD.shader_layers.scales[layer.scale]) or tonumber(c[role=='effect' and 'effect_shader_scale' or 'theme_shader_scale']) or 1
                         if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
                         local seconds,animated=HUD.config.shader_animation_values(c,role,c.style_clock)
+                        if layer then seconds=(c.style_clock or 0)*(layer.speed or 1);animated=layer.animate and 1 or 0 end
                         sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,seconds))
                         sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,animated))
                         sr.Material.set_vector4(handle,'clip_box',sr.Vector4(rows[7],rows[8],rows[9],0))
@@ -16844,24 +17773,33 @@ function M.new(sr,log,hot_panel_art)
                 return name
             end
             local function project(x,y)
-                local wx,wy,wz=M.point(axes,origin,x,y)
-                local point=project_snapshot(wx,wy,wz)
+                local point=local_project(x,y)
                 if point then return sr.Vector3(point.x*width,0,point.y*height),{x=point.x*width,y=point.y*height} end
             end
             -- This scratch quad is consumed synchronously by clipping; never stored by native drawing.
             local corners={{},{},{},{}}
             local clipping_scratch={camera={{},{},{},{}},result={{},{},{},{}}}
+            local native_polygon={{},{},{},{}}
             local function vertex(p)return sr.Vector3(p.x*width,0,p.y*height) end
-            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role,art_rows)
+            local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role,art_rows,art_params)
                 if w<=0 or h<=0 then return end
                 for i=1,4 do
                     local right=i==2 or i==3;local upper=i>=3
-                    local wx,wy,wz=M.point(axes,origin,points and points[i][1] or (right and x+w or x),points and points[i][2] or (upper and y+h or y))
-                    local corner=corners[i];corner.x,corner.y,corner.z=wx,wy,wz
+                    local lx,ly=points and points[i][1] or (right and x+w or x),points and points[i][2] or (upper and y+h or y)
+                    local corner=corners[i];corner.lx,corner.ly=lx,ly
+                    if not native_projection then corner.x,corner.y,corner.z=M.point(axes,origin,lx,ly)end
                     corner.s=uv and (right and uv[3] or uv[1]) or 0
                     corner.v=uv and (upper and uv[2] or uv[4]) or 0
                 end
-                local polygon=HUD.projection.clip_polygon(camera,corners,fov,width/height,hud_near,clipping_scratch)
+                local polygon
+                if native_projection then
+                    polygon=native_polygon
+                    for i,corner in ipairs(corners) do
+                        local point=local_project(corner.lx,corner.ly)
+                        if not point then polygon={};break end
+                        local result=polygon[i];result.x,result.y,result.s,result.v=point.x,point.y,corner.s,corner.v
+                    end
+                else polygon=HUD.projection.clip_polygon(camera,corners,fov,width/height,hud_near,clipping_scratch) end
                 if effect then scan_generated=scan_generated+1 end
                 if #polygon<3 then if effect then scan_clipped=scan_clipped+1 end;return end
                 if effect and #polygon==4 and not self.scanline_probe then
@@ -16871,7 +17809,7 @@ function M.new(sr,log,hot_panel_art)
                     local thickness=length>0 and math.abs(dx*(d.y-a.y)*height-dy*(d.x-a.x)*width)/length or 0
                     log(string.format('SCANLINE_PIXEL_PROBE projected_length_px=%.3f projected_thickness_px=%.4f',length,thickness));self.scanline_probe=true
                 end
-                name=material(name,texture,role,art_rows)
+                name=material(name,texture,role,art_rows,art_params)
                 local primitive_gui=role_gui(role)
                 for i=2,#polygon-1 do
                     local a,b,d=polygon[1],polygon[i],polygon[i+1]
@@ -16883,17 +17821,22 @@ function M.new(sr,log,hot_panel_art)
                 end
             end
             for _,v in ipairs(list) do
-                local function color(alpha,ink)ink=ink or v.c;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
-                if v.type=='texture' then
-                    local x,y,z=M.point(axes,origin,v.x,v.y+v.h)
-                    local rx,ry,rz=M.point(axes,origin,v.x+v.w,v.y+v.h)
-                    local bx,by,bz=M.point(axes,origin,v.x,v.y)
-                    local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
-                    if rows[1] then rows=M.atlas_rows(rows,v.atlas_rect) end
-                    local artwork_material=HUD.texture_theme.material(v.texture_material,v.texture_theme==false and 'none' or c.theme_shader,A.can_get)
-                    if rows[1] then quad(v.x,v.y,v.w,v.h,artwork_material,color(1),v.texture_layer or 49,nil,v.texture_resource,nil,nil,'texture:'..v.texture_slot,rows) end
+                local function color(alpha,ink)ink=ink or v.c;if v.texture_color_linear then ink=HUD.config.native_rgb(ink)end;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
+                if v.type=='texture' and v.a>0 then
+                    local rows=panel_rows(v.x,v.y,v.w,v.h)
+                    if rows then rows=M.atlas_rows(rows,v.atlas_rect) end
+                    local artwork_material=HUD.texture_theme.material(v.texture_material,v.texture_theme_shader or (v.texture_theme==false and 'none' or c.theme_shader),A.can_get)
+                    if rows then for _,box in ipairs(M.feather_boxes(v.w,v.h,v.texture_feather_x,v.texture_feather_y))do
+                        quad(v.x+box[1],v.y+box[2],box[3],box[4],artwork_material,color(box[5]),v.texture_layer or 49,nil,v.texture_resource,nil,nil,'texture:'..v.texture_slot,rows,v.shader_layer)
+                    end end
                 end
-                if (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
+                if v.type=='rect' and v.decoration and not v.charge_meter and edge_mask and not c.profile_skip_geometry then
+                    -- The shared decoration rectangles use one panel-wide alpha
+                    -- map on the existing root GUI; their geometry/color stay intact.
+                    local rows=panel_mapping()
+                    if rows then quad(v.x,v.y,v.w,v.h,edge_material,color(1),50,nil,edge_mask,v.quad,nil,'decoration',rows)
+                    else quad(v.x,v.y,v.w,v.h,fill,color(1),50,nil,nil,v.quad)end
+                elseif (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
                     local selected_material=not v.contrast_backing and panel_material(v,p.resource_hex,c)
                     local panel_uv
                     if selected_material and selected_material:find("/lab_",1,true) then
@@ -16905,7 +17848,9 @@ function M.new(sr,log,hot_panel_art)
                     -- Multiplicative textures cannot produce detail from pure black.
                     -- Keep the saved palette intact; only explicit textured backdrops use a dim carrier.
                     if v.type=='panel' and selected_material and c.theme_shader~='auto' and math.max(v.c[1],v.c[2],v.c[3])<16 then shader_ink={48,48,48} end
-                    quad(v.x,v.y,v.w,v.h,(p.resource_hex=='27ee1ed8f6fb6356' and v.heat_fill and dither_available) and dither or selected_material or fill,color(1,shader_ink),v.type=='panel' and 48 or (v.scanline_layer and 50.5 or (v.fuel_marker_piece and 51 or 50)),panel_uv,nil,v.quad,v.df_effect_frame,(v.type~='panel' and selected_material and selected_material:find('/mapped_',1,true)) and 'effect' or nil)
+                    if not v.shader_layer or selected_material then
+                    quad(v.x,v.y,v.w,v.h,(p.resource_hex=='27ee1ed8f6fb6356' and v.heat_fill and dither_available) and dither or selected_material or fill,color(1,shader_ink),v.shader_layer and (50.1+v.shader_slot*.1) or v.type=='panel' and 48 or (v.scanline_layer and 50.5 or (v.fuel_marker_piece and 51 or 50)),panel_uv,nil,v.quad,v.df_effect_frame,v.shader_layer and ('shader:'..v.shader_slot) or (v.type~='panel' and selected_material and selected_material:find('/mapped_',1,true)) and 'effect' or nil)
+                    end
                 elseif v.type=='text' and not v.fuel_endpoint and not c.profile_skip_text then
                     local key=v.font or 'bigblue';local face=HUD.native_font_data.faces[key]
                     local uv=HUD.native_font_uv[key]
@@ -17019,6 +17964,7 @@ function M.new(sr,log,hot_panel_art)
             render(child,HUD.pose_motion.forward_tilt(m,-math.pi/2),
                 {x=at.x+m[9]*hinge/1000,y=at.y+m[10]*hinge/1000,z=at.z+m[11]*hinge/1000},child_gui)
         elseif child_gui then
+            if shader_guis[child_gui]then for _,layer_gui in pairs(shader_guis[child_gui])do W.destroy_gui(world,layer_gui)end;shader_guis[child_gui]=nil end
             if texture_guis[child_gui]then for _,layer_gui in pairs(texture_guis[child_gui])do W.destroy_gui(world,layer_gui)end;texture_guis[child_gui]=nil end
             if glyphs[child_gui] then released=released+#glyphs[child_gui].ids;glyphs[child_gui]=nil end
             if effect_guis[child_gui] then W.destroy_gui(world,effect_guis[child_gui]);effect_guis[child_gui]=nil end
@@ -17031,13 +17977,17 @@ function M.new(sr,log,hot_panel_art)
             log(string.format('SCANLINE_EMISSION strips=%d native_triangles=%d fully_clipped=%d separate_layer=50.5',scan_generated,scan_emitted,scan_clipped));self.scanline_emission_logged=true
         end
         created=created+#ids
+        self.native_point_calls=native_points
         self.status='screen-projected scene-depth HUD'
-        if first then log('SCREEN_SCENE HUD submitted; native atlas glyphs; saved mounts retained; live validation pending');first=false end
+        if first then
+            if native_projection then log('SCREEN_PLANAR_SNAPSHOT native_points='..native_points..' commands='..#commands..' existing_renderer=true')end
+            log('SCREEN_SCENE HUD submitted; native atlas glyphs; saved mounts retained; live validation pending');first=false
+        end
         return true
     end
     function self.draw(p,c,commands,camera,fov,width,height,near)
         if failed then return false end
-        if not p or not camera then return false end
+        if not p or (not camera and type(c.native_panel_projector)~='function') then return false end
         local prepared,ready,m,at=pcall(M.prepare_commands,commands,p,c,A.can_get)
         if not prepared then
             self.status='Command preparation rejected: '..tostring(ready)
@@ -17048,6 +17998,9 @@ function M.new(sr,log,hot_panel_art)
         local ok,result=pcall(draw,p,c,ready,camera,fov,width,height,near,m,at)
         if not ok then failed=true;self.status=tostring(result);log('SCREEN_SCENE failure: '..self.status);pcall(self.release);return false end
         return result
+    end
+    if hot_panel_art and hot_panel_art.register_consumer then
+        hot_panel_art.register_consumer(self,function()self.release();return true end)
     end
     return self
 end
@@ -17610,11 +18563,16 @@ function M.texture_choices(resource)
     local art=HUD.texture_art_assets and HUD.texture_art_assets[resource]
     local study=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[resource]
     local fragments=HUD.faithful_fragment_assets and HUD.faithful_fragment_assets[resource]
+    local mechanical=HUD.mechanical_art and HUD.mechanical_art.layouts[resource]
     if art and art.variants then
         if art.variants.faithful then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
         if art.variants.realistic then labels[#labels+1]='Hyper-realistic treatment';ids[#ids+1]='realistic' end
-    elseif fragments or (study and study.faithful) then labels[#labels+1]='Faithful original';ids[#ids+1]='faithful' end
+    elseif fragments or mechanical or (study and study.faithful) then labels[#labels+1]=mechanical and 'HUD Texture' or 'Faithful original';ids[#ids+1]='faithful' end
     if study then labels[#labels+1]='Designer texture study (manual)';ids[#ids+1]='study' end
+    if HUD.segmented_primary_specs and HUD.segmented_primary_specs[resource]then
+        local found=false;for i,id in ipairs(ids)do if id=='faithful'then labels[i]='HUD Texture';found=true end end
+        if not found then table.insert(labels,1,'HUD Texture');table.insert(ids,1,'faithful')end
+    end
     labels[#labels+1]='Original primitives';ids[#ids+1]='original'
     return labels,ids,#ids>1
 end
@@ -17762,12 +18720,16 @@ function M.new(hud)
                 assert(ok,err)
             end
             local weapon_labels,weapon_ids=M.weapon_choices()
-            local panel_controls={{id='appearance_weapon_select',type='choice',presentation='dropdown',label='Weapon',choices=weapon_labels,default=1,on_change=function(v)
+            local panel_controls={
+                {id='hud_presentation',type='choice',presentation='dropdown',label='HUD presentation',choices={'Automatic','Simple','Fancy'},default=({automatic=1,practical=2,weapon_specific=3})[hud.config.hud_presentation] or 1,description='Automatic switches with the camera. Simple uses the practical panel in both views; Fancy uses weapon-specific styling in both views. Your camera perspective is unchanged.',on_change=function(v)save('hud_presentation',assert(({'automatic','practical','weapon_specific'})[v],'Unknown HUD presentation'))end},
+                {id='third_person_scale',type='slider',label='Third-person HUD scale',min=.5,max=1.5,step=.05,default=hud.config.third_person_scale,description='Compact practical panel outside first person. First-person scale uses the existing HUD scale.',on_change=function(v)save('third_person_scale',v)end},
+                {id='third_person_opacity',type='slider',label='Third-person panel opacity',min=0,max=1,step=.05,default=hud.config.third_person_opacity,description='Practical panel background only; live text stays readable.',on_change=function(v)save('third_person_opacity',v)end},
+                {id='appearance_follow_equipped',type='toggle',label='Follow equipped weapon',default=hud.config.appearance_follow_equipped~=false,on_change=function(v)hud.follow_equipped_appearance(v);hud.save_tuning();if panel_refresh then panel_refresh(true)end end},{id='appearance_weapon_select',type='choice',presentation='dropdown',label='Weapon',choices=weapon_labels,default=1,on_change=function(v)
                 hud.select_appearance_weapon(assert(weapon_ids[v],'Unknown weapon'));if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
             end},{type='text',label='Select any weapon or Fetch the equipped weapon',id='weapon_heading'},
                 {id='fetch_weapon_appearance',type='button',label='Fetch current weapon appearance',description='Reload the equipped weapon settings, including inherited global options.',on_activate=function()
                     assert(hud.equipped_resource(),'Equip a weapon first')
-                    hud.select_appearance_weapon(hud.equipped_resource());if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
+                    hud.follow_equipped_appearance(true);if panel_refresh then panel_refresh(true)end;if panel_guard then panel_guard()end
                     local fetched=hud.appearance_weapon()
                     local state=host.mods and host.mods.dbf_hud_fonts
                     assert(state,'Appearance registration unavailable; reload HUD')
@@ -17782,25 +18744,18 @@ function M.new(hud)
             local shader_choices={'Automatic weapon theme','None'};local shader_ids={'auto','none'}
             for _,entry in ipairs(HUD.shader_catalog)do shader_choices[#shader_choices+1]=entry.title..(entry.frozen and ' (frozen sample)' or '');shader_ids[#shader_ids+1]=entry.id end
             local panel_definitions={
-                {'theme_shader','Theme shader (3D)','choice',shader_choices},
-                {'theme_shader_scale','Panel pattern size','slider',.25,4,.05},
-                {'theme_shader_animate','Animate panel shader','toggle'},
-                {'theme_shader_speed','Panel animation speed','slider',.1,3,.1},
-                {'effect_shader','Effect shader (3D)','choice',shader_choices},
-                {'effect_shader_scale','Effect pattern size','slider',.25,4,.05},
-                {'effect_shader_animate','Animate effect shader','toggle'},
-                {'effect_shader_speed','Effect animation speed','slider',.1,3,.1},
                 {'font','Weapon font','choice',weapon_fonts},
                 {'background_color','Panel color','color'},{'text_color','Text color','color'},{'decoration_color','Decoration color','color'},
                 {'panel_opacity','Panel opacity','slider',0,1,.01},{'text_opacity','Text opacity','slider',0,1,.01},
-                {'effect_scanline_count','Scanline count','slider',1,80,1},
-                {'effect_sweep_speed','Sweep speed','slider',.05,2,.05},{'effect_sweep_density','Sweep density','slider',1,12,1},
-                {'effect_scanlines','Scanlines','toggle'},{'effect_flicker','Flicker','toggle'},{'effect_sweep','Sweep','toggle'},{'frosted','Frosted background (2D)','toggle'},
+                {'panel_edge_softness','Edge feather width (%)','slider',0,24,1},
+                {'panel_edge_curve','Edge fade curve','slider',.5,3,.1},
+                {'panel_edge_dither','Edge dither (%)','slider',0,100,5},
+                {'panel_edge_grain','Edge grain size','slider',1,4,1},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
             -- Fetch selects a weapon after registration; keep these controls
             -- registered and gate their availability against the fetched weapon.
-            panel_definitions[#panel_definitions+1]={'texture_art_trial','Texture artwork comparison','toggle'}
+            panel_definitions[#panel_definitions+1]={'texture_art_trial','HUD Texture','toggle'}
             panel_definitions[#panel_definitions+1]={'texture_art_variant','Texture artwork variant','choice',{'Faithful original','Hyper-realistic treatment'}}
             local function panel_value(key)
                 local cfg=panel_weapon and hud.panel_settings and hud.panel_settings(panel_weapon) or hud.config
@@ -17813,9 +18768,17 @@ function M.new(hud)
                 if v==nil then v=HUD.config.defaults[key] end
                 return v
             end
+            panel_definitions[#panel_definitions+1]={'font_scale','Font size','slider',.5,1.5,.05}
             for _,def in ipairs(panel_definitions)do
                 local key=def[1];local c={id='weapon_'..key,type=def[3],label=def[2],default=panel_value(key)}
                 if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Animation is controlled by Animate panel shader.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Animation is controlled by Animate effect shader; preview uses native materials in 3D mode.' end
+                if key=='theme_shader' then c.description='Native 3D shader on the live readout area. HUD Texture pixels stay unchanged. Automatic preserves HUD Texture; None removes this shader carrier.' end
+                if key=='font_scale' then c.description='Scale live weapon readouts. 1 is the original size. Lettering baked into texture artwork keeps its size.' end
+                if key=='panel_edge_softness' then c.description='Width of the inward edge fade on the primary backing, shader layers and selected decoration. 0 restores hard edges. Digits and status stay crisp.' end
+                if key=='panel_edge_curve' then c.description='Shape the fade: below 1 retains more of the edge; 1 is the original smooth fade; above 1 dissolves more quickly.' end
+                if key=='panel_edge_dither' then c.description='Break the fading edge into stable dots. 0 is smooth feathering; 100 is fully dithered. The solid center stays unchanged.' end
+                if key=='panel_edge_grain' then c.description='Size of the edge dots: 1 is fine; 4 is coarse. The pattern stays attached to the panel.' end
+                if key=='background_color' then c.description='Live readout shader carrier color; HUD Texture colors are unchanged.' end
                 if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
                 if key=='theme_shader_animate' or key=='effect_shader_animate' then c.description='Animate the selected shader. Off keeps the static sample. Requires animated native assets; no new panel geometry.' end
                 if key=='theme_shader_speed' or key=='effect_shader_speed' then c.description='Animation speed multiplier. 1 is normal. Pattern size remains independent.' end
@@ -17829,6 +18792,51 @@ function M.new(hud)
                     hud.configure_panel({[key]=v},panel_weapon);hud.save_tuning()
                 end
                 panel_controls[#panel_controls+1]=c
+            end
+            local layer_signature
+            local function refresh_layers(mod)
+                local page;for _,p in ipairs(mod.pages)do if p.id=='weapon_appearance'then page=p end end
+                if not page then return end
+                local cfg=panel_weapon and hud.panel_settings(panel_weapon) or hud.config
+                local rows=HUD.shader_layers.effective(cfg)
+                local signature=tostring(panel_weapon)..'/'..tostring(hud.appearance_revision)
+                if signature==layer_signature then return end;layer_signature=signature
+                for i=#page.controls,1,-1 do local c=page.controls[i];if c.shader_layer_row then
+                    if c.id then mod.controls[c.id]=nil;mod.values[c.id]=nil;page.pending[c.id]=nil;page.actions[c.id]=nil end
+                    table.remove(page.controls,i)
+                end end
+                local resource=panel_weapon
+                local function commit(action,id,value)
+                    assert(resource and resource==panel_weapon,'Weapon selection changed')
+                    local current=hud.panel_settings(resource)
+                    hud.configure_panel(HUD.shader_layers.edit(current,action,id,value),resource);hud.save_tuning()
+                    layer_signature=nil;refresh_layers(mod)
+                end
+                local function add(c,value)
+                    c.shader_layer_row=true;c.page=page;c.groups={'weapon_effects'};c.depth=1;c.description=c.description or '';c.disabled=resource==nil
+                    page.controls[#page.controls+1]=c
+                    if c.type~='text' and c.type~='section'then mod.controls[c.id]=c;mod.values[c.id]=value;c.default=value end
+                end
+                add({id='weapon_shader_add',type='button',label='Add Shader',on_activate=function()commit('add');return 'Shader layer added'end})
+                mod.controls.weapon_shader_add.disabled=not resource or #rows>=HUD.shader_layers.maximum
+                add({type='text',label='Up to four ordered alpha overlays using existing shader assets. 3D only. Shader support determines animation.'})
+                local choices,keys={},{};for _,e in ipairs(HUD.shader_catalog)do choices[#choices+1]=e.title;keys[#keys+1]=e.id end
+                for position,row in ipairs(rows)do
+                    local id=row.id;local prefix='weapon_shader_layer_'..id..'_'
+                    add({type='text',label='Layer '..position})
+                    add({id=prefix..'enabled',type='toggle',label='Enabled',on_change=function(v)commit('enabled',id,v)end},row.enabled~=false)
+                    local selected=1;for i,key in ipairs(keys)do if key==row.shader then selected=i end end
+                    add({id=prefix..'shader',type='choice',presentation='dropdown',label='Shader',choices=choices,on_change=function(v)commit('shader',id,keys[v])end},selected)
+                    add({id=prefix..'pattern_size',type='slider',label='Pattern size',min=.25,max=4,step=1/32,on_change=function(v)commit('pattern_size',id,v)end},row.pattern_size or HUD.shader_layers.scales[row.scale or 2])
+                    add({id=prefix..'opacity',type='slider',label='Opacity',min=.01,max=1,step=.01,description='This shader layer only, independent of the panel backing opacity.',on_change=function(v)commit('opacity',id,v)end},row.opacity or .25)
+                    add({id=prefix..'animate',type='toggle',label='Animate',on_change=function(v)commit('animate',id,v)end},row.animate==true)
+                    add({id=prefix..'speed',type='slider',label='Animation speed',min=.1,max=3,step=.1,on_change=function(v)commit('speed',id,v)end},row.speed or 1)
+                    for _,action in ipairs({'up','down','remove'})do local op=action
+                        add({id=prefix..op,type='button',label=op=='up' and 'Move up' or op=='down' and 'Move down' or 'Remove Shader',on_activate=function()commit(op,id);return 'Shader layers updated'end})
+                        if (op=='up' and position==1)or(op=='down' and position==#rows)then mod.controls[prefix..op].disabled=true end
+                    end
+                end
+                host.revision=(host.revision or 0)+1
             end
             local function panel_control(mod,id)
                 if mod.controls and mod.controls[id] then return mod.controls[id]end
@@ -17852,13 +18860,25 @@ function M.new(hud)
             panel_guard=function()
                 local id=hud.appearance_weapon and hud.appearance_weapon()
                 local mod=host.mods and host.mods.dbf_hud_fonts;if not mod then return end
+                refresh_layers(mod)
+                mod.values.appearance_follow_equipped=hud.config.appearance_follow_equipped~=false
                 local ready=panel_weapon~=nil
+                local settings=ready and hud.panel_settings(panel_weapon) or {}
+                local mechanical=ready and HUD.mechanical_art and HUD.mechanical_art.layouts[panel_weapon] and settings.texture_art_trial~=false and settings.texture_art_variant=='faithful'
                 for _,c in ipairs(panel_controls)do local registered=panel_control(mod,c.id)
                     if registered then
                         if c.id=='appearance_weapon_select' then registered.disabled=false;for i,resource in ipairs(weapon_ids)do if resource==panel_weapon then mod.values[c.id]=i end end
                         elseif c.id=='faithful_render_status' then registered.disabled=false;registered.label=hud.faithful_status(panel_weapon)
                         elseif c.id=='fetch_weapon_appearance' then registered.disabled=hud.equipped_resource()==nil
                         elseif c.id=='weapon_heading' then registered.label=panel_weapon and ('Editing: '..(HUD.weapon_names[panel_weapon] or panel_weapon)..(ready and '' or ' - equip this weapon or press Fetch again')) or 'Select any weapon or Fetch the equipped weapon'
+                        elseif c.id=='weapon_decoration' or c.id=='weapon_style_3d' then
+                            local texture=settings.texture_art_trial~=false and settings.texture_art_variant~='original'
+                            local simple=hud.config.hud_presentation=='practical'
+                            local world_only=c.id=='weapon_style_3d' and hud.config.anchor_mode~='world'
+                            registered.disabled=not ready or simple or world_only
+                            registered.description=simple and 'Simple presentation uses its plain practical panel; this saved effect is inactive. Choose Automatic or Fancy to use it.' or world_only and 'Visual Style applies in 3D WorldGUI mode; this saved effect is inactive in 2D.' or 'Applies through the existing HUD Texture and shader system. Automatic uses it in first person; Fancy uses it in both views.'
+                        elseif mechanical and c.id=='weapon_frosted' then
+                            registered.disabled=true;registered.description='HUD Texture owns this styling. Turn HUD Texture off to edit primitive styling.'
                         elseif c.id=='weapon_texture_art_trial' or c.id=='weapon_texture_art_variant' then
                             local art=HUD.texture_art_assets and HUD.texture_art_assets[panel_weapon]
                             local bespoke=HUD.bespoke_texture_specs and HUD.bespoke_texture_specs[panel_weapon]
@@ -17871,7 +18891,7 @@ function M.new(hud)
             end
             font_handle=host.register({id='dbf_hud_fonts',name='DBF-HUD',
                 description='Native fonts, styles and color wheels.',pages={{id='appearance',name='Global Options',require_confirmation=false,render_preview=hud.appearance_preview,preview_popout=true,controls={
-                    {id='reload_hot_panel_art',type='button',label='Reload texture files',description='Reload prepared HUD artwork from Local AppData/DBF/HotTextures. Upload stages run on separate render frames; Restore cancels pending work.',on_activate=function()local ok,result=hud.reload_panel_art();assert(ok,result);return result end},
+                    {id='reload_hot_panel_art',type='button',label='Reload texture files',description='Read edited RGBA files from Local AppData/DBF/HotTextures. Creation, copying and submission run on separate render frames; retained resources are bounded.',on_activate=function()local ok,result=hud.reload_panel_art();assert(ok,result);return result end},
                     {id='restore_hot_panel_art',type='button',label='Restore packaged artwork',on_activate=function()return hud.restore_panel_art()end},
                     {id='fade_when_not_aiming',type='toggle',label='Fade when not aiming',default=hud.config.fade_3d_unless_aiming,
                         on_change=function(v)save('fade_3d_unless_aiming',v)end},
@@ -17898,9 +18918,10 @@ function M.new(hud)
                     else controls[#controls+1]=c end
                 end
                 controls[#controls+1]={id='weapon_theme',type='section',label='Theme',collapsed=false,children=theme}
-                controls[#controls+1]={id='weapon_effects',type='section',label='Effects',collapsed=false,children=effects}
+                controls[#controls+1]={id='weapon_effects',type='section',label='Shaders',collapsed=false,children=effects}
                 return controls
             end)()},{id='developer',name='Developer',controls=(function()local controls={
+{id='force_all_hud_texture_off',type='toggle',label='Force all HUD off',description='Global override for texture artwork. Live readouts and standard Lua primitives remain visible.',require_confirmation=false,default=hud.config.force_all_hud_texture_off,on_change=function(v)save('force_all_hud_texture_off',v)end},
 {id='render_sync_trial',type='toggle',label='Render-synchronized HUD',require_confirmation=false,description='Sample weapon pose and camera before the existing render callback. Defaults on; can be disabled here. No smoothing or offset changes. Falls back to update when the render bridge is unavailable.',default=hud.config.render_sync_trial,on_change=function(v)save('render_sync_trial',v)end},
 {id='senator_style',type='choice',require_confirmation=false,label='Senator appearance (3D)',choices={'Cylinder','Upright bullets'},description='2D always uses upright bullets.',default=hud.config.senator_style=='upright' and 2 or 1,
                         on_change=function(v)save('senator_style',v==2 and 'upright' or 'cylinder')end},
@@ -17919,16 +18940,8 @@ function M.new(hud)
 {id='debug_sight_root_orientation',type='toggle',label='Debug: sight + root orientation',default=hud.config.debug_sight_root_orientation,on_change=function(v)save('debug_sight_root_orientation',v)end},
 {id='debug_logging',type='toggle',label='Debug logging',default=hud.config.debug_logging,on_change=function(v)save('debug_logging',v)end},
 
-{id='effect_scanlines',type='toggle',label='HUD effect: Scanlines',default=hud.config.effect_scanlines,
-                        on_change=function(v)save('effect_scanlines',v)end},
 {id='mg43_easter_egg',type='toggle',label='MG-43: Get some! Easter egg',default=hud.config.mg43_easter_egg,
                         on_change=function(v)save('mg43_easter_egg',v)end},
-{id='effect_flicker',type='toggle',label='HUD effect: Flicker',default=hud.config.effect_flicker,
-                        on_change=function(v)save('effect_flicker',v)end},
-{id='effect_sweep',type='toggle',label='HUD effect: Scanning sweep',default=hud.config.effect_sweep,
-                        on_change=function(v)save('effect_sweep',v)end},
-{id='effect_sweep_speed',type='slider',label='Sweep speed',min=.05,max=2,step=.05,default=hud.config.effect_sweep_speed,on_change=function(v)save('effect_sweep_speed',v)end},
-{id='effect_sweep_density',type='slider',label='Sweep density',min=1,max=12,step=1,default=hud.config.effect_sweep_density,on_change=function(v)save('effect_sweep_density',v)end}
 };for _,c in ipairs(developer_motion_controls)do controls[#controls+1]=c end;for _,c in ipairs(placement_controls)do controls[#controls+1]=c end;return controls end)()},{id='presets',name='Presets',require_confirmation=true,controls={
                     {id='preset_name',type='input',label='Preset filename',default='My preset'},
                     {id='saved_preset',type='choice',presentation='dropdown',label='Saved presets',choices=preset_choices,default=1},
@@ -17945,6 +18958,7 @@ function M.new(hud)
                 }}}})
             font_host=host;self.status='MCM > DBF-HUD'
         end
+        if panel_refresh then panel_refresh(false)end
         if panel_guard then panel_guard()end
         local visibility_mod=host and host.mods and host.mods.dbf_hud_fonts
         local visibility_control=visibility_mod and visibility_mod.controls and visibility_mod.controls.equipped_weapon_hud
@@ -18082,7 +19096,7 @@ return M
 end)()
 HUD.mechanical_layouts=(function()
 local layouts=(function()
-return {["72170a55a1f37ff1"]={["source_box"]={0,-19,120,131},["family"]="shotgun",["zones"]={["reserve"]={0.2,0.79,0.6,0.075},["mode"]={0.34,0.935,0.32,0.06},["shells"]={0.25,0.3,0.5,0.36}},["box"]={0,-19,120,131.0580204778157},["name"]="DBS-2 Double Freedom",["material"]="mods/dbf_hud/materials/projected_72170a55a1f37ff1",["texture"]="mods/dbf_hud/textures/projected_72170a55a1f37ff1"},["1abbff60d26ba391"]={["source_box"]={0,0,144,116},["family"]="precision",["zones"]={["reserve"]={0.22,0.895,0.56,0.065},["gauge"]={0.1,0.79,0.8,0.025},["count"]={0.32,0.54,0.38,0.21}},["box"]={0,0,144,115.875},["name"]="R/40-K Hot-Shot Marksman Rifle",["material"]="mods/dbf_hud/materials/projected_1abbff60d26ba391",["texture"]="mods/dbf_hud/textures/projected_1abbff60d26ba391"},["4ba41b6f9f405cc2"]={["source_box"]={2,1,176,123},["family"]="compact",["zones"]={["capacity"]={0.38,0.417,0.12,0.04},["reserve"]={0.65,0.92,0.25,0.04},["count"]={0.13,0.22,0.34,0.18}},["box"]={2,1,176,122.925},["name"]="StA-11 SMG",["material"]="mods/dbf_hud/materials/projected_4ba41b6f9f405cc2",["texture"]="mods/dbf_hud/textures/projected_4ba41b6f9f405cc2"},["968211c0033dce64"]={["source_box"]={-16,-46,133,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="AR-23 Liberator",["material"]="mods/dbf_hud/materials/projected_968211c0033dce64",["texture"]="mods/dbf_hud/textures/projected_968211c0033dce64"},["d54b9505c0f72873"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-98 Laser Cannon",["material"]="mods/dbf_hud/materials/projected_d54b9505c0f72873",["texture"]="mods/dbf_hud/textures/projected_d54b9505c0f72873"},["5fecab819f96a3e8"]={["source_box"]={-25,-46,148,129},["material"]="mods/dbf_hud/materials/projected_5fecab819f96a3e8",["family"]="precision",["zones"]={["count"]={0.1,0.26,0.78,0.24},["total"]={0.1,0.79,0.8,0.065},["gauge"]={0.12,0.535,0.76,0.025},["compass"]={0.1,0.17,0.8,0.06},["status"]={0.1,0.875,0.8,0.033},["reserve"]={0.275,0.58,0.45,0.04},["mode"]={0.3,0.92,0.4,0.06},["capacity"]={0.35,0.5,0.3,0.04}},["box"]={-25,-46,148,128.80625},["name"]="BR-14 Adjudicator",["texture"]="mods/dbf_hud/textures/projected_5fecab819f96a3e8"},["7e3145a5baa4b948"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="laser_rifle_charge",["material"]="mods/dbf_hud/materials/projected_7e3145a5baa4b948",["texture"]="mods/dbf_hud/textures/projected_7e3145a5baa4b948"},["4f749e2ee26f532d"]={["source_box"]={0,0,158,112},["count_digits"]=2,["family"]="shotgun",["zones"]={["gauge"]={0.35,0.695,0.56,0.02},["capacity"]={0.78,0.58,0.14,0.05},["reserve"]={0.22,0.895,0.57,0.06},["count"]={0.49,0.4,0.29,0.22}},["box"]={0,0,158,111.834375},["name"]="SG-8S Slugger",["occupancy_mask"]={0.11,0.28,0.13,0.41},["material"]="mods/dbf_hud/materials/projected_4f749e2ee26f532d",["texture"]="mods/dbf_hud/textures/projected_4f749e2ee26f532d"},["11c27d3babb38956"]={["source_box"]={-19.666666666667,-46,137.33333333333,129},["family"]="belt",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-19.666666666667,-46,137.33333333333,128.3208333333302},["name"]="machinegun",["material"]="mods/dbf_hud/materials/projected_11c27d3babb38956",["texture"]="mods/dbf_hud/textures/projected_11c27d3babb38956"},["e91f569c2ad8af01"]={["source_box"]={0,0,158,112},["count_digits"]=2,["family"]="sidearm",["zones"]={["gauge"]={0.35,0.695,0.56,0.02},["capacity"]={0.78,0.58,0.14,0.05},["reserve"]={0.22,0.895,0.57,0.06},["count"]={0.49,0.4,0.29,0.22}},["box"]={0,0,158,111.834375},["name"]="P-34 Breacher",["occupancy_mask"]={0.08,0.25,0.15,0.46},["material"]="mods/dbf_hud/materials/projected_e91f569c2ad8af01",["texture"]="mods/dbf_hud/textures/projected_e91f569c2ad8af01"},["e6d932be83729076"]={["source_box"]={0,0,126,100},["family"]="precision",["zones"]={["reserve"]={0.15,0.875,0.7,0.065},["gauge"]={0.12,0.74,0.76,0.025},["count"]={0.13,0.39,0.62,0.25}},["box"]={0,0,126,100.0125},["name"]="R-6 Deadeye",["material"]="mods/dbf_hud/materials/projected_e6d932be83729076",["texture"]="mods/dbf_hud/textures/projected_e6d932be83729076"},["05e4e5c2db6e44a2"]={["source_box"]={-16,-46,133,129},["family"]="sidearm",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="P-2 Peacemaker",["material"]="mods/dbf_hud/materials/projected_05e4e5c2db6e44a2",["texture"]="mods/dbf_hud/textures/projected_05e4e5c2db6e44a2"},["4d58c77087b774c5"]={["source_box"]={-24.5,-46,150,115},["family"]="sidearm",["zones"]={["reserve"]={0.18,0.68,0.5,0.07},["mode"]={0.33,0.91,0.34,0.075},["count"]={0.14,0.3,0.43,0.23}},["box"]={-24.5,-46,150,114.140625},["name"]="M6C/SOCOM Pistol",["material"]="mods/dbf_hud/materials/projected_4d58c77087b774c5",["texture"]="mods/dbf_hud/textures/projected_4d58c77087b774c5"},["41eac4a03987faa0"]={["source_box"]={0,0,158,112},["count_digits"]=2,["family"]="shotgun",["zones"]={["gauge"]={0.35,0.695,0.56,0.02},["capacity"]={0.78,0.58,0.14,0.05},["reserve"]={0.22,0.895,0.57,0.06},["count"]={0.49,0.4,0.29,0.22}},["box"]={0,0,158,111.834375},["name"]="SG-8 Punisher",["occupancy_mask"]={0.1,0.29,0.13,0.4},["material"]="mods/dbf_hud/materials/projected_41eac4a03987faa0",["texture"]="mods/dbf_hud/textures/projected_41eac4a03987faa0"},["3828e2051aa9e897"]={["source_box"]={-16,-27,132,108},["family"]="dart",["zones"]={["status"]={0.29,0.225,0.49,0.06},["reserve"]={0.23,0.895,0.54,0.06}},["box"]={-16,-27,132,107.86875},["name"]="S-11 Speargun",["occupancy_mask"]={0.08,0.33,0.82,0.34},["material"]="mods/dbf_hud/materials/projected_3828e2051aa9e897",["texture"]="mods/dbf_hud/textures/projected_3828e2051aa9e897"},["27ee1ed8f6fb6356"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.30416666666522},["name"]="LAS-5 Scythe",["material"]="mods/dbf_hud/materials/projected_27ee1ed8f6fb6356",["texture"]="mods/dbf_hud/textures/projected_27ee1ed8f6fb6356"},["39ab99895147a3bf"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="FLAM-40 Flamethrower",["material"]="mods/dbf_hud/materials/projected_39ab99895147a3bf",["texture"]="mods/dbf_hud/textures/projected_39ab99895147a3bf"},["3f92ba65ef65cca9"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="P-72 Crisper",["material"]="mods/dbf_hud/materials/projected_3f92ba65ef65cca9",["texture"]="mods/dbf_hud/textures/projected_3f92ba65ef65cca9"},["cdf28be026bb7d84"]={["source_box"]={-16,-46,133,129},["family"]="rifle",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="StA-52 Assault Rifle",["material"]="mods/dbf_hud/materials/projected_cdf28be026bb7d84",["texture"]="mods/dbf_hud/textures/projected_cdf28be026bb7d84"},["2152d5147b0ac418"]={["source_box"]={-16,-46,133,129},["family"]="rifle",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="heavy_mg",["material"]="mods/dbf_hud/materials/projected_2152d5147b0ac418",["texture"]="mods/dbf_hud/textures/projected_2152d5147b0ac418"},["9f80d67a12a7e40f"]={["source_box"]={-16,-27,132,124},["family"]="rocket",["zones"]={["status"]={0.35,0.757,0.3,0.05},["reserve"]={0.25,0.89,0.5,0.055},["ammo_mode"]={0.34,0.17,0.32,0.08}},["box"]={-16,-27,132,123.75},["name"]="GR-8 Recoilless Rifle",["occupancy_mask"]={0.36,0.27,0.28,0.44},["variants"]={["HE"]={["material"]="mods/dbf_hud/materials/projected_9f80d67a12a7e40f_HE",["texture"]="mods/dbf_hud/textures/projected_9f80d67a12a7e40f_HE"},["HEAT"]={["material"]="mods/dbf_hud/materials/projected_9f80d67a12a7e40f_HEAT",["texture"]="mods/dbf_hud/textures/projected_9f80d67a12a7e40f_HEAT"}},["material"]="mods/dbf_hud/materials/projected_9f80d67a12a7e40f",["texture"]="mods/dbf_hud/textures/projected_9f80d67a12a7e40f"},["a8cffb316f0b5c5f"]={["source_box"]={-16,-46,133,137},["family"]="explosive",["zones"]={["selector"]={0.1,0.045,0.8,0.15},["count"]={0.14,0.41,0.72,0.22},["gauge"]={0.15,0.655,0.7,0.025},["mode"]={0.26,0.9,0.48,0.075},["reserve"]={0.19,0.74,0.62,0.065}},["box"]={-16,-46,133,133.0},["name"]="AC-8 Autocannon",["variants"]={["APHET"]={["material"]="mods/dbf_hud/materials/projected_a8cffb316f0b5c5f_APHET",["texture"]="mods/dbf_hud/textures/projected_a8cffb316f0b5c5f_APHET"},["FLAK"]={["material"]="mods/dbf_hud/materials/projected_a8cffb316f0b5c5f_FLAK",["texture"]="mods/dbf_hud/textures/projected_a8cffb316f0b5c5f_FLAK"}},["material"]="mods/dbf_hud/materials/projected_a8cffb316f0b5c5f",["texture"]="mods/dbf_hud/textures/projected_a8cffb316f0b5c5f"},["a955c4ea6f6d4203"]={["source_box"]={-16,-46,133,129},["family"]="explosive",["zones"]={["selector"]={0.15,0.245,0.7,0.055},["count"]={0.14,0.41,0.72,0.22},["gauge"]={0.15,0.655,0.7,0.025},["mode"]={0.26,0.9,0.48,0.075},["reserve"]={0.19,0.74,0.62,0.065}},["box"]={-16,-46,133,133.0},["name"]="AR/GL-21 One-Two",["material"]="mods/dbf_hud/materials/projected_a955c4ea6f6d4203",["texture"]="mods/dbf_hud/textures/projected_a955c4ea6f6d4203"},["52e4334e6a128caf"]={["source_box"]={-16,-46,130,105},["family"]="explosive",["zones"]={["gauge"]={0.2,0.57,0.6,0.025},["reserve"]={0.25,0.635,0.5,0.06},["mode"]={0.34,0.9,0.32,0.06},["count"]={0.24,0.34,0.52,0.19}},["box"]={-16,-46,130,105.015625},["name"]="Grenade Pistol",["material"]="mods/dbf_hud/materials/projected_52e4334e6a128caf",["texture"]="mods/dbf_hud/textures/projected_52e4334e6a128caf"},["8645f167b3c813a2"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-16 Sickle",["material"]="mods/dbf_hud/materials/projected_8645f167b3c813a2",["texture"]="mods/dbf_hud/textures/projected_8645f167b3c813a2"},["fb3a19078694708a"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["charge_label"]={0.72,0.8,0.17,0.05},["charge"]={0.09,0.875,0.82,0.025},["count"]={0.4,0.34,0.44,0.22},["gauge"]={0.34,0.275,0.56,0.017},["reserve"]={0.4,0.675,0.47,0.06},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,0,144,117.9},["name"]="PLAS-101 Purifier",["material"]="mods/dbf_hud/materials/projected_fb3a19078694708a",["texture"]="mods/dbf_hud/textures/projected_fb3a19078694708a"},["eea5e3cef1e12c14"]={["source_box"]={0,-18,144,136},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["reserve"]={0.4,0.655,0.47,0.055},["charge_label"]={0.65,0.775,0.26,0.055},["count"]={0.4,0.33,0.44,0.2},["gauge"]={0.34,0.275,0.56,0.017},["mode"]={0.36,0.94,0.3,0.055},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,-18,144,136.125},["name"]="PLAS-1 Scorcher",["material"]="mods/dbf_hud/materials/projected_eea5e3cef1e12c14",["texture"]="mods/dbf_hud/textures/projected_eea5e3cef1e12c14"},["be70ee0d8d44028e"]={["zones"]={["reserve"]={0.53,0.845,0.39,0.055},["capacity"]={0.52,0.055,0.2,0.06},["count"]={0.22,0.365,0.56,0.225}},["box"]={0,0,136,70.125},["name"]="M7S SMG",["source_box"]={0,0,136,70},["family"]="compact",["material"]="mods/dbf_hud/materials/projected_be70ee0d8d44028e",["texture"]="mods/dbf_hud/textures/projected_be70ee0d8d44028e"},["43cb1033961a2276"]={["source_box"]={-18.166666666667,-46,137.33333333333,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-18.166666666667,-46,137.33333333333,127.46249999999688},["name"]="AR-23P Liberator Penetrator",["material"]="mods/dbf_hud/materials/projected_43cb1033961a2276",["texture"]="mods/dbf_hud/textures/projected_43cb1033961a2276"},["a7ee1ebf58fcdf1f"]={["source_box"]={-16,-46,133,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="AR-23A Liberator Carbine",["material"]="mods/dbf_hud/materials/projected_a7ee1ebf58fcdf1f",["texture"]="mods/dbf_hud/textures/projected_a7ee1ebf58fcdf1f"},["dbb6c961c59fadc1"]={["source_box"]={0,0,144,116},["family"]="sidearm",["zones"]={["reserve"]={0.22,0.895,0.56,0.065},["gauge"]={0.1,0.79,0.8,0.025},["count"]={0.32,0.54,0.38,0.21}},["box"]={0,0,144,115.875},["name"]="P/40-K Bolt Pistol",["material"]="mods/dbf_hud/materials/projected_dbb6c961c59fadc1",["texture"]="mods/dbf_hud/textures/projected_dbb6c961c59fadc1"},["416d053372c4e433"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-58 Talon",["material"]="mods/dbf_hud/materials/projected_416d053372c4e433",["texture"]="mods/dbf_hud/textures/projected_416d053372c4e433"},["78a8185f63a70795"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="heavy_flamethrower",["material"]="mods/dbf_hud/materials/projected_78a8185f63a70795",["texture"]="mods/dbf_hud/textures/projected_78a8185f63a70795"},["8a307bd1811a5fe9"]={["source_box"]={-16,-46,133,123.25},["family"]="fuel",["zones"]={["gauge"]={0.2,0.69,0.6,0.025},["reserve"]={0.24,0.755,0.52,0.06},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.22,0.48,0.56,0.19},["ammo_mode"]={0.33,0.13,0.34,0.05}},["box"]={-16,-46,133,124.0640625},["name"]="SMG/FLAM-34 Stoker",["variants"]={["FUEL"]={["material"]="mods/dbf_hud/materials/projected_8a307bd1811a5fe9_FUEL",["texture"]="mods/dbf_hud/textures/projected_8a307bd1811a5fe9_FUEL"},["ROUNDS"]={["material"]="mods/dbf_hud/materials/projected_8a307bd1811a5fe9_ROUNDS",["texture"]="mods/dbf_hud/textures/projected_8a307bd1811a5fe9_ROUNDS"}},["material"]="mods/dbf_hud/materials/projected_8a307bd1811a5fe9",["texture"]="mods/dbf_hud/textures/projected_8a307bd1811a5fe9"},["4fb0f8c02f55c82b"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="FLAM-66 Torcher",["material"]="mods/dbf_hud/materials/projected_4fb0f8c02f55c82b",["texture"]="mods/dbf_hud/textures/projected_4fb0f8c02f55c82b"},["cf5f176e0e322be1"]={["source_box"]={-18.166666666667,-46,137.33333333333,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-18.166666666667,-46,137.33333333333,127.46249999999688},["name"]="AR-23C Liberator Concussive",["material"]="mods/dbf_hud/materials/projected_cf5f176e0e322be1",["texture"]="mods/dbf_hud/textures/projected_cf5f176e0e322be1"},["d6b1fb05b9109353"]={["source_box"]={-16,-46,133,129},["family"]="medical",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="P-11 Stim Pistol",["material"]="mods/dbf_hud/materials/projected_d6b1fb05b9109353",["texture"]="mods/dbf_hud/textures/projected_d6b1fb05b9109353"},["4dbd74f49c8ffc13"]={["source_box"]={-16,-46,133,112},["family"]="rifle",["zones"]={["icon"]={0.68,0.36,0.2,0.18},["compass"]={0.14,0.18,0.53,0.09},["gauge"]={0.22,0.59,0.56,0.024},["count"]={0.14,0.35,0.48,0.21},["mode"]={0.3,0.91,0.4,0.075},["reserve"]={0.32,0.68,0.36,0.055}},["box"]={-16,-46,133,111.803125},["name"]="MA5C Assault Rifle",["material"]="mods/dbf_hud/materials/projected_4dbd74f49c8ffc13",["texture"]="mods/dbf_hud/textures/projected_4dbd74f49c8ffc13"},["89c5493e08ca4207"]={["source_box"]={-16,-46,133,129},["family"]="laser",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="APW-1 Anti-Materiel Rifle",["material"]="mods/dbf_hud/materials/projected_89c5493e08ca4207",["texture"]="mods/dbf_hud/textures/projected_89c5493e08ca4207"},["a6a735accb4a327f"]={["source_box"]={-16,-46,130,129},["family"]="belt",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,130,130.0},["name"]="M-105 Stalwart",["material"]="mods/dbf_hud/materials/projected_a6a735accb4a327f",["texture"]="mods/dbf_hud/textures/projected_a6a735accb4a327f"},["1a437158e1b8d2a1"]={["source_box"]={-16,-46,133,129},["family"]="sidearm",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="P-113 Verdict",["material"]="mods/dbf_hud/materials/projected_1a437158e1b8d2a1",["texture"]="mods/dbf_hud/textures/projected_1a437158e1b8d2a1"},["9eb160830321bfd6"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="explosive",["zones"]={["status"]={0.48,0.655,0.36,0.06},["capacity"]={0.8,0.55,0.1,0.05},["reserve"]={0.25,0.875,0.5,0.06},["count"]={0.51,0.34,0.28,0.23}},["box"]={0,0,144,117.9},["name"]="GP-20 Ultimatum",["occupancy_mask"]={0.08,0.23,0.27,0.51},["material"]="mods/dbf_hud/materials/projected_9eb160830321bfd6",["texture"]="mods/dbf_hud/textures/projected_9eb160830321bfd6"},["3575aabc5f1f9326"]={["source_box"]={-16,-46,133,129},["family"]="sidearm",["zones"]={["aux_mode"]={0.61,0.22,0.22,0.05},["count"]={0.14,0.41,0.72,0.22},["gauge"]={0.15,0.655,0.7,0.025},["mode"]={0.26,0.9,0.48,0.075},["reserve"]={0.19,0.74,0.62,0.065}},["box"]={-16,-46,133,133.0},["name"]="P-19 Redeemer",["material"]="mods/dbf_hud/materials/projected_3575aabc5f1f9326",["texture"]="mods/dbf_hud/textures/projected_3575aabc5f1f9326"},["aa69a60d74a3ec54"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["charge_label"]={0.72,0.8,0.17,0.05},["charge"]={0.09,0.875,0.82,0.025},["count"]={0.4,0.34,0.44,0.22},["gauge"]={0.34,0.275,0.56,0.017},["reserve"]={0.4,0.675,0.47,0.06},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,0,144,117.9},["name"]="PLAS-15 Loyalist",["material"]="mods/dbf_hud/materials/projected_aa69a60d74a3ec54",["texture"]="mods/dbf_hud/textures/projected_aa69a60d74a3ec54"},["2e9d0bdc48b09e60"]={["source_box"]={-22,-46,124,129},["family"]="laser",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-22,-46,124,129.04065040650406},["name"]="RS-422 Railgun",["material"]="mods/dbf_hud/materials/projected_2e9d0bdc48b09e60",["texture"]="mods/dbf_hud/textures/projected_2e9d0bdc48b09e60"},["8d3d52a3b2f19402"]={["source_box"]={-16,-46,133,123.25},["family"]="sidearm",["zones"]={["gauge"]={0.2,0.69,0.6,0.025},["reserve"]={0.25,0.775,0.5,0.06},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.19,0.485,0.48,0.19}},["box"]={-16,-46,133,124.0640625},["name"]="P-4 Senator",["material"]="mods/dbf_hud/materials/projected_8d3d52a3b2f19402",["texture"]="mods/dbf_hud/textures/projected_8d3d52a3b2f19402"},["6cfcc7f8801a0266"]={["source_box"]={-16,-27,144,116},["family"]="plasma",["zones"]={["reserve"]={0.24,0.9,0.52,0.06},["gauge"]={0.15,0.795,0.7,0.023},["count"]={0.26,0.59,0.48,0.19}},["box"]={-16,-27,144,116.1},["name"]="40-K Meltagun",["melta_mask"]={0.23,0.24,0.45,0.19},["material"]="mods/dbf_hud/materials/projected_6cfcc7f8801a0266",["texture"]="mods/dbf_hud/textures/projected_6cfcc7f8801a0266"},["35a61296619cc47e"]={["source_box"]={-8,-27,281.33333333333,91},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-27,281.33333333333,93.6312499999989},["name"]="LAS-99 Quasar Cannon",["material"]="mods/dbf_hud/materials/projected_35a61296619cc47e",["texture"]="mods/dbf_hud/textures/projected_35a61296619cc47e"},["7617642765ac38c7"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="rocket",["zones"]={["status"]={0.48,0.655,0.36,0.06},["capacity"]={0.8,0.55,0.1,0.05},["reserve"]={0.25,0.875,0.5,0.06},["count"]={0.51,0.34,0.28,0.23}},["box"]={0,0,144,117.9},["name"]="EAT-411 Leveller",["occupancy_mask"]={0.1,0.24,0.25,0.48},["material"]="mods/dbf_hud/materials/projected_7617642765ac38c7",["texture"]="mods/dbf_hud/textures/projected_7617642765ac38c7"},["3c86e871923f3970"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-13 Trident",["material"]="mods/dbf_hud/materials/projected_3c86e871923f3970",["texture"]="mods/dbf_hud/textures/projected_3c86e871923f3970"},["c85f576d5e086147"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-12 Sai",["material"]="mods/dbf_hud/materials/projected_c85f576d5e086147",["texture"]="mods/dbf_hud/textures/projected_c85f576d5e086147"},["295beb26dc4f8ff1"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-17 Double-Edge Sickle",["material"]="mods/dbf_hud/materials/projected_295beb26dc4f8ff1",["texture"]="mods/dbf_hud/textures/projected_295beb26dc4f8ff1"},["e8d5f49ad7780e54"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["charge_label"]={0.72,0.8,0.17,0.05},["charge"]={0.09,0.875,0.82,0.025},["count"]={0.4,0.34,0.44,0.22},["gauge"]={0.34,0.275,0.56,0.017},["reserve"]={0.4,0.675,0.47,0.06},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,0,144,117.9},["name"]="PLAS-45 Epoch",["material"]="mods/dbf_hud/materials/projected_e8d5f49ad7780e54",["texture"]="mods/dbf_hud/textures/projected_e8d5f49ad7780e54"},["02eecd0b1fa49630"]={["source_box"]={-16,-46,130,129},["family"]="explosive",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,130,130.0},["name"]="GL-21 Grenade Launcher",["material"]="mods/dbf_hud/materials/projected_02eecd0b1fa49630",["texture"]="mods/dbf_hud/textures/projected_02eecd0b1fa49630"},["88f61afff48ac8a4"]={["source_box"]={-8,-45,217.33333333333,109},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,217.33333333333,108.666666666665},["name"]="TX-41 Sterilizer",["material"]="mods/dbf_hud/materials/projected_88f61afff48ac8a4",["texture"]="mods/dbf_hud/textures/projected_88f61afff48ac8a4"},["26e40437ea275296"]={["source_box"]={-16,-44.5,132,141.5},["family"]="rocket",["zones"]={["selector"]={0.32,0.19,0.37,0.06},["status"]={0.44,0.715,0.28,0.05},["reserve"]={0.26,0.82,0.5,0.055},["mode"]={0.22,0.955,0.57,0.045},["count"]={0.13,0.72,0.18,0.05}},["box"]={-16,-44.5,132,142.22222222222223},["name"]="RL-77 Airburst Rocket Launcher",["occupancy_mask"]={0.38,0.28,0.25,0.4},["variants"]={["CLUSTER"]={["material"]="mods/dbf_hud/materials/projected_26e40437ea275296_CLUSTER",["texture"]="mods/dbf_hud/textures/projected_26e40437ea275296_CLUSTER"},["FLAK"]={["material"]="mods/dbf_hud/materials/projected_26e40437ea275296_FLAK",["texture"]="mods/dbf_hud/textures/projected_26e40437ea275296_FLAK"}},["material"]="mods/dbf_hud/materials/projected_26e40437ea275296",["texture"]="mods/dbf_hud/textures/projected_26e40437ea275296"}}
+return {["72170a55a1f37ff1"]={["source_box"]={0,-19,120,131},["family"]="shotgun",["zones"]={["reserve"]={0.2,0.79,0.6,0.075},["mode"]={0.34,0.935,0.32,0.06},["shells"]={0.25,0.3,0.5,0.36}},["box"]={0,-19,120,131.0580204778157},["name"]="DBS-2 Double Freedom",["material"]="mods/dbf_hud/materials/projected_72170a55a1f37ff1",["texture"]="mods/dbf_hud/textures/projected_72170a55a1f37ff1"},["1abbff60d26ba391"]={["source_box"]={0,0,144,116},["family"]="precision",["zones"]={["reserve"]={0.22,0.895,0.56,0.065},["gauge"]={0.1,0.79,0.8,0.025},["count"]={0.32,0.54,0.38,0.21}},["box"]={0,0,144,115.875},["name"]="R/40-K Hot-Shot Marksman Rifle",["material"]="mods/dbf_hud/materials/projected_1abbff60d26ba391",["texture"]="mods/dbf_hud/textures/projected_1abbff60d26ba391"},["4ba41b6f9f405cc2"]={["source_box"]={2,1,176,123},["family"]="compact",["zones"]={["capacity"]={0.38,0.417,0.12,0.04},["reserve"]={0.65,0.92,0.25,0.04},["count"]={0.13,0.22,0.34,0.18}},["box"]={2,1,176,122.925},["name"]="StA-11 SMG",["material"]="mods/dbf_hud/materials/projected_4ba41b6f9f405cc2",["texture"]="mods/dbf_hud/textures/projected_4ba41b6f9f405cc2"},["968211c0033dce64"]={["source_box"]={-16,-46,133,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="AR-23 Liberator",["material"]="mods/dbf_hud/materials/projected_968211c0033dce64",["texture"]="mods/dbf_hud/textures/projected_968211c0033dce64"},["d54b9505c0f72873"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-98 Laser Cannon",["material"]="mods/dbf_hud/materials/projected_d54b9505c0f72873",["texture"]="mods/dbf_hud/textures/projected_d54b9505c0f72873"},["5fecab819f96a3e8"]={["name"]="BR-14 Adjudicator",["family"]="precision",["zones"]={["count"]={0.08,0.345,0.62,0.17},["capacity"]={0.25,0.52,0.38,0.045},["reserve"]={0.075,0.785,0.235,0.057},["mode"]={0.355,0.785,0.28,0.063},["gauge"]={0.085,0.613,0.83,0.045},["compass"]={0.065,0.043,0.87,0.08},["total"]={0.685,0.785,0.235,0.057},["status"]={0.145,0.91,0.71,0.031}},["source_box"]={-25,-46,148,129},["box"]={-25,-46,148,182.15384615384616},["material"]="mods/dbf_hud/materials/adjudicator_tall_v1",["texture"]="mods/dbf_hud/textures/adjudicator_tall_v1"},["7e3145a5baa4b948"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="laser_rifle_charge",["material"]="mods/dbf_hud/materials/projected_7e3145a5baa4b948",["texture"]="mods/dbf_hud/textures/projected_7e3145a5baa4b948"},["4f749e2ee26f532d"]={["source_box"]={0,0,158,112},["count_digits"]=2,["family"]="shotgun",["zones"]={["gauge"]={0.35,0.695,0.56,0.02},["capacity"]={0.78,0.58,0.14,0.05},["reserve"]={0.22,0.895,0.57,0.06},["count"]={0.49,0.4,0.29,0.22}},["box"]={0,0,158,111.834375},["name"]="SG-8S Slugger",["occupancy_mask"]={0.11,0.28,0.13,0.41},["material"]="mods/dbf_hud/materials/projected_4f749e2ee26f532d",["texture"]="mods/dbf_hud/textures/projected_4f749e2ee26f532d"},["11c27d3babb38956"]={["source_box"]={-19.666666666667,-46,137.33333333333,129},["family"]="belt",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-19.666666666667,-46,137.33333333333,128.3208333333302},["name"]="machinegun",["material"]="mods/dbf_hud/materials/projected_11c27d3babb38956",["texture"]="mods/dbf_hud/textures/projected_11c27d3babb38956"},["e91f569c2ad8af01"]={["source_box"]={0,0,158,112},["count_digits"]=2,["family"]="sidearm",["zones"]={["gauge"]={0.35,0.695,0.56,0.02},["capacity"]={0.78,0.58,0.14,0.05},["reserve"]={0.22,0.895,0.57,0.06},["count"]={0.49,0.4,0.29,0.22}},["box"]={0,0,158,111.834375},["name"]="P-34 Breacher",["occupancy_mask"]={0.08,0.25,0.15,0.46},["material"]="mods/dbf_hud/materials/projected_e91f569c2ad8af01",["texture"]="mods/dbf_hud/textures/projected_e91f569c2ad8af01"},["e6d932be83729076"]={["source_box"]={0,0,126,100},["family"]="precision",["zones"]={["reserve"]={0.15,0.875,0.7,0.065},["gauge"]={0.12,0.74,0.76,0.025},["count"]={0.13,0.39,0.62,0.25}},["box"]={0,0,126,100.0125},["name"]="R-6 Deadeye",["material"]="mods/dbf_hud/materials/projected_e6d932be83729076",["texture"]="mods/dbf_hud/textures/projected_e6d932be83729076"},["05e4e5c2db6e44a2"]={["source_box"]={-16,-46,133,129},["family"]="sidearm",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="P-2 Peacemaker",["material"]="mods/dbf_hud/materials/projected_05e4e5c2db6e44a2",["texture"]="mods/dbf_hud/textures/projected_05e4e5c2db6e44a2"},["4d58c77087b774c5"]={["source_box"]={-24.5,-46,150,115},["family"]="sidearm",["zones"]={["reserve"]={0.18,0.68,0.5,0.07},["mode"]={0.33,0.91,0.34,0.075},["count"]={0.14,0.3,0.43,0.23}},["box"]={-24.5,-46,150,114.140625},["name"]="M6C/SOCOM Pistol",["material"]="mods/dbf_hud/materials/projected_4d58c77087b774c5",["texture"]="mods/dbf_hud/textures/projected_4d58c77087b774c5"},["41eac4a03987faa0"]={["source_box"]={0,0,158,112},["count_digits"]=2,["family"]="shotgun",["zones"]={["gauge"]={0.35,0.695,0.56,0.02},["capacity"]={0.78,0.58,0.14,0.05},["reserve"]={0.22,0.895,0.57,0.06},["count"]={0.49,0.4,0.29,0.22}},["box"]={0,0,158,111.834375},["name"]="SG-8 Punisher",["occupancy_mask"]={0.1,0.29,0.13,0.4},["material"]="mods/dbf_hud/materials/projected_41eac4a03987faa0",["texture"]="mods/dbf_hud/textures/projected_41eac4a03987faa0"},["3828e2051aa9e897"]={["source_box"]={-16,-27,132,108},["family"]="dart",["zones"]={["status"]={0.29,0.225,0.49,0.06},["reserve"]={0.23,0.895,0.54,0.06}},["box"]={-16,-27,132,107.86875},["name"]="S-11 Speargun",["occupancy_mask"]={0.08,0.33,0.82,0.34},["material"]="mods/dbf_hud/materials/projected_3828e2051aa9e897",["texture"]="mods/dbf_hud/textures/projected_3828e2051aa9e897"},["27ee1ed8f6fb6356"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.30416666666522},["name"]="LAS-5 Scythe",["material"]="mods/dbf_hud/materials/projected_27ee1ed8f6fb6356",["texture"]="mods/dbf_hud/textures/projected_27ee1ed8f6fb6356"},["39ab99895147a3bf"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="FLAM-40 Flamethrower",["material"]="mods/dbf_hud/materials/projected_39ab99895147a3bf",["texture"]="mods/dbf_hud/textures/projected_39ab99895147a3bf"},["3f92ba65ef65cca9"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="P-72 Crisper",["material"]="mods/dbf_hud/materials/projected_3f92ba65ef65cca9",["texture"]="mods/dbf_hud/textures/projected_3f92ba65ef65cca9"},["cdf28be026bb7d84"]={["source_box"]={-16,-46,133,129},["family"]="rifle",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="StA-52 Assault Rifle",["material"]="mods/dbf_hud/materials/projected_cdf28be026bb7d84",["texture"]="mods/dbf_hud/textures/projected_cdf28be026bb7d84"},["2152d5147b0ac418"]={["source_box"]={-16,-46,133,129},["family"]="rifle",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="heavy_mg",["material"]="mods/dbf_hud/materials/projected_2152d5147b0ac418",["texture"]="mods/dbf_hud/textures/projected_2152d5147b0ac418"},["9f80d67a12a7e40f"]={["source_box"]={-16,-27,132,124},["family"]="rocket",["zones"]={["status"]={0.35,0.757,0.3,0.05},["reserve"]={0.25,0.89,0.5,0.055},["ammo_mode"]={0.34,0.17,0.32,0.08}},["box"]={-16,-27,132,123.75},["name"]="GR-8 Recoilless Rifle",["occupancy_mask"]={0.36,0.27,0.28,0.44},["variants"]={["HE"]={["material"]="mods/dbf_hud/materials/projected_9f80d67a12a7e40f_HE",["texture"]="mods/dbf_hud/textures/projected_9f80d67a12a7e40f_HE"},["HEAT"]={["material"]="mods/dbf_hud/materials/projected_9f80d67a12a7e40f_HEAT",["texture"]="mods/dbf_hud/textures/projected_9f80d67a12a7e40f_HEAT"}},["material"]="mods/dbf_hud/materials/projected_9f80d67a12a7e40f",["texture"]="mods/dbf_hud/textures/projected_9f80d67a12a7e40f"},["a8cffb316f0b5c5f"]={["source_box"]={-16,-46,133,137},["family"]="explosive",["zones"]={["selector"]={0.1,0.045,0.8,0.15},["count"]={0.14,0.41,0.72,0.22},["gauge"]={0.15,0.655,0.7,0.025},["mode"]={0.26,0.9,0.48,0.075},["reserve"]={0.19,0.74,0.62,0.065}},["box"]={-16,-46,133,133.0},["name"]="AC-8 Autocannon",["variants"]={["APHET"]={["material"]="mods/dbf_hud/materials/projected_a8cffb316f0b5c5f_APHET",["texture"]="mods/dbf_hud/textures/projected_a8cffb316f0b5c5f_APHET"},["FLAK"]={["material"]="mods/dbf_hud/materials/projected_a8cffb316f0b5c5f_FLAK",["texture"]="mods/dbf_hud/textures/projected_a8cffb316f0b5c5f_FLAK"}},["material"]="mods/dbf_hud/materials/projected_a8cffb316f0b5c5f",["texture"]="mods/dbf_hud/textures/projected_a8cffb316f0b5c5f"},["a955c4ea6f6d4203"]={["source_box"]={-16,-46,133,129},["family"]="explosive",["zones"]={["selector"]={0.15,0.245,0.7,0.055},["count"]={0.14,0.41,0.72,0.22},["gauge"]={0.15,0.655,0.7,0.025},["mode"]={0.26,0.9,0.48,0.075},["reserve"]={0.19,0.74,0.62,0.065}},["box"]={-16,-46,133,133.0},["name"]="AR/GL-21 One-Two",["material"]="mods/dbf_hud/materials/projected_a955c4ea6f6d4203",["texture"]="mods/dbf_hud/textures/projected_a955c4ea6f6d4203"},["52e4334e6a128caf"]={["source_box"]={-16,-46,130,105},["family"]="explosive",["zones"]={["gauge"]={0.2,0.57,0.6,0.025},["reserve"]={0.25,0.635,0.5,0.06},["mode"]={0.34,0.9,0.32,0.06},["count"]={0.24,0.34,0.52,0.19}},["box"]={-16,-46,130,105.015625},["name"]="Grenade Pistol",["material"]="mods/dbf_hud/materials/projected_52e4334e6a128caf",["texture"]="mods/dbf_hud/textures/projected_52e4334e6a128caf"},["8645f167b3c813a2"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-16 Sickle",["material"]="mods/dbf_hud/materials/projected_8645f167b3c813a2",["texture"]="mods/dbf_hud/textures/projected_8645f167b3c813a2"},["fb3a19078694708a"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["charge_label"]={0.72,0.8,0.17,0.05},["charge"]={0.09,0.875,0.82,0.025},["count"]={0.4,0.34,0.44,0.22},["gauge"]={0.34,0.275,0.56,0.017},["reserve"]={0.4,0.675,0.47,0.06},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,0,144,117.9},["name"]="PLAS-101 Purifier",["material"]="mods/dbf_hud/materials/projected_fb3a19078694708a",["texture"]="mods/dbf_hud/textures/projected_fb3a19078694708a"},["eea5e3cef1e12c14"]={["source_box"]={0,-18,144,136},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["reserve"]={0.4,0.655,0.47,0.055},["charge_label"]={0.65,0.775,0.26,0.055},["count"]={0.4,0.33,0.44,0.2},["gauge"]={0.34,0.275,0.56,0.017},["mode"]={0.36,0.94,0.3,0.055},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,-18,144,136.125},["name"]="PLAS-1 Scorcher",["material"]="mods/dbf_hud/materials/projected_eea5e3cef1e12c14",["texture"]="mods/dbf_hud/textures/projected_eea5e3cef1e12c14"},["be70ee0d8d44028e"]={["zones"]={["reserve"]={0.53,0.845,0.39,0.055},["capacity"]={0.52,0.055,0.2,0.06},["count"]={0.22,0.365,0.56,0.225}},["box"]={0,0,136,70.125},["name"]="M7S SMG",["source_box"]={0,0,136,70},["family"]="compact",["material"]="mods/dbf_hud/materials/projected_be70ee0d8d44028e",["texture"]="mods/dbf_hud/textures/projected_be70ee0d8d44028e"},["43cb1033961a2276"]={["source_box"]={-18.166666666667,-46,137.33333333333,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-18.166666666667,-46,137.33333333333,127.46249999999688},["name"]="AR-23P Liberator Penetrator",["material"]="mods/dbf_hud/materials/projected_43cb1033961a2276",["texture"]="mods/dbf_hud/textures/projected_43cb1033961a2276"},["a7ee1ebf58fcdf1f"]={["source_box"]={-16,-46,133,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="AR-23A Liberator Carbine",["material"]="mods/dbf_hud/materials/projected_a7ee1ebf58fcdf1f",["texture"]="mods/dbf_hud/textures/projected_a7ee1ebf58fcdf1f"},["dbb6c961c59fadc1"]={["source_box"]={0,0,144,116},["family"]="sidearm",["zones"]={["reserve"]={0.22,0.895,0.56,0.065},["gauge"]={0.1,0.79,0.8,0.025},["count"]={0.32,0.54,0.38,0.21}},["box"]={0,0,144,115.875},["name"]="P/40-K Bolt Pistol",["material"]="mods/dbf_hud/materials/projected_dbb6c961c59fadc1",["texture"]="mods/dbf_hud/textures/projected_dbb6c961c59fadc1"},["416d053372c4e433"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-58 Talon",["material"]="mods/dbf_hud/materials/projected_416d053372c4e433",["texture"]="mods/dbf_hud/textures/projected_416d053372c4e433"},["78a8185f63a70795"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="heavy_flamethrower",["material"]="mods/dbf_hud/materials/projected_78a8185f63a70795",["texture"]="mods/dbf_hud/textures/projected_78a8185f63a70795"},["8a307bd1811a5fe9"]={["source_box"]={-16,-46,133,123.25},["family"]="fuel",["zones"]={["gauge"]={0.2,0.69,0.6,0.025},["reserve"]={0.24,0.755,0.52,0.06},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.22,0.48,0.56,0.19},["ammo_mode"]={0.33,0.13,0.34,0.05}},["box"]={-16,-46,133,124.0640625},["name"]="SMG/FLAM-34 Stoker",["variants"]={["FUEL"]={["material"]="mods/dbf_hud/materials/projected_8a307bd1811a5fe9_FUEL",["texture"]="mods/dbf_hud/textures/projected_8a307bd1811a5fe9_FUEL"},["ROUNDS"]={["material"]="mods/dbf_hud/materials/projected_8a307bd1811a5fe9_ROUNDS",["texture"]="mods/dbf_hud/textures/projected_8a307bd1811a5fe9_ROUNDS"}},["material"]="mods/dbf_hud/materials/projected_8a307bd1811a5fe9",["texture"]="mods/dbf_hud/textures/projected_8a307bd1811a5fe9"},["4fb0f8c02f55c82b"]={["source_box"]={-8,-45,228,111},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,228,110.79375},["name"]="FLAM-66 Torcher",["material"]="mods/dbf_hud/materials/projected_4fb0f8c02f55c82b",["texture"]="mods/dbf_hud/textures/projected_4fb0f8c02f55c82b"},["cf5f176e0e322be1"]={["source_box"]={-18.166666666667,-46,137.33333333333,129},["family"]="precision",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-18.166666666667,-46,137.33333333333,127.46249999999688},["name"]="AR-23C Liberator Concussive",["material"]="mods/dbf_hud/materials/projected_cf5f176e0e322be1",["texture"]="mods/dbf_hud/textures/projected_cf5f176e0e322be1"},["d6b1fb05b9109353"]={["source_box"]={-16,-46,133,129},["family"]="medical",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="P-11 Stim Pistol",["material"]="mods/dbf_hud/materials/projected_d6b1fb05b9109353",["texture"]="mods/dbf_hud/textures/projected_d6b1fb05b9109353"},["4dbd74f49c8ffc13"]={["source_box"]={-16,-46,133,112},["family"]="rifle",["zones"]={["icon"]={0.68,0.36,0.2,0.18},["compass"]={0.14,0.18,0.53,0.09},["gauge"]={0.22,0.59,0.56,0.024},["count"]={0.14,0.35,0.48,0.21},["mode"]={0.3,0.91,0.4,0.075},["reserve"]={0.32,0.68,0.36,0.055}},["box"]={-16,-46,133,111.803125},["name"]="MA5C Assault Rifle",["material"]="mods/dbf_hud/materials/projected_4dbd74f49c8ffc13",["texture"]="mods/dbf_hud/textures/projected_4dbd74f49c8ffc13"},["89c5493e08ca4207"]={["source_box"]={-16,-46,133,129},["family"]="laser",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="APW-1 Anti-Materiel Rifle",["material"]="mods/dbf_hud/materials/projected_89c5493e08ca4207",["texture"]="mods/dbf_hud/textures/projected_89c5493e08ca4207"},["a6a735accb4a327f"]={["source_box"]={-16,-46,130,129},["family"]="belt",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,130,130.0},["name"]="M-105 Stalwart",["material"]="mods/dbf_hud/materials/projected_a6a735accb4a327f",["texture"]="mods/dbf_hud/textures/projected_a6a735accb4a327f"},["1a437158e1b8d2a1"]={["source_box"]={-16,-46,133,129},["family"]="sidearm",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,133,133.0},["name"]="P-113 Verdict",["material"]="mods/dbf_hud/materials/projected_1a437158e1b8d2a1",["texture"]="mods/dbf_hud/textures/projected_1a437158e1b8d2a1"},["9eb160830321bfd6"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="explosive",["zones"]={["status"]={0.48,0.655,0.36,0.06},["capacity"]={0.8,0.55,0.1,0.05},["reserve"]={0.25,0.875,0.5,0.06},["count"]={0.51,0.34,0.28,0.23}},["box"]={0,0,144,117.9},["name"]="GP-20 Ultimatum",["occupancy_mask"]={0.08,0.23,0.27,0.51},["material"]="mods/dbf_hud/materials/projected_9eb160830321bfd6",["texture"]="mods/dbf_hud/textures/projected_9eb160830321bfd6"},["3575aabc5f1f9326"]={["source_box"]={-16,-46,133,129},["family"]="sidearm",["zones"]={["aux_mode"]={0.61,0.22,0.22,0.05},["count"]={0.14,0.41,0.72,0.22},["gauge"]={0.15,0.655,0.7,0.025},["mode"]={0.26,0.9,0.48,0.075},["reserve"]={0.19,0.74,0.62,0.065}},["box"]={-16,-46,133,133.0},["name"]="P-19 Redeemer",["material"]="mods/dbf_hud/materials/projected_3575aabc5f1f9326",["texture"]="mods/dbf_hud/textures/projected_3575aabc5f1f9326"},["aa69a60d74a3ec54"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["charge_label"]={0.72,0.8,0.17,0.05},["charge"]={0.09,0.875,0.82,0.025},["count"]={0.4,0.34,0.44,0.22},["gauge"]={0.34,0.275,0.56,0.017},["reserve"]={0.4,0.675,0.47,0.06},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,0,144,117.9},["name"]="PLAS-15 Loyalist",["material"]="mods/dbf_hud/materials/projected_aa69a60d74a3ec54",["texture"]="mods/dbf_hud/textures/projected_aa69a60d74a3ec54"},["2e9d0bdc48b09e60"]={["source_box"]={-22,-46,124,129},["family"]="laser",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-22,-46,124,129.04065040650406},["name"]="RS-422 Railgun",["material"]="mods/dbf_hud/materials/projected_2e9d0bdc48b09e60",["texture"]="mods/dbf_hud/textures/projected_2e9d0bdc48b09e60"},["8d3d52a3b2f19402"]={["source_box"]={-16,-46,133,123.25},["family"]="sidearm",["zones"]={["gauge"]={0.2,0.69,0.6,0.025},["reserve"]={0.25,0.775,0.5,0.06},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.19,0.485,0.48,0.19}},["box"]={-16,-46,133,124.0640625},["name"]="P-4 Senator",["material"]="mods/dbf_hud/materials/projected_8d3d52a3b2f19402",["texture"]="mods/dbf_hud/textures/projected_8d3d52a3b2f19402"},["6cfcc7f8801a0266"]={["source_box"]={-16,-27,144,116},["family"]="plasma",["zones"]={["reserve"]={0.24,0.9,0.52,0.06},["gauge"]={0.15,0.795,0.7,0.023},["count"]={0.26,0.59,0.48,0.19}},["box"]={-16,-27,144,116.1},["name"]="40-K Meltagun",["melta_mask"]={0.23,0.24,0.45,0.19},["material"]="mods/dbf_hud/materials/projected_6cfcc7f8801a0266",["texture"]="mods/dbf_hud/textures/projected_6cfcc7f8801a0266"},["35a61296619cc47e"]={["source_box"]={-8,-27,281.33333333333,91},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-27,281.33333333333,93.6312499999989},["name"]="LAS-99 Quasar Cannon",["material"]="mods/dbf_hud/materials/projected_35a61296619cc47e",["texture"]="mods/dbf_hud/textures/projected_35a61296619cc47e"},["7617642765ac38c7"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="rocket",["zones"]={["status"]={0.48,0.655,0.36,0.06},["capacity"]={0.8,0.55,0.1,0.05},["reserve"]={0.25,0.875,0.5,0.06},["count"]={0.51,0.34,0.28,0.23}},["box"]={0,0,144,117.9},["name"]="EAT-411 Leveller",["occupancy_mask"]={0.1,0.24,0.25,0.48},["material"]="mods/dbf_hud/materials/projected_7617642765ac38c7",["texture"]="mods/dbf_hud/textures/projected_7617642765ac38c7"},["3c86e871923f3970"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-13 Trident",["material"]="mods/dbf_hud/materials/projected_3c86e871923f3970",["texture"]="mods/dbf_hud/textures/projected_3c86e871923f3970"},["c85f576d5e086147"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-12 Sai",["material"]="mods/dbf_hud/materials/projected_c85f576d5e086147",["texture"]="mods/dbf_hud/textures/projected_c85f576d5e086147"},["295beb26dc4f8ff1"]={["source_box"]={-8,-45,249.33333333333,109},["family"]="laser",["zones"]={["gauge"]={0.06,0.3,0.88,0.24},["reserve"]={0.51,0.65,0.43,0.09},["reading"]={0.055,0.045,0.58,0.12},["mode"]={0.32,0.87,0.36,0.085}},["box"]={-8,-45,249.33333333333,108.69374999999854},["name"]="LAS-17 Double-Edge Sickle",["material"]="mods/dbf_hud/materials/projected_295beb26dc4f8ff1",["texture"]="mods/dbf_hud/textures/projected_295beb26dc4f8ff1"},["e8d5f49ad7780e54"]={["source_box"]={0,0,144,118},["count_digits"]=2,["family"]="plasma",["capacitor_mask"]={0.12,0.25,0.1,0.36},["zones"]={["charge_label"]={0.72,0.8,0.17,0.05},["charge"]={0.09,0.875,0.82,0.025},["count"]={0.4,0.34,0.44,0.22},["gauge"]={0.34,0.275,0.56,0.017},["reserve"]={0.4,0.675,0.47,0.06},["capacity"]={0.74,0.51,0.16,0.06}},["box"]={0,0,144,117.9},["name"]="PLAS-45 Epoch",["material"]="mods/dbf_hud/materials/projected_e8d5f49ad7780e54",["texture"]="mods/dbf_hud/textures/projected_e8d5f49ad7780e54"},["02eecd0b1fa49630"]={["source_box"]={-16,-46,130,129},["family"]="explosive",["zones"]={["gauge"]={0.15,0.655,0.7,0.025},["reserve"]={0.19,0.74,0.62,0.065},["mode"]={0.26,0.9,0.48,0.075},["count"]={0.14,0.41,0.72,0.22}},["box"]={-16,-46,130,130.0},["name"]="GL-21 Grenade Launcher",["material"]="mods/dbf_hud/materials/projected_02eecd0b1fa49630",["texture"]="mods/dbf_hud/textures/projected_02eecd0b1fa49630"},["88f61afff48ac8a4"]={["source_box"]={-8,-45,217.33333333333,109},["family"]="fuel",["zones"]={["gauge"]={0.07,0.33,0.86,0.23},["reserve"]={0.57,0.68,0.37,0.1},["reading"]={0.07,0.04,0.42,0.11},["mode"]={0.32,0.88,0.36,0.075}},["box"]={-8,-45,217.33333333333,108.666666666665},["name"]="TX-41 Sterilizer",["material"]="mods/dbf_hud/materials/projected_88f61afff48ac8a4",["texture"]="mods/dbf_hud/textures/projected_88f61afff48ac8a4"},["26e40437ea275296"]={["source_box"]={-16,-44.5,132,141.5},["family"]="rocket",["zones"]={["selector"]={0.32,0.19,0.37,0.06},["status"]={0.44,0.715,0.28,0.05},["reserve"]={0.26,0.82,0.5,0.055},["mode"]={0.22,0.955,0.57,0.045},["count"]={0.13,0.72,0.18,0.05}},["box"]={-16,-44.5,132,142.22222222222223},["name"]="RL-77 Airburst Rocket Launcher",["occupancy_mask"]={0.38,0.28,0.25,0.4},["variants"]={["CLUSTER"]={["material"]="mods/dbf_hud/materials/projected_26e40437ea275296_CLUSTER",["texture"]="mods/dbf_hud/textures/projected_26e40437ea275296_CLUSTER"},["FLAK"]={["material"]="mods/dbf_hud/materials/projected_26e40437ea275296_FLAK",["texture"]="mods/dbf_hud/textures/projected_26e40437ea275296_FLAK"}},["material"]="mods/dbf_hud/materials/projected_26e40437ea275296",["texture"]="mods/dbf_hud/textures/projected_26e40437ea275296"}}
 end)()
 layouts['72170a55a1f37ff1']={family='shotgun',box={-20,-19,160,120},material='mods/dbf_hud/materials/mechanical_72170a55a1f37ff1',texture='mods/dbf_hud/textures/df_emitted_loaded',zones={}}
 return layouts
@@ -18217,7 +19231,10 @@ function M.compose(original,m,x,y,s,opacity,cfg,clock,measure,can_get,hot_resour
   for _,v in ipairs(HUD.double_freedom_atlas.reserve_commands(m,left,bottom,w,h,opacity))do out[#out+1]=v end
   for _,v in ipairs(HUD.double_freedom_atlas.reserve_commands(m,left,bottom,w,h,opacity))do out[#out+1]=v end
  end
- local zones=a.zones;local ink=HUD.config.rgb(cfg.text_color or '#D8DFC9')
+ local zones=a.zones
+ -- Keep EPOCH's live ammo meter between its fixed AMMO label and count.
+ if id=='e8d5f49ad7780e54' then zones=copy(zones);zones.gauge={.40,.31,.44,.008} end
+ local ink=HUD.config.rgb(cfg.text_color or '#D8DFC9')
  local warning=m.warning and HUD.config.rgb(cfg.heat_red or '#E16D65')or ink
  local function bounds(z)return left+z[1]*w,bottom+(1-z[2]-z[4])*h,z[3]*w,z[4]*h end
  local function text(value,z,color,source)
@@ -18443,6 +19460,371 @@ end
 return M
 
 end)()
+HUD.df_media_panel=(function()
+-- Designer receiver-shaped Double Freedom: static frame, Lua state/readouts.
+local M={width=128,height=96,texture='mods/dbf_hud/textures/df_media_receiver_frame',material='mods/dbf_hud/materials/mechanical_72170a55a1f37ff1'}
+local C={face={25,27,26},steel={159,163,155},gold={150,133,92},rim={179,175,155},ink={191,193,180},ready={213,202,155},fired={62,30,26},unknown={101,106,101}}
+local outline={{6,24},{6,19},{18,10},{35,10},{39,4},{50,4},{53,13},{75,13},{78,4},{89,4},{93,10},{110,10},{122,19},{122,66},{111,75},{109,83},{102,89},{89,89},{86,85},{42,85},{39,89},{25,89},{18,83},{16,75},{6,66}}
+local static={}
+local function box(out,x,y,w,h,c,a,role)out[#out+1]={type='rect',x=x,y=96-y-h,w=w,h=h,c=c,a=a or 1,render_role=role}end
+local function segment(out,a,b,width,c)
+ local dx,dy=b[1]-a[1],b[2]-a[2];local length=math.sqrt(dx*dx+dy*dy);local nx,ny=-dy/length*width/2,dx/length*width/2
+ out[#out+1]={type='rect',x=math.min(a[1],b[1])-width,y=96-math.max(a[2],b[2])-width,w=math.abs(dx)+2*width,h=math.abs(dy)+2*width,c=c,a=1,quad={{a[1]+nx,96-a[2]-ny},{b[1]+nx,96-b[2]-ny},{b[1]-nx,96-b[2]+ny},{a[1]-nx,96-a[2]+ny}}}
+end
+local function ring(out,cx,cy,r,width,c)
+ for i=0,31 do local a=i*math.pi/16;local b=(i+1)*math.pi/16;segment(out,{cx+r*math.cos(a),cy+r*math.sin(a)},{cx+r*math.cos(b),cy+r*math.sin(b)},width,c)end
+end
+local function disc(out,cx,cy,r,c,a)
+ for top=-r,r-.001,1 do local h=math.min(1,r-top);local yy=top+h/2;local half=math.sqrt(math.max(0,r*r-yy*yy));box(out,cx-half,cy+top,half*2,h,c,a)end
+end
+-- Raster spans fill a concave receiver outline without unsupported polygon APIs.
+for y=4,89 do local hits={};local scan=y+.5
+ for i,p in ipairs(outline)do local q=outline[i%#outline+1];if (p[2]<=scan and q[2]>scan)or(q[2]<=scan and p[2]>scan)then hits[#hits+1]=p[1]+(scan-p[2])*(q[1]-p[1])/(q[2]-p[2])end end
+ table.sort(hits);for i=1,#hits,2 do box(static,hits[i],y,hits[i+1]-hits[i],1,C.face,.92)end
+end
+for i,p in ipairs(outline)do segment(static,p,outline[i%#outline+1],.8,C.steel)end
+for _,cx in ipairs({42,87})do disc(static,cx,43,22,{15,17,17},.95);ring(static,cx,43,22,.7,C.steel);ring(static,cx,43,20.5,.8,C.gold)end
+box(static,24,76,80,.6,C.steel);box(static,64,77,.5,8,C.gold)
+function M.ready(resource)return resource(M.texture)~=nil end
+local function finite(x)return type(x)=='number'and x==x and math.abs(x)<math.huge end
+function M.compose(m,x,y,s,opacity,cfg,measure,primitive)
+ measure=measure or HUD.font.measure;local own=cfg.weapon_panel_overrides or {};local face=own.background_color and HUD.config.rgb(own.background_color)or C.face;local trim=own.decoration_color and HUD.config.rgb(own.decoration_color)or C.gold;local ink=own.text_color and HUD.config.rgb(own.text_color)or C.ink;local out={{type='panel',x=x,y=y,w=128*s,h=96*s,c=face,a=0,frosted=false,mechanical_art=true,df_media=true,world_reference_width=256*s,shader_mask={{.1,.22,.8,.49}}}}
+ local function append(shape)
+  for _,v in ipairs(shape)do local q={};for k,value in pairs(v)do q[k]=value end;q.x=x+v.x*s;q.y=y+v.y*s;q.w=v.w*s;q.h=v.h*s;q.a=v.a*opacity;q.df_media=true;q.contrast_backing=true;if v.c==C.face then q.c=face elseif v.c==C.gold or v.c==C.steel then q.c=trim end
+   if v.quad then q.quad={};for i,p in ipairs(v.quad)do q.quad[i]={x+p[1]*s,y+p[2]*s}end end;out[#out+1]=q
+  end
+ end
+ if primitive then append(static)else out[#out+1]={type='texture',x=x,y=y,w=128*s,h=96*s,c={255,255,255},a=opacity*(cfg.panel_opacity or 1)*.88,texture_material=M.material,texture_resource=M.texture,texture_theme=false,texture_layer=49,df_media=true}end
+ local function text(value,cx,cy,height,width,c)
+  local font=cfg.font or 'departuremono';local l,b,r,t=measure(value,s,font,true);local size=s*math.min(width*s/math.max(.001,r-l),height*s/math.max(.001,t-b));l,b,r,t=measure(value,size,font,true)
+  out[#out+1]={type='text',text=value,x=x+cx*s-(l+r)/2,y=y+(96-cy)*s-(b+t)/2,size=size,font=font,c=own.text_color and ink or c or ink,a=opacity*(cfg.text_opacity or 1),texture_readout=true,readout_zone={cx=x+cx*s,cy=y+(96-cy)*s,w=width*s,h=height*s},df_media=true}
+ end
+ text('DBS-2',64,20,5,29,C.steel)
+ for side,cx in ipairs({42,87})do
+  local known=finite(m.value);local unavailable=known and ((m.df_shell_spent or {})[side]or m.value<3-side);local shape={}
+  if m.df_ejector_open then ring(shape,cx,43,5,.6,C.unknown)
+  elseif not known then text('?',cx,43,8,9,C.unknown)
+  elseif unavailable then disc(shape,cx,43,5,C.fired,1)
+  else disc(shape,cx,43,7,C.ready,.12);disc(shape,cx,43,5.8,C.ready,1);disc(shape,cx,43,4.4,{222,215,183},1)end
+  append(shape)
+ end
+ text(m.fire_mode=='SEMI'and 'SEMI'or m.fire_mode=='VOLLEY'and 'VOLLEY'or '--',42,82,7,32,C.gold)
+ text(finite(m.reserve)and tostring(math.max(0,math.floor(m.reserve)))or '--',89,81,10,25)
+ text('RES',108,82,4,13,C.steel)
+ return out
+end
+return M
+
+end)()
+HUD.ballistic_family_specs=(function()
+return {["03e67a19b07c6523"]={["id"]="03e67a19b07c6523",["name"]="R-63 Diligence",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/03e67a19b07c6523.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="03e67a19b07c6523",["name"]="R-63 Diligence",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/R-63_Diligence",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="25",["spare"]="8",["reload"]="2.83s",["tactical_reload"]="2.35s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["05e4e5c2db6e44a2"]={["id"]="05e4e5c2db6e44a2",["name"]="P-2 Peacemaker",["palette"]="sidearm",["backing_color"]={32,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/05e4e5c2db6e44a2.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="05e4e5c2db6e44a2",["name"]="P-2 Peacemaker",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/P-2_Peacemaker",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="15",["spare"]="8",["reload"]="1.8s",["tactical_reload"]="1.45s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["0807aea5217e4767"]={["id"]="0807aea5217e4767",["name"]="SMG-72 Pummeler",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/0807aea5217e4767.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="0807aea5217e4767",["name"]="SMG-72 Pummeler",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SMG-72_Pummeler",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="AutoÂ â€¢Â BurstÂ â€¢Â Semi",["capacity"]="45",["spare"]="7",["reload"]="2.8s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["0f83639ab8c86165"]={["id"]="0f83639ab8c86165",["name"]="R-2 Amendment",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/0f83639ab8c86165.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="0f83639ab8c86165",["name"]="R-2 Amendment",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/R-2_Amendment",["wiki"]={["firing_modes"]="Semi â€¢ Burst",["capacity"]="20",["spare"]="8 Magazines",["reload"]="3.5s",["tactical_reload"]="2.8s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["11c27d3babb38956"]={["id"]="11c27d3babb38956",["name"]="MG-43 Machine Gun",["palette"]="support",["backing_color"]={29,34,33},["backing_default_alpha"]=0.3,["texture"]="panels/11c27d3babb38956.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="11c27d3babb38956",["name"]="MG-43 Machine Gun",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/MG-43_Machine_Gun",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto",["capacity"]="175",["spare"]="3 Magazines",["reload"]="4.55s",["tactical_reload"]="3.83s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["186ea95de7306b1a"]={["id"]="186ea95de7306b1a",["name"]="SMG-203 Gallant",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/186ea95de7306b1a.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="186ea95de7306b1a",["name"]="SMG-203 Gallant",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SMG-203_Gallant",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi Â â€¢Â  Burst",["capacity"]="50",["spare"]="7",["reload"]="2.5s",["tactical_reload"]=nil,["ammo_notes"]="shell references present; read full page before reserve-unit classification",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["1a437158e1b8d2a1"]={["id"]="1a437158e1b8d2a1",["name"]="P-113 Verdict",["palette"]="sidearm",["backing_color"]={32,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/1a437158e1b8d2a1.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="1a437158e1b8d2a1",["name"]="P-113 Verdict",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/P-113_Verdict",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="10",["spare"]="10",["reload"]="2s",["tactical_reload"]="1.35s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["1abbff60d26ba391"]={["id"]="1abbff60d26ba391",["name"]="R/40-K Hot-Shot Marksman Rifle",["palette"]="imperial",["backing_color"]={35,30,28},["backing_default_alpha"]=0.3,["texture"]="panels/1abbff60d26ba391.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="1abbff60d26ba391",["name"]="R/40-K Hot-Shot Marksman Rifle",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Hot-Shot",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="12",["spare"]="7",["reload"]="2.9s",["tactical_reload"]="2.9s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["2b28e17ffed05f7c"]={["id"]="2b28e17ffed05f7c",["name"]="SG-22 Bushwhacker",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/2b28e17ffed05f7c.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_rounds",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="2b28e17ffed05f7c",["name"]="SG-22 Bushwhacker",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SG-22_Bushwhacker",["wiki"]={["firing_modes"]="Semi Â â€¢Â  All Barrel",["capacity"]="3",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]=nil,["spare_rounds"]="30",["rounds_reload_full_time"]="1.75s",["single_round_reload"]="1.1s"},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["3575aabc5f1f9326"]={["id"]="3575aabc5f1f9326",["name"]="P-19 Redeemer",["palette"]="sidearm",["backing_color"]={32,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/3575aabc5f1f9326.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="3575aabc5f1f9326",["name"]="P-19 Redeemer",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Redeemer",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="AutoÂ Â â€¢Â Â Semi",["capacity"]="31",["spare"]="6",["reload"]="2.15s",["tactical_reload"]="1.4s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["41eac4a03987faa0"]={["id"]="41eac4a03987faa0",["name"]="SG-8 Punisher",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/41eac4a03987faa0.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="41eac4a03987faa0",["name"]="SG-8 Punisher",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Punisher",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="16",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]="60",["spare_rounds"]=nil,["rounds_reload_full_time"]="6.45s",["single_round_reload"]="1.25s (Empty)"},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["43a58cb89cfa197c"]={["id"]="43a58cb89cfa197c",["name"]="M-1000 Maxigun",["palette"]="support",["backing_color"]={29,34,33},["backing_default_alpha"]=0.3,["texture"]="panels/43a58cb89cfa197c.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="backpack_rounds",["total"]="same feed pool; do not duplicate current+reserve",["status"]="backpack feed connection; no magazine reload",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="Wiki continuous backpack ammunition feed"},["conditional"]=false,["wiki"]={["id"]="43a58cb89cfa197c",["name"]="M-1000 Maxigun",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/M-1000_Maxigun",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto",["capacity"]="1,000 (Backpack)",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["43cb1033961a2276"]={["id"]="43cb1033961a2276",["name"]="AR-23P Liberator Penetrator",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/43cb1033961a2276.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="43cb1033961a2276",["name"]="AR-23P Liberator Penetrator",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-23P_Liberator_Penetrator",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi Â â€¢Â  Burst Â â€¢Â  Full",["capacity"]="45",["spare"]="8",["reload"]="3s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["46183b50961d1328"]={["id"]="46183b50961d1328",["name"]="SG-225 Breaker",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/46183b50961d1328.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="46183b50961d1328",["name"]="SG-225 Breaker",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SG-225_Breaker",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi",["capacity"]="16",["spare"]="7",["reload"]="2.5s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["4ba41b6f9f405cc2"]={["id"]="4ba41b6f9f405cc2",["name"]="StA-11 SMG",["palette"]="killzone",["backing_color"]={30,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/4ba41b6f9f405cc2.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="4ba41b6f9f405cc2",["name"]="StA-11 SMG",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/StA-11_SMG",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto",["capacity"]="48",["spare"]="7",["reload"]="2.6s",["tactical_reload"]="1.7s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["4c786785c79d44e7"]={["id"]="4c786785c79d44e7",["name"]="R-63CS Diligence Counter Sniper",["palette"]="olive",["backing_color"]={45,56,27},["backing_default_alpha"]=0.3,["texture"]="panels/4c786785c79d44e7.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="4c786785c79d44e7",["name"]="R-63CS Diligence Counter Sniper",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/R-63CS_Diligence_Counter_Sniper",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="15",["spare"]="6",["reload"]="3s",["tactical_reload"]="1.9s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["4d58c77087b774c5"]={["id"]="4d58c77087b774c5",["name"]="M6C/SOCOM Pistol",["palette"]="halo",["backing_color"]={24,37,43},["backing_default_alpha"]=0.3,["texture"]="panels/4d58c77087b774c5.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="4d58c77087b774c5",["name"]="M6C/SOCOM Pistol",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/M6C/SOCOM",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="12",["spare"]="10",["reload"]="1.5s",["tactical_reload"]="1.2s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["4dbd74f49c8ffc13"]={["id"]="4dbd74f49c8ffc13",["name"]="MA5C Assault Rifle",["palette"]="halo",["backing_color"]={24,37,43},["backing_default_alpha"]=0.3,["texture"]="panels/4dbd74f49c8ffc13.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="4dbd74f49c8ffc13",["name"]="MA5C Assault Rifle",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/MA5C",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi Â â€¢Â  Burst Â â€¢Â  Full",["capacity"]="32",["spare"]="8",["reload"]="3.15s",["tactical_reload"]="2s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["4e310b1fe4c52b52"]={["id"]="4e310b1fe4c52b52",["name"]="SG-20 Halt",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/4e310b1fe4c52b52.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05},["alternate_ammo"]={0.16,0.585,0.5,0.025}},["semantics"]={["reserve"]="shared_loose_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="Two independent tubes; selected flechette/stun branch count and capacity"},["conditional"]=false,["wiki"]={["id"]="4e310b1fe4c52b52",["name"]="SG-20 Halt",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SG-20_Halt",["wiki"]={["firing_modes"]="â€¢Â Semi",["capacity"]="8 (x2)",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]="60",["spare_rounds"]=nil,["rounds_reload_full_time"]="3.7s",["single_round_reload"]="1.25s (Empty)"},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["4f749e2ee26f532d"]={["id"]="4f749e2ee26f532d",["name"]="SG-8S Slugger",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/4f749e2ee26f532d.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="4f749e2ee26f532d",["name"]="SG-8S Slugger",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SG-8S_Slugger",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="16",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]="60",["spare_rounds"]=nil,["rounds_reload_full_time"]="6.45s",["single_round_reload"]="1.25s (Empty)"},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["52071f49263415e4"]={["id"]="52071f49263415e4",["name"]="SG-88 Break-Action Shotgun",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/52071f49263415e4.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="52071f49263415e4",["name"]="SG-88 Break-Action Shotgun",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Break-Action_Shotgun",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi Â â€¢Â  Volley",["capacity"]="2",["spare"]=nil,["reload"]="1.55s",["tactical_reload"]="1.55s",["ammo_notes"]="individual rounds reload",["spare_shells"]="40",["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["5ebaea70c0d060b9"]={["id"]="5ebaea70c0d060b9",["name"]="SG-225SP Breaker Spray&Pray",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/5ebaea70c0d060b9.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="5ebaea70c0d060b9",["name"]="SG-225SP Breaker Spray&Pray",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SG-225SP_Breaker_Spray_and_Pray",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi",["capacity"]="26",["spare"]="8",["reload"]="3s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["5fecab819f96a3e8"]={["id"]="5fecab819f96a3e8",["name"]="BR-14 Adjudicator",["palette"]="olive",["backing_color"]={45,56,27},["backing_default_alpha"]=0.3,["texture"]="panels/5fecab819f96a3e8.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="5fecab819f96a3e8",["name"]="BR-14 Adjudicator",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Adjudicator",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi Â â€¢Â  Auto",["capacity"]="30",["spare"]="8",["reload"]="3s",["tactical_reload"]="1.85s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["708ea298c82093d0"]={["id"]="708ea298c82093d0",["name"]="AR-59 Suppressor",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/708ea298c82093d0.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="708ea298c82093d0",["name"]="AR-59 Suppressor",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-59_Suppressor",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi Â â€¢Â  Auto",["capacity"]="45",["spare"]="8",["reload"]="3s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["7b75e5132ffd4ca6"]={["id"]="7b75e5132ffd4ca6",["name"]="R-2124 Constitution",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/7b75e5132ffd4ca6.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_rounds",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="Bolt-action/internal load; reader owns chamber state"},["conditional"]=false,["wiki"]={["id"]="7b75e5132ffd4ca6",["name"]="R-2124 Constitution",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Constitution",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Bolt-Action",["capacity"]="5",["spare"]=nil,["reload"]="1.3s",["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]=nil,["spare_rounds"]="100",["rounds_reload_full_time"]=nil,["single_round_reload"]="0.95s"},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["80f1a156d9fa1e36"]={["id"]="80f1a156d9fa1e36",["name"]="JAR-5 Dominator",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/80f1a156d9fa1e36.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="80f1a156d9fa1e36",["name"]="JAR-5 Dominator",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/JAR-5_Dominator",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi Â â€¢Â  Burst",["capacity"]="15",["spare"]="6",["reload"]="3.8s",["tactical_reload"]="2.65s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["84354339522c932d"]={["id"]="84354339522c932d",["name"]="AR-2 Coyote",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/84354339522c932d.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="84354339522c932d",["name"]="AR-2 Coyote",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-2_Coyote",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi",["capacity"]="45",["spare"]="8",["reload"]="3s",["tactical_reload"]="2s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["89c5493e08ca4207"]={["id"]="89c5493e08ca4207",["name"]="APW-1 Anti-Materiel Rifle",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/89c5493e08ca4207.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="89c5493e08ca4207",["name"]="APW-1 Anti-Materiel Rifle",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/APW-1_Anti-Materiel_Rifle",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="7",["spare"]="8 Magazines",["reload"]="3.05s",["tactical_reload"]="2.05s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["8d3d52a3b2f19402"]={["id"]="8d3d52a3b2f19402",["name"]="P-4 Senator",["palette"]="sidearm",["backing_color"]={32,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/8d3d52a3b2f19402.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_rounds",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="Cylinder/individual rounds; no magazine reserve multiplication"},["conditional"]=false,["wiki"]={["id"]="8d3d52a3b2f19402",["name"]="P-4 Senator",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/P-4_Senator",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="6",["spare"]=nil,["reload"]="2.3s",["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]=nil,["spare_rounds"]="40",["rounds_reload_full_time"]=nil,["single_round_reload"]="1.45s"},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["90ddc374f4e3d756"]={["id"]="90ddc374f4e3d756",["name"]="M90A Shotgun",["palette"]="halo",["backing_color"]={24,37,43},["backing_default_alpha"]=0.3,["texture"]="panels/90ddc374f4e3d756.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="90ddc374f4e3d756",["name"]="M90A Shotgun",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/M90A_Shotgun",["wiki"]={["firing_modes"]="Semi",["capacity"]="6",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]="44",["spare_rounds"]=nil,["rounds_reload_full_time"]="3.6s",["single_round_reload"]="1.5s (Empty)"},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["94bd931b5fb4ee95"]={["id"]="94bd931b5fb4ee95",["name"]="SMG-32 Reprimand",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/94bd931b5fb4ee95.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="94bd931b5fb4ee95",["name"]="SMG-32 Reprimand",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Reprimand",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="AutoÂ â€¢Â BurstÂ â€¢Â Semi",["capacity"]="25",["spare"]="9",["reload"]="3.55s",["tactical_reload"]="2.1s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["9571ca51f0daf35b"]={["id"]="9571ca51f0daf35b",["name"]="MP-98 Knight",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/9571ca51f0daf35b.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="9571ca51f0daf35b",["name"]="MP-98 Knight",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/MP-98_Knight",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi Â â€¢Â  Burst",["capacity"]="50",["spare"]="7",["reload"]="2.5s",["tactical_reload"]=nil,["ammo_notes"]="shell references present; read full page before reserve-unit classification",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["968211c0033dce64"]={["id"]="968211c0033dce64",["name"]="AR-23 Liberator",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/968211c0033dce64.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="968211c0033dce64",["name"]="AR-23 Liberator",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-23_Liberator",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="AutoÂ â€¢Â SemiÂ â€¢Â Burst",["capacity"]="45",["spare"]="8",["reload"]="3s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["a6a735accb4a327f"]={["id"]="a6a735accb4a327f",["name"]="M-105 Stalwart",["palette"]="support",["backing_color"]={29,34,33},["backing_default_alpha"]=0.3,["texture"]="panels/a6a735accb4a327f.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="a6a735accb4a327f",["name"]="M-105 Stalwart",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/M-105_Stalwart",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto",["capacity"]="250",["spare"]="3 Magazines",["reload"]="5.9s",["tactical_reload"]="4.4s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["a7ee1ebf58fcdf1f"]={["id"]="a7ee1ebf58fcdf1f",["name"]="AR-23A Liberator Carbine",["palette"]="olive",["backing_color"]={45,56,27},["backing_default_alpha"]=0.3,["texture"]="panels/a7ee1ebf58fcdf1f.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="a7ee1ebf58fcdf1f",["name"]="AR-23A Liberator Carbine",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Liberator_Carbine",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi Â â€¢Â  Burst",["capacity"]="45",["spare"]="8",["reload"]="2.5s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["a8a91eb54892b6b2"]={["id"]="a8a91eb54892b6b2",["name"]="AR-11 Arbitrator",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/a8a91eb54892b6b2.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05},["alternate_ammo"]={0.16,0.585,0.5,0.025}},["semantics"]={["reserve"]="branch_specific_magazines_or_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="4mm rifle and10ga underbarrel shotgun; do not mix reserve units"},["conditional"]=false,["wiki"]={["id"]="a8a91eb54892b6b2",["name"]="AR-11 Arbitrator",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-11_Arbitrator",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Burst Â â€¢Â  10g",["capacity"]="45 (4mm)",["spare"]="7",["reload"]="3.75s",["tactical_reload"]="2.35s",["ammo_notes"]="individual rounds reload",["spare_shells"]="20",["spare_rounds"]=nil,["rounds_reload_full_time"]="2.5s",["single_round_reload"]="1.5s"},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["b16c9d490aa59b77"]={["id"]="b16c9d490aa59b77",["name"]="MGX-42 Bullet Storm",["palette"]="support",["backing_color"]={29,34,33},["backing_default_alpha"]=0.3,["texture"]="panels/b16c9d490aa59b77.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="spare_weapon_units_if_reader_supports",["total"]="remaining load only",["status"]="expended/discard; no magazine reload",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="Wiki single-use stacked caseless rounds"},["conditional"]=false,["wiki"]={["id"]="b16c9d490aa59b77",["name"]="MGX-42 Bullet Storm",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/MGX-42_Bullet_Storm",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]=nil,["capacity"]="300",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["b6aff2195568767f"]={["id"]="b6aff2195568767f",["name"]="R-36 Eruptor",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/b6aff2195568767f.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="b6aff2195568767f",["name"]="R-36 Eruptor",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Erupter",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Bolt-Action",["capacity"]="5",["spare"]="6",["reload"]="4.67s",["tactical_reload"]="2.75s",["ammo_notes"]="shell reference present; source-specific reserve handling",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["bc29613666df696b"]={["id"]="bc29613666df696b",["name"]="AR-32 Pacifier",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/bc29613666df696b.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="bc29613666df696b",["name"]="AR-32 Pacifier",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-32_Pacifier",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="â€¢Â  Auto",["capacity"]="40",["spare"]="8",["reload"]="3s",["tactical_reload"]="1.85s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["be70ee0d8d44028e"]={["id"]="be70ee0d8d44028e",["name"]="M7S SMG",["palette"]="halo",["backing_color"]={24,37,43},["backing_default_alpha"]=0.3,["texture"]="panels/be70ee0d8d44028e.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="be70ee0d8d44028e",["name"]="M7S SMG",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/M7S",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Full Â â€¢Â  Semi Â â€¢Â  Burst",["capacity"]="48",["spare"]="7",["reload"]="3s",["tactical_reload"]="2s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["c12a34f375bd5a87"]={["id"]="c12a34f375bd5a87",["name"]="SG-225IE Breaker Incendiary",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/c12a34f375bd5a87.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="c12a34f375bd5a87",["name"]="SG-225IE Breaker Incendiary",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SG-225IE_Breaker_Incendiary",["wiki"]={["firing_modes"]="Burst Â â€¢Â  Semi",["capacity"]="26",["spare"]="4",["reload"]="3s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["c780bcd79547da0f"]={["id"]="c780bcd79547da0f",["name"]="P-69 Veto",["palette"]="sidearm",["backing_color"]={32,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/c780bcd79547da0f.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_rounds",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="12round internal magazine loaded with6round clips; reload availability comes from reader"},["conditional"]=false,["wiki"]={["id"]="c780bcd79547da0f",["name"]="P-69 Veto",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Veto",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="12",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]=nil,["spare_rounds"]="90",["rounds_reload_full_time"]="3.3s",["single_round_reload"]="1.45s (Empty)"},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["cdf28be026bb7d84"]={["id"]="cdf28be026bb7d84",["name"]="StA-52 Assault Rifle",["palette"]="killzone",["backing_color"]={30,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/cdf28be026bb7d84.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="cdf28be026bb7d84",["name"]="StA-52 Assault Rifle",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/StA-52_Assault_Rifle",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi",["capacity"]="56",["spare"]="6",["reload"]="4.2s",["tactical_reload"]="2.5s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["ce063aa33d95a812"]={["id"]="ce063aa33d95a812",["name"]="AR-61 Tenderizer",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/ce063aa33d95a812.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="ce063aa33d95a812",["name"]="AR-61 Tenderizer",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-61_Tenderizer",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="SemiÂ â€¢Â BurstÂ â€¢Â Auto",["capacity"]="35",["spare"]="7",["reload"]="3.33s",["tactical_reload"]="2.18s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["cf5f176e0e322be1"]={["id"]="cf5f176e0e322be1",["name"]="AR-23C Liberator Concussive",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/cf5f176e0e322be1.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="cf5f176e0e322be1",["name"]="AR-23C Liberator Concussive",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/AR-23C_Liberator_Concussive",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto Â â€¢Â  Semi",["capacity"]="60",["spare"]="6",["reload"]="3.5s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["cf8934ff6567a42d"]={["id"]="cf8934ff6567a42d",["name"]="P-92 Warrant",["palette"]="sidearm",["backing_color"]={32,34,37},["backing_default_alpha"]=0.3,["texture"]="panels/cf8934ff6567a42d.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="cf8934ff6567a42d",["name"]="P-92 Warrant",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Warrant",["wiki"]={["firing_modes"]="Guided Â â€¢Â  Non-Guided",["capacity"]="13",["spare"]="8",["reload"]="2s",["tactical_reload"]="1.4s",["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["d323de60855898ac"]={["id"]="d323de60855898ac",["name"]="SG-451 Cookout",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/d323de60855898ac.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="d323de60855898ac",["name"]="SG-451 Cookout",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/SG-451_Cookout",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="16",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]="60",["spare_rounds"]=nil,["rounds_reload_full_time"]="6.45s",["single_round_reload"]="1.25s (Empty)"},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["dbb6c961c59fadc1"]={["id"]="dbb6c961c59fadc1",["name"]="P/40-K Bolt Pistol",["palette"]="imperial",["backing_color"]={35,30,28},["backing_default_alpha"]=0.3,["texture"]="panels/dbb6c961c59fadc1.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="dbb6c961c59fadc1",["name"]="P/40-K Bolt Pistol",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/P/40-K_Bolt_Pistol",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="6",["spare"]="4",["reload"]="2.45s",["tactical_reload"]="1.3s",["ammo_notes"]="shell reference present; source-specific reserve handling",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["dcd1c835407ef7ba"]={["id"]="dcd1c835407ef7ba",["name"]="SG-97 Sweeper",["palette"]="shotgun",["backing_color"]={42,35,30},["backing_default_alpha"]=0.3,["texture"]="panels/dcd1c835407ef7ba.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_shells",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="dcd1c835407ef7ba",["name"]="SG-97 Sweeper",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Sweeper",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Auto",["capacity"]="7",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]="70",["spare_rounds"]=nil,["rounds_reload_full_time"]="4s",["single_round_reload"]="1.5s (Empty)"},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["e5796355a8fd67e0"]={["id"]="e5796355a8fd67e0",["name"]="R-4 Hyena",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/e5796355a8fd67e0.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="e5796355a8fd67e0",["name"]="R-4 Hyena",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Hyena",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="15",["spare"]="5",["reload"]="2.5s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["e6d932be83729076"]={["id"]="e6d932be83729076",["name"]="R-6 Deadeye",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/e6d932be83729076.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="loose_rounds",["total"]="current+loose_reserve_if_same_ammunition_pool",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO",["note"]="Lever-action; individual rounds reload"},["conditional"]=false,["wiki"]={["id"]="e6d932be83729076",["name"]="R-6 Deadeye",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/R-6_Deadeye",["wiki"]={["firing_modes"]="Lever-Action",["capacity"]="8",["spare"]=nil,["reload"]=nil,["tactical_reload"]=nil,["ammo_notes"]="individual rounds reload",["spare_shells"]=nil,["spare_rounds"]="60",["rounds_reload_full_time"]="6.4s",["single_round_reload"]="2.3s (Empty)"},["live_override"]="Wiki values design context only; active runtime attachments and reader state authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}},["f0338468dcdb6a6c"]={["id"]="f0338468dcdb6a6c",["name"]="R-72 Censor",["palette"]="rifle",["backing_color"]={29,34,36},["backing_default_alpha"]=0.3,["texture"]="panels/f0338468dcdb6a6c.png",["size"]={520,640},["mask"]="masks/coverage.png",["zones"]={["compass"]={0.08,0.035,0.84,0.09},["count"]={0.16,0.35,0.53,0.2},["capacity"]={0.26,0.535,0.3,0.05},["gauge"]={0.095,0.615,0.81,0.045},["reserve"]={0.105,0.77,0.25,0.08},["mode"]={0.375,0.77,0.25,0.08},["total"]={0.68,0.77,0.25,0.08},["status"]={0.12,0.9,0.76,0.05}},["semantics"]={["reserve"]="magazine_units_from_wiki; confirmreaderunit",["total"]="estimate only if reader confirms reserve_magazines; prefix~",["status"]="reader chamber/reload event only; no inferred state",["capacity"]="reader-owned",["mode"]="reader-owned; no forced AUTO"},["conditional"]=false,["wiki"]={["id"]="f0338468dcdb6a6c",["name"]="R-72 Censor",["status"]="individual_page_retrieved",["source"]="https://helldivers.wiki.gg/wiki/Censor",["notes"]="Search attempted; individual page not returned. Do not finalize semantics.",["wiki"]={["firing_modes"]="Semi",["capacity"]="20",["spare"]="8",["reload"]="2.5s",["tactical_reload"]=nil,["ammo_notes"]="reader-owned reserve units",["spare_shells"]=nil,["spare_rounds"]=nil,["rounds_reload_full_time"]=nil,["single_round_reload"]=nil},["live_override"]="Wiki design context only; runtime attachment/state reader authoritative"},["research_status"]="individual_weapon_page_checked",["shader_contract"]={["coverage_alpha"]="outputalpha *= silhouetteMaskAlpha",["backing"]="theme andopacity only onbacking",["foreground"]="preserve intrinsicalpha andcolor",["glyph_clear"]="never clear backing under text"}}}
+
+end)()
+HUD.ballistic_family=(function()
+local M={specs=HUD.ballistic_family_specs,mask='mods/dbf_hud/textures/ballistic_family_coverage_v1'}
+local material='mods/dbf_hud/materials/adjudicator_tall_v1'
+local function number(v)return type(v)=='number'and v==v and v>=0 and v<=100000 and math.floor(v)or nil end
+function M.ready(id,resource)
+    local primary=HUD.segmented_fancy
+    if primary and primary.ready(id) and primary.assets_ready(resource) then return true end
+    return M.specs[id] and resource(M.mask)~=nil and resource('mods/dbf_hud/textures/ballistic_family_'..id)~=nil
+end
+function M.compose(m,x,y,s,opacity,cfg,resource,can_get)
+    cfg=HUD.config.texture_policy(cfg)
+    if cfg.presentation_view=='third' or cfg.hud_presentation=='practical' then return nil end
+    -- The approved primary face is artwork for the existing HUD Texture choice.
+    -- Original/alternative art and Simple keep their established composers.
+    local primary=HUD.segmented_fancy
+    if primary and cfg.texture_art_trial~=false and cfg.texture_art_variant=='faithful' and primary.ready(m.resource_hex,cfg) then
+        local out=primary.compose(m,x,y,s,opacity,cfg,cfg.style_clock,resource,can_get)
+        if out then return HUD.layout.decorate_textures(out,s,cfg,opacity) end
+    end
+    local spec=M.specs[m.resource_hex]
+    if not spec or cfg.texture_art_trial==false or cfg.texture_art_variant~='faithful' or not M.ready(m.resource_hex,resource) then return nil end
+    local w,h=148*s,148*640/520*s
+    local out={{type='panel',x=x,y=y,w=w,h=h,a=0,c={0,0,0},frosted=false,atlas_frame=true,ballistic_family=true}}
+    out[#out+1]={type='texture',x=x,y=y,w=w,h=h,c=HUD.config.rgb(cfg.background_color),a=opacity*(cfg.panel_opacity or .3),texture_material=material,texture_resource=M.mask,texture_theme=false,texture_layer=49,coverage_mask=true,ballistic_family=true}
+    out[#out+1]={type='texture',x=x,y=y,w=w,h=h,c={255,255,255},a=opacity,texture_material=material,texture_resource='mods/dbf_hud/textures/ballistic_family_'..m.resource_hex,texture_theme=false,texture_layer=49.1,ballistic_family=true}
+    local ink=HUD.config.rgb(cfg.text_color);local warning=m.warning and HUD.config.rgb(cfg.heat_red)or ink
+    local function text(value,key,color)
+        local z=spec.zones[key];if not z then return end
+        local size=z[4]*h/.75;local l,b,r,t=HUD.font.measure(tostring(value),size,cfg.font,true)
+        size=size*math.min(1,z[3]*w/math.max(.001,r-l),z[4]*h/math.max(.001,t-b));l,b,r,t=HUD.font.measure(tostring(value),size,cfg.font,true)
+        out[#out+1]={type='text',text=tostring(value),font=cfg.font,size=size,x=x+(z[1]+z[3]/2)*w-(l+r)/2,y=y+(1-z[2]-z[4]/2)*h-(b+t)/2,c=color or ink,a=opacity*(cfg.text_opacity or 1),ballistic_live=true}
+    end
+    local loaded,capacity,reserve=number(m.value),number(m.capacity),number(m.reserve)
+    text(loaded and tostring(loaded)or '--','count',warning);text(capacity and ('/ '..capacity)or '/ --','capacity')
+    local unit=m.reserve_kind or 'RES';if unit=='ROUNDS' and spec.semantics.reserve:find('shells',1,true)then unit='SHELLS'end
+    text(reserve and (reserve..' '..unit)or '-- RES','reserve')
+    text(m.ammo_mode or m.fire_mode or '--','mode')
+    local total='--'
+    if spec.semantics.total=='remaining load only' and loaded then total=tostring(loaded)
+    elseif spec.semantics.reserve=='magazine_units_from_wiki; confirmreaderunit' and m.reserve_kind=='MAGS' and m.kind=='magazine' and loaded and capacity and reserve then total='~'..(loaded+capacity*reserve)end
+    text(total,'total')
+    text(m.reloading==true and 'RELOADING'or m.chamber_rounds==1 and 'CHAMBERED'or (m.state=='EMPTY' or m.state=='SPENT')and m.state or '--','status')
+    local g=spec.zones.gauge
+    if g and type(m.fraction)=='number'and m.fraction==m.fraction and m.fraction>0 then out[#out+1]={type='rect',x=x+g[1]*w,y=y+(1-g[2]-g[4])*h,w=g[3]*w*math.max(0,math.min(1,m.fraction)),h=g[4]*h,c=warning,a=opacity}end
+    local ticks,heading=HUD.compass.ticks(m.compass_heading);local z=spec.zones.compass
+    if ticks and z then
+        for _,tick in ipairs(ticks)do
+            local tx=x+(z[1]+z[3]*tick.position)*w
+            out[#out+1]={type='rect',x=tx,y=y+(1-z[2]-z[4]*.55)*h,w=.4*s,h=(tick.label and .23 or .12)*z[4]*h,c=ink,a=opacity}
+            if tick.label and tick.position>.05 and tick.position<.95 then
+                local size=z[4]*h*.30;local l,b,r,t=HUD.font.measure(tick.label,size,cfg.font,true)
+                out[#out+1]={type='text',text=tick.label,font=cfg.font,size=size,x=tx-(l+r)/2,y=y+(1-z[2]-.15*z[4])*h-(b+t)/2,c=ink,a=opacity}
+            end
+        end
+        out[#out+1]={type='rect',x=x+(z[1]+z[3]/2)*w,y=y+(1-z[2]-z[4])*h,w=s,h=z[4]*h*.3,c={230,198,112},a=opacity}
+    end
+    return out
+end
+return M
+
+end)()
+HUD.df_designer_texture=(function()
+-- Exact Designer texture atlas; state selection/readouts remain Lua.
+local M={}
+local spec={["version"]=1,["authority"]="../concept-board.png; existing df-media/frame.png derived from that board",["format"]="straight RGBA8; RGB and alpha preserved, no gamma/color conversion",["files"]={["df_media_frame_v1"]={["width"]=1448,["height"]=1086,["rgba_bytes"]=6290112,["file"]="df_media_frame_v1_f98db39401c5dfd3a32483d902b0211e1882edb4a53b979780d4187995223729.rgba",["sha256"]="f98db39401c5dfd3a32483d902b0211e1882edb4a53b979780d4187995223729",["png"]="frame.png"},["df_media_cores_v1"]={["width"]=528,["height"]=1584,["rgba_bytes"]=3345408,["file"]="df_media_cores_v1_c29789ffcb7bdd3db8ee569406587974c798d1acabe08d2d8e70edcb0403f104.rgba",["sha256"]="c29789ffcb7bdd3db8ee569406587974c798d1acabe08d2d8e70edcb0403f104",["png"]="cores-atlas.png"}},["frame"]={["resource"]="mods/dbf_hud/textures/df_media_frame_v1",["pixels"]={51,46,1373,982},["uv"]={0.03522099447513812,0.0423572744014733,0.9482044198895028,0.9042357274401474},["logical_size"]={128,91.54843408594319}},["cores"]={["resource"]="mods/dbf_hud/textures/df_media_cores_v1",["regions"]={["loaded"]={["pixels"]={8,8,512,512},["uv"]={0.015151515151515152,0.005050505050505051,0.9696969696969697,0.32323232323232326},["source_crop"]={288,107,512,512}},["unavailable"]={["pixels"]={8,536,512,512},["uv"]={0.015151515151515152,0.3383838383838384,0.9696969696969697,0.32323232323232326},["source_crop"]={828,105,512,512}},["unknown"]={["pixels"]={8,1064,512,512},["uv"]={0.015151515151515152,0.6717171717171717,0.9696969696969697,0.32323232323232326},["source_crop"]={1374,105,512,512}}},["canonical_tile_size"]={512,512},["logical_draw_size"]={32,32},["centers_top_left_pixels"]={{436,492},{985,492}},["centers_top_left_logical"]={{35.892206846321926,41.579024034959936},{87.07356154406409,41.579024034959936}}},["readouts"]={["model"]={["center_top_left_pixels"]={724,203},["zone_pixels"]={530,178,388,50}},["mode"]={["center_top_left_pixels"]={488,865},["zone_pixels"]={295,806,386,118}},["reserve"]={["center_top_left_pixels"]={967,865},["zone_pixels"]={762,806,410,118}}},["all_coordinates_top_left"]=true,["baked_dynamic_text"]=false,["native_compositor_included"]=false,["installed"]=false}
+M.frame='mods/dbf_hud/textures/df_media_frame_v1';M.cores='mods/dbf_hud/textures/df_media_cores_v1'
+local material='mods/dbf_hud/materials/mechanical_72170a55a1f37ff1'
+function M.ready(resource)return resource(M.frame)~=nil and resource(M.cores)~=nil end
+local function finite(n)return type(n)=='number'and n==n and math.abs(n)<math.huge end
+function M.compose(m,x,y,s,opacity,cfg,measure)
+ measure=measure or HUD.font.measure;local w,h=spec.frame.logical_size[1],spec.frame.logical_size[2]
+ local out={{type='panel',x=x,y=y,w=w*s,h=h*s,c={22,23,22},a=0,frosted=false,mechanical_art=true,df_designer_texture=true,world_reference_width=256*s}}
+ local function image(resource,uv,dx,dy,dw,dh,alpha,layer)
+  out[#out+1]={type='texture',x=x+dx*s,y=y+(h-dy-dh)*s,w=dw*s,h=dh*s,c={255,255,255},a=opacity*alpha,texture_material=material,texture_resource=resource,atlas_rect=uv,texture_theme=false,texture_layer=layer,df_designer_texture=true}
+ end
+ image(M.frame,spec.frame.uv,0,0,w,h,cfg.panel_opacity or 1,49)
+ for side,center in ipairs(spec.cores.centers_top_left_logical)do
+  local state=not finite(m.value)and 'unknown'or ((m.df_shell_spent or {})[side]or m.value<3-side)and 'unavailable'or 'loaded'
+  if m.df_ejector_open then state='unknown'end
+  image(M.cores,spec.cores.regions[state].uv,center[1]-16,center[2]-16,32,32,1,49.1+side*.1)
+ end
+ local function text(value,zone,c)
+  local scale=128/spec.frame.pixels[3];local z=zone.zone_pixels
+  local cx=(z[1]+z[3]/2-spec.frame.pixels[1])*scale;local cy=(z[2]+z[4]/2-spec.frame.pixels[2])*scale;local zw,zh=z[3]*scale,z[4]*scale
+  local font=cfg.font or 'departuremono';local l,b,r,t=measure(value,s,font,true);local size=s*math.min(zw*s/math.max(.001,r-l),zh*s/math.max(.001,t-b));l,b,r,t=measure(value,size,font,true)
+  out[#out+1]={type='text',text=value,x=x+cx*s-(l+r)/2,y=y+(h-cy)*s-(b+t)/2,size=size,font=font,c=c,a=opacity*(cfg.text_opacity or 1),texture_readout=true,readout_zone={cx=x+cx*s,cy=y+(h-cy)*s,w=zw*s,h=zh*s},df_designer_texture=true}
+ end
+ local ink=cfg.weapon_panel_overrides and cfg.weapon_panel_overrides.text_color and HUD.config.rgb(cfg.weapon_panel_overrides.text_color)or {190,191,180}
+ text('DBS-2',spec.readouts.model,{155,161,155});text(m.fire_mode=='SEMI'and 'SEMI'or m.fire_mode=='VOLLEY'and 'VOLLEY'or '--',spec.readouts.mode,{157,142,98})
+ text((finite(m.reserve)and tostring(math.max(0,math.floor(m.reserve)))or '--')..' RES',spec.readouts.reserve,ink)
+ return out
+end
+return M
+
+end)()
+HUD.compass=(function()
+local M={}
+local function finite(v)return type(v)=='number'and v==v and math.abs(v)<math.huge end
+function M.heading(matrix)
+    if not matrix or not finite(matrix[5]) or not finite(matrix[6]) then return nil end
+    if matrix[5]^2+matrix[6]^2<1e-8 then return nil end
+    return math.deg(math.atan2(matrix[5],matrix[6]))%360
+end
+function M.ticks(heading)
+    if not finite(heading)then return nil end
+    heading=heading%360;local out={};local names={'N','NE','E','SE','S','SW','W','NW'}
+    for angle=0,345,15 do
+        local delta=(angle-heading+180)%360-180
+        if math.abs(delta)<=90 then out[#out+1]={position=(delta+90)/180,label=angle%45==0 and names[angle/45+1] or nil}end
+    end
+    return out,heading
+end
+return M
+
+end)()
+HUD.df_retro_spec=(function()
+return {["atlas_size"]={2048,1536},["origin"]="top-left",["resource"]="mods/dbf_hud/textures/dbs2_upright_retro_atlas_v2",["regions"]={["frame"]={["pixels"]={32,32,600,988},["uv"]={0.015625,0.020833333333333332,0.29296875,0.6432291666666666},["padded_pixels"]={0,0,664,1052},["padded_uv"]={0.0,0.0,0.32421875,0.6848958333333334},["gutter"]=32},["loaded_shell"]={["pixels"]={696,32,224,672},["uv"]={0.33984375,0.020833333333333332,0.109375,0.4375},["padded_pixels"]={664,0,288,736},["padded_uv"]={0.32421875,0.0,0.140625,0.4791666666666667},["gutter"]=32},["fired_shell"]={["pixels"]={984,32,224,672},["uv"]={0.48046875,0.020833333333333332,0.109375,0.4375},["padded_pixels"]={952,0,288,736},["padded_uv"]={0.46484375,0.0,0.140625,0.4791666666666667},["gutter"]=32},["semi"]={["pixels"]={1272,32,268,132},["uv"]={0.62109375,0.020833333333333332,0.130859375,0.0859375},["padded_pixels"]={1240,0,332,196},["padded_uv"]={0.60546875,0.0,0.162109375,0.12760416666666666},["gutter"]=32},["volley"]={["pixels"]={1604,32,268,132},["uv"]={0.783203125,0.020833333333333332,0.130859375,0.0859375},["padded_pixels"]={1572,0,332,196},["padded_uv"]={0.767578125,0.0,0.162109375,0.12760416666666666},["gutter"]=32},["selector"]={["pixels"]={32,1084,92,76},["uv"]={0.015625,0.7057291666666666,0.044921875,0.049479166666666664},["padded_pixels"]={0,1052,156,140},["padded_uv"]={0.0,0.6848958333333334,0.076171875,0.09114583333333333},["gutter"]=32},["reserve_label"]={["pixels"]={188,1084,172,60},["uv"]={0.091796875,0.7057291666666666,0.083984375,0.0390625},["padded_pixels"]={156,1052,236,124},["padded_uv"]={0.076171875,0.6848958333333334,0.115234375,0.08072916666666667},["gutter"]=32},["shells_label"]={["pixels"]={424,1084,148,60},["uv"]={0.20703125,0.7057291666666666,0.072265625,0.0390625},["padded_pixels"]={392,1052,212,124},["padded_uv"]={0.19140625,0.6848958333333334,0.103515625,0.08072916666666667},["gutter"]=32},["compass_N"]={["pixels"]={636,1084,72,76},["uv"]={0.310546875,0.7057291666666666,0.03515625,0.049479166666666664},["padded_pixels"]={604,1052,136,140},["padded_uv"]={0.294921875,0.6848958333333334,0.06640625,0.09114583333333333},["gutter"]=32},["compass_E"]={["pixels"]={772,1084,72,76},["uv"]={0.376953125,0.7057291666666666,0.03515625,0.049479166666666664},["padded_pixels"]={740,1052,136,140},["padded_uv"]={0.361328125,0.6848958333333334,0.06640625,0.09114583333333333},["gutter"]=32},["compass_S"]={["pixels"]={908,1084,72,76},["uv"]={0.443359375,0.7057291666666666,0.03515625,0.049479166666666664},["padded_pixels"]={876,1052,136,140},["padded_uv"]={0.427734375,0.6848958333333334,0.06640625,0.09114583333333333},["gutter"]=32},["compass_W"]={["pixels"]={1044,1084,72,76},["uv"]={0.509765625,0.7057291666666666,0.03515625,0.049479166666666664},["padded_pixels"]={1012,1052,136,140},["padded_uv"]={0.494140625,0.6848958333333334,0.06640625,0.09114583333333333},["gutter"]=32},["digit_0"]={["pixels"]={1180,1084,76,108},["uv"]={0.576171875,0.7057291666666666,0.037109375,0.0703125},["padded_pixels"]={1148,1052,140,172},["padded_uv"]={0.560546875,0.6848958333333334,0.068359375,0.11197916666666667},["gutter"]=32},["digit_1"]={["pixels"]={1320,1084,76,108},["uv"]={0.64453125,0.7057291666666666,0.037109375,0.0703125},["padded_pixels"]={1288,1052,140,172},["padded_uv"]={0.62890625,0.6848958333333334,0.068359375,0.11197916666666667},["gutter"]=32},["digit_2"]={["pixels"]={1460,1084,76,108},["uv"]={0.712890625,0.7057291666666666,0.037109375,0.0703125},["padded_pixels"]={1428,1052,140,172},["padded_uv"]={0.697265625,0.6848958333333334,0.068359375,0.11197916666666667},["gutter"]=32},["digit_3"]={["pixels"]={1600,1084,76,108},["uv"]={0.78125,0.7057291666666666,0.037109375,0.0703125},["padded_pixels"]={1568,1052,140,172},["padded_uv"]={0.765625,0.6848958333333334,0.068359375,0.11197916666666667},["gutter"]=32},["digit_4"]={["pixels"]={1740,1084,76,108},["uv"]={0.849609375,0.7057291666666666,0.037109375,0.0703125},["padded_pixels"]={1708,1052,140,172},["padded_uv"]={0.833984375,0.6848958333333334,0.068359375,0.11197916666666667},["gutter"]=32},["digit_5"]={["pixels"]={1880,1084,76,108},["uv"]={0.91796875,0.7057291666666666,0.037109375,0.0703125},["padded_pixels"]={1848,1052,140,172},["padded_uv"]={0.90234375,0.6848958333333334,0.068359375,0.11197916666666667},["gutter"]=32},["digit_6"]={["pixels"]={32,1256,76,108},["uv"]={0.015625,0.8177083333333334,0.037109375,0.0703125},["padded_pixels"]={0,1224,140,172},["padded_uv"]={0.0,0.796875,0.068359375,0.11197916666666667},["gutter"]=32},["digit_7"]={["pixels"]={172,1256,76,108},["uv"]={0.083984375,0.8177083333333334,0.037109375,0.0703125},["padded_pixels"]={140,1224,140,172},["padded_uv"]={0.068359375,0.796875,0.068359375,0.11197916666666667},["gutter"]=32},["digit_8"]={["pixels"]={312,1256,76,108},["uv"]={0.15234375,0.8177083333333334,0.037109375,0.0703125},["padded_pixels"]={280,1224,140,172},["padded_uv"]={0.13671875,0.796875,0.068359375,0.11197916666666667},["gutter"]=32},["digit_9"]={["pixels"]={452,1256,76,108},["uv"]={0.220703125,0.8177083333333334,0.037109375,0.0703125},["padded_pixels"]={420,1224,140,172},["padded_uv"]={0.205078125,0.796875,0.068359375,0.11197916666666667},["gutter"]=32}},["shell_draw_size"]={224,672},["state_contract"]={["2"]={"loaded_shell","loaded_shell"},["1"]={"fired_shell","loaded_shell"},["0"]={"fired_shell","fired_shell"},["unknown"]="omit shells; texture digits may be omitted; never imply loaded"},["notes"]={"Generated atlas approved by David; original restored image preserved.","No baked reserve040 or active selection in frame.","Selectors and reserve digits are texture regions, not Lua text.","Generated halo/fill remains in atlas regions; adjustable backing alone cannot remove it.","Fixed shell bounds for every state. No ejection/reload inference.","Lossless sprite repack:32px transparent gutters; shell source pixels and draw bounds unchanged. Intrinsic source halo remains; gutters prevent neighboring cell bleed, not baked halo."}}
+
+end)()
+HUD.df_retro_primitive=(function()
+-- Isolated Designer export. Top-left coordinates; adapter may flip Y for native GUI.
+-- compose(model,x,y,width,height,alpha) returns DBF-style rect/text commands.
+local M={design_width=640,design_height=1320,style="16-bit",texture_free=true}
+function M.compose(m,x,y,w,h,a)
+ m=m or {}; x=x or 0;y=y or 0;w=w or 160;h=h or 330;a=a or 1
+ local out={};local ivory={223,216,177};local gold={236,193,99}
+ local function rect(px,py,pw,ph,c,op)out[#out+1]={type='rect',x=x+px*w/640,y=y+py*h/1320,w=pw*w/640,h=ph*h/1320,c=c,a=a*(op or 1)}end
+ local function text(px,py,s,str,c,op)out[#out+1]={type='text',x=x+px*w/640,y=y+py*h/1320,size=s*h/1320,text=str,font='bigblue',c=c or ivory,a=a*(op or 1)}end
+ -- Stepped translucent silhouette, no bitmap dependency.
+ -- Feathered backing: nested non-overlapping bands, pale stepped outline.
+ rect(30,30,580,1260,{37,44,40},.52)
+ for i=0,3 do
+  local inset=14+i*4;local bw,bh=612-i*8,1292-i*8;local op=.08+i*.09
+  rect(inset,inset,4,bh,{37,44,40},op);rect(640-inset-4,inset,4,bh,{37,44,40},op)
+  rect(inset+4,inset,bw-8,4,{37,44,40},op);rect(inset+4,1320-inset-4,bw-8,4,{37,44,40},op)
+ end
+ for i=0,5 do
+  rect(20+i*4,42-i*4,4,4,ivory,.65);rect(596+i*4,18+i*4,4,4,ivory,.65)
+  rect(20+i*4,1278+i*4,4,4,ivory,.65);rect(596+i*4,1298-i*4,4,4,ivory,.65)
+ end
+ for _,py in ipairs({42,280,500,750,980,1180})do rect(18,py,2,130,ivory,.42);rect(620,py,2,130,ivory,.42)end
+ rect(48,22,540,2,ivory,.45);rect(48,1298,540,2,ivory,.45)
+ -- Sliding compass reads the accepted camera heading, not a static direction.
+ local ticks,heading=HUD.compass.ticks(m.heading)
+ rect(56,103,528,1,ivory,.6)
+ if ticks then
+  for _,tick in ipairs(ticks)do
+   local tx=56+528*tick.position
+   rect(tx,82,1,tick.label and 20 or 10,ivory,.7)
+   if tick.label and tick.position>.03 and tick.position<.97 then text(tx,60,17,tick.label);out[#out].center_x=tx*w/640 end
+  end
+  text(320,119,13,string.format('%03d DEG',heading));out[#out].center_x=320*w/640
+  for i=0,5 do rect(314+i,106+i,12-i*2,1,gold)end
+ else text(320,68,17,'---');out[#out].center_x=320*w/640 end
+ text(132,165,64,'DBS-2');out[#out].center_x=320*w/640;text(113,242,24,'DOUBLE FREEDOM');out[#out].center_x=320*w/640;rect(64,284,512,1,ivory,.7)
+ text(126,306,16,'10 GAUGE TACTICAL SHOTGUN');out[#out].center_x=320*w/640
+ local n=type(m.value)=='number' and m.value or nil
+ for side=1,2 do
+  local first=#out+1
+  local sx=side==1 and 112 or 372
+  local loaded=n and n>=3-side;local op=n==nil and .45 or loaded and 1 or .28
+  -- Identical bounds for loaded and fired states. Blue hull 73%, brass 27%.
+  rect(sx,398,144,412,{18,40,70},op)
+  rect(sx+7,398,130,412,{24,62,110},op)
+  rect(sx+16,402,14,400,{48,95,151},op*.8)
+  rect(sx+32,402,8,400,{32,78,133},op*.7)
+  rect(sx+110,402,18,400,{12,31,57},op*.8)
+  -- Coarse ordered highlights keep the sprite feel at low command cost.
+  for row=0,11 do rect(sx+18+(row%2)*6,420+row*30,6,6,{64,122,177},op*.45);rect(sx+119-(row%2)*6,434+row*30,6,6,{8,25,48},op*.45)end
+  rect(sx+8,390,128,8,{53,105,159},op)
+  rect(sx+20,382,104,8,{24,66,115},op)
+  rect(sx,810,144,120,{144,113,56},op)
+  rect(sx+9,811,127,120,{183,147,75},op)
+  rect(sx+22,813,17,116,{225,197,123},op)
+  rect(sx+108,813,15,116,{133,98,42},op)
+  for row=0,5 do rect(sx+40+(row%2)*6,817+row*18,6,6,{231,207,142},op*.5)end
+  rect(sx-6,929,156,8,{214,183,110},op)
+  rect(sx-3,937,150,5,{126,98,50},op)
+  text(sx+43,548,30,'10',{8,24,43},op);text(sx+43,586,30,'GA',{8,24,43},op)
+  text(sx+27,663,16,'3 1/2"',{8,24,43},op);text(sx+43,685,16,'MAG',{8,24,43},op)
+  -- At the native Lua preview size 128x264, 96 px/in means +12px wide,
+  -- -24px tall. Scale the whole shell about its center, preserving brass ratio.
+  local fx,fy=216/156,440/560
+  local cx,cy=(sx+72)*w/640,662*h/1320
+  for i=first,#out do
+   local v=out[i];v.shell_side=side
+   v.x=cx+(v.x-cx)*fx;v.y=cy+(v.y-cy)*fy
+   if v.type=='rect' then v.w=v.w*fx;v.h=v.h*fy else v.size=v.size*fy;v.shell_center_x=cx end
+  end
+ end
+ text(74,1020,16,'RESERVE');out[#out].reserve_part='label';text(218,996,54,type(m.reserve)=='number' and string.format('%03d',math.max(0,m.reserve)) or '---');out[#out].reserve_part='value';text(430,1020,16,'SHELLS');out[#out].reserve_part='unit'
+ rect(64,1082,512,1,ivory,.75)
+ local mode=m.fire_mode
+ for i,label in ipairs({'SEMI','VOLLEY'})do
+  local bx=i==1 and 130 or 330;local active=mode==label;local op=active and 1 or .3
+  rect(bx,1138,174,2,active and gold or ivory,op);rect(bx,1202,174,2,active and gold or ivory,op)
+  rect(bx,1138,2,66,active and gold or ivory,op);rect(bx+172,1138,2,66,active and gold or ivory,op)
+  text(bx+35,1158,24,label,active and gold or ivory,op)
+  if active then for j=0,7 do rect(bx+72+j,1115+j,30-j*2,1,gold)end end
+ end
+ return out
+end
+return M
+end)()
+HUD.df_retro_panel=(function()
+-- Approved upright retro sprite atlas. All dynamic lettering samples cells.
+local M={atlas=HUD.df_retro_spec.resource,backing='mods/dbf_hud/textures/dbs2_retro_backing_v1'}
+local material='mods/dbf_hud/materials/mechanical_72170a55a1f37ff1'
+local spec=HUD.df_retro_spec;local w,h=128,128*988/600
+local function finite(v)return type(v)=='number'and v==v and math.abs(v)<math.huge end
+function M.ready(resource)return resource(M.atlas)~=nil and resource(M.backing)~=nil end
+function M.compose(m,x,y,s,opacity,cfg,resource)
+    cfg=HUD.config.texture_policy(cfg)
+    if cfg.texture_art_trial==false or cfg.texture_art_variant=='original' or not M.ready(resource) then return nil end
+    local out={{type='panel',x=x,y=y,w=w*s,h=h*s,c={0,0,0},a=0,frosted=false,atlas_frame=true,world_reference_width=256*s,df_retro=true}}
+    local k=128/600;local order=49
+    local function image(resource,uv,px,py,pw,ph,alpha,color,region)
+        out[#out+1]={type='texture',x=x+px*k*s,y=y+(h-(py+ph)*k)*s,w=pw*k*s,h=ph*k*s,
+            c=color or {255,255,255},a=opacity*alpha,texture_resource=resource,texture_material=material,
+            atlas_rect=uv,texture_theme=false,texture_layer=order,df_retro=true,texture_color_linear=false,atlas_region=region,
+            texture_feather_x=region and 6/spec.regions[region].pixels[3] or nil,
+            texture_feather_y=region and 6/spec.regions[region].pixels[4] or nil}
+        order=order+.01
+    end
+    local function cell(name,px,py,pw,ph,alpha)
+        image(M.atlas,spec.regions[name].uv,px,py,pw,ph,alpha or 1,nil,name)
+    end
+    -- Mask is from the original 1536x1024 layout; atlas v2 has different UVs.
+    image(M.backing,{16/1536,12/1024,600/1536,988/1024},0,0,600,988,cfg.panel_opacity or .8,HUD.config.rgb(cfg.background_color))
+    cell('frame',0,0,600,988)
+    local n=finite(m.value) and m.value%1==0 and m.value>=0 and m.value<=2 and m.value or nil
+    if n then
+        local states=spec.state_contract[tostring(n)]
+        for side=1,2 do cell(states[side],side==1 and 95 or 365,330,128,384,states[side]=='fired_shell' and .55 or 1)end
+    end
+    local ink_alpha=cfg.text_opacity or 1
+    cell('reserve_label',70,777,100,35,ink_alpha);cell('shells_label',435,777,100,35,ink_alpha)
+    if finite(m.reserve) and m.reserve>=0 and m.reserve<=100000 then
+        local value=string.format('%03d',math.floor(m.reserve));local dw=math.min(35,140/#value);local left=300-#value*dw/2
+        for i=1,#value do cell('digit_'..value:sub(i,i),left+(i-1)*dw,752,dw,55,ink_alpha)end
+    end
+    cell('semi',105,868,180,89,(m.fire_mode=='SEMI' and 1 or .3)*ink_alpha)
+    cell('volley',315,868,180,89,(m.fire_mode=='VOLLEY' and 1 or .3)*ink_alpha)
+    if m.fire_mode=='SEMI' or m.fire_mode=='VOLLEY' then cell('selector',m.fire_mode=='SEMI' and 174 or 384,840,42,35,ink_alpha)end
+    local ticks=HUD.compass.ticks(m.compass_heading)
+    if ticks then
+        for _,tick in ipairs(ticks)do
+            local tx=56+488*tick.position
+            if tick.label and tick.position>.05 and tick.position<.95 then
+                local total=#tick.label*24
+                for i=1,#tick.label do cell('compass_'..tick.label:sub(i,i),tx-total/2+(i-1)*24,51,24,32,ink_alpha)end
+            end
+            out[#out+1]={type='rect',x=x+tx*k*s,y=y+(h-95*k)*s,w=k*s,h=(tick.label and 12 or 6)*k*s,c={223,216,177},a=opacity*ink_alpha}
+        end
+        cell('selector',288,88,24,20,ink_alpha)
+    end
+    return out
+end
+function M.primitive(m,x,y,s,opacity,cfg)
+    local model={};for k,v in pairs(m)do model[k]=v end;model.heading=m.compass_heading
+    local pw,ph=128*s,264*s
+    local raw=HUD.df_retro_primitive.compose(model,0,0,pw,ph,opacity)
+    local out={{type='panel',x=x,y=y,w=pw,h=ph,c={0,0,0},a=0,frosted=false,world_reference_width=256*s,df_retro=true}}
+    for _,v in ipairs(raw)do
+        if v.type=='rect' then
+            v.y=y+ph-v.y-v.h
+            if v.c[1]==37 and v.c[2]==44 and v.c[3]==40 then v.c=HUD.config.rgb(cfg.background_color);v.a=math.min(opacity,v.a*(cfg.panel_opacity or .8)/.52)end
+        else
+            local left,bottom,right,top=HUD.font.measure(v.text,v.size,cfg.font,true)
+            if v.shell_center_x or v.center_x then v.x=(v.shell_center_x or v.center_x)-(left+right)/2 end
+            v.y=y+ph-v.y-top;v.font=cfg.font;v.a=v.a*(cfg.text_opacity or 1)
+        end
+        v.x=x+v.x;v.df_retro=true;out[#out+1]=v
+    end
+    local reserve={};for _,v in ipairs(out)do if v.reserve_part then reserve[v.reserve_part]=v end end
+    if reserve.label and reserve.value and reserve.unit then
+        local parts={reserve.label,reserve.value,reserve.unit};local width=16*s;local metrics={}
+        for i,v in ipairs(parts)do local l,b,r,t=HUD.font.measure(v.text,v.size,v.font,true);metrics[i]={l,b,r,t};width=width+r-l end
+        local left=x+(pw-width)/2;local center=reserve.value.y+(metrics[2][2]+metrics[2][4])/2
+        for i,v in ipairs(parts)do local m=metrics[i];v.x=left-m[1];v.y=center-(m[2]+m[4])/2;left=left+m[3]-m[1]+8*s end
+    end
+    HUD.layout.decorate(out,out[1],s,cfg,opacity)
+    return out
+end
+return M
+
+end)()
+HUD.control_requests=(function()
+local M={}
+function M.new(hud,root)
+ local last,next_poll=nil,0;local self={}
+ function self.poll()
+  if (hud.clock or 0)<next_poll then return end;next_poll=(hud.clock or 0)+.25
+  local f=io.open(root..'/HUD-control-request.tsv','rb');if not f then return end;local line=f:read(513);f:close();if #line>512 then return end
+  local nonce,op=line:match('^([%w_%-]+)\t([a-z_]+)%s*$');if not nonce or nonce==last then return end
+  local method=({reload_settings=hud.reload_settings,reload_art=hud.reload_panel_art,restore_art=hud.restore_panel_art,art_status=function()
+   local stats=hud.panel_art_stats();local keys={};for k in pairs(stats)do keys[#keys+1]=k end;table.sort(keys);local fields={};for _,k in ipairs(keys)do fields[#fields+1]=k..'='..tostring(stats[k])end;return true,table.concat(fields,',')
+  end})[op];if not method then return end;last=nonce
+  local ok,a,b=pcall(method);ok=ok and a~=false;local result=tostring(b or a);local ack=io.open(root..'/HUD-control-ack.tsv','w');if ack then ack:write(nonce..'\t'..op..'\t'..tostring(ok)..'\t'..result:gsub('[\r\n\t]',' ')..'\n');ack:close()end
+ end
+ return self
+end
+return M
+
+end)()
 HUD.runtime=(function()
 local M={draw_budget_ms=2.5}
 function M.rebase_commands(commands,left,bottom)
@@ -18506,24 +19888,60 @@ function M.start(sr,backend,options)
             return finish(fn(...))
         end
     end
-    local compose=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure,native_art)
+    local compose_raw=timed('layout',function(m,x,y,scale,opacity,cfg,clock,measure,native_art)
         if cfg.weapon_panel_overrides then
             local resolved={};for k,v in pairs(cfg)do resolved[k]=v end;for k,v in pairs(cfg.weapon_panel_overrides)do resolved[k]=v end;cfg=resolved
         end
+        if cfg.presentation_view=='third' then return HUD.view_presentation.compose(m,x,y,scale,opacity,cfg)end
+        cfg=HUD.config.texture_policy(cfg)
+        if cfg.shader_layers~=nil then cfg.effect_scanlines=false;cfg.effect_flicker=false;cfg.effect_sweep=false;cfg.theme_shader='none';cfg.effect_shader='none' end
+        cfg.style_clock=clock
+        local family=HUD.ballistic_family.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource,sr.Application.can_get)
+        local primary=HUD.segmented_primary_specs and HUD.segmented_primary_specs[m.resource_hex]and HUD.segmented_fancy
+        local needs_texture=primary and not HUD.segmented_fancy.assets_ready(hot_panel_art.resource)
+        if needs_texture and cfg.texture_art_trial~=false and cfg.texture_art_variant=='faithful'and not self.hud_texture_request and rawget(_G,'HUDRenderBridge')then
+            local stats=hot_panel_art.stats()
+            if not stats.pending and not stats.failed then
+                self.hud_texture_request=true
+                local ok,why=pcall(hot_panel_art.reload)
+                if backend.log then pcall(backend.log,'HUD_TEXTURE_LOAD '..tostring(ok)..' '..tostring(why))end
+            end
+        end
+        if primary and HUD.segmented_fancy.assets_ready(hot_panel_art.resource)and cfg.texture_art_trial~=false and cfg.texture_art_variant=='faithful'and rawget(_G,'HUDRenderBridge')then
+            local edge=HUD.edge_mask.settings(cfg)
+            if edge.width>0 then
+                local signature=HUD.edge_mask.signature(edge)
+                local ok,why=pcall(hot_panel_art.request_generated,signature,function()return HUD.edge_mask.image(edge)end)
+                if not ok and not self.edge_request_error then self.edge_request_error=true;if backend.log then pcall(backend.log,'HUD_EDGE_LOAD_FAILED '..tostring(why))end end
+            else hot_panel_art.clear_generated_request()end
+        end
+        if family then return family end
+        if m.resource_hex=='72170a55a1f37ff1' then
+            local retro=HUD.df_retro_panel.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource)
+            if retro then return HUD.layout.decorate_textures(retro,scale,cfg,opacity)end
+            if cfg.texture_art_trial==false or cfg.texture_art_variant=='original' then return HUD.df_retro_panel.primitive(m,x,y,scale,opacity,cfg)end
+        end
+        if m.resource_hex=='72170a55a1f37ff1' and cfg.texture_art_trial~=false and cfg.texture_art_variant~='original' and HUD.df_designer_texture.ready(hot_panel_art.resource) then return HUD.layout.decorate_textures(HUD.df_designer_texture.compose(m,x,y,scale,opacity,cfg,measure or HUD.font.measure),scale,cfg,opacity)end
         local out=HUD.layout.compose(m,x,y,scale,opacity,cfg,clock,measure)
-        local atlas=false
-        if HUD.df_neogeo_atlas and m.resource_hex=='72170a55a1f37ff1' and cfg.texture_art_trial~=false and cfg.mechanical_art_enabled~=false and cfg.texture_art_variant=='faithful' then
-            if HUD.df_neogeo_atlas.ready(hot_panel_art.resource) then
+        local mechanical=false
+        if m.resource_hex=='72170a55a1f37ff1' and cfg.texture_art_trial~=false and cfg.mechanical_art_enabled~=false and cfg.texture_art_variant=='faithful' then
+            -- Readiness is checked against the atlas's distinct hot resource, never the legacy image.
+            if hot_panel_art.resource('mods/dbf_hud/textures/df_neogeo_shell_states_v2') and hot_panel_art.resource('mods/dbf_hud/textures/df_neogeo_backing_preview_v2') and hot_panel_art.resource('mods/dbf_hud/textures/df_neogeo_rim_neutral') then
                 local ok,art=pcall(HUD.df_neogeo_atlas.compose,m,x-20*scale,y-19*scale,scale,opacity,cfg,measure or HUD.font.measure)
                 if ok then out=art elseif not self.neo_geo_error then self.neo_geo_error=true;log('NEOGEO_PANEL_FALLBACK '..tostring(art))end
             end
-            atlas=true
+            mechanical=true -- Pending/failed artwork retains the known-working original layout.
         end
-        if not atlas and native_art and HUD.mechanical_art and type(sr.Application.can_get)=='function' then
-            out,atlas=HUD.mechanical_art.compose(out,m,x,y,scale,opacity,cfg,clock,measure,sr.Application.can_get,hot_panel_art.resource)
+        if not mechanical and native_art and HUD.mechanical_art and type(sr.Application.can_get)=='function' then
+            out,mechanical=HUD.mechanical_art.compose(out,m,x,y,scale,opacity,cfg,clock,measure,sr.Application.can_get,hot_panel_art.resource)
+            if mechanical and not self.mechanical_seen then self.mechanical_seen={} end
+            if mechanical and not self.mechanical_seen[m.resource_hex] then
+                self.mechanical_seen[m.resource_hex]=true
+                if backend.log then pcall(backend.log,'MECHANICAL_TEXTURE_ACTIVE weapon='..tostring(m.resource_hex)..' live_readouts=true')end
+            end
         end
         local faithful=HUD.faithful_fragment_assets and HUD.faithful_fragment_assets[m.resource_hex]
-        if not atlas and native_art and faithful and HUD.faithful_fragments and cfg.texture_art_trial and cfg.texture_art_variant=='faithful' and type(sr.Application.can_get)=='function' then
+        if not mechanical and native_art and faithful and HUD.faithful_fragments and cfg.texture_art_trial and cfg.texture_art_variant=='faithful' and type(sr.Application.can_get)=='function' then
             local original=out
             out=HUD.faithful_fragments.prepare(out,faithful.spec,faithful.assets,x,y,scale,opacity,cfg,sr.Application.can_get)
             local count=0;for _,v in ipairs(out)do if v.faithful_fragment then count=count+1 end end
@@ -18531,7 +19949,7 @@ function M.start(sr,backend,options)
             faithful_states[m.resource_hex].revision=self.appearance_revision
             if math.abs(opacity-1)<=1e-6 then faithful_full_states[m.resource_hex]=faithful_states[m.resource_hex] end
         end
-        if not atlas and native_art and HUD.bespoke_texture_panel and type(sr.Application.can_get)=='function' then
+        if not mechanical and native_art and HUD.bespoke_texture_panel and type(sr.Application.can_get)=='function' then
             out=HUD.bespoke_texture_panel.compose(out,m,x,y,scale,opacity,cfg,clock,measure,sr.Application.can_get)
         end
         local override=cfg.weapon_panel_overrides
@@ -18540,8 +19958,11 @@ function M.start(sr,backend,options)
             if v.type=='panel' and override.background_color then v.c=HUD.config.rgb(override.background_color)end
             if v.type=='text' and override.text_color and not v.weapon_label and not m.warning and v.text~='UNSAFE' then v.c=HUD.config.rgb(override.text_color)end
         end end
-        return out
+        return HUD.layout.decorate_textures(out,scale,cfg,opacity)
     end)
+    local function compose(m,x,y,scale,opacity,cfg,clock,measure,native_art)
+        return HUD.font_scale.apply(compose_raw(m,x,y,scale,opacity,cfg,clock,measure,native_art),cfg,measure or HUD.font.measure)
+    end
     local mg_easter=HUD.mg_easter.new()
     local df_reload_state=HUD.df_reload_state.new();local df_shell_state=HUD.df_shell_state.new()
     local recoilless_state=HUD.recoilless_state.new()
@@ -18571,6 +19992,10 @@ function M.start(sr,backend,options)
         -- A presentation-only example keeps Appearance useful on the ship.
         local preview_model=self.appearance_model(self.appearance_weapon())
         local cfg=HUD.config.effective(self.config,preview_model.resource_hex)
+        cfg.presentation_view=cfg.hud_presentation=='practical' and 'third' or (cfg.hud_presentation=='weapon_specific' and 'first' or self.presentation_view or 'first')
+        if cfg.presentation_view~='third'and HUD.config.segmented_eligible(cfg,preview_model.resource_hex)then cfg=HUD.config.segmented_appearance(cfg,preview_model.resource_hex)end
+        if cfg.presentation_view=='third' then cfg.style_3d='standard';cfg.shader_layers={};cfg.theme_shader='none';cfg.effect_shader='none' end
+        if cfg.anchor_mode~='world' then cfg.style_3d='standard' end
         cfg.frosted=false;cfg.placement_mode='manual'
         local commands=compose(preview_model,0,0,2,1,cfg,self.clock)
         commands=HUD.world_style.prepare(commands,{first_person=false},cfg)
@@ -18650,7 +20075,7 @@ function M.start(sr,backend,options)
         if self.config.debug_logging or line:find('failure',1,true) or line:find('missing',1,true) or line:find('stopped',1,true) then log(line) end
     end
     local world_probe=HUD.world_probe.new(sr,research_log)
-    local world_display=HUD.scene_test.new(sr,research_log)
+    local world_display=HUD.scene_test.new(sr,research_log,nil,hot_panel_art)
     local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log,hot_panel_art)
     do
         local available,total=0,0
@@ -18787,12 +20212,13 @@ function M.start(sr,backend,options)
     local menu
     function self.configure(values)
         local was_debug=self.config.debug_logging
-        HUD.config.apply(self.config,values);self.appearance_revision=(self.appearance_revision or 0)+1;self.config.placement_mode='auto';self.config.show_3d='aiming'
+        if HUD.config.apply(self.config,values)then self.texture_styles_dirty=true end;self.appearance_revision=(self.appearance_revision or 0)+1;self.config.placement_mode='auto';self.config.show_3d='aiming'
         if self.config.debug_logging and not was_debug then research_snapshot() end
         if menu then menu.sync() end
     end
-    function self.appearance_weapon()return appearance_selection or (model and model.resource_hex) end
+    function self.appearance_weapon()if self.config.appearance_follow_equipped~=false then return model and model.resource_hex end;return appearance_selection or (model and model.resource_hex)end
     function self.select_appearance_weapon(resource)
+        self.config.appearance_follow_equipped=false
         assert(resource and HUD.weapon_names[resource],'Unknown weapon');appearance_selection=resource
         self.appearance_revision=(self.appearance_revision or 0)+1
     end
@@ -18802,6 +20228,8 @@ function M.start(sr,backend,options)
         sample.resource_hex=resource;return sample
     end
     function self.faithful_status(resource)
+        local selected=HUD.config.effective(self.config,resource)
+        if selected.texture_art_trial~=false and selected.texture_art_variant=='faithful' and selected.mechanical_art_enabled~=false and HUD.mechanical_art.enabled and HUD.mechanical_art.layouts[resource] then return 'HUD Texture: '..(HUD.mechanical_art.status[resource] or 'awaiting visible weapon sample') end
         local cfg=HUD.config.effective(self.config,resource);local art=HUD.faithful_fragment_assets and HUD.faithful_fragment_assets[resource]
         if not cfg.texture_art_trial or cfg.texture_art_variant~='faithful' then return 'Faithful inactive: selected alternative / artwork disabled' end
         if not art then return 'No fragment adapter: existing native art / original rendering' end
@@ -18825,6 +20253,11 @@ function M.start(sr,backend,options)
     function self.equipped_resource()return latest_raw and latest_raw.resource_hex end
     function self.shader_status()
         local cfg=HUD.config.effective(self.config,self.appearance_weapon())
+        if cfg.shader_layers~=nil then
+            local status=HUD.shader_layers.status(cfg,sr.Application.can_get)
+            local note=HUD.screen_scene.shader_layer_status and HUD.screen_scene.shader_layer_status[self.appearance_weapon()]
+            return status..(note and ('; '..note)or '')
+        end
         local function state(key)
             local selected=cfg[key] or (key=='theme_shader' and 'auto' or 'none')
             if selected=='auto' then return 'automatic weapon theme (may use plain fill)' end
@@ -18837,9 +20270,13 @@ function M.start(sr,backend,options)
         end
         return 'Theme: '..state('theme_shader')..'; Effects: '..state('effect_shader')..(not cfg.effect_scanlines and not cfg.effect_sweep and ' [inactive: enable Scanlines or Sweep]' or '')..(self.config.anchor_mode~='world' and ' [3D renderer only; 2D preview uses normal fill]' or '')
     end
+    function self.follow_equipped_appearance(enabled)
+        self.config.appearance_follow_equipped=enabled~=false;if enabled then appearance_selection=nil end;self.appearance_revision=(self.appearance_revision or 0)+1
+    end
     function self.panel_settings(resource)
         resource=resource or self.appearance_weapon()
         local cfg=HUD.config.effective(self.config,resource)
+        if self.config.hud_presentation~='practical'and HUD.config.segmented_eligible(cfg,resource)then return HUD.config.segmented_appearance(cfg,resource)end
         local selected_model=self.appearance_model(resource)
         -- Read the actual themed commands; fetching is presentation-only, never a save.
         local commands=compose(selected_model,0,0,2,1,cfg,self.clock)
@@ -18854,13 +20291,22 @@ function M.start(sr,backend,options)
             if not v or not v.c then return fallback end
             return string.format('#%02X%02X%02X',math.max(0,math.min(255,math.floor(v.c[1]+.5))),math.max(0,math.min(255,math.floor(v.c[2]+.5))),math.max(0,math.min(255,math.floor(v.c[3]+.5))))
         end
-        cfg.background_color=color(frame,cfg.background_color)
-        cfg.text_color=color(ink,cfg.text_color)
-        cfg.decoration_color=color(border,cfg.decoration_color)
-        if frame then cfg.panel_opacity=frame.a or cfg.panel_opacity;cfg.frosted=frame.frosted==true end
+        -- Explicit saved colors are authoritative. Texture bounds often use an
+        -- invisible black frame, which is geometry metadata rather than a palette.
+        local own=cfg.weapon_panel_overrides or {}
+        if own.background_color==nil and frame and (frame.a or 0)>0 then cfg.background_color=color(frame,cfg.background_color)end
+        if own.text_color==nil then cfg.text_color=color(ink,cfg.text_color)end
+        if own.decoration_color==nil then cfg.decoration_color=color(border,cfg.decoration_color)end
+        -- Opacity is authoritative configuration, not a themed frame alpha.
+        if frame then cfg.frosted=frame.frosted==true end
         return cfg
     end
     function self.configure_panel(values,resource)
+        resource=resource or self.appearance_weapon()
+        if type(values)=='table'and self.config.hud_presentation~='practical'and HUD.config.segmented_eligible(self.config,resource)then
+            local aliases={text_color='segmented_text_color',background_color='segmented_background_color',decoration_color='segmented_ui_color'}
+            local mapped={};for k,v in pairs(values)do mapped[aliases[k]or k]=v end;values=mapped
+        end
         HUD.config.set_panel(self.config,resource or self.appearance_weapon(),values);self.appearance_revision=(self.appearance_revision or 0)+1
     end
     function self.export_tuning() return HUD.config.serialize(self.config) end
@@ -18868,14 +20314,27 @@ function M.start(sr,backend,options)
         if not backend.write_tuning then self.tuning_status='file writer unavailable';return false end
         local ok,result=pcall(backend.write_tuning,self.export_tuning())
         self.tuning_status=ok and ('saved '..result) or tostring(result)
-        if not ok then log('TUNING '..self.tuning_status) end
+        if not ok then log('TUNING '..self.tuning_status)else self.texture_styles_dirty=false end
         return ok,result
     end
     function self.reload_tuning()
         if not backend.read_tuning then return false end
-        local ok,result=pcall(function()local values=backend.read_tuning();if values then self.configure(values) end;return values~=nil end)
+        local ok,result=pcall(function()
+            local values=backend.read_tuning()
+            if values then
+                if options and options.disable_segmented_fancy then
+                    -- Turning off the experiment must not rewrite saved appearance.
+                    HUD.config.apply(self.config,values,true)
+                    self.config.segmented_fancy=false
+                    self.appearance_revision=(self.appearance_revision or 0)+1
+                else self.configure(values)end
+            end
+            return values~=nil
+        end)
         self.tuning_status=ok and (result and 'loaded tuning file' or 'defaults; no tuning file') or tostring(result)
-        log('TUNING '..self.tuning_status);return ok and result
+        log('TUNING '..self.tuning_status)
+        if ok and result and self.texture_styles_dirty then local saved,why=self.save_tuning();if not saved then self.tuning_status=tostring(why);return false end end
+        return ok and result
     end
     self.reload_tuning()
     self.weapon_clearance=HUD.weapon_offsets.load(backend,log)
@@ -19036,6 +20495,13 @@ function M.start(sr,backend,options)
             end -- Returning to the gun between throws is not another pickup.
             self.sample_weapon=raw and raw.resource_hex
             latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);if model then model.charge_sample_clock=self.clock;model.charge_frame_delay=self.railgun_frame_delay;model.snow_party=raw.resource_hex=='ccfae6d4a601c741' and (self.snowball_pickups or 0)>=3;if raw.resource_hex=='ccfae6d4a601c741' and not model.snow_party then model=nil end end;self.status=reader.status
+            if self.config.debug_logging and self.config.segmented_fancy and self.segmented_seen then
+                local sig=tostring(raw~=nil)..':'..tostring(model~=nil)..':'..tostring(reader.status)
+                if sig~=self.segmented_sample_signature and (self.segmented_sample_traces or 0)<80 then
+                    self.segmented_sample_signature=sig;self.segmented_sample_traces=(self.segmented_sample_traces or 0)+1
+                    log('SEGMENTED_SAMPLE raw='..tostring(raw~=nil)..' model='..tostring(model~=nil)..' reader='..tostring(reader.status))
+                end
+            end
             if raw and raw.resource_hex=='e8d5f49ad7780e54' and raw.binding then
                 self.epoch_probe_start=self.epoch_probe_start or self.clock
                 if self.clock-self.epoch_probe_start<300 and (self.epoch_probe_count or 0)<200 and self.clock>=(self.epoch_probe_next or 0) then
@@ -19161,7 +20627,10 @@ function M.start(sr,backend,options)
         -- Screen GUI coordinates use Gui.resolution(), not the output back buffer.
         -- Upscaling can make the latter larger and displace the whole hybrid panel.
         if type(w)~='number' or type(h)~='number' or w<=0 or h<=0 then view.clear();return end
-        if w~=width or h~=height then motion.ready=false;attached.ready=false;width,height=w,h end
+        if w~=width or h~=height then
+            motion.ready=false;attached.ready=false;width,height=w,h
+            self.texture_projection_map=nil;self.texture_xy_checks=0
+        end
         if model and not provider and self.clock>=manual_until then
             local point=native.poll()
             if point then anchor=point;anchor_at=self.clock;anchor_source='native crosshair' end
@@ -19232,6 +20701,13 @@ function M.start(sr,backend,options)
         local wanted=visible and 1 or 0
         alpha=wanted+(alpha-wanted)*math.exp(-math.min(dt,0.35)/(visible and 0.06 or 0.10))
         self.opacity=alpha;self.motion_x=x;self.motion_y=y
+        if self.config.debug_logging and self.config.segmented_fancy and self.segmented_seen then
+            local reason=not model and 'no-model'or alpha<.01 and 'alpha-zero'or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex)and 'blacklisted'or 'ready'
+            if reason~=self.segmented_visibility_reason and (self.segmented_visibility_traces or 0)<80 then
+                self.segmented_visibility_reason=reason;self.segmented_visibility_traces=(self.segmented_visibility_traces or 0)+1
+                log('SEGMENTED_VISIBILITY '..reason..' visible='..tostring(visible)..' hidden='..tostring(self.hidden)..' alpha='..tostring(alpha)..' pose='..tostring(self.weapon_pose~=nil))
+            end
+        end
         if self.config.debug_logging then
         local diagnostic=self.status..' | '..self.anchor_status..' | '..(view.material_status or 'material not sampled')..' | font: '..self.config.font
         if self.clock>=next_log then
@@ -19246,11 +20722,15 @@ function M.start(sr,backend,options)
         if self.frame_stage==4 then return end
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
-        if model.resource_hex=='4dbd74f49c8ffc13' then
+        if model.resource_hex=='72170a55a1f37ff1' or HUD.ballistic_family.specs[model.resource_hex] then
+            model.compass_heading=HUD.compass.heading(projection.camera_matrix)
+        elseif model.resource_hex=='4dbd74f49c8ffc13' or (HUD.mechanical_art.layouts[model.resource_hex] and HUD.mechanical_art.layouts[model.resource_hex].zones.compass) then
             local matrix=self.weapon_pose and self.weapon_pose.matrix
             model.compass_heading=matrix and (math.deg(math.atan2(matrix[5],matrix[6]))%360) or nil
         end
+        model.chamber_rounds=(latest_raw or {}).chamber_rounds
         local aiming=HUD.camera_mode.read_aiming(backend,latest_raw)
+        self.presentation_view,self.presentation_status=HUD.view_presentation.select(native_first,aiming,self.config.hud_presentation)
         local aim_opacity=1
         if self.config.fade_3d_unless_aiming then
             local wanted=aiming==true and 1 or 0
@@ -19258,9 +20738,29 @@ function M.start(sr,backend,options)
             aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
         end
         self.aim_opacity=aim_opacity
+        -- Presentation selects artwork; the requested WorldGUI placement must
+        -- reach the weapon renderer even when Automatic selects practical art.
+        if self.presentation_view=='third' and self.config.anchor_mode~='world' then
+            world_display.release();if screen_scene then screen_scene.release()end
+            local cfg=HUD.config.effective(self.config,model.resource_hex);cfg.presentation_view='third'
+            local unit=h/1080;local scale=unit*self.config.scale*self.config.third_person_scale
+            local px=w/2+(self.config.offset_x+(self.motion_x or 0))*unit
+            local py=h/2+(self.config.offset_y+(self.motion_y or 0))*unit
+            px=math.max(4*unit,math.min(w-64*scale-4*unit,px));py=math.max(4*unit,math.min(h-86*scale-4*unit,py))
+            local commands=compose(model,px,py,scale,alpha*aim_opacity,cfg,self.clock)
+            for _,v in ipairs(screen_overlay(w,h))do commands[#commands+1]=v end
+            view.draw(commands);self.anchor_status=use_weapon and 'weapon-attached Simple HUD' or 'floating Simple HUD';return
+        end
         if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
             local world_config=HUD.config.effective(self.config,model.resource_hex)
+            world_config.presentation_view=self.presentation_view
             world_config.scale=self.config.scale*(self.profile_scale or 1)
+            if self.presentation_view=='third' then
+                world_config.scale=world_config.scale*self.config.third_person_scale
+                world_config.style_3d='standard';world_config.shader_layers={}
+                world_config.theme_shader='none';world_config.effect_shader='none'
+                world_config.effect_scanlines=false;world_config.effect_sweep=false;world_config.effect_flicker=false
+            end
             local appearance_id=(model.resource_hex or '')..'/'..tostring(self.appearance_revision or 0)
             if appearance_id~=self.logged_appearance then
                 self.logged_appearance=appearance_id
@@ -19280,18 +20780,78 @@ function M.start(sr,backend,options)
             local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock,nil,true)
             local f=world_commands[1];local left,bottom=f.x,f.y
             M.rebase_commands(world_commands,left,bottom)
+            local textured=false;for _,command in ipairs(world_commands)do if command.type=='texture'then textured=true;break end end
+            local texture_route=table.concat({tostring(textured),tostring(world_config.presentation_view),tostring(world_config.texture_art_variant),tostring(world_config.texture_art_trial)},':')
+            if self.texture_route~=texture_route then
+                self.texture_route=texture_route
+                log('HUD_TEXTURE_ROUTE '..texture_route..' compositor='..tostring(f.hud_texture_primary)..' projection_units_fix=2')
+            end
+            if textured and projection.native_point then
+                local output_width,output_height=sr.Application.back_buffer_size()
+                if output_width~=self.texture_output_width or output_height~=self.texture_output_height then
+                    self.texture_projection_map=nil;self.texture_xy_checks=0
+                    self.texture_output_width,self.texture_output_height=output_width,output_height
+                end
+                self.texture_projection_map=self.texture_projection_map or HUD.projection.native_coordinate_map(output_width,output_height)
+                local _,at=HUD.screen_scene.panel_pose(self.weapon_pose,world_config,world_commands)
+                local point=projection.native_point(at.x,at.y,at.z)
+                local camera=projection.camera_matrix
+                local native_state=point and 'projected' or tostring(projection.native_status)..'; '..tostring(projection.status)
+                if self.texture_native_state~=native_state and (self.texture_native_checks or 0)<8 then
+                    self.texture_native_state=native_state;self.texture_native_checks=(self.texture_native_checks or 0)+1
+                    log('HUD_TEXTURE_NATIVE_STATE '..native_state)
+                end
+                if point and point.depth>0 and point.depth<10000 then
+                    if camera and not self.texture_depth_calibrated then
+                        local manual=(at.x-camera[13])*camera[5]+(at.y-camera[14])*camera[6]+(at.z-camera[15])*camera[7]
+                        self.texture_depth_calibrated=math.abs(point.depth-manual)<.002+math.abs(manual)*.002
+                        if (self.texture_depth_checks or 0)<3 then
+                            self.texture_depth_checks=(self.texture_depth_checks or 0)+1
+                            log(string.format('HUD_TEXTURE_NATIVE_DEPTH normalized=%.6f metres=%.6f manual=%.6f metres_verified=%s',point.native_depth or 0,point.depth,manual,tostring(self.texture_depth_calibrated)))
+                        end
+                    end
+                    if camera and self.texture_projection_map and (self.texture_xy_checks or 0)<3 then
+                        local dx,dy,dz=at.x-camera[13],at.y-camera[14],at.z-camera[15]
+                        local d=dx*camera[5]+dy*camera[6]+dz*camera[7];local tan=math.tan(projection.camera_fov*.5)
+                        if d>0 then
+                            local mx=.5+.5*(dx*camera[1]+dy*camera[2]+dz*camera[3])/(d*tan*(w/h))
+                            local my=.5+.5*(dx*camera[9]+dy*camera[10]+dz*camera[11])/(d*tan)
+                            local map=self.texture_projection_map
+                            local error=math.abs(point.x*map.sx-mx)+math.abs(point.y*map.sy-my)
+                            self.texture_xy_checks=(self.texture_xy_checks or 0)+1
+                            log(string.format('HUD_TEXTURE_NATIVE_XY native=%.6f,%.6f manual=%.6f,%.6f error=%.6f space=%s gui=%dx%d output=%dx%d verified=%s',point.x,point.y,mx,my,error,map.space,w,h,output_width,output_height,tostring(error<.004)))
+                        end
+                    end
+                    world_config.world_texture_depth=point.depth
+                end
+                -- The wrapper owns recoil/dive offsets. A still-frame comparison
+                -- is diagnostic only; it must not disable a HUD loaded mid-shot.
+                if self.texture_projection_map and point then
+                    local map=self.texture_projection_map
+                    world_config.native_panel_projector=function(x,y,z)
+                        local q=projection.native_point(x,y,z);if not q then return nil end
+                        return HUD.projection.normalize_native_point(q,map)
+                    end
+                end
+            end
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
-                projection.camera_matrix,projection.camera_fov,w,h,projection.camera_near) then
-                world_display.release();view.draw(screen_overlay(w,h));self.anchor_status='screen-projected scene-depth HUD';return
+                projection.camera_matrix or (world_config.native_panel_projector and projection.depth_camera_matrix),
+                projection.camera_fov or projection.native_fov,w,h,projection.camera_near or projection.native_near) then
+                world_display.release();view.draw(screen_overlay(w,h));self.anchor_status='screen-projected scene-depth HUD';self.world_fallback_reason=nil;return
             end
             if screen_scene then screen_scene.release() end
             if world_display.draw(self.weapon_pose,world_config,nil,dt,nil,world_commands) then
                 view.draw(screen_overlay(w,h))
-                self.anchor_status='weapon 3D WorldGUI';return
+                self.anchor_status='weapon 3D WorldGUI';self.world_fallback_reason=nil;return
             end
         end
         world_display.release()
         if screen_scene then screen_scene.release() end
+        if self.config.anchor_mode=='world' then
+            local reason=self.weapon_pose and 'weapon render path unavailable' or ('weapon pose unavailable: '..tostring(self.pose_status))
+            self.anchor_status='WorldGUI screen fallback: '..reason
+            if self.world_fallback_reason~=reason then log('WORLDGUI_FALLBACK '..reason);self.world_fallback_reason=reason end
+        else self.world_fallback_reason=nil end
         if aim_opacity<.01 then view.draw(screen_overlay(w,h));return end
         local s=h/1080
         local offset_x,offset_y=self.config.offset_x,self.config.offset_y
@@ -19317,6 +20877,14 @@ function M.start(sr,backend,options)
         end
         if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
         local screen_config=HUD.config.effective(self.config,model.resource_hex)
+        screen_config.presentation_view=self.presentation_view
+        if self.presentation_view~='third'and HUD.config.segmented_eligible(screen_config,model.resource_hex)then screen_config=HUD.config.segmented_appearance(screen_config,model.resource_hex)end
+        if self.presentation_view=='third' then
+            scale=scale*self.config.third_person_scale
+            screen_config.style_3d='standard';screen_config.shader_layers={}
+            screen_config.theme_shader='none';screen_config.effect_shader='none'
+            screen_config.effect_scanlines=false;screen_config.effect_sweep=false;screen_config.effect_flicker=false
+        end
         screen_config.senator_style='upright' -- Also covers a failed WorldGUI falling back to screen.
         local commands=compose(model,x,y,scale,alpha*aim_opacity,screen_config,self.clock)
         local frame=commands[1]
@@ -19348,7 +20916,9 @@ function M.start(sr,backend,options)
 
     frame_trial=options and options.frame_trial and {elapsed=0,phase=1,frames=0,max=0,over33=0,over50=0,total=0,cpu_max=0,buckets={}} or nil
     if frame_trial then profile=nil end
+    local control_requests=HUD.control_requests.new(self,assert(os.getenv('LOCALAPPDATA'))..'/DBF')
     function self.tick(dt)
+        if not retired then control_requests.poll()end
         if frame_trial and not retired then
             local t=frame_trial;local delta=math.max(0,dt or 0)
             local eligible=self.first_person and (self.opacity or 0)>.9 and self.sample_weapon
@@ -19449,9 +21019,10 @@ function M.start(sr,backend,options)
         if cleaned then return end
         cleaned=true
         if texture_swaps then texture_swaps.close()end
+        if backend.close and hot_panel_art.after_close then hot_panel_art.after_close(function()pcall(backend.close)end)end
         hot_panel_art.close()
         retired=true;menu.retire();if depth_marker then pcall(depth_marker.release) end;if screen_scene then pcall(screen_scene.release) end;pcall(bone_marker.release);pcall(world_display.release);pcall(world_probe.release);pcall(view.release)
-        if backend.close then pcall(backend.close) end
+        if backend.close and not hot_panel_art.after_close then pcall(backend.close) end
         if not managed then
             if rawget(_G,'update')==wrapper then rawset(_G,'update',original) end
             if rawget(_G,'shutdown')==shutdown_wrapper then rawset(_G,'shutdown',shutdown) end
@@ -19488,9 +21059,14 @@ return {
         assert(ctx.api==2 and type(ctx.on_cleanup)=='function' and type(ctx.global)=='function','MDL API 2 required')
         local sr=assert(rawget(_G,'stingray'),'stingray missing')
         local backend=HUD.memory.native()
+        local settings_ok,previous_settings=pcall(backend.read_tuning)
         local started=false
         ctx.on_cleanup(function() disable();if not started and backend.close then backend.close() end end)
-        hud=HUD.runtime.start(sr,backend,{managed=true,screen_bone_hud=false,frame_trial=false})
+        hud=HUD.runtime.start(sr,backend,{managed=true,screen_bone_hud=false,frame_trial=false,disable_segmented_fancy=true})
+        if settings_ok and previous_settings and previous_settings.segmented_fancy==true then
+            local saved,why=hud.save_tuning()
+            ctx.log('Fancy segmentation disabled; HUD Texture restored: '..tostring(saved)..(why and (' '..tostring(why))or ''))
+        end
         if backend.log then backend.log('GLYPH_REUSE_BUILD 20261003-NATIVE-RENDER-STATS local only read-only profiler statistics') end
         if backend.log then
             local available=0

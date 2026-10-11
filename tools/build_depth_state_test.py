@@ -112,7 +112,7 @@ def build(control=False, enable_depth=False):
                 'Name': 'DBF-HUD WorldGUI Depth Probe 0.3' if enable_depth else 'DBF-HUD Shader Loader Control 0.2',
                 'Description': 'Isolated depth-enable probe on the verified loader control.' if enable_depth else 'Loader-only baseline; depth disabled.',
                 'Options': [{'Name': 'Shader loader control', 'Include': ['DepthState']}]}
-    output = ROOT.parent / ('DBF-HUD-WorldGUI-Depth-Probe-0.3.zip' if enable_depth else 'DBF-HUD-Shader-Loader-Control-0.2.zip')
+    output = ROOT / 'releases' / ('DBF-HUD-WorldGUI-Depth-Probe-0.3.zip' if enable_depth else 'DBF-HUD-Shader-Loader-Control-0.2.zip')
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
         archive.writestr('manifest.json', json.dumps(manifest, indent=2))
         stem = 'DepthState/ee6b1ba7e22d71ed.patch_0'

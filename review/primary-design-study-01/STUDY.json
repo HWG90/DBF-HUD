@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-10",
+  "scope": "primary weapons first",
+  "first_weapon": { "name": "AR-23 Liberator", "resource_hex": "968211c0033dce64" },
+  "status": "initial comparison preserved; Open selected for the next primary study",
+  "feedback": { "Receiver": "liked", "Open": "liked; selected with variable background translucency", "Dial": "unusual; not rejected" },
+  "designs": ["Receiver", "Open", "Dial"],
+  "sample_values_are_weapon_defaults": false,
+  "runtime_integrated": false,
+  "installed": false,
+  "live_visual_verified": false,
+  "existing_designs_preserved_as_fallback": true
+}

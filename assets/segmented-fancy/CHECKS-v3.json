@@ -1,0 +1,12 @@
+{
+  "source_polygons_exact": true,
+  "no_active_inset": true,
+  "compound_caps_checked": 8,
+  "active_mode_outline_and_underline_one_image": true,
+  "rgba_bytes_verified": true,
+  "preview_from_runtime_commands": true,
+  "label_preview": "Exact retained native BigBlue and Hack atlases and live metrics",
+  "font_package": "releases/DBF-HUD-Native-Fonts-0.1.zip",
+  "art_image_budget": 20,
+  "four_shader_layers_fit": true
+}

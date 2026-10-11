@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DBF HUD â€” Primaries / First study</title>
+<style>
+:root{color-scheme:dark;--paper:#101416;--ink:#ecede7;--muted:#a2acae;--line:#333d40;--accent:#d5c487}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 'Segoe UI',sans-serif}main{max-width:1440px;margin:auto;padding:42px 40px 32px}header{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;border-bottom:1px solid var(--line);padding-bottom:26px}.eyebrow{font:11px/1.4 Consolas,monospace;letter-spacing:.16em;color:var(--accent);text-transform:uppercase}h1{font-size:clamp(32px,4.5vw,60px);line-height:1;margin:12px 0 0;font-weight:600;letter-spacing:-.05em}header p{margin:0;color:var(--muted);max-width:360px}.intro{max-width:720px;color:var(--muted);margin:24px 0 22px}.toolbar{display:flex;align-items:flex-end;flex-wrap:wrap;gap:16px 22px;padding-bottom:28px}label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}button,select{font:14px 'Segoe UI',sans-serif;color:var(--ink);background:#1c2529;border:1px solid #455053;border-radius:3px;padding:9px 12px;min-height:40px}button:hover,select:hover{background:#273338}button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button:disabled{opacity:.45}.sample{font:13px Consolas,monospace;color:var(--muted);margin-left:auto;align-self:center}.studies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.study{min-width:0}.study-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding-bottom:12px}.study-head h2{font-size:19px;font-weight:500;margin:0;letter-spacing:-.02em}.number{font:12px Consolas,monospace;color:var(--muted)}.stage{height:280px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 70% 10%,#40564c99,transparent 55%),linear-gradient(158deg,#171f1f,#26362b 48%,#131a1f);border:1px solid #45505333}.stage:before{content:'';position:absolute;inset:0;background:linear-gradient(26deg,transparent 38%,#0003 39%,transparent 58%);pointer-events:none}.stage svg{position:relative;width:100%;height:auto;max-height:230px;overflow:visible}.stage.light{background:radial-gradient(ellipse at 25% 35%,#c6c4ac,#909e8c 70%,#677770)}.stage.busy{background:repeating-linear-gradient(130deg,#384b41 0px,#384b41 17px,#1d2926 18px,#1d2926 40px,#5a5d4040 41px,#5a5d4040 57px),#273932}.caption{padding-top:16px;color:var(--muted);font-size:13px}.caption strong{color:var(--ink);font-weight:500}.caption p{margin:0 0 7px}.rank{font:12px/1.6 Consolas,monospace;color:var(--accent)}footer{display:flex;gap:30px;justify-content:space-between;border-top:1px solid var(--line);padding-top:24px;margin-top:34px;color:var(--muted);font-size:12px}footer p{margin:0;max-width:620px}footer a{color:var(--accent)}.hud-label{font:11px Consolas,monospace;letter-spacing:.08em}.hud-count{font-family:'Segoe UI',sans-serif;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.06em}.hud-mono{font-family:Consolas,monospace;font-variant-numeric:tabular-nums}.stroke{vector-effect:non-scaling-stroke}.a-alert{fill:#ffbf69}.b-alert{fill:#ffd19a}.c-alert{fill:#ffba6a}@media(max-width:1000px){main{padding:30px 24px}.studies{gap:16px}.stage{height:240px}.sample{margin-left:0}}@media(max-width:760px){header{align-items:flex-start;flex-direction:column;gap:18px}.studies{grid-template-columns:1fr}.stage{height:280px}.stage svg{max-width:420px}.toolbar{gap:12px}.sample{width:100%}footer{flex-direction:column;gap:12px}}@media(prefers-reduced-motion:no-preference){.hud-count{transition:fill .15s}}
+</style>
+</head>
+<body>
+<main>
+<header><div><div class="eyebrow">DBF / Holographic Utility Display</div><h1>Primaries, from scratch.</h1></div><p><span class="eyebrow">01 / AR-23 Liberator</span><br>Three directions. One weapon. Same sample state.</p></header>
+<p class="intro">Start with the next shot: loaded ammunition first, reserve second, mode third. These sketches explore how much structure the display needsâ€”before that structure spreads to the rest of the primaries.</p>
+<p class="intro">Selected direction: <a href="../primary-design-study-02/index.html" style="color:var(--accent)">Open with adjustable background translucency</a>. This initial comparison remains preserved.</p>
+<div class="toolbar" aria-label="Preview controls">
+<label>Weapon state<select id="state"><option value="ready">Ready</option><option value="low">Low ammunition</option><option value="empty">Empty</option><option value="unknown">Unavailable reading</option></select></label>
+<label>Fire mode<select id="mode"><option>AUTO</option><option>BURST</option><option>SEMI</option></select></label>
+<label>Readability field<select id="field"><option value="dark">Dark</option><option value="busy">Busy</option><option value="light">Light</option></select></label>
+<div class="actions"><button id="fire" type="button">Fire one</button><button id="reload" type="button">Reload</button><button id="reset" type="button">Reset sample</button></div>
+<output id="sample" class="sample" aria-live="polite">27 / 45 Â· 6 spare magazines</output>
+</div>
+<div class="studies">
+<section class="study" aria-labelledby="receiver-title">
+<div class="study-head"><h2 id="receiver-title">Receiver</h2><span class="number">A / Built into the gun</span></div>
+<div class="stage">
+<svg viewBox="0 0 360 220" role="img" aria-labelledby="a-title a-desc"><title id="a-title">Receiver concept</title><desc id="a-desc">An angular instrument with a dominant loaded count and a distinct reserve block. The opaque backing supports contrast.</desc>
+<defs><linearGradient id="receiver-surface" x2="0" y2="1"><stop stop-color="#253336"/><stop offset="1" stop-color="#10191c"/></linearGradient></defs>
+<path d="M23 40 H296 L338 81 V167 L322 183 H23 Z" fill="#000" opacity=".24" transform="translate(3 4)"/>
+<path d="M23 40 H296 L338 81 V167 L322 183 H23 Z" fill="url(#receiver-surface)" stroke="#a4b4ac" stroke-opacity=".6" class="stroke"/>
+<path d="M23 40 H88 M23 40 V57 M320 183 H287" fill="none" stroke="#d5c487" stroke-width="2" class="stroke"/>
+<text x="39" y="62" fill="#aebbb5" class="hud-label">AR-23 / LIBERATOR</text>
+<text id="a-count" x="35" y="137" font-size="79" fill="#f0f1e9" class="hud-count">27</text>
+<text x="139" y="134" fill="#aebbb5" font-size="19" class="hud-mono">/ 45</text>
+<path d="M204 72 V159" stroke="#58716a" class="stroke"/>
+<text x="222" y="87" fill="#aebbb5" class="hud-label">RESERVE</text>
+<text id="a-reserve" x="221" y="125" font-size="36" fill="#d5c487" class="hud-count">6</text>
+<text x="251" y="124" fill="#b7c0b7" class="hud-label">MAGS</text>
+<g id="a-pips" fill="#d5c487"></g>
+<path d="M39 158 H188" stroke="#47605a" class="stroke"/>
+<text id="a-status" x="39" y="174" fill="#b1beb6" class="hud-label">ROUNDS</text>
+<text id="a-mode" x="267" y="170" fill="#ced6ce" class="hud-label">AUTO</text>
+</svg></div>
+<div class="caption"><p><strong>A compact piece of weapon equipment.</strong> Hard backing, restrained brass, and separate reading zones.</p><p class="rank">Loaded â†’ reserve block â†’ mode</p></div>
+</section>
+<section class="study" aria-labelledby="open-title">
+<div class="study-head"><h2 id="open-title">Open</h2><span class="number">B / Floating readout</span></div>
+<div class="stage">
+<svg viewBox="0 0 360 220" role="img" aria-labelledby="b-title b-desc"><title id="b-title">Open concept</title><desc id="b-desc">An unframed holographic readout. Large loaded count, a short magazine gauge, and a smaller reserve number.</desc>
+<defs><filter id="open-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#06191d" flood-opacity=".9"/></filter></defs>
+<g filter="url(#open-shadow)">
+<path d="M39 63 V49 H62 M297 168 V181 H274" fill="none" stroke="#a2d4d8" stroke-width="1.2" class="stroke"/>
+<text x="56" y="61" fill="#b8d2d1" class="hud-label">AR-23</text>
+<text id="b-count" x="49" y="141" font-size="89" fill="#ebfbf5" class="hud-count">27</text>
+<text x="164" y="136" fill="#b0d2d1" font-size="20" class="hud-mono">/45</text>
+<text id="b-reserve" x="246" y="119" fill="#c3e3dc" font-size="33" class="hud-count">6</text>
+<text x="246" y="139" fill="#b8d2d1" class="hud-label">MAGS</text>
+<path d="M56 157 H196" stroke="#405e60" stroke-width="3" class="stroke"/>
+<path id="b-gauge" d="M56 157 H140" stroke="#aad7d3" stroke-width="3" class="stroke"/>
+<path d="M56 153 V161 M91 154 V160 M126 154 V160 M161 154 V160 M196 153 V161" stroke="#1b3b41" class="stroke"/>
+<text id="b-status" x="56" y="182" fill="#bbd5cf" class="hud-label">ROUNDS</text>
+<text id="b-mode" x="246" y="170" fill="#b8d2d1" class="hud-label">AUTO</text>
+</g>
+</svg></div>
+<div class="caption"><p><strong>Typography carries the display.</strong> A quiet hologram with open edges and very little permanent structure.</p><p class="rank">Loaded â†’ reserve number â†’ mode</p></div>
+</section>
+<section class="study" aria-labelledby="dial-title">
+<div class="study-head"><h2 id="dial-title">Dial</h2><span class="number">C / Magazine instrument</span></div>
+<div class="stage">
+<svg viewBox="0 0 360 220" role="img" aria-labelledby="c-title c-desc"><title id="c-title">Dial concept</title><desc id="c-desc">A circular loaded-ammunition instrument with a remaining-magazine arc and a smaller supply tab.</desc>
+<defs><linearGradient id="dial-surface" x2=".6" y2="1"><stop stop-color="#29363c"/><stop offset="1" stop-color="#111a21"/></linearGradient></defs>
+<path d="M206 81 H297 L317 101 V159 H206 Z" fill="#15212a" fill-opacity=".95" stroke="#7e9d9f" stroke-opacity=".5" class="stroke"/>
+<circle cx="137" cy="112" r="78" fill="url(#dial-surface)" stroke="#80999b" stroke-opacity=".65" class="stroke"/>
+<circle cx="137" cy="112" r="65" fill="none" stroke="#3c555d" stroke-width="5" class="stroke"/>
+<circle id="c-gauge" cx="137" cy="112" r="65" fill="none" stroke="#b8cddd" stroke-width="5" stroke-dasharray="245 409" transform="rotate(-90 137 112)" class="stroke"/>
+<path d="M137 34 V44 M59 112 H69 M137 180 V190" stroke="#bbcdd0" stroke-width="1" class="stroke"/>
+<text x="137" y="75" fill="#b7c6cd" text-anchor="middle" class="hud-label">AR-23</text>
+<text id="c-count" x="134" y="130" font-size="69" fill="#f0f0e7" text-anchor="middle" class="hud-count">27</text>
+<text id="c-status" x="137" y="152" fill="#bdcbd2" text-anchor="middle" class="hud-label">/ 45 ROUNDS</text>
+<text id="c-mode" x="137" y="171" fill="#9fbbc3" text-anchor="middle" class="hud-label">AUTO</text>
+<text x="233" y="104" fill="#a7bec6" class="hud-label">RESERVE</text>
+<text id="c-reserve" x="231" y="139" font-size="34" fill="#c7d8db" class="hud-count">6</text>
+<text x="262" y="138" fill="#a7bec6" class="hud-label">MAGS</text>
+</svg></div>
+<div class="caption"><p><strong>Ammunition has a physical instrument.</strong> The count stays central; its arc adds a quick sense of remaining load.</p><p class="rank">Loaded + remaining arc â†’ supply tab â†’ mode</p></div>
+</section>
+</div>
+<footer><p>Design exploration only. Sample ammunition, capacity, and reserves are illustrativeâ€”not weapon defaults. All three previews use the same simulated state. These are flat studies; mounting, occlusion, and in-game readability still need review.</p><p>Primaries first. Existing designs remain available as a fallback.</p></footer>
+</main>
+<script>
+(function(){
+const capacity=45, initial={count:27,reserve:6};let count=initial.count,reserve=initial.reserve;
+const state=document.getElementById('state'), mode=document.getElementById('mode');
+const set=(id,text)=>document.getElementById(id).textContent=text;
+function draw(){
+ const unavailable=count===null, low=!unavailable&&count<=9, empty=count===0;
+ const display=unavailable?'â€”':String(count), supply=unavailable?'â€”':String(reserve);
+ const label=unavailable?'NO DATA':empty?'EMPTY':low?'LOW AMMO':'ROUNDS';
+ ['a','b','c'].forEach(function(id){set(id+'-count',display);set(id+'-reserve',supply);set(id+'-mode',mode.value)});
+ set('a-status',label);set('b-status',label);set('c-status',unavailable?'NO DATA':empty?'EMPTY':low?'LOW AMMO':'/ 45 ROUNDS');
+ ['a','b','c'].forEach(function(id){document.getElementById(id+'-count').classList.toggle(id+'-alert',low);document.getElementById(id+'-status').classList.toggle(id+'-alert',low)});
+ document.getElementById('b-gauge').setAttribute('d','M56 157 H'+(56+(unavailable?0:count/capacity)*140));
+ document.getElementById('c-gauge').setAttribute('stroke-dasharray',((unavailable?0:count/capacity)*408.4)+' 409');
+ document.getElementById('c-gauge').setAttribute('stroke',low?'#ffba6a':'#b8cddd');
+ const pips=document.getElementById('a-pips');pips.replaceChildren();
+ for(let i=0;i<6;i++){const p=document.createElementNS('http://www.w3.org/2000/svg','rect');p.setAttribute('x',222+i*12);p.setAttribute('y',139);p.setAttribute('width',7);p.setAttribute('height',12);p.setAttribute('opacity',unavailable||i>=reserve?'.15':'.8');pips.appendChild(p)}
+ set('sample',unavailable?'Unavailable readings stay unknown':count+' / '+capacity+' Â· '+reserve+' spare magazines');
+ document.getElementById('fire').disabled=unavailable||empty;
+ document.getElementById('reload').disabled=unavailable||reserve===0||count===capacity;
+}
+state.addEventListener('change',function(){count=state.value==='unknown'?null:state.value==='empty'?0:state.value==='low'?5:initial.count;reserve=initial.reserve;draw()});
+mode.addEventListener('change',draw);
+document.getElementById('field').addEventListener('change',function(){const v=this.value;document.querySelectorAll('.stage').forEach(function(el){el.classList.toggle('light',v==='light');el.classList.toggle('busy',v==='busy')})});
+document.getElementById('fire').addEventListener('click',function(){if(count!==null&&count>0){count--;state.value=count===0?'empty':count<=9?'low':'ready';draw()}});
+document.getElementById('reload').addEventListener('click',function(){if(count!==null&&reserve>0&&count<capacity){count=capacity;reserve--;state.value='ready';draw()}});
+document.getElementById('reset').addEventListener('click',function(){count=initial.count;reserve=initial.reserve;state.value='ready';mode.value='AUTO';draw()});
+draw();
+})();
+</script>
+</body>
+</html>

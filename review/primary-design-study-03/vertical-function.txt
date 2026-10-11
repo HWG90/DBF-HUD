@@ -1,0 +1,23 @@
+ function svgFor(reading,translucent,prefix){
+  const unknown=reading.count===null, empty=reading.count===0, low=!unknown&&reading.count/reading.capacity<=.2;
+  const countText=unknown?'â€”':String(reading.count), reserveText=unknown?'â€”':String(reading.reserve);
+  const status=unknown?'NO DATA':empty?'EMPTY':low?'LOW AMMO':'';
+  const ink=low?'#ffd19a':'#ebfbf5', fraction=unknown?0:Math.min(1,Math.max(0,reading.count/reading.capacity));
+  const alpha=1-Math.min(100,Math.max(0,Number(translucent)))/100;
+  const countSize=countText.length>2?Math.max(24,205/countText.length):89;
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 278" width="190" height="278" role="img" aria-label="Vertical Open ammunition display: '+escapeText(countText)+' loaded; '+escapeText(reserveText)+' '+escapeText(reading.unit)+'; '+escapeText(status||reading.mode)+'"><style>.label{font:11px Consolas,monospace;letter-spacing:.08em}.count{font-family:Segoe UI,sans-serif;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.06em}.mono{font-family:Consolas,monospace}.stroke{vector-effect:non-scaling-stroke}</style>'+
+   '<defs><filter id="'+prefix+'-shadow" x="-35%" y="-30%" width="170%" height="160%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#06191d" flood-opacity=".9"/></filter></defs>'+
+   '<path data-backing="true" d="M31 28 H141 L156 43 V244 H46 L31 229 Z" fill="#091619" opacity="'+alpha.toFixed(2)+'"/>'+
+   '<g data-foreground="true" filter="url(#'+prefix+'-shadow)">'+
+   '<path d="M31 47 V28 H55 M156 225 V244 H132" fill="none" stroke="#a2d4d8" stroke-width="1.2" class="stroke"/>'+
+   '<text x="94" y="46" fill="#b8d2d1" text-anchor="middle" class="label">AR-23</text>'+
+   '<text x="92" y="122" font-size="'+countSize+'" fill="'+ink+'" text-anchor="middle" class="count">'+escapeText(countText)+'</text>'+
+   '<text x="94" y="146" fill="#b0d2d1" font-size="18" text-anchor="middle" class="mono">/ '+(unknown?'â€”':escapeText(reading.capacity))+'</text>'+
+   '<path d="M48 161 H140" stroke="#405e60" stroke-width="3" class="stroke"/>'+
+   '<path d="M48 161 H'+(48+fraction*92).toFixed(2)+'" stroke="'+(low?'#ffd19a':'#aad7d3')+'" stroke-width="3" class="stroke"/>'+
+   '<path d="M48 157 V165 M71 158 V164 M94 158 V164 M117 158 V164 M140 157 V165" stroke="#1b3b41" class="stroke"/>'+
+   '<text x="94" y="184" fill="'+(low?'#ffd19a':'#bbd5cf')+'" text-anchor="middle" class="label">'+status+'</text>'+
+   '<text x="78" y="215" fill="#c3e3dc" font-size="33" text-anchor="end" class="count">'+escapeText(reserveText)+'</text>'+
+   '<text x="93" y="213" fill="#b8d2d1" class="label">'+escapeText(reading.unit)+'</text>'+
+   '<text x="94" y="236" fill="#b8d2d1" text-anchor="middle" class="label">'+escapeText(reading.mode)+'</text></g></svg>';
+ }

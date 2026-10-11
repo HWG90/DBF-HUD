@@ -1,0 +1,64 @@
+{
+  "scope": "Review-only primary instrument digit alternatives",
+  "source_references": [
+    "codex-clipboard-5e525488-fdda-4374-8495-4fc60541f998.png",
+    "codex-clipboard-ef3449e9-e592-413a-84c8-93ff2a3c6369.png"
+  ],
+  "styles": [
+    "24 triangular cells",
+    "restrained slanted LED"
+  ],
+  "core_frame": [
+    174,
+    304
+  ],
+  "study04_loaded_height": 89,
+  "loaded_height": 78,
+  "counter_reduction_percent": 12.35955056179775,
+  "leading_zero_alpha": 0.14,
+  "backing_independent": true,
+  "rectangular_backing": true,
+  "complete_ten_digit_atlases": true,
+  "atlas": {
+    "size": [
+      960,
+      384
+    ],
+    "cell": [
+      80,
+      128
+    ],
+    "rows": [
+      "white",
+      "gold",
+      "red"
+    ],
+    "columns": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "dash",
+      "ghost"
+    ]
+  },
+  "future_render_contract": "One cached atlas image per glyph; no per-facet runtime primitives",
+  "runtime_integrated": false,
+  "installed": false,
+  "checks": [
+    "24 facets",
+    "10 distinct digits per style",
+    "foreground identical at all backing opacity",
+    "027 and 046 full panels",
+    "native-style chamber count preserved",
+    "refill clears loaded-only empty animation",
+    "reduced motion steady",
+    "unknown dashes"
+  ]
+}

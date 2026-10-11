@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220"><style>.hud-label{font:11px Consolas,monospace;letter-spacing:.08em}.hud-count{font-family:Segoe UI,sans-serif;font-weight:600;letter-spacing:-.06em}.hud-mono{font-family:Consolas,monospace}.stroke{vector-effect:non-scaling-stroke}</style><title id="a-title">Receiver concept</title><desc id="a-desc">An angular instrument with a dominant loaded count and a distinct reserve block. The opaque backing supports contrast.</desc>
+<defs><linearGradient id="receiver-surface" x2="0" y2="1"><stop stop-color="#253336"/><stop offset="1" stop-color="#10191c"/></linearGradient></defs>
+<path d="M23 40 H296 L338 81 V167 L322 183 H23 Z" fill="#000" opacity=".24" transform="translate(3 4)"/>
+<path d="M23 40 H296 L338 81 V167 L322 183 H23 Z" fill="url(#receiver-surface)" stroke="#a4b4ac" stroke-opacity=".6" class="stroke"/>
+<path d="M23 40 H88 M23 40 V57 M320 183 H287" fill="none" stroke="#d5c487" stroke-width="2" class="stroke"/>
+<text x="39" y="62" fill="#aebbb5" class="hud-label">AR-23 / LIBERATOR</text>
+<text id="a-count" x="35" y="137" font-size="79" fill="#f0f1e9" class="hud-count">27</text>
+<text x="139" y="134" fill="#aebbb5" font-size="19" class="hud-mono">/ 45</text>
+<path d="M204 72 V159" stroke="#58716a" class="stroke"/>
+<text x="222" y="87" fill="#aebbb5" class="hud-label">RESERVE</text>
+<text id="a-reserve" x="221" y="125" font-size="36" fill="#d5c487" class="hud-count">6</text>
+<text x="251" y="124" fill="#b7c0b7" class="hud-label">MAGS</text>
+<g fill="#d5c487"><rect x="222" y="139" width="7" height="12" opacity=".8"/><rect x="234" y="139" width="7" height="12" opacity=".8"/><rect x="246" y="139" width="7" height="12" opacity=".8"/><rect x="258" y="139" width="7" height="12" opacity=".8"/><rect x="270" y="139" width="7" height="12" opacity=".8"/><rect x="282" y="139" width="7" height="12" opacity=".8"/></g>
+<path d="M39 158 H188" stroke="#47605a" class="stroke"/>
+<text id="a-status" x="39" y="174" fill="#b1beb6" class="hud-label">ROUNDS</text>
+<text id="a-mode" x="267" y="170" fill="#ced6ce" class="hud-label">AUTO</text>
+</svg>

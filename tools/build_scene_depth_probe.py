@@ -121,7 +121,7 @@ def build(compare=False):
         'Name':'DBF-HUD Scene Depth Occlusion Probe 0.2' if compare else 'DBF-HUD Scene Depth Access Probe 0.1',
         'Description':'Private screen-depth comparison test; main HUD and layouts unchanged.' if compare else 'Private access-only scene-depth shader test. No occlusion discard or HUD layout changes.',
         'Options':[{'Name':'Scene depth access probe','Include':['SceneDepthAccess']}]}
-    destination = ROOT.parent / ('DBF-HUD-Scene-Depth-Occlusion-Probe-0.2.zip' if compare else 'DBF-HUD-Scene-Depth-Access-Probe-0.1.zip')
+    destination = ROOT / 'releases' / ('DBF-HUD-Scene-Depth-Occlusion-Probe-0.2.zip' if compare else 'DBF-HUD-Scene-Depth-Access-Probe-0.1.zip')
     with zipfile.ZipFile(destination,'w',zipfile.ZIP_DEFLATED) as archive:
         archive.writestr('manifest.json',json.dumps(manifest,indent=2))
         stem = 'SceneDepthAccess/ee6b1ba7e22d71ed.patch_0'

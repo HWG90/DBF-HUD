@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DBF Â· Split instrument study 08</title>
+  <link rel="stylesheet" href="study.css">
+</head>
+<body>
+<header class="page-head">
+  <div><span class="eyebrow">DBF / SPLIT INSTRUMENT / STUDY 08</span><h1>An instrument in open space.</h1><p>A clear resource register, a reserve pod to the left, and selected settings to the right.</p></div>
+  <span class="review-tag">DESIGN STUDY</span>
+</header>
+<nav class="direction-strip" aria-label="Selected direction"><span><b>SPLIT</b> Â· Open, asymmetric readout cluster <small>Selected by David Â· October 11</small></span><a href="../universal-hud-study-07/index.html">Return to the three directions â†—</a></nav>
+<main>
+<aside class="controls">
+  <div class="control-section"><span class="section-label">READOUT</span>
+    <label class="stacked">Weapon family<select id="family"></select></label>
+    <label class="stacked">State<select id="state"><option value="ready">Normal</option><option value="chamber">Chambered +1</option><option value="low">Low / hot</option><option value="empty">Empty / spent / venting</option><option value="unknown">Unknown data</option></select></label>
+    <label class="stacked">Reading detail<select id="readoutView"><option value="combat">Combat Â· selected values</option><option value="inspect">Inspect Â· setting names + values</option></select></label>
+    <p class="hint">Combat keeps every available selected setting visible. Inspect adds field names. Fixed modes and unavailable values stay quiet in both views.</p>
+  </div>
+  <div class="control-section"><span class="section-label">EDGE & CONTRAST</span>
+    <label class="slider">Backing <output id="backingOut">35%</output><input id="backing" type="range" min="0" max="80" value="35" step="1"></label>
+    <label class="slider">Feather width <output id="featherOut">7%</output><input id="feather" type="range" min="0" max="20" value="7" step="1"></label>
+    <label class="slider">Edge dither <output id="ditherOut">40%</output><input id="dither" type="range" min="0" max="100" value="40" step="5"></label>
+    <label class="slider">Dither grain <output id="grainOut">2 px</output><input id="grain" type="range" min="1" max="5" value="2" step="1"></label>
+    <p class="hint">Backing and outer accents dissolve together. Numerals, unit labels and the status strip keep a crisp outline.</p>
+  </div>
+  <div class="control-section"><span class="section-label">SPATIAL READING</span>
+    <label class="stacked">View<select id="angle"><option value="0">Angle 1 Â· standing</option><option value="1">Angle 2 Â· shoulder</option><option value="2">Angle 3 Â· inclined</option><option value="3">Angle 4 Â· shoulder</option><option value="neutral">Neutral contrast field</option></select></label>
+    <label class="check"><input type="checkbox" id="perspective" checked>Use the angle of the weapon</label>
+    <label class="slider">Depth separation <output id="depthOut">16 px</output><input id="depth" type="range" min="0" max="36" value="16" step="2"></label>
+    <label class="slider">Instrument size <output id="scaleOut">70%</output><input id="scale" type="range" min="65" max="150" value="70" step="5"></label>
+    <div class="button-row"><button id="reset" class="plain">Reset study controls</button><button id="recenter" class="plain">Reset placement</button></div>
+  </div>
+</aside>
+<section class="review-area">
+  <div class="stage-tools"><span><b id="conceptTitle">Split Â· Combat</b><small id="dimensions">224 Ã— 113 px at 1920 Ã— 1080</small></span><div><button class="view-mode active" data-view="fit">Fit scene</button><button class="view-mode" data-view="pixels">100% screen</button><button class="view-mode" data-view="inspect">Inspect Ã—3</button></div></div>
+  <div class="scene-viewport" id="sceneViewport"><div class="world" id="world"><img id="scenePhoto" alt="Provided third-person gameplay reference"><div class="neutral-grid"></div><div id="instrument" class="instrument" aria-label="Weapon instrument preview"></div></div><div class="stage-label" id="stageLabel">DRAG INSTRUMENT TO PLACE</div></div>
+  <div class="reading-note"><strong id="familyTitle">Magazine / AR-23 Liberator</strong><p id="readingExplanation"></p><span id="capabilityLine"></span></div>
+  <section class="family-section"><div class="section-heading"><h2>One cluster. Every resource keeps its meaning.</h2><p>Source-owned units Â· independently applicable settings</p></div><div class="family-grid" id="familyGrid"></div></section>
+  <details class="source-note"><summary>What this study knows about weapon settings</summary><p>Every reading here is illustrative. The current source exposes ammunition and typed reserves, heat, several charge systems, selectable fire modes, selectable RPM, safety, and known ammunition selectors. This study demonstrates how those fields could share one design language; it does not establish support for every weapon or selector.</p><p>Missing fields are omitted. Unknown counts use a dash and NO DATA, never a fabricated zero. Detailed variants such as zoom, flashlight state, fuse distance, or a complete list of all selector choices need additional reader contracts before a HUD can report them.</p><p>Scene positions and layered perspective are a spatial mockup. <a href="BRIEF.md">Design brief and source mapping</a></p></details>
+</section>
+</main>
+<footer>Review only Â· original gameplay references Â· 1920 Ã— 1080 scale reference Â· static data Â· no game, settings, or renderer changes. Edge treatment is an SVG preview.</footer>
+<script src="study.js"></script>
+</body>
+</html>

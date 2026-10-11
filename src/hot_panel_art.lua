@@ -22,7 +22,8 @@ function M.new(sr,backend,root)
  local self={status='Packaged artwork',closing=false}
  local validation_remaining,validation_cycle,validation_baseline,validation_image
  local registered={}
- local native,off,busy,job,pool,restore_requested,after_close;local frame=0;local serial=store.serial or 0
+ local native,off,busy,job,pool,restore_requested,after_close,desired;local frame=0;local serial=store.serial or 0
+ local generated_name='primary_edge_mask_dynamic_v2'
  local function trace(v)
   local line='HOT_ART_STAGE staged_v3 job='..serial..' frame='..frame..' '..v
   local f=io.open(root..'/upload-stages.log','a')
@@ -51,7 +52,7 @@ function M.new(sr,backend,root)
  end
  local function step()
   if store.owner~=self then if off then local stop=off;off=nil;stop()end;if after_close then local done=after_close;after_close=nil;done()end;return end
-  if busy or (not job and not restore_requested and validation_remaining==nil and not (pool and (#store.retirements>0 or #store.orphans>0))) then return end
+  if busy or (not job and not desired and not restore_requested and validation_remaining==nil and not (pool and (#store.retirements>0 or #store.orphans>0))) then return end
   busy=true;frame=frame+1;native.set_phase(true)
   local ok,err=pcall(function()
    if pool then
@@ -86,6 +87,17 @@ function M.new(sr,backend,root)
      trace('validation final cleanup baseline='..tostring(validation_baseline))
     end
    end
+   if not job and desired then
+    if store.generated_signature==desired.signature and store.active[generated_name]then desired=nil;return end
+    desired.quiet=desired.quiet+1
+    if desired.quiet<12 then return end
+    local request=desired;desired=nil
+    local image=request.factory();HUD.runtime_textures.validate(image)
+    local prepared={};for name,r in pairs(store.active)do prepared[name]=r end
+    serial=serial+1;store.serial=serial
+    job={items={{name=generated_name,image=image}},index=1,stage='select',prepared=prepared,generated_signature=request.signature}
+    trace('generated edge queued signature='..request.signature)
+   end
    if not job then return end
    local j=job;local item=j.items[j.index]
    if j.stage=='select' then
@@ -117,6 +129,7 @@ function M.new(sr,backend,root)
    elseif j.stage=='publish' then
     if pool then pool.publish(j.prepared) else store.active=j.prepared end
     for name,record in pairs(j.prepared)do store.images[name]=record;cache(record)end
+    if j.generated_signature then store.generated_signature=j.generated_signature end
     job=nil;self.status='Texture files loaded ('..#j.items..')'
     trace('published '..#j.items..' artwork files')
    end
@@ -178,15 +191,29 @@ function M.new(sr,backend,root)
   assert(#items>0,'Manifest has no artwork')
   assert(store.bytes+total<=HUD.runtime_textures.max_retained_bytes,'Hot artwork budget exhausted; restart required')
   initialize();serial=serial+1;store.serial=serial
-  job={items=items,index=1,stage='select',prepared={}}
+  local prepared={};if store.active[generated_name]then prepared[generated_name]=store.active[generated_name]end
+  job={items=items,index=1,stage='select',prepared=prepared}
   self.status='Loading '..#items..' texture files';trace('queued '..#items..' files')
   return self.status
+ end
+ function self.request_generated(signature,factory)
+  assert(not self.closing and store.owner==self,'Artwork manager retired')
+  assert(not store.failure,'Texture uploads blocked after a stage failure; restart required: '..tostring(store.failure))
+  assert(type(signature)=='string'and #signature<=128 and type(factory)=='function','Generated edge request invalid')
+  if not job and store.generated_signature==signature and store.active[generated_name]then desired=nil;return false end
+  if job and job.generated_signature==signature then desired=nil;return false end
+  if desired and desired.signature==signature then return false end
+  local quarantine=io.open(root..'/UPLOADS-QUARANTINED.txt','rb')
+  if quarantine then quarantine:close();error('Texture uploads quarantined',0)end
+  initialize();assert(pool,'Generated edge changes require fenced texture reclamation')
+  desired={signature=signature,factory=factory,quiet=0};return true
  end
  function self.register_consumer(id,detach)
   store.consumers=store.consumers or {}
   assert(not store.consumers[id] and type(detach)=='function','unique artwork material owner required')
   store.consumers[id]=detach;registered[id]=true
  end
+ function self.clear_generated_request()desired=nil end
  function self.resource(texture)
   if self.closing or store.owner~=self then return nil end
   local name=texture and texture:match('^mods/dbf_hud/textures/([%w_%-]+)$')
@@ -194,12 +221,13 @@ function M.new(sr,backend,root)
  end
  function self.restore()
   assert(not self.closing and store.owner==self,'Artwork manager retired')
+  desired=nil;store.generated_signature=nil
   cancel('Packaged artwork restored');if pool then restore_requested=true else store.active={} end;trace('restored packaged artwork');return self.status
  end
  function self.after_close(fn)assert(type(fn)=='function');after_close=fn end
  function self.close()
   if self.closing then return end
-  self.closing=true;validation_remaining=nil;cancel('Artwork manager retired')
+  self.closing=true;validation_remaining=nil;desired=nil;store.generated_signature=nil;cancel('Artwork manager retired')
   -- This owner cannot draw again. Detach its GUI owners before forgetting them.
   for id in pairs(registered)do local detach=store.consumers and store.consumers[id];if detach then assert(detach()==true,'retired material owner did not detach');store.consumers[id]=nil end end
   if pool then restore_requested=true
@@ -213,7 +241,7 @@ function M.new(sr,backend,root)
  function self.stats()
   local count=0;for _ in pairs(store.active)do count=count+1 end
   return {retained_bytes=store.bytes,retained_resources=#store.resources,active_images=count,
-   pending=job~=nil,stage=job and job.stage or 'idle',failed=store.failure~=nil,job=serial,retiring=store.retirements and #store.retirements or 0,reclamation=pool~=nil,validation_cycles=validation_cycle or 0}
+   pending=job~=nil or desired~=nil,stage=job and job.stage or desired and 'edge_debounce'or 'idle',failed=store.failure~=nil,job=serial,retiring=store.retirements and #store.retirements or 0,reclamation=pool~=nil,validation_cycles=validation_cycle or 0,generated_signature=store.generated_signature}
  end
  return self
 end

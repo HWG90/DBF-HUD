@@ -1,0 +1,24 @@
+{
+  "selected_led_source_exact": true,
+  "ten_digit_crops_checked": true,
+  "digit_cell": [
+    72,
+    118
+  ],
+  "digit_step": 79,
+  "loaded_box": [
+    28,
+    87,
+    154,
+    78
+  ],
+  "leading_zero_alpha": 0.14,
+  "active_mode_outline_and_underline_one_image": true,
+  "rgba_bytes_verified": true,
+  "preview_from_runtime_commands": true,
+  "label_preview": "Exact retained native Hack atlas and live metrics",
+  "font_package": "releases/DBF-HUD-Native-Fonts-0.1.zip",
+  "art_image_budget": 20,
+  "four_shader_layers_fit": true,
+  "v3_files_preserved": 10
+}

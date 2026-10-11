@@ -198,11 +198,27 @@ function M.native()
     -- Read-only projection call. The caller must validate the native wrapper and
     -- camera owner immediately before use. x64 disassembly confirms explicit
     -- result buffer, camera pointer and input-vector pointer (three arguments).
-    local project_in=ffi.new('float[4]');local project_out=ffi.new('float[4]')
+    -- Native SIMD vectors require 16-byte alignment. Keep the owning allocations
+    -- with this backend; derived FFI pointers alone do not retain their storage.
+    local project_in_storage=ffi.new('uint8_t[32]');local project_out_storage=ffi.new('uint8_t[32]')
+    backend.projection_buffers={project_in_storage,project_out_storage}
+    local function aligned_vector(storage)
+        local address=tonumber(ffi.cast('uintptr_t',storage))
+        assert(address>=65536 and address<2^47,'projection buffer address')
+        return ffi.cast('float*',math.floor((address+15)/16)*16)
+    end
+    local project_in=aligned_vector(project_in_storage);local project_out=aligned_vector(project_out_storage)
+    -- Anonymous function signatures create a new LuaJIT CType each time they
+    -- are parsed. Cache both the type and callable, rather than parsing per point.
+    -- Initialize lazily so an already exhausted VM can still draw its fallback.
+    local project_type,project_fn,project_call
     function backend.project_camera(fn,camera,x,y,z)
+        if project_fn~=fn then
+            project_type=project_type or ffi.typeof('float* (*)(float*, const void*, const float*)')
+            project_call=ffi.cast(project_type,fn);project_fn=fn
+        end
         project_in[0],project_in[1],project_in[2]=x,y,z
-        local call=ffi.cast('float* (*)(float*, const void*, const float*)',fn)
-        call(project_out,ffi.cast('const void*',camera),project_in)
+        project_call(project_out,ffi.cast('const void*',camera),project_in)
         return tonumber(project_out[0]),tonumber(project_out[1]),tonumber(project_out[2])
     end
     function backend.close() if file then file:close();file=nil end end

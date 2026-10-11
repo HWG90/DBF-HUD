@@ -2,9 +2,9 @@
 
 # DBF-HUD
 
-A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current development version: **0.3.41**. This is the source checkout; generated releases may lag behind it.
+A weapon-mounted ammo, fuel, heat and charge HUD for Helldivers 2. Current development version: **0.3.42**. This is the source checkout; generated releases may lag behind it.
 
-Current approved weapon-art checkpoint: [2026-10-03 session notes](docs/SESSION-20261003.md). Source publication does not create a new release or install prototypes.
+Current design direction: [2026-10-10 design reset](docs/DESIGN-RESET-20261010.md). The approved primary instrument is artwork under the existing HUD Texture selection and shader renderer. The separate Fancy segmentation experiment is disabled and its replacement renderer is retired. Saved appearance and placement remain preserved. See [current handoff](docs/HANDOFF.md) for the current package and verification state. The [2026-10-03 session notes](docs/SESSION-20261003.md) preserve the earlier accepted checkpoint. Source publication does not create a new release.
 
 ## Installation
 
@@ -43,7 +43,7 @@ python tools/build.py
 
 The test runner uses the installed game's LuaJIT DLL by default; `--lua-dll` overrides its path. **113 offline contracts pass for this release.** They do not replace an in-game visual check.
 
-Build outputs include `dist/dbf_hud.lua`, `mdl/dbf_hud/mod.lua` and an MDL ZIP in the parent directory. The active loose MDL mod is installed under `%LOCALAPPDATA%/MDL/Helldivers2/Mods/dbf_hud`.
+Build outputs include `dist/dbf_hud.lua`, `mdl/dbf_hud/mod.lua` and an MDL ZIP in the releases directory. The active loose MDL mod is installed under `%LOCALAPPDATA%/MDL/Helldivers2/Mods/dbf_hud`.
 
 Active configuration lives in Local AppData\DBF. Back it up before manual profile changes; updates preserve existing files.
 

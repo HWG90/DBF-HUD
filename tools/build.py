@@ -33,6 +33,9 @@ ORDER = (
     'sta11_panel',
     'weapon_styles',
     'layout',
+    'segmented_primary_specs',
+    'edge_mask',
+    'segmented_fancy',
     'simple_vertical',
     'view_presentation',
     'memory',
@@ -119,7 +122,8 @@ def bundle(output_dir=ROOT, check=False):
 def package_mdl(output_dir=ROOT):
     output_dir = Path(output_dir)
     live = output_dir / 'mdl/dbf_hud/mod.lua'
-    with zipfile.ZipFile(ROOT.parent / 'DBF-HUD-MDL-0.3.42.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+    (ROOT / 'releases').mkdir(exist_ok=True)
+    with zipfile.ZipFile(ROOT / 'releases/DBF-HUD-MDL-0.3.42.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
         archive.write(live, 'dbf_hud/mod.lua')
         for name, target in [('MDL.md', 'dbf_hud/README.md'),
                              ('DBF-HUD-weapon-offsets.lua', 'DBF-HUD-weapon-offsets.lua'),
@@ -145,7 +149,7 @@ def main():
     if args.package_mdl or args.addon_builder:
         package_mdl(args.output_dir)
     if args.addon_builder:
-        output = ROOT.parent / 'DBF-HUD-0.3.42.zip'
+        output = ROOT / 'releases/DBF-HUD-0.3.42.zip'
         subprocess.run([sys.executable, str(args.addon_builder), '--name', 'mods/dbf_hud/hud',
                         '--entry', str(target), '--guid', 'eb9de2f7-5733-46a0-96d8-8750becccd53',
                         '--display-name', 'DBF-HUD Configurable HUD 0.3.42', '--output', str(output)], check=True)

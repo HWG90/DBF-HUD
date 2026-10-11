@@ -62,7 +62,7 @@ def rows_from_zip(path):
 
 def build():
     fill='mods/dbf_hud/shaders/screen_hud_fill';font='mods/dbf_hud/shaders/screen_hud_font'
-    resources=rows_from_zip(ROOT.parent/'DBF-HUD-Scene-Depth-Occlusion-Probe-0.2.zip')
+    resources=rows_from_zip(ROOT/'releases'/'DBF-HUD-Scene-Depth-Occlusion-Probe-0.2.zip')
     group_hash=hash64('shader_library_group');group=bytearray(next(r[2] for r in resources if r[1]==group_hash))
     resources=[r for r in resources if r[1]!=group_hash]
     fill_gpu,fill_report=library(FOLDER/'source-blur.gpu','gui:blur_background',fill,'hud_fill')
@@ -71,7 +71,7 @@ def build():
                   (hash64(font),hash64('shader_library'),struct.pack('<I',4),font_gpu)]
     material=bytearray((ROOT/'assets/depth-state-test/source.bin').read_bytes());struct.pack_into('<I',material,128,hash64(fill)>>32)
     resources.append((hash64('mods/dbf_hud/materials/screen_hud_fill'),hash64('material'),bytes(material),b''))
-    native=rows_from_zip(ROOT.parent/'DBF-HUD-Native-Fonts-0.1.zip');by_id={(r[0],r[1]):r for r in native}
+    native=rows_from_zip(ROOT/'releases'/'DBF-HUD-Native-Fonts-0.1.zip');by_id={(r[0],r[1]):r for r in native}
     # Native glyph records provide exact atlas UVs; draw glyphs as two triangles.
     import re
     text=(ROOT/'src/native_font_data.lua').read_text()
@@ -94,7 +94,7 @@ def build():
     group+=struct.pack('<2Q',hash64(fill),hash64(font));resources.append((hash64('core/stingray_renderer/shader_libraries/default_shaders'),group_hash,bytes(group),b''))
     assert len({(r[0],r[1]) for r in resources})==len(resources)
     body,gpu=archive_rows(resources)
-    output=ROOT.parent/'DBF-HUD-Screen-Depth-Renderer-0.3.zip'
+    output=ROOT/'releases'/'DBF-HUD-Screen-Depth-Renderer-0.3.zip'
     manifest={'Version':1,'Guid':'b160d891-7bce-4079-82ef-57f165e54211','Name':'DBF-HUD Screen Depth Renderer 0.3',
               'Description':'Screen-projected weapon HUD with scene-depth comparison. Native atlas colors and alpha retained. Live HUD validation pending.',
               'Options':[{'Name':'Screen depth renderer','Include':['SceneHUD']}]}

@@ -1,0 +1,37 @@
+const fs = require('fs');
+const path = require('path');
+const directory = __dirname;
+const base = path.resolve(directory, '../primary-design-study-03');
+let html = fs.readFileSync(path.join(base, 'index.html'), 'utf8');
+function replace(before, after) {
+  if (!html.includes(before)) throw new Error('Missing source text: ' + before);
+  html = html.replace(before, after);
+}
+replace('DBF HUD â€” Open / Vertical candidate', 'DBF HUD â€” Segmented / Vertical candidate');
+replace('STUDY 03', 'STUDY 04');
+replace('Open, vertically.', 'Ammunition instrumentation.');
+replace('A narrow stack of floating readouts, with adjustable backing.', 'Fixed digit cells. Angular segments. Military markings.');
+replace('Return to the horizontal Open study', 'Return to the earlier vertical Open study');
+replace('../primary-design-study-02/index.html', '../primary-design-study-03/index.html');
+replace('The ammunition count carries the display. Capacity and the gauge sit below it. Reserve and mode complete the stack.', 'A rigid segmented register carries the count. Capacity, supply, and mode have fixed positions.');
+replace('Changing translucency leaves the digits, brackets, and gauge at full clarity.', 'Change the backing without changing the digit segments, alignment rails, or indicators.');
+replace('A light backing gives the lettering a quieter field.', 'A light backing gives the segments a quieter field.');
+replace('Open is the selected direction. This vertical arrangement is a candidate; the horizontal study remains available.', 'This segmented instrument refines the vertical Open candidate. It is a design study; earlier layouts remain available.');
+replace('.hero{min-height:410px;', '.hero{min-height:455px;');
+replace('max-width:240px', 'max-width:240px');
+replace('.compare .stage{height:330px}', '.compare .stage{height:365px}');
+replace('.compare .preview{width:min(100%,205px)}', '.compare .preview{width:min(100%,205px)}');
+replace('.states .stage{height:280px}', '.states .stage{height:300px}');
+replace('.states .preview{width:min(100%,170px)}', '.states .preview{width:min(100%,170px)}');
+const first = html.indexOf(' function svgFor(');
+const last = html.indexOf(' function draw(){', first);
+if (first < 0 || last < 0) throw new Error('SVG renderer markers not found');
+html = html.slice(0, first) + fs.readFileSync(path.join(directory, 'segmented-function.txt'), 'utf8') + '\n' + html.slice(last);
+fs.writeFileSync(path.join(directory, 'index.html'), html);
+let renderer = fs.readFileSync(path.join(base, 'render-study.cjs'), 'utf8');
+renderer = renderer.replaceAll('.resize(380, 556)', '.resize(420, 704)');
+renderer = renderer.replace("node('main-preview').innerHTML.includes('>â€”</text>')", "node('main-preview').innerHTML.includes('data-value=\"unknown\"')");
+renderer = renderer.replace('width="205" height="300"', 'width="190" height="319"').replace('x="78" y="38"', 'x="85" y="38"');
+renderer = renderer.replace('PRIMARY STUDY 03', 'PRIMARY STUDY 04').replace('Open Â· Vertical candidate', 'Segmented Â· Vertical ammunition instrument');
+fs.writeFileSync(path.join(directory, 'render-study.cjs'), renderer);
+console.log('Segmented candidate authored; earlier layouts preserved.');

@@ -11,6 +11,10 @@ function M.texture_choices(resource)
         if art.variants.realistic then labels[#labels+1]='Hyper-realistic treatment';ids[#ids+1]='realistic' end
     elseif fragments or mechanical or (study and study.faithful) then labels[#labels+1]=mechanical and 'HUD Texture' or 'Faithful original';ids[#ids+1]='faithful' end
     if study then labels[#labels+1]='Designer texture study (manual)';ids[#ids+1]='study' end
+    if HUD.segmented_primary_specs and HUD.segmented_primary_specs[resource]then
+        local found=false;for i,id in ipairs(ids)do if id=='faithful'then labels[i]='HUD Texture';found=true end end
+        if not found then table.insert(labels,1,'HUD Texture');table.insert(ids,1,'faithful')end
+    end
     labels[#labels+1]='Original primitives';ids[#ids+1]='original'
     return labels,ids,#ids>1
 end
@@ -185,6 +189,10 @@ function M.new(hud)
                 {'font','Weapon font','choice',weapon_fonts},
                 {'background_color','Panel color','color'},{'text_color','Text color','color'},{'decoration_color','Decoration color','color'},
                 {'panel_opacity','Panel opacity','slider',0,1,.01},{'text_opacity','Text opacity','slider',0,1,.01},
+                {'panel_edge_softness','Edge feather width (%)','slider',0,24,1},
+                {'panel_edge_curve','Edge fade curve','slider',.5,3,.1},
+                {'panel_edge_dither','Edge dither (%)','slider',0,100,5},
+                {'panel_edge_grain','Edge grain size','slider',1,4,1},
                 {'decoration','Decorations','choice',{'None','Thin outline','Corner brackets','Helldivers HUD','Double frame','Deadeye receiver'}},
                 {'style_3d','Visual style','choice',styles}}
             -- Fetch selects a weapon after registration; keep these controls
@@ -208,6 +216,10 @@ function M.new(hud)
                 if key=='theme_shader' or key=='effect_shader' then c.presentation='dropdown';c.description=key=='theme_shader' and 'Native shader on the in-world HUD and preview when Display mode is 3D. Explicit shaders override the frosted-background skip. Automatic preserves the weapon theme; None uses normal fill. Missing assets fall back. Animation is controlled by Animate panel shader.' or 'Native 3D shader for existing scanline/sweep bands: enable Scanlines or Sweep. No extra geometry. None keeps normal bands. Animation is controlled by Animate effect shader; preview uses native materials in 3D mode.' end
                 if key=='theme_shader' then c.description='Native 3D shader on the live readout area. HUD Texture pixels stay unchanged. Automatic preserves HUD Texture; None removes this shader carrier.' end
                 if key=='font_scale' then c.description='Scale live weapon readouts. 1 is the original size. Lettering baked into texture artwork keeps its size.' end
+                if key=='panel_edge_softness' then c.description='Width of the inward edge fade on the primary backing, shader layers and selected decoration. 0 restores hard edges. Digits and status stay crisp.' end
+                if key=='panel_edge_curve' then c.description='Shape the fade: below 1 retains more of the edge; 1 is the original smooth fade; above 1 dissolves more quickly.' end
+                if key=='panel_edge_dither' then c.description='Break the fading edge into stable dots. 0 is smooth feathering; 100 is fully dithered. The solid center stays unchanged.' end
+                if key=='panel_edge_grain' then c.description='Size of the edge dots: 1 is fine; 4 is coarse. The pattern stays attached to the panel.' end
                 if key=='background_color' then c.description='Live readout shader carrier color; HUD Texture colors are unchanged.' end
                 if key=='theme_shader_scale' or key=='effect_shader_scale' then c.description='Pattern spacing only: below 1 is tighter; above 1 is larger. Does not resize the HUD. World and preview use the same panel coordinates.' end
                 if key=='theme_shader_animate' or key=='effect_shader_animate' then c.description='Animate the selected shader. Off keeps the static sample. Requires animated native assets; no new panel geometry.' end
@@ -305,8 +317,8 @@ function M.new(hud)
                             local texture=settings.texture_art_trial~=false and settings.texture_art_variant~='original'
                             local simple=hud.config.hud_presentation=='practical'
                             local world_only=c.id=='weapon_style_3d' and hud.config.anchor_mode~='world'
-                            registered.disabled=not ready or texture or simple or world_only
-                            registered.description=texture and 'Texture mode keeps Decorations at None and Visual Style at Standard. Use the independent Shader layers for effects.' or simple and 'Simple presentation uses its plain practical panel; this saved effect is inactive. Choose Automatic or Fancy to use it.' or world_only and 'Visual Style applies in 3D WorldGUI mode; this saved effect is inactive in 2D.' or 'Applies to the weapon-specific presentation, including texture artwork. Automatic uses it in first person; Fancy uses it in both views.'
+                            registered.disabled=not ready or simple or world_only
+                            registered.description=simple and 'Simple presentation uses its plain practical panel; this saved effect is inactive. Choose Automatic or Fancy to use it.' or world_only and 'Visual Style applies in 3D WorldGUI mode; this saved effect is inactive in 2D.' or 'Applies through the existing HUD Texture and shader system. Automatic uses it in first person; Fancy uses it in both views.'
                         elseif mechanical and c.id=='weapon_frosted' then
                             registered.disabled=true;registered.description='HUD Texture owns this styling. Turn HUD Texture off to edit primitive styling.'
                         elseif c.id=='weapon_texture_art_trial' or c.id=='weapon_texture_art_variant' then

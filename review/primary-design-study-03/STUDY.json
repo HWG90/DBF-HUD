@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-10",
+  "scope": "primary weapons first",
+  "first_weapon": { "name": "AR-23 Liberator", "resource_hex": "968211c0033dce64" },
+  "selected_style": "Open with variable background translucency",
+  "candidate_layout": "vertical",
+  "orientation_selected": false,
+  "reading_order": ["loaded ammunition", "capacity", "remaining-load gauge", "reserve and unit", "mode"],
+  "foreground_opacity_independent": true,
+  "sample_values_are_weapon_defaults": false,
+  "runtime_integrated": false,
+  "installed": false,
+  "live_visual_verified": false,
+  "horizontal_open_preserved": "../primary-design-study-02/index.html",
+  "existing_designs_preserved_as_fallback": true
+}

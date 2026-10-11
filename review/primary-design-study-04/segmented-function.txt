@@ -1,0 +1,67 @@
+ function svgFor(reading,translucent,prefix){
+  const unknown=reading.count===null, empty=reading.count===0, low=!unknown&&reading.count/reading.capacity<=.2;
+  const countText=unknown?'â€”':String(reading.count), reserveText=unknown?'â€”':String(reading.reserve);
+  const status=unknown?'NO DATA':empty?'EMPTY':low?'LOW AMMO':'';
+  const ink=low?'#f3ca53':'#e9efcf', fraction=unknown?0:Math.min(1,Math.max(0,reading.count/reading.capacity));
+  const alpha=1-Math.min(100,Math.max(0,Number(translucent)))/100;
+  const shapes={
+   a:'10,0 48,0 55,7 48,14 10,14 3,7',
+   b:'51,11 58,18 58,51 51,58 44,51 44,18',
+   c:'51,61 58,68 58,101 51,108 44,101 44,68',
+   d:'10,104 48,104 55,111 48,118 10,118 3,111',
+   e:'7,61 14,68 14,101 7,108 0,101 0,68',
+   f:'7,11 14,18 14,51 7,58 0,51 0,18',
+   g:'10,52 48,52 55,59 48,66 10,66 3,59'
+  };
+  const patterns={'0':'abcdef','1':'bc','2':'abdeg','3':'abcdg','4':'bcfg','5':'acdfg','6':'acdefg','7':'abc','8':'abcdefg','9':'abcdfg','-':'g'};
+  function digits(value,slots,x,y,width,height,color,role){
+   const raw=value===null?'-'.repeat(slots):String(value), text=value===null?raw:raw.padStart(slots,'0');
+   const n=text.length, fullWidth=n*60+(n-1)*7, scale=Math.min(width/fullWidth,height/118), start=x+(width-fullWidth*scale)/2;
+   const leading=value===null?0:text.length-raw.length;
+   let out='<g data-readout="'+role+'" data-value="'+(value===null?'unknown':escapeText(value))+'">';
+   for(let i=0;i<n;i++){
+    out+='<g transform="translate('+(start+i*67*scale).toFixed(2)+' '+y+') scale('+scale.toFixed(4)+')">';
+    const lit=patterns[text[i]]||'';
+    Object.entries(shapes).forEach(function(entry){
+     const enabled=lit.includes(entry[0]), opacity=enabled?(i<leading?.24:1):.075;
+     out+='<polygon data-segment="'+entry[0]+'" data-lit="'+enabled+'" points="'+entry[1]+'" fill="'+color+'" opacity="'+opacity+'"/>';
+    });
+    out+='</g>';
+   }
+   return out+'</g>';
+  }
+  let gauge='';
+  for(let i=0;i<20;i++){
+   const x=25+i*8, fill=Math.min(1,Math.max(0,fraction*20-i));
+   gauge+='<path d="M'+(x+1)+' 231 H'+(x+6)+' L'+(x+7)+' 232 V238 H'+x+' V232 Z" fill="#b8c68e" opacity=".12"/>';
+   if(fill>0)gauge+='<rect x="'+x+'" y="231" width="'+(7*fill).toFixed(2)+'" height="7" fill="'+(low?'#f3ca53':'#b8c68e')+'"/>';
+  }
+  const modes=['AUTO','BURST','SEMI'];
+  let modeBank='';
+  modes.forEach(function(name,i){
+   const x=25+i*55, on=reading.mode===name;
+   modeBank+='<path d="M'+x+' 301 H'+(x+48)+' V318 H'+x+' Z" fill="none" stroke="'+(on?'#d7bd59':'#6e8170')+'" stroke-opacity="'+(on?.8:.25)+'" stroke-width=".7"/>'+
+    '<text x="'+(x+24)+'" y="313" text-anchor="middle" class="small" fill="'+(on?'#efe0a7':'#8a9a85')+'" opacity="'+(on?1:.55)+'">'+name+'</text>';
+   if(on)modeBank+='<path d="M'+x+' 321 H'+(x+48)+'" stroke="#dbc25b" stroke-width="2"/>';
+  });
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 352" width="210" height="352" role="img" aria-label="Segmented ammunition instrument: '+escapeText(countText)+' loaded; '+escapeText(reserveText)+' '+escapeText(reading.unit)+'; '+escapeText(status||reading.mode)+'"><style>.label{font:700 10px Consolas,monospace;letter-spacing:.09em}.small{font:700 9px Consolas,monospace;letter-spacing:.03em}.stroke{vector-effect:non-scaling-stroke}</style>'+
+   '<path data-backing="true" d="M18 25 H177 L192 40 V329 H33 L18 314 Z" fill="#0b110e" opacity="'+alpha.toFixed(2)+'"/>'+
+   '<g data-foreground="true">'+
+   '<path d="M18 44 V25 H42 M192 310 V329 H168" fill="none" stroke="#d7bd59" stroke-width="1.5" class="stroke"/>'+
+   '<path d="M25 52 H185 M25 176 H185 M25 244 H185 M25 286 H185" stroke="#9cac8c" stroke-opacity=".48" stroke-width=".7" class="stroke"/>'+
+   '<text x="25" y="44" fill="#d7bd59" class="label">AR-23</text>'+
+   '<text x="184" y="44" fill="#c2cdb4" text-anchor="end" class="small">LIBERATOR</text>'+
+   '<text x="25" y="67" fill="#a5b594" class="small">LOAD</text>'+
+   '<path d="M27 76 H33 M25 78 V168 M27 171 H33 M177 76 H183 M185 78 V168 M177 171 H183" stroke="#849678" stroke-opacity=".5" stroke-width=".6" fill="none" class="stroke"/>'+
+   digits(unknown?null:reading.count,3,28,81,154,89,ink,'loaded')+
+   '<path d="M25 184 H185 V198 H25 Z" fill="none" stroke="'+(status?'#c7ab4d':'#6e8170')+'" stroke-opacity="'+(status?.6:.2)+'" stroke-width=".6"/>'+
+   '<rect x="25" y="184" width="3" height="14" fill="#e8c24e" opacity="'+(status?1:.15)+'"/>'+
+   '<text x="34" y="194" fill="'+(status?'#e8c24e':'#82927c')+'" class="small">'+status+'</text>'+
+   '<text x="25" y="218" fill="#a5b594" class="label">CAP</text>'+
+   digits(unknown?null:reading.capacity,3,136,206,49,22,'#b8c68e','capacity')+gauge+
+   '<text x="25" y="260" fill="#a5b594" class="small">RESERVE</text>'+
+   '<text x="25" y="278" fill="#c2cdb4" class="label">'+escapeText(reading.unit)+'</text>'+
+   digits(unknown?null:reading.reserve,2,132,250,53,33,'#e3e9ca','reserve')+
+   '<text x="25" y="296" fill="#a5b594" class="small">MODE</text>'+modeBank+
+   '</g></svg>';
+ }

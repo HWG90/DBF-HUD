@@ -64,10 +64,29 @@ function M.start(sr,backend,options)
         if cfg.weapon_panel_overrides then
             local resolved={};for k,v in pairs(cfg)do resolved[k]=v end;for k,v in pairs(cfg.weapon_panel_overrides)do resolved[k]=v end;cfg=resolved
         end
-        cfg=HUD.config.texture_policy(cfg)
         if cfg.presentation_view=='third' then return HUD.view_presentation.compose(m,x,y,scale,opacity,cfg)end
+        cfg=HUD.config.texture_policy(cfg)
         if cfg.shader_layers~=nil then cfg.effect_scanlines=false;cfg.effect_flicker=false;cfg.effect_sweep=false;cfg.theme_shader='none';cfg.effect_shader='none' end
-        local family=HUD.ballistic_family.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource)
+        cfg.style_clock=clock
+        local family=HUD.ballistic_family.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource,sr.Application.can_get)
+        local primary=HUD.segmented_primary_specs and HUD.segmented_primary_specs[m.resource_hex]and HUD.segmented_fancy
+        local needs_texture=primary and not HUD.segmented_fancy.assets_ready(hot_panel_art.resource)
+        if needs_texture and cfg.texture_art_trial~=false and cfg.texture_art_variant=='faithful'and not self.hud_texture_request and rawget(_G,'HUDRenderBridge')then
+            local stats=hot_panel_art.stats()
+            if not stats.pending and not stats.failed then
+                self.hud_texture_request=true
+                local ok,why=pcall(hot_panel_art.reload)
+                if backend.log then pcall(backend.log,'HUD_TEXTURE_LOAD '..tostring(ok)..' '..tostring(why))end
+            end
+        end
+        if primary and HUD.segmented_fancy.assets_ready(hot_panel_art.resource)and cfg.texture_art_trial~=false and cfg.texture_art_variant=='faithful'and rawget(_G,'HUDRenderBridge')then
+            local edge=HUD.edge_mask.settings(cfg)
+            if edge.width>0 then
+                local signature=HUD.edge_mask.signature(edge)
+                local ok,why=pcall(hot_panel_art.request_generated,signature,function()return HUD.edge_mask.image(edge)end)
+                if not ok and not self.edge_request_error then self.edge_request_error=true;if backend.log then pcall(backend.log,'HUD_EDGE_LOAD_FAILED '..tostring(why))end end
+            else hot_panel_art.clear_generated_request()end
+        end
         if family then return family end
         if m.resource_hex=='72170a55a1f37ff1' then
             local retro=HUD.df_retro_panel.compose(m,x,y,scale,opacity,cfg,hot_panel_art.resource)
@@ -146,6 +165,7 @@ function M.start(sr,backend,options)
         local preview_model=self.appearance_model(self.appearance_weapon())
         local cfg=HUD.config.effective(self.config,preview_model.resource_hex)
         cfg.presentation_view=cfg.hud_presentation=='practical' and 'third' or (cfg.hud_presentation=='weapon_specific' and 'first' or self.presentation_view or 'first')
+        if cfg.presentation_view~='third'and HUD.config.segmented_eligible(cfg,preview_model.resource_hex)then cfg=HUD.config.segmented_appearance(cfg,preview_model.resource_hex)end
         if cfg.presentation_view=='third' then cfg.style_3d='standard';cfg.shader_layers={};cfg.theme_shader='none';cfg.effect_shader='none' end
         if cfg.anchor_mode~='world' then cfg.style_3d='standard' end
         cfg.frosted=false;cfg.placement_mode='manual'
@@ -227,7 +247,7 @@ function M.start(sr,backend,options)
         if self.config.debug_logging or line:find('failure',1,true) or line:find('missing',1,true) or line:find('stopped',1,true) then log(line) end
     end
     local world_probe=HUD.world_probe.new(sr,research_log)
-    local world_display=HUD.scene_test.new(sr,research_log)
+    local world_display=HUD.scene_test.new(sr,research_log,nil,hot_panel_art)
     local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log,hot_panel_art)
     do
         local available,total=0,0
@@ -428,6 +448,7 @@ function M.start(sr,backend,options)
     function self.panel_settings(resource)
         resource=resource or self.appearance_weapon()
         local cfg=HUD.config.effective(self.config,resource)
+        if self.config.hud_presentation~='practical'and HUD.config.segmented_eligible(cfg,resource)then return HUD.config.segmented_appearance(cfg,resource)end
         local selected_model=self.appearance_model(resource)
         -- Read the actual themed commands; fetching is presentation-only, never a save.
         local commands=compose(selected_model,0,0,2,1,cfg,self.clock)
@@ -453,6 +474,11 @@ function M.start(sr,backend,options)
         return cfg
     end
     function self.configure_panel(values,resource)
+        resource=resource or self.appearance_weapon()
+        if type(values)=='table'and self.config.hud_presentation~='practical'and HUD.config.segmented_eligible(self.config,resource)then
+            local aliases={text_color='segmented_text_color',background_color='segmented_background_color',decoration_color='segmented_ui_color'}
+            local mapped={};for k,v in pairs(values)do mapped[aliases[k]or k]=v end;values=mapped
+        end
         HUD.config.set_panel(self.config,resource or self.appearance_weapon(),values);self.appearance_revision=(self.appearance_revision or 0)+1
     end
     function self.export_tuning() return HUD.config.serialize(self.config) end
@@ -465,7 +491,18 @@ function M.start(sr,backend,options)
     end
     function self.reload_tuning()
         if not backend.read_tuning then return false end
-        local ok,result=pcall(function()local values=backend.read_tuning();if values then self.configure(values) end;return values~=nil end)
+        local ok,result=pcall(function()
+            local values=backend.read_tuning()
+            if values then
+                if options and options.disable_segmented_fancy then
+                    -- Turning off the experiment must not rewrite saved appearance.
+                    HUD.config.apply(self.config,values,true)
+                    self.config.segmented_fancy=false
+                    self.appearance_revision=(self.appearance_revision or 0)+1
+                else self.configure(values)end
+            end
+            return values~=nil
+        end)
         self.tuning_status=ok and (result and 'loaded tuning file' or 'defaults; no tuning file') or tostring(result)
         log('TUNING '..self.tuning_status)
         if ok and result and self.texture_styles_dirty then local saved,why=self.save_tuning();if not saved then self.tuning_status=tostring(why);return false end end
@@ -630,6 +667,13 @@ function M.start(sr,backend,options)
             end -- Returning to the gun between throws is not another pickup.
             self.sample_weapon=raw and raw.resource_hex
             latest_raw=raw;binding_base=raw and raw.binding and raw.binding.module_base;model=HUD.model.normalize(raw);if model then model.charge_sample_clock=self.clock;model.charge_frame_delay=self.railgun_frame_delay;model.snow_party=raw.resource_hex=='ccfae6d4a601c741' and (self.snowball_pickups or 0)>=3;if raw.resource_hex=='ccfae6d4a601c741' and not model.snow_party then model=nil end end;self.status=reader.status
+            if self.config.debug_logging and self.config.segmented_fancy and self.segmented_seen then
+                local sig=tostring(raw~=nil)..':'..tostring(model~=nil)..':'..tostring(reader.status)
+                if sig~=self.segmented_sample_signature and (self.segmented_sample_traces or 0)<80 then
+                    self.segmented_sample_signature=sig;self.segmented_sample_traces=(self.segmented_sample_traces or 0)+1
+                    log('SEGMENTED_SAMPLE raw='..tostring(raw~=nil)..' model='..tostring(model~=nil)..' reader='..tostring(reader.status))
+                end
+            end
             if raw and raw.resource_hex=='e8d5f49ad7780e54' and raw.binding then
                 self.epoch_probe_start=self.epoch_probe_start or self.clock
                 if self.clock-self.epoch_probe_start<300 and (self.epoch_probe_count or 0)<200 and self.clock>=(self.epoch_probe_next or 0) then
@@ -755,7 +799,10 @@ function M.start(sr,backend,options)
         -- Screen GUI coordinates use Gui.resolution(), not the output back buffer.
         -- Upscaling can make the latter larger and displace the whole hybrid panel.
         if type(w)~='number' or type(h)~='number' or w<=0 or h<=0 then view.clear();return end
-        if w~=width or h~=height then motion.ready=false;attached.ready=false;width,height=w,h end
+        if w~=width or h~=height then
+            motion.ready=false;attached.ready=false;width,height=w,h
+            self.texture_projection_map=nil;self.texture_xy_checks=0
+        end
         if model and not provider and self.clock>=manual_until then
             local point=native.poll()
             if point then anchor=point;anchor_at=self.clock;anchor_source='native crosshair' end
@@ -826,6 +873,13 @@ function M.start(sr,backend,options)
         local wanted=visible and 1 or 0
         alpha=wanted+(alpha-wanted)*math.exp(-math.min(dt,0.35)/(visible and 0.06 or 0.10))
         self.opacity=alpha;self.motion_x=x;self.motion_y=y
+        if self.config.debug_logging and self.config.segmented_fancy and self.segmented_seen then
+            local reason=not model and 'no-model'or alpha<.01 and 'alpha-zero'or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex)and 'blacklisted'or 'ready'
+            if reason~=self.segmented_visibility_reason and (self.segmented_visibility_traces or 0)<80 then
+                self.segmented_visibility_reason=reason;self.segmented_visibility_traces=(self.segmented_visibility_traces or 0)+1
+                log('SEGMENTED_VISIBILITY '..reason..' visible='..tostring(visible)..' hidden='..tostring(self.hidden)..' alpha='..tostring(alpha)..' pose='..tostring(self.weapon_pose~=nil))
+            end
+        end
         if self.config.debug_logging then
         local diagnostic=self.status..' | '..self.anchor_status..' | '..(view.material_status or 'material not sampled')..' | font: '..self.config.font
         if self.clock>=next_log then
@@ -856,7 +910,9 @@ function M.start(sr,backend,options)
             aim_opacity=wanted+(previous-wanted)*math.exp(-math.max(0,dt)/.15)
         end
         self.aim_opacity=aim_opacity
-        if self.presentation_view=='third' then
+        -- Presentation selects artwork; the requested WorldGUI placement must
+        -- reach the weapon renderer even when Automatic selects practical art.
+        if self.presentation_view=='third' and self.config.anchor_mode~='world' then
             world_display.release();if screen_scene then screen_scene.release()end
             local cfg=HUD.config.effective(self.config,model.resource_hex);cfg.presentation_view='third'
             local unit=h/1080;local scale=unit*self.config.scale*self.config.third_person_scale
@@ -865,7 +921,7 @@ function M.start(sr,backend,options)
             px=math.max(4*unit,math.min(w-64*scale-4*unit,px));py=math.max(4*unit,math.min(h-86*scale-4*unit,py))
             local commands=compose(model,px,py,scale,alpha*aim_opacity,cfg,self.clock)
             for _,v in ipairs(screen_overlay(w,h))do commands[#commands+1]=v end
-            view.draw(commands);self.anchor_status='floating Simple HUD';return
+            view.draw(commands);self.anchor_status=use_weapon and 'weapon-attached Simple HUD' or 'floating Simple HUD';return
         end
         if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
             local world_config=HUD.config.effective(self.config,model.resource_hex)
@@ -896,18 +952,78 @@ function M.start(sr,backend,options)
             local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock,nil,true)
             local f=world_commands[1];local left,bottom=f.x,f.y
             M.rebase_commands(world_commands,left,bottom)
+            local textured=false;for _,command in ipairs(world_commands)do if command.type=='texture'then textured=true;break end end
+            local texture_route=table.concat({tostring(textured),tostring(world_config.presentation_view),tostring(world_config.texture_art_variant),tostring(world_config.texture_art_trial)},':')
+            if self.texture_route~=texture_route then
+                self.texture_route=texture_route
+                log('HUD_TEXTURE_ROUTE '..texture_route..' compositor='..tostring(f.hud_texture_primary)..' projection_units_fix=2')
+            end
+            if textured and projection.native_point then
+                local output_width,output_height=sr.Application.back_buffer_size()
+                if output_width~=self.texture_output_width or output_height~=self.texture_output_height then
+                    self.texture_projection_map=nil;self.texture_xy_checks=0
+                    self.texture_output_width,self.texture_output_height=output_width,output_height
+                end
+                self.texture_projection_map=self.texture_projection_map or HUD.projection.native_coordinate_map(output_width,output_height)
+                local _,at=HUD.screen_scene.panel_pose(self.weapon_pose,world_config,world_commands)
+                local point=projection.native_point(at.x,at.y,at.z)
+                local camera=projection.camera_matrix
+                local native_state=point and 'projected' or tostring(projection.native_status)..'; '..tostring(projection.status)
+                if self.texture_native_state~=native_state and (self.texture_native_checks or 0)<8 then
+                    self.texture_native_state=native_state;self.texture_native_checks=(self.texture_native_checks or 0)+1
+                    log('HUD_TEXTURE_NATIVE_STATE '..native_state)
+                end
+                if point and point.depth>0 and point.depth<10000 then
+                    if camera and not self.texture_depth_calibrated then
+                        local manual=(at.x-camera[13])*camera[5]+(at.y-camera[14])*camera[6]+(at.z-camera[15])*camera[7]
+                        self.texture_depth_calibrated=math.abs(point.depth-manual)<.002+math.abs(manual)*.002
+                        if (self.texture_depth_checks or 0)<3 then
+                            self.texture_depth_checks=(self.texture_depth_checks or 0)+1
+                            log(string.format('HUD_TEXTURE_NATIVE_DEPTH normalized=%.6f metres=%.6f manual=%.6f metres_verified=%s',point.native_depth or 0,point.depth,manual,tostring(self.texture_depth_calibrated)))
+                        end
+                    end
+                    if camera and self.texture_projection_map and (self.texture_xy_checks or 0)<3 then
+                        local dx,dy,dz=at.x-camera[13],at.y-camera[14],at.z-camera[15]
+                        local d=dx*camera[5]+dy*camera[6]+dz*camera[7];local tan=math.tan(projection.camera_fov*.5)
+                        if d>0 then
+                            local mx=.5+.5*(dx*camera[1]+dy*camera[2]+dz*camera[3])/(d*tan*(w/h))
+                            local my=.5+.5*(dx*camera[9]+dy*camera[10]+dz*camera[11])/(d*tan)
+                            local map=self.texture_projection_map
+                            local error=math.abs(point.x*map.sx-mx)+math.abs(point.y*map.sy-my)
+                            self.texture_xy_checks=(self.texture_xy_checks or 0)+1
+                            log(string.format('HUD_TEXTURE_NATIVE_XY native=%.6f,%.6f manual=%.6f,%.6f error=%.6f space=%s gui=%dx%d output=%dx%d verified=%s',point.x,point.y,mx,my,error,map.space,w,h,output_width,output_height,tostring(error<.004)))
+                        end
+                    end
+                    world_config.world_texture_depth=point.depth
+                end
+                -- The wrapper owns recoil/dive offsets. A still-frame comparison
+                -- is diagnostic only; it must not disable a HUD loaded mid-shot.
+                if self.texture_projection_map and point then
+                    local map=self.texture_projection_map
+                    world_config.native_panel_projector=function(x,y,z)
+                        local q=projection.native_point(x,y,z);if not q then return nil end
+                        return HUD.projection.normalize_native_point(q,map)
+                    end
+                end
+            end
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
-                projection.camera_matrix,projection.camera_fov,w,h,projection.camera_near) then
-                world_display.release();view.draw(screen_overlay(w,h));self.anchor_status='screen-projected scene-depth HUD';return
+                projection.camera_matrix or (world_config.native_panel_projector and projection.depth_camera_matrix),
+                projection.camera_fov or projection.native_fov,w,h,projection.camera_near or projection.native_near) then
+                world_display.release();view.draw(screen_overlay(w,h));self.anchor_status='screen-projected scene-depth HUD';self.world_fallback_reason=nil;return
             end
             if screen_scene then screen_scene.release() end
             if world_display.draw(self.weapon_pose,world_config,nil,dt,nil,world_commands) then
                 view.draw(screen_overlay(w,h))
-                self.anchor_status='weapon 3D WorldGUI';return
+                self.anchor_status='weapon 3D WorldGUI';self.world_fallback_reason=nil;return
             end
         end
         world_display.release()
         if screen_scene then screen_scene.release() end
+        if self.config.anchor_mode=='world' then
+            local reason=self.weapon_pose and 'weapon render path unavailable' or ('weapon pose unavailable: '..tostring(self.pose_status))
+            self.anchor_status='WorldGUI screen fallback: '..reason
+            if self.world_fallback_reason~=reason then log('WORLDGUI_FALLBACK '..reason);self.world_fallback_reason=reason end
+        else self.world_fallback_reason=nil end
         if aim_opacity<.01 then view.draw(screen_overlay(w,h));return end
         local s=h/1080
         local offset_x,offset_y=self.config.offset_x,self.config.offset_y
@@ -934,6 +1050,7 @@ function M.start(sr,backend,options)
         if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
         local screen_config=HUD.config.effective(self.config,model.resource_hex)
         screen_config.presentation_view=self.presentation_view
+        if self.presentation_view~='third'and HUD.config.segmented_eligible(screen_config,model.resource_hex)then screen_config=HUD.config.segmented_appearance(screen_config,model.resource_hex)end
         if self.presentation_view=='third' then
             scale=scale*self.config.third_person_scale
             screen_config.style_3d='standard';screen_config.shader_layers={}

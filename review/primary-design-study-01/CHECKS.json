@@ -1,0 +1,14 @@
+{
+  "javascript_syntax": true,
+  "initial_state": true,
+  "fire": true,
+  "low": true,
+  "empty": true,
+  "reload": true,
+  "fire_mode": true,
+  "unknown": true,
+  "reset": true,
+  "svg_renders": 3,
+  "browser_reviewed": false,
+  "live_game_verified": false
+}

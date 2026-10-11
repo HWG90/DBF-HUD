@@ -1,0 +1,16 @@
+{
+  "javascript_syntax": true,
+  "opacity_endpoints": true,
+  "foreground_independent": true,
+  "fixed_comparisons": true,
+  "fire": true,
+  "low": true,
+  "empty": true,
+  "reload": true,
+  "mode": true,
+  "unknown": true,
+  "reset": true,
+  "svg_renders": 6,
+  "browser_reviewed": false,
+  "live_game_verified": false
+}

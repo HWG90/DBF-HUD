@@ -11,7 +11,18 @@ python tools/build.py
 
 `tests/run.py` loads `tests/contracts.lua` with the game's LuaJIT DLL and stops on a contract failure. Override the DLL using `--lua-dll`. The October 2 checkpoint has 101 contracts covering model/layout, numerical display, guarded reads, lifecycle, profiles, editor save/reset/scale/attachments, menu behavior and edge-triggered occlusion notice behavior.
 
-`tools/build.py` generates the startup bundle, loose MDL bundle and parent-directory MDL ZIP. `--addon-builder` can generate an Arsenal addon through the external Bingus builder. Font conversion/depth asset builders are separate tools; normal Lua build does not rebuild deployed native assets.
+`tools/build.py` generates startup and loose MDL bundles. `--package-mdl` writes the MDL ZIP into this repository's `releases` folder. `--addon-builder` can generate an Arsenal addon. Building never installs files.
+
+The complete builder now uses the local `tools/archive_addon.py` by default and reads its font/depth inputs from `releases`, rather than the enclosing workspace. The pinned native-font input is `releases/DBF-HUD-Native-Fonts-0.1.zip`. Rebuild missing depth inputs and the complete archive with:
+
+```powershell
+python tools/build_depth_state_test.py --depth-probe
+python tools/build_scene_depth_probe.py --compare
+python tools/build_scene_hud.py
+python tools/build_complete.py
+```
+
+These use maintained shader inputs and create `releases/DBF-HUD-Complete-0.3.42.zip`; they do not promote the separate Neo-Geo review candidate. Temporary test folders, logs and generated ZIPs are excluded from the complete package's source section. Offline compilation and archive checks do not establish live rendering.
 
 ## Install Lua without replacing layouts
 

@@ -144,16 +144,26 @@ function M.new(backend)
         assert(r.u(b,0x30)==1 and r.u(b,0x50)==0,'unsupported camera projection mode')
         local near,fov=r.f(b,0x28),r.f(b,0x34)
         assert(near>0 and near<10,'camera near plane')
-        -- Nonidentity local offsets require a separately verified inverse transform.
+        -- CPU projection still requires identity local offsets. The engine's
+        -- validated wrapper handles recoil/dive offsets for native depth reads.
+        local local_supported=true
         for _,o in ipairs({0x80,0x84,0x88,0x90,0x94,0x98,0x48,0x4c}) do
-            assert(math.abs(r.f(b,o))<1e-6,'camera local offset unsupported')
+            local value=r.f(b,o);assert(value==value and math.abs(value)<1e4,'camera local offset invalid')
+            if math.abs(value)>=1e-6 then local_supported=false end
         end
-        assert(math.abs(math.abs(r.f(b,0x8c))-1)<1e-6,'camera local rotation unsupported')
+        local rotation_w=r.f(b,0x8c);assert(rotation_w==rotation_w and math.abs(rotation_w)<2,'camera local rotation invalid')
+        if math.abs(math.abs(rotation_w)-1)>=1e-6 then local_supported=false end
         local array=r.p(scene+0x28);local data=r.read(array+index*64,64);local matrix={}
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
             and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        validate(matrix,fov,aspect)
         self.native_camera=camera;self.native_getter=getter
+        self.native_near=near
+        self.native_fov=fov
+        self.native_owner={base=base,state=state,scene=scene,index=index,array=array}
+        self.depth_camera_matrix=matrix
+        if not local_supported then return nil,'camera local offset unsupported for CPU projection; native projection available'end
         self.camera_matrix=matrix;self.camera_near=near;self.camera_aspect=aspect
         self.camera_distance=math.sqrt((pose.x-matrix[13])^2+(pose.y-matrix[14])^2+(pose.z-matrix[15])^2)
         self.camera_fov=fov
@@ -161,14 +171,28 @@ function M.new(backend)
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
     function self.native_point(x,y,z)
-        if not backend.project_camera or not self.native_camera or not self.native_getter then return nil end
-        local ok,a,b,d=pcall(backend.project_camera,self.native_getter,self.native_camera,x,y,z)
-        if not ok or type(a)~='number' or a~=a or b~=b or d~=d then return nil end
-        return {x=a,y=b,depth=d}
+        if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
+        local ok,a,b,d=pcall(function()
+            local owner=assert(self.native_owner);r.reset()
+            assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera and
+                r.p(self.native_camera+0x18)==owner.scene and r.u(r.read(self.native_camera+0x20,4),0)==owner.index and
+                r.p(owner.scene+0x28)==owner.array,'camera owner changed before native projection')
+            return backend.project_camera(self.native_getter,self.native_camera,x,y,z)
+        end)
+        if not ok then self.native_status=tostring(a);return nil end
+        for _,value in ipairs({a,b,d})do if type(value)~='number'or value~=value or math.abs(value)>=1e7 then self.native_status='nonfinite native projection';return nil end end
+        if type(a)~='number'or type(b)~='number'or type(d)~='number'then self.native_status='incomplete native projection';return nil end
+        -- Native perspective projection returns forward normalized device depth.
+        -- The scene-depth shader samples linear metres, so invert near/z first.
+        if not self.native_near or d>=1 then self.native_status='native depth outside perspective range';return nil end
+        local depth=self.native_near/(1-d)
+        if depth~=depth or depth<=0 or depth>=10000 then self.native_status='invalid native linear depth';return nil end
+        self.native_status='projected'
+        return {x=a,y=b,depth=depth,native_depth=d}
     end
     function self.poll(base,pose,aspect)
         if not base or not pose then self.status='no weapon pose';return nil end
-        self.native_camera=nil;self.native_getter=nil
+        self.native_camera=nil;self.native_getter=nil;self.native_owner=nil;self.native_near=nil;self.native_fov=nil;self.depth_camera_matrix=nil
         self.camera_matrix=nil;self.camera_near=nil;self.camera_aspect=nil
         self.camera_distance=nil;self.camera_fov=nil;self.camera_lateral=nil
         local ok,result,status=pcall(self.snapshot,base,pose,aspect)
@@ -177,4 +201,103 @@ function M.new(backend)
     end
     return self
 end
+-- Invert an ordered projected quad: TL, TR, BR, BL; screen UV -> unit panel UV.
+-- Rows match screen_scene.atlas_rows: u numerator, v numerator, denominator.
+local function valid(v)return type(v)=='number'and v==v and math.abs(v)<=1e7 end
+-- The guarded engine wrapper returns output pixels, which can differ from GUI
+-- pixels under upscaling. Normalize once; screen_scene scales to GUI pixels.
+function M.native_coordinate_map(output_width,output_height)
+ if not valid(output_width)or not valid(output_height)or output_width<=0 or output_height<=0 then return nil end
+ return {space='output_pixels',sx=1/output_width,sy=1/output_height,bx=0,by=0}
+end
+function M.normalize_native_point(point,map)
+ if not point or not map then return nil end
+ point.x=point.x*map.sx+map.bx;point.y=point.y*map.sy+map.by
+ return valid(point.x)and valid(point.y)and point or nil
+end
+function M.native_panel_inverse(points)
+ if type(points)~='table'or #points~=4 then return nil end
+ local x,y={},{ };local xmin,ymin,xmax,ymax=math.huge,math.huge,-math.huge,-math.huge
+ for i=1,4 do
+  local p=points[i];if type(p)~='table'then return nil end
+  x[i]=p.x~=nil and p.x or p[1];y[i]=p.y~=nil and p.y or p[2]
+  if not valid(x[i])or not valid(y[i])then return nil end
+  xmin=math.min(xmin,x[i]);xmax=math.max(xmax,x[i]);ymin=math.min(ymin,y[i]);ymax=math.max(ymax,y[i])
+ end
+ local span=math.max(xmax-xmin,ymax-ymin);if span<=0 then return nil end
+ -- A finite visible planar projection must be convex and have distinct corners.
+ local sign
+ for i=1,4 do
+  local j,k=i%4+1,(i+1)%4+1
+  local cross=(x[j]-x[i])*(y[k]-y[j])-(y[j]-y[i])*(x[k]-x[j])
+  if math.abs(cross)<=1e-12*span^2 or(sign and cross*sign<0)then return nil end
+  sign=cross
+ end
+ local dx1,dx2,dx3=x[2]-x[3],x[4]-x[3],x[1]-x[2]+x[3]-x[4]
+ local dy1,dy2,dy3=y[2]-y[3],y[4]-y[3],y[1]-y[2]+y[3]-y[4]
+ local g,h=0,0
+ if math.abs(dx3)>1e-12*span or math.abs(dy3)>1e-12*span then
+  local determinant=dx1*dy2-dx2*dy1;local extent=math.max(math.abs(dx1),math.abs(dx2),math.abs(dy1),math.abs(dy2))
+  if math.abs(determinant)<=1e-12*extent^2 then return nil end
+  g=(dx3*dy2-dx2*dy3)/determinant;h=(dx1*dy3-dx3*dy1)/determinant
+ end
+ local a,b,c=x[2]-x[1]+g*x[2],x[4]-x[1]+h*x[4],x[1]
+ local d,e,f=y[2]-y[1]+g*y[2],y[4]-y[1]+h*y[4],y[1]
+ local rows={e-f*h,c*h-b,b*f-c*e,f*g-d,a-c*g,c*d-a*f,d*h-e*g,b*g-a*h,a*e-b*d}
+ local determinant=a*rows[1]+b*rows[4]+c*rows[7]
+ local extent=math.max(math.abs(a),math.abs(b),math.abs(c),math.abs(d),math.abs(e),math.abs(f),math.abs(g),math.abs(h),1)
+ if not valid(determinant)or math.abs(determinant)<=1e-12*extent^3 then return nil end
+ local norm=math.max(math.abs(rows[7]),math.abs(rows[8]),math.abs(rows[9]));if norm<=0 then return nil end
+ for i=1,9 do rows[i]=rows[i]/norm;if not valid(rows[i])then return nil end end
+ -- Reject numerically unstable inverses instead of sending malformed shader UVs.
+ local expected={{0,0},{1,0},{1,1},{0,1}}
+ for i=1,4 do
+  local denominator=rows[7]*x[i]+rows[8]*y[i]+rows[9]
+  if not valid(denominator)or math.abs(denominator)<=1e-12 then return nil end
+  local u=(rows[1]*x[i]+rows[2]*y[i]+rows[3])/denominator
+  local v=(rows[4]*x[i]+rows[5]*y[i]+rows[6])/denominator
+  if not valid(u)or not valid(v)or math.abs(u-expected[i][1])>1e-7 or math.abs(v-expected[i][2])>1e-7 then return nil end
+ end
+ return rows
+end
+
+-- Reuse one guarded corner projection for a complete planar GUI surface.
+-- Input corners are TL/TR/BR/BL in D3D screen UVs, with native linear depth.
+-- Local geometry remains bottom-left/up; atlas mapping remains top-left/down.
+function M.native_panel_snapshot(frame,points,near)
+ if not frame or not valid(frame.x)or not valid(frame.y)or not valid(frame.w)or not valid(frame.h)or frame.w<=0 or frame.h<=0 then return nil end
+ local rows=M.native_panel_inverse(points);if not rows then return nil end
+ for i=1,4 do if not valid(points[i].depth)or points[i].depth<=0 then return nil end end
+ local a,b,c,d,e,f,g,h,i=unpack(rows)
+ local forward={e*i-f*h,c*h-b*i,b*f-c*e,f*g-d*i,a*i-c*g,c*d-a*f,d*h-e*g,b*g-a*h,a*e-b*d}
+ local norm=math.max(math.abs(forward[7]),math.abs(forward[8]),math.abs(forward[9]));if norm<=0 then return nil end
+ for k=1,9 do forward[k]=forward[k]/norm;if not valid(forward[k])then return nil end end
+ local d0,du,dv=points[1].depth,points[2].depth-points[1].depth,points[4].depth-points[1].depth
+ -- Native float projection can round; refuse a nonplanar depth snapshot.
+ if math.abs(d0+du+dv-points[3].depth)>.002+math.abs(points[3].depth)*.002 then return nil end
+ local threshold=math.max(near or .0001,.0001)
+ local snapshot={rows=rows}
+ function snapshot.project(x,y)
+  local u,v=(x-frame.x)/frame.w,1-(y-frame.y)/frame.h
+  local depth=d0+du*u+dv*v;local divisor=forward[7]*u+forward[8]*v+forward[9]
+  if not valid(depth)or depth<=threshold or not valid(divisor)or math.abs(divisor)<1e-12 then return nil end
+  local nx=(forward[1]*u+forward[2]*v+forward[3])/divisor
+  local ny=1-(forward[4]*u+forward[5]*v+forward[6])/divisor
+  if not valid(nx)or not valid(ny)then return nil end
+  return {x=nx,y=ny,depth=depth}
+ end
+ function snapshot.image_rows(x,y,w,h)
+  if not valid(w)or not valid(h)or w<=0 or h<=0 then return nil end
+  local ox,oy=frame.x-x,y+h-frame.y-frame.h
+  local cropped={}
+  for k=1,3 do
+   cropped[k]=(frame.w*rows[k]+ox*rows[k+6])/w
+   cropped[k+3]=(frame.h*rows[k+3]+oy*rows[k+6])/h
+   cropped[k+6]=rows[k+6]
+  end
+  return cropped
+ end
+ return snapshot
+end
+
 return M

@@ -3,12 +3,12 @@ from pathlib import Path
 import argparse, importlib.util, json, subprocess, sys, zipfile, ctypes, struct
 ROOT=Path(__file__).resolve().parents[1]
 def main():
- p=argparse.ArgumentParser();p.add_argument('--addon-builder',type=Path,required=True);args=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--addon-builder',type=Path,default=ROOT/'tools/archive_addon.py');args=p.parse_args()
  sys.path.insert(0,str(args.addon_builder.parent))
  spec=importlib.util.spec_from_file_location('addon_builder',args.addon_builder);builder=importlib.util.module_from_spec(spec);spec.loader.exec_module(builder)
  subprocess.run([sys.executable,str(ROOT/'tools/build.py')],check=True)
- bridge=(ROOT/'bridge/render_bridge.lua').read_text().split('\n',1)[1]
- hud=(ROOT/'dist/dbf_hud.lua').read_text().split('\n',1)[1]
+ bridge=(ROOT/'bridge/render_bridge.lua').read_text(encoding='utf-8').split('\n',1)[1]
+ hud=(ROOT/'dist/dbf_hud.lua').read_text(encoding='utf-8').split('\n',1)[1]
  combined='-- HD2-Addon: mods/dbf_hud/hud\nlocal bridge_ok,bridge_result=pcall(function()\n'+bridge+'\nend)\n'+hud
  entry=ROOT/'dist/dbf_hud_complete.lua';entry.write_text(combined,encoding='utf-8')
  # Compile without running any game API.
@@ -17,7 +17,7 @@ def main():
  dll.luaL_loadfile.argtypes=[ctypes.c_void_p,ctypes.c_char_p];dll.lua_close.argtypes=[ctypes.c_void_p]
  try: assert dll.luaL_loadfile(state,str(entry).encode())==0,'combined startup Lua failed compilation'
  finally:dll.lua_close(state)
- temp=ROOT.parent/'DBF-HUD-startup-component.zip';live=ROOT.parent/'DBF-HUD-live-bridge-component.zip'
+ temp=ROOT/'releases'/'DBF-HUD-startup-component.zip';live=ROOT/'releases'/'DBF-HUD-live-bridge-component.zip'
  builder.build_addon('mods/dbf_hud/hud',combined.encode(),'eb9de2f7-5733-46a0-96d8-8750becccd53',temp)
  builder.build_addon('mods/holographic_utility_display/render_bridge',(ROOT/'bridge/render_bridge.lua').read_bytes(),'2d860b40-510b-4a22-bbad-0911f9537d64',live)
  # Merge resources and shader registrations rather than stacking competing groups.
@@ -25,7 +25,7 @@ def main():
  from build_scene_hud import rows_from_zip
  from build_scene_depth_probe import archive_rows
  from build_native_font_depth import hash64
- assets=[ROOT.parent/'DBF-HUD-Native-Fonts-0.1.zip',ROOT.parent/'DBF-HUD-WorldGUI-Depth-Probe-0.3.zip',ROOT.parent/'DBF-HUD-Screen-Depth-Renderer-0.3.zip']
+ assets=[ROOT/'releases'/'DBF-HUD-Native-Fonts-0.1.zip',ROOT/'releases'/'DBF-HUD-WorldGUI-Depth-Probe-0.3.zip',ROOT/'releases'/'DBF-HUD-Screen-Depth-Renderer-0.3.zip']
  resources={};groups=[];group_kind=hash64('shader_library_group')
  for asset in assets:
   assert asset.exists(),f'Missing required asset package: {asset}'
@@ -46,7 +46,7 @@ def main():
  resources[groups[-1][:2]]=(groups[-1][0],group_kind,bytes(group),b'')
  asset_body,asset_gpu=archive_rows(list(resources.values()))
  manifest={'Version':1,'Guid':'eb9de2f7-5733-46a0-96d8-8750becccd53','Name':'DBF-HUD Complete 0.3.42','Description':'HUD, render bridge, all native fonts and current screen-depth renderer assets. Requires Bingus Shared Loader. Choose one installation mode.','Options':[{'Name':'Complete HUD - startup','Include':['Startup','Assets']},{'Name':'MDL live reload - bridge and all assets','Include':['LiveBridge','Assets']}]}
- output=ROOT.parent/'DBF-HUD-Complete-0.3.42.zip'
+ output=ROOT/'releases'/'DBF-HUD-Complete-0.3.42.zip'
  with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as out:
   out.writestr('manifest.json',json.dumps(manifest,indent=2)+'\n')
   for component,prefix in [(temp,'Startup'),(live,'LiveBridge')]:
@@ -70,7 +70,9 @@ def main():
    if path.is_file():out.write(path,'Fonts/'+path.relative_to(ROOT/'assets/fonts').as_posix())
   for folder in ('src','tools','tests','bridge','preview'):
    for path in sorted((ROOT/folder).rglob('*')):
-    if path.is_file() and '__pycache__' not in path.parts:out.write(path,'Source/'+path.relative_to(ROOT).as_posix())
+    relative=path.relative_to(ROOT)
+    if path.is_file() and '__pycache__' not in path.parts and 'tmp' not in relative.parts and path.suffix not in ('.log','.pyc','.zip'):
+     out.write(path,'Source/'+relative.as_posix())
  with zipfile.ZipFile(output) as z:
   assert z.testzip() is None
   assert len(z.namelist())==len(set(z.namelist()))

@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-10",
+  "scope": "primary weapons first",
+  "first_weapon": { "name": "AR-23 Liberator", "resource_hex": "968211c0033dce64" },
+  "candidate_layout": "vertical segmented instrument",
+  "feedback_addressed": ["rigid", "seven-segment display", "Helldivers-oriented", "avoid text floating in a box"],
+  "digits": "beveled SVG polygons; fixed cells with dim leading zeros and inactive segments",
+  "backing_translucency_independent": true,
+  "palette": "warm white, olive, military yellow",
+  "sample_values_are_weapon_defaults": false,
+  "runtime_integrated": false,
+  "installed": false,
+  "live_visual_verified": false,
+  "candidate_approved": true,
+  "approved_scope": "Fancy layout only",
+  "requested_theme_revision": "white, gold, navy; red empty loaded counter; contrast strokes",
+  "earlier_studies_preserved": true
+}

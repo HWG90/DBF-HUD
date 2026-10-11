@@ -1,0 +1,35 @@
+{
+  "composition_cases": 150,
+  "concepts": [
+    "orbit",
+    "rail",
+    "split"
+  ],
+  "families": [
+    "magazine",
+    "belt",
+    "shells",
+    "heat",
+    "charge",
+    "ammo",
+    "expendable",
+    "fuel",
+    "infinite",
+    "stress"
+  ],
+  "states": 5,
+  "unknown_is_not_zero": true,
+  "selected_contexts_present": true,
+  "four_independent_settings_stress_passed": true,
+  "unsupported_fields_not_fabricated": true,
+  "gameplay_default_scale": 0.7,
+  "reference_pixels": [
+    1920,
+    1080
+  ],
+  "mask_algorithm": "smoothstep + static 4x4 ordered threshold mixture",
+  "browser_layout_verified": false,
+  "browser_limitation": "file protocol URL policy",
+  "asset_rasterization": "Sharp standalone SVG",
+  "source_or_deployment_mutations": false
+}

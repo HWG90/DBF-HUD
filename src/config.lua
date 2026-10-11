@@ -15,8 +15,17 @@ M.weapon_clearance={
 M.defaults={font_scale=1,hud_presentation='automatic',third_person_scale=.75,third_person_opacity=.22,force_all_hud_texture_off=false,appearance_follow_equipped=true,shader_layer_serial=0,texture_art_variant='faithful',texture_art_trial=true,theme_shader_animate=false,effect_shader_animate=false,theme_shader_speed=1,effect_shader_speed=1,theme_shader_scale=1,effect_shader_scale=1,render_sync_trial=true,theme_shader='auto',effect_shader='none',railgun_release_margin_ms=200,debug_hud_timing=false,senator_style="cylinder",weapon_panels={},effect_sweep_speed=.35,effect_sweep_density=3,effect_scanline_count=21,mg43_easter_egg=true,weapon_blacklist="",zoom_compensation=false,debug_sight_root_orientation=false,effect_scanlines=false,effect_flicker=false,effect_sweep=false,text_opacity=1,force_occlusion=false,style_3d='standard',fade_3d_unless_aiming=false,show_3d='aiming',keep_hud_upright=false,fp_auto_side='right',placement_mode='auto',decoration='none',debug_logging=false,weapon_screen_test=false,always_show_3d=false,occlusion_mode="gui_depth",hud_occlusion=true,text_color_alpha=255,heat_white_alpha=255,heat_yellow_alpha=255,heat_red_alpha=255,saturation=1.3,left_mount_x=0,left_mount_y=0,left_mount_z=0,fp_mount_x=0,fp_mount_y=0,fp_mount_z=0,scanline_strength=0.18,texture_refresh_hz=0,emissive_intensity=3,world_position_smooth=0.045,world_rotation_smooth=0.08,world_max_lag=0.12,follow=0.65,travel=55,settle=0.22,offset_x=62,offset_y=-5,scale=1,opacity=1,
     panel_opacity=0.8,flash_hz=2,frosted=true,pose_marker=false,world_probe=false,anchor_mode='world',weapon_offset_x=62,weapon_offset_y=30,weapon_settle=0.10,weapon_lag=40,mount_x=0,mount_y=0,mount_z=0,text_color='#C4CECA',decoration_color='#C4CECA',background_color='#202628',
     heat_white='#E5E7E2',heat_yellow='#E7C85C',heat_red='#E16D65',font='bigblue'}
+M.defaults.segmented_fancy=false
+M.defaults.segmented_text_color='#F5F6F0'
+M.defaults.segmented_ui_color='#E9C45D'
+M.defaults.segmented_background_color='#091B35'
+M.defaults.segmented_empty_color='#FF5750'
+M.defaults.panel_edge_softness=4
+M.defaults.panel_edge_curve=1;M.defaults.panel_edge_dither=35;M.defaults.panel_edge_grain=1
 M.limits={font_scale={.5,1.5},third_person_scale={.5,1.5},third_person_opacity={0,1},theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
     scale={0.5,2},opacity={0.1,1},panel_opacity={0,1},flash_hz={0.5,3}}
+M.limits.panel_edge_softness={0,24}
+M.limits.panel_edge_curve={.5,3};M.limits.panel_edge_dither={0,100};M.limits.panel_edge_grain={1,4}
 function M.hex(v)
     assert(type(v)=='string','hex color must be a string')
     local h=v:gsub('^#','')
@@ -77,19 +86,44 @@ HUD.shader_catalog={
 HUD.shader_ids={auto=true,none=true};for _,entry in ipairs(HUD.shader_catalog)do HUD.shader_ids[entry.id]=true end
 M.panel_keys={font_scale=true,shader_layers=true,shader_layer_serial=true,texture_art_variant=true,texture_art_trial=true,theme_shader_animate=true,effect_shader_animate=true,theme_shader_speed=true,effect_shader_speed=true,theme_shader_scale=true,effect_shader_scale=true,theme_shader=true,effect_shader=true,background_color=true,text_color=true,decoration_color=true,panel_opacity=true,text_opacity=true,decoration=true,frosted=true,effect_scanlines=true,effect_flicker=true,effect_sweep=true,effect_sweep_speed=true,effect_sweep_density=true,effect_scanline_count=true,style_3d=true,font=true}
 -- Apply last, after every per-weapon merge. Never alter saved weapon choices.
-function M.texture_policy(config)
+M.panel_keys.segmented_text_color=true;M.panel_keys.segmented_ui_color=true
+M.panel_keys.segmented_background_color=true;M.panel_keys.segmented_empty_color=true
+M.panel_keys.panel_edge_softness=true
+M.panel_keys.panel_edge_curve=true;M.panel_keys.panel_edge_dither=true;M.panel_keys.panel_edge_grain=true
+function M.segmented_eligible(config,resource)
+ return false -- Retired: HUD Texture owns artwork and shader rendering.
+end
+function M.segmented_appearance(config,resource)
+ if not M.segmented_eligible(config,resource)or config.presentation_view=='third'then return config end
+ local out={};for k,v in pairs(config)do out[k]=v end
+ out.text_color=out.segmented_text_color or M.defaults.segmented_text_color
+ out.decoration_color=out.segmented_ui_color or M.defaults.segmented_ui_color
+ out.background_color=out.segmented_background_color or M.defaults.segmented_background_color
+ out.heat_red=out.segmented_empty_color or M.defaults.segmented_empty_color
+ out.heat_yellow=out.decoration_color
+ out.style_3d='standard';out.shader_layers={};out.theme_shader='none';out.effect_shader='none'
+ out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.frosted=false
+ out.keep_hud_upright=false;out.first_person_zoom_demo=false;out.saturation=1;out.emissive_intensity=1
+ out.texture_art_trial=false;out.texture_art_variant='original'
+ return out
+end
+function M.texture_policy(config,owned)
+ if config.segmented_primary then return config end
  local force=config.force_all_hud_texture_off
  local texture=config.texture_art_trial==true and config.texture_art_variant~='original'
  if not force and not texture then return config end
- local out={};for k,v in pairs(config)do out[k]=v end
+  local out=config
+  if not owned then out={};for k,v in pairs(config)do out[k]=v end end
  if force then out.texture_art_trial=false;out.mechanical_art_enabled=false;out.texture_art_variant='original'
- else out.decoration='none';out.style_3d='standard';out.theme_shader='none';out.effect_shader='none';out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.frosted=false end
+ else out.frosted=false end
  return out
 end
 function M.effective(config,resource)
  local out={};for k,v in pairs(config)do out[k]=v end
  local overrides=(config.weapon_panels or {})[resource or '']
  if overrides then for k,v in pairs(overrides)do out[k]=v end;out.weapon_panel_overrides=overrides end
+ out.segmented_primary=M.segmented_eligible(out,resource)or false
+ if out.segmented_primary then out.texture_art_trial=false;out.texture_art_variant='original' end
  out=M.texture_policy(out)
  if HUD.shader_layers then out.shader_layers=HUD.shader_layers.effective(out);out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.theme_shader='none';out.effect_shader='none' end
  return out
@@ -120,19 +154,11 @@ function M.blacklist_value(config,resource,hidden)
 end
 -- Texture mode owns fixed artwork styling. Independent shader layers remain.
 function M.normalize_texture_mode(config)
- local changed=false
- local reset={decoration='none',style_3d='standard',theme_shader='none',effect_shader='none',effect_scanlines=false,effect_flicker=false,effect_sweep=false,frosted=false}
- local global_on=config.texture_art_trial~=false and config.texture_art_variant~='original'
- local before={};for k in pairs(reset)do before[k]=config[k]end
- for _,profile in pairs(config.weapon_panels or {})do
-  local enabled=profile.texture_art_trial;if enabled==nil then enabled=config.texture_art_trial end
-  local variant=profile.texture_art_variant or config.texture_art_variant
-  if enabled~=false and variant~='original' then for k,v in pairs(reset)do if (profile[k]~=nil or not global_on)and profile[k]~=v then changed=true;profile[k]=v end end
-  elseif global_on then for k in pairs(reset)do if profile[k]==nil then profile[k]=before[k];changed=true end end end
- end
- if global_on then for k,v in pairs(reset)do if config[k]~=v then changed=true;config[k]=v end end end
- return changed
+ -- Appearance choices belong to the user. Texture policy acts on a render copy;
+ -- loading or disabling artwork must not overwrite shader/decor/style settings.
+ return false
 end
+
 function M.apply(config,values,validation_only)
     assert(type(values)=='table','configuration must be a table')
     local flattened={}
@@ -152,7 +178,8 @@ function M.apply(config,values,validation_only)
     for k,v in pairs(flattened) do
         assert(M.defaults[k]~=nil or k=='shader_layers','unknown setting: '..tostring(k))
         local limits=M.limits[k]
-        if k=='force_all_hud_texture_off' or k=='appearance_follow_equipped' then assert(type(v)=='boolean','setting must be boolean')
+        if k=='force_all_hud_texture_off' or k=='appearance_follow_equipped' or k=='segmented_fancy' then assert(type(v)=='boolean','setting must be boolean')
+        elseif k=='segmented_text_color' or k=='segmented_ui_color' or k=='segmented_background_color' or k=='segmented_empty_color' then v=M.hex(v)
         elseif k=='hud_presentation' then assert(v=='automatic' or v=='practical' or v=='weapon_specific','invalid HUD presentation')
         elseif k=='shader_layers' then v=HUD.shader_layers.validate(v)
         elseif k=='shader_layer_serial' then assert(type(v)=='number' and v%1==0 and v>=0 and v<1000000,'Invalid layer serial')

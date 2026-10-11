@@ -2,10 +2,21 @@ local M={specs=HUD.ballistic_family_specs,mask='mods/dbf_hud/textures/ballistic_
 local material='mods/dbf_hud/materials/adjudicator_tall_v1'
 local function number(v)return type(v)=='number'and v==v and v>=0 and v<=100000 and math.floor(v)or nil end
 function M.ready(id,resource)
+    local primary=HUD.segmented_fancy
+    if primary and primary.ready(id) and primary.assets_ready(resource) then return true end
     return M.specs[id] and resource(M.mask)~=nil and resource('mods/dbf_hud/textures/ballistic_family_'..id)~=nil
 end
-function M.compose(m,x,y,s,opacity,cfg,resource)
-    cfg=HUD.config.texture_policy(cfg);local spec=M.specs[m.resource_hex]
+function M.compose(m,x,y,s,opacity,cfg,resource,can_get)
+    cfg=HUD.config.texture_policy(cfg)
+    if cfg.presentation_view=='third' or cfg.hud_presentation=='practical' then return nil end
+    -- The approved primary face is artwork for the existing HUD Texture choice.
+    -- Original/alternative art and Simple keep their established composers.
+    local primary=HUD.segmented_fancy
+    if primary and cfg.texture_art_trial~=false and cfg.texture_art_variant=='faithful' and primary.ready(m.resource_hex,cfg) then
+        local out=primary.compose(m,x,y,s,opacity,cfg,cfg.style_clock,resource,can_get)
+        if out then return HUD.layout.decorate_textures(out,s,cfg,opacity) end
+    end
+    local spec=M.specs[m.resource_hex]
     if not spec or cfg.texture_art_trial==false or cfg.texture_art_variant~='faithful' or not M.ready(m.resource_hex,resource) then return nil end
     local w,h=148*s,148*640/520*s
     local out={{type='panel',x=x,y=y,w=w,h=h,a=0,c={0,0,0},frosted=false,atlas_frame=true,ballistic_family=true}}

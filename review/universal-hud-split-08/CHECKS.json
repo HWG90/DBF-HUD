@@ -1,0 +1,41 @@
+{
+  "composition_cases": 100,
+  "direction": "Split",
+  "selected_by": "David",
+  "selection_date": "2026-10-11",
+  "families": [
+    "magazine",
+    "belt",
+    "shells",
+    "heat",
+    "charge",
+    "ammo",
+    "expendable",
+    "fuel",
+    "infinite",
+    "stress"
+  ],
+  "states": 5,
+  "context_views": [
+    "combat",
+    "inspect"
+  ],
+  "known_selected_values_preserved_in_both_views": true,
+  "four_independent_settings_stress_passed": true,
+  "chamber_bonus_requires_verified_capacity_plus_one": true,
+  "unknown_is_not_zero": true,
+  "fixed_modes_omitted": true,
+  "unsupported_fields_not_fabricated": true,
+  "gameplay_default_scale": 0.7,
+  "reference_pixels": [
+    1920,
+    1080
+  ],
+  "critical_reference_label_size": 11.5,
+  "optional_reference_fallback": "neutral field with message",
+  "browser_layout_verified": false,
+  "browser_limitation": "file protocol URL policy; no workaround used",
+  "asset_rasterization": "Sharp standalone SVG",
+  "runtime_implementation_claimed": false,
+  "source_or_deployment_mutations": false
+}

@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-10",
+  "scope": "primary weapons first",
+  "first_weapon": { "name": "AR-23 Liberator", "resource_hex": "968211c0033dce64" },
+  "selected_direction": "Open with variable background translucency",
+  "foreground_opacity_independent": true,
+  "background_translucency_percent": { "min": 0, "max": 100, "default_preview": 75 },
+  "preview_default_is_user_approved": false,
+  "alternatives_preserved": ["Receiver", "Dial"],
+  "sample_values_are_weapon_defaults": false,
+  "runtime_integrated": false,
+  "installed": false,
+  "live_visual_verified": false,
+  "existing_designs_preserved_as_fallback": true
+}

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "white_rgb_under_transparency": true,
+  "boundary_zero": true,
+  "center_255": true,
+  "symmetric": true,
+  "monotonic_inward": true,
+  "actual_composer_preview": true,
+  "shared_decoration_global_mask": true,
+  "foreground_unmasked": true,
+  "v4_files_preserved": 22
+}

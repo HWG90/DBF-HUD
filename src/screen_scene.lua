@@ -1,6 +1,7 @@
 -- Project saved world layouts into the UI world; compare scene depth in shaders.
 -- Native atlas glyphs become textured quads, not replacement bitmap lettering.
 local M={max_texture_images=24}
+local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
 -- Non-overlapping edge bands use the existing material mapping and triangle
 -- alpha. No new native shader library or per-band GUI/material is required.
 function M.feather_boxes(w,h,fx,fy)
@@ -33,6 +34,7 @@ function M.expand_shader_layers(commands,c,can_get,resource)
     q.a=(c.visibility_alpha or 1)*opacity;q.c=carrier.coverage_mask and {96,106,101}or {255,255,255}
     q.texture_layers=nil;q.texture_theme_shader=r.shader;q.texture_theme=false
     q.shader_layer=r;q.texture_layer=50+slot*.08;q.shader_alpha_masked=true
+    q.texture_slot=count+1 -- Each layer owns independent scale/time uniforms.
     out[#out+1]=q;count=count+1
    else notes[#notes+1]='Layer '..slot..': texture-alpha material unavailable or image budget reached' end
   else
@@ -48,7 +50,9 @@ function M.expand_texture_layers(commands)
     local out,slots={},0
     local function finite(n)return type(n)=='number' and n==n and math.abs(n)<math.huge end
     local function emit(v)
-        if v.visible==false or (v.a or 1)<=0 then return end
+        -- Keep an invisible backing as shader coverage metadata. Dropping it
+        -- at zero opacity would make independent layers adopt the face atlas.
+        if v.visible==false or ((v.a or 1)<=0 and not(v.coverage_mask and v.a==0)) then return end
         slots=slots+1;assert(slots<=M.max_texture_images,'too many visible texture images per panel')
         local q={};for k,value in pairs(v)do q[k]=value end
         q.texture_layers=nil;q.texture_slot=slots;q.a=q.a or 1;q.c=q.c or {255,255,255}
@@ -233,7 +237,10 @@ function M.new(sr,log,hot_panel_art)
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
     local function draw(p,c,commands,camera,fov,width,height,near,m,at)
-        if not p or not camera or not A.can_get or not A.can_get('material',fill) then self.release();return false end
+        local native_projection=type(c.native_panel_projector)=='function'
+        if not p or (not native_projection and not camera) or not A.can_get or not A.can_get('material',fill) then self.release();return false end
+        if native_projection and (not finite(width) or not finite(height) or width<=0 or height<=0 or
+            type(HUD.projection.native_panel_inverse)~='function') then return false end
         assert(type(G.triangle)=='function' and type(G.destroy_triangle)=='function','screen triangle API unavailable')
         assert(type(G.material)=='function' and sr.Material and type(sr.Material.set_scalar)=='function','material parameters unavailable')
         if dither_available==nil then dither_available=A.can_get('material',dither)==true;log('SCYTHE_DITHER material_available='..tostring(dither_available)) end
@@ -245,7 +252,7 @@ function M.new(sr,log,hot_panel_art)
         clear()
         for _,pool in pairs(glyphs) do pool.used=0 end
         -- Temporary zoom demo: retain the widest observed first-person FOV per weapon.
-        if c.first_person_zoom_demo and fov then
+        if not native_projection and c.first_person_zoom_demo and fov then
             self.zoom_reference=self.zoom_reference or {}
             local key=p.resource_hex or 'unknown'
             local reference=math.max(self.zoom_reference[key] or fov,fov)
@@ -270,34 +277,89 @@ function M.new(sr,log,hot_panel_art)
         -- First-person surfaces can sit closer than the world camera near plane.
         if first then log('SCREEN_FONT_API bitmap='..type(G.bitmap_3d_uv)..' destroy='..type(G.destroy_bitmap_3d)) end
         local hud_near=p.first_person and math.min(near or .05,.005) or (near or .05)
-        local project_snapshot=HUD.projection.projector(camera,fov,width/height,hud_near)
+        local project_snapshot;local native_points=0
+        if native_projection then
+            if not finite(hud_near) or hud_near<0 then return false end
+            project_snapshot=function(x,y,z)
+                if not finite(x) or not finite(y) or not finite(z) then return nil end
+                native_points=native_points+1
+                local ok,point=pcall(c.native_panel_projector,x,y,z)
+                if not ok or type(point)~='table' or not finite(point.x) or not finite(point.y) or
+                    math.abs(point.x)>1e7 or math.abs(point.y)>1e7 or not finite(point.depth) or
+                    point.depth<=math.max(hud_near,.0001) then return nil end
+                return point -- Native callback returns normalized GUI-up coordinates.
+            end
+        else project_snapshot=HUD.projection.projector(camera,fov,width/height,hud_near) end
         local function render(list,axes,origin,draw_gui)
-            local dx,dy,dz=origin.x-camera[13],origin.y-camera[14],origin.z-camera[15]
-            local depth=dx*camera[5]+dy*camera[6]+dz*camera[7]
-            depth=math.max(depth,hud_near)
-            local enabled=c.occlusion_mode~='gui' and 1 or 0
+            local plane
+            if native_projection then
+                local frame
+                for _,entry in ipairs(list)do if entry.type=='panel'and entry.w>0 and entry.h>0 then frame=entry;break end end
+                if frame then
+                    local points={}
+                    for i,corner in ipairs({{frame.x,frame.y+frame.h},{frame.x+frame.w,frame.y+frame.h},{frame.x+frame.w,frame.y},{frame.x,frame.y}})do
+                        local point=project_snapshot(M.point(axes,origin,corner[1],corner[2]))
+                        if not point then points=nil;break end
+                        points[i]={x=point.x,y=1-point.y,depth=point.depth}
+                    end
+                    if points then plane=HUD.projection.native_panel_snapshot(frame,points,hud_near)end
+                end
+            end
+            local function local_project(x,y)
+                if plane then return plane.project(x,y)end
+                return project_snapshot(M.point(axes,origin,x,y))
+            end
+            local depth,enabled
+            if native_projection then
+                depth=finite(c.world_texture_depth) and c.world_texture_depth>0 and c.world_texture_depth or 0
+                enabled=c.occlusion_mode~='gui' and depth>0 and 1 or 0
+            else
+                local dx,dy,dz=origin.x-camera[13],origin.y-camera[14],origin.z-camera[15]
+                depth=math.max(dx*camera[5]+dy*camera[6]+dz*camera[7],hud_near)
+                enabled=c.occlusion_mode~='gui' and 1 or 0
+            end
             if first and list[1] then
                 local panel=list[1];local depths={}
                 for _,corner in ipairs({{panel.x,panel.y},{panel.x+panel.w,panel.y},{panel.x+panel.w,panel.y+panel.h},{panel.x,panel.y+panel.h}}) do
-                    local wx,wy,wz=M.point(axes,origin,corner[1],corner[2])
-                    depths[#depths+1]=(wx-camera[13])*camera[5]+(wy-camera[14])*camera[6]+(wz-camera[15])*camera[7]
+                    if native_projection then local point=local_project(corner[1],corner[2]);depths[#depths+1]=point and point.depth or -1
+                    else local wx,wy,wz=M.point(axes,origin,corner[1],corner[2]);depths[#depths+1]=(wx-camera[13])*camera[5]+(wy-camera[14])*camera[6]+(wz-camera[15])*camera[7] end
                 end
                 log(string.format('SCREEN_CLIP near=%.6f enabled=%d corners=%.6f,%.6f,%.6f,%.6f',hud_near,enabled,unpack(depths)))
             end
             -- One panel coordinate system per GUI/pose, shared by its shader materials.
             -- Child folds already use a separate GUI and render pose.
+            local function panel_rows(x,y,w,h)
+                if native_projection then
+                    if plane then return plane.image_rows(x,y,w,h)end
+                    local points={}
+                    for i,corner in ipairs({{x,y+h},{x+w,y+h},{x+w,y},{x,y}}) do
+                        local point=project_snapshot(M.point(axes,origin,corner[1],corner[2]))
+                        if not point then return nil end
+                        points[i]={x=point.x,y=1-point.y} -- D3D screen UVs are downwards.
+                    end
+                    return HUD.projection.native_panel_inverse(points)
+                end
+                local wx,wy,wz=M.point(axes,origin,x,y+h)
+                local rx,ry,rz=M.point(axes,origin,x+w,y+h)
+                local bx,by,bz=M.point(axes,origin,x,y)
+                local rows={HUD.projection.panel_inverse(camera,fov,width/height,wx,wy,wz,rx-wx,ry-wy,rz-wz,bx-wx,by-wy,bz-wz)}
+                return rows[1] and rows or nil
+            end
             local mapping_rows,mapping_checked
+            local edge_mask,edge_material
+            for _,entry in ipairs(list)do
+                if entry.type=='panel'and entry.hud_texture_primary and entry.edge_mask_resource and type(entry.edge_mask_material)=='string'and
+                    hot_panel_art and hot_panel_art.resource(entry.edge_mask_resource)then
+                    edge_mask,edge_material=entry.edge_mask_resource,entry.edge_mask_material;break
+                end
+            end
             local function panel_mapping()
                 if mapping_checked then return mapping_rows end
                 mapping_checked=true
                 local frame
                 for _,entry in ipairs(list) do if entry.type=='panel' then frame=entry;break end end
                 if not frame or frame.w<=0 or frame.h<=0 then return nil end
-                local x,y,z=M.point(axes,origin,frame.x,frame.y+frame.h)
-                local rx,ry,rz=M.point(axes,origin,frame.x+frame.w,frame.y+frame.h)
-                local bx,by,bz=M.point(axes,origin,frame.x,frame.y)
-                local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
-                if rows[1] then mapping_rows=rows end
+                mapping_rows=panel_rows(frame.x,frame.y,frame.w,frame.h)
                 return mapping_rows
             end
             local materials={}
@@ -352,24 +414,33 @@ function M.new(sr,log,hot_panel_art)
                 return name
             end
             local function project(x,y)
-                local wx,wy,wz=M.point(axes,origin,x,y)
-                local point=project_snapshot(wx,wy,wz)
+                local point=local_project(x,y)
                 if point then return sr.Vector3(point.x*width,0,point.y*height),{x=point.x*width,y=point.y*height} end
             end
             -- This scratch quad is consumed synchronously by clipping; never stored by native drawing.
             local corners={{},{},{},{}}
             local clipping_scratch={camera={{},{},{},{}},result={{},{},{},{}}}
+            local native_polygon={{},{},{},{}}
             local function vertex(p)return sr.Vector3(p.x*width,0,p.y*height) end
             local function quad(x,y,w,h,name,color,layer,uv,texture,points,effect,role,art_rows,art_params)
                 if w<=0 or h<=0 then return end
                 for i=1,4 do
                     local right=i==2 or i==3;local upper=i>=3
-                    local wx,wy,wz=M.point(axes,origin,points and points[i][1] or (right and x+w or x),points and points[i][2] or (upper and y+h or y))
-                    local corner=corners[i];corner.x,corner.y,corner.z=wx,wy,wz
+                    local lx,ly=points and points[i][1] or (right and x+w or x),points and points[i][2] or (upper and y+h or y)
+                    local corner=corners[i];corner.lx,corner.ly=lx,ly
+                    if not native_projection then corner.x,corner.y,corner.z=M.point(axes,origin,lx,ly)end
                     corner.s=uv and (right and uv[3] or uv[1]) or 0
                     corner.v=uv and (upper and uv[2] or uv[4]) or 0
                 end
-                local polygon=HUD.projection.clip_polygon(camera,corners,fov,width/height,hud_near,clipping_scratch)
+                local polygon
+                if native_projection then
+                    polygon=native_polygon
+                    for i,corner in ipairs(corners) do
+                        local point=local_project(corner.lx,corner.ly)
+                        if not point then polygon={};break end
+                        local result=polygon[i];result.x,result.y,result.s,result.v=point.x,point.y,corner.s,corner.v
+                    end
+                else polygon=HUD.projection.clip_polygon(camera,corners,fov,width/height,hud_near,clipping_scratch) end
                 if effect then scan_generated=scan_generated+1 end
                 if #polygon<3 then if effect then scan_clipped=scan_clipped+1 end;return end
                 if effect and #polygon==4 and not self.scanline_probe then
@@ -392,18 +463,21 @@ function M.new(sr,log,hot_panel_art)
             end
             for _,v in ipairs(list) do
                 local function color(alpha,ink)ink=ink or v.c;if v.texture_color_linear then ink=HUD.config.native_rgb(ink)end;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
-                if v.type=='texture' then
-                    local x,y,z=M.point(axes,origin,v.x,v.y+v.h)
-                    local rx,ry,rz=M.point(axes,origin,v.x+v.w,v.y+v.h)
-                    local bx,by,bz=M.point(axes,origin,v.x,v.y)
-                    local rows={HUD.projection.panel_inverse(camera,fov,width/height,x,y,z,rx-x,ry-y,rz-z,bx-x,by-y,bz-z)}
-                    if rows[1] then rows=M.atlas_rows(rows,v.atlas_rect) end
+                if v.type=='texture' and v.a>0 then
+                    local rows=panel_rows(v.x,v.y,v.w,v.h)
+                    if rows then rows=M.atlas_rows(rows,v.atlas_rect) end
                     local artwork_material=HUD.texture_theme.material(v.texture_material,v.texture_theme_shader or (v.texture_theme==false and 'none' or c.theme_shader),A.can_get)
-                    if rows[1] then for _,box in ipairs(M.feather_boxes(v.w,v.h,v.texture_feather_x,v.texture_feather_y))do
+                    if rows then for _,box in ipairs(M.feather_boxes(v.w,v.h,v.texture_feather_x,v.texture_feather_y))do
                         quad(v.x+box[1],v.y+box[2],box[3],box[4],artwork_material,color(box[5]),v.texture_layer or 49,nil,v.texture_resource,nil,nil,'texture:'..v.texture_slot,rows,v.shader_layer)
                     end end
                 end
-                if (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
+                if v.type=='rect' and v.decoration and not v.charge_meter and edge_mask and not c.profile_skip_geometry then
+                    -- The shared decoration rectangles use one panel-wide alpha
+                    -- map on the existing root GUI; their geometry/color stay intact.
+                    local rows=panel_mapping()
+                    if rows then quad(v.x,v.y,v.w,v.h,edge_material,color(1),50,nil,edge_mask,v.quad,nil,'decoration',rows)
+                    else quad(v.x,v.y,v.w,v.h,fill,color(1),50,nil,nil,v.quad)end
+                elseif (v.type=='rect' or v.type=='panel') and not c.profile_skip_geometry then
                     local selected_material=not v.contrast_backing and panel_material(v,p.resource_hex,c)
                     local panel_uv
                     if selected_material and selected_material:find("/lab_",1,true) then
@@ -544,13 +618,17 @@ function M.new(sr,log,hot_panel_art)
             log(string.format('SCANLINE_EMISSION strips=%d native_triangles=%d fully_clipped=%d separate_layer=50.5',scan_generated,scan_emitted,scan_clipped));self.scanline_emission_logged=true
         end
         created=created+#ids
+        self.native_point_calls=native_points
         self.status='screen-projected scene-depth HUD'
-        if first then log('SCREEN_SCENE HUD submitted; native atlas glyphs; saved mounts retained; live validation pending');first=false end
+        if first then
+            if native_projection then log('SCREEN_PLANAR_SNAPSHOT native_points='..native_points..' commands='..#commands..' existing_renderer=true')end
+            log('SCREEN_SCENE HUD submitted; native atlas glyphs; saved mounts retained; live validation pending');first=false
+        end
         return true
     end
     function self.draw(p,c,commands,camera,fov,width,height,near)
         if failed then return false end
-        if not p or not camera then return false end
+        if not p or (not camera and type(c.native_panel_projector)~='function') then return false end
         local prepared,ready,m,at=pcall(M.prepare_commands,commands,p,c,A.can_get)
         if not prepared then
             self.status='Command preparation rejected: '..tostring(ready)

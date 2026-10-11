@@ -1,0 +1,9 @@
+# Building primary artwork
+
+Run `node tools/build_segmented_textures.cjs` and then `node tools/build_primary_feather_assets.cjs` from the repository root. These commands generate immutable SVG/PNG/RGBA assets and local compositor previews. They do not deploy files. The slanted digit generator reads the preserved `review/primary-digit-study-06/design.js` reference; exact native-font previews require the separate `releases/DBF-HUD-Native-Fonts-0.1.zip` package and the Lua DLL used by `tests/run.py`. These native dependencies are not fetched by the generators.
+
+Node.js must be able to resolve `sharp`. If it is installed elsewhere, set `DBF_HUD_SHARP_MODULE` to its absolute module directory. Set `DBF_HUD_PYTHON` to a Python executable path when selecting a particular environment; Pillow is required for font-atlas extraction. The helper first uses ordinary `require('sharp')` and otherwise checks the optional module path. Without explicit paths, a locally available Codex dependency runtime under the current user's home directory is a convenience fallback; otherwise Python runs through `py -3` on Windows or `python3` on other systems. No specific username or Codex installation is required.
+
+Raw asset formulas, selected geometry, and alpha defaults are independent of dependency discovery. Review captures, extracted native-font atlases, deployment records, settings snapshots, and backups remain local evidence rather than source artwork.
+
+Historical one-off builders `build_segmented_fancy_candidate.py`, `build_segmented_texture_review.py`, and `build_worldgui_anchor_candidate.py` preserve the early review experiments. They are not the maintained modular HUD packaging path. Use `tools/build_lll.py` for modular source packaging, followed by `tools/build_primary_edge_candidate.py` for the current edge-control candidate. Deployment remains an explicit `--deploy` action.

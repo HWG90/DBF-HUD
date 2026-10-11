@@ -6,7 +6,10 @@ for _,name in ipairs(assert(DBF_BUNDLE_MODULES,'run through tests/run.py'))do
 end
 for _,name in ipairs({'doom_easter','shared_suite','camera_state'})do HUD[name]=assert(loadfile('src/'..name..'.lua'))() end
 local tests=0
-local function test(name,f) f();tests=tests+1;print('PASS '..name) end
+local function test(name,f)
+    if DBF_CONTRACT_FILTER and not name:find(DBF_CONTRACT_FILTER,1,true) then return end
+    f();tests=tests+1;print('PASS '..name)
+end
 local cfg={follow=1,travel=55,settle=0.22}
 test('spring is frame-rate invariant',function()
     local values={}
@@ -363,6 +366,9 @@ test('runtime preserves callback results, expires anchors and releases GUI',func
     sr.Gui.rect=add;sr.Gui.text=add;sr.Gui.destroy_rect=remove;sr.Gui.destroy_text=remove
     local previous=function()calls=calls+1;return 7,nil,9 end;update=previous
     local hud=HUD.runtime.start(sr,backend)
+    -- This contract exercises reticle anchors; automatic camera fallback renders
+    -- the practical HUD and deliberately reports its presentation instead.
+    hud.configure({hud_presentation='weapon_specific'})
     local a,b,c=update(1/60);assert(a==7 and b==nil and c==9 and calls==1)
     hud.set_anchor_provider(function()return nil end)
     hud.push_anchor(.6,.4);update(1/60);assert(hud.anchor_status=='external provider')
@@ -397,6 +403,7 @@ test('movement does not fade the HUD and automatic native input moves it',functi
     HUD.model.normalize=function(raw)local m=normalize(raw);if m then m.lowered=true end;return m end
     F(reticle+0x2090,0);F(reticle+0x2094,0)
     local h=HUD.runtime.start(sr,backend)
+    h.configure({hud_presentation='weapon_specific'})
     for _=1,60 do update(1/60) end
     assert(h.opacity>.99 and math.abs(h.motion_x)<1e-6)
     F(selection+0x1ac,6);F(selection+0x1b0,12)
@@ -475,13 +482,14 @@ test('configuration validates atomically and roundtrips as Lua',function()
 end)
 test('decorations default off, fit dynamic perimeter and preserve content',function()
     local c=HUD.config.new();assert(c.decoration=='none')
+    c.texture_art_trial=false -- Primitive decorations are disabled by texture policy.
     local model={kind='heat',fraction=.8,value=80,reserve=3,state='READY'}
     for _,font in ipairs(HUD.config.fonts) do for _,scale in ipairs({.5,1,2}) do
         c.font=font;c.decoration='none';local plain=HUD.layout.compose(model,15,20,scale,.8,c,0)
         for _,style in ipairs(HUD.config.decorations) do
             HUD.config.apply(c,{decoration=style});local decorated=HUD.layout.compose(model,15,20,scale,.8,c,0)
             local f=decorated[1];assert(f.x==plain[1].x and f.y==plain[1].y and f.w==plain[1].w and f.h==plain[1].h)
-            assert((style=='none' and #decorated==#plain) or (style~='none' and #decorated>#plain))
+            assert((style=='none' and #decorated==#plain) or (style~='none' and #decorated>#plain),font..' / '..style..': '..#plain..' -> '..#decorated)
             local child
             for _,r in ipairs(decorated) do if r.heat_child and r.type=='panel' then child=r end end
             for _,r in ipairs(decorated) do if r.decoration then
@@ -525,6 +533,7 @@ test('native menu keeps colors config-only and persists placement',function()
     ModOptionsMenu={api=1,register_option=function(id,spec) if spec.type=='choice' then assert(#spec.choices>=2 and #spec.choices<=16) end;options[id]=spec;values[id]=spec.default;return true end,
         on_change=function(id,fn)callbacks[id]=fn;return true end,set=function(id,v)values[id]=v;return true end}
     local h={config=HUD.config.new()};local menu
+    h.config.texture_art_trial=false -- Exercise primitive appearance callbacks.
     h.configure=function(v)HUD.config.apply(h.config,v);menu.sync()end
     h.save_tuning=function()writes=writes+1 end
     menu=HUD.menu.new(h);menu.poll();assert(menu.status=='Options > Mods > DBF-HUD')
@@ -669,19 +678,56 @@ end)
 
 test('runtime attaches without reticle travel clamp and falls back when projection fails',function()
     local draw_x=0
-    local sr={Application={back_buffer_size=function()return 3840,2160 end,worlds=function()return {1}end,main_world=function()return 1 end},
+    local output_w,output_h,gui_w,gui_h=3840,2160,1920,1080
+    local native_fixture,shake=false,false
+    local native_draws,native_config=0,nil
+    local sr={Application={back_buffer_size=function()return output_w,output_h end,worlds=function()return {1}end,main_world=function()return 1 end,can_get=function(kind,name)return kind=='material'and name=='mods/dbf_hud/materials/adjudicator_tall_v1'end},
         World={create_screen_gui=function()return 2 end,destroy_gui=function()end},
         Vector2=function(...)return {...}end,Vector3=function(...)return {...}end,Color=function(...)return {...}end,
-        Gui={resolution=function()return 1920,1080 end,rect=function(gui,pos)draw_x=math.max(draw_x,pos[1]);return 1 end,text=function()return 2 end,destroy_rect=function()end,destroy_text=function()end}}
-    local saved_pose,saved_projection,saved_scene=HUD.pose.new,HUD.projection.new,HUD.scene_test.new
-    local world_draws=0;local selected_mode
-    HUD.scene_test.new=function()return {draw=function(p,c,target,dt,aspect,commands)assert(target==nil and commands and #commands>0);world_draws=world_draws+1;selected_mode=c.occlusion_mode;return true end,release=function()end}end
-    local valid=true;local received;local pose_reads=0
-    HUD.pose.new=function()return {poll=function()pose_reads=pose_reads+1;return {id=20,candidate=1,node_count=1,x=1,y=2,z=3,matrix={0,1,0,0,-1,0,0,0,0,0,1,0,1,2,3,1}}end,status='test'}end
-    HUD.projection.new=function()return {status='test',poll=function(base,p,aspect)received=p;if valid then return {x=.8,y=.2,depth=2} end end}end
+        Gui={resolution=function()return gui_w,gui_h end,rect=function(gui,pos)draw_x=math.max(draw_x,pos[1]);return 1 end,text=function()return 2 end,destroy_rect=function()end,destroy_text=function()end}}
+    local saved_pose,saved_projection,saved_scene,saved_reader,saved_hot=HUD.pose.new,HUD.projection.new,HUD.scene_test.new,HUD.reader.new,HUD.hot_panel_art.new
+    local saved_screen=HUD.screen_scene.new
+    HUD.screen_scene.new=function()return {release=function()end,draw=function(p,c,commands,camera,fov,w,h,near)
+        if not native_fixture then return false end
+        assert(c.native_panel_projector,'Runtime failed to install the pixel-normalizing callback')
+        local q=assert(c.native_panel_projector(.3,2,.1))
+        assert(math.abs(q.x-(.5+.5*.3/(2*(w/h))+(shake and .02 or 0)))<1e-8)
+        assert(math.abs(q.y-(.5+.5*.1/2))<1e-8 and q.depth==2)
+        assert(camera and fov==math.pi/2 and near==.05)
+        native_draws=native_draws+1;native_config=c;return true
+    end}end
+    HUD.hot_panel_art.new=function(...)
+        local art=saved_hot(...)
+        art.resource=function(name)if name==HUD.segmented_fancy.face or name==HUD.segmented_fancy.atlas then return {}end end
+        return art
+    end
+    local fixture_resource='0123456789abcdef'
+    HUD.reader.new=function()return {status='fixture weapon',poll=function()return {id=20,kind='magazine',rounds=27,capacity=45,reserve=6,reserve_kind='MAGS',fire_mode='AUTO',resource_hex=fixture_resource,binding={module_base=base}}end}end
+    local world_draws=0;local selected_mode,selected_presentation,selected_pose,selected_commands,selected_config;local world_succeeds=true
+    HUD.scene_test.new=function()return {draw=function(p,c,target,dt,aspect,commands)assert(target==nil and commands and #commands>0);world_draws=world_draws+1;selected_mode=c.occlusion_mode;selected_presentation=c.presentation_view;selected_pose=p;selected_commands=commands;selected_config=c;return world_succeeds end,release=function()end}end
+    local valid=true;local received;local pose_reads=0;local pose_available=true
+    HUD.pose.new=function()return {poll=function()pose_reads=pose_reads+1;if not pose_available then return nil end;return {id=20,candidate=1,node_count=1,x=1,y=2,z=3,matrix={0,1,0,0,-1,0,0,0,0,0,1,0,1,2,3,1}}end,status='test'}end
+    HUD.projection.new=function()
+        local projected={status='test'}
+        local camera={1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1}
+        projected.poll=function(base,p,aspect)
+            received=p
+            projected.camera_matrix=native_fixture and not shake and camera or nil
+            projected.depth_camera_matrix=native_fixture and camera or nil
+            projected.camera_fov=projected.camera_matrix and math.pi/2 or nil
+            projected.camera_near=projected.camera_matrix and .05 or nil
+            projected.native_fov=math.pi/2;projected.native_near=.05
+            if valid then return {x=.8,y=.2,depth=2} end
+        end
+        projected.native_point=function(x,y,z)
+            if not native_fixture then return nil end
+            return {x=(.5+.5*x/(y*(gui_w/gui_h))+(shake and .02 or 0))*output_w,y=(.5+.5*z/y)*output_h,depth=y,native_depth=1-.05/y}
+        end
+        return projected
+    end
     update=function()end
-    local h=HUD.runtime.start(sr,backend);h.configure({mount_x=.5,anchor_mode='weapon'})
-    update(1/60);assert(h.anchor_status=='weapon attachment')
+    local h=HUD.runtime.start(sr,backend);h.configure({mount_x=.5,anchor_mode='weapon',hud_presentation='weapon_specific'})
+    update(1/60);assert(h.anchor_status=='weapon attachment',tostring(h.anchor_status)..'; '..tostring(h.status)..'; pose='..tostring(h.pose_status))
     assert(draw_x>0 and draw_x<1920,'screen geometry must stay in GUI coordinates despite a larger back buffer')
     assert(math.abs(h.motion_x-576)<1e-6 and math.abs(h.motion_y+324)<1e-6)
     assert(math.abs(received.x-.8238)<1e-6 and math.abs(received.y-2.16)<1e-6 and math.abs(received.z-3.04)<1e-6)
@@ -693,7 +739,61 @@ test('runtime attaches without reticle travel clamp and falls back when projecti
     h.configure({anchor_mode='world',always_show_3d=false});update(1/60);assert(world_draws==1 and selected_mode=='gui')
     h.configure({always_show_3d=true});update(1/60);assert(world_draws==2 and selected_mode=='gui')
     h.configure({anchor_mode='weapon'});update(1/60);assert(world_draws==2)
-    h.retire();HUD.pose.new,HUD.projection.new,HUD.scene_test.new=saved_pose,saved_projection,saved_scene
+    local saved_camera,saved_aiming=HUD.camera_mode.read,HUD.camera_mode.read_aiming
+    local native_view,aiming=false,false
+    HUD.camera_mode.read=function()return native_view,'fixture camera'end
+    HUD.camera_mode.read_aiming=function()return aiming end
+    local function expect_world(presentation)
+        local before=world_draws;h.configure({anchor_mode='world',hud_presentation=presentation});update(1/60)
+        assert(world_draws==before+1 and selected_presentation=='third','WorldGUI must not be bypassed by practical presentation')
+        assert(selected_pose==h.weapon_pose and h.anchor_status=='weapon 3D WorldGUI','world renderer must receive the current weapon pose')
+    end
+    expect_world('automatic') -- Shoulder view.
+    native_view,aiming=nil,nil;expect_world('automatic') -- Unknown camera retains practical art, not screen placement.
+    native_view,aiming=true,true;expect_world('practical') -- Explicit Simple still respects WorldGUI.
+    native_view,aiming=false,false
+    local before=world_draws;h.configure({anchor_mode='weapon',hud_presentation='practical'});update(1/60)
+    assert(world_draws==before and h.anchor_status=='weapon-attached Simple HUD','hybrid practical art must keep the projected weapon anchor')
+    h.configure({anchor_mode='crosshair'});update(1/60)
+    assert(world_draws==before and h.anchor_status=='floating Simple HUD','explicit crosshair mode remains screen anchored')
+    h.configure({anchor_mode='world'});world_succeeds=false;update(1/60)
+    assert(h.anchor_status=='WorldGUI screen fallback: weapon render path unavailable','failed world renderer must identify its fallback')
+    world_succeeds=true;pose_available=false;update(1/60)
+    assert(h.anchor_status:find('WorldGUI screen fallback: weapon pose unavailable',1,true),'missing pose must identify its fallback')
+    pose_available=true;update(1/60);assert(h.anchor_status=='weapon 3D WorldGUI' and h.world_fallback_reason==nil)
+    fixture_resource='968211c0033dce64'
+    h.configure({segmented_fancy=false,hud_presentation='weapon_specific',anchor_mode='world',texture_art_trial=true,texture_art_variant='faithful',decoration='helldivers'})
+    for _=1,10 do update(1/60)end
+    assert(selected_commands[1].hud_texture_primary and not selected_commands[1].segmented_fancy,'approved primary art must use HUD Texture without a segmentation flag')
+    local decorated=false;for _,command in ipairs(selected_commands)do if command.decoration then decorated=true end end
+    assert(decorated,'HUD Texture must honor the selected decoration')
+    local textures=0;for _,command in ipairs(selected_commands)do if command.type=='texture'then textures=textures+1 end end
+    assert(textures==20,'HUD Texture must leave room for four shader layers')
+    h.configure({keep_hud_upright=false,shader_layers={{id=1,shader='crt_scan'}}})
+    native_view,aiming=true,true;update(1/60)
+    assert(selected_pose==h.weapon_pose and not selected_config.keep_hud_upright,'HUD Texture must retain weapon pose')
+    assert(#selected_config.shader_layers==1,'HUD Texture must retain selected shader layers')
+    h.configure_panel({decoration='outline',text_color='#112233',background_color='#223344',decoration_color='#DDAA33'},fixture_resource)
+    local settings=h.panel_settings(fixture_resource)
+    assert(settings.decoration=='outline'and settings.text_color=='#112233'and settings.background_color=='#223344'and settings.decoration_color=='#DDAA33','HUD Texture appearance controls must read back saved values')
+    native_fixture=true;update(1/60)
+    assert(h.texture_projection_map.space=='output_pixels'and native_draws==1)
+    shake=true;valid=false;update(1/60)
+    assert(native_draws==2 and h.anchor_status=='screen-projected scene-depth HUD','Firing offsets must retain HUD Texture instead of WorldGUI fallback')
+    assert(native_config.decoration=='outline'and #native_config.shader_layers==1,'Projection correction must preserve decoration and shader layers')
+    shake=false;output_w,output_h=2560,1440;update(1/60)
+    assert(h.texture_projection_map.sx==1/2560 and native_draws==3,'Output resize must invalidate native pixel units')
+    gui_w,gui_h=1280,720;update(1/60)
+    assert(h.texture_projection_map.sx==1/2560 and native_draws==4,'GUI resize must recalibrate without using GUI pixels for native output')
+    shake=true;update(1/60);assert(native_draws==5)
+    h.texture_projection_map=nil;h.texture_depth_calibrated=nil
+    update(1/60);assert(native_draws==6,'Loading mid-shot must not wait for an unshaken calibration frame')
+    native_fixture=false;shake=false;valid=true
+    h.configure({hud_presentation='practical'});update(1/60)
+    assert(not selected_commands[1].hud_texture_primary,'Simple artwork must remain unchanged')
+    HUD.camera_mode.read,HUD.camera_mode.read_aiming=saved_camera,saved_aiming
+    h.retire();HUD.pose.new,HUD.projection.new,HUD.scene_test.new,HUD.reader.new,HUD.hot_panel_art.new=saved_pose,saved_projection,saved_scene,saved_reader,saved_hot
+    HUD.screen_scene.new=saved_screen
 end)
 
 test('projection handles perspective, aspect, camera rotation and clipping',function()
@@ -724,7 +824,12 @@ test('camera reader rejects changed code, camera modes and torn ownership',funct
     local reader=HUD.projection.new(backend);local pose={x=0,y=10,z=0}
     assert(reader.poll(base,pose,2),reader.status)
     U(cam+0x50,2);assert(not reader.poll(base,pose,2));U(cam+0x50,0)
-    F(cam+0x90,1);assert(not reader.poll(base,pose,2));F(cam+0x90,0)
+    F(cam+0x90,1);assert(not reader.poll(base,pose,2))
+    assert(reader.camera_matrix==nil and reader.native_camera==cam,'local offsets must reject CPU projection while retaining the verified native camera')
+    local calls=0;backend.project_camera=function(fn,owner,x,y,z)calls=calls+1;assert(fn==getter and owner==cam);return .2,.3,.995 end
+    local native=assert(reader.native_point(1,2,3));assert(math.abs(native.depth-10)<1e-5 and native.native_depth==.995 and calls==1)
+    P(state,cam+0x1000);assert(not reader.native_point(1,2,3)and calls==1,'native projection must reject a replaced owner before calling');P(state,cam)
+    backend.project_camera=nil;F(cam+0x90,0)
     bytes[getter]=0;assert(not reader.poll(base,pose,2));bytes[getter]=0x48
     local tearing={read=function(a,n)local b=read(a,n);if a==mat then U(cam+0x20,1)end;return b end}
     assert(not HUD.projection.new(tearing).poll(base,pose,2));U(cam+0x20,0)

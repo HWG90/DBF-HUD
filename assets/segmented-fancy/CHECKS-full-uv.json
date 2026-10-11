@@ -1,0 +1,14 @@
+{
+  "full_white_16x16_rgba_all255": true,
+  "white_bytes": 1024,
+  "white_sha256": "5f4ecdb7b71c3e403983fe405cddcdc2f2576b655fdb3e80d94a6f7c32e58bc2",
+  "unit_backing_uv": true,
+  "unshaded_appearance_unchanged": true,
+  "queued_white_falls_back": true,
+  "rgba_bytes_verified": true,
+  "preview_from_runtime_commands": true,
+  "art_image_budget": 20,
+  "four_shader_layers_fit": true,
+  "v3_files_preserved": 10,
+  "v4_files_preserved": 22
+}
