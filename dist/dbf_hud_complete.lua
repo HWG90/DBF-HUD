@@ -7989,7 +7989,7 @@ M.split_defaults={texture_art_trial=true,texture_art_variant='split',force_all_h
     text_color='#F5F6F0',decoration_color='#E9C45D',background_color='#091B35',heat_red='#FF5750',
     panel_opacity=.35,text_opacity=1,text_color_alpha=255,decoration='split',
     panel_edge_softness=7,panel_edge_curve=1,panel_edge_dither=40,panel_edge_grain=2,
-    panel_spatial_depth=16,split_readout_view='combat',weapon_panels={},scale=1,third_person_scale=1,
+    panel_spatial_depth=16,split_readout_view='combat',weapon_panels={},
     theme_shader='none',effect_shader='none',shader_layers={},effect_scanlines=false,effect_sweep=false,
     effect_flicker=false,saturation=1,emissive_intensity=1}
 M.limits={font_scale={.5,1.5},third_person_scale={.5,1.5},third_person_opacity={0,1},theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -8239,7 +8239,6 @@ if HUD.bundled_defaults then
 end
 -- Historical bundled palettes remain recovery data. Fresh setup uses Split.
 for key,value in pairs(M.split_defaults)do M.defaults[key]=value end
-M.weapon_clearance={}
 function M.shader_animation_values(c,role,clock)
     local key=role=='effect' and 'effect_shader' or 'theme_shader'
     local speed=tonumber(c[key..'_speed']) or 1
@@ -13981,15 +13980,16 @@ function M.assets_ready(resource,can_get)
  return true
 end
 function M.readouts(m,cfg,clock)
- cfg=cfg or {};local loaded,capacity,reserve=count(m.value),count(m.capacity),count(m.reserve)
+ cfg=cfg or {};clock=finite(clock)and clock or finite(cfg.style_clock)and cfg.style_clock or 0
+ local loaded,capacity,reserve=count(m.value),count(m.capacity),count(m.reserve)
  local heat,infinite=m.kind=='heat',m.kind=='infinite'
- local fuel=m.label=='FUEL';local unknown=loaded==nil and not infinite
- local charge,release
+ local fuel=m.label=='FUEL'or m.label=='GAS';local unknown=loaded==nil and not infinite
+ local charge,release,railgun
  if m.safety_mode then
   local now=clock or cfg.style_clock
   local age=finite(now)and finite(m.charge_sample_clock)and now-m.charge_sample_clock or nil
   local q=HUD.layout.railgun_charge(m.safety_mode,m.charge_fraction,m.charge_seconds,cfg.railgun_release_margin_ms,age,m.charge_frame_delay)
-  if q then charge,release=q.fraction,q.release or q.limit end
+  if q then railgun=q;charge,release=q.fraction,q.release or q.limit end
  else charge=fraction(m.epoch_charge_fraction)or fraction(m.loyalist_charge_fraction)or fraction(m.purifier_charge_fraction)end
  local quasar=m.quasar_charge_verified==true
  local cooldown=quasar and(m.state=='VENT'or m.locked==true)
@@ -13998,31 +13998,90 @@ function M.readouts(m,cfg,clock)
  local level=m.melta_charge_level
  local active_level=finite(level)and level>=0 and level<=10 and level>0
  local empty=not heat and not infinite and loaded==0
- local low=not heat and not infinite and loaded and loaded>0 and capacity and capacity>0 and loaded/capacity<=.2
- local label=heat and 'HEAT'or infinite and 'ENERGY'or fuel and 'FUEL'or
+ -- The normalizer owns weapon-specific thresholds (Autocannon: <=3 warning,
+ -- <=5 reload reminder). Do not replace them with the generic 20% rule.
+ local low=not heat and not infinite and loaded and loaded>0 and
+  (type(m.warning)=='boolean'and m.warning or type(m.warning)~='boolean'and capacity and capacity>0 and loaded/capacity<=.2)
+ local reminder=not heat and not infinite and loaded and loaded>0 and m.reload_reminder==true
+ local label=heat and 'HEAT'or infinite and 'ENERGY'or fuel and m.label or
   ((m.reserve_kind=='SHELLS'or m.ammo_icon=='SHELL'or m.ammo_icon=='DOUBLE_SHELL')and 'SHELLS'or'ROUNDS')
  if not heat and not infinite and not fuel and capacity==1 then label='LOADED' end
  local value,suffix,sub=loaded,heat and '%'or nil,capacity and('/ '..capacity)or''
  local progress=fraction(m.fraction);local status='';local warning
+ local counter_color,gauge_color,counter_pulse,gauge_pulse,status_pulse=nil,nil,1,1,1
+ local animate=cfg.reduced_motion~=true
+ local hz=finite(cfg.flash_hz)and math.max(.5,math.min(3,cfg.flash_hz))or 2
+ local function pulse(rate,floor)return animate and floor+(1-floor)*(.5+.5*math.cos(clock*math.pi*2*rate))or 1 end
  if m.reloadable==false then sub='ONE SHOT' end
  if infinite then value=nil;sub='CONTINUOUS';unknown=false;progress=1 end
  if quasar then label=cooldown and 'COOLDOWN'or'CHARGE';reserve=nil end
  if active_charge and not unknown then
   value=math.floor(charge*100+.5);suffix='%';sub=quasar and ''or(tostring(loaded)..' LOADED');progress=charge;label='CHARGE'
-  status=release and 'RELEASE'or(m.charge_ready or charge>=1)and'CHARGED'or charge>0 and'CHARGING'or''
+  status=railgun and railgun.limit and 'LIMIT'or release and 'RELEASE'or
+   railgun and railgun.ready and 'SAFE READY'or(m.charge_ready or charge>=1-1e-6)and'CHARGED'or charge>0 and'CHARGING'or''
+  if railgun and railgun.remaining and not release then status=string.format('UNSAFE %.2fs',railgun.remaining)end
  elseif active_level and not unknown then
   value=math.floor(level);label='CHARGE LEVEL';suffix=nil;sub=tostring(loaded)..' LOADED';progress=nil;status='CHARGING'
  end
  if unknown then status='NO DATA';sub='';suffix=nil;progress=nil
  elseif cooldown then status='COOLING';suffix='%'
  elseif m.reloading==true or m.df_ejector_open==true then status='RELOADING'
- elseif empty then status=(m.state=='SPENT'or m.reloadable==false)and'SPENT'or'EMPTY';warning='red'
+ elseif empty then status=(m.state=='SPENT'or m.reloadable==false or m.recoilless_spent==true)and'SPENT'or'EMPTY';warning='red'
  elseif heat and not quasar then
-  if m.state=='VENT'or m.locked==true then status='VENTING';warning='red'
-  elseif m.state=='HOT'or(progress and progress>=.85)then status='HOT';warning='gold'end
- elseif low and not active_charge and not active_level then status=fuel and'LOW FUEL'or'LOW AMMO';warning='gold'
+  counter_color='heat_white'
+  if m.state=='VENT'or m.locked==true then
+   status='VENTING';warning='red';counter_color='heat_red';counter_pulse=pulse(2,.25);gauge_pulse=counter_pulse;status_pulse=counter_pulse
+  elseif m.state=='HOT'or(progress and progress>=.85)then
+   status='HOT';warning='red';counter_color='heat_red'
+   if progress and progress>=.95 then
+    counter_color=animate and math.floor(clock*hz*2)%2==1 and 'heat_yellow'or'heat_red'
+    gauge_color=animate and math.floor(clock*16)%2==1 and 'heat_white'or'heat_red'
+   end
+  elseif progress and progress>=.65 then warning='gold';counter_color='heat_yellow'end
+ elseif fuel and progress and progress<=.35 then
+  status='LOW '..m.label;warning=progress<=.15 and'red'or'gold'
+ elseif low and not active_charge and not active_level then status='LOW AMMO';warning='gold'
+ elseif reminder then status='RELOAD ADVISED'
  elseif m.chamber_bonus==1 and loaded and capacity and loaded==capacity+1 then status='CHAMBERED +1' end
- if release then warning='red' end
+ if not unknown and not empty then
+  if reminder and not active_charge and not active_level then counter_pulse=pulse(hz,.35)end
+  if railgun and m.safety_mode=='UNSAFE'and active_charge then
+   if charge>=.85 then warning='red'elseif charge>=.7 then warning='gold'end
+   if release or not railgun.remaining and m.charge_warning==true then
+    warning='red';gauge_color=animate and math.floor(clock*8)%2==0 and'heat_yellow'or'heat_red'
+    status_pulse=pulse(4,.35)
+   end
+  elseif railgun and railgun.ready then counter_color='heat_yellow'end
+  if m.resource_hex=='fb3a19078694708a'and active_charge and charge>=1-1e-6 and m.charge_ready==true then
+   counter_color='heat_yellow';counter_pulse=pulse(hz,.35)
+  elseif m.resource_hex=='e8d5f49ad7780e54'and active_charge and charge>=1-1e-6 then
+   warning='red';gauge_color='heat_red';gauge_pulse=pulse(4,.35);status_pulse=gauge_pulse
+  end
+ end
+ if release then warning='red'end
+ if empty then counter_color='heat_red'end
+ if status==''and m.resource_hex=='11c27d3babb38956'and m.mg43_flash==true and cfg.mg43_easter_egg~=false then status='GET SOME!!!';status_pulse=pulse(hz,.35)end
+ local heading=finite(m.compass_heading)and m.compass_heading%360 or nil
+ if status==''and heading then
+  local names={'N','NE','E','SE','S','SW','W','NW'}
+  status=string.format('HDG %03d %s',math.floor(heading+.5)%360,names[math.floor((heading+22.5)/45)%8+1])
+ end
+ -- Count-driven indicators retain the existing state machines. These are
+ -- observed loaded/spent states, not claims about physical casing occupancy.
+ local slots
+ if not unknown and m.resource_hex=='8d3d52a3b2f19402'and type(m.cylinder_slots)=='table'then
+  local valid,total=true,0;slots={}
+  for i=1,6 do local loaded_slot=m.cylinder_slots[i];if type(loaded_slot)~='boolean'then valid=false end
+   total=total+(loaded_slot==true and 1 or 0)
+   -- Upright Senator slot order differs from the rotating cylinder order;
+   -- never borrow its spent-case latch to infer a physical chamber here.
+   slots[i]={loaded=loaded_slot==true,spent=false,index=i}
+  end
+  if not valid or total~=loaded then slots=nil end
+ elseif not unknown and m.resource_hex=='72170a55a1f37ff1'and loaded<=2 and type(m.df_shell_spent)=='table'then
+  slots={};for i=1,2 do slots[i]={loaded=m.fire_mode=='VOLLEY'and loaded>=2 or m.fire_mode~='VOLLEY'and loaded>=3-i,
+   spent=m.df_shell_spent[i]==true,index=i}end
+ end
  local contexts={}
  local function context(kind,value)if type(value)=='string'and value~=''and value~='--'then contexts[#contexts+1]={kind=kind,value=value}end end
  context('AUTO',m.fire_mode)
@@ -14033,7 +14092,8 @@ function M.readouts(m,cfg,clock)
  local code=spec and spec.code or name:match('^%S+')or'WEAPON'
  return {value=value,loaded=loaded,capacity=capacity,reserve=reserve,unit=m.reserve_kind,label=label,code=code,
   suffix=suffix,sub=sub,status=status,progress=progress,empty=empty,infinite=infinite,unknown=unknown,
-  warning=warning,contexts=contexts,charge=active_charge and charge or nil}
+  warning=warning,contexts=contexts,charge=active_charge and charge or nil,slots=slots,
+  counter_color=counter_color,gauge_color=gauge_color,counter_pulse=counter_pulse,gauge_pulse=gauge_pulse,status_pulse=status_pulse,compass_heading=heading}
 end
 function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  if not m or not M.selected(cfg)or not M.supported(m.resource_hex)or not M.assets_ready(resource,can_get)then return nil end
@@ -14041,7 +14101,9 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  local width,height=inspect and 410 or 320,inspect and 178 or 161
  if #r.contexts>4 then height=math.max(height,(inspect and 46 or 61)+(#r.contexts-1)*(inspect and 29 or 23)+25)end
  local white,gold,navy,red=color(cfg.text_color,WHITE),color(cfg.decoration_color,GOLD),color(cfg.background_color,NAVY),color(cfg.heat_red,RED)
- local ink=r.warning=='red'and red or r.warning=='gold'and gold or white
+ local yellow,heat_white=color(cfg.heat_yellow,gold),color(cfg.heat_white,white)
+ local function signal(key,fallback)return key=='heat_red'and red or key=='heat_yellow'and yellow or key=='heat_white'and heat_white or fallback end
+ local ink=signal(r.counter_color,r.warning=='red'and red or r.warning=='gold'and yellow or white)
  local fg=opacity*(cfg.text_opacity or 1)*(cfg.text_color_alpha or 255)/255
  local depth=finite(cfg.panel_spatial_depth)and math.max(0,math.min(32,cfg.panel_spatial_depth))or 16
  local depths={main=depth*s,reserve=-depth*.5*s,context=depth*1.8*s,status=0}
@@ -14075,7 +14137,7 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  end
  text(87,16,r.code,10,gold,'identity','main','left',140)
  text(87,43,r.label,11.5,gold,'unit','main','left',134)
- local pulse=r.empty and cfg.reduced_motion~=true and math.floor((clock or 0)*4)%2==1 and.22 or 1
+ local pulse=r.empty and cfg.reduced_motion~=true and math.floor((clock or 0)*4)%2==1 and.22 or r.counter_pulse
  if r.infinite then
   local b=A.infinity_outline;local q=image(A.atlas,b.uv,88,61,b.w,b.h,NAVY,fg,'loaded');q.outline=true
   local a=A.infinity;image(A.atlas,a.uv,88,61,a.w,a.h,white,fg,'loaded')
@@ -14093,7 +14155,14 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  if r.suffix then text(88+(digit_count*76-5)*48/118+5,97,r.suffix,14,ink,'suffix')end
  text(222,122,r.sub,11,white,'capacity','main','right',134)
  local gauge=A.sprites.gauge;image(A.atlas,gauge.uv,87,109.5,136,10,white,fg,'gauge_inactive')
- if r.progress and r.progress>0 then image(A.atlas,A.sprites.solid.uv,88,109.5,134*r.progress,3,r.warning=='red'and red or gold,fg,'gauge')end
+ if r.slots then
+  local pitch=134/#r.slots
+  for _,slot in ipairs(r.slots)do
+   local q=image(A.atlas,A.sprites.solid.uv,88+(slot.index-1)*pitch,109.5,pitch-3,3,
+    slot.loaded and gold or slot.spent and red or white,fg*(slot.loaded and 1 or slot.spent and.55 or.18),'gauge')
+   q.ammo_slot=slot.index;q.slot_loaded=slot.loaded;q.slot_observed_spent=slot.spent;q.count_driven_slot=true
+  end
+ elseif r.progress and r.progress>0 then image(A.atlas,A.sprites.solid.uv,88,109.5,134*r.progress,3,signal(r.gauge_color,r.warning=='red'and red or gold),fg*r.gauge_pulse,'gauge')end
  if r.reserve~=nil then
   local sprite=A.sprites.reserve_connector;image(A.atlas,sprite.uv,61,78.5,12,3,gold,fg,'reserve','reserve')
   local icon=A.icons[r.unit]or A.icons[r.unit=='ROUNDS'and'SHELLS'or r.unit=='CANISTERS'and'TANKS'or'UNKNOWN']
@@ -14117,8 +14186,8 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  if r.status~=''then
   local c=r.warning=='red'and red or gold
   image(A.atlas,A.sprites.solid.uv,87,141,166,18,navy,fg*.58,'status','status')
-  image(A.atlas,A.sprites.solid.uv,85.5,141,3,18,c,fg,'status','status')
-  text(97,153.5,r.status,11.5,c,'status','status','left',153)
+  image(A.atlas,A.sprites.solid.uv,85.5,141,3,18,c,fg*r.status_pulse,'status','status')
+  text(97,153.5,r.status,11.5,c,'status','status','left',153).a=fg*r.status_pulse
  end
  frame.split_decor_resource=resource(M.dynamic_face)and M.dynamic_face or A.face
  frame.split_scale=s
@@ -20898,14 +20967,8 @@ function M.start(sr,backend,options)
     function self.export_tuning() return HUD.config.serialize(self.config) end
     function self.use_split_defaults()
         self.configure(HUD.config.split_defaults)
-        self.weapon_clearance={};self.auto_mounts={}
-        if self.layout_editor then self.layout_editor.active=false end
-        if backend.write_weapon_offsets then
-            local ok,why=pcall(backend.write_weapon_offsets,HUD.weapon_offsets.serialize(self.weapon_clearance))
-            if not ok then return false,tostring(why)end
-        end
         local ok,message=self.save_tuning()
-        log('SPLIT_DEFAULTS applied='..tostring(ok)..' previous_appearance_choices_replaced=true')
+        log('SPLIT_DEFAULTS applied='..tostring(ok)..' appearance_replaced=true placement_preserved=true')
         return ok,message
     end
     function self.save_tuning()

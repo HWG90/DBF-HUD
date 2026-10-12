@@ -116,12 +116,18 @@ local empty=model({value=0,fraction=0,state='EMPTY'});local bright,dim=compose(e
 local changed=0;for i,v in ipairs(bright)do if not equal(v,dim[i])then changed=changed+1;assert(v.split_role=='loaded','Empty flash affected a non-counter element');if not v.outline then assert(v.c[1]==255 and v.c[2]==87 and v.c[3]==80,'Empty counter is not red')end;near(dim[i].a,v.a*.22,'Empty pulse is not bounded')end end
 assert(changed>0 and equal(bright,compose(empty,nil,.5)),'Empty counter must flash at 2Hz')
 assert(equal(bright,compose(empty,config({reduced_motion=true}),.25)),'Reduced motion unexpectedly flashed')
+local empty_reload=copy(empty);empty_reload.reloading=true
+local reload_empty_out=compose(empty_reload)
+assert(text(reload_empty_out,'RELOADING','status'),'Native reload status was lost')
+for _,v in ipairs(numeric(reload_empty_out))do assert(equal(v.c,{255,87,80}),'Reloading changed an empty counter away from red')end
 assert(equal(compose(model()),compose(model(),nil,.25)),'Refilled counter retained empty flash')
 local spent=copy(families.expendable);spent.value=0;spent.fraction=0;spent.state='SPENT';assert(text(compose(spent),'SPENT','status'),'Expendable empty state lost SPENT')
 local unknown=model({value=false,capacity=false,reserve=false,fraction=false,unknown=true});local out=compose(unknown);assert(chars(out)=='--'and text(out,'NO DATA','status'),'Unknown reading turned into zero')
 assert(equal(out,compose(unknown,nil,.25)),'Unknown data falsely flashed as empty')
 local hot=copy(families.heat);hot.value=100;hot.fraction=1;hot.state='VENT';hot.warning=true;assert(text(compose(hot),'VENTING','status')or text(compose(hot),'VENT','status'),'Native venting state disappeared')
-assert(equal(compose(hot,nil,0),compose(hot,nil,.25)),'Heat venting was treated as empty ammunition')
+local hot_bright,hot_dim=compose(hot,nil,0),compose(hot,nil,.25)
+near(numeric(hot_dim)[1].a,numeric(hot_bright)[1].a*.25,'Existing 2Hz venting pulse was lost')
+assert(equal(hot_bright,compose(hot,config({reduced_motion=true}),.25)),'Reduced motion retained venting pulse')
 local hot_gauge=role(compose(hot),'gauge')[1];assert(hot_gauge.c[1]==255 and hot_gauge.c[2]==87 and hot_gauge.c[3]==80,'Venting gauge lost the Study danger color')
 local quasar=model({resource_hex='35a61296619cc47e',kind='heat',value=68,capacity=false,reserve=3,reserve_kind='SINKS',fire_mode=false,fraction=.68,quasar_charge_verified=true});local qout=compose(quasar);assert(text(qout,'CHARGE')and not text(qout,'HEAT'),'Verified Quasar charge mislabeled as heat')
 assert(not S.readouts(quasar,config()).sub:find('LOADED',1,true),'Quasar charge percentage was fabricated into loaded ammunition')
@@ -132,6 +138,91 @@ local danger=assert(HUD.model.normalize({resource_hex='2e9d0bdc48b09e60',kind='r
 danger.charge_sample_clock=5;danger.charge_frame_delay=1/60
 assert(text(compose(danger,nil,5.05),'RELEASE','status'),'Verified unsafe reaction margin was lost by the new readout')
 assert(not text(compose(danger,nil,5.3),'RELEASE','status'),'Stale unsafe timer fabricated a release warning')
+
+-- Restore weapon behavior from the retained native normalizer/state machines,
+-- independently of the old artwork. Counts and reserved units stay untouched.
+local function native(raw)return assert(HUD.model.normalize(raw),'Native behavior fixture failed to normalize')end
+local function cannon(n)return native({resource_hex='a8cffb316f0b5c5f',kind='rounds',rounds=n,capacity=10,reserve=30,reserve_kind='ROUNDS',ammo_mode='FLAK'})end
+for _,n in ipairs({10,6})do local m=cannon(n);assert(not m.reload_reminder and equal(compose(m,nil,0),compose(m,nil,.25)),'Autocannon above five retained its reminder pulse')end
+for _,n in ipairs({5,4,3,2,1})do
+ local m=cannon(n);local bright,dim=compose(m,nil,0),compose(m,nil,.25)
+ assert(m.reload_reminder and chars(bright)==string.format('%02d',n),'Autocannon native count/reminder was lost')
+ near(numeric(dim)[1].a,numeric(bright)[1].a*.35,'Autocannon <=5 must retain its smooth 2Hz reload reminder')
+ assert(text(bright,n<=3 and'LOW AMMO'or'RELOAD ADVISED','status'),'Autocannon <=3 warning and <=5 reminder were conflated')
+ assert(equal(role(bright,'reserve'),role(dim,'reserve'))and equal(role(bright,'context'),role(dim,'context')),'Autocannon counter flash affected reserves/settings')
+ local reduced=compose(m,config({reduced_motion=true}),.25);near(numeric(reduced)[1].a,1,'Reduced motion did not stop the reminder')
+end
+local slow=config({flash_hz=.5,heat_yellow='#AABBCC'});local slow_bright,slow_dim=compose(cannon(3),slow,0),compose(cannon(3),slow,1)
+near(numeric(slow_dim)[1].a,numeric(slow_bright)[1].a*.35,'Saved reminder frequency was ignored')
+assert(equal(numeric(slow_dim)[1].c,{170,187,204}),'Saved low-ammo warning color was ignored')
+local zero_cannon=compose(cannon(0),nil,.25);near(numeric(zero_cannon)[1].a,.22,'Empty counter must override the clip reminder pulse');assert(text(zero_cannon,'EMPTY','status'))
+local refilled_cannon=compose(cannon(10),nil,.25);near(numeric(refilled_cannon)[1].a,1,'Refilled Autocannon retained reminder pulse')
+
+for _,case in ipairs({{.64,false,'#F5F6F0'},{.65,'gold','#E9C45D'},{.84,'gold','#E9C45D'},{.85,'red','#FF5750'},{.94,'red','#FF5750'}})do
+ local f,warning=case[1],case[2];local m=native({resource_hex='8645f167b3c813a2',kind='heat',heat=f,reserve=3,reserve_kind='SINKS'})
+ local cfg=config({heat_white='#F5F6F0'});local r=S.readouts(m,cfg,0);assert(r.warning==(warning or nil),'Prior heat band changed at '..f)
+ assert(equal(numeric(compose(m,cfg,0))[1].c,HUD.config.rgb(case[3])),'Prior heat band tint changed at '..f)
+end
+local near_vent=native({resource_hex='8645f167b3c813a2',kind='heat',heat=.95})
+assert(equal(numeric(compose(near_vent,nil,0))[1].c,{255,87,80})and equal(numeric(compose(near_vent,nil,.25))[1].c,{233,196,93}),'95% heat counter must alternate red/gold at the saved warning rate')
+assert(equal(role(compose(near_vent,nil,.0625),'gauge')[1].c,HUD.config.rgb(config().heat_white)),'Prior fast heat danger gauge cue was lost')
+assert(equal(numeric(compose(near_vent,config({reduced_motion=true}),.25))[1].c,{255,87,80}),'Reduced motion must keep heat danger steadily red')
+
+for _,label in ipairs({'FUEL','GAS'})do for _,case in ipairs({{36,nil},{35,'gold'},{15,'red'}})do
+ local m=native({resource_hex=label=='GAS'and'88f61afff48ac8a4'or'4fb0f8c02f55c82b',kind='resource',rounds=case[1],capacity=100,label=label,reserve=2,reserve_kind='TANKS'})
+ local r=S.readouts(m,config());assert(r.label==label and r.warning==case[2],'Fuel/gas 35% and 15% warning bands were lost')
+ if case[2]then assert(r.status=='LOW '..label)end
+end end
+local purifier=native({resource_hex='fb3a19078694708a',kind='magazine',rounds=8,capacity=15,reserve=4,reserve_kind='MAGS',purifier_charge_fraction=1,charge_ready=true})
+local pur_bright,pur_dim=compose(purifier,nil,0),compose(purifier,nil,.25)
+assert(text(pur_bright,'CHARGED','status')and chars(pur_bright)=='100'and text(pur_bright,'8 LOADED'),'Purifier full-charge cue changed the loaded ammunition')
+near(numeric(pur_dim)[1].a,numeric(pur_bright)[1].a*.35,'Purifier ready counter pulse was lost')
+purifier.charge_ready=false;assert(equal(compose(purifier,nil,0),compose(purifier,nil,.25)),'Purifier readiness inferred without the existing verified flag')
+local epoch=native({resource_hex='e8d5f49ad7780e54',kind='magazine',rounds=6,capacity=8,reserve=3,reserve_kind='MAGS',epoch_charge_fraction=1})
+near(role(compose(epoch,nil,.125),'gauge')[1].a,.35,'Epoch full-charge 4Hz red gauge warning was lost')
+assert(equal(role(compose(epoch),'gauge')[1].c,{255,87,80})and text(compose(epoch),'CHARGED','status'))
+local safe=native({resource_hex='2e9d0bdc48b09e60',kind='rounds',rounds=1,capacity=1,safety_mode='SAFE',charge_fraction=.7})
+assert(text(compose(safe),'SAFE READY','status'),'Verified Railgun SAFE cap readiness was lost')
+local early=native({resource_hex='2e9d0bdc48b09e60',kind='rounds',rounds=1,capacity=1,safety_mode='UNSAFE',charge_fraction=.82,charge_seconds=1.5});early.charge_sample_clock=5
+assert(text(compose(early,nil,5),'UNSAFE 1.50s','status'),'Verified unsafe time remaining was lost')
+local limit=native({resource_hex='2e9d0bdc48b09e60',kind='rounds',rounds=1,capacity=1,safety_mode='UNSAFE',charge_fraction=1,charge_seconds=3});limit.charge_sample_clock=5
+assert(text(compose(limit,nil,5),'LIMIT','status'),'Railgun limit was collapsed into the earlier release margin')
+local fallback=native({resource_hex='2e9d0bdc48b09e60',kind='rounds',rounds=1,capacity=1,safety_mode='UNSAFE',charge_fraction=.94,charge_warning=true})
+assert(not equal(role(compose(fallback,nil,0),'gauge')[1].c,role(compose(fallback,nil,.125),'gauge')[1].c),'Existing verified unsafe warning fallback stopped flashing')
+
+HUD.senator_state=dofile('src/senator_state.lua');HUD.df_shell_state=dofile('src/df_shell_state.lua');HUD.df_reload_state=dofile('src/df_reload_state.lua');HUD.recoilless_state=dofile('src/recoilless_state.lua');HUD.mg_easter=dofile('src/mg_easter.lua')
+local senator_state=HUD.senator_state.new()
+for _,n in ipairs({6,5,4,0,2,6})do
+ local m=native({id=17,unit_ref=31,resource_hex='8d3d52a3b2f19402',kind='rounds',rounds=n,capacity=6,reserve=40,reserve_kind='ROUNDS',fire_mode='SEMI'})
+ HUD.senator_state.step(senator_state,m,0);local out=compose(m);local slots=role(out,'gauge');local loaded=0
+ assert(#slots==6,'Senator six-slot count-driven indicator was lost')
+ for _,v in ipairs(slots)do assert(v.count_driven_slot and v.ammo_slot>=1 and v.ammo_slot<=6);loaded=loaded+(v.slot_loaded and 1 or 0)end
+ assert(loaded==n and chars(out)==string.format('%02d',n),'Senator count transition invented loaded chambers');assert(count_images(out)+4<=24,'Senator indicator exhausted existing shader/image slots')
+end
+local shell_state,reload_state=HUD.df_shell_state.new(),HUD.df_reload_state.new()
+for _,n in ipairs({2,1,0,2})do
+ local m=native({id=3,unit_ref=4,resource_hex='72170a55a1f37ff1',kind='rounds',rounds=n,capacity=2,reserve=20,reserve_kind='SHELLS',fire_mode='SEQUENTIAL'})
+ HUD.df_shell_state.step(shell_state,m);HUD.df_reload_state.step(reload_state,m)
+ local out=compose(m);local slots=role(out,'gauge');assert(#slots==2 and slots[1].slot_loaded==(n>=2)and slots[2].slot_loaded==(n>=1),'Double Freedom sequential barrel indications changed')
+ if n==1 then assert(slots[1].slot_observed_spent and not slots[2].slot_observed_spent,'Observed first-barrel shot latch was lost')end
+ assert(count_images(out)+4<=24,'Double Freedom indicator exhausted existing image slots')
+end
+local reload=native({id=3,unit_ref=4,resource_hex='72170a55a1f37ff1',kind='rounds',rounds=0,capacity=2})
+HUD.df_reload_state.step(reload_state,reload,{verified=true,weapon_id=3,unit_ref=4,phase='start'});assert(text(compose(reload),'RELOADING','status'),'Verified Double Freedom reload event was lost')
+HUD.df_reload_state.step(reload_state,reload,{verified=true,weapon_id=3,unit_ref=4,phase='cancel'});assert(text(compose(reload),'EMPTY','status'),'Cancelled reload remained open')
+local rr_state=HUD.recoilless_state.new();local rr=native({id=5,unit_ref=6,resource_hex='9f80d67a12a7e40f',kind='rounds',rounds=1,capacity=1})
+HUD.recoilless_state.step(rr_state,rr);rr.value=0;rr.fraction=0;rr.state='EMPTY';HUD.recoilless_state.step(rr_state,rr);assert(text(compose(rr),'SPENT','status'),'Recoilless observed-shot latch was lost')
+local mg=model({resource_hex='11c27d3babb38956',value=100,capacity=175,fraction=100/175,reserve_kind='BELTS',mg43_flash=true})
+assert(text(compose(mg),'GET SOME!!!','status')and chars(compose(mg))=='100','Existing MG-43 easter egg displaced the native ammo readout')
+assert(not text(compose(mg,config({mg43_easter_egg=false})),'GET SOME!!!','status'),'Disabled MG-43 easter egg was shown')
+for _,case in ipairs({{0,'HDG 000 N'},{45,'HDG 045 NE'},{270,'HDG 270 W'},{359.7,'HDG 000 N'},{-90,'HDG 270 W'}})do
+ local m=model({resource_hex='4dbd74f49c8ffc13',compass_heading=case[1]});local out=compose(m)
+ assert(text(out,case[2],'status')and S.readouts(m,config()).compass_heading==case[1]%360,'Existing heading source was lost or changed')
+end
+for _,invalid in ipairs({false,'90',math.huge,0/0})do assert(not S.readouts(model({compass_heading=invalid}),config()).compass_heading,'Invalid heading fabricated compass data')end
+for _,critical in ipairs({model({value=0,fraction=0,compass_heading=90}),cannon(3),chamber,danger,reload})do
+ critical.compass_heading=90;assert(not S.readouts(critical,config(),5.05).status:find('HDG',1,true),'Compass displaced a warning/chamber/charge/reload status')
+end
 local loose=compose(model({reserve=250,reserve_kind='ROUNDS'}));assert(text(loose,'250','reserve')and text(loose,'ROUNDS'),'Large loose reserve got converted into magazines')
 local wide=compose(model({value=100000,capacity=100000,reserve=100000,reserve_kind='ROUNDS'}));assert(text(wide,'100000','loaded')and text(wide,'/ 100000','capacity')and text(wide,'100000','reserve'),'Large native counts were clipped or replaced by estimates')
 local no_decor=compose(model(),config({decoration='none'}));assert(#role(no_decor,'decoration')==0 and chars(no_decor)=='27','None decoration was overridden by baked artwork')
@@ -139,7 +230,7 @@ local deep=compose(model(),config({panel_spatial_depth=32}));local flat=compose(
 for _,v in ipairs(deep)do near(v.spatial_depth,plane_depth[v.spatial_plane],'Study spatial separation changed')end
 for _,v in ipairs(flat)do near(v.spatial_depth,0,'Zero depth did not flatten the open cluster')end
 local no_mutation=config();local before=copy(no_mutation);compose(model(),no_mutation);assert(equal(before,no_mutation),'Composer mutated saved settings')
-print('PASS Split Study08: '..cases..' family/view compositions + '..#provider_cases..' native provider cases, exact two/three-digit geometry, native units/chamber/charge/unsafe timing, independent settings, full-UV shader carrier, unknown/empty states, decoration/depth controls and image budget (max '..max_images..')')
+print('PASS Split Study08: '..cases..' family/view compositions + '..#provider_cases..' native provider cases, exact geometry/units/chamber/charge, restored Autocannon reminders, heat/fuel/gas bands, charge readiness/danger, Senator/Double Freedom slots, observed reload/spent events, MG-43/idle compass status, saved/reduced-motion controls, shaders/depth and image budget (family max '..max_images..')')
 
 -- Optional snapshot of actual production commands and retained native glyph UVs.
 -- This path only writes an explicitly requested offline review directory.

@@ -36,7 +36,7 @@ files['README.txt']=(
     'Existing HUD Texture/WorldGUI materials, texture shaders, native fonts and renderer are required. '
     'Copy dbf_hud into LocalAppData/LLL/Helldivers2/Mods, merge HotTextures rows and copy RGBA files. '
     'LLL applies the fresh Split baseline once through its existing configuration path.\n'
-    'The baseline replaces old appearance choices and mount profiles with white/gold/navy, native Hack, '
+    'The baseline replaces appearance choices while preserving placement, with white/gold/navy, native Hack, '
     'Split artwork, 35% backing, 7% feather, 40% dither, grain2, depth spacing16, Combat detail. '
     'Native weapon readers and shader controls remain. No native DLL/shader bytecode is changed.\n'
     'Readout detail and Layer spacing are in Appearance. Placement > Bring HUD into view recovers '

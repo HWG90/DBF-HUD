@@ -509,14 +509,8 @@ function M.start(sr,backend,options)
     function self.export_tuning() return HUD.config.serialize(self.config) end
     function self.use_split_defaults()
         self.configure(HUD.config.split_defaults)
-        self.weapon_clearance={};self.auto_mounts={}
-        if self.layout_editor then self.layout_editor.active=false end
-        if backend.write_weapon_offsets then
-            local ok,why=pcall(backend.write_weapon_offsets,HUD.weapon_offsets.serialize(self.weapon_clearance))
-            if not ok then return false,tostring(why)end
-        end
         local ok,message=self.save_tuning()
-        log('SPLIT_DEFAULTS applied='..tostring(ok)..' previous_appearance_choices_replaced=true')
+        log('SPLIT_DEFAULTS applied='..tostring(ok)..' appearance_replaced=true placement_preserved=true')
         return ok,message
     end
     function self.save_tuning()

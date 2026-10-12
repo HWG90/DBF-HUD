@@ -3,47 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DBF · Split instrument study 08</title>
+  <meta name="theme-color" content="#091b35">
+  <title>DBF Armory · Split instrument</title>
   <link rel="stylesheet" href="study.css">
+  <link rel="stylesheet" href="workbench.css">
 </head>
 <body>
-<header class="page-head">
-  <div><span class="eyebrow">DBF / SPLIT INSTRUMENT / STUDY 08</span><h1>An instrument in open space.</h1><p>A clear resource register, a reserve pod to the left, and selected settings to the right.</p></div>
-  <span class="review-tag">DESIGN STUDY</span>
+<a class="skip-link" href="#workbench">Skip to the instrument</a>
+<header class="masthead">
+  <a class="brand" href="#top" aria-label="DBF Armory home"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 2 46 24 24 46 2 24Z"/><path d="M24 9v30M9 24h30"/><path class="mark-fill" d="m24 14 3 7 8 3-8 3-3 7-3-7-8-3 8-3Z"/></svg><span>DBF <strong>ARMORY</strong><small>DIVER’S BEST FRIEND</small></span></a>
+  <nav aria-label="Workbench navigation"><a href="#workbench" class="nav-current">Instrument lab</a><a href="#resource-systems">Resource systems</a><a href="../universal-hud-study-07/index.html">Design archive ↗</a></nav>
+  <span class="online"><i aria-hidden="true"></i>INTERACTIVE STUDY <b>08</b></span>
 </header>
-<nav class="direction-strip" aria-label="Selected direction"><span><b>SPLIT</b> · Open, asymmetric readout cluster <small>Selected by David · October 11</small></span><a href="../universal-hud-study-07/index.html">Return to the three directions ↗</a></nav>
-<main>
-<aside class="controls">
-  <div class="control-section"><span class="section-label">READOUT</span>
-    <label class="stacked">Weapon family<select id="family"></select></label>
-    <label class="stacked">State<select id="state"><option value="ready">Normal</option><option value="chamber">Chambered +1</option><option value="low">Low / hot</option><option value="empty">Empty / spent / venting</option><option value="unknown">Unknown data</option></select></label>
-    <label class="stacked">Reading detail<select id="readoutView"><option value="combat">Combat · selected values</option><option value="inspect">Inspect · setting names + values</option></select></label>
-    <p class="hint">Combat keeps every available selected setting visible. Inspect adds field names. Fixed modes and unavailable values stay quiet in both views.</p>
+<section class="hero" id="top" aria-labelledby="pageTitle">
+  <div class="hero-copy"><span class="eyebrow">WEAPON INSTRUMENT / SELECTED DIRECTION</span><h1 id="pageTitle">SPLIT<span class="title-dot">.</span><span class="hero-subtitle">Weapon<br>telemetry.</span></h1><p>Resource, reserve, and selected settings in an open instrument.<br>White, gold, and navy. Built around the weapon in your hands.</p></div>
+  <div class="hero-insignia" aria-hidden="true"><svg viewBox="0 0 270 200"><circle cx="129" cy="102" r="77" class="orbit-ring"/><path d="M52 102a77 77 0 0 1 108-70M129 179a77 77 0 0 0 77-77" class="orbit-accent"/><circle cx="129" cy="102" r="58" class="inner-ring"/><path d="M18 102h32m156 0h42M129 9v16m0 155v16" class="orbit-ticks"/><path d="M79 73v63m0-63h28m72 63h-28M70 100H41m138-11h42m-42 25h30" class="cluster-mark"/><text x="96" y="116">27</text><path d="M96 128h64" class="orbit-accent"/><circle cx="42" cy="100" r="3" class="orbit-dot"/><circle cx="222" cy="89" r="3" class="orbit-dot"/></svg><span>OPEN / ASYMMETRIC / SPATIAL</span></div>
+  <div class="design-principles"><span><b>01</b>Resource first</span><span><b>02</b>Settings in context</span><span><b>03</b>Room to see</span></div>
+</section>
+<main id="workbench">
+<aside class="controls" aria-label="Instrument controls">
+  <div class="controls-title"><span class="section-label">CONFIGURE INSTRUMENT</span><span class="tiny-plus" aria-hidden="true">+</span></div>
+  <div class="control-section"><span class="section-label"><b>01</b> READOUT</span>
+    <label class="stacked">Resource system<select id="family"></select></label>
+    <label class="stacked">Weapon state<select id="state"><option value="ready">Ready</option><option value="chamber">Chambered +1</option><option value="low">Low / hot</option><option value="empty">Empty / spent / venting</option><option value="unknown">Unknown data</option></select></label>
+    <label class="stacked">Detail<select id="readoutView"><option value="combat">Combat · selected values</option><option value="inspect">Inspect · names + values</option></select></label>
+    <p class="hint">Only the settings that matter to this weapon. Inspect adds their names.</p>
   </div>
-  <div class="control-section"><span class="section-label">EDGE & CONTRAST</span>
-    <label class="slider">Backing <output id="backingOut">35%</output><input id="backing" type="range" min="0" max="80" value="35" step="1"></label>
+  <details class="control-fold" open><summary><span class="section-label"><b>02</b> EDGE & CONTRAST</span><span aria-hidden="true">−</span></summary><div class="control-section">
+    <label class="slider">Navy backing <output id="backingOut">35%</output><input id="backing" type="range" min="0" max="80" value="35" step="1"></label>
     <label class="slider">Feather width <output id="featherOut">7%</output><input id="feather" type="range" min="0" max="20" value="7" step="1"></label>
     <label class="slider">Edge dither <output id="ditherOut">40%</output><input id="dither" type="range" min="0" max="100" value="40" step="5"></label>
     <label class="slider">Dither grain <output id="grainOut">2 px</output><input id="grain" type="range" min="1" max="5" value="2" step="1"></label>
-    <p class="hint">Backing and outer accents dissolve together. Numerals, unit labels and the status strip keep a crisp outline.</p>
-  </div>
-  <div class="control-section"><span class="section-label">SPATIAL READING</span>
-    <label class="stacked">View<select id="angle"><option value="0">Angle 1 · standing</option><option value="1">Angle 2 · shoulder</option><option value="2">Angle 3 · inclined</option><option value="3">Angle 4 · shoulder</option><option value="neutral">Neutral contrast field</option></select></label>
-    <label class="check"><input type="checkbox" id="perspective" checked>Use the angle of the weapon</label>
+    <p class="hint">Let the backing dissolve. Keep the important readings crisp.</p>
+  </div></details>
+  <details class="control-fold"><summary><span class="section-label"><b>03</b> SPACE & PLACEMENT</span><span aria-hidden="true">+</span></summary><div class="control-section">
+    <label class="stacked">Scene angle<select id="angle"><option value="neutral" selected>Armory contrast field</option><option value="0">Standing</option><option value="1">Over the shoulder</option><option value="2">Inclined / diving</option><option value="3">Shoulder · alternate</option></select></label>
+    <label class="check"><input type="checkbox" id="perspective" checked>Follow the weapon angle</label>
     <label class="slider">Depth separation <output id="depthOut">16 px</output><input id="depth" type="range" min="0" max="36" value="16" step="2"></label>
     <label class="slider">Instrument size <output id="scaleOut">70%</output><input id="scale" type="range" min="65" max="150" value="70" step="5"></label>
-    <div class="button-row"><button id="reset" class="plain">Reset study controls</button><button id="recenter" class="plain">Reset placement</button></div>
-  </div>
+    <button id="recenter" class="plain">Recenter preview <span aria-hidden="true">↺</span></button>
+  </div></details>
+  <div class="control-bottom"><button id="reset" class="plain">Restore study defaults <span aria-hidden="true">↺</span></button><small>Preview controls only. Your game settings stay yours.</small></div>
 </aside>
-<section class="review-area">
-  <div class="stage-tools"><span><b id="conceptTitle">Split · Combat</b><small id="dimensions">224 × 113 px at 1920 × 1080</small></span><div><button class="view-mode active" data-view="fit">Fit scene</button><button class="view-mode" data-view="pixels">100% screen</button><button class="view-mode" data-view="inspect">Inspect ×3</button></div></div>
-  <div class="scene-viewport" id="sceneViewport"><div class="world" id="world"><img id="scenePhoto" alt="Provided third-person gameplay reference"><div class="neutral-grid"></div><div id="instrument" class="instrument" aria-label="Weapon instrument preview"></div></div><div class="stage-label" id="stageLabel">DRAG INSTRUMENT TO PLACE</div></div>
-  <div class="reading-note"><strong id="familyTitle">Magazine / AR-23 Liberator</strong><p id="readingExplanation"></p><span id="capabilityLine"></span></div>
-  <section class="family-section"><div class="section-heading"><h2>One cluster. Every resource keeps its meaning.</h2><p>Source-owned units · independently applicable settings</p></div><div class="family-grid" id="familyGrid"></div></section>
-  <details class="source-note"><summary>What this study knows about weapon settings</summary><p>Every reading here is illustrative. The current source exposes ammunition and typed reserves, heat, several charge systems, selectable fire modes, selectable RPM, safety, and known ammunition selectors. This study demonstrates how those fields could share one design language; it does not establish support for every weapon or selector.</p><p>Missing fields are omitted. Unknown counts use a dash and NO DATA, never a fabricated zero. Detailed variants such as zoom, flashlight state, fuse distance, or a complete list of all selector choices need additional reader contracts before a HUD can report them.</p><p>Scene positions and layered perspective are a spatial mockup. <a href="BRIEF.md">Design brief and source mapping</a></p></details>
+<section class="review-area" aria-label="Live instrument showcase">
+  <div class="stage-heading"><div><span class="eyebrow">LIVE PREVIEW</span><h2>Weapon state.<br><span>At a glance.</span></h2></div><div class="environment-tabs" role="group" aria-label="Preview environment"><button data-environment="bench" class="active" aria-pressed="true">Workbench</button><button data-environment="field" aria-pressed="false">In the field</button></div></div>
+  <div class="stage-tools"><span><i class="preview-dot" aria-hidden="true"></i><b id="conceptTitle">Split · Combat</b><small id="dimensions">224 × 113 px</small></span><div role="group" aria-label="Preview magnification"><button class="view-mode" data-view="fit">Fit scene</button><button class="view-mode" data-view="pixels">1:1</button><button class="view-mode active" data-view="inspect">Bench ×3</button></div></div>
+  <div class="scene-viewport" id="sceneViewport"><div class="stage-ring" aria-hidden="true"></div><span class="viewport-coordinate" aria-hidden="true">WPN / 08<br>READOUT ACTIVE</span><div class="world" id="world"><img id="scenePhoto" alt="Third-person gameplay reference"><div class="neutral-grid"></div><div id="instrument" class="instrument" aria-label="Weapon instrument preview"></div></div><div class="stage-label" id="stageLabel">DRAG INSTRUMENT TO PLACE</div><span class="viewport-index" aria-hidden="true">+ / 001</span></div>
+  <div class="scenario-bar"><span class="section-label">TRY A READING</span><div role="group" aria-label="Instrument scenarios"><button data-preset="chamber"><span aria-hidden="true">+1</span>Chambered</button><button data-preset="charge"><span aria-hidden="true">◌</span>Charge & safety</button><button data-preset="settings"><span aria-hidden="true">≡</span>Four settings</button><button data-preset="spent"><span aria-hidden="true">!</span>Spent</button></div></div>
+  <div class="reading-note"><div class="reading-index" aria-hidden="true">R<span>01</span></div><div class="reading-copy"><strong id="familyTitle">Magazine / AR-23 Liberator</strong><p id="readingExplanation"></p><span id="capabilityLine"></span></div><span class="reading-state" id="readingState">READY</span></div>
+  <section class="family-section" id="resource-systems"><div class="section-heading"><div><span class="eyebrow">THE SAME LANGUAGE / DIFFERENT WEAPONS</span><h2>One instrument.<br><span>Every resource keeps its meaning.</span></h2></div><p>Choose a system to put it on the bench <span aria-hidden="true">↙</span></p></div><div class="family-grid" id="familyGrid"></div></section>
+  <details class="source-note"><summary><span>How to explore the instrument</span><span aria-hidden="true">+</span></summary><p>Drag the instrument to place it. Switch to In the field to compare the four weapon angles; Bench ×3 brings the readout close enough to inspect. Select a resource card or a quick scenario, then use the controls to compare detail, contrast, feathering, and depth.</p><p>These are illustrative weapon readings. Empty counts flash red, unknown readings say NO DATA, and each resource uses its own units. Fixed or unavailable settings are omitted. <a href="BRIEF.md">Read the design brief ↗</a></p></details>
 </section>
 </main>
-<footer>Review only · original gameplay references · 1920 × 1080 scale reference · static data · no game, settings, or renderer changes. Edge treatment is an SVG preview.</footer>
+<footer class="page-footer"><span><b>DBF ARMORY</b> / SPLIT INSTRUMENT</span><p>Resource · Reserve · Control</p><small>Study 08 · interactive illustrative readings · no game changes</small></footer>
 <script src="study.js"></script>
+<script src="workbench.js"></script>
 </body>
 </html>

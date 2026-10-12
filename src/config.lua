@@ -28,7 +28,7 @@ M.split_defaults={texture_art_trial=true,texture_art_variant='split',force_all_h
     text_color='#F5F6F0',decoration_color='#E9C45D',background_color='#091B35',heat_red='#FF5750',
     panel_opacity=.35,text_opacity=1,text_color_alpha=255,decoration='split',
     panel_edge_softness=7,panel_edge_curve=1,panel_edge_dither=40,panel_edge_grain=2,
-    panel_spatial_depth=16,split_readout_view='combat',weapon_panels={},scale=1,third_person_scale=1,
+    panel_spatial_depth=16,split_readout_view='combat',weapon_panels={},
     theme_shader='none',effect_shader='none',shader_layers={},effect_scanlines=false,effect_sweep=false,
     effect_flicker=false,saturation=1,emissive_intensity=1}
 M.limits={font_scale={.5,1.5},third_person_scale={.5,1.5},third_person_opacity={0,1},theme_shader_speed={.1,3},effect_shader_speed={.1,3},theme_shader_scale={.25,4},effect_shader_scale={.25,4},effect_sweep_speed={.05,2},effect_sweep_density={1,12},railgun_release_margin_ms={50,1000},effect_scanline_count={1,80},text_opacity={0,1},text_color_alpha={0,255},heat_white_alpha={0,255},heat_yellow_alpha={0,255},heat_red_alpha={0,255},saturation={0,2.5},left_mount_x={-2,2},left_mount_y={-2,2},left_mount_z={-2,2},fp_mount_x={-2,2},fp_mount_y={-2,2},fp_mount_z={-2,2},scanline_strength={0,0.6},texture_refresh_hz={0,120},emissive_intensity={0,10},world_position_smooth={0,0.5},world_rotation_smooth={0,0.5},world_max_lag={0,0.5},weapon_offset_x={-1920,1920},weapon_offset_y={-1080,1080},weapon_settle={0.04,1},weapon_lag={0,160},mount_x={-2,2},mount_y={-2,2},mount_z={-2,2},follow={0,1},travel={1,160},settle={0.04,1},offset_x={-1920,1920},offset_y={-1080,1080},
@@ -278,7 +278,6 @@ if HUD.bundled_defaults then
 end
 -- Historical bundled palettes remain recovery data. Fresh setup uses Split.
 for key,value in pairs(M.split_defaults)do M.defaults[key]=value end
-M.weapon_clearance={}
 function M.shader_animation_values(c,role,clock)
     local key=role=='effect' and 'effect_shader' or 'theme_shader'
     local speed=tonumber(c[key..'_speed']) or 1

@@ -4,6 +4,8 @@
 
 The first production implementation is now in `src/split_hud.lua`, using the existing HUD Texture renderer and configuration system. David approved this as a first-pass baseline and authorized replacing old appearance choices. See [the current handoff](../../docs/HANDOFF.md) for deployment and live verification; this gallery remains the illustrative design reference.
 
+The armory workbench presents the same approved instrument with an enlarged responsive bench, field comparison, scenario shortcuts and selectable resource cards. Page controls affect the preview. Saved game placement remains independent; the Split appearance action now preserves offsets and scale.
+
 ## The instrument
 
 The center contains the dominant resource, its short unit label, a proportion rail, and a subordinate capacity or loaded-shot reading. The left reserve pod preserves its actual unit. Relevant selected settings sit on independent open nodes to the right. The compact status strip stays underneath the resource, including the liked CHAMBERED +1 presentation.

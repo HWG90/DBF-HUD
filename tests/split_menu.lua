@@ -14,6 +14,11 @@ io.open=function(path,...)
  return old_open(path,...)
 end
 local function copy(t)if type(t)~='table'then return t end;local q={};for k,v in pairs(t)do q[k]=copy(v)end;return q end
+local function same(a,b)
+ if type(a)~=type(b)then return false end;if type(a)~='table'then return a==b end
+ for k,v in pairs(a)do if not same(v,b[k])then return false end end
+ for k in pairs(b)do if a[k]==nil then return false end end;return true
+end
 local stored,logs,writes={dbf_hud_fonts={decoration=6,family=1,text_color='#010203',panel_color='#111111',decoration_color='#222222',hud_scale=.55}}, {},0
 local store={load=function(id)return copy(stored[id]or{})end,save=function(id,v)stored[id]=copy(v);writes=writes+1;return true end}
 local api=Core.new(store,function(message)logs[#logs+1]=message end)
@@ -96,7 +101,8 @@ local Fresh=dofile('src/config.lua');local fresh=Fresh.new()
 assert(fresh.texture_art_variant=='split'and fresh.texture_art_trial and fresh.hud_presentation=='weapon_specific'and fresh.font=='hack')
 assert(fresh.text_color=='#F5F6F0'and fresh.decoration_color=='#E9C45D'and fresh.background_color=='#091B35'and fresh.heat_red=='#FF5750')
 assert(fresh.decoration=='split'and fresh.panel_opacity==.35 and fresh.panel_edge_softness==7 and fresh.panel_edge_curve==1 and fresh.panel_edge_dither==40 and fresh.panel_edge_grain==2)
-assert(fresh.panel_spatial_depth==16 and fresh.split_readout_view=='combat'and next(fresh.weapon_panels)==nil and next(Fresh.weapon_clearance)==nil)
+assert(fresh.panel_spatial_depth==16 and fresh.split_readout_view=='combat'and next(fresh.weapon_panels)==nil)
+assert(next(bundle.layouts)~=nil and same(Fresh.weapon_clearance,bundle.layouts),'Fresh Split appearance discarded bundled weapon placement defaults')
 assert(next(fresh.shader_layers)==nil and fresh.theme_shader=='none'and fresh.effect_shader=='none')
 assert(bundle.settings.decoration=='helldivers'and bundle.settings.font=='bigblue','Fresh setup modified recovery defaults')
 fresh.weapon_panels['968211c0033dce64']={decoration='none'}
