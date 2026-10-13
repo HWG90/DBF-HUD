@@ -42,6 +42,12 @@ resources[A.atlas]=false;assert(not S.compose(model(),0,0,1,1,config(),0,resourc
 assert(not S.compose(model({resource_hex='ffffffffffffffff'}),0,0,1,1,config(),0,resource,can_get),'Unknown identity was silently adopted')
 
 local base=compose(model());assert(base[1].type=='panel'and base[1].a==0 and base[1].w==320 and base[1].h==161 and base[1].hud_texture_split)
+-- HMG must enter Split through the same catalog gate as the runtime.
+assert(S.supported('2152d5147b0ac418'),'Heavy Machine Gun missing from Split catalog')
+for _,view in ipairs({'first','third'})do
+ local hmg=compose(model({resource_hex='2152d5147b0ac418',value=75,capacity=100,reserve=2}),config({presentation_view=view}))
+ assert(hmg[1].hud_texture_split and chars(hmg)=='75'and text(hmg,'MG-206'),'HMG must use shared Split artwork in both views')
+end
 local digits=numeric(base);assert(#digits==2,'Combat number has an unnecessary leading register')
 for i,v in ipairs(digits)do near(v.x,88+(i-1)*76*48/118);near(v.y,60);near(v.w,72*48/118);near(v.h,48);assert(equal(v.atlas_rect,A.digit_uv(tonumber(v.digit_character),false)),'Selected glyph crop changed')end
 assert(chars(base)=='27'and text(base,'/ 45')and text(base,'6','reserve')and text(base,'MAGS')and text(base,'AUTO','context'))
