@@ -252,10 +252,11 @@ function M.new(backend)
         assert(e~=255,'nonfinite float')
         return sign*(e==0 and m*2^-149 or (1+m/2^23)*2^(e-127))
     end
-    function r.p(a)
-        local s=r.read(a,8);local p=r.u(s,0)+r.u(s,4)*2^32
+    function r.pointer(s,o)
+        o=o or 0;local p=r.u(s,o)+r.u(s,o+4)*2^32
         assert(p>=65536 and p<2^47,'invalid pointer');return p
     end
+    function r.p(a)return r.pointer(r.read(a,8),0)end
     function r.map(a,key,limit)
         local h=r.read(a,20);local n,empty,mult=r.u(h,8),r.u(h,12),r.u(h,16)
         if n==0 or key==empty or key==0xffffffff then return nil end

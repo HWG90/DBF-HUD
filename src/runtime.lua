@@ -958,7 +958,10 @@ function M.start(sr,backend,options)
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
         if model.resource_hex=='72170a55a1f37ff1' or HUD.ballistic_family.specs[model.resource_hex] then
-            model.compass_heading=HUD.compass.heading(projection.camera_matrix)
+            -- Local recoil/lean offsets disable raw CPU projection, not the
+            -- freshly validated camera orientation. Do not blink the status
+            -- strip by treating that projection restriction as missing heading.
+            model.compass_heading=HUD.compass.heading(projection.camera_matrix or projection.depth_camera_matrix)
         elseif model.resource_hex=='4dbd74f49c8ffc13' or (HUD.mechanical_art.layouts[model.resource_hex] and HUD.mechanical_art.layouts[model.resource_hex].zones.compass) then
             local matrix=self.weapon_pose and self.weapon_pose.matrix
             model.compass_heading=matrix and (math.deg(math.atan2(matrix[5],matrix[6]))%360) or nil
@@ -1206,7 +1209,7 @@ function M.start(sr,backend,options)
             self.timing_draw=0
             if not self.timing_active then self.timing_window=nil;self.hud_timing=nil end
             local started=(profile or frame_trial or self.timing_active) and os.clock()
-            HUD.native_font.begin_frame()
+            HUD.native_font.begin_frame(self.clock)
             local ok,err=pcall(self.frame,dt)
             HUD.native_font.end_frame()
             if self.timing_active and ok then

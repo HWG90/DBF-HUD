@@ -814,6 +814,7 @@ test('camera reader rejects changed code, camera modes and torn ownership',funct
     local base,api,cap,getter,impl,state,cam,scene,mat=0x50000000,0x60000000,0x60001000,0x60002000,0x60003000,0x60004000,0x60005000,0x60006000,0x60007000
     local function hex(s)return (s:gsub('..',function(h)return string.char(tonumber(h,16))end))end
     P(base+0x3326308,api);P(api+0x20,cap);P(cap+0xf8,getter)
+    put(getter,string.rep('\0',0x137));put(impl,string.rep('\0',0x76))
     put(getter,hex('48895c2408574883ec60'))
     put(getter+0x132,hex('e8')..u(impl-getter-0x137))
     put(impl,hex('488bc448895808488968104889701857'))
@@ -826,11 +827,15 @@ test('camera reader rejects changed code, camera modes and torn ownership',funct
     U(cam+0x50,2);assert(not reader.poll(base,pose,2));U(cam+0x50,0)
     F(cam+0x90,1);assert(not reader.poll(base,pose,2))
     assert(reader.camera_matrix==nil and reader.native_camera==cam,'local offsets must reject CPU projection while retaining the verified native camera')
+    assert(HUD.compass.heading(reader.camera_matrix or reader.depth_camera_matrix)==0,'Local camera offsets blanked the verified compass heading')
     local calls=0;backend.project_camera=function(fn,owner,x,y,z)calls=calls+1;assert(fn==getter and owner==cam);return .2,.3,.995 end
     local native=assert(reader.native_point(1,2,3));assert(math.abs(native.depth-10)<1e-5 and native.native_depth==.995 and calls==1)
     P(state,cam+0x1000);assert(not reader.native_point(1,2,3)and calls==1,'native projection must reject a replaced owner before calling');P(state,cam)
+    U(cam+0x20,1);assert(not reader.native_point(1,2,3)and calls==1,'batched identity must reject changed node');U(cam+0x20,0)
+    P(cam+0x18,scene+0x1000);assert(not reader.native_point(1,2,3)and calls==1,'batched identity must reject changed scene');P(cam+0x18,scene)
     backend.project_camera=nil;F(cam+0x90,0)
     bytes[getter]=0;assert(not reader.poll(base,pose,2));bytes[getter]=0x48
+    assert(reader.depth_camera_matrix==nil,'Failed ownership/code validation retained a stale heading')
     local tearing={read=function(a,n)local b=read(a,n);if a==mat then U(cam+0x20,1)end;return b end}
     assert(not HUD.projection.new(tearing).poll(base,pose,2));U(cam+0x20,0)
     assert(reader.poll(base,pose,2))
@@ -2092,7 +2097,7 @@ test('screen numeric grouping retains leading-zero opacity and proportional spac
     local variable={glyphs={}};for digit=48,57 do variable.glyphs[digit]={digit} end
     assert(#HUD.screen_scene.text_parts({text='145',numeric_display=true,size=36,font='profont'},variable)==3)
 end)
-test('font availability checks reuse results only within one frame',function()
+test('font availability checks reuse results only within one frame without a clock',function()
     local calls=0;local sr={Application={can_get=function()calls=calls+1;return true end}}
     HUD.native_font.begin_frame()
     local f,m,face=HUD.native_font.resolve(sr,'profont',false)
@@ -2100,6 +2105,21 @@ test('font availability checks reuse results only within one frame',function()
     assert(f==again and face and calls==2)
     HUD.native_font.end_frame();HUD.native_font.resolve(sr,'profont',false);assert(calls==4)
     HUD.native_font.begin_frame();HUD.native_font.resolve(sr,'profont',false);assert(calls==6);HUD.native_font.end_frame()
+end)
+test('clocked font registration checks are bounded without delaying new resources',function()
+    local calls,ready=0,true
+    local sr={Application={can_get=function()calls=calls+1;return ready end}}
+    local function frame(t,name)
+        HUD.native_font.begin_frame(t);local f,m,face=HUD.native_font.resolve(sr,name or 'profont',false);HUD.native_font.end_frame();return face
+    end
+    for i=0,24 do assert(frame(i/100))end
+    assert(calls==2,'Static font registration queried every render frame')
+    assert(frame(.25));assert(calls==4,'Resource availability did not refresh')
+    ready=false;assert(not frame(.5),'Missing resource kept after refresh')
+    ready=true;assert(frame(.51),'Missing-resource cache delayed upload visibility')
+    local before=calls;assert(frame(.52,'hack'));assert(calls>before,'Font switch reused another face')
+    sr.Application.can_get=function()return false end
+    assert(not frame(.53),'Provider replacement retained stale registration')
 end)
 test('Bushwhacker selector uses shell symbols in semi and volley',function()
     for _,mode in ipairs({'SEMI','VOLLEY'}) do

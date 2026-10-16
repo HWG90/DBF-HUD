@@ -136,13 +136,15 @@ function M.new(backend)
         r.reset()
         local api=r.p(base+0x3326308);local camera_api=r.p(api+0x20)
         local getter=r.p(camera_api+0xf8)
-        assert(r.read(getter,10)==wrapper_signature,'unknown projection wrapper')
-        local call=r.read(getter+0x132,5);assert(call:byte()==0xe8,'unknown projection call')
+        local wrapper=r.read(getter,0x137)
+        assert(wrapper:sub(1,10)==wrapper_signature,'unknown projection wrapper')
+        local call=wrapper:sub(0x133,0x137);assert(call:byte()==0xe8,'unknown projection call')
         local impl=getter+0x137+r.i(call,1)
-        assert(r.read(impl,16)==implementation_signature,'unknown projection implementation')
-        assert(r.read(impl+0x62,20)==scene_signature,'unknown camera scene layout')
+        local implementation=r.read(impl,0x76)
+        assert(implementation:sub(1,16)==implementation_signature,'unknown projection implementation')
+        assert(implementation:sub(0x63,0x76)==scene_signature,'unknown camera scene layout')
         local state=r.p(base+0x346d560);local camera=r.p(state);local b=r.read(camera,160)
-        local scene=r.p(camera+0x18);local index=r.u(b,0x20)
+        local scene=r.pointer(b,0x18);local index=r.u(b,0x20)
         assert(index<4096,'camera node index')
         assert(r.u(b,0x30)==1 and r.u(b,0x50)==0,'unsupported camera projection mode')
         local near,fov=r.f(b,0x28),r.f(b,0x34)
@@ -158,8 +160,9 @@ function M.new(backend)
         if math.abs(math.abs(rotation_w)-1)>=1e-6 then local_supported=false end
         local array=r.p(scene+0x28);local data=r.read(array+index*64,64);local matrix={}
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
-        assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
-            and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        assert(r.p(base+0x346d560)==state and r.p(state)==camera,'camera changed during read')
+        local identity=r.read(camera+0x18,12)
+        assert(r.pointer(identity,0)==scene and r.u(identity,8)==index and r.p(scene+0x28)==array,'camera changed during read')
         validate(matrix,fov,aspect)
         self.native_camera=camera;self.native_getter=getter
         self.native_near=near
@@ -177,8 +180,9 @@ function M.new(backend)
         if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
         local ok,a,b,d=pcall(function()
             local owner=assert(self.native_owner);r.reset()
-            assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera and
-                r.p(self.native_camera+0x18)==owner.scene and r.u(r.read(self.native_camera+0x20,4),0)==owner.index and
+            assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera,'camera owner changed before native projection')
+            local identity=r.read(self.native_camera+0x18,12)
+            assert(r.pointer(identity,0)==owner.scene and r.u(identity,8)==owner.index and
                 r.p(owner.scene+0x28)==owner.array,'camera owner changed before native projection')
             return backend.project_camera(self.native_getter,self.native_camera,x,y,z)
         end)

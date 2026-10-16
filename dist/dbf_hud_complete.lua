@@ -7927,9 +7927,10 @@ end)()
 HUD.native_font=(function()
 -- Native resource selection; no rectangle glyph renderer.
 local M={}
-local frame_cache
-function M.begin_frame() frame_cache={} end
-function M.end_frame() frame_cache=nil end
+local frame_cache,frame_clock
+local availability=setmetatable({},{__mode='k'})
+function M.begin_frame(clock) frame_cache={};frame_clock=clock end
+function M.end_frame() frame_cache=nil;frame_clock=nil end
 function M.resolve(sr,name,depth)
     local key=(name or 'bigblue')..(depth and ':depth' or ':clear')
     if frame_cache and frame_cache[key] then return unpack(frame_cache[key],1,3) end
@@ -7941,7 +7942,18 @@ function M.resolve(sr,name,depth)
     local app=sr and sr.Application
     local function available(kind,resource)
         if not app or type(app.can_get)~='function' then return false end
-        local ok,value=pcall(app.can_get,kind,resource);return ok and value==true
+        -- Resource registration is not animation. Recheck positive availability
+        -- at 4 Hz; a new font/material or provider is still queried immediately.
+        -- Misses are not retained, so newly uploaded fonts appear next frame.
+        local entries=frame_clock and availability[app]
+        if frame_clock and (not entries or entries.provider~=app.can_get)then
+            entries={provider=app.can_get};availability[app]=entries
+        end
+        local id=kind..':'..resource;local entry=entries and entries[id]
+        if entry and frame_clock>=entry.at and frame_clock<entry.expires then return true end
+        local ok,value=pcall(app.can_get,kind,resource)
+        if entries then entries[id]=ok and value==true and {at=frame_clock,expires=frame_clock+.25}or nil end
+        return ok and value==true
     end
     if face then
         local material=depth and face.depth or face.clear
@@ -14591,10 +14603,11 @@ function M.new(backend)
         assert(e~=255,'nonfinite float')
         return sign*(e==0 and m*2^-149 or (1+m/2^23)*2^(e-127))
     end
-    function r.p(a)
-        local s=r.read(a,8);local p=r.u(s,0)+r.u(s,4)*2^32
+    function r.pointer(s,o)
+        o=o or 0;local p=r.u(s,o)+r.u(s,o+4)*2^32
         assert(p>=65536 and p<2^47,'invalid pointer');return p
     end
+    function r.p(a)return r.pointer(r.read(a,8),0)end
     function r.map(a,key,limit)
         local h=r.read(a,20);local n,empty,mult=r.u(h,8),r.u(h,12),r.u(h,16)
         if n==0 or key==empty or key==0xffffffff then return nil end
@@ -15094,10 +15107,11 @@ function M.new(backend)
         local resolver=getter+14+r.i(code,10);code=r.read(resolver,116)
         assert(code:sub(1,18)==resolver_prefix and code:sub(0x26,0x54)==resolver_body,'unknown unit resolver')
         local registry=r.p(resolver+0x16+r.i(code,0x12))
-        local cap=r.u(r.read(registry+0x98,4),0);assert(cap>0 and cap<=0x400000,'unit capacity')
+        local registry_header=r.read(registry+0x88,32)
+        local cap=r.u(registry_header,0x10);assert(cap>0 and cap<=0x400000,'unit capacity')
         local index=b.candidate%0x400000;local generation=math.floor(b.candidate/0x400000)%256
         assert(index>0 and index<cap,'unit index')
-        local array=r.p(registry+0x88);local generations=r.p(registry+0xa0)
+        local array=r.pointer(registry_header,0);local generations=r.pointer(registry_header,0x18)
         assert(r.read(generations+index,1):byte()==generation,'recycled unit')
         local object=r.p(array+index*8)
         assert(r.u(r.read(object+8,4),0)==b.candidate,'unit identity')
@@ -15428,13 +15442,15 @@ function M.new(backend)
         r.reset()
         local api=r.p(base+0x3326308);local camera_api=r.p(api+0x20)
         local getter=r.p(camera_api+0xf8)
-        assert(r.read(getter,10)==wrapper_signature,'unknown projection wrapper')
-        local call=r.read(getter+0x132,5);assert(call:byte()==0xe8,'unknown projection call')
+        local wrapper=r.read(getter,0x137)
+        assert(wrapper:sub(1,10)==wrapper_signature,'unknown projection wrapper')
+        local call=wrapper:sub(0x133,0x137);assert(call:byte()==0xe8,'unknown projection call')
         local impl=getter+0x137+r.i(call,1)
-        assert(r.read(impl,16)==implementation_signature,'unknown projection implementation')
-        assert(r.read(impl+0x62,20)==scene_signature,'unknown camera scene layout')
+        local implementation=r.read(impl,0x76)
+        assert(implementation:sub(1,16)==implementation_signature,'unknown projection implementation')
+        assert(implementation:sub(0x63,0x76)==scene_signature,'unknown camera scene layout')
         local state=r.p(base+0x346d560);local camera=r.p(state);local b=r.read(camera,160)
-        local scene=r.p(camera+0x18);local index=r.u(b,0x20)
+        local scene=r.pointer(b,0x18);local index=r.u(b,0x20)
         assert(index<4096,'camera node index')
         assert(r.u(b,0x30)==1 and r.u(b,0x50)==0,'unsupported camera projection mode')
         local near,fov=r.f(b,0x28),r.f(b,0x34)
@@ -15450,8 +15466,9 @@ function M.new(backend)
         if math.abs(math.abs(rotation_w)-1)>=1e-6 then local_supported=false end
         local array=r.p(scene+0x28);local data=r.read(array+index*64,64);local matrix={}
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
-        assert(r.p(base+0x346d560)==state and r.p(state)==camera and r.p(camera+0x18)==scene
-            and r.u(r.read(camera+0x20,4),0)==index and r.p(scene+0x28)==array,'camera changed during read')
+        assert(r.p(base+0x346d560)==state and r.p(state)==camera,'camera changed during read')
+        local identity=r.read(camera+0x18,12)
+        assert(r.pointer(identity,0)==scene and r.u(identity,8)==index and r.p(scene+0x28)==array,'camera changed during read')
         validate(matrix,fov,aspect)
         self.native_camera=camera;self.native_getter=getter
         self.native_near=near
@@ -15469,8 +15486,9 @@ function M.new(backend)
         if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
         local ok,a,b,d=pcall(function()
             local owner=assert(self.native_owner);r.reset()
-            assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera and
-                r.p(self.native_camera+0x18)==owner.scene and r.u(r.read(self.native_camera+0x20,4),0)==owner.index and
+            assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera,'camera owner changed before native projection')
+            local identity=r.read(self.native_camera+0x18,12)
+            assert(r.pointer(identity,0)==owner.scene and r.u(identity,8)==owner.index and
                 r.p(owner.scene+0x28)==owner.array,'camera owner changed before native projection')
             return backend.project_camera(self.native_getter,self.native_camera,x,y,z)
         end)
@@ -21553,7 +21571,10 @@ function M.start(sr,backend,options)
         if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
         if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
         if model.resource_hex=='72170a55a1f37ff1' or HUD.ballistic_family.specs[model.resource_hex] then
-            model.compass_heading=HUD.compass.heading(projection.camera_matrix)
+            -- Local recoil/lean offsets disable raw CPU projection, not the
+            -- freshly validated camera orientation. Do not blink the status
+            -- strip by treating that projection restriction as missing heading.
+            model.compass_heading=HUD.compass.heading(projection.camera_matrix or projection.depth_camera_matrix)
         elseif model.resource_hex=='4dbd74f49c8ffc13' or (HUD.mechanical_art.layouts[model.resource_hex] and HUD.mechanical_art.layouts[model.resource_hex].zones.compass) then
             local matrix=self.weapon_pose and self.weapon_pose.matrix
             model.compass_heading=matrix and (math.deg(math.atan2(matrix[5],matrix[6]))%360) or nil
@@ -21801,7 +21822,7 @@ function M.start(sr,backend,options)
             self.timing_draw=0
             if not self.timing_active then self.timing_window=nil;self.hud_timing=nil end
             local started=(profile or frame_trial or self.timing_active) and os.clock()
-            HUD.native_font.begin_frame()
+            HUD.native_font.begin_frame(self.clock)
             local ok,err=pcall(self.frame,dt)
             HUD.native_font.end_frame()
             if self.timing_active and ok then
