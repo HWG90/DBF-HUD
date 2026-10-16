@@ -207,7 +207,8 @@ for _,view in ipairs({'combat','inspect'})do for _,status in ipairs({'normal','e
  local nt,ng,nc=#triangles,#glyphs,native_calls
  assert(actual.draw(p,config,out,nil,nil,3840,2160,.05),actual.status)
  assert(native_calls-nc==4*#grouped and native_calls-nc<=16,'Production native projection escaped the four-point-per-pod budget')
- if status~='normal'then assert(#grouped==4)else assert(#grouped==3)end
+ -- Chamber bonus now lives on the ones digit; only the empty warning adds a status pod.
+ if status=='empty'then assert(#grouped==4)else assert(#grouped==3)end
  local images,seen={},{}
  for i=nt+1,#triangles do local v=triangles[i];if v.name:find(A.material,1,true)and not seen[v.gui]then seen[v.gui]=true;images[#images+1]=v end end
  local expected_images,expected_depths={},{}

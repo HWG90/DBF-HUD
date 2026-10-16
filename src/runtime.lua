@@ -704,6 +704,7 @@ function M.start(sr,backend,options)
     end
     -- Only CPU layout is retained. Pose, projection, shaders and native draws still run each frame.
     local split_world_cache
+    local render_settings=HUD.config.render_cache()
     local next_weapon_screen_lookup=0;local last_weapon_screen_available
     function self.frame(dt)
         if retired then return end
@@ -994,10 +995,11 @@ function M.start(sr,backend,options)
         self.aim_opacity=aim_opacity
         -- Presentation selects artwork; the requested WorldGUI placement must
         -- reach the weapon renderer even when Automatic selects practical art.
-        if self.presentation_view=='third' and self.config.anchor_mode~='world'and not HUD.split_hud.selected(HUD.config.effective(self.config,model.resource_hex))then
+        local render_config=render_settings(self.config,model.resource_hex)
+        if self.presentation_view=='third' and self.config.anchor_mode~='world'and not HUD.split_hud.selected(render_config)then
             release_retained()
             world_display.release();if screen_scene then screen_scene.release()end
-            local cfg=HUD.config.effective(self.config,model.resource_hex);cfg.presentation_view='third'
+            local cfg=render_config;cfg.presentation_view='third'
             local unit=h/1080;local scale=unit*self.config.scale*self.config.third_person_scale
             local px=w/2+(self.config.offset_x+(self.motion_x or 0))*unit
             local py=h/2+(self.config.offset_y+(self.motion_y or 0))*unit
@@ -1007,7 +1009,7 @@ function M.start(sr,backend,options)
             view.draw(commands);self.anchor_status=use_weapon and 'weapon-attached Simple HUD' or 'floating Simple HUD';return
         end
         if self.config.anchor_mode=='world' and self.weapon_pose and not self.screen_bone_hud then
-            local world_config=HUD.config.effective(self.config,model.resource_hex)
+            local world_config=render_config
             world_config.presentation_view=self.presentation_view
             world_config.scale=self.config.scale*(self.profile_scale or 1)
             if self.presentation_view=='third'and not HUD.split_hud.selected(world_config)then
@@ -1154,7 +1156,7 @@ function M.start(sr,backend,options)
             scale=scale*math.max(.25,math.min(4,(self.hybrid_scale_depth or point.depth)/point.depth))
         end
         if self.config.anchor_mode=='weapon' and self.first_person then scale=scale*2 end
-        local screen_config=HUD.config.effective(self.config,model.resource_hex)
+        local screen_config=render_settings(self.config,model.resource_hex)
         screen_config.presentation_view=self.presentation_view
         if self.presentation_view~='third'and HUD.config.segmented_eligible(screen_config,model.resource_hex)then screen_config=HUD.config.segmented_appearance(screen_config,model.resource_hex)end
         if self.presentation_view=='third'and not HUD.split_hud.selected(screen_config)then

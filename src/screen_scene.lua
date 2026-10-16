@@ -244,6 +244,9 @@ function M.prepare_commands(commands,p,c,can_get)
     local m,at=M.panel_pose(p,c,commands)
     if c.texture_art_trial and not (commands[1] and commands[1].atlas_frame) then commands=HUD.texture_art.prepare(commands,p.resource_hex,can_get,HUD.texture_art_assets,c.texture_art_variant)end
     commands=M.expand_shader_layers(M.expand_texture_layers(commands),c,can_get,p.resource_hex)
+    if HUD.native_labels and c.profile_skip_text~=true and c.native_label_sprites~=false then
+        commands=HUD.native_labels.prepare(commands,can_get,M.max_texture_images)
+    end
     for _,v in ipairs(commands)do
         assert(type(v.x)=='number' and v.x==v.x and math.abs(v.x)<math.huge and type(v.y)=='number' and v.y==v.y and math.abs(v.y)<math.huge,'invalid HUD coordinates')
         if v.spatial_depth~=nil then assert(finite(v.spatial_depth),'invalid spatial HUD depth')end
@@ -331,6 +334,7 @@ function M.new(sr,log,hot_panel_art)
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
     function self.release()
+        self.native_label_count=0
         prepared_cache=nil
         partition_cache=nil
         if gui and live(world) then
@@ -813,12 +817,14 @@ function M.new(sr,log,hot_panel_art)
         local started=c.debug_hud_timing and os.clock()
         local cacheable=c.layout_cache_token==commands and c.style_3d=='standard'
         local prepared,ready,m,at
-        if cacheable and prepared_cache and prepared_cache.input==commands and prepared_cache.first_person==p.first_person then
+        local label_sprites=c.native_label_sprites~=false and c.profile_skip_text~=true
+        if cacheable and prepared_cache and prepared_cache.input==commands and prepared_cache.first_person==p.first_person and prepared_cache.label_sprites==label_sprites then
             ready=prepared_cache.commands
             prepared,m,at=pcall(M.panel_pose,p,c,ready)
         else
             prepared,ready,m,at=pcall(M.prepare_commands,commands,p,c,A.can_get)
-            prepared_cache=prepared and cacheable and {input=commands,first_person=p.first_person,commands=ready}or nil
+            prepared_cache=prepared and cacheable and {input=commands,first_person=p.first_person,label_sprites=label_sprites,commands=ready}or nil
+            self.native_label_count=prepared and ready.native_label_count or 0
         end
         local prepare_done=started and os.clock()
         if not prepared then

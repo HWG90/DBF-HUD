@@ -17,13 +17,12 @@ local function validate(m,fov,aspect)
     end
     assert(math.abs(m[4])+math.abs(m[8])+math.abs(m[12])+math.abs(m[16]-1)<1e-5,'camera affine')
 end
-local function project_validated(m,x,y,z,fov,aspect,near)
+local function project_validated(m,x,y,z,t,aspect,near)
     local dx,dy,dz=x-m[13],y-m[14],z-m[15]
     local right=dx*m[1]+dy*m[2]+dz*m[3]
     local depth=dx*m[5]+dy*m[6]+dz*m[7]
     local up=dx*m[9]+dy*m[10]+dz*m[11]
-    if depth<=math.max(near,.0001) then return nil,'behind camera or near plane' end
-    local t=math.tan(fov*.5)
+    if depth<=near then return nil,'behind camera or near plane' end
     local nx,ny=.5+.5*right/(depth*t*aspect),.5+.5*up/(depth*t)
     if nx~=nx or ny~=ny or nx<0 or nx>1 or ny<0 or ny>1 then return nil,'outside viewport' end
     return {x=nx,y=ny,depth=depth},'projected weapon root'
@@ -31,11 +30,12 @@ end
 -- Validate this immutable frame snapshot once, rather than once per glyph corner.
 function M.project(m,x,y,z,fov,aspect,near)
     validate(m,fov,aspect)
-    return project_validated(m,x,y,z,fov,aspect,near)
+    return project_validated(m,x,y,z,math.tan(fov*.5),aspect,math.max(near,.0001))
 end
 function M.projector(m,fov,aspect,near)
     validate(m,fov,aspect)
-    return function(x,y,z)return project_validated(m,x,y,z,fov,aspect,near) end
+    local t,n=math.tan(fov*.5),math.max(near,.0001)
+    return function(x,y,z)return project_validated(m,x,y,z,t,aspect,n) end
 end
 -- Invert the camera projection of a planar panel without clipping its corners.
 -- u runs right and v runs down. This also handles partially offscreen panels.
@@ -144,7 +144,8 @@ function M.new(backend)
         local implementation=r.read(impl,0x76)
         assert(implementation:sub(1,16)==implementation_signature,'unknown projection implementation')
         assert(implementation:sub(0x63,0x76)==scene_signature,'unknown camera scene layout')
-        local state=r.p(base+0x346d560);local camera=r.p(state);local b=r.read(camera,160)
+        local state_bytes=r.read(base+0x346d560,8);local state=r.pointer(state_bytes)
+        local camera_bytes=r.read(state,8);local camera=r.pointer(camera_bytes);local b=r.read(camera,160)
         local scene=r.pointer(b,0x18);local index=r.u(b,0x20)
         assert(index<4096,'camera node index')
         assert(r.u(b,0x30)==1 and r.u(b,0x50)==0,'unsupported camera projection mode')
@@ -159,7 +160,7 @@ function M.new(backend)
         end
         local rotation_w=r.f(b,0x8c);assert(rotation_w==rotation_w and math.abs(rotation_w)<2,'camera local rotation invalid')
         if math.abs(math.abs(rotation_w)-1)>=1e-6 then local_supported=false end
-        local array=r.p(scene+0x28);local data=r.read(array+index*64,64);local matrix={}
+        local array_bytes=r.read(scene+0x28,8);local array=r.pointer(array_bytes);local data=r.read(array+index*64,64);local matrix={}
         for i=1,16 do matrix[i]=r.f(data,(i-1)*4) end
         assert(r.p(base+0x346d560)==state and r.p(state)==camera,'camera changed during read')
         local identity=r.read(camera+0x18,12)
@@ -168,7 +169,8 @@ function M.new(backend)
         self.native_camera=camera;self.native_getter=getter
         self.native_near=near
         self.native_fov=fov
-        self.native_owner={base=base,state=state,scene=scene,index=index,array=array}
+        self.native_owner={base=base,state=state,scene=scene,index=index,array=array,
+            state_bytes=state_bytes,camera_bytes=camera_bytes,identity_bytes=identity,array_bytes=array_bytes}
         self.depth_camera_matrix=matrix
         if not local_supported then return nil,'camera local offset unsupported for CPU projection; native projection available'end
         self.camera_matrix=matrix;self.camera_near=near;self.camera_aspect=aspect
@@ -180,10 +182,11 @@ function M.new(backend)
     -- Reuse the guarded call itself; every point still rechecks live ownership.
     local function guarded_native_point(x,y,z)
             local owner=assert(self.native_owner);r.reset()
-            assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera,'camera owner changed before native projection')
+            -- Read all ownership fields at the same points as before. Exact byte
+            -- equality avoids decoding identical pointers for every panel corner.
+            assert(r.read(owner.base+0x346d560,8)==owner.state_bytes and r.read(owner.state,8)==owner.camera_bytes,'camera owner changed before native projection')
             local identity=r.read(self.native_camera+0x18,12)
-            assert(r.pointer(identity,0)==owner.scene and r.u(identity,8)==owner.index and
-                r.p(owner.scene+0x28)==owner.array,'camera owner changed before native projection')
+            assert(identity==owner.identity_bytes and r.read(owner.scene+0x28,8)==owner.array_bytes,'camera owner changed before native projection')
             return backend.project_camera(self.native_getter,self.native_camera,x,y,z)
     end
     function self.native_point(x,y,z)
@@ -284,13 +287,17 @@ function M.native_panel_snapshot(frame,points,near)
  -- Native float projection can round; refuse a nonplanar depth snapshot.
  if math.abs(d0+du+dv-points[3].depth)>.002+math.abs(points[3].depth)*.002 then return nil end
  local threshold=math.max(near or .0001,.0001)
+ -- Capture the immutable plane coefficients once. Retain the original arithmetic
+ -- order for depth and divisor so near-plane and singularity rejection is exact.
+ local fx,fy,fw,fh=frame.x,frame.y,frame.w,frame.h
+ local ax,ay,ac,bx,by,bc,cx,cy,cc=unpack(forward)
  local snapshot={rows=rows}
  function snapshot.project_values(x,y)
-  local u,v=(x-frame.x)/frame.w,1-(y-frame.y)/frame.h
-  local depth=d0+du*u+dv*v;local divisor=forward[7]*u+forward[8]*v+forward[9]
+  local u,v=(x-fx)/fw,1-(y-fy)/fh
+  local depth=d0+du*u+dv*v;local divisor=cx*u+cy*v+cc
   if not valid(depth)or depth<=threshold or not valid(divisor)or math.abs(divisor)<1e-12 then return nil end
-  local nx=(forward[1]*u+forward[2]*v+forward[3])/divisor
-  local ny=1-(forward[4]*u+forward[5]*v+forward[6])/divisor
+  local nx=(ax*u+ay*v+ac)/divisor
+  local ny=1-(bx*u+by*v+bc)/divisor
   if not valid(nx)or not valid(ny)then return nil end
   return nx,ny,depth
  end

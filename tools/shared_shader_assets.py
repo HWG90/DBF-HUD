@@ -77,4 +77,5 @@ def shared_resources(photo_core=None):
 
 def complete_hud_resources():
     shared, audit = shared_resources()
-    return [r for r in hud_resources() if r[1] not in (SHADER, GROUP)] + shared, audit
+    from build_native_labels import resources as label_resources
+    return [r for r in hud_resources() if r[1] not in (SHADER, GROUP)] + label_resources() + shared, audit

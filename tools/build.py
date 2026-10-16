@@ -66,6 +66,8 @@ ORDER = (
     'panel_texture_layers',
     'bespoke_texture_panel',
     'texture_theme',
+    'native_label_data',
+    'native_labels',
     'screen_scene',
     'retained_surface',
     'retained_carrier',

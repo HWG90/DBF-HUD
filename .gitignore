@@ -43,3 +43,4 @@ assets/faithful-comparison/full-stage/
 
 # Deliberately promoted, hash-verified native build input (not a release ZIP).
 !/assets/native-runtime/hud-native.zip
+!/assets/native-labels/native-labels.zip

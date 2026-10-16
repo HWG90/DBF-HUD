@@ -139,6 +139,55 @@ function M.effective(config,resource)
  if HUD.shader_layers then out.shader_layers=HUD.shader_layers.effective(out);out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.theme_shader='none';out.effect_shader='none' end
  return out
 end
+-- One render-owned working copy. Public effective() still returns a fresh table
+-- for menu/edit callers. Compare saved inputs by value so direct live edits,
+-- including an in-place shader/profile edit, take effect on the next frame.
+function M.render_cache()
+ local saved,profile,rows,row_values,base,output,output_rows,source,weapon,shaders
+ local function snapshot(t)
+  local values,count={},0
+  for k,v in pairs(t or {})do values[k]=v;count=count+1 end
+  return {values=values,count=count}
+ end
+ local function same(t,s)
+  local count=0
+  for k,v in pairs(t or {})do if s.values[k]~=v then return false end;count=count+1 end
+  return count==s.count
+ end
+ local function reset(t,values)
+  -- Remove frame-only fields as well as restoring changed/deleted base fields.
+  for k in pairs(t)do if values[k]==nil then t[k]=nil end end
+  for k,v in pairs(values)do t[k]=v end
+ end
+ return function(config,resource)
+  local selected=(config.weapon_panels or {})[resource or '']
+  local layers=selected and selected.shader_layers or config.shader_layers
+  local valid=source==config and weapon==resource and shaders==HUD.shader_layers
+   and same(config,saved)and same(selected,profile)and same(layers,rows)
+  if valid then
+   for i,row in ipairs(layers or {})do if not same(row,row_values[i])then valid=false;break end end
+  end
+  if not valid then
+   base=M.effective(config,resource);output={};output_rows={}
+   source,weapon,shaders=config,resource,HUD.shader_layers
+   saved,profile,rows=snapshot(config),snapshot(selected),snapshot(layers);row_values={}
+   for i,row in ipairs(layers or {})do row_values[i]=snapshot(row)end
+   for i in ipairs(base.shader_layers or {})do output_rows[i]={}end
+  end
+  reset(output,base)
+  if base.shader_layers then
+   -- Render consumers may replace or edit their list without poisoning the
+   -- normalized cache or the settings used by the menu and another weapon.
+   for k in pairs(output_rows)do if not base.shader_layers[k]then output_rows[k]=nil end end
+   for i,row in ipairs(base.shader_layers)do
+    if type(output_rows[i])~='table'then output_rows[i]={}end
+    reset(output_rows[i],row)
+   end
+   output.shader_layers=output_rows
+  end
+  return output
+ end
+end
 function M.set_panel(config,resource,values)
  assert(type(resource)=='string' and resource:match('^%x+$') and #resource==16,'Equip a verified weapon first')
  local panels={};for id,profile in pairs(config.weapon_panels or {})do panels[id]=profile end

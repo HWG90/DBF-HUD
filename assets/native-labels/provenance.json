@@ -1,0 +1,35 @@
+{
+  "source_archive_sha256": "f63a95151613e050e33395fba09c978f54ee43348b8ae96d8d70744708f3cc75",
+  "fonts": {
+    "hack": {
+      "labels": 164,
+      "width": 2048,
+      "height": 2048,
+      "mips": 12,
+      "source_rgba_sha256": "759e1612269e341ab8134441186d7a2a9ff63677043589f38609a355db7eb077",
+      "rgba_sha256": "51ae3e7034b4f539818b058c62a2aebff6001ff9181578511e2d73b2d2e9910f",
+      "native_em": 48,
+      "integral_metrics": true,
+      "new_font_rasterization": false
+    },
+    "bigblue": {
+      "labels": 164,
+      "width": 2048,
+      "height": 2048,
+      "mips": 12,
+      "source_rgba_sha256": "a1e4969f03373826ea940c869820baf25f31ad9eeb88f86a17f21fe15839e5fa",
+      "rgba_sha256": "d7b55248442fa14ff1fc3450f136c0709604655a209851c0f9a80bd6f4e7c86f",
+      "native_em": 48,
+      "integral_metrics": true,
+      "new_font_rasterization": false
+    }
+  },
+  "archive_sha256": "b94b6d66f8098de4a9cfbd9188f425bdc87ca441af002ca67b9369a876e4824c",
+  "files": {
+    "labels.patch_0": "7a2ef3532ee4862309fc758a91d80753a8447be91217ea0ade06b3aded386c8c",
+    "labels.patch_0.gpu_resources": "d432e521f7fdac30fe438d8559af676f576f33a0e873386b9d93837d6197d100"
+  },
+  "live_visual_verified": false,
+  "dynamic_labels": "original native glyph path",
+  "shader_changes": false
+}
