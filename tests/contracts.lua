@@ -833,6 +833,10 @@ test('camera reader rejects changed code, camera modes and torn ownership',funct
     P(state,cam+0x1000);assert(not reader.native_point(1,2,3)and calls==1,'native projection must reject a replaced owner before calling');P(state,cam)
     U(cam+0x20,1);assert(not reader.native_point(1,2,3)and calls==1,'batched identity must reject changed node');U(cam+0x20,0)
     P(cam+0x18,scene+0x1000);assert(not reader.native_point(1,2,3)and calls==1,'batched identity must reject changed scene');P(cam+0x18,scene)
+    for _,values in ipairs({{}, {.2}, {.2,.3}, {.2,.3,0/0}, {math.huge,.3,.995}, {.2,.3,1}, {.2,.3,-math.huge}})do
+        backend.project_camera=function()return unpack(values)end
+        assert(not reader.native_point(1,2,3),'incomplete or nonfinite native output accepted')
+    end
     backend.project_camera=nil;F(cam+0x90,0)
     bytes[getter]=0;assert(not reader.poll(base,pose,2));bytes[getter]=0x48
     assert(reader.depth_camera_matrix==nil,'Failed ownership/code validation retained a stale heading')

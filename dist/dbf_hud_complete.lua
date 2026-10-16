@@ -14150,11 +14150,13 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  local out={frame}
  local function image(texture,uv,a,b,w,h,c,alpha,role,plane,layer)
   local q={type='texture',x=x+a*s,y=y+(height-b-h)*s,w=w*s,h=h*s,c=c,a=alpha,
-   texture_material=A.material,texture_resource=texture,atlas_rect=uv,texture_theme=false,texture_layer=layer or 49.1,
+   texture_material=A.material,texture_resource=texture,atlas_rect=uv,texture_theme=false,texture_layer=layer or 50,
    split_role=role,spatial_plane=plane or'main',spatial_depth=depths[plane or'main']}
   out[#out+1]=q;return q
  end
- local carrier=image(coverage,A.full_uv,0,0,320,161,navy,opacity*(cfg.panel_opacity or.35),'backing','main',49)
+ -- Separate integer layers: native GUI sorting must not collapse fractional
+ -- backing/foreground depths and blend the backing over individual digits.
+ local carrier=image(coverage,A.full_uv,0,0,320,161,navy,opacity*(cfg.panel_opacity or.35),'backing','main',40)
  carrier.coverage_mask=true;carrier.texture_theme=nil;carrier.render_role='backing'
  local font=cfg.font or'hack';local font_scale=cfg.font_scale or 1
  local function text(a,b,str,size,c,role,plane,align,maxw)
@@ -14173,7 +14175,7 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  text(87,43,r.label,11.5,gold,'unit','main','left',134)
  local pulse=r.empty and cfg.reduced_motion~=true and math.floor((clock or 0)*4)%2==1 and.22 or r.counter_pulse
  if r.infinite then
-  local b=A.infinity_outline;local q=image(A.atlas,b.uv,88,61,b.w,b.h,NAVY,fg,'loaded');q.outline=true
+  local b=A.infinity_outline;local q=image(A.atlas,b.uv,88,61,b.w,b.h,NAVY,fg,'loaded','main',49);q.outline=true
   local a=A.infinity;image(A.atlas,a.uv,88,61,a.w,a.h,white,fg,'loaded')
  else
   local raw=r.value and tostring(r.value)or'--';local str=r.value and string.rep('0',math.max(0,2-#raw))..raw or raw
@@ -14182,13 +14184,13 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
    local ch=str:sub(i,i);local column=tonumber(ch)or 10;local quiet=r.value~=nil and i<=#str-#raw
    local a=88+(i-1)*76*48/118
    local q=image(A.atlas,A.digit_uv(column,quiet),a,53,72*48/118,48,ink,fg*pulse,'loaded');q.digit_character=ch;q.leading_zero=quiet
-   q=image(A.atlas,quiet and A.quiet_zero_outline_uv or A.outline_uv(column),a,53,72*48/118,48,NAVY,fg*pulse,'loaded');q.outline=true;q.digit_character=ch
+   q=image(A.atlas,quiet and A.quiet_zero_outline_uv or A.outline_uv(column),a,53,72*48/118,48,NAVY,fg*pulse,'loaded','main',49);q.outline=true;q.digit_character=ch
   end end
  end
  local digit_count=r.value and math.max(2,#tostring(r.value))or 2
  if r.suffix then text(88+(digit_count*76-5)*48/118+5,97,r.suffix,14,ink,'suffix')end
  text(222,122,r.sub,11,white,'capacity','main','right',134)
- local gauge=A.sprites.gauge;image(A.atlas,gauge.uv,87,109.5,136,10,white,fg,'gauge_inactive')
+ local gauge=A.sprites.gauge;image(A.atlas,gauge.uv,87,109.5,136,10,white,fg,'gauge_inactive','main',49)
  if r.slots then
   local pitch=134/#r.slots
   for _,slot in ipairs(r.slots)do
@@ -14219,7 +14221,7 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  end
  if r.status~=''then
   local c=r.warning=='red'and red or gold
-  image(A.atlas,A.sprites.solid.uv,87,141,166,18,navy,fg*.58,'status','status')
+  image(A.atlas,A.sprites.solid.uv,87,141,166,18,navy,fg*.58,'status','status',40)
   image(A.atlas,A.sprites.solid.uv,85.5,141,3,18,c,fg*r.status_pulse,'status','status')
   text(97,153.5,r.status,11.5,c,'status','status','left',153).a=fg*r.status_pulse
  end
@@ -15307,6 +15309,7 @@ HUD.projection=(function()
 -- Diagnostic world-to-screen projection. Reads data only; no engine calls.
 -- Initial scope: perspective camera with identity local camera offset.
 local M={}
+local function valid(v)return type(v)=='number'and v==v and math.abs(v)<=1e7 end
 local function unhex(s)return (s:gsub('..',function(h)return string.char(tonumber(h,16))end))end
 local wrapper_signature=unhex('48895c2408574883ec60')
 local implementation_signature=unhex('488bc448895808488968104889701857')
@@ -15482,19 +15485,20 @@ function M.new(backend)
         self.camera_lateral=(pose.x-matrix[13])*matrix[1]+(pose.y-matrix[14])*matrix[2]+(pose.z-matrix[15])*matrix[3]
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
-    function self.native_point(x,y,z)
-        if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
-        local ok,a,b,d=pcall(function()
+    -- Reuse the guarded call itself; every point still rechecks live ownership.
+    local function guarded_native_point(x,y,z)
             local owner=assert(self.native_owner);r.reset()
             assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera,'camera owner changed before native projection')
             local identity=r.read(self.native_camera+0x18,12)
             assert(r.pointer(identity,0)==owner.scene and r.u(identity,8)==owner.index and
                 r.p(owner.scene+0x28)==owner.array,'camera owner changed before native projection')
             return backend.project_camera(self.native_getter,self.native_camera,x,y,z)
-        end)
+    end
+    function self.native_point(x,y,z)
+        if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
+        local ok,a,b,d=pcall(guarded_native_point,x,y,z)
         if not ok then self.native_status=tostring(a);return nil end
-        for _,value in ipairs({a,b,d})do if type(value)~='number'or value~=value or math.abs(value)>=1e7 then self.native_status='nonfinite native projection';return nil end end
-        if type(a)~='number'or type(b)~='number'or type(d)~='number'then self.native_status='incomplete native projection';return nil end
+        if not valid(a) or not valid(b) or not valid(d) or math.abs(a)>=1e7 or math.abs(b)>=1e7 or math.abs(d)>=1e7 then self.native_status='nonfinite native projection';return nil end
         -- Native perspective projection returns forward normalized device depth.
         -- The scene-depth shader samples linear metres, so invert near/z first.
         if not self.native_near or d>=1 then self.native_status='native depth outside perspective range';return nil end
@@ -15516,7 +15520,6 @@ function M.new(backend)
 end
 -- Invert an ordered projected quad: TL, TR, BR, BL; screen UV -> unit panel UV.
 -- Rows match screen_scene.atlas_rows: u numerator, v numerator, denominator.
-local function valid(v)return type(v)=='number'and v==v and math.abs(v)<=1e7 end
 -- The guarded engine wrapper returns output pixels, which can differ from GUI
 -- pixels under upscaling. Normalize once; screen_scene scales to GUI pixels.
 function M.native_coordinate_map(output_width,output_height)
@@ -17877,7 +17880,7 @@ function M.expand_shader_layers(commands,c,can_get,resource)
     local q={};for k,v in pairs(carrier)do q[k]=v end
     q.a=(c.visibility_alpha or 1)*opacity;q.c=carrier.coverage_mask and {96,106,101}or {255,255,255}
     q.texture_layers=nil;q.texture_theme_shader=r.shader;q.texture_theme=false
-    q.shader_layer=r;q.texture_layer=50+slot*.08;q.shader_alpha_masked=true
+    q.shader_layer=r;q.texture_layer=frame.split_hud and (40+slot)or (50+slot*.08);q.shader_alpha_masked=true
     q.texture_slot=count+1 -- Each layer owns independent scale/time uniforms.
     out[#out+1]=q;count=count+1
    else notes[#notes+1]='Layer '..slot..': texture-alpha material unavailable or image budget reached' end
@@ -18039,6 +18042,43 @@ function M.text_parts(command,face)
         else out[#out+1]={text=part.text,dx=part.dx,alpha=part.alpha,c=part.c} end
     end
     return out
+end
+-- Numeric Lua data only: native vectors and matrices remain frame-local.
+function M.glyph_plan(text,x,y,size,face,uv)
+    local plan={}
+    for i=1,#text do
+        local code=text:byte(i)
+        local metric=assert(face.glyphs[code] or face.glyphs[63])
+        local coords=assert(uv[code] or uv[63])
+        local left,bottom=metric[2]*size,metric[3]*size
+        local span,height=(metric[4]-metric[2])*size,(metric[5]-metric[3])*size
+        if span>0 and height>0 then
+            plan[#plan+1]={code=code,coords=coords,x=x+left,right=x+left+span,
+                bottom=y+bottom,middle=y+bottom+height*.5,top=y+bottom+height}
+        end
+        x=x+metric[1]*size
+    end
+    return plan
+end
+-- Keep numeric projection in one Lua loop, separate from native GUI calls.
+-- This lets LuaJIT trace the arithmetic across a complete label; no frame or
+-- native transform is retained, only reusable numeric output slots.
+function M.project_glyph_plan(plan,plane,width,height)
+    local project=plane.project_values
+    for _,g in ipairs(plan)do
+        local bx,by=project(g.x,g.bottom)
+        local mx,my=project(g.x,g.middle)
+        local tx,ty=project(g.x,g.top)
+        local rx,ry=project(g.right,g.bottom)
+        local sx,sy=project(g.right,g.middle)
+        local out=g.projected
+        if not out then out={{},{}};g.projected=out end
+        local a,b=out[1],out[2]
+        a.visible=bx~=nil and rx~=nil and mx~=nil
+        b.visible=mx~=nil and sx~=nil and tx~=nil
+        if a.visible then a[1],a[2],a[3],a[4],a[5],a[6]=bx*width,by*height,rx*width,ry*height,mx*width,my*height end
+        if b.visible then b[1],b[2],b[3],b[4],b[5],b[6]=mx*width,my*height,sx*width,sy*height,tx*width,ty*height end
+    end
 end
 -- Pure command preparation completes before touching native GUI ownership.
 function M.prepare_commands(commands,p,c,can_get)
@@ -18455,20 +18495,29 @@ function M.new(sr,log,hot_panel_art)
                             if not glyph_zero then glyph_forward=sr.Vector3(0,1,0);glyph_zero=sr.Vector3(0,0,0);glyph_extent=sr.Vector2(1,1)end
                             local ink=color(part.alpha,part.c)
                             local cached_uv=glyph_uv_cache[uv];if not cached_uv then cached_uv={};glyph_uv_cache[uv]=cached_uv end
-                            for i=1,#part.text do
-                                local code=part.text:byte(i)
-                                local metric=assert(face.glyphs[code] or face.glyphs[63])
-                                local coords=assert(uv[code] or uv[63])
-                                local left,bottom=metric[2]*size,metric[3]*size
-                                local span,height=(metric[4]-metric[2])*size,(metric[5]-metric[3])*size
+                            local plan=part.glyph_plan
+                            if not plan then plan=M.glyph_plan(part.text,x,v.y,size,face,uv);part.glyph_plan=plan end
+                            local projected=plane and plane.project_values
+                            if projected then M.project_glyph_plan(plan,plane,width,height)end
+                            for _,glyph in ipairs(plan)do
+                                local code,coords=glyph.code,glyph.coords
+                                local next_x,next_y
                                 -- Small atlas strips follow changing perspective across the glyph.
                                 local strips=2
                                 for strip=0,strips-1 do
                                     local low,high=strip/strips,(strip+1)/strips
-                                    local bx,by=glyph_project(x+left,v.y+bottom+height*low)
-                                    local rx,ry=glyph_project(x+left+span,v.y+bottom+height*low)
-                                    local ux,uy=glyph_project(x+left,v.y+bottom+height*high)
-                                    if span>0 and height>0 and bx and rx and ux then
+                                    local bx,by,rx,ry,ux,uy
+                                    if projected then
+                                        local q=glyph.projected[strip+1]
+                                        if q.visible then bx,by,rx,ry,ux,uy=q[1],q[2],q[3],q[4],q[5],q[6]end
+                                    else
+                                        bx,by=next_x,next_y
+                                        if strip==0 then bx,by=glyph_project(glyph.x,glyph.bottom)end
+                                        rx,ry=glyph_project(glyph.right,strip==0 and glyph.bottom or glyph.middle)
+                                        ux,uy=glyph_project(glyph.x,strip==0 and glyph.middle or glyph.top)
+                                        next_x,next_y=ux,uy
+                                    end
+                                    if bx and rx and ux then
                                         local transform
                                         if sr.Matrix4x4.from_elements then
                                             transform=sr.Matrix4x4.from_elements(rx-bx,0,ry-by,
@@ -18506,7 +18555,6 @@ function M.new(sr,log,hot_panel_art)
                                         end
                                     end
                                 end
-                                x=x+metric[1]*size
                             end
                         elseif G.text_3d and sr.Matrix4x4 and sr.Matrix4x4.from_axes then
                             material(name,face.font)

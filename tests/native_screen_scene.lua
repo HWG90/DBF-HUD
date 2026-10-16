@@ -145,6 +145,8 @@ print('PASS material lifetime cache: 120 unchanged frames make zero material cal
 local prepare=Scene.prepare_commands;local prepares=0
 Scene.prepare_commands=function(...)prepares=prepares+1;return prepare(...)end
 local group,parts=Scene.spatial_groups,Scene.text_parts;local groups,partitions=0,0
+local glyph_plan=Scene.glyph_plan;local plans=0
+Scene.glyph_plan=function(...)plans=plans+1;return glyph_plan(...)end
 Scene.spatial_groups=function(...)groups=groups+1;return group(...)end
 Scene.text_parts=function(...)partitions=partitions+1;return parts(...)end
 cfg.style_3d='standard';cfg.layout_cache_token=commands
@@ -153,16 +155,20 @@ local gt=#glyphs
 assert(cached.draw(pose,cfg,commands,nil,nil,1920,1080,.05))
 local first_glyph=glyphs[gt+1];local n=#glyphs-gt
 local first_parts=partitions
+local first_plans=plans;assert(first_plans>0)
 shift_x=shift_x+.03;gt=#glyphs
 assert(cached.draw(pose,cfg,commands,nil,nil,1920,1080,.05))
 assert(prepares==1 and #glyphs-gt==n,'Layout reuse changed frame submission')
 assert(groups==1 and partitions==first_parts,'Immutable text or panel grouping repeated')
+assert(plans==first_plans,'Unchanged text rebuilt glyph geometry')
 close(glyphs[gt+1].tm.at[1]-first_glyph.tm.at[1],.03*1920)
 cached.release()
 assert(cached.draw(pose,cfg,commands,nil,nil,1920,1080,.05));assert(prepares==2,'Released geometry cache survived material publication')
 assert(groups==2 and partitions==first_parts*2,'Released partition cache survived publication')
+assert(plans==first_plans*2,'Released glyph plan survived publication')
 cached.release();cfg.layout_cache_token=nil;Scene.prepare_commands=prepare
 Scene.spatial_groups,Scene.text_parts=group,parts
+Scene.glyph_plan=glyph_plan
 print('PASS immutable preparation cache retains full-rate pose updates and clears on GUI release')
 -- The original raw-camera branch remains usable when no callback is provided.
 HUD.projection.projector,HUD.projection.panel_inverse,HUD.projection.clip_polygon=unpack(original)

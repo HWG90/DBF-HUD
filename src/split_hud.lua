@@ -179,11 +179,13 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  local out={frame}
  local function image(texture,uv,a,b,w,h,c,alpha,role,plane,layer)
   local q={type='texture',x=x+a*s,y=y+(height-b-h)*s,w=w*s,h=h*s,c=c,a=alpha,
-   texture_material=A.material,texture_resource=texture,atlas_rect=uv,texture_theme=false,texture_layer=layer or 49.1,
+   texture_material=A.material,texture_resource=texture,atlas_rect=uv,texture_theme=false,texture_layer=layer or 50,
    split_role=role,spatial_plane=plane or'main',spatial_depth=depths[plane or'main']}
   out[#out+1]=q;return q
  end
- local carrier=image(coverage,A.full_uv,0,0,320,161,navy,opacity*(cfg.panel_opacity or.35),'backing','main',49)
+ -- Separate integer layers: native GUI sorting must not collapse fractional
+ -- backing/foreground depths and blend the backing over individual digits.
+ local carrier=image(coverage,A.full_uv,0,0,320,161,navy,opacity*(cfg.panel_opacity or.35),'backing','main',40)
  carrier.coverage_mask=true;carrier.texture_theme=nil;carrier.render_role='backing'
  local font=cfg.font or'hack';local font_scale=cfg.font_scale or 1
  local function text(a,b,str,size,c,role,plane,align,maxw)
@@ -202,7 +204,7 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  text(87,43,r.label,11.5,gold,'unit','main','left',134)
  local pulse=r.empty and cfg.reduced_motion~=true and math.floor((clock or 0)*4)%2==1 and.22 or r.counter_pulse
  if r.infinite then
-  local b=A.infinity_outline;local q=image(A.atlas,b.uv,88,61,b.w,b.h,NAVY,fg,'loaded');q.outline=true
+  local b=A.infinity_outline;local q=image(A.atlas,b.uv,88,61,b.w,b.h,NAVY,fg,'loaded','main',49);q.outline=true
   local a=A.infinity;image(A.atlas,a.uv,88,61,a.w,a.h,white,fg,'loaded')
  else
   local raw=r.value and tostring(r.value)or'--';local str=r.value and string.rep('0',math.max(0,2-#raw))..raw or raw
@@ -211,13 +213,13 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
    local ch=str:sub(i,i);local column=tonumber(ch)or 10;local quiet=r.value~=nil and i<=#str-#raw
    local a=88+(i-1)*76*48/118
    local q=image(A.atlas,A.digit_uv(column,quiet),a,53,72*48/118,48,ink,fg*pulse,'loaded');q.digit_character=ch;q.leading_zero=quiet
-   q=image(A.atlas,quiet and A.quiet_zero_outline_uv or A.outline_uv(column),a,53,72*48/118,48,NAVY,fg*pulse,'loaded');q.outline=true;q.digit_character=ch
+   q=image(A.atlas,quiet and A.quiet_zero_outline_uv or A.outline_uv(column),a,53,72*48/118,48,NAVY,fg*pulse,'loaded','main',49);q.outline=true;q.digit_character=ch
   end end
  end
  local digit_count=r.value and math.max(2,#tostring(r.value))or 2
  if r.suffix then text(88+(digit_count*76-5)*48/118+5,97,r.suffix,14,ink,'suffix')end
  text(222,122,r.sub,11,white,'capacity','main','right',134)
- local gauge=A.sprites.gauge;image(A.atlas,gauge.uv,87,109.5,136,10,white,fg,'gauge_inactive')
+ local gauge=A.sprites.gauge;image(A.atlas,gauge.uv,87,109.5,136,10,white,fg,'gauge_inactive','main',49)
  if r.slots then
   local pitch=134/#r.slots
   for _,slot in ipairs(r.slots)do
@@ -248,7 +250,7 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  end
  if r.status~=''then
   local c=r.warning=='red'and red or gold
-  image(A.atlas,A.sprites.solid.uv,87,141,166,18,navy,fg*.58,'status','status')
+  image(A.atlas,A.sprites.solid.uv,87,141,166,18,navy,fg*.58,'status','status',40)
   image(A.atlas,A.sprites.solid.uv,85.5,141,3,18,c,fg*r.status_pulse,'status','status')
   text(97,153.5,r.status,11.5,c,'status','status','left',153).a=fg*r.status_pulse
  end

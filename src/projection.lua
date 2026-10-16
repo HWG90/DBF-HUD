@@ -1,6 +1,7 @@
 -- Diagnostic world-to-screen projection. Reads data only; no engine calls.
 -- Initial scope: perspective camera with identity local camera offset.
 local M={}
+local function valid(v)return type(v)=='number'and v==v and math.abs(v)<=1e7 end
 local function unhex(s)return (s:gsub('..',function(h)return string.char(tonumber(h,16))end))end
 local wrapper_signature=unhex('48895c2408574883ec60')
 local implementation_signature=unhex('488bc448895808488968104889701857')
@@ -176,19 +177,20 @@ function M.new(backend)
         self.camera_lateral=(pose.x-matrix[13])*matrix[1]+(pose.y-matrix[14])*matrix[2]+(pose.z-matrix[15])*matrix[3]
         return M.project(matrix,pose.x,pose.y,pose.z,fov,aspect,near)
     end
-    function self.native_point(x,y,z)
-        if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
-        local ok,a,b,d=pcall(function()
+    -- Reuse the guarded call itself; every point still rechecks live ownership.
+    local function guarded_native_point(x,y,z)
             local owner=assert(self.native_owner);r.reset()
             assert(r.p(owner.base+0x346d560)==owner.state and r.p(owner.state)==self.native_camera,'camera owner changed before native projection')
             local identity=r.read(self.native_camera+0x18,12)
             assert(r.pointer(identity,0)==owner.scene and r.u(identity,8)==owner.index and
                 r.p(owner.scene+0x28)==owner.array,'camera owner changed before native projection')
             return backend.project_camera(self.native_getter,self.native_camera,x,y,z)
-        end)
+    end
+    function self.native_point(x,y,z)
+        if not backend.project_camera or not self.native_camera or not self.native_getter then self.native_status='camera descriptor unavailable';return nil end
+        local ok,a,b,d=pcall(guarded_native_point,x,y,z)
         if not ok then self.native_status=tostring(a);return nil end
-        for _,value in ipairs({a,b,d})do if type(value)~='number'or value~=value or math.abs(value)>=1e7 then self.native_status='nonfinite native projection';return nil end end
-        if type(a)~='number'or type(b)~='number'or type(d)~='number'then self.native_status='incomplete native projection';return nil end
+        if not valid(a) or not valid(b) or not valid(d) or math.abs(a)>=1e7 or math.abs(b)>=1e7 or math.abs(d)>=1e7 then self.native_status='nonfinite native projection';return nil end
         -- Native perspective projection returns forward normalized device depth.
         -- The scene-depth shader samples linear metres, so invert near/z first.
         if not self.native_near or d>=1 then self.native_status='native depth outside perspective range';return nil end
@@ -210,7 +212,6 @@ function M.new(backend)
 end
 -- Invert an ordered projected quad: TL, TR, BR, BL; screen UV -> unit panel UV.
 -- Rows match screen_scene.atlas_rows: u numerator, v numerator, denominator.
-local function valid(v)return type(v)=='number'and v==v and math.abs(v)<=1e7 end
 -- The guarded engine wrapper returns output pixels, which can differ from GUI
 -- pixels under upscaling. Normalize once; screen_scene scales to GUI pixels.
 function M.native_coordinate_map(output_width,output_height)

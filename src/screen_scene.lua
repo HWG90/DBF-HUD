@@ -33,7 +33,7 @@ function M.expand_shader_layers(commands,c,can_get,resource)
     local q={};for k,v in pairs(carrier)do q[k]=v end
     q.a=(c.visibility_alpha or 1)*opacity;q.c=carrier.coverage_mask and {96,106,101}or {255,255,255}
     q.texture_layers=nil;q.texture_theme_shader=r.shader;q.texture_theme=false
-    q.shader_layer=r;q.texture_layer=50+slot*.08;q.shader_alpha_masked=true
+    q.shader_layer=r;q.texture_layer=frame.split_hud and (40+slot)or (50+slot*.08);q.shader_alpha_masked=true
     q.texture_slot=count+1 -- Each layer owns independent scale/time uniforms.
     out[#out+1]=q;count=count+1
    else notes[#notes+1]='Layer '..slot..': texture-alpha material unavailable or image budget reached' end
@@ -195,6 +195,43 @@ function M.text_parts(command,face)
         else out[#out+1]={text=part.text,dx=part.dx,alpha=part.alpha,c=part.c} end
     end
     return out
+end
+-- Numeric Lua data only: native vectors and matrices remain frame-local.
+function M.glyph_plan(text,x,y,size,face,uv)
+    local plan={}
+    for i=1,#text do
+        local code=text:byte(i)
+        local metric=assert(face.glyphs[code] or face.glyphs[63])
+        local coords=assert(uv[code] or uv[63])
+        local left,bottom=metric[2]*size,metric[3]*size
+        local span,height=(metric[4]-metric[2])*size,(metric[5]-metric[3])*size
+        if span>0 and height>0 then
+            plan[#plan+1]={code=code,coords=coords,x=x+left,right=x+left+span,
+                bottom=y+bottom,middle=y+bottom+height*.5,top=y+bottom+height}
+        end
+        x=x+metric[1]*size
+    end
+    return plan
+end
+-- Keep numeric projection in one Lua loop, separate from native GUI calls.
+-- This lets LuaJIT trace the arithmetic across a complete label; no frame or
+-- native transform is retained, only reusable numeric output slots.
+function M.project_glyph_plan(plan,plane,width,height)
+    local project=plane.project_values
+    for _,g in ipairs(plan)do
+        local bx,by=project(g.x,g.bottom)
+        local mx,my=project(g.x,g.middle)
+        local tx,ty=project(g.x,g.top)
+        local rx,ry=project(g.right,g.bottom)
+        local sx,sy=project(g.right,g.middle)
+        local out=g.projected
+        if not out then out={{},{}};g.projected=out end
+        local a,b=out[1],out[2]
+        a.visible=bx~=nil and rx~=nil and mx~=nil
+        b.visible=mx~=nil and sx~=nil and tx~=nil
+        if a.visible then a[1],a[2],a[3],a[4],a[5],a[6]=bx*width,by*height,rx*width,ry*height,mx*width,my*height end
+        if b.visible then b[1],b[2],b[3],b[4],b[5],b[6]=mx*width,my*height,sx*width,sy*height,tx*width,ty*height end
+    end
 end
 -- Pure command preparation completes before touching native GUI ownership.
 function M.prepare_commands(commands,p,c,can_get)
@@ -611,20 +648,29 @@ function M.new(sr,log,hot_panel_art)
                             if not glyph_zero then glyph_forward=sr.Vector3(0,1,0);glyph_zero=sr.Vector3(0,0,0);glyph_extent=sr.Vector2(1,1)end
                             local ink=color(part.alpha,part.c)
                             local cached_uv=glyph_uv_cache[uv];if not cached_uv then cached_uv={};glyph_uv_cache[uv]=cached_uv end
-                            for i=1,#part.text do
-                                local code=part.text:byte(i)
-                                local metric=assert(face.glyphs[code] or face.glyphs[63])
-                                local coords=assert(uv[code] or uv[63])
-                                local left,bottom=metric[2]*size,metric[3]*size
-                                local span,height=(metric[4]-metric[2])*size,(metric[5]-metric[3])*size
+                            local plan=part.glyph_plan
+                            if not plan then plan=M.glyph_plan(part.text,x,v.y,size,face,uv);part.glyph_plan=plan end
+                            local projected=plane and plane.project_values
+                            if projected then M.project_glyph_plan(plan,plane,width,height)end
+                            for _,glyph in ipairs(plan)do
+                                local code,coords=glyph.code,glyph.coords
+                                local next_x,next_y
                                 -- Small atlas strips follow changing perspective across the glyph.
                                 local strips=2
                                 for strip=0,strips-1 do
                                     local low,high=strip/strips,(strip+1)/strips
-                                    local bx,by=glyph_project(x+left,v.y+bottom+height*low)
-                                    local rx,ry=glyph_project(x+left+span,v.y+bottom+height*low)
-                                    local ux,uy=glyph_project(x+left,v.y+bottom+height*high)
-                                    if span>0 and height>0 and bx and rx and ux then
+                                    local bx,by,rx,ry,ux,uy
+                                    if projected then
+                                        local q=glyph.projected[strip+1]
+                                        if q.visible then bx,by,rx,ry,ux,uy=q[1],q[2],q[3],q[4],q[5],q[6]end
+                                    else
+                                        bx,by=next_x,next_y
+                                        if strip==0 then bx,by=glyph_project(glyph.x,glyph.bottom)end
+                                        rx,ry=glyph_project(glyph.right,strip==0 and glyph.bottom or glyph.middle)
+                                        ux,uy=glyph_project(glyph.x,strip==0 and glyph.middle or glyph.top)
+                                        next_x,next_y=ux,uy
+                                    end
+                                    if bx and rx and ux then
                                         local transform
                                         if sr.Matrix4x4.from_elements then
                                             transform=sr.Matrix4x4.from_elements(rx-bx,0,ry-by,
@@ -662,7 +708,6 @@ function M.new(sr,log,hot_panel_art)
                                         end
                                     end
                                 end
-                                x=x+metric[1]*size
                             end
                         elseif G.text_3d and sr.Matrix4x4 and sr.Matrix4x4.from_axes then
                             material(name,face.font)

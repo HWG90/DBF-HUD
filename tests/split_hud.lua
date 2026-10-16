@@ -58,6 +58,11 @@ local gauge=role(base,'gauge');assert(#gauge>=1,'Immediate resource proportion i
 near(role(base,'gauge_inactive')[1].a,1,'Study gauge opacity is already encoded in its sprite and must not be applied twice')
 near(role(base,'reserve')[1].a,1,'Study reserve-connector opacity is already encoded in its sprite and must not be applied twice')
 local full=role(base,'backing')[1];assert(full and full.coverage_mask and equal(full.atlas_rect,{0,0,1,1}),'Existing shader carrier must retain full UVs')
+for _,v in ipairs(role(base,'loaded'))do
+ if v.type=='texture'then assert(v.texture_layer%1==0 and v.texture_layer>full.texture_layer,'Counter must sort above backing on an integer layer')end
+ if v.outline then assert(v.texture_layer<digits[1].texture_layer,'Outline must sort below lit digits')end
+end
+assert(role(base,'gauge_inactive')[1].texture_layer<gauge[1].texture_layer,'Inactive gauge must sort below fill')
 local transparent=compose(model(),config({panel_opacity=0}));assert(role(transparent,'backing')[1].a==0)
 for i,v in ipairs(base)do if v.split_role~='backing'then assert(equal(v,transparent[i]),'Panel opacity changed crisp foreground')end end
 for _,size in ipairs({.25,1,4})do local c=role(compose(model(),config({theme_shader_scale=size})),'backing')[1];assert(equal(c.atlas_rect,{0,0,1,1}),'Pattern scale changed shader UVs')end

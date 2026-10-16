@@ -31,8 +31,8 @@ def shader_rows(path):
         assert any('Assets' in o['Include'] for o in manifest['Options'])
         return sorted(rows)
 
-def verify():
-    photo=PHOTO_OUTPUT/('War-Journalist-'+(PHOTO_ROOT/'VERSION').read_text().strip()+'-Assets.zip')
+def verify(photo=None):
+    photo=photo or PHOTO_OUTPUT/('War-Journalist-'+(PHOTO_ROOT/'VERSION').read_text().strip()+'-Assets.zip')
     expected,audit=shared_resources()
     for package in (HUD,photo):
         assert shader_rows(package)==sorted(expected), 'Package shader closure differs: '+str(package)
@@ -43,9 +43,10 @@ def verify():
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--verify-only',action='store_true')
+    parser.add_argument('--photo-package',type=Path,help='Explicit companion asset ZIP to verify, including a published release')
     args=parser.parse_args()
     if not args.verify_only:
         subprocess.run([sys.executable,str(ROOT/'tools/test_shared_shader_assets.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'tools/build_complete.py')],check=True)
         subprocess.run([sys.executable,str(PHOTO_ROOT/'tools/build_release.py'),'--assets-only','--output',str(PHOTO_OUTPUT)],check=True)
-    verify()
+    verify(args.photo_package)
