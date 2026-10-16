@@ -49,9 +49,9 @@ function M.start(sr,backend,options)
             local started=os.clock()
             local function finish(...)
                 local cost=os.clock()-started
-                if self.timing_active and (name=='depth_draw' or name=='world_draw' or name=='screen_draw') then self.timing_draw=(self.timing_draw or 0)+cost end
+                if self.timing_active and (name=='depth_draw' or name=='world_draw' or name=='screen_draw' or name=='retained_draw') then self.timing_draw=(self.timing_draw or 0)+cost end
                 if active then
-                    if name=='depth_draw' and select(1,...)==true then active.drew=true end
+                    if (name=='depth_draw' or name=='retained_draw') and select(1,...)==true then active.drew=true end
                     local bucket=active.buckets[name] or {total=0,calls=0,max=0};active.buckets[name]=bucket
                     bucket.total=bucket.total+cost;bucket.calls=bucket.calls+1;bucket.max=math.max(bucket.max,cost)
                 end
@@ -273,6 +273,21 @@ function M.start(sr,backend,options)
     local world_probe=HUD.world_probe.new(sr,research_log)
     local world_display=HUD.scene_test.new(sr,research_log,nil,hot_panel_art)
     local screen_scene=HUD.screen_scene and HUD.screen_scene.new(sr,log,hot_panel_art)
+    local retained_scene=HUD.retained_scene and HUD.retained_scene.new(sr,log,_G,hot_panel_art)
+    local retained_options,retained_render_seen,retained_calls_seen={},0,0
+    -- Explicit session-only experiment. Saved layouts and the default route stay intact.
+    function self.set_retained_mode(mode,settings)
+        assert(mode==nil or mode=='off' or mode=='screen_texture' or mode=='worldgui' or mode=='mesh','invalid retained mode')
+        assert(retained_scene,'retained candidate unavailable')
+        local ok,why=retained_scene.release();if ok==false then return false,why end
+        self.retained_mode=mode~='off' and mode or nil
+        retained_options=settings or {};self.retained_status='idle'
+        self.retained_deadline=self.retained_mode and self.clock+math.min(300,math.max(1,retained_options.retained_trial_seconds or 90))or nil
+        local r=retained_scene.timing();retained_render_seen,retained_calls_seen=r.render_seconds,r.render_calls
+        return true
+    end
+    function self.retained_timing()return retained_scene and retained_scene.timing()end
+    local function release_retained()if retained_scene then return retained_scene.release()end end
     do
         local available,total=0,0
         for _,entry in ipairs(HUD.shader_catalog) do
@@ -284,6 +299,7 @@ function M.start(sr,backend,options)
     end
     world_display.draw=timed('world_draw',world_display.draw)
     if screen_scene then screen_scene.draw=timed('depth_draw',screen_scene.draw) end
+    if retained_scene then retained_scene.draw=timed('retained_draw',retained_scene.draw)end
     self.screen_scene_hud=true -- Auto-migrate only when the new shader package is available.
     local bone_marker=HUD.world_probe.new(sr,research_log,true)
     local bone_marker_position
@@ -861,7 +877,7 @@ function M.start(sr,backend,options)
         local w,h=sr.Gui.resolution()
         -- Screen GUI coordinates use Gui.resolution(), not the output back buffer.
         -- Upscaling can make the latter larger and displace the whole hybrid panel.
-        if type(w)~='number' or type(h)~='number' or w<=0 or h<=0 then view.clear();return end
+        if type(w)~='number' or type(h)~='number' or w<=0 or h<=0 then release_retained();view.clear();return end
         if w~=width or h~=height then
             motion.ready=false;attached.ready=false;width,height=w,h
             self.texture_projection_map=nil;self.texture_xy_checks=0
@@ -954,9 +970,9 @@ function M.start(sr,backend,options)
             next_log=self.clock+2
         end
         end
-        if self.frame_stage==4 then return end
-        if self.scene_test_only then world_probe.draw(nil,self.config);view.clear();return end
-        if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
+        if self.frame_stage==4 then release_retained();return end
+        if self.scene_test_only then release_retained();world_probe.draw(nil,self.config);view.clear();return end
+        if not model or alpha<0.01 or HUD.config.is_blacklisted(self.config,(latest_raw or {}).resource_hex) then release_retained();if screen_scene then screen_scene.release() end;world_display.release();world_probe.draw(nil,self.config);view.draw(screen_overlay(w,h));return end
         if model.resource_hex=='72170a55a1f37ff1' or HUD.ballistic_family.specs[model.resource_hex] then
             -- Local recoil/lean offsets disable raw CPU projection, not the
             -- freshly validated camera orientation. Do not blink the status
@@ -979,6 +995,7 @@ function M.start(sr,backend,options)
         -- Presentation selects artwork; the requested WorldGUI placement must
         -- reach the weapon renderer even when Automatic selects practical art.
         if self.presentation_view=='third' and self.config.anchor_mode~='world'and not HUD.split_hud.selected(HUD.config.effective(self.config,model.resource_hex))then
+            release_retained()
             world_display.release();if screen_scene then screen_scene.release()end
             local cfg=HUD.config.effective(self.config,model.resource_hex);cfg.presentation_view='third'
             local unit=h/1080;local scale=unit*self.config.scale*self.config.third_person_scale
@@ -1014,7 +1031,7 @@ function M.start(sr,backend,options)
             world_config.profile_skip_geometry=self.frame_stage==3
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
-            if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
+            if aim_opacity<.01 then release_retained();if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
             local layout_key=HUD.split_hud.layout_key(model,world_config,alpha*aim_opacity,self.clock,hot_panel_art.resource)
             local world_commands
             if layout_key and split_world_cache and HUD.split_hud.same_layout(layout_key,split_world_cache.key)then
@@ -1032,7 +1049,7 @@ function M.start(sr,backend,options)
                 self.texture_route=texture_route
                 log('HUD_TEXTURE_ROUTE '..texture_route..' compositor='..tostring(f.hud_texture_primary)..' projection_units_fix=2')
             end
-            if textured and projection.native_point then
+            if textured and projection.native_point and (not self.retained_mode or self.retained_mode=='screen_texture') then
                 local output_width,output_height=sr.Application.back_buffer_size()
                 if output_width~=self.texture_output_width or output_height~=self.texture_output_height then
                     self.texture_projection_map=nil;self.texture_xy_checks=0
@@ -1080,6 +1097,20 @@ function M.start(sr,backend,options)
                     end
                 end
             end
+            if self.retained_mode and retained_scene then
+                for k,v in pairs(retained_options)do world_config[k]=v end
+                world_config.retained_mode=self.retained_mode
+                local ok,why=retained_scene.draw(self.weapon_pose,world_config,world_commands,
+                    projection.camera_matrix or (world_config.native_panel_projector and projection.depth_camera_matrix),
+                    projection.camera_fov or projection.native_fov,w,h,projection.camera_near or projection.native_near)
+                self.retained_status=why or retained_scene.status
+                if ok then
+                    if screen_scene then screen_scene.release()end;world_display.release();view.draw(screen_overlay(w,h))
+                    self.anchor_status=retained_scene.status;self.world_fallback_reason=nil;return
+                elseif why~='awaiting retained render' then
+                    log('RETAINED_STOP '..tostring(why));self.retained_mode=nil
+                end
+            end
             if self.screen_scene_hud and screen_scene and screen_scene.draw(self.weapon_pose,world_config,world_commands,
                 projection.camera_matrix or (world_config.native_panel_projector and projection.depth_camera_matrix),
                 projection.camera_fov or projection.native_fov,w,h,projection.camera_near or projection.native_near) then
@@ -1092,6 +1123,7 @@ function M.start(sr,backend,options)
             end
         end
         world_display.release()
+        release_retained()
         if screen_scene then screen_scene.release() end
         if self.config.anchor_mode=='world' then
             local reason=self.weapon_pose and 'weapon render path unavailable' or ('weapon pose unavailable: '..tostring(self.pose_status))
@@ -1167,11 +1199,13 @@ function M.start(sr,backend,options)
         if self.photo_hidden==(value and true or false)then return end
         self.photo_hidden=value and true or false
         if self.photo_hidden then
+            release_retained()
             if screen_scene then screen_scene.release()end
             world_display.release();world_probe.release();view.release()
         end
     end
     function self.tick(dt)
+        if self.retained_deadline and self.clock>=self.retained_deadline then self.set_retained_mode('off')end
         if self.photo_hidden then return end
         if not retired then control_requests.poll()end
         if frame_trial and not retired then
@@ -1212,8 +1246,19 @@ function M.start(sr,backend,options)
             HUD.native_font.begin_frame(self.clock)
             local ok,err=pcall(self.frame,dt)
             HUD.native_font.end_frame()
+            local retained_cost=0
+            if self.retained_mode then
+                local r=retained_scene.timing();retained_cost=math.max(0,r.render_seconds-retained_render_seen)
+                local calls=math.max(0,r.render_calls-retained_calls_seen)
+                retained_render_seen,retained_calls_seen=r.render_seconds,r.render_calls
+                self.timing_draw=(self.timing_draw or 0)+retained_cost
+                if profile then
+                    local b=profile.buckets.retained_render or {total=0,calls=0,max=0};profile.buckets.retained_render=b
+                    b.total=b.total+retained_cost;b.calls=b.calls+calls;b.max=math.max(b.max,retained_cost)
+                end
+            end
             if self.timing_active and ok then
-                local cost=os.clock()-started
+                local cost=os.clock()-started+retained_cost
                 local t=self.timing_window or {elapsed=0,frames=0,cpu=0,draw=0,peak=0};self.timing_window=t
                 t.elapsed=t.elapsed+math.max(0,dt or 0);t.frames=t.frames+1;t.cpu=t.cpu+cost;t.draw=t.draw+(self.timing_draw or 0);t.peak=math.max(t.peak,cost)
                 if t.elapsed>=.25 then self.hud_timing={cpu_ms=1000*t.cpu/t.frames,draw_ms=1000*t.draw/t.frames,peak_ms=1000*t.peak};self.timing_window=nil end
@@ -1222,7 +1267,7 @@ function M.start(sr,backend,options)
             if profile and profile.drew then
                 profile.dt_total=(profile.dt_total or 0)+math.max(0,dt or 0);profile.dt_max=math.max(profile.dt_max or 0,dt or 0)
                 profile.weapon=self.sample_weapon;profile.view=self.first_person
-                local cost=os.clock()-started
+                local cost=os.clock()-started+retained_cost
                 profile.elapsed=profile.elapsed+math.max(0,dt or 0)
                 profile.frames=profile.frames+1;profile.total=profile.total+cost;profile.max=math.max(profile.max,cost)
                 profile.intervals=profile.intervals or {}
@@ -1250,7 +1295,7 @@ function M.start(sr,backend,options)
                 end
             end
             if profile and not profile.drew then profile={elapsed=0,frames=0,total=0,max=0,buckets={}} end
-            if not ok then self.status=tostring(err);failures=failures+1;log('ERROR '..self.status);pcall(view.clear)
+            if not ok then pcall(release_retained);self.status=tostring(err);failures=failures+1;log('ERROR '..self.status);pcall(view.clear)
                 if failures>=10 then self.status='disabled: '..self.status;self.retire() end
             else failures=0 end
         end
@@ -1273,6 +1318,7 @@ function M.start(sr,backend,options)
     function self.retire()
         if cleaned then return end
         cleaned=true
+        release_retained()
         if texture_swaps then texture_swaps.close()end
         if backend.close and hot_panel_art.after_close then hot_panel_art.after_close(function()pcall(backend.close)end)end
         hot_panel_art.close()
