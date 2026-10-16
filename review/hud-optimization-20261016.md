@@ -1,6 +1,6 @@
 # Split CPU optimization pass — 16 October 2026
 
-Status: source built and staged in the existing Arsenal entry. Settings/projection changes have been sampled in the running game. The new label textures require Arsenal deployment and a normal restart before their live performance and filtering can be accepted. The under-50-ms/s target is not yet established.
+Status: source built, deployed through the existing Arsenal entry, and restarted on 16 October. Settings/projection changes have been sampled in the running game. The new label textures still need visible combat samples and a filtering comparison. The under-50-ms/s target is not yet established.
 
 ## Changes
 
@@ -21,6 +21,10 @@ All rates below are CPU milliseconds per wall-clock second, not milliseconds per
 | Settings/projection, settled | 107.5–109.6 | 69.143–74.875 | 32.280–34.396 | 0.635–0.683 |
 
 One earlier 49.743-ms/s reading included only 6.66 seconds of visible draws in a 10.51-second window. It is excluded. A zero-draw window is also excluded. The sampler now requires at least 90% visible-time coverage.
+
+After the user's Arsenal deployment and restart, all nine staged files still matched the accepted receipt. Read-only hashes of the deployed native Assets body and GPU file matched the staged payload. The new game process started at 14:17 local time, and its Lua environment contains the new Hack label resource metadata. A game capture at 14:21 showed the ship; repeated status reads through 14:25 reported `no selected weapon`, no texture route, and zero prepared labels. These checks establish deployment, not label visibility or performance. No combat timing result was accepted from that interval.
+
+The label comparison sampler also requires an unchanged HUD instance, weapon, view, active profiler, and prepared-label count. It clears its profiler even when the runtime resets a sample after a hidden frame. `native_label_count` counts prepared commands rather than visible submissions, so capture and valid visible timing coverage remain required.
 
 Offline production-renderer integration proves that `RELOADING` changes from 18 glyph submissions to two textured triangles, with full-rate camera movement, scene-depth parameters, alpha, and missing-asset fallback. Source glyph pixels and native-em bounds match. Projected texture filtering still needs visual comparison in game.
 
