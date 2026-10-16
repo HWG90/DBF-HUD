@@ -135,7 +135,7 @@ function M.effective(config,resource)
  if overrides then for k,v in pairs(overrides)do out[k]=v end;out.weapon_panel_overrides=overrides end
  out.segmented_primary=M.segmented_eligible(out,resource)or false
  if out.segmented_primary then out.texture_art_trial=false;out.texture_art_variant='original' end
- out=M.texture_policy(out)
+ out=M.texture_policy(out,true)
  if HUD.shader_layers then out.shader_layers=HUD.shader_layers.effective(out);out.effect_scanlines=false;out.effect_flicker=false;out.effect_sweep=false;out.theme_shader='none';out.effect_shader='none' end
  return out
 end

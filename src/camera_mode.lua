@@ -2,13 +2,22 @@
 -- The native toggle resolves the local player and changes one byte at +0x2EC.
 local M={}
 local signatures={{0xa42a74,'4c8b0ded398e02'},{0xa42b1f,'4138bc24ec020000'},{0xa42b2a,'41888424ec020000'}}
+local shoulder_signatures={{0xa4604c,'4c8b15cd0c8e02'},{0xa460da,'4869c138120000'},{0xa460e1,'4a8b841088e8530048c1e82a2401'}}
+for _,list in ipairs({signatures,shoulder_signatures})do for _,entry in ipairs(list)do
+ entry[2]=entry[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)
+end end
+local reader_backend,reader
+local function memory(backend)
+ if reader_backend~=backend then reader_backend=backend;reader=HUD.memory.new(backend)end
+ reader.reset();return reader
+end
 function M.read(backend,raw)
     local ok,value=pcall(function()
         assert(raw and raw.binding,'no current weapon identity')
-        local r=HUD.memory.new(backend);r.reset()
+        local r=memory(backend)
         local base=raw.binding.module_base
         for _,s in ipairs(signatures) do
-            local expected=s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)
+            local expected=s[2]
             assert(r.read(base+s[1],#expected)==expected,'unknown first-person control binding')
         end
         local player=r.p(base+HUD.layouts.player)
@@ -28,10 +37,10 @@ end
 function M.read_shoulder(backend,raw,aiming)
     local ok,value=pcall(function()
         assert(raw and raw.binding,'no current weapon identity')
-        local r=HUD.memory.new(backend);r.reset()
+        local r=memory(backend)
         local base=raw.binding.module_base
-        for _,s in ipairs({{0xa4604c,'4c8b15cd0c8e02'},{0xa460da,'4869c138120000'},{0xa460e1,'4a8b841088e8530048c1e82a2401'}}) do
-            local expected=s[2]:gsub('..',function(h)return string.char(tonumber(h,16))end)
+        for _,s in ipairs(shoulder_signatures) do
+            local expected=s[2]
             assert(r.read(base+s[1],#expected)==expected,'unknown shoulder control binding')
         end
         local player=r.p(base+HUD.layouts.player)

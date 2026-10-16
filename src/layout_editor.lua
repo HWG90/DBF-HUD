@@ -204,6 +204,7 @@ function M.new(hud,backend,log)
     local held={};local repeats={};local notice_until=0;local next_input_probe=0
     function e.tick(dt)
         if not backend.editor_key then return end
+        if backend.begin_editor_input then backend.begin_editor_input()end
         local now=hud.clock or 0
         if hud.config.debug_logging and backend.editor_input_diagnostic and now<60 and now>=next_input_probe then
             backend.editor_input_diagnostic(e.active);next_input_probe=now+2
@@ -239,7 +240,7 @@ function M.new(hud,backend,log)
         if pressed(187) and e.active then e.set_scale(math.min(3,e.scale()+(backend.editor_key(16) and .01 or .05))) end -- = / +
         if e.active then
             local pose=hud.weapon_pose
-            if not pose or pose.resource_hex~=e.resource then e.active=false;e.status='Weapon changed; editor closed';notice_until=now+4;return end
+            if not pose or pose.resource_hex~=e.resource then e.active=false;e.status='Weapon changed; editor closed';notice_until=now+4;if backend.end_editor_input then backend.end_editor_input()end;return end
             local active_view=hud.first_person and ('first_'..hud.config.fp_auto_side) or 'right'
             local views=hud.weapon_clearance[e.resource] or {}
             e.shared=false
@@ -257,6 +258,7 @@ function M.new(hud,backend,log)
                 held[key]=down
             end
         end
+        if backend.end_editor_input then backend.end_editor_input()end
         e.notice_visible=e.active or now<notice_until
     end
     function e.overlay(w,h,font)

@@ -217,6 +217,7 @@ function M.prepare_commands(commands,p,c,can_get)
 end
 function M.new(sr,log,hot_panel_art)
     local A,W,G=sr.Application,sr.World,sr.Gui
+    local prepared_cache,partition_cache
     local fill='mods/dbf_hud/materials/screen_hud_fill'
     local dither='mods/dbf_hud/materials/scythe_dither_fill';local dither_available
     local panel_effects={['11c27d3babb38956']='mods/dbf_hud/materials/lab_brushed_steel',['a6a735accb4a327f']='mods/dbf_hud/materials/lab_brushed_steel',['2152d5147b0ac418']='mods/dbf_hud/materials/lab_gunmetal',['89c5493e08ca4207']='mods/dbf_hud/materials/lab_brushed_steel',['4d58c77087b774c5']='mods/dbf_hud/materials/lab_ceramic',['cdf28be026bb7d84']='mods/dbf_hud/materials/lab_crt_scan',['e8d5f49ad7780e54']='mods/dbf_hud/materials/lab_glass_sheen'};local effect_availability={};local shader_submitted={}
@@ -234,6 +235,36 @@ function M.new(sr,log,hot_panel_art)
         return effect_availability[name] and name or nil
     end
 
+    -- Material state belongs to its GUI. Never retain handles after GUI destruction.
+    local material_states={}
+    local function destroy_gui(w,g)
+        material_states[g]=nil
+        W.destroy_gui(w,g)
+    end
+    local function material_state(g,name)
+        local states=material_states[g]
+        if not states then states={};material_states[g]=states end
+        local state=states[name]
+        if not state then
+            assert(A.can_get('material',name),'screen scene font material missing: '..name)
+            state={handle=assert(G.material(g,name),'screen scene material unavailable'),values={}}
+            states[name]=state
+        end
+        return state
+    end
+    local function scalar(state,key,value)
+        if state.values[key]~=value then
+            sr.Material.set_scalar(state.handle,key,value);state.values[key]=value
+        end
+    end
+    local function vector(state,key,x,y,z,w)
+        local old=state.values[key]
+        if not old or old[1]~=x or old[2]~=y or old[3]~=z or old[4]~=w then
+            sr.Material.set_vector4(state.handle,key,sr.Vector4(x,y,z,w))
+            if not old then old={};state.values[key]=old end
+            old[1],old[2],old[3],old[4]=x,y,z,w
+        end
+    end
     local effect_guis={};local texture_guis={};local shader_guis={};local spatial_guis={}
     local gui,child_gui,world,atlas_gui;local ids={};local glyphs={};local bitmap_updates=0;local reuse_glyphs=type(G.update_bitmap_3d_uv)=='function';local recycled={};local allocated,reused=0,0;local failed=false;local first=true
     local self={status='screen scene assets not loaded'}
@@ -263,16 +294,18 @@ function M.new(sr,log,hot_panel_art)
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
     function self.release()
+        prepared_cache=nil
+        partition_cache=nil
         if gui and live(world) then
-            for _,layers in pairs(texture_guis)do for _,layer_gui in pairs(layers)do W.destroy_gui(world,layer_gui)end end
-            for _,layers in pairs(shader_guis)do for _,layer_gui in pairs(layers)do W.destroy_gui(world,layer_gui)end end
-            for _,effect_gui in pairs(effect_guis) do W.destroy_gui(world,effect_gui) end;effect_guis={}
-            if child_gui then W.destroy_gui(world,child_gui) end
-            if atlas_gui then W.destroy_gui(world,atlas_gui) end
-            for _,spatial_gui in pairs(spatial_guis)do W.destroy_gui(world,spatial_gui)end
-            W.destroy_gui(world,gui)
+            for _,layers in pairs(texture_guis)do for _,layer_gui in pairs(layers)do destroy_gui(world,layer_gui)end end
+            for _,layers in pairs(shader_guis)do for _,layer_gui in pairs(layers)do destroy_gui(world,layer_gui)end end
+            for _,effect_gui in pairs(effect_guis) do destroy_gui(world,effect_gui) end;effect_guis={}
+            if child_gui then destroy_gui(world,child_gui) end
+            if atlas_gui then destroy_gui(world,atlas_gui) end
+            for _,spatial_gui in pairs(spatial_guis)do destroy_gui(world,spatial_gui)end
+            destroy_gui(world,gui)
         end
-        texture_guis={};shader_guis={};spatial_guis={}
+        texture_guis={};shader_guis={};spatial_guis={};material_states={}
         released=released+#ids;for _,pool in pairs(glyphs) do released=released+#pool.ids end;glyphs={};gui,child_gui,world,atlas_gui=nil,nil,nil,nil
         for i=#ids,1,-1 do recycle(ids[i]);ids[i]=nil end
     end
@@ -310,10 +343,16 @@ function M.new(sr,log,hot_panel_art)
         end
 
         local scan_generated,scan_emitted,scan_clipped=0,0,0
-        local body,fold={},{ }
-        for _,v in ipairs(commands) do
-            local list=v.fold_child and fold or body;list[#list+1]=v
+        local glyph_uv_cache={} -- Native vectors live only for this draw callback.
+        local immutable=prepared_cache and prepared_cache.commands==commands
+        local partition=immutable and partition_cache and partition_cache.commands==commands and partition_cache
+        if not partition then
+            local body,fold={},{}
+            for _,v in ipairs(commands)do local list=v.fold_child and fold or body;list[#list+1]=v end
+            partition={commands=commands,body=body,fold=fold,spatial=M.spatial_groups(body),text={}}
+            partition_cache=immutable and partition or nil
         end
+        local body,fold=partition.body,partition.fold
         -- First-person surfaces can sit closer than the world camera near plane.
         if first then log('SCREEN_FONT_API bitmap='..type(G.bitmap_3d_uv)..' destroy='..type(G.destroy_bitmap_3d)) end
         local hud_near=p.first_person and math.min(near or .05,.005) or (near or .05)
@@ -434,23 +473,27 @@ function M.new(sr,log,hot_panel_art)
             local function material(name,texture,role,art_rows,art_params)
                 local cache_key=(role or 'panel')..':'..name
                 if not materials[cache_key] then
-                    assert(A.can_get('material',name),'screen scene font material missing: '..name)
-                    local handle=assert(G.material(role_gui(role),name),'screen scene material unavailable')
+                    local state=material_state(role_gui(role),name)
                     local hot=art_rows and hot_panel_art and hot_panel_art.resource(texture)
-                    if hot then sr.Material.set_resource(handle,'artwork_texture',hot)
-                    elseif texture then sr.Material.set_texture(handle,art_rows and 'artwork_texture' or 'diffuse_map',texture) end
-                    sr.Material.set_scalar(handle,'threshold_fade',depth)
-                    sr.Material.set_scalar(handle,'scissor_mode',enabled)
+                    local binding=hot or texture
+                    local binding_kind=hot and 'resource' or 'texture'
+                    local binding_slot=art_rows and 'artwork_texture' or 'diffuse_map'
+                    if binding and (state.binding~=binding or state.binding_kind~=binding_kind or state.binding_slot~=binding_slot) then
+                        sr.Material[hot and 'set_resource' or 'set_texture'](state.handle,binding_slot,binding)
+                        state.binding,state.binding_kind,state.binding_slot=binding,binding_kind,binding_slot
+                    end
+                    scalar(state,'threshold_fade',depth)
+                    scalar(state,'scissor_mode',enabled)
                     if art_rows then
                         if name:find('_texture_theme_',1,true)then
                             local seconds,animated=HUD.config.shader_animation_values(c,nil,c.style_clock)
                             local size=c.theme_shader_scale
                             if art_params then size=art_params.pattern_size or HUD.shader_layers.scales[art_params.scale or 2];seconds=(c.style_clock or 0)*(art_params.speed or 1);animated=art_params.animate and 1 or 0 end
-                            sr.Material.set_scalar(handle,'scissor_mode',HUD.texture_theme.parameters(enabled,size,seconds,animated))
+                            scalar(state,'scissor_mode',HUD.texture_theme.parameters(enabled,size,seconds,animated))
                         end
-                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(art_rows[1],art_rows[2],art_rows[3],0))
-                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(art_rows[4],art_rows[5],art_rows[6],0))
-                        sr.Material.set_vector4(handle,'clip_box',sr.Vector4(art_rows[7],art_rows[8],art_rows[9],0))
+                        vector(state,'scissor_rect',art_rows[1],art_rows[2],art_rows[3],0)
+                        vector(state,'atlas_scissor',art_rows[4],art_rows[5],art_rows[6],0)
+                        vector(state,'clip_box',art_rows[7],art_rows[8],art_rows[9],0)
                     elseif name:find('/mapped_',1,true) then
                         local rows=assert(panel_mapping(),'panel shader mapping unavailable')
                         local slot=type(role)=='string' and tonumber(role:match('^shader:(%d+)$'));local layer=slot and c.shader_layers and c.shader_layers[slot]
@@ -458,9 +501,9 @@ function M.new(sr,log,hot_panel_art)
                         if scale~=scale then scale=1 end;scale=math.max(.25,math.min(4,scale))
                         local seconds,animated=HUD.config.shader_animation_values(c,role,c.style_clock)
                         if layer then seconds=(c.style_clock or 0)*(layer.speed or 1);animated=layer.animate and 1 or 0 end
-                        sr.Material.set_vector4(handle,'scissor_rect',sr.Vector4(rows[1]/scale,rows[2]/scale,rows[3]/scale,seconds))
-                        sr.Material.set_vector4(handle,'atlas_scissor',sr.Vector4(rows[4]/scale,rows[5]/scale,rows[6]/scale,animated))
-                        sr.Material.set_vector4(handle,'clip_box',sr.Vector4(rows[7],rows[8],rows[9],0))
+                        vector(state,'scissor_rect',rows[1]/scale,rows[2]/scale,rows[3]/scale,seconds)
+                        vector(state,'atlas_scissor',rows[4]/scale,rows[5]/scale,rows[6]/scale,animated)
+                        vector(state,'clip_box',rows[7],rows[8],rows[9],0)
                     end
                     materials[cache_key]=true
                 end
@@ -468,7 +511,13 @@ function M.new(sr,log,hot_panel_art)
             end
             local function project(x,y)
                 local point=local_project(x,y)
-                if point then return sr.Vector3(point.x*width,0,point.y*height),{x=point.x*width,y=point.y*height} end
+                if point then return nil,{x=point.x*width,y=point.y*height} end
+            end
+            local function glyph_project(x,y)
+                local nx,ny
+                if plane and plane.project_values then nx,ny=plane.project_values(x,y)
+                else local point=local_project(x,y);if point then nx,ny=point.x,point.y end end
+                if nx then return nx*width,ny*height end
             end
             -- This scratch quad is consumed synchronously by clipping; never stored by native drawing.
             local corners={{},{},{},{}}
@@ -514,6 +563,8 @@ function M.new(sr,log,hot_panel_art)
                     if effect and id then scan_emitted=scan_emitted+1 end
                 end
             end
+            -- Native temporaries are shared only within this synchronous render call.
+            local glyph_forward,glyph_zero,glyph_extent
             for _,v in ipairs(list) do
                 local function color(alpha,ink)ink=ink or v.c;if v.texture_color_linear then ink=HUD.config.native_rgb(ink)end;return sr.Color(math.floor(v.a*alpha*255+.5),ink[1],ink[2],ink[3]) end
                 if v.type=='texture' and v.a>0 then
@@ -551,10 +602,15 @@ function M.new(sr,log,hot_panel_art)
                     assert(face and uv,'native screen font atlas unavailable: '..key)
                     local size=v.size/(face.em or 48)
                     local name=face.clear:sub(1,-7)..'_scene'
-                    for _,part in ipairs(M.text_parts(v,face)) do
+                    local text=partition.text[v]
+                    if not text or text.face~=face then text={face=face,parts=M.text_parts(v,face)};partition.text[v]=text end
+                    for _,part in ipairs(text.parts) do
                         local x=v.x+part.dx
                         if G.bitmap_3d_uv and G.destroy_bitmap_3d and sr.Matrix4x4 and sr.Matrix4x4.from_axes then
                             material(name,face.font)
+                            if not glyph_zero then glyph_forward=sr.Vector3(0,1,0);glyph_zero=sr.Vector3(0,0,0);glyph_extent=sr.Vector2(1,1)end
+                            local ink=color(part.alpha,part.c)
+                            local cached_uv=glyph_uv_cache[uv];if not cached_uv then cached_uv={};glyph_uv_cache[uv]=cached_uv end
                             for i=1,#part.text do
                                 local code=part.text:byte(i)
                                 local metric=assert(face.glyphs[code] or face.glyphs[63])
@@ -565,17 +621,26 @@ function M.new(sr,log,hot_panel_art)
                                 local strips=2
                                 for strip=0,strips-1 do
                                     local low,high=strip/strips,(strip+1)/strips
-                                    local _,base=project(x+left,v.y+bottom+height*low)
-                                    local _,right=project(x+left+span,v.y+bottom+height*low)
-                                    local _,up=project(x+left,v.y+bottom+height*high)
-                                    if span>0 and height>0 and base and right and up then
-                                        local transform=sr.Matrix4x4.from_axes(
-                                            sr.Vector3(right.x-base.x,0,right.y-base.y),sr.Vector3(0,1,0),
-                                            sr.Vector3(up.x-base.x,0,up.y-base.y),sr.Vector3(base.x,0,base.y))
+                                    local bx,by=glyph_project(x+left,v.y+bottom+height*low)
+                                    local rx,ry=glyph_project(x+left+span,v.y+bottom+height*low)
+                                    local ux,uy=glyph_project(x+left,v.y+bottom+height*high)
+                                    if span>0 and height>0 and bx and rx and ux then
+                                        local transform
+                                        if sr.Matrix4x4.from_elements then
+                                            transform=sr.Matrix4x4.from_elements(rx-bx,0,ry-by,
+                                                0,1,0,ux-bx,0,uy-by,bx,0,by)
+                                        else
+                                            transform=sr.Matrix4x4.from_axes(
+                                                sr.Vector3(rx-bx,0,ry-by),glyph_forward,
+                                                sr.Vector3(ux-bx,0,uy-by),sr.Vector3(bx,0,by))
+                                        end
                                         local top=coords[4]+(coords[2]-coords[4])*high
                                         local bottom_uv=coords[4]+(coords[2]-coords[4])*low
-                                        local uv0,uv1=sr.Vector2(coords[1],top),sr.Vector2(coords[3],bottom_uv)
-                                        local pos,extent,ink=sr.Vector3(0,0,0),sr.Vector2(1,1),color(part.alpha,part.c)
+                                        local glyph_uv=cached_uv[code];if not glyph_uv then glyph_uv={};cached_uv[code]=glyph_uv end
+                                        local pair=glyph_uv[strip+1]
+                                        if not pair then pair={sr.Vector2(coords[1],top),sr.Vector2(coords[3],bottom_uv)};glyph_uv[strip+1]=pair end
+                                        local uv0,uv1=pair[1],pair[2]
+                                        local pos,extent=glyph_zero,glyph_extent
                                         if reuse_glyphs then
                                             local pool=glyphs[draw_gui]
                                             if not pool then pool={ids={},used=0};glyphs[draw_gui]=pool end
@@ -642,7 +707,7 @@ function M.new(sr,log,hot_panel_art)
                 end
             end
         end
-        local spatial=M.spatial_groups(body);local used_spatial={}
+        local spatial=partition.spatial;local used_spatial={}
         if spatial then
             for _,group in ipairs(spatial)do
                 local draw_gui=gui
@@ -655,11 +720,11 @@ function M.new(sr,log,hot_panel_art)
             end
         else render(body,m,at,gui)end
         for name,spatial_gui in pairs(spatial_guis)do if not used_spatial[name]then
-            if shader_guis[spatial_gui]then for _,layer_gui in pairs(shader_guis[spatial_gui])do W.destroy_gui(world,layer_gui)end;shader_guis[spatial_gui]=nil end
-            if texture_guis[spatial_gui]then for _,layer_gui in pairs(texture_guis[spatial_gui])do W.destroy_gui(world,layer_gui)end;texture_guis[spatial_gui]=nil end
+            if shader_guis[spatial_gui]then for _,layer_gui in pairs(shader_guis[spatial_gui])do destroy_gui(world,layer_gui)end;shader_guis[spatial_gui]=nil end
+            if texture_guis[spatial_gui]then for _,layer_gui in pairs(texture_guis[spatial_gui])do destroy_gui(world,layer_gui)end;texture_guis[spatial_gui]=nil end
             if glyphs[spatial_gui]then released=released+#glyphs[spatial_gui].ids;glyphs[spatial_gui]=nil end
-            if effect_guis[spatial_gui]then W.destroy_gui(world,effect_guis[spatial_gui]);effect_guis[spatial_gui]=nil end
-            W.destroy_gui(world,spatial_gui);spatial_guis[name]=nil
+            if effect_guis[spatial_gui]then destroy_gui(world,effect_guis[spatial_gui]);effect_guis[spatial_gui]=nil end
+            destroy_gui(world,spatial_gui);spatial_guis[name]=nil
         end end
         if #fold>0 then
             local child_panel=fold[1];local edge=child_panel.y+child_panel.h;local child={}
@@ -676,11 +741,11 @@ function M.new(sr,log,hot_panel_art)
             render(child,HUD.pose_motion.forward_tilt(m,-math.pi/2),
                 {x=at.x+m[9]*hinge/1000,y=at.y+m[10]*hinge/1000,z=at.z+m[11]*hinge/1000},child_gui)
         elseif child_gui then
-            if shader_guis[child_gui]then for _,layer_gui in pairs(shader_guis[child_gui])do W.destroy_gui(world,layer_gui)end;shader_guis[child_gui]=nil end
-            if texture_guis[child_gui]then for _,layer_gui in pairs(texture_guis[child_gui])do W.destroy_gui(world,layer_gui)end;texture_guis[child_gui]=nil end
+            if shader_guis[child_gui]then for _,layer_gui in pairs(shader_guis[child_gui])do destroy_gui(world,layer_gui)end;shader_guis[child_gui]=nil end
+            if texture_guis[child_gui]then for _,layer_gui in pairs(texture_guis[child_gui])do destroy_gui(world,layer_gui)end;texture_guis[child_gui]=nil end
             if glyphs[child_gui] then released=released+#glyphs[child_gui].ids;glyphs[child_gui]=nil end
-            if effect_guis[child_gui] then W.destroy_gui(world,effect_guis[child_gui]);effect_guis[child_gui]=nil end
-            W.destroy_gui(world,child_gui);child_gui=nil
+            if effect_guis[child_gui] then destroy_gui(world,effect_guis[child_gui]);effect_guis[child_gui]=nil end
+            destroy_gui(world,child_gui);child_gui=nil
         end
         for draw_gui,pool in pairs(glyphs) do
             for i=#pool.ids,pool.used+1,-1 do G.destroy_bitmap_3d(draw_gui,pool.ids[i]);pool.ids[i]=nil;destroyed=destroyed+1 end
@@ -700,7 +765,17 @@ function M.new(sr,log,hot_panel_art)
     function self.draw(p,c,commands,camera,fov,width,height,near)
         if failed then return false end
         if not p or (not camera and type(c.native_panel_projector)~='function') then return false end
-        local prepared,ready,m,at=pcall(M.prepare_commands,commands,p,c,A.can_get)
+        local started=c.debug_hud_timing and os.clock()
+        local cacheable=c.layout_cache_token==commands and c.style_3d=='standard'
+        local prepared,ready,m,at
+        if cacheable and prepared_cache and prepared_cache.input==commands and prepared_cache.first_person==p.first_person then
+            ready=prepared_cache.commands
+            prepared,m,at=pcall(M.panel_pose,p,c,ready)
+        else
+            prepared,ready,m,at=pcall(M.prepare_commands,commands,p,c,A.can_get)
+            prepared_cache=prepared and cacheable and {input=commands,first_person=p.first_person,commands=ready}or nil
+        end
+        local prepare_done=started and os.clock()
         if not prepared then
             self.status='Command preparation rejected: '..tostring(ready)
             if self.command_error~=self.status then self.command_error=self.status;log('SCREEN_COMMAND_REJECTED '..self.status)end
@@ -708,6 +783,10 @@ function M.new(sr,log,hot_panel_art)
         end
         self.command_error=nil
         local ok,result=pcall(draw,p,c,ready,camera,fov,width,height,near,m,at)
+        if started then
+            local stats=self.costs or {frames=0,prepare=0,native=0};self.costs=stats
+            stats.frames=stats.frames+1;stats.prepare=stats.prepare+prepare_done-started;stats.native=stats.native+os.clock()-prepare_done
+        end
         if not ok then failed=true;self.status=tostring(result);log('SCREEN_SCENE failure: '..self.status);pcall(self.release);return false end
         return result
     end

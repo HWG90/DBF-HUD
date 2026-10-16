@@ -284,3 +284,37 @@ if export then
  local f=assert(io.open(export,'wb'));f:write(json(output));f:close()
  print('Exported '..export..' from actual Split compositor/native Hack glyph metrics')
 end
+
+-- Cache decisions must preserve the complete command output, including pulses.
+local reuse=0
+for _,m in ipairs({model(),empty,chamber,mixed,model({resource_hex='a8cffb316f0b5c5f',value=5,reload_reminder=true})})do
+ local previous_key,previous_out
+ for _,clock in ipairs({0,.01,.1,.249,.25,.26,.5,1,2})do
+  local cfg=config();cfg.style_clock=clock
+  local key=S.layout_key(m,cfg,1,clock,resource)
+  local actual=compose(m,cfg,clock)
+  if previous_key and S.same_layout(key,previous_key)then
+   assert(equal(actual,previous_out),'Layout cache hid an animated or changed readout');reuse=reuse+1
+  end
+  previous_key,previous_out=key,actual
+ end
+end
+assert(reuse>0,'Unchanged layouts never reused')
+local cfg=config();local key=S.layout_key(model(),cfg,1,0,resource)
+for _,change in ipairs({{font='bigblue'},{panel_opacity=.8},{decoration='none'},{scale=2},{split_readout_view='inspect'}})do
+ assert(not S.same_layout(key,S.layout_key(model(),config(change),1,0,resource)),'Appearance change did not invalidate layout')
+end
+assert(not S.same_layout(key,S.layout_key(model({value=26}),cfg,1,0,resource)))
+assert(not S.same_layout(key,S.layout_key(model(),cfg,.5,0,resource)))
+resources[A.atlas]={replacement=true}
+assert(not S.same_layout(key,S.layout_key(model(),cfg,1,0,resource)),'Texture replacement did not invalidate layout')
+print('PASS cached Split output matches fresh commands across time; data, appearance, opacity and artwork invalidate immediately')
+
+
+local c=config();local a=model({compass_heading=276.51});local b=model({compass_heading=276.52})
+assert(equal(compose(a,c,0),compose(b,c,0)))
+assert(S.same_layout(S.layout_key(a,c,1,0,resource),S.layout_key(b,c,1,0,resource)),
+ 'Undisplayed sub-degree heading invalidated layout')
+b.compass_heading=277.51
+assert(not S.same_layout(S.layout_key(a,c,1,0,resource),S.layout_key(b,c,1,0,resource)),
+ 'Displayed heading change did not invalidate layout')

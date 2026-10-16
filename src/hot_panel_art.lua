@@ -6,7 +6,7 @@ function M.new(sr,backend,root)
  package.loaded[key]=store;store.images=store.images or {};store.active=store.active or {}
  store.cache=store.cache or {};store.orphans=store.orphans or {}
  local function cache(record)
-  if not(record and record.ready and record.uploaded and record.consumed and record.source and type(record.rgba)=='string')then return end
+  if not(record and record.ready and record.uploaded and record.consumed and record.resource and record.source and type(record.rgba)=='string')or record.orphaned or record.retiring or record.destroyed then return end
   local size=record.width..'x'..record.height
   store.cache[size]=store.cache[size]or {};store.cache[size][record.rgba]=record
  end
@@ -15,7 +15,7 @@ function M.new(sr,backend,root)
  local function cached(image)
   local bucket=store.cache[image.width..'x'..image.height]
   local record=bucket and bucket[image.rgba]
-  return record and record.source and record.consumed and record
+  return record and record.source and record.consumed and record.resource and not record.orphaned and not record.retiring and not record.destroyed and record
  end
  -- Retire callbacks from an older HUD before installing a replacement owner.
  if store.owner then store.owner.close()end

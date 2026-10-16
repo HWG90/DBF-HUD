@@ -139,4 +139,14 @@ for i=1,500 do frame()end
 assert(trial.stats().validation_cycles==32 and trial.stats().retained_bytes==4 and trial.stats().retained_resources==1 and not trial.stats().pending,'one-shot validation failed to run 32 cycles and return to baseline')
 trial.close();finish();os.remove=old_remove
 print('PASS startup restore preserves one-shot 32-cycle validation, returns to baseline and closes')
+-- Retiring an owner between ready and publication must not reuse its orphan.
+package.loaded['dbf_hud.hot_panel_art.lifetime.v1']=nil
+write('manifest.tsv','base\t1\t1\nother\t1\t1\n');write('base.rgba','swap');write('other.rgba','more')
+local interrupted=M.new({}, {},root);interrupted.reload()
+for i=1,10 do frame()end
+local replacement=M.new({}, {},root);replacement.reload();finish()
+assert(not replacement.stats().failed and replacement.resource('mods/dbf_hud/textures/base'),
+ 'replacement reused a canceled upload that the orphan collector destroyed')
+replacement.close();finish()
+print('PASS owner replacement during ready/publication cannot reuse a retiring orphan')
 io.open=old_open

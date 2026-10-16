@@ -654,6 +654,8 @@ function M.start(sr,backend,options)
         return true,message
     end
     menu=HUD.menu.new(self)
+    menu.poll=timed('menu',menu.poll)
+    self.layout_editor.tick=timed('editor',self.layout_editor.tick)
     local function screen_overlay(w,h)
         local commands=self.layout_editor.overlay(w,h,self.config.font)
         for _,c in ipairs(menu.overlay(w,h,self.config.font)) do commands[#commands+1]=c end
@@ -684,6 +686,8 @@ function M.start(sr,backend,options)
         end
         return commands
     end
+    -- Only CPU layout is retained. Pose, projection, shaders and native draws still run each frame.
+    local split_world_cache
     local next_weapon_screen_lookup=0;local last_weapon_screen_available
     function self.frame(dt)
         if retired then return end
@@ -1008,9 +1012,17 @@ function M.start(sr,backend,options)
             world_config.occlusion_mode=self.config.force_occlusion and 'gui_depth' or 'gui'
             world_config.keep_hud_upright=self.config.keep_hud_upright and aiming==true
             if aim_opacity<.01 then if screen_scene then screen_scene.release() end;world_display.release();view.draw(screen_overlay(w,h));return end
-            local world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock,nil,true)
-            local f=world_commands[1];local left,bottom=f.x,f.y
-            M.rebase_commands(world_commands,left,bottom)
+            local layout_key=HUD.split_hud.layout_key(model,world_config,alpha*aim_opacity,self.clock,hot_panel_art.resource)
+            local world_commands
+            if layout_key and split_world_cache and HUD.split_hud.same_layout(layout_key,split_world_cache.key)then
+                world_commands=split_world_cache.commands
+            else
+                world_commands=compose(model,0,0,2*world_config.scale,alpha*aim_opacity,world_config,self.clock,nil,true)
+                local f=world_commands[1];M.rebase_commands(world_commands,f.x,f.y)
+                split_world_cache=layout_key and f.split_hud and {key=layout_key,commands=world_commands}or nil
+            end
+            world_config.layout_cache_token=layout_key and world_commands or nil
+            local f=world_commands[1]
             local textured=false;for _,command in ipairs(world_commands)do if command.type=='texture'then textured=true;break end end
             local texture_route=table.concat({tostring(textured),tostring(world_config.presentation_view),tostring(world_config.texture_art_variant),tostring(world_config.texture_art_trial)},':')
             if self.texture_route~=texture_route then

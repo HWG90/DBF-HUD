@@ -2,6 +2,9 @@
 -- Initial scope: perspective camera with identity local camera offset.
 local M={}
 local function unhex(s)return (s:gsub('..',function(h)return string.char(tonumber(h,16))end))end
+local wrapper_signature=unhex('48895c2408574883ec60')
+local implementation_signature=unhex('488bc448895808488968104889701857')
+local scene_signature=unhex('488b471848c1e206418be948035028e80a951500')
 local function validate(m,fov,aspect)
     assert(fov>.05 and fov<3.1 and aspect>.1 and aspect<10,'projection dimensions')
     for i=1,16 do assert(type(m[i])=='number' and m[i]==m[i] and math.abs(m[i])<1e7,'camera matrix finite') end
@@ -133,11 +136,11 @@ function M.new(backend)
         r.reset()
         local api=r.p(base+0x3326308);local camera_api=r.p(api+0x20)
         local getter=r.p(camera_api+0xf8)
-        assert(r.read(getter,10)==unhex('48895c2408574883ec60'),'unknown projection wrapper')
+        assert(r.read(getter,10)==wrapper_signature,'unknown projection wrapper')
         local call=r.read(getter+0x132,5);assert(call:byte()==0xe8,'unknown projection call')
         local impl=getter+0x137+r.i(call,1)
-        assert(r.read(impl,16)==unhex('488bc448895808488968104889701857'),'unknown projection implementation')
-        assert(r.read(impl+0x62,20)==unhex('488b471848c1e206418be948035028e80a951500'),'unknown camera scene layout')
+        assert(r.read(impl,16)==implementation_signature,'unknown projection implementation')
+        assert(r.read(impl+0x62,20)==scene_signature,'unknown camera scene layout')
         local state=r.p(base+0x346d560);local camera=r.p(state);local b=r.read(camera,160)
         local scene=r.p(camera+0x18);local index=r.u(b,0x20)
         assert(index<4096,'camera node index')
@@ -277,14 +280,18 @@ function M.native_panel_snapshot(frame,points,near)
  if math.abs(d0+du+dv-points[3].depth)>.002+math.abs(points[3].depth)*.002 then return nil end
  local threshold=math.max(near or .0001,.0001)
  local snapshot={rows=rows}
- function snapshot.project(x,y)
+ function snapshot.project_values(x,y)
   local u,v=(x-frame.x)/frame.w,1-(y-frame.y)/frame.h
   local depth=d0+du*u+dv*v;local divisor=forward[7]*u+forward[8]*v+forward[9]
   if not valid(depth)or depth<=threshold or not valid(divisor)or math.abs(divisor)<1e-12 then return nil end
   local nx=(forward[1]*u+forward[2]*v+forward[3])/divisor
   local ny=1-(forward[4]*u+forward[5]*v+forward[6])/divisor
   if not valid(nx)or not valid(ny)then return nil end
-  return {x=nx,y=ny,depth=depth}
+  return nx,ny,depth
+ end
+ function snapshot.project(x,y)
+  local nx,ny,depth=snapshot.project_values(x,y)
+  if nx then return {x=nx,y=ny,depth=depth}end
  end
  function snapshot.image_rows(x,y,w,h)
   if not valid(w)or not valid(h)or w<=0 or h<=0 then return nil end

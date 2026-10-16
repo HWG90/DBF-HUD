@@ -26,10 +26,18 @@ function M.native()
     }
     local input=ffi.load('user32');local window_pid=ffi.new('unsigned long[1]')
     local input_probe={polls=0,focused=0,f6_high=0,f6_tap=0,right_high=0,right_tap=0}
-    function backend.editor_key(code)
+    local process_id=tonumber(k.dbf_hud_pid())
+    local frame_focused
+    local function input_focused()
         local window=input.dbf_hud_foreground();if window==nil then return false end
         input.dbf_hud_window_pid(window,window_pid)
-        local focused=tonumber(window_pid[0])==tonumber(k.dbf_hud_pid())
+        return tonumber(window_pid[0])==process_id
+    end
+    function backend.begin_editor_input()frame_focused=input_focused()end
+    function backend.end_editor_input()frame_focused=nil end
+    function backend.editor_key(code)
+        local focused=frame_focused
+        if focused==nil then focused=input_focused()end
         local state=tonumber(input.dbf_hud_key(code))
         if code==117 or code==39 then
             if code==117 then input_probe.polls=input_probe.polls+1;if focused then input_probe.focused=input_probe.focused+1 end end

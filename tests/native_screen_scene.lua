@@ -26,6 +26,13 @@ local sr={Vector2=function(...)return {...}end,Vector3=function(...)return {...}
   set_vector4=function(h,k,v)for i=1,4 do assert(v[i]==v[i]and math.abs(v[i])<math.huge)end;params[h.gui][h.name][k]=v end,
   set_resource=function(h,k,v)assert(k=='artwork_texture');bindings[h.gui]=v end,
   set_texture=function(h,k,v)assert(k=='diffuse_map');bindings[h.gui]=v end}}
+local material_calls={}
+for _,group in ipairs({'Gui','Material'})do
+ for _,name in ipairs(group=='Gui'and {'material'}or {'set_scalar','set_vector4','set_resource','set_texture'})do
+  local fn=sr[group][name]
+  sr[group][name]=function(...)material_calls[name]=(material_calls[name]or 0)+1;return fn(...)end
+ end
+end
 local resources={[Fancy.face]={id='face'},[Fancy.atlas]={id='atlas'}}
 local hot={resource=function(name)return resources[name]end,register_consumer=function(owner,detach)callbacks[#callbacks+1]={owner,detach}end}
 local shift_x,shift_y=0,0;local invalid;local native_calls=0
@@ -81,6 +88,10 @@ end
 assert(#images==20,'Not all atlas images submitted');for i,image in ipairs(images)do check_image(image,textures[i])end
 for _,g in ipairs(glyphs)do assert(g.params.scissor_mode==1 and g.params.threshold_fade==.147 and g.resource==HUD.native_font_data.faces.bigblue.font,'Native font material/depth changed')end
 local triangle_count,glyph_count=#triangles,#glyphs
+-- Engine from_elements takes twelve affine components, in axis order.
+sr.Matrix4x4.from_elements=function(a,b,c,d,e,f,g,h,i,j,k,l)
+ return {right={a,b,c},forward={d,e,f},up={g,h,i},at={j,k,l}}
+end
 shift_x,shift_y=.06,-.04
 draw_native(matrix,1)
 assert(#made==21 and #triangles==triangle_count*2 and #glyphs==glyph_count*2,'Shake changed submission count or GUI ownership')
@@ -89,6 +100,8 @@ for i=1,triangle_count do local a,b=triangles[i],triangles[i+triangle_count]
 end
 for i=1,glyph_count do local a,b=glyphs[i],glyphs[i+glyph_count]
  close(b.tm.at[1]-a.tm.at[1],.06*1920);close(b.tm.at[3]-a.tm.at[3],-.04*1080)
+ for _,axis in ipairs({'right','forward','up'})do for j=1,3 do close(a.tm[axis][j],b.tm[axis][j])end end
+ for j=1,2 do close(a.uv0[j],b.uv0[j]);close(a.uv1[j],b.uv1[j])end
 end
 seen={};local index=0
 for i=triangle_count+1,#triangles do local t=triangles[i];if t.name==Fancy.material and not seen[t.gui]then seen[t.gui]=true;index=index+1;check_image(t,textures[index])end end
@@ -116,7 +129,41 @@ for _,bad in ipairs({'nil','nan','infinite','near','behind','throw'})do
  assert(#triangles==nt and #glyphs==ng,'Invalid native point reached the GUI or fell back to CPU')
 end
 invalid=nil;draw_native()
+-- Stationary frames keep drawing but do not repeat unchanged native material work.
+material_calls={}
+for i=1,120 do draw_native()end
+for name,calls in pairs(material_calls)do assert(calls==0,'Unchanged frame repeated material work: '..name..'='..calls)end
+-- Publication changes must rebind even when the texture name is unchanged.
+resources[Fancy.face]={id='replacement-face'};draw_native()
+assert((material_calls.set_resource or 0)>0,'Replacement artwork was not rebound')
 assert(callbacks[1][2]());renderer.release();assert(#made==21);for _,g in ipairs(made)do assert(freed[g])end
+material_calls={};draw_native()
+assert((material_calls.material or 0)>0 and (material_calls.set_resource or 0)>0,'GUI recreation reused stale handles')
+renderer.release()
+print('PASS material lifetime cache: 120 unchanged frames make zero material calls; replacement artwork rebinds and GUI recreation reacquires handles')
+-- Reusing immutable commands skips preparation, but never skips pose/draw updates.
+local prepare=Scene.prepare_commands;local prepares=0
+Scene.prepare_commands=function(...)prepares=prepares+1;return prepare(...)end
+local group,parts=Scene.spatial_groups,Scene.text_parts;local groups,partitions=0,0
+Scene.spatial_groups=function(...)groups=groups+1;return group(...)end
+Scene.text_parts=function(...)partitions=partitions+1;return parts(...)end
+cfg.style_3d='standard';cfg.layout_cache_token=commands
+local cached=Scene.new(sr,function()end,hot)
+local gt=#glyphs
+assert(cached.draw(pose,cfg,commands,nil,nil,1920,1080,.05))
+local first_glyph=glyphs[gt+1];local n=#glyphs-gt
+local first_parts=partitions
+shift_x=shift_x+.03;gt=#glyphs
+assert(cached.draw(pose,cfg,commands,nil,nil,1920,1080,.05))
+assert(prepares==1 and #glyphs-gt==n,'Layout reuse changed frame submission')
+assert(groups==1 and partitions==first_parts,'Immutable text or panel grouping repeated')
+close(glyphs[gt+1].tm.at[1]-first_glyph.tm.at[1],.03*1920)
+cached.release()
+assert(cached.draw(pose,cfg,commands,nil,nil,1920,1080,.05));assert(prepares==2,'Released geometry cache survived material publication')
+assert(groups==2 and partitions==first_parts*2,'Released partition cache survived publication')
+cached.release();cfg.layout_cache_token=nil;Scene.prepare_commands=prepare
+Scene.spatial_groups,Scene.text_parts=group,parts
+print('PASS immutable preparation cache retains full-rate pose updates and clears on GUI release')
 -- The original raw-camera branch remains usable when no callback is provided.
 HUD.projection.projector,HUD.projection.panel_inverse,HUD.projection.clip_polygon=unpack(original)
 cfg.native_panel_projector=nil;cfg.first_person_zoom_demo=false

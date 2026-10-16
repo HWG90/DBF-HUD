@@ -29,6 +29,7 @@ function M.new(hud)
     local api,attempted,retired,routes;local self={status='Mod Options Menu not installed'}
     local font_host,font_handle
     local panel_weapon,panel_refresh,panel_revision,panel_guard
+    local guard_weapon,guard_revision,guard_mod,guard_next
     local binding_host,binding_down
     local binding_id='dbf_hud_debug.force_occlusion'
     local notice,notice_until
@@ -336,6 +337,12 @@ function M.new(hud)
             panel_guard=function()
                 local id=hud.appearance_weapon and hud.appearance_weapon()
                 local mod=host.mods and host.mods.dbf_hud_fonts;if not mod then return end
+                -- Settings edits and weapon changes refresh immediately. Runtime
+                -- readiness labels need only a bounded 4 Hz refresh, not a full
+                -- control-tree walk on every render frame.
+                local clock=hud.clock or 0
+                if guard_mod==mod and guard_weapon==id and guard_revision==hud.appearance_revision and guard_next and clock<guard_next then return end
+                guard_mod,guard_weapon,guard_revision,guard_next=mod,id,hud.appearance_revision,clock+.25
                 refresh_layers(mod)
                 mod.values.appearance_follow_equipped=hud.config.appearance_follow_equipped~=false
                 local ready=panel_weapon~=nil

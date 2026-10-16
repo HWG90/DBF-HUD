@@ -136,6 +136,28 @@ function M.readouts(m,cfg,clock)
   warning=warning,contexts=contexts,charge=active_charge and charge or nil,slots=slots,
   counter_color=counter_color,gauge_color=gauge_color,counter_pulse=counter_pulse,gauge_pulse=gauge_pulse,status_pulse=status_pulse,compass_heading=heading}
 end
+-- A key describes visible layout, not camera motion or shader animation time.
+-- Callers own the returned commands and must not mutate them after caching.
+function M.same_layout(a,b)
+ if a==b then return true end
+ if type(a)~='table'or type(b)~='table'then return false end
+ for k,v in pairs(a)do if not M.same_layout(v,b[k])then return false end end
+ for k in pairs(b)do if a[k]==nil then return false end end
+ return true
+end
+function M.layout_key(m,c,opacity,clock,resource)
+ if not M.selected(c)or not M.supported(m.resource_hex)then return nil end
+ local settings={};for k,v in pairs(c)do if k~='style_clock'then settings[k]=v end end
+ local images={}
+ for _,name in ipairs({A.face,A.atlas,A.coverage,A.hard_coverage,M.dynamic_coverage,M.dynamic_face,M.dynamic_soft})do
+  images[#images+1]=resource(name)or false
+ end
+ local r=M.readouts(m,c,clock)
+ -- Only the formatted heading is drawn; sub-degree aim changes do not alter it.
+ r.compass_heading=nil
+ return {weapon=m.resource_hex,settings=settings,readouts=r,
+  empty_phase=r.empty and math.floor(clock*4)%2 or 0,opacity=opacity,images=images}
+end
 function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
  if not m or not M.selected(cfg)or not M.supported(m.resource_hex)or not M.assets_ready(resource,can_get)then return nil end
  local r=M.readouts(m,cfg,clock);local inspect=cfg.split_readout_view=='inspect'

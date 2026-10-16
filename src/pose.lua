@@ -2,6 +2,8 @@
 -- See WEAPON_BINDING.md. Unknown implementations or recycled handles fail closed.
 local M={}
 local function unhex(s) return (s:gsub('..',function(h)return string.char(tonumber(h,16))end)) end
+local scene_accessor_signature=unhex('488d4160c3')
+local resource_accessor_signature=unhex('488b8178010000c3')
 local pose_prefix=unhex('40534883ec204863da')
 local pose_suffix=unhex('488bc84c8b0041ff90e8000000488bcb48c1e10648034828488bc14883c4205bc3')
 local resolver_prefix=unhex('48895c24084889742410574883ec20488b35')
@@ -27,7 +29,7 @@ function M.new(backend)
         local object=r.p(array+index*8)
         assert(r.u(r.read(object+8,4),0)==b.candidate,'unit identity')
         local accessor=r.p(r.p(object)+0xe8)
-        assert(r.read(accessor,5)==unhex('488d4160c3'),'unknown scene accessor')
+        assert(r.read(accessor,5)==scene_accessor_signature,'unknown scene accessor')
         local nodes=r.u(r.read(object+0x70,4),0);assert(nodes>0 and nodes<=4096,'node count')
         local address=r.p(object+0x88);local bytes=r.read(address,64);local matrix={}
         for i=1,16 do matrix[i]=r.f(bytes,(i-1)*4) end
@@ -103,7 +105,7 @@ function M.new(backend)
             local resource_getter=r.p(r.p(object)+0x1b0)
             local resource_code=r.read(resource_getter,64)
             node_parts[#node_parts+1]={name='weapon_resource_accessor',address=resource_getter,data=resource_code}
-            assert(resource_code:sub(1,8)==unhex('488b8178010000c3'),'unknown weapon resource accessor')
+            assert(resource_code:sub(1,8)==resource_accessor_signature,'unknown weapon resource accessor')
             local resource=r.p(object+0x178);local names=r.p(resource+0x28)
             local header=r.read(names,32);local count=r.u(header,0x14);local offset=r.u(header,0x18)
             node_parts[#node_parts+1]={name='weapon_resource_header',address=resource,data=r.read(resource,256)}

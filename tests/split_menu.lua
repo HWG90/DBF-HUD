@@ -42,6 +42,16 @@ function hud.appearance_preview()return{}end
 local menu=Menu.new(hud)
 menu.poll()
 local mod=assert(api.mods.dbf_hud_fonts,'Split defaults failed strict MCM registration')
+-- An unchanged closed-menu render loop must not rebuild all control states.
+local status_calls=0;local status=hud.faithful_status
+hud.faithful_status=function(...)status_calls=status_calls+1;return status(...)end
+hud.clock=1;menu.poll();local first=status_calls;assert(first>0)
+for i=1,120 do menu.poll()end
+assert(status_calls==first,'Unchanged frames rebuilt menu state')
+hud.clock=1.25;menu.poll();assert(status_calls>first,'Runtime status stopped refreshing')
+first=status_calls;hud.appearance_revision=hud.appearance_revision+1;menu.poll()
+assert(status_calls>first,'Settings revision did not refresh immediately')
+hud.faithful_status=status
 local global=assert(mod.controls.decoration);local panel=assert(mod.controls.weapon_decoration)
 assert(global.type=='choice'and #global.choices==7 and global.choices[7]=='Split instrument')
 assert(global.default==7 and mod.values.decoration==7,'Split global default is outside its registered schema')

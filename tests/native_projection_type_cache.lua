@@ -4,11 +4,16 @@ local real_ffi=require('ffi')
 local signature='float* (*)(float*, const void*, const float*)'
 local parses,casts,calls=0,0,0
 local project_type
+local focus_checks,key_checks=0,0
 local ffi={}
 for key,value in pairs(real_ffi)do ffi[key]=value end
 function ffi.load(name)
  assert(name=='kernel32'or name=='user32')
- return {dbf_hud_process=function()return real_ffi.cast('void*',65536)end}
+ return {dbf_hud_process=function()return real_ffi.cast('void*',65536)end,
+  dbf_hud_pid=function()return 123 end,
+  dbf_hud_foreground=function()focus_checks=focus_checks+1;return real_ffi.cast('void*',77777)end,
+  dbf_hud_window_pid=function(w,out)out[0]=123 end,
+  dbf_hud_key=function()key_checks=key_checks+1;return -32768 end}
 end
 function ffi.typeof(value)
  if value==signature then
@@ -53,5 +58,10 @@ for i=1,10000 do
  assert(x==i+2000 and y==-i+2000 and z==.5,'Changed wrapper output not used')
 end
 assert(parses==1 and casts==2 and calls==60000,'Changed wrapper did not reuse the function CType')
+backend.begin_editor_input()
+for i=1,20 do assert(backend.editor_key(117))end
+backend.end_editor_input()
+assert(focus_checks==1 and key_checks==20,'Editor repeated focus queries or dropped input sampling')
+assert(backend.editor_key(117)and focus_checks==2,'Focus cache escaped frame boundary')
 backend.close()
 print('PASS native projection type cache: 60000 real-buffer calls, one anonymous CType parse, one callable cast per stable wrapper address, changed wrapper refreshed, aligned storage retained, no dummy native calls')
