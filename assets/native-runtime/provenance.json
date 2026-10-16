@@ -1,0 +1,19 @@
+{
+  "purpose": "Explicit promotion of maintained HUD native assets previously only present in Arsenal; excludes runtime/settings.",
+  "source": "C:\\Users\\david\\AppData\\Local\\hd2arsenal\\mods\\DBF-HUD-Complete-LLL-Liberator-Comparison_AR392992\\Assets",
+  "files": {
+    "ee6b1ba7e22d71ed.patch_0": {
+      "sha256": "23e7b819773370bdd4c1beba480fbdfb8068dd5a438fa5fc38dd9639cd3ccce8",
+      "bytes": 4012960
+    },
+    "ee6b1ba7e22d71ed.patch_0.gpu_resources": {
+      "sha256": "78de31b96897875ea102ae636cb30c5265ef8a5944d340055377b9a0718913ea",
+      "bytes": 1024031488
+    },
+    "ee6b1ba7e22d71ed.patch_0.stream": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "archive_sha256": "f63a95151613e050e33395fba09c978f54ee43348b8ae96d8d70744708f3cc75"
+}

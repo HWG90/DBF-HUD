@@ -25,30 +25,15 @@ def main():
  from build_scene_hud import rows_from_zip
  from build_scene_depth_probe import archive_rows
  from build_native_font_depth import hash64
- assets=[ROOT/'releases'/'DBF-HUD-Native-Fonts-0.1.zip',ROOT/'releases'/'DBF-HUD-WorldGUI-Depth-Probe-0.3.zip',ROOT/'releases'/'DBF-HUD-Screen-Depth-Renderer-0.3.zip']
- resources={};groups=[];group_kind=hash64('shader_library_group')
- for asset in assets:
-  assert asset.exists(),f'Missing required asset package: {asset}'
-  with zipfile.ZipFile(asset) as z:
-   stem=next(n for n in z.namelist() if n.endswith('.patch_0'))
-   body=z.read(stem);_,nt,n=struct.unpack_from('<III',body)
-   assert all(row[8]==0 for row in struct.iter_unpack('<7Q6I',body[72+nt*32:72+nt*32+n*80])),'Unexpected streamed resources'
-  for row in rows_from_zip(asset):
-   if row[1]==group_kind:groups.append(row)
-   else:resources[row[:2]]=row
- hashes=[]
- for row in groups:
-  count=struct.unpack_from('<I',row[2],16)[0]
-  assert len(row[2])==24+8*count,'Unexpected shader group layout'
-  for value in struct.unpack_from('<'+str(count)+'Q',row[2],24):
-   if value not in hashes:hashes.append(value)
- group=bytearray(groups[-1][2][:24]);struct.pack_into('<I',group,16,len(hashes));group+=struct.pack('<'+str(len(hashes))+'Q',*hashes)
- resources[groups[-1][:2]]=(groups[-1][0],group_kind,bytes(group),b'')
- asset_body,asset_gpu=archive_rows(list(resources.values()))
+ from shared_shader_assets import complete_hud_resources
+ resources,compatibility=complete_hud_resources()
+ asset_body,asset_gpu=archive_rows(resources)
  manifest={'Version':1,'Guid':'eb9de2f7-5733-46a0-96d8-8750becccd53','Name':'DBF-HUD Complete 0.3.42','Description':'HUD, render bridge, all native fonts and current screen-depth renderer assets. Requires Bingus Shared Loader. Choose one installation mode.','Options':[{'Name':'Complete HUD - startup','Include':['Startup','Assets']},{'Name':'MDL live reload - bridge and all assets','Include':['LiveBridge','Assets']}]}
- output=ROOT/'releases'/'DBF-HUD-Complete-0.3.42.zip'
+ output=ROOT/'dist/releases/shader-coexistence'/'DBF-HUD-Complete-0.3.42.zip'
+ output.parent.mkdir(parents=True,exist_ok=True)
  with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as out:
   out.writestr('manifest.json',json.dumps(manifest,indent=2)+'\n')
+  out.writestr('SHADER-COMPATIBILITY.json',json.dumps(compatibility,indent=2)+'\n')
   for component,prefix in [(temp,'Startup'),(live,'LiveBridge')]:
    with zipfile.ZipFile(component) as z:
     for n in z.namelist():

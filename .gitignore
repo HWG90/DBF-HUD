@@ -40,3 +40,6 @@ assets/faithful-comparison/full-stage/
 /assets/segmented-fancy/preview*.svg
 /review/**/reference/
 /review/**/REFERENCE-HASHES.json
+
+# Deliberately promoted, hash-verified native build input (not a release ZIP).
+!/assets/native-runtime/hud-native.zip
