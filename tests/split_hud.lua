@@ -120,8 +120,23 @@ for _,view in ipairs({'combat','inspect'})do
  assert(count_images(out)<=20,'Mixed capability specimen exhausted shader budget')
 end
 
-local chamber=model({value=46,chamber_bonus=1,fraction=1});local chamber_out=compose(chamber);assert(chars(chamber_out)=='46'and text(chamber_out,'CHAMBERED +1','status'),'Reader-owned chamber count/status changed')
-assert(not text(compose(model({value=46,fraction=1})),'CHAMBERED +1'),'Chamber bonus inferred without native flag')
+local chamber=model({value=36,capacity=35,chamber_bonus=1,fraction=1});local chamber_out=compose(chamber)
+assert(chars(chamber_out)=='36'and not text(chamber_out,'CHAMBERED +1','status'),'Chamber indicator must move to the reader-owned total without adding another round')
+for _,view in ipairs({'combat','inspect'})do for _,total in ipairs({10,36,100})do
+ local out=compose(model({value=total,capacity=total-1,chamber_bonus=1,fraction=1}),config({split_readout_view=view}))
+ local digits=numeric(out);assert(chars(out)==tostring(total),'Chamber total was changed')
+ for i,v in ipairs(digits)do assert(equal(v.c,i==#digits and {233,196,93}or{245,246,240}),'Only the ones digit should be gold, including carry boundaries')end
+end end
+for _,m in ipairs({model({value=36,capacity=35,fraction=1}),model({value=35,capacity=35,chamber_bonus=1,fraction=1})})do
+ for _,v in ipairs(numeric(compose(m)))do assert(equal(v.c,{245,246,240}),'Chamber tint survived a shot or was inferred without the verified flag')end
+end
+local wide_chamber=text(compose(model({value=1000,capacity=999,chamber_bonus=1,fraction=1})),'1000','loaded')
+local wide_parts=HUD.font.numeric_parts(wide_chamber)
+assert(#wide_parts==4 and equal(wide_parts[4].c,{233,196,93})and not wide_parts[3].c,'Large-count text fallback must tint only the ones digit')
+local charging=model({value=36,capacity=35,chamber_bonus=1,epoch_charge_fraction=.36})
+assert(not S.readouts(charging,config()).chamber_digit,'Chamber tint leaked into the charge percentage')
+local chamber_heading=copy(chamber);chamber_heading.compass_heading=90
+assert(text(compose(chamber_heading),'HDG 090 E','status'),'Moving the chamber indicator should free the status strip for heading')
 local verified=HUD.model.normalize({resource_hex='968211c0033dce64',kind='magazine',rounds=46,capacity=45,reserve=6,reserve_kind='MAGS',chamber_supported=true,chamber_rounds=1});assert(verified.chamber_bonus==1 and chars(compose(verified))=='46','Normalized native chamber value was altered')
 local empty=model({value=0,fraction=0,state='EMPTY'});local bright,dim=compose(empty,nil,0),compose(empty,nil,.25);assert(text(bright,'EMPTY','status')and chars(bright)=='00')
 local changed=0;for i,v in ipairs(bright)do if not equal(v,dim[i])then changed=changed+1;assert(v.split_role=='loaded','Empty flash affected a non-counter element');if not v.outline then assert(v.c[1]==255 and v.c[2]==87 and v.c[3]==80,'Empty counter is not red')end;near(dim[i].a,v.a*.22,'Empty pulse is not bounded')end end
@@ -231,8 +246,8 @@ for _,case in ipairs({{0,'HDG 000 N'},{45,'HDG 045 NE'},{270,'HDG 270 W'},{359.7
  assert(text(out,case[2],'status')and S.readouts(m,config()).compass_heading==case[1]%360,'Existing heading source was lost or changed')
 end
 for _,invalid in ipairs({false,'90',math.huge,0/0})do assert(not S.readouts(model({compass_heading=invalid}),config()).compass_heading,'Invalid heading fabricated compass data')end
-for _,critical in ipairs({model({value=0,fraction=0,compass_heading=90}),cannon(3),chamber,danger,reload})do
- critical.compass_heading=90;assert(not S.readouts(critical,config(),5.05).status:find('HDG',1,true),'Compass displaced a warning/chamber/charge/reload status')
+for _,critical in ipairs({model({value=0,fraction=0,compass_heading=90}),cannon(3),danger,reload})do
+ critical.compass_heading=90;assert(not S.readouts(critical,config(),5.05).status:find('HDG',1,true),'Compass displaced a warning/charge/reload status')
 end
 local loose=compose(model({reserve=250,reserve_kind='ROUNDS'}));assert(text(loose,'250','reserve')and text(loose,'ROUNDS'),'Large loose reserve got converted into magazines')
 local wide=compose(model({value=100000,capacity=100000,reserve=100000,reserve_kind='ROUNDS'}));assert(text(wide,'100000','loaded')and text(wide,'/ 100000','capacity')and text(wide,'100000','reserve'),'Large native counts were clipped or replaced by estimates')

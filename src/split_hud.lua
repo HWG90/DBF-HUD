@@ -82,8 +82,7 @@ function M.readouts(m,cfg,clock)
  elseif fuel and progress and progress<=.35 then
   status='LOW '..m.label;warning=progress<=.15 and'red'or'gold'
  elseif low and not active_charge and not active_level then status='LOW AMMO';warning='gold'
- elseif reminder then status='RELOAD ADVISED'
- elseif m.chamber_bonus==1 and loaded and capacity and loaded==capacity+1 then status='CHAMBERED +1' end
+ elseif reminder then status='RELOAD ADVISED' end
  if not unknown and not empty then
   if reminder and not active_charge and not active_level then counter_pulse=pulse(hz,.35)end
   if railgun and m.safety_mode=='UNSAFE'and active_charge then
@@ -131,7 +130,11 @@ function M.readouts(m,cfg,clock)
  if m.reloadable==false then context('SINGLE','SINGLE USE')end
  local name=HUD.weapon_names[m.resource_hex]or'WEAPON';local spec=HUD.segmented_primary_specs and HUD.segmented_primary_specs[m.resource_hex]
  local code=spec and spec.code or name:match('^%S+')or'WEAPON'
- return {value=value,loaded=loaded,capacity=capacity,reserve=reserve,unit=m.reserve_kind,label=label,code=code,
+ -- The reader includes the chamber in loaded. Mark only its ones digit, and
+ -- never apply the chamber tint to a replacement charge/heat readout.
+ local chamber_digit=m.chamber_bonus==1 and loaded~=nil and capacity~=nil and loaded==capacity+1
+  and not heat and not infinite and not active_charge and not active_level
+ return {value=value,loaded=loaded,capacity=capacity,reserve=reserve,unit=m.reserve_kind,label=label,code=code,chamber_digit=chamber_digit,
   suffix=suffix,sub=sub,status=status,progress=progress,empty=empty,infinite=infinite,unknown=unknown,
   warning=warning,contexts=contexts,charge=active_charge and charge or nil,slots=slots,
   counter_color=counter_color,gauge_color=gauge_color,counter_pulse=counter_pulse,gauge_pulse=gauge_pulse,status_pulse=status_pulse,compass_heading=heading}
@@ -208,11 +211,13 @@ function M.compose(m,x,y,s,opacity,cfg,clock,resource,can_get)
   local a=A.infinity;image(A.atlas,a.uv,88,61,a.w,a.h,white,fg,'loaded')
  else
   local raw=r.value and tostring(r.value)or'--';local str=r.value and string.rep('0',math.max(0,2-#raw))..raw or raw
-  if #str>3 then text(88,101,raw,48,ink,'loaded','main','left',134).a=fg*pulse
+  if #str>3 then
+   local q=text(88,101,raw,48,ink,'loaded','main','left',134);q.a=fg*pulse;q.last_digit_color=r.chamber_digit and gold or nil
   else for i=1,#str do
    local ch=str:sub(i,i);local column=tonumber(ch)or 10;local quiet=r.value~=nil and i<=#str-#raw
    local a=88+(i-1)*76*48/118
-   local q=image(A.atlas,A.digit_uv(column,quiet),a,53,72*48/118,48,ink,fg*pulse,'loaded');q.digit_character=ch;q.leading_zero=quiet
+   local cell=r.chamber_digit and i==#str and gold or ink
+   local q=image(A.atlas,A.digit_uv(column,quiet),a,53,72*48/118,48,cell,fg*pulse,'loaded');q.digit_character=ch;q.leading_zero=quiet
    q=image(A.atlas,quiet and A.quiet_zero_outline_uv or A.outline_uv(column),a,53,72*48/118,48,NAVY,fg*pulse,'loaded','main',49);q.outline=true;q.digit_character=ch
   end end
  end
