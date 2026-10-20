@@ -1,0 +1,8 @@
+{
+  "id": "dbf_spine_health",
+  "name": "DBF Experiments (Unsupported)",
+  "author": "Goose",
+  "version": "0.1.0-candidate.5",
+  "description": "Unsupported optional experiments. Spine health bar defaults Off. Delete this add-on without affecting DBF.",
+  "lll": {"entry": "main.lua", "modules": ["backend.lua", "renderer.lua", "spine_health.lua"]}
+}
